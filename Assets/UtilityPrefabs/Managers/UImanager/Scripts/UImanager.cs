@@ -5,19 +5,15 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UImanager : MonoBehaviour {
-    public static UImanager Instance { get; private set; }
+public class UImanager : Singleton<UImanager> {
+
     public List<UIElement> uiElements;
     UIType openedUI;
     UIType savedUI;
 
-    void Awake() {
-        if (Instance == null) {
-            Instance = this;
-            HideAllUIs();
-        } else {
-            Destroy(gameObject);
-        }
+    protected override void Awake() {
+        base.Awake();
+        HideAllUIs();
     }
 
     public void HideAllUIs() {
@@ -46,16 +42,6 @@ public class UImanager : MonoBehaviour {
         }
     }
 
-    public void ToggleUI(UIType uiType) {
-        var uiElement = uiElements.FirstOrDefault(element => element.uiType == uiType);
-        if (uiElement != null) {
-            bool isActive = uiElement.canvas.gameObject.activeSelf;
-            uiElement.canvas.gameObject.SetActive(!isActive);
-        } else {
-            Debug.LogWarning($"UIType {uiType} not found.");
-        }
-    }
-
     public void ToggleAllButtonsInUI(UIType uiType, bool enable) {
         var uiElement = uiElements.FirstOrDefault(element => element.uiType == uiType);
         if (uiElement != null) {
@@ -79,7 +65,8 @@ public enum UIType {
     Login,
     Register,
     Projects,
-    EditorHUD
+    EditorHUD,
+    DecorationPopUp
 }
 
 [System.Serializable]

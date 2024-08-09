@@ -5,19 +5,15 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneLoadingManager : MonoBehaviour {
-    public static SceneLoadingManager Instance { get; private set; }
+public class SceneLoadingManager : Singleton<SceneLoadingManager> {
 
     private List<SceneField> loadedScenes = new List<SceneField>();
     private List<SceneField> loadedGameplayScenes = new List<SceneField>();
 
-    void Awake() {
-        if (Instance == null) {
-            Instance = this;
-        } else {
-            Destroy(gameObject);
-        }
+    protected override void Awake() {
+        base.Awake();
     }
+
 
     public async Task<bool> LoadSceneAsync(SceneType sceneType, float loadingScreenLength, bool addToGameplayScenes = false) {
         SceneField scene = SceneList.Instance.GetScene(sceneType);

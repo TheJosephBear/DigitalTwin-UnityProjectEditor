@@ -5,32 +5,18 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
 
-public class AudioManager : MonoBehaviour {
-    public static AudioManager Instance { get; private set; }
+public class AudioManager : Singleton<AudioManager> {
+
     public AudioMixer audioMixer;
-    Dictionary<MixerType, AudioMixerGroup> mixerGroups;
     Dictionary<SoundType, AudioSource> activeLoopingSources;
     List<AudioSource> allAudioSources;
     List<AudioSource> pausedAudioSources;
 
-
-    void Awake() {
-        if (Instance != null && Instance != this) {
-            Destroy(this.gameObject);
-        } else {
-            Instance = this;
-            activeLoopingSources = new Dictionary<SoundType, AudioSource>();
-            allAudioSources = new List<AudioSource>();
-            pausedAudioSources = new List<AudioSource>();
-            InitializeMixerGroups();
-        }
-    }
-    void InitializeMixerGroups() {
-        mixerGroups = new Dictionary<MixerType, AudioMixerGroup>();
-        mixerGroups[MixerType.Theme] = audioMixer.FindMatchingGroups("Theme")[0];
-        mixerGroups[MixerType.SoundEffect] = audioMixer.FindMatchingGroups("ActiveEffects")[0];
-        mixerGroups[MixerType.EnvironmentAmbience] = audioMixer.FindMatchingGroups("Ambience")[0];
-        mixerGroups[MixerType.EnvironmentEffect] = audioMixer.FindMatchingGroups("AmbienceEffects")[0];
+    protected override void Awake() {
+        base.Awake();
+        activeLoopingSources = new Dictionary<SoundType, AudioSource>();
+        allAudioSources = new List<AudioSource>();
+        pausedAudioSources = new List<AudioSource>();
     }
 
     public void PlaySound(SoundType soundType, float fadeInDuration = 0f, Vector3 position = default(Vector3), bool is3D = false) {
@@ -43,7 +29,6 @@ public class AudioManager : MonoBehaviour {
             source.pitch = sound.pitch;
             source.loop = sound.loop;
             source.spatialBlend = is3D ? 1.0f : 0.0f;
-            source.outputAudioMixerGroup = GetMixerGroup(sound.mixerType);
             soundGameObject.transform.position = position;
 
             source.Play();
@@ -149,15 +134,6 @@ public class AudioManager : MonoBehaviour {
         } else {
             Debug.LogWarning("SoundType not found for name: " + soundName);
             return default(SoundType);
-        }
-    }
-
-    AudioMixerGroup GetMixerGroup(MixerType mixerType) {
-        if (mixerGroups.TryGetValue(mixerType, out AudioMixerGroup mixerGroup)) {
-            return mixerGroup;
-        } else {
-            Debug.LogWarning("MixerType not found: " + mixerType);
-            return null;
         }
     }
 

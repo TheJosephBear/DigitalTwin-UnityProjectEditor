@@ -2,18 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PopUp : MonoBehaviour {
+public class PopUp : Singleton<PopUp> {
 
-    public static PopUp Instance;
     public GameObject PopUpPrefab;
 
-    void Awake() {
-        if (Instance == null) {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        } else {
-            Destroy(gameObject);
-        }
+    protected override void Awake() {
+        base.Awake();
     }
 
     public void ShowPopUpWindow(string text) {

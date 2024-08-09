@@ -9,6 +9,7 @@ public class PopUpWindow : MonoBehaviour {
     TextMeshProUGUI text;
 
     public void Exit() {
+        AudioManager.Instance.PlaySound(SoundType.click);
         Destroy(this.gameObject);
     }
 

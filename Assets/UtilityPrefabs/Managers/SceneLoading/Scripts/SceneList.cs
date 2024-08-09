@@ -2,16 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SceneList : MonoBehaviour {
-    public static SceneList Instance { get; private set; }
+public class SceneList : Singleton<SceneList> {
+
     public List<SceneField> scenes = new List<SceneField>();
 
-    void Awake() {
-        if (Instance != null && Instance != this) {
-            Destroy(this.gameObject);
-        } else {
-            Instance = this;
-        }
+    protected override void Awake() {
+        base.Awake();
     }
     
     public SceneField GetScene(SceneType sceneType) {

@@ -2,19 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AudioPauseManager : MonoBehaviour {
-    public static AudioPauseManager Instance { get; private set; }
+public class AudioPauseManager : Singleton<AudioPauseManager> {
 
     List<AudioSource> pausedAudioSources;
 
-    void Awake() {
-        if (Instance != null && Instance != this) {
-            Destroy(this.gameObject);
-        } else {
-            Instance = this;
+    protected override void Awake() {
+        base.Awake();
         pausedAudioSources = new List<AudioSource>();
-        }
     }
+    
+
+
 
     public void PauseAllSounds(List<AudioSource> allAudioSources) {
         pausedAudioSources.Clear();

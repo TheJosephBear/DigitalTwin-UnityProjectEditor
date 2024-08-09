@@ -1,19 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
-public class SoundBoard : MonoBehaviour {
-    public static SoundBoard Instance { get; private set; }
+public class SoundBoard : Singleton<SoundBoard> {
+
     public List<Sound> sounds = new List<Sound>();
 
-    void Awake() {
-        if (Instance != null && Instance != this) {
-            Destroy(this.gameObject);
-        } else {
-            Instance = this;
-        }
+    protected override void Awake() {
+        base.Awake();
     }
-    
+
     public Sound GetSound(SoundType soundType) {
         foreach (Sound sound in sounds) {
             if (sound.soundName == soundType.ToString())
@@ -22,5 +19,4 @@ public class SoundBoard : MonoBehaviour {
         Debug.LogError("Sound named " + soundType + " aint in the databse chief...");
         return null;
     }
-    
 }

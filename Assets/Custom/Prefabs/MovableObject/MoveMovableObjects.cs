@@ -10,6 +10,28 @@ public class MoveMovableObjects : MonoBehaviour {
 
 
     void Update() {
+
+        if (Input.GetMouseButtonDown(0)) {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit)) {
+                GameObject hitObject = hit.collider.gameObject;
+                print(hitObject.layer);
+                if (selectedObject == null) {
+                    // Vybrat
+                    if (hitObject.layer == LayerMask.NameToLayer("Movable")) {
+                        SelectObject(hitObject);
+                    }
+                } else {
+                    // Zrušit výbìr
+                    if (hitObject.transform.root.gameObject.name != selectedObject.name) {
+                        DeselectObject();
+                    }
+                }
+            }
+        }
+
+        /*
         if (Input.GetMouseButtonDown(0)) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -25,10 +47,12 @@ public class MoveMovableObjects : MonoBehaviour {
                 }
             }
         }
+
+                */
     }
 
     void SelectObject(GameObject obj) {
-        selectedObject = obj;
+        selectedObject = obj.transform.root.gameObject;
         StartMovingObject();
     }
 
