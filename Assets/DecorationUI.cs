@@ -18,7 +18,7 @@ public class DecorationUI : UIBehaviour {
     }
 
     public void SpawnVariantMain() {
-        ObjectUploadingManager.Instance.SpawnDecoration();
+        ObjectUploadingManager.Instance.SpawnActiveDecoration();
         HideUI();
     }
 

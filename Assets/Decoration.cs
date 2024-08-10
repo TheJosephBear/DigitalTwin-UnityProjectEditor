@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,8 @@ using UnityEngine;
 public class Decoration : MonoBehaviour {
 
     public string Name { get; private set; }
-    List<GameObject> Variants = new List<GameObject>();
+    public List<GameObject> Variants = new List<GameObject>();
+    public GameObject selectedVariant;
 
     public void AddVariant(GameObject model) {
         Variants.Add(model);
@@ -19,18 +21,19 @@ public class Decoration : MonoBehaviour {
         Name = name;
     }
 
-    public void Spawn(Vector3 pos) {
+    public GameObject Spawn(Vector3 pos) {
         GameObject spawned = Instantiate(Variants[0], pos, Quaternion.identity);
-        spawned.SetActive(true); 
+        spawned.SetActive(true);
+        SpawnedDecoration script = spawned.AddComponent<SpawnedDecoration>();
+        script.decorationPreset = this;
+        script.decorationVariantIdx = 0;
         AddMeshColliderToAllChildren(spawned);
+        return spawned;
     }
 
     void AddMeshColliderToAllChildren(GameObject g) {
-        // Get all child transforms including the parent object itself
         foreach (Transform child in g.GetComponentsInChildren<Transform>()) {
-            // Check if the child has a MeshRenderer or MeshFilter component
             if (child.GetComponent<MeshRenderer>() != null || child.GetComponent<MeshFilter>() != null) {
-                // Add MeshCollider if it doesn't already exist
                 if (child.GetComponent<MeshCollider>() == null) {
                     child.gameObject.AddComponent<MeshCollider>();
                     ChangeLayer(child.gameObject, "Movable");
@@ -46,6 +49,10 @@ public class Decoration : MonoBehaviour {
             collider.enabled = false;
             collider.enabled = true;
         }
+    }
+
+    public void Serialize() {
+
     }
 
 }

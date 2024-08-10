@@ -21,7 +21,7 @@ public class DecorationButton : MonoBehaviour {
     }
 
     private void OnButtonClick() {
-        ObjectUploadingManager.Instance.SetActiveDecoration(decoration);
+        ObjectUploadingManager.Instance.SetActiveDecorationPreset(decoration);
         UImanager.Instance.ShowUI(UIType.DecorationPopUp);
     }
 }
