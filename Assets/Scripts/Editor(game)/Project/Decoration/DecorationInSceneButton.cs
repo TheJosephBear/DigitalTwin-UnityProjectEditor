@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class DecorationInSceneButton : MonoBehaviour
 {
     GameObject gameObjectRefference;
-    Decoration decoration;
+    DecorationPreset decorationPreset;
     Button button;
     [SerializeField] private TextMeshProUGUI text;
 
@@ -18,9 +18,10 @@ public class DecorationInSceneButton : MonoBehaviour
 
     public void Initialize(GameObject go) {
         gameObjectRefference = go;
-        decoration = go.GetComponent<Decoration>();
+        decorationPreset = go.GetComponent<Decoration>().decorationPreset;
         button.onClick.AddListener(OnButtonClick);
-        text.text = decoration.Name;
+        print(decorationPreset.Name);
+        text.text = decorationPreset.Name;
     }
 
     void OnButtonClick() {

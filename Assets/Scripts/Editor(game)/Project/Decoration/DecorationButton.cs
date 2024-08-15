@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class DecorationButton : MonoBehaviour {
 
-    Decoration decoration;
+    DecorationPreset decorationPreset;
     Button button;
     [SerializeField] private TextMeshProUGUI text;
 
@@ -14,14 +14,14 @@ public class DecorationButton : MonoBehaviour {
         button = GetComponent<Button>();
     }
 
-    public void Initialize(Decoration decorationInstance) {
-        decoration = decorationInstance;
+    public void Initialize(DecorationPreset deco) {
+        decorationPreset = deco;
         button.onClick.AddListener(OnButtonClick);
-        text.text = decoration.Name;
+        text.text = decorationPreset.Name;
     }
 
-    private void OnButtonClick() {
-        ObjectUploadingManager.Instance.SetActiveDecorationPreset(decoration);
+    void OnButtonClick() {
+        DecorationManager.Instance.SetActiveDecorationPreset(decorationPreset);
         UImanager.Instance.ShowUI(UIType.DecorationPopUp);
     }
 }

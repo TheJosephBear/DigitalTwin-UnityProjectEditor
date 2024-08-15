@@ -18,7 +18,7 @@ public class DecorationUI : UIBehaviour {
     }
 
     public void SpawnVariantMain() {
-        ObjectUploadingManager.Instance.SpawnActiveDecoration();
+        DecorationManager.Instance.SpawnActiveDecoration();
         HideUI();
     }
 
@@ -30,8 +30,8 @@ public class DecorationUI : UIBehaviour {
         if (paths.Length > 0) {
             string path = paths[0];
             if (Path.GetExtension(path).ToLower() == ".obj") {
-                GameObject loadingObject = FileLoading.Instance.LoadModel(path);
-                ObjectUploadingManager.Instance.UploadNewDecorationModel(loadingObject);
+                ModelAsset modelAsset = AssetManager.Instance.CreateNewAsset(path);
+                DecorationManager.Instance.UploadNewDecorationModel(modelAsset);
             }
         }
     }

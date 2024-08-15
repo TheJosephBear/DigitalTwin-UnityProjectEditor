@@ -3,30 +3,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Decoration : MonoBehaviour {
-
+public class DecorationPreset {
+    /// <summary>
+    /// Decoration type (tree, bush, bench, ...)
+    /// Can have multiple variants and have multiple instances in scene (The instances themselves are Decoration class that refferences this class)
+    /// </summary>
+    
     public string Name { get; private set; }
-    public List<GameObject> Variants = new List<GameObject>();
-    public GameObject selectedVariant;
+    public List<ModelAsset> Variants = new List<ModelAsset>();
 
-    public void AddVariant(GameObject model) {
+    public void AddVariant(ModelAsset model) {
+        if(Variants.Contains(model)) return;
         Variants.Add(model);
-        print(Variants.Count);
-        foreach (GameObject variant in Variants) {
-            print(variant.name);
-        }
     }
 
     public void SetName(string name) {
         Name = name;
     }
 
-    public GameObject Spawn(Vector3 pos) {
-        GameObject spawned = Instantiate(Variants[0], pos, Quaternion.identity);
+    public GameObject Spawn(Vector3 pos, int variantIdx = 0) {
+        GameObject spawned = Variants[variantIdx].InstantiateModel(pos);
         spawned.SetActive(true);
-        SpawnedDecoration script = spawned.AddComponent<SpawnedDecoration>();
-        script.decorationPreset = this;
-        script.decorationVariantIdx = 0;
+        Decoration decoScript = spawned.AddComponent<Decoration>();
+        decoScript.decorationPreset = this;
+        decoScript.decorationVariantIdx = variantIdx;
+        /*
+        print("testin");
+        print(this);
+        print(this.Name);
+        print(decoScript.decorationPreset);
+        */
         AddMeshColliderToAllChildren(spawned);
         return spawned;
     }
@@ -55,4 +61,10 @@ public class Decoration : MonoBehaviour {
 
     }
 
+}
+
+[Serializable]
+public class SerializableDecorationPreset {
+    public string name;
+    public List<string> modelAssetIDs;  
 }
