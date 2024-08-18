@@ -14,7 +14,7 @@ public class Project : Singleton<Project> {
     protected override void Awake() {
         base.Awake();
         GetComponent<ProjectSaver>().currentProject = this;
-        SetProjectName("Krutopøísný projekt");
+        SetProjectName("Awesome project");
     }
 
     public void SetProjectName(string projectName) {
@@ -29,7 +29,6 @@ public class Project : Singleton<Project> {
             map = MapManager.Instance.SerializeMap(),
             modelAssets = AssetManager.Instance.SerializeAssetList()
         };
-        print(serializableProject.modelAssets);
         return JsonUtility.ToJson(serializableProject);
     }
 
@@ -62,5 +61,5 @@ public class SerializableProject {
     public List<SerializableDecorationPreset> decorationPresets;
     public List<SerializableDecoration> decorationsInstantiated;
     public SerializableMap map;
-    public string modelAssets; 
+    public List<SerializableModelAsset> modelAssets;
 }

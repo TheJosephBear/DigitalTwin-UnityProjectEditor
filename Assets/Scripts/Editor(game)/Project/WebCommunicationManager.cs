@@ -54,17 +54,13 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
     }
 
     IEnumerator UploadFileCoroutine(string path, string fileName) {
-        // Read the file data into a byte array
+        fileName += ".obj"; // should find a better way to do this
         byte[] fileData = File.ReadAllBytes(path);
-
-        // Create form data
         WWWForm form = new WWWForm();
         form.AddBinaryData("file", fileData, fileName, "application/octet-stream");
 
-        // Send the request
         UnityWebRequest www = UnityWebRequest.Post(serverUrlUploadFiles, form);
         yield return www.SendWebRequest();
-
         if (www.result != UnityWebRequest.Result.Success) {
             Debug.LogError("Error uploading file: " + www.error); ;
         } else {

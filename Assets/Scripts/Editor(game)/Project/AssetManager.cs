@@ -55,7 +55,7 @@ public class AssetManager : Singleton<AssetManager> {
         return null;
     }
 
-    public string SerializeAssetList() {
+    public List<SerializableModelAsset> SerializeAssetList() {
         List<SerializableModelAsset> serializableAssets = new List<SerializableModelAsset>();
 
         foreach (ModelAsset asset in assets) {
@@ -66,16 +66,22 @@ public class AssetManager : Singleton<AssetManager> {
             serializableAssets.Add(serializableAsset);
         }
 
-        return JsonUtility.ToJson(serializableAssets);
+        foreach (SerializableModelAsset asset in serializableAssets) {
+            print(asset.modelID);
+            print(asset.fileHash);
+        }
+
+        return serializableAssets;
     }
 
-    public void DeserializeAssetList(string json) {
-        List<SerializableModelAsset> serializableAssets = JsonUtility.FromJson<List<SerializableModelAsset>>(json);
+    public void DeserializeAssetList(List<SerializableModelAsset> data) {
+        List<SerializableModelAsset> serializableAssets = data;
 
         foreach (SerializableModelAsset serializableAsset in serializableAssets) {
             ModelAsset existingAsset = FindModelAssetByID(serializableAsset.modelID);
             if (existingAsset == null) {
-                // I MUST FIGURE OUT HOW TO DOWNLOAD AND USE THE MODELS FIRST
+                // I MUST FIGURE OUT HOW TO DOWNLOAD AND USE THE MODELS FIRST <- it is figured out but in the other project
+                
                 /*
                 GameObject newAssetGo = FileLoading.Instance.LoadModel(serializableAsset.filePath);
                 newAssetGo.transform.parent = AssetContainer.transform;
@@ -89,4 +95,3 @@ public class AssetManager : Singleton<AssetManager> {
         }
     }
 }
-

@@ -24,10 +24,10 @@ public class DecorationManager : Singleton<DecorationManager> {
         GameObject deco = UIactivePreset.Spawn(DecorationSpawnPos);
         DecorationsInstantiated.Add(deco.GetComponent<Decoration>());
         FindAnyObjectByType<EditorHUDui>().AddDecorationInSceneButton(deco);
-
+        /*
         foreach(Decoration decor in DecorationsInstantiated) {
             print(decor.decorationPreset.Variants[decor.decorationVariantIdx].ModelID);
-        }
+        }*/
     }
 
     public void SetActiveDecorationPreset(DecorationPreset decoration) {
