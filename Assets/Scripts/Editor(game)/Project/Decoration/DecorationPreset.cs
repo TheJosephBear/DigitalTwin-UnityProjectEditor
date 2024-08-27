@@ -27,12 +27,6 @@ public class DecorationPreset {
         Decoration decoScript = spawned.AddComponent<Decoration>();
         decoScript.decorationPreset = this;
         decoScript.decorationVariantIdx = variantIdx;
-        /*
-        print("testin");
-        print(this);
-        print(this.Name);
-        print(decoScript.decorationPreset);
-        */
         AddMeshColliderToAllChildren(spawned);
         return spawned;
     }

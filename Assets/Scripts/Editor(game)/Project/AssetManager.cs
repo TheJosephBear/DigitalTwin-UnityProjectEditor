@@ -51,10 +51,6 @@ public class AssetManager : Singleton<AssetManager> {
         }
     }
 
-    public ModelAsset FindModelAssetByID(string id) {
-        return null;
-    }
-
     public List<SerializableModelAsset> SerializeAssetList() {
         List<SerializableModelAsset> serializableAssets = new List<SerializableModelAsset>();
 
@@ -74,24 +70,67 @@ public class AssetManager : Singleton<AssetManager> {
         return serializableAssets;
     }
 
-    public void DeserializeAssetList(List<SerializableModelAsset> data) {
-        List<SerializableModelAsset> serializableAssets = data;
+    public ModelAsset FindModelAssetByID(string id) {
+        foreach (ModelAsset modelAsset in assets) {
+            if (modelAsset.ModelID == id) return modelAsset;
+        }
+        print("modelAsset with id " + id + " doesn't exist.");
+        return null;
+    }
 
-        foreach (SerializableModelAsset serializableAsset in serializableAssets) {
-            ModelAsset existingAsset = FindModelAssetByID(serializableAsset.modelID);
-            if (existingAsset == null) {
-                // I MUST FIGURE OUT HOW TO DOWNLOAD AND USE THE MODELS FIRST <- it is figured out but in the other project
-                
-                /*
-                GameObject newAssetGo = FileLoading.Instance.LoadModel(serializableAsset.filePath);
-                newAssetGo.transform.parent = AssetContainer.transform;
-                ModelAsset newAsset = newAssetGo.AddComponent<ModelAsset>();
-                newAsset.ModelID = serializableAsset.modelID;
-                newAsset.FileHash = serializableAsset.fileHash;
-                newAsset.SetModelGameObject(newAssetGo);
-                assets.Add(newAsset);
-                */
+    void DownloadModel(string objectID, System.Action<ModelAsset> onComplete) {
+        WebCommunicationManager.Instance.DownloadFileFromServer(objectID, fileData => {
+            if (fileData == null) {
+                Debug.LogError("Failed to download model file.");
+                onComplete(null);
+                return;
+            }
+
+            string localPath = Path.Combine(Application.persistentDataPath, objectID + ".obj");
+            File.WriteAllBytes(localPath, fileData);
+
+            LoadModelAsset(localPath, onComplete);
+        });
+    }
+
+    void LoadModelAsset(string path, System.Action<ModelAsset> onComplete) {
+        string fileHash = GetFileHash(path);
+
+        foreach (var asset in assets) {
+            if (asset.FileHash == fileHash) {
+                Debug.Log("Model already uploaded.");
+                onComplete(asset);
+                return;
             }
         }
+        GameObject newAssetGo = FileLoading.Instance.LoadModel(path);
+        print("model is loaded in the assetManager");
+        newAssetGo.transform.parent = AssetContainer.transform;
+
+        ModelAsset modelAsset = newAssetGo.AddComponent<ModelAsset>();
+        modelAsset.filePath = path;
+        modelAsset.SetModelGameObject(newAssetGo);
+        assets.Add(modelAsset);
+        newAssetGo.SetActive(false);
+        onComplete(modelAsset);
+    }
+
+    public void DeserializeAssetList(List<SerializableModelAsset> data, System.Action onComplete = null) {
+        StartCoroutine(DeserializeAssetsCoroutine(data, onComplete));
+    }
+
+    IEnumerator DeserializeAssetsCoroutine(List<SerializableModelAsset> data, System.Action onComplete) {
+        foreach (SerializableModelAsset serializableAsset in data) {
+            bool isDone = false;
+            DownloadModel(serializableAsset.modelID, modelAsset => {
+                if (modelAsset != null) {
+                    modelAsset.ModelID = serializableAsset.modelID;
+                    modelAsset.FileHash = serializableAsset.fileHash;
+                }
+                isDone = true;
+            });
+            yield return new WaitUntil(() => isDone);
+        }
+        onComplete?.Invoke();
     }
 }

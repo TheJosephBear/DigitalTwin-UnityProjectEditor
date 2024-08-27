@@ -5,6 +5,7 @@ using System.IO;
 using SimpleFileBrowser;
 using UnityEngine;
 using UnityEngine.UI;
+using TransformGizmos;
 
 public class EditorHUDui : UIBehaviour {
 
@@ -22,30 +23,40 @@ public class EditorHUDui : UIBehaviour {
         canvas.SetActive(true);
     }
 
-    public void UploadMap() {
+    public void onUploadMap() {
         AudioManager.Instance.PlaySound(SoundType.click);
         FileBrowser.ShowLoadDialog(OnFileSelectedMap, null, FileBrowser.PickMode.Files, false, null, "Select OBJ File", "Select");
     }
 
-    public void SpawnMap() {
-        AudioManager.Instance.PlaySound(SoundType.click);
-        MapManager.Instance.SpawnMap();
-    }
 
-
-    public void AddNewDecoration() {
+    public void onAddNewDecoration() {
         AudioManager.Instance.PlaySound(SoundType.click);
         DecorationManager.Instance.CreateNewDecorationPreset();
     }
 
-    public void SaveProject() {
+    public void onSaveProject() {
         AudioManager.Instance.PlaySound(SoundType.click);
         ProjectSaver.Instance.SaveProject();
     }
 
-    public void LoadProject() {
+    public void onLoadProject() {
         AudioManager.Instance.PlaySound(SoundType.click);
         ProjectSaver.Instance.LoadProject();
+    }
+
+    public void onPositionGizmo() {
+        AudioManager.Instance.PlaySound(SoundType.click);
+        GizmoController.Instance.SelectMovement();
+    }
+
+    public void onRotationGizmo() {
+        AudioManager.Instance.PlaySound(SoundType.click);
+        GizmoController.Instance.SelectRotation();
+    }
+
+    public void onScaleGizmo() {
+        AudioManager.Instance.PlaySound(SoundType.click);
+        GizmoController.Instance.SelectScale();
     }
 
     void OnFileSelectedMap(string[] paths) {

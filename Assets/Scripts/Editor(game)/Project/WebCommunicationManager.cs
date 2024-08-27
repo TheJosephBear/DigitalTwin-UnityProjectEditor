@@ -9,12 +9,13 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
     public string serverUrlUploadJson = "http://127.0.0.1:5000/upload";
     public string serverUrlUploadFiles = "http://127.0.0.1:5000/uploadFiles";
     public string serverUrlDownload = "http://127.0.0.1:5000/download";
+    public string serverUrlDownloadFiles = "http://127.0.0.1:5000/downloadModels";
 
     public void StartUpload(string data) {
         StartCoroutine(UploadDataCoroutine(data));
     }
 
-    public void StartDownload(System.Action<string> callback) {
+    public void StartDataDownload(System.Action<string> callback) {
         StartCoroutine(DownloadDataCoroutine(callback));
     }
 
@@ -54,18 +55,43 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
     }
 
     IEnumerator UploadFileCoroutine(string path, string fileName) {
-        fileName += ".obj"; // should find a better way to do this
+        fileName += ".obj"; // need to figure out a better way
+
+
         byte[] fileData = File.ReadAllBytes(path);
         WWWForm form = new WWWForm();
         form.AddBinaryData("file", fileData, fileName, "application/octet-stream");
 
+
         UnityWebRequest www = UnityWebRequest.Post(serverUrlUploadFiles, form);
         yield return www.SendWebRequest();
+
         if (www.result != UnityWebRequest.Result.Success) {
             Debug.LogError("Error uploading file: " + www.error); ;
         } else {
             Debug.Log("File uploaded successfully!");
             Debug.Log("Server response: " + www.downloadHandler.text);
+        }
+    }
+
+    public void DownloadFileFromServer(string fileName, System.Action<byte[]> callback) {
+        StartCoroutine(DownloadFileCoroutine(fileName, callback));
+    }
+
+    IEnumerator DownloadFileCoroutine(string fileName, System.Action<byte[]> callback) {
+        print("Downloading the model from server");
+        fileName += ".obj"; // need to figure out a better way
+        string url = $"{serverUrlDownloadFiles}?fileName={UnityWebRequest.EscapeURL(fileName)}";
+
+        UnityWebRequest www = UnityWebRequest.Get(url);
+        yield return www.SendWebRequest();
+
+        if (www.result != UnityWebRequest.Result.Success) {
+            Debug.LogError("Error downloading file: " + www.error);
+            callback(null);
+        } else {
+            print("File downloaded Succesfully");
+            callback(www.downloadHandler.data);
         }
     }
 }

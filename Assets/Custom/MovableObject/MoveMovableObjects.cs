@@ -1,15 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using TransformGizmos;
 using UnityEngine;
 
 public class MoveMovableObjects : MonoBehaviour {
-
-    public GameObject pivotArrows;
+    /// <summary>
+    /// This is the logic for clicking objects in scene in orther to change their transform
+    /// Transform manipulation is handled by GizmoController
+    /// </summary>
+     
+    GizmoController gizmoController;
     GameObject selectedObject;
-    GameObject selectedObjectArrows;
+    bool canMove = true;
 
+    private void Awake() {
+        gizmoController = GizmoController.Instance;
+    }
 
     void Update() {
+        if (!canMove)
+            return;
         if (Input.GetMouseButtonDown(0)) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -22,7 +32,10 @@ public class MoveMovableObjects : MonoBehaviour {
                     }
                 } else {
                     if (hitObject.transform.root.gameObject != selectedObject) {
-                        DeselectObject();
+                        // if its not a pivot!!!
+                        if(hitObject.layer != LayerMask.NameToLayer("GizmoPivot")){
+                            DeselectObject();
+                        }
                         if (hitObject.layer == LayerMask.NameToLayer("Movable")) {
                             SelectObject(hitObject);
                         }
@@ -34,16 +47,17 @@ public class MoveMovableObjects : MonoBehaviour {
 
     void SelectObject(GameObject obj) {
         selectedObject = obj.transform.root.gameObject;
-        StartMovingObject();
+        gizmoController.SelectGameObject(selectedObject);
     }
 
     void DeselectObject() {
         selectedObject = null;
-        Destroy(selectedObjectArrows);
-        selectedObjectArrows = null;
+        gizmoController.DeselectGameObject();
     }
 
-    public void StartMovingObject() {
-        selectedObjectArrows = Instantiate(pivotArrows, selectedObject.transform);
+    public void ToggleMoveEnable() {
+        canMove = !canMove;
     }
+
+
 }

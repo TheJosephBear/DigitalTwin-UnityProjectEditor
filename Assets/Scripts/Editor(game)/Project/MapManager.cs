@@ -9,7 +9,8 @@ public class MapManager : Singleton<MapManager> {
     public Vector3 mapSpawnPosition; 
 
     public void UploadMapModel(ModelAsset newMap) {
-       map = newMap;
+        map = newMap;
+        SpawnMap();
     }
 
     public void SpawnMap() {

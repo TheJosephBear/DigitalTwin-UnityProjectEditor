@@ -13,7 +13,7 @@ public class Project : Singleton<Project> {
 
     protected override void Awake() {
         base.Awake();
-        GetComponent<ProjectSaver>().currentProject = this;
+        GetComponent<ProjectSaver>().project = this;
         SetProjectName("Awesome project");
     }
 
@@ -33,21 +33,22 @@ public class Project : Singleton<Project> {
     }
 
     public void DeserializeProject(string json) {
+        StartCoroutine(DeserializeCoroutine(json));
+    }
+
+    IEnumerator DeserializeCoroutine(string json) {
         SerializableProject serializedProject = JsonUtility.FromJson<SerializableProject>(json);
 
-        // Set project name
         SetProjectName(serializedProject.projectName);
+        // Wait for models to load
+        bool isDeserializationComplete = false;
+        AssetManager.Instance.DeserializeAssetList(serializedProject.modelAssets, () => {
+            isDeserializationComplete = true;
+        });
+        yield return new WaitUntil(() => isDeserializationComplete);
 
-        // Deserialize ModelAssets
-        AssetManager.Instance.DeserializeAssetList(serializedProject.modelAssets);
-
-        // Deserialize DecorationPresets
         DecorationManager.Instance.DeserializeDecorationPresets(serializedProject.decorationPresets);
-
-        // Deserialize DecorationsInstantiated
         DecorationManager.Instance.DeserializeDecorationsInstantiated(serializedProject.decorationsInstantiated);
-
-        // Deserialize Map
         MapManager.Instance.DeserializeMap(serializedProject.map);
     }
 

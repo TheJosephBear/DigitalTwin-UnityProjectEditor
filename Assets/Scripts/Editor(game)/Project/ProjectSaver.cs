@@ -5,26 +5,26 @@ using UnityEngine;
 
 public class ProjectSaver : Singleton<ProjectSaver> {
 
-    public Project currentProject;
+    public Project project;
 
     public void SaveProject() {
         // Upload all models
         AssetManager.Instance.UploadModelsToWeb();
         // project serialization
-        string serializedProject = currentProject.SerializeProject();
+        string serializedProject = project.SerializeProject();
         //upload
         WebCommunicationManager.Instance.StartUpload(serializedProject);
     }
 
     public void LoadProject() {
         // Download data from server
-        WebCommunicationManager.Instance.StartDownload((data) => {
+        WebCommunicationManager.Instance.StartDataDownload((data) => {
             if (data != null) {
-                currentProject.DeserializeProject(data);
+                project.DeserializeProject(data);
             }
         });
     }
 
-    
+
 
 }
