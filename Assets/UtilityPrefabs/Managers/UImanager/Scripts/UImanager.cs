@@ -66,7 +66,9 @@ public enum UIType {
     Register,
     Projects,
     EditorHUD,
-    DecorationPopUp
+    DecorationPopUp,
+    Map,
+    ProjectSettings
 }
 
 [System.Serializable]
