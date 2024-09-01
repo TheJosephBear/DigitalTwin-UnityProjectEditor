@@ -6,6 +6,11 @@ public class ProjectSettingsUI : UIBehaviour {
 
     public GameObject canvas;
 
+    public void onX() {
+        AudioManager.Instance.PlaySound(SoundType.click);
+        UImanager.Instance.HideUI(UIType.ProjectSettings);
+    }
+
     public override void Show() {
         canvas.SetActive(true);
     }

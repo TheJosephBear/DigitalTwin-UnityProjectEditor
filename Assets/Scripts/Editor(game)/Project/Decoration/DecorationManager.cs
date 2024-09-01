@@ -1,46 +1,62 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DecorationManager : Singleton<DecorationManager> {
     
     List<DecorationPreset> DecorationPresets = new List<DecorationPreset>();
     List<Decoration> DecorationsInstantiated = new List<Decoration>();
-    public DecorationPreset UIactivePreset { get; private set; }
+    public DecorationPreset ActiveDecorationPreset { get; private set; } // what is Selected in the DecorationUI
     public Vector3 DecorationSpawnPos;
 
-    public void CreateNewDecorationPreset() {
+    public DecorationPreset CreateNewDecorationPreset() {
         DecorationPreset decorationPreset = new DecorationPreset();
-        decorationPreset.SetName("new Decoration");
+        decorationPreset.SetName("NewDecoration");
         AddDecorationPreset(decorationPreset);
+        return decorationPreset;
     }
 
     void AddDecorationPreset(DecorationPreset decoPreset) {
-        DecorationPresets.Add(decoPreset);
-        FindAnyObjectByType<EditorHUDui>().AddDecorationPrefabButton(decoPreset);
+       DecorationPresets.Add(decoPreset);
+   //     FindAnyObjectByType<EditorHUDui>().AddDecorationPrefabButton(decoPreset);
     }
 
     public void UploadNewDecorationModel(ModelAsset modelAss) {
-        UIactivePreset.AddVariant(modelAss);
+        ActiveDecorationPreset.AddVariant(modelAss);
     }
 
     public void SpawnActiveDecoration() {
-        GameObject deco = UIactivePreset.Spawn(DecorationSpawnPos);
+        GameObject deco = ActiveDecorationPreset.Spawn(DecorationSpawnPos);
         SpawnDecoration(deco);
-        /*
-        foreach(Decoration decor in DecorationsInstantiated) {
-            print(decor.decorationPreset.Variants[decor.decorationVariantIdx].ModelID);
-        }*/
     }
 
     void SpawnDecoration(GameObject DecorationGameObject) {
         DecorationsInstantiated.Add(DecorationGameObject.GetComponent<Decoration>());
-        FindAnyObjectByType<EditorHUDui>().AddDecorationInSceneButton(DecorationGameObject);
+     //   FindAnyObjectByType<EditorHUDui>().AddDecorationInSceneButton(DecorationGameObject);
     }
 
     public void SetActiveDecorationPreset(DecorationPreset decoration) {
-        UIactivePreset = decoration;
+        ActiveDecorationPreset = decoration;
     }
+
+    public DecorationPreset GetActiveDecorationPreset() {
+        return ActiveDecorationPreset;
+    }
+
+    public void EnterDecorationSettings() {
+        UImanager.Instance.ShowUI(UIType.DecorationPopUp);
+    }
+
+    public bool DecorationPresetNameExists(string name) {
+        int count = DecorationPresets.Count(decorationPreset => decorationPreset.Name == name);
+        return count >= 2;
+    }
+
+    public List<DecorationPreset> GetDecorationsList() {
+        return DecorationPresets;
+    }
+
 
     public List<SerializableDecorationPreset> SerializeDecorationPresets() {
         List<SerializableDecorationPreset> serializedPresets = new List<SerializableDecorationPreset>();
