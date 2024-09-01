@@ -14,7 +14,7 @@ public class DecorationPresetUI : UIBehaviour {
 
     void Initialize() {
         string name = DecorationManager.Instance.GetActiveDecorationPreset().Name;
-        NameInputText.SetTextWithoutNotify(UniqueNameEnsure(name));
+        NameInputText.SetTextWithoutNotify(name);
     }
 
     public void onX() {
@@ -54,28 +54,41 @@ public class DecorationPresetUI : UIBehaviour {
     }
 
     string UniqueNameEnsure(string ogName) {
-        // Name must be original, if it isnt add "(1)" behind the copy name
         string originalName = ogName;
         string newName = originalName;
         int copyNumber = 1;
+
+        // Check if the name exists, if not return it as is
         if (!DecorationManager.Instance.DecorationPresetNameExists(newName)) {
+            print("the name is OG");
             return newName;
         }
+
+        // Loop until a unique name is found
         while (DecorationManager.Instance.DecorationPresetNameExists(newName)) {
+            print("Trying new name "+ newName);
+            // Check if the name already has a copy number suffix in the format "(1)"
             int lastIndexOfOpenParenthesis = newName.LastIndexOf('(');
             int lastIndexOfCloseParenthesis = newName.LastIndexOf(')');
+
+            // Check if the suffix is a valid number in parentheses at the end of the string
             if (lastIndexOfOpenParenthesis != -1 && lastIndexOfCloseParenthesis == newName.Length - 1) {
                 string suffix = newName.Substring(lastIndexOfOpenParenthesis + 1, lastIndexOfCloseParenthesis - lastIndexOfOpenParenthesis - 1);
                 if (int.TryParse(suffix, out int existingNumber)) {
+                    // If a valid number is found, increment it
                     copyNumber = existingNumber + 1;
+                    newName = newName.Substring(0, lastIndexOfOpenParenthesis).Trim();
                 }
-                newName = newName.Substring(0, lastIndexOfOpenParenthesis).Trim();
             }
-            newName = $"{newName} ({copyNumber})";
-            copyNumber++;
+
+            // Construct the new name with the incremented number
+            newName = $"{newName} ({copyNumber})"; 
+            DecorationManager.Instance.GetActiveDecorationPreset().SetName(UniqueNameEnsure(newName));
         }
+
         return newName;
     }
+
 
     public void SpawnVariant() {
         // Handle selecting the variant and spawning the chosen one

@@ -50,6 +50,7 @@ public class DecorationManager : Singleton<DecorationManager> {
 
     public bool DecorationPresetNameExists(string name) {
         int count = DecorationPresets.Count(decorationPreset => decorationPreset.Name == name);
+        print("da funció made the count of: " + count);
         return count >= 2;
     }
 
