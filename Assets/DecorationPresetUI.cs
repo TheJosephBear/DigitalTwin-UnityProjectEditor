@@ -21,8 +21,8 @@ public class DecorationPresetUI : UIBehaviour {
         AudioManager.Instance.PlaySound(SoundType.click);
         SaveSettings();
         // Reset the decoration UI to refresh the list
-        UImanager.Instance.HideUI(UIType.DecorationMain);
-        UImanager.Instance.ShowUI   (UIType.DecorationMain);
+      //  UImanager.Instance.HideUI(UIType.DecorationMain);
+      //  UImanager.Instance.ShowUI(UIType.DecorationMain);
         // die :(
         UImanager.Instance.HideUI(UIType.DecorationPopUp);
     }

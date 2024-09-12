@@ -10,8 +10,9 @@ public class CameraManager : MonoBehaviour {
     void Start() {
         freeCam = GetComponent<FreeCam>();
     }
-
+    // THIS NEEDS A MAJOR REWORK
     void Update() {
+        /*
         // on RightClick move
         if (Input.GetMouseButtonDown(1)) {
             freeCam.ToggleFreeCam(true);

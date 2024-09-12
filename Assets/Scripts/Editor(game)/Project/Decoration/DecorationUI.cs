@@ -4,11 +4,10 @@ using System.IO;
 using SimpleFileBrowser;
 using UnityEngine;
 
-public class DecorationUI : UIBehaviour {
+public class DecorationUI : MonoBehaviour {
 
-    public GameObject canvas;
     public GameObject DecorationListButtonPrefab; // scrollview button prefab
-    public GameObject DecorationListScrollview; // Scrollview showing decoration list in UI
+    public GameObject DecorationListScrollview; // Scrollview showing decoration list in UI (content of scrollview)
     public List<DecorationButton> DecorationListButtons = new List<DecorationButton>();
 
     public void onX() {
@@ -59,13 +58,4 @@ public class DecorationUI : UIBehaviour {
 
     
 
-
-    public override void Show() {
-        canvas.SetActive(true);
-        RefreshDecorationButtonList();
-    }
-
-    public override void Hide() {
-        canvas.SetActive(false);
-    }
 }
