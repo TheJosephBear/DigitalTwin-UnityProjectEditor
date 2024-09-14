@@ -69,7 +69,8 @@ public enum UIType {
     DecorationPopUp,
     Map,
     ProjectSettings,
-    DecorationMain
+    DecorationMain,
+    NewProject
 }
 
 [System.Serializable]

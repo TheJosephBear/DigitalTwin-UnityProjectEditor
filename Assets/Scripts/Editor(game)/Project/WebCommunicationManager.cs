@@ -11,6 +11,96 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
     public string serverUrlDownload = "http://127.0.0.1:5000/download";
     public string serverUrlDownloadFiles = "http://127.0.0.1:5000/downloadModels";
 
+    public void CreateProject(string projectName, System.Action<bool, string> callback) {
+        StartCoroutine(CreateProjectCoroutine(projectName, callback));
+    }
+
+    IEnumerator CreateProjectCoroutine(string projectName, System.Action<bool, string> callback) {
+        WWWForm form = new WWWForm();
+        form.AddField("projectName", projectName);
+
+        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/createProject", form);
+        yield return www.SendWebRequest();
+
+        if (www.result != UnityWebRequest.Result.Success) {
+            Debug.LogError("Error creating project: " + www.error);
+            callback(false, www.error);
+        } else {
+            Debug.Log("Project created successfully!");
+            callback(true, www.downloadHandler.text);
+        }
+    }
+
+    public void EditProjectName(string oldName, string newName, System.Action<bool, string> callback) {
+        StartCoroutine(EditProjectNameCoroutine(oldName, newName, callback));
+    }
+
+    IEnumerator EditProjectNameCoroutine(string oldName, string newName, System.Action<bool, string> callback) {
+        WWWForm form = new WWWForm();
+        form.AddField("oldProjectName", oldName);
+        form.AddField("newProjectName", newName);
+
+        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/editProjectName", form);
+        yield return www.SendWebRequest();
+
+        if (www.result != UnityWebRequest.Result.Success) {
+            Debug.LogError("Error editing project name: " + www.error);
+            callback(false, www.error);
+        } else {
+            Debug.Log("Project name edited successfully!");
+            callback(true, www.downloadHandler.text);
+        }
+    }
+
+    public void DeleteProject(string projectName, System.Action<bool, string> callback) {
+        StartCoroutine(DeleteProjectCoroutine(projectName, callback));
+    }
+
+    IEnumerator DeleteProjectCoroutine(string projectName, System.Action<bool, string> callback) {
+        WWWForm form = new WWWForm();
+        form.AddField("projectName", projectName);
+
+        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/deleteProject", form); // DELETE in HTTP technically, but UnityWebRequest doesn't have a DELETE with form data
+        www.method = UnityWebRequest.kHttpVerbDELETE;  // Change method to DELETE
+        yield return www.SendWebRequest();
+
+        if (www.result != UnityWebRequest.Result.Success) {
+            Debug.LogError("Error deleting project: " + www.error);
+            callback(false, www.error);
+        } else {
+            Debug.Log("Project deleted successfully!");
+            callback(true, www.downloadHandler.text);
+        }
+    }
+
+    public void FetchAllProjects(System.Action<List<string>> callback) {
+        StartCoroutine(FetchAllProjectsCoroutine(callback));
+    }
+
+    IEnumerator FetchAllProjectsCoroutine(System.Action<List<string>> callback) {
+        string url = "http://127.0.0.1:5000/getAllProjects";
+
+        UnityWebRequest www = UnityWebRequest.Get(url);
+        yield return www.SendWebRequest();
+
+        if (www.result != UnityWebRequest.Result.Success) {
+            Debug.LogError("Error fetching projects: " + www.error);
+            callback(null);
+        } else {
+            Debug.Log("Projects fetched successfully!");
+
+            // Parse the JSON response
+            string jsonResponse = www.downloadHandler.text;
+            ProjectListResponse response = JsonUtility.FromJson<ProjectListResponse>(jsonResponse);
+
+            if (response != null && response.projects != null) {
+                callback(response.projects);
+            } else {
+                callback(null);
+            }
+        }
+    }
+
     public void StartUpload(string data) {
         StartCoroutine(UploadDataCoroutine(data));
     }
@@ -94,4 +184,9 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
             callback(www.downloadHandler.data);
         }
     }
+}
+
+[System.Serializable]
+public class ProjectListResponse {
+    public List<string> projects;
 }

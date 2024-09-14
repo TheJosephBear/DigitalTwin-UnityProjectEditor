@@ -26,10 +26,16 @@ public class ContextMenu : MonoBehaviour {
     }
 
     void Update() {
-        if (isContextMenuActive && (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2))) {
-            print("Closing!!!");
-            CloseContextMenu();
+        if (isContextMenuActive) {
+            if (Input.GetMouseButtonDown(0)) {
+                if (!IsMouseClickOnContextMenu()) {
+                    CloseContextMenu();
+                }
+            } else if (Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2)) {
+                CloseContextMenu();
+            }
         }
+
         if (Input.GetMouseButtonDown(1)) {
             CheckRightClickUI();
         }
@@ -65,6 +71,9 @@ public class ContextMenu : MonoBehaviour {
             GameObject newButton = Instantiate(buttonPrefab, activeContextMenu.transform);
             ContextMenuButton contextMenuButton = newButton.GetComponent<ContextMenuButton>();
             contextMenuButton.Initialize(buttonEditor);
+            contextMenuButton.GetComponent<Button>().onClick.AddListener(() => {
+                CloseContextMenu();
+            });
         }
     }
 
@@ -100,10 +109,16 @@ public class ContextMenu : MonoBehaviour {
         activeContextMenu.GetComponent<RectTransform>().sizeDelta = new Vector2(activeContextMenu.GetComponent<RectTransform>().sizeDelta.x, totalHeight);
     }
 
+    bool IsMouseClickOnContextMenu() {
+        RectTransform rectTransform = activeContextMenu.GetComponent<RectTransform>();
+        Vector2 localMousePosition;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, Input.mousePosition, null, out localMousePosition);
+        return rectTransform.rect.Contains(localMousePosition);
+    }
 
     public void CloseContextMenu() {
         if (activeContextMenu != null) {
-            Destroy(activeContextMenu);
+            Destroy(activeContextMenu.transform.root.gameObject);
             activeContextMenu = null;
             isContextMenuActive = false;
         }

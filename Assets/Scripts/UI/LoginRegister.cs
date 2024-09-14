@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class LoginRegister : UIBehaviour {
 
-    public GameObject canvas;
     public TMP_InputField name_field;
     public TMP_InputField password_field;
 
@@ -34,9 +33,6 @@ public class LoginRegister : UIBehaviour {
         string name = name_field.text;
         string password = password_field.text;
         LoginManager.Instance.Login(name, password);
-
-        UImanager.Instance.ShowUI(UIType.Projects);
-        UImanager.Instance.HideUI(UIType.Login);
     }
 
     public void Register() {
@@ -44,9 +40,6 @@ public class LoginRegister : UIBehaviour {
         string name = name_field.text;
         string password = password_field.text;
         LoginManager.Instance.Register(name, password);
-
-        UImanager.Instance.ShowUI(UIType.Projects);
-        UImanager.Instance.HideUI(UIType.Register);
     }
 
 

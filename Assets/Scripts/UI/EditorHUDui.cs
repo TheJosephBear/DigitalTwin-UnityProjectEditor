@@ -9,7 +9,6 @@ using TransformGizmos;
 
 public class EditorHUDui : UIBehaviour {
 
-    public GameObject canvas;
 
     public override void Hide() {
         canvas.SetActive(false);

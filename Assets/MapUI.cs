@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class MapUI : UIBehaviour {
 
-    public GameObject canvas;
 
     public void onX() {
         AudioManager.Instance.PlaySound(SoundType.click);

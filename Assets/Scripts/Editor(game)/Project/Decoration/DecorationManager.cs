@@ -19,7 +19,7 @@ public class DecorationManager : Singleton<DecorationManager> {
 
     void AddDecorationPreset(DecorationPreset decoPreset) {
        DecorationPresets.Add(decoPreset);
-   //     FindAnyObjectByType<EditorHUDui>().AddDecorationPrefabButton(decoPreset);
+    //    FindAnyObjectByType<EditorHUDui>().AddDecorationPrefabButton(decoPreset);
     }
 
     public void UploadNewDecorationModel(ModelAsset modelAss) {

@@ -9,7 +9,6 @@ using UnityEngine.UI;
 
 public class DecorationPresetUI : UIBehaviour {
 
-    public GameObject canvas;
     public TMP_InputField NameInputText;
 
     void Initialize() {

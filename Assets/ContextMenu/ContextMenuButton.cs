@@ -14,6 +14,9 @@ public class ContextMenuButton : MonoBehaviour {
         button = GetComponent<Button>();
         label.text = tempClass.text;
         button.onClick.RemoveAllListeners();
-        button.onClick.AddListener(() => tempClass.onClickAction?.Invoke());
+
+        button.onClick.AddListener(() => {
+            tempClass.onClickAction?.Invoke();
+        });
     }
 }
