@@ -17,6 +17,38 @@ public class DecorationManager : Singleton<DecorationManager> {
         return decorationPreset;
     }
 
+    public void ShowDecorationVariantEditorMenu() {
+        if (ActiveDecorationPreset == null) 
+            return;
+        FindAnyObjectByType<EditorHUDui>().ToggleVariantUI(true);
+    }
+
+    public void RenameSelectedDecoration(string name) {
+        ActiveDecorationPreset.SetName(name);
+        FindAnyObjectByType<DecorationUI>().RefreshDecorationButtonList(); 
+    }
+
+    public void DeleteSelectedDecoration() {
+        DecorationPresets.Remove(ActiveDecorationPreset);
+        ActiveDecorationPreset = null;
+        FindAnyObjectByType<DecorationUI>().RefreshDecorationButtonList();
+    }
+
+    public void RenameSelectedVariant() {
+
+    }
+
+    public void DeleteSelectedVariant() {
+
+    }
+
+
+
+
+
+
+
+
     void AddDecorationPreset(DecorationPreset decoPreset) {
        DecorationPresets.Add(decoPreset);
     //    FindAnyObjectByType<EditorHUDui>().AddDecorationPrefabButton(decoPreset);

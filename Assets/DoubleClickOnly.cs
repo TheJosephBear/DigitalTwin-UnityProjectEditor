@@ -19,10 +19,16 @@ public class DoubleClickOnly : MonoBehaviour {
 
     void HandleClick() {
         float currentTime = Time.time;
+        print("Clicked");
+        print(currentTime);
+        print(lastClickTime);
+        print(doubleClickTime);
         if (currentTime - lastClickTime < doubleClickTime) {
             // Double-click detected
+            print("Doubleclicked");
             onDoubleClick.Invoke();
         }
         lastClickTime = currentTime;
+        print(lastClickTime);
     }
 }

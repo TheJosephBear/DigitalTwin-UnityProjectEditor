@@ -153,14 +153,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7231660cffb8ce4ebbe7f79886bbb27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clickBeforeContextMenu: 0
   buttons:
   - text: "Otev\u0159\xEDt"
     onClickAction:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: ProjectsUI, Assembly-CSharp
-          m_MethodName: onEditing
+        - m_Target: {fileID: 4023937042281846181}
+          m_TargetAssemblyTypeName: ProjectListButton, Assembly-CSharp
+          m_MethodName: onOtevrit
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -174,9 +175,9 @@ MonoBehaviour:
     onClickAction:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: ProjectsUI, Assembly-CSharp
-          m_MethodName: onRenameProject
+        - m_Target: {fileID: 4023937042281846181}
+          m_TargetAssemblyTypeName: ProjectListButton, Assembly-CSharp
+          m_MethodName: onPrejmenovat
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -190,9 +191,9 @@ MonoBehaviour:
     onClickAction:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: ProjectsUI, Assembly-CSharp
-          m_MethodName: onFeedback
+        - m_Target: {fileID: 4023937042281846181}
+          m_TargetAssemblyTypeName: ProjectListButton, Assembly-CSharp
+          m_MethodName: onZpetnavVaz
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -206,9 +207,9 @@ MonoBehaviour:
     onClickAction:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: ProjectsUI, Assembly-CSharp
-          m_MethodName: onDeleteProject
+        - m_Target: {fileID: 4023937042281846181}
+          m_TargetAssemblyTypeName: ProjectListButton, Assembly-CSharp
+          m_MethodName: onOdstranit
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -234,9 +235,9 @@ MonoBehaviour:
   onDoubleClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: ProjectsUI, Assembly-CSharp
-        m_MethodName: onEditing
+      - m_Target: {fileID: 4023937042281846181}
+        m_TargetAssemblyTypeName: ProjectListButton, Assembly-CSharp
+        m_MethodName: onOtevrit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

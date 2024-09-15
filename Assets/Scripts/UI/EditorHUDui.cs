@@ -9,6 +9,7 @@ using TransformGizmos;
 
 public class EditorHUDui : UIBehaviour {
 
+    public GameObject VariantUI;
 
     public override void Hide() {
         canvas.SetActive(false);
@@ -16,6 +17,11 @@ public class EditorHUDui : UIBehaviour {
 
     public override void Show() {
         canvas.SetActive(true);
+        ToggleVariantUI(false);
+    }
+
+    public void ToggleVariantUI(bool show) {
+        VariantUI.SetActive(show);
     }
 
     public void onProjekt() {
@@ -32,7 +38,6 @@ public class EditorHUDui : UIBehaviour {
     public void onMesto() {
         AudioManager.Instance.PlaySound(SoundType.click);
         UImanager.Instance.ShowUI(UIType.Map);
-
     }
 
     public void onProstredi() {
@@ -44,6 +49,12 @@ public class EditorHUDui : UIBehaviour {
         AudioManager.Instance.PlaySound(SoundType.click);
 
     }
+
+    public void onNahrat() {
+        AudioManager.Instance.PlaySound(SoundType.click);
+
+    }
+
 
     public void onPositionGizmo() {
         AudioManager.Instance.PlaySound(SoundType.click);

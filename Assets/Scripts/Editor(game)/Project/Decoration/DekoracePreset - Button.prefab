@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Varianta1
+  m_text: deko123
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -150,6 +150,8 @@ GameObject:
   - component: {fileID: 4037544633668764399}
   - component: {fileID: 4037544633668764398}
   - component: {fileID: 5136315344247338094}
+  - component: {fileID: 5994986278322219058}
+  - component: {fileID: 1408223860811862143}
   m_Layer: 5
   m_Name: DekoracePreset - Button
   m_TagString: Untagged
@@ -304,3 +306,93 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   text: {fileID: 4037544632830549249}
   SelectedOutline: {fileID: 4037544633668764398}
+--- !u!114 &5994986278322219058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4037544633668764396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7231660cffb8ce4ebbe7f79886bbb27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickBeforeContextMenu: 0
+  buttons:
+  - text: "P\u0159idat do sc\xE9ny"
+    onClickAction:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 5136315344247338094}
+          m_TargetAssemblyTypeName: DecorationButton, Assembly-CSharp
+          m_MethodName: onOtevrit
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - text: "P\u0159ejmenovat"
+    onClickAction:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 5136315344247338094}
+          m_TargetAssemblyTypeName: DecorationButton, Assembly-CSharp
+          m_MethodName: onPrejmenovat
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - text: Odstranit
+    onClickAction:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 5136315344247338094}
+          m_TargetAssemblyTypeName: DecorationButton, Assembly-CSharp
+          m_MethodName: onOdstranit
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &1408223860811862143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4037544633668764396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cf53c49b8504014f836a97ae89eab2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  doubleClickTime: 0.3
+  onDoubleClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5136315344247338094}
+        m_TargetAssemblyTypeName: DecorationButton, Assembly-CSharp
+        m_MethodName: onOtevrit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

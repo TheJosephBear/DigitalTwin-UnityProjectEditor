@@ -1,50 +1,42 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PopUpTextInput : MonoBehaviour {
+public class PopUpTextInput : Singleton<PopUpTextInput> {
 
-    public Text messageLabel;
-    public InputField inputField;
-    public Button submitButton;
+    public GameObject canvas;
+    public TextMeshProUGUI messageLabel;
+    public TMP_InputField inputField;
 
-    private TaskCompletionSource<string> taskCompletionSource;
+    Action<string> onInputSubmitted;
 
-    // This is the prefab for the PopUp, ensure it is assigned in the inspector
-    private static PopUpTextInput instance;
 
-    void Awake() {
-        instance = this;
-        gameObject.SetActive(false); // Hide initially
+    protected override void Awake() {
+        base.Awake();
+        canvas.SetActive(false);
     }
 
-    // Method to display the popup and wait for user input
-    public static Task<string> AskForInput(string message = "Please enter your input:") {
-        instance.gameObject.SetActive(true); // Show the popup
-        instance.messageLabel.text = message; // Set the message
-        instance.inputField.text = ""; // Clear previous input
-        instance.inputField.ActivateInputField(); // Focus the input field
-
-        // Set up TaskCompletionSource to wait for the result
-        instance.taskCompletionSource = new TaskCompletionSource<string>();
-
-        // Return the task which will complete when the user submits
-        return instance.taskCompletionSource.Task;
+    public void AskForInput(string message, Action<string> callback) { 
+        canvas.SetActive(true);
+        messageLabel.text = message;
+        inputField.text = "";
+        onInputSubmitted = callback;
     }
 
-    // Method called when Submit button is clicked
     public void OnSubmitButtonClicked() {
-        string userInput = inputField.text; // Get the input value
-
-        // Complete the task with the user's input and close the popup
-        taskCompletionSource.SetResult(userInput);
-        gameObject.SetActive(false); // Hide the popup
+        AudioManager.Instance.PlaySound(SoundType.click);
+        string userInput = inputField.text;
+        onInputSubmitted?.Invoke(userInput);
+        canvas.SetActive(false);
     }
 
     public void OnCancelButtonClicked() {
-        taskCompletionSource.SetResult(null); // Return null if cancelled
-        gameObject.SetActive(false); // Hide the popup
+        AudioManager.Instance.PlaySound(SoundType.click);
+        onInputSubmitted?.Invoke(null);
+        canvas.SetActive(false);
     }
 }

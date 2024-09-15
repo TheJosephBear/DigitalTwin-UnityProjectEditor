@@ -56,13 +56,25 @@ public class ProjectsUI : UIBehaviour {
     // Call this method when the user initiates the creation of a new project
     public void onNewProject() {
         AudioManager.Instance.PlaySound(SoundType.click);
-        UImanager.Instance.ShowUI(UIType.NewProject);
+        PopUpTextInput.Instance.AskForInput("Jméno projektu", (userInput) => {
+            if (!string.IsNullOrEmpty(userInput)) {
+                ProjectListManager.Instance.CreateNewProject(userInput);
+                RefreshProjectList();
+            } else {
+                Debug.Log("Input was cancelled or empty.");
+            }
+        });
     }
 
     public void onRenameProject() {
         AudioManager.Instance.PlaySound(SoundType.click);
-
-       // ProjectListManager.Instance.RenameProject();
+        PopUpTextInput.Instance.AskForInput("Pøejmenovat projekt", (userInput) => {
+            if (!string.IsNullOrEmpty(userInput)) {
+                ProjectListManager.Instance.RenameProject(userInput);
+            } else {
+                Debug.Log("Input was cancelled or empty.");
+            }
+        });
     }
 
     public void onDeleteProject() {

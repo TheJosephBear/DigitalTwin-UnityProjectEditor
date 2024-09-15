@@ -16,8 +16,7 @@ public class ProjectListManager : Singleton<ProjectListManager> {
         WebCommunicationManager.Instance.CreateProject(newProjectName, (success, response) => {
             if (success) {
                 Debug.Log("Project created: " + response);
-                RefreshProjectListFromServer(null);
-                FindAnyObjectByType<ProjectsUI>().RefreshProjectList();
+            //    RefreshProjectListFromServer(null);
             } else {
                 Debug.LogError("Failed to create project: " + response);
             }
@@ -54,6 +53,10 @@ public class ProjectListManager : Singleton<ProjectListManager> {
         return true; 
     }
 
+    public void OpenProject() {
+        StartCoroutine(LoadEditing());
+    }
+
     public void SelectProject(ProjectWebRefference project) {
         selectedProjectRefference = project;
         Debug.Log("Project selected: " + selectedProjectRefference.projectName);
@@ -81,5 +84,13 @@ public class ProjectListManager : Singleton<ProjectListManager> {
                 Debug.LogError("Failed to deelte project: " + response);
             }
         });
+    }
+
+    IEnumerator LoadEditing() {
+        var loading = SceneLoadingManager.Instance.LoadSceneAsync(SceneType.Editing, 0f);
+        while (!loading.IsCompleted) {
+            yield return null;
+        }
+        UImanager.Instance.HideUI(UIType.Projects);
     }
 }

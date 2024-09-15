@@ -19,14 +19,9 @@ public class DecorationUI : MonoBehaviour {
         AudioManager.Instance.PlaySound(SoundType.click);
         DecorationPreset newDeco = DecorationManager.Instance.CreateNewDecorationPreset();
         DecorationButton newButton = AddButtonToDecorationList(newDeco);
-        newButton.GetSelected();
         RefreshDecorationButtonList();
-        onNastaveni();
     }
 
-    public void onNastaveni() {
-        UImanager.Instance.ShowUI(UIType.DecorationPopUp);
-    }
 
 
 

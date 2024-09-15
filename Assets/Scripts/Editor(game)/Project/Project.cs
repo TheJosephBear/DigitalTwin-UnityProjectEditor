@@ -6,16 +6,20 @@ using UnityEngine;
 public class Project : Singleton<Project> {
 
     /// <summary>
-    /// Stores all the project objects, their positions and metadata
+    /// Stores data needed for editor to worko
     /// </summary>
-    /// 
+    
     public string ProjectName { get; private set; }
 
     protected override void Awake() {
         base.Awake();
-        GetComponent<ProjectSaver>().project = this;
-        SetProjectName("Awesome project");
     }
+
+    public void OpenProject(ProjectWebRefference projectWebReff) {
+        GetComponent<ProjectSaver>().project = this;
+        SetProjectName(projectWebReff.projectName);
+    }
+
 
     public void SetProjectName(string projectName) {
         ProjectName = projectName;

@@ -22,4 +22,28 @@ public class ProjectListButton : MonoBehaviour {
     public void OnClick() {
         ProjectListManager.Instance.SelectProject(projectWebRefference);
     }
+
+    public void onOtevrit() {
+        ProjectListManager.Instance.SelectProject(projectWebRefference);
+        ProjectListManager.Instance.OpenProject();
+    }
+
+    public void onPrejmenovat() {
+        ProjectListManager.Instance.SelectProject(projectWebRefference);
+        PopUpTextInput.Instance.AskForInput("Nové jméno", (input) => { 
+            ProjectListManager.Instance.RenameProject(input);
+        });
+    }
+
+    public void onZpetnavVaz() {
+        ProjectListManager.Instance.SelectProject(projectWebRefference);
+
+    }
+
+    public void onOdstranit() {
+        ProjectListManager.Instance.SelectProject(projectWebRefference);
+        ProjectListManager.Instance.DeleteProject();
+
+    }
+
 }

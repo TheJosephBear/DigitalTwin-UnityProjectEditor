@@ -10,6 +10,7 @@ public class DecorationButton : MonoBehaviour {
     Button button;
     [SerializeField] private TextMeshProUGUI text;
     public Outline SelectedOutline;
+    bool selected = false;
 
     private void Awake() {
         button = GetComponent<Button>();
@@ -24,7 +25,11 @@ public class DecorationButton : MonoBehaviour {
 
     void OnButtonClick() {
         AudioManager.Instance.PlaySound(SoundType.click);
-        GetSelected();
+        if (!selected) {
+            GetSelected();
+        } else {
+            GetUnselected();
+        }
     }
 
     public void GetSelected() {
@@ -34,5 +39,23 @@ public class DecorationButton : MonoBehaviour {
 
     public void GetUnselected() {
         SelectedOutline.enabled = false;    
+    }
+
+    public void onOtevrit() {
+        GetSelected();
+        DecorationManager.Instance.ShowDecorationVariantEditorMenu();   
+    }
+
+    public void onPrejmenovat() {
+        GetSelected();
+        PopUpTextInput.Instance.AskForInput("Pøejmenovat dekoraci", (input) => {
+            if (input!=null) 
+                DecorationManager.Instance.RenameSelectedDecoration(input);
+        });
+    }
+
+    public void onOdstranit() {
+        GetSelected();
+        DecorationManager.Instance.DeleteSelectedDecoration();
     }
 }

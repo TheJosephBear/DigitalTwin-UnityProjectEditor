@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class ContextMenu : MonoBehaviour {
+    public bool clickBeforeContextMenu = true; // when the butto needs to be selected/clicked before the context menu appears
     [SerializeField]
     List<ContextMenuButtonEditor> buttons = new List<ContextMenuButtonEditor>();
     GameObject canvasPrefab;
@@ -22,7 +23,7 @@ public class ContextMenu : MonoBehaviour {
         contextMenuPrefab = manager.contextMenuPrefab;
         buttonPrefab = manager.buttonPrefab;
         eventSystem = FindObjectOfType<EventSystem>();
-        graphicRaycaster = FindObjectOfType<GraphicRaycaster>();
+        graphicRaycaster = manager.graphicRaycaster;
     }
 
     void Update() {
@@ -46,11 +47,14 @@ public class ContextMenu : MonoBehaviour {
             position = Input.mousePosition
         };
         var results = new List<RaycastResult>();
-        graphicRaycaster.Raycast(pointerEventData, results);
+        graphicRaycaster?.Raycast(pointerEventData, results);
 
         foreach (var result in results) {
             if (result.gameObject == this.gameObject) {
                 Vector2 clickPos = Input.mousePosition;
+                if (clickBeforeContextMenu) {
+                    GetComponent<Button>().onClick.Invoke();
+                }
                 OpenContextMenu(clickPos);
                 return;
             }

@@ -23,10 +23,10 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
         yield return www.SendWebRequest();
 
         if (www.result != UnityWebRequest.Result.Success) {
-            Debug.LogError("Error creating project: " + www.error);
+            Debug.LogError("Error creating project on da server : " + www.error);
             callback(false, www.error);
         } else {
-            Debug.Log("Project created successfully!");
+            Debug.Log("Project created successfully on da server!");
             callback(true, www.downloadHandler.text);
         }
     }
