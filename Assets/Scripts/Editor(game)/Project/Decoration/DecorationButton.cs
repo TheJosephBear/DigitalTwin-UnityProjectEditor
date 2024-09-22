@@ -19,7 +19,7 @@ public class DecorationButton : MonoBehaviour {
     public void Initialize(DecorationPreset deco) {
         decorationPreset = deco;
         button.onClick.AddListener(OnButtonClick);
-        button.onClick.AddListener(() => FindAnyObjectByType<DecorationUI>().RefreshDecorationButtonList()); // Nechuù·rna ale nevÌm jak jinak aktualizovat ty outline vöech tlaËÌtek
+        button.onClick.AddListener(() => FindAnyObjectByType<DecorationUI>().RefreshDecorationButtonListSelection()); // Nechuù·rna ale nevÌm jak jinak aktualizovat ty outline vöech tlaËÌtek
         text.text = decorationPreset.Name;
     }
 
@@ -43,7 +43,7 @@ public class DecorationButton : MonoBehaviour {
 
     public void onOtevrit() {
         GetSelected();
-        DecorationManager.Instance.ShowDecorationVariantEditorMenu();   
+        DecorationManager.Instance.ToggleDecorationVariantEditorMenu(true);   
     }
 
     public void onPrejmenovat() {

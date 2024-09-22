@@ -10,20 +10,24 @@ public class ProjectSaver : Singleton<ProjectSaver> {
     public void SaveProject() {
         // Upload all models
         AssetManager.Instance.UploadModelsToWeb();
-        // project serialization
+
+        // Project serialization
         string serializedProject = project.SerializeProject();
-        //upload
-        WebCommunicationManager.Instance.StartUpload(serializedProject);
+
+        // Use the correct endpoint to upload data
+        WebCommunicationManager.Instance.StartUpload(serializedProject, project.ProjectName);
     }
+
 
     public void LoadProject() {
         // Download data from server
-        WebCommunicationManager.Instance.StartDataDownload((data) => {
+        WebCommunicationManager.Instance.StartDataDownload(project.ProjectName, (data) => {
             if (data != null) {
                 project.DeserializeProject(data);
             }
         });
     }
+
 
 
 

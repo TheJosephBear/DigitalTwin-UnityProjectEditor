@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class UImanager : Singleton<UImanager> {
 
+    public GraphicRaycaster graphicRaycasterLatest;
     public List<UIElement> uiElements;
     UIType openedUI;
     UIType savedUI;
@@ -27,7 +28,8 @@ public class UImanager : Singleton<UImanager> {
         if (uiElement != null) {
             openedUI = uiElement.uiType;
             uiElement.uiScript.Show();
-            if(uiElement.defaultSelectedButton != null) EventSystem.current.SetSelectedGameObject(uiElement.defaultSelectedButton.gameObject); // this is Button. i want to select it via code
+            graphicRaycasterLatest = uiElement.canvas.GetComponent<GraphicRaycaster>();
+            if (uiElement.defaultSelectedButton != null) EventSystem.current.SetSelectedGameObject(uiElement.defaultSelectedButton.gameObject); // this is Button. i want to select it via code
         } else {
             Debug.LogWarning($"UIType {uiType} not found.");
         }

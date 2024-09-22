@@ -101,18 +101,15 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
         }
     }
 
-    public void StartUpload(string data) {
-        StartCoroutine(UploadDataCoroutine(data));
+    public void StartUpload(string data, string projectName) {
+        StartCoroutine(UploadDataCoroutine(data, projectName));
     }
 
-    public void StartDataDownload(System.Action<string> callback) {
-        StartCoroutine(DownloadDataCoroutine(callback));
-    }
-
-    IEnumerator UploadDataCoroutine(string data) {
+    IEnumerator UploadDataCoroutine(string data, string projectName) {
         // Create form data
         WWWForm form = new WWWForm();
         form.AddField("myData", data);
+        form.AddField("projectName", projectName); // Include project name
 
         // Send request
         UnityWebRequest www = UnityWebRequest.Post(serverUrlUploadJson, form);
@@ -126,8 +123,14 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
         }
     }
 
-    IEnumerator DownloadDataCoroutine(System.Action<string> callback) {
-        UnityWebRequest www = UnityWebRequest.Get(serverUrlDownload);
+
+    public void StartDataDownload(string projectName, System.Action<string> callback) {
+        StartCoroutine(DownloadDataCoroutine(projectName, callback));
+    }
+
+    IEnumerator DownloadDataCoroutine(string projectName, System.Action<string> callback) {
+        string url = $"{serverUrlDownload}?projectName={UnityWebRequest.EscapeURL(projectName)}";
+        UnityWebRequest www = UnityWebRequest.Get(url);
         yield return www.SendWebRequest();
 
         if (www.result != UnityWebRequest.Result.Success) {
@@ -139,18 +142,23 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
         }
     }
 
+
+
     // Uploads any .obj, .txt, .json, ... file to my server
-    public void UploadFileToServer(string path, string fileName) {
-        StartCoroutine(UploadFileCoroutine(path, fileName));
+    public void UploadFileToServer(string path, string fileName, string projectName) {
+        StartCoroutine(UploadFileCoroutine(path, fileName, projectName));
     }
 
-    IEnumerator UploadFileCoroutine(string path, string fileName) {
+    IEnumerator UploadFileCoroutine(string path, string fileName, string projectName) {
+
+
         fileName += ".obj"; // need to figure out a better way
 
 
         byte[] fileData = File.ReadAllBytes(path);
         WWWForm form = new WWWForm();
         form.AddBinaryData("file", fileData, fileName, "application/octet-stream");
+        form.AddField("projectName", projectName);
 
 
         UnityWebRequest www = UnityWebRequest.Post(serverUrlUploadFiles, form);
@@ -164,14 +172,13 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
         }
     }
 
-    public void DownloadFileFromServer(string fileName, System.Action<byte[]> callback) {
-        StartCoroutine(DownloadFileCoroutine(fileName, callback));
+    public void DownloadFileFromServer(string fileName, string projectName, System.Action<byte[]> callback) {
+        StartCoroutine(DownloadFileCoroutine(fileName, projectName, callback));
     }
 
-    IEnumerator DownloadFileCoroutine(string fileName, System.Action<byte[]> callback) {
+    IEnumerator DownloadFileCoroutine(string fileName, string projectName, System.Action<byte[]> callback) {
         print("Downloading the model from server");
-        fileName += ".obj"; // need to figure out a better way
-        string url = $"{serverUrlDownloadFiles}?fileName={UnityWebRequest.EscapeURL(fileName)}";
+        string url = $"{serverUrlDownloadFiles}?projectName={UnityWebRequest.EscapeURL(projectName)}&fileName={UnityWebRequest.EscapeURL(fileName)}.obj"; // .obj !!!!!
 
         UnityWebRequest www = UnityWebRequest.Get(url);
         yield return www.SendWebRequest();
@@ -180,10 +187,11 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
             Debug.LogError("Error downloading file: " + www.error);
             callback(null);
         } else {
-            print("File downloaded Succesfully");
+            print("File downloaded successfully");
             callback(www.downloadHandler.data);
         }
     }
+
 }
 
 [System.Serializable]

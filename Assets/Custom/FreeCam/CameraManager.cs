@@ -12,21 +12,21 @@ public class CameraManager : MonoBehaviour {
     }
     // THIS NEEDS A MAJOR REWORK
     void Update() {
-        /*
+        
         // on RightClick move
         if (Input.GetMouseButtonDown(1)) {
-            freeCam.ToggleFreeCam(true);
+            freeCam?.ToggleFreeCam(true);
         } else if (Input.GetMouseButtonUp(1)) {
-            freeCam.ToggleFreeCam(false);
+            freeCam?.ToggleFreeCam(false);
         }
 
         // on Shift move
-        /*
+        
         if (Input.GetKeyDown(KeyCode.LeftShift)) {
-            freeCam.ToggleFreeCam(true);
+            freeCam?.ToggleFreeCam(true);
         } else if (Input.GetKeyUp(KeyCode.LeftShift)) {
-            freeCam.ToggleFreeCam(false);
+            freeCam?.ToggleFreeCam(false);
         }
-        */
+        
     }
 }

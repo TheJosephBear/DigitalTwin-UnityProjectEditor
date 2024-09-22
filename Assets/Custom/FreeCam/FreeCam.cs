@@ -25,8 +25,8 @@ public class FreeCam : MonoBehaviour {
 
     public void ToggleFreeCam(bool enable) {
         canMove = enable;
-        activeVCam = FindAnyObjectByType<CinemachineBrain>().ActiveVirtualCamera.VirtualCameraGameObject;
-        if (enable) {
+        activeVCam = FindAnyObjectByType<CinemachineBrain>().ActiveVirtualCamera?.VirtualCameraGameObject;
+        if (activeVCam!= null && enable) {
             // Initialize yaw and pitch to match the current camera rotation
             Vector3 currentRotation = activeVCam.transform.eulerAngles;
             yaw = currentRotation.y;
@@ -35,7 +35,7 @@ public class FreeCam : MonoBehaviour {
             // Hide cursor
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-        } else {
+        } else if(activeVCam != null) {
             // Show cursor
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -43,6 +43,8 @@ public class FreeCam : MonoBehaviour {
     }
 
     void MouseLook() {
+        if (activeVCam == null)
+            return;
         yaw += Input.GetAxis("Mouse X") * mouseSensitivity;
         pitch -= Input.GetAxis("Mouse Y") * mouseSensitivity;
         pitch = Mathf.Clamp(pitch, -90f, 90f);
@@ -51,6 +53,8 @@ public class FreeCam : MonoBehaviour {
     }
 
     void Movement() {
+        if (activeVCam == null) 
+            return;
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
         Vector3 forwardMovement = activeVCam.transform.forward * verticalInput;

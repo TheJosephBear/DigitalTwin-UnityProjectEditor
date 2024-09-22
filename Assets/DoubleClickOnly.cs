@@ -14,21 +14,21 @@ public class DoubleClickOnly : MonoBehaviour {
 
     void Start() {
         button = GetComponent<Button>();
+   //     button.onClick.RemoveAllListeners();
         button.onClick.AddListener(HandleClick);
     }
 
-    void HandleClick() {
+    public void HandleClick() {
         float currentTime = Time.time;
-        print("Clicked");
-        print(currentTime);
-        print(lastClickTime);
-        print(doubleClickTime);
+    //    print("doublick reacts to click");
+    //    print("current time: " +currentTime);
+    //    print("lastClickTime: " + lastClickTime);
         if (currentTime - lastClickTime < doubleClickTime) {
             // Double-click detected
-            print("Doubleclicked");
+    //        print("Doubleclicked");
             onDoubleClick.Invoke();
         }
         lastClickTime = currentTime;
-        print(lastClickTime);
+    //    print("lastClickTime: " + lastClickTime);
     }
 }

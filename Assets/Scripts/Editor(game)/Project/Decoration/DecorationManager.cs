@@ -17,10 +17,10 @@ public class DecorationManager : Singleton<DecorationManager> {
         return decorationPreset;
     }
 
-    public void ShowDecorationVariantEditorMenu() {
-        if (ActiveDecorationPreset == null) 
+    public void ToggleDecorationVariantEditorMenu(bool show) {
+        if (show && ActiveDecorationPreset == null) 
             return;
-        FindAnyObjectByType<EditorHUDui>().ToggleVariantUI(true);
+        FindAnyObjectByType<DecorationUI>().ToggleVariantUI(show);
     }
 
     public void RenameSelectedDecoration(string name) {
@@ -31,14 +31,22 @@ public class DecorationManager : Singleton<DecorationManager> {
     public void DeleteSelectedDecoration() {
         DecorationPresets.Remove(ActiveDecorationPreset);
         ActiveDecorationPreset = null;
+        ToggleDecorationVariantEditorMenu(false);
         FindAnyObjectByType<DecorationUI>().RefreshDecorationButtonList();
     }
 
-    public void RenameSelectedVariant() {
-
+    /* Variant Logic works only when there is a decoration selected */
+    public void SpawnVariant(int variantIdx) {
+        AddInstantiedDecorationToList(ActiveDecorationPreset.Spawn(DecorationSpawnPos, variantIdx));
+        ToggleDecorationVariantEditorMenu(false);
+        FindAnyObjectByType<DecorationUI>().RefreshInstantiatedList();
     }
 
-    public void DeleteSelectedVariant() {
+    public void RenameSelectedVariant(int variantIdx) {
+        
+    }
+
+    public void DeleteSelectedVariant(int variantIdx) {
 
     }
 
@@ -57,14 +65,15 @@ public class DecorationManager : Singleton<DecorationManager> {
     public void UploadNewDecorationModel(ModelAsset modelAss) {
         ActiveDecorationPreset.AddVariant(modelAss);
     }
-
+    /*
     public void SpawnActiveDecoration() {
         GameObject deco = ActiveDecorationPreset.Spawn(DecorationSpawnPos);
         SpawnDecoration(deco);
-    }
+    }*/
 
-    void SpawnDecoration(GameObject DecorationGameObject) {
+    void AddInstantiedDecorationToList(GameObject DecorationGameObject) {
         DecorationsInstantiated.Add(DecorationGameObject.GetComponent<Decoration>());
+        // Update the editor hud scrollview
      //   FindAnyObjectByType<EditorHUDui>().AddDecorationInSceneButton(DecorationGameObject);
     }
 
@@ -74,6 +83,10 @@ public class DecorationManager : Singleton<DecorationManager> {
 
     public DecorationPreset GetActiveDecorationPreset() {
         return ActiveDecorationPreset;
+    }
+
+    public List<Decoration> GetInstantiatedDecorationList() {
+        return DecorationsInstantiated;
     }
 
     public void EnterDecorationSettings() {
@@ -148,9 +161,11 @@ public class DecorationManager : Singleton<DecorationManager> {
             if (preset != null) {
                 int variantIdx = preset.Variants.FindIndex(v => v.ModelID == serializedDecoration.modelAssetID);
                 GameObject deco = preset.Spawn(serializedDecoration.position, variantIdx);
-                SpawnDecoration(deco);
+                AddInstantiedDecorationToList(deco);
             }
         }
+        FindAnyObjectByType<DecorationUI>().RefreshDecorationButtonList();
+        FindAnyObjectByType<DecorationUI>().RefreshInstantiatedList();
     }
 
     DecorationPreset FindDecorationPresetByName(string name) {

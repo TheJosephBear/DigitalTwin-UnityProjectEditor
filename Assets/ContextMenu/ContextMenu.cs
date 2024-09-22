@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -22,8 +23,8 @@ public class ContextMenu : MonoBehaviour {
         canvasPrefab = manager.canvasPrefab;
         contextMenuPrefab = manager.contextMenuPrefab;
         buttonPrefab = manager.buttonPrefab;
-        eventSystem = FindObjectOfType<EventSystem>();
-        graphicRaycaster = manager.graphicRaycaster;
+        eventSystem = EventSystem.current;
+        graphicRaycaster = UImanager.Instance.graphicRaycasterLatest;
     }
 
     void Update() {
@@ -46,7 +47,10 @@ public class ContextMenu : MonoBehaviour {
         pointerEventData = new PointerEventData(eventSystem) {
             position = Input.mousePosition
         };
+
         var results = new List<RaycastResult>();
+        if(graphicRaycaster == null)
+            graphicRaycaster = UImanager.Instance.graphicRaycasterLatest;
         graphicRaycaster?.Raycast(pointerEventData, results);
 
         foreach (var result in results) {
@@ -62,6 +66,7 @@ public class ContextMenu : MonoBehaviour {
     }
 
     void OpenContextMenu(Vector2 clickPos) {
+        print("opening context menu");
         GameObject canvas = Instantiate(canvasPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         activeContextMenu = Instantiate(contextMenuPrefab, canvas.transform);
         SetContextMenuSize();
@@ -82,6 +87,7 @@ public class ContextMenu : MonoBehaviour {
     }
 
     void SetContextMenuPosition(Vector2 clickPosition) {
+        print("setting position");
         Vector2 menuSize = activeContextMenu.GetComponent<RectTransform>().sizeDelta;
         Vector2 position = clickPosition;
 
@@ -108,6 +114,7 @@ public class ContextMenu : MonoBehaviour {
     }
 
     void SetContextMenuSize() {
+        print("setting size");
         float buttonHeight = buttonPrefab.GetComponent<RectTransform>().sizeDelta.y;
         float totalHeight = (buttonHeight * buttons.Count) + (2 * (buttons.Count - 1));
         activeContextMenu.GetComponent<RectTransform>().sizeDelta = new Vector2(activeContextMenu.GetComponent<RectTransform>().sizeDelta.x, totalHeight);

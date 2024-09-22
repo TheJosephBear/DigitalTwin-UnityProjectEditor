@@ -7,9 +7,5 @@ public class ContextMenuManager : MonoBehaviour {
     public GameObject canvasPrefab;
     public GameObject contextMenuPrefab;
     public GameObject buttonPrefab;
-    public GraphicRaycaster graphicRaycaster;
 
-    void Awake() {
-        graphicRaycaster = FindObjectOfType<GraphicRaycaster>();
-    }
 }

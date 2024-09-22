@@ -9,19 +9,13 @@ using TransformGizmos;
 
 public class EditorHUDui : UIBehaviour {
 
-    public GameObject VariantUI;
-
     public override void Hide() {
         canvas.SetActive(false);
     }
 
     public override void Show() {
         canvas.SetActive(true);
-        ToggleVariantUI(false);
-    }
-
-    public void ToggleVariantUI(bool show) {
-        VariantUI.SetActive(show);
+        GetComponent<DecorationUI>().ToggleVariantUI(false);
     }
 
     public void onProjekt() {
@@ -32,7 +26,6 @@ public class EditorHUDui : UIBehaviour {
     public void onDekorace() {
         AudioManager.Instance.PlaySound(SoundType.click);
         UImanager.Instance.ShowUI(UIType.DecorationMain);
-
     }
 
     public void onMesto() {
@@ -42,17 +35,18 @@ public class EditorHUDui : UIBehaviour {
 
     public void onProstredi() {
         AudioManager.Instance.PlaySound(SoundType.click);
+        print("not supported yet!");
         //    UImanager.Instance.ShowUI(UIType.ProjectSettings);
     }
 
     public void onUlozit() {
         AudioManager.Instance.PlaySound(SoundType.click);
-
+        ProjectSaver.Instance.SaveProject();
     }
 
     public void onNahrat() {
         AudioManager.Instance.PlaySound(SoundType.click);
-
+        ProjectSaver.Instance.LoadProject();
     }
 
 
