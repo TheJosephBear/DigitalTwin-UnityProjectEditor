@@ -3,24 +3,23 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Windows;
 
 public class VariantButton : MonoBehaviour {
     
-    int variantIndex;
+    DecorationVariant variant;
     Button button;
     [SerializeField] private TextMeshProUGUI text;
-    bool selected = false;
 
     private void Awake() {
         button = GetComponent<Button>();
     }
 
-    public void Initialize(int variIndex) {
-        variantIndex = variIndex;
-        ModelAsset variantAsset = DecorationManager.Instance.GetActiveDecorationPreset().Variants[variantIndex];
+    public void Initialize(DecorationVariant vari) {
+        variant = vari;
         button.onClick.AddListener(OnButtonClick);
   //      button.onClick.AddListener(() => FindAnyObjectByType<DecorationUI>().RefreshVariantButtonListSelection()); // Nechuárna ale nevím jak jinak aktualizovat ty outline všech tlaèítek
-        text.text = variantAsset.name;
+        text.text = variant.Name;
     }
 
     void OnButtonClick() {
@@ -28,21 +27,17 @@ public class VariantButton : MonoBehaviour {
     }
 
     public void onPridatDoSceny() {
-        //   GetSelected();
-        //  DecorationManager.Instance.ShowDecorationVariantEditorMenu();
-        DecorationManager.Instance.SpawnVariant(variantIndex);
+        DecorationManager.Instance.SpawnVariant(variant);
     }
 
     public void onPrejmenovat() {
-      //  GetSelected();
         PopUpTextInput.Instance.AskForInput("Pøejmenovat dekoraci", (input) => {
-       //     if (input != null)
-              //  DecorationManager.Instance.RenameSelectedDecoration(input);
+            if (input != null)
+                DecorationManager.Instance.RenameVariant(variant, input);
         });
     }
 
     public void onOdstranit() {
-     //   GetSelected();
-     //   DecorationManager.Instance.DeleteSelectedDecoration();
+        DecorationManager.Instance.DeleteVariant(variant);
     }
 }

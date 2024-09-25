@@ -28,8 +28,8 @@ public class Project : Singleton<Project> {
     public string SerializeProject() {
         SerializableProject serializableProject = new SerializableProject {
             projectName = ProjectName,
-            decorationPresets = DecorationManager.Instance.SerializeDecorationPresets(),
-            decorationsInstantiated = DecorationManager.Instance.SerializeDecorationsInstantiated(),
+       //     decorationPresets = DecorationManager.Instance.SerializeDecorationPresets(),
+       //     decorationsInstantiated = DecorationManager.Instance.SerializeDecorationsInstantiated(),
             map = MapManager.Instance.SerializeMap(),
             modelAssets = AssetManager.Instance.SerializeAssetList()
         };
@@ -51,8 +51,8 @@ public class Project : Singleton<Project> {
         });
         yield return new WaitUntil(() => isDeserializationComplete);
 
-        DecorationManager.Instance.DeserializeDecorationPresets(serializedProject.decorationPresets);
-        DecorationManager.Instance.DeserializeDecorationsInstantiated(serializedProject.decorationsInstantiated);
+     //   DecorationManager.Instance.DeserializeDecorationPresets(serializedProject.decorationPresets);
+     //   DecorationManager.Instance.DeserializeDecorationsInstantiated(serializedProject.decorationsInstantiated);
         MapManager.Instance.DeserializeMap(serializedProject.map);
     }
 
@@ -63,8 +63,8 @@ public class Project : Singleton<Project> {
 [Serializable]
 public class SerializableProject {
     public string projectName;
-    public List<SerializableDecorationPreset> decorationPresets;
-    public List<SerializableDecoration> decorationsInstantiated;
+ //   public List<SerializableDecorationPreset> decorationPresets;
+  //  public List<SerializableDecoration> decorationsInstantiated;
     public SerializableMap map;
     public List<SerializableModelAsset> modelAssets;
 }

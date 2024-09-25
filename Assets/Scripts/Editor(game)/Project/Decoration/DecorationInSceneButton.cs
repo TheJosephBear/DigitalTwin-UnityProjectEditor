@@ -18,7 +18,7 @@ public class DecorationInSceneButton : MonoBehaviour
 
     public void Initialize(GameObject go) {
         gameObjectRefference = go;
-        decorationPreset = go.GetComponent<Decoration>().decorationPreset;
+        decorationPreset = go.GetComponent<DecorationInstantiated>().decorationPreset;
         button.onClick.AddListener(OnButtonClick);
         print(decorationPreset.Name);
         text.text = decorationPreset.Name;

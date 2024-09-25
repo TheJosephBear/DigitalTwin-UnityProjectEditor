@@ -35,6 +35,10 @@ public class ProjectListButton : MonoBehaviour {
         });
     }
 
+    public void onDuplikovat() {
+        ProjectListManager.Instance.DuplicateProject(projectWebRefference);
+    }
+
     public void onZpetnavVaz() {
         ProjectListManager.Instance.SelectProject(projectWebRefference);
 

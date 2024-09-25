@@ -28,6 +28,10 @@ public class DecorationUI : MonoBehaviour {
         DecorationButton newButton = AddButtonToDecorationList(newDeco);
         newButton.GetComponent<DecorationButton>().GetSelected();
         RefreshDecorationButtonList();
+        UploadVariantFile();
+    }
+
+    public void UploadVariantFile() {
         FileBrowser.ShowLoadDialog(OnFileSelected, null, FileBrowser.PickMode.Files, false, null, "Select OBJ File", "Select");
     }
 
@@ -36,7 +40,8 @@ public class DecorationUI : MonoBehaviour {
             string path = paths[0];
             if (Path.GetExtension(path).ToLower() == ".obj") {
                 ModelAsset newModel = AssetManager.Instance.CreateNewAsset(path);
-                DecorationManager.Instance.UploadNewDecorationModel(newModel);
+                DecorationManager.Instance.UploadNewDecorationVariant("New Variant", newModel);
+                ToggleVariantUI(true);
             } else {
                 PopUp.Instance.ShowPopUpWindow("Please select .obj file!");
             }
@@ -95,12 +100,12 @@ public class DecorationUI : MonoBehaviour {
             Destroy(butt.gameObject);
         }
         VariantListButtons.Clear();
-        for (int i = 0; i < DecorationManager.Instance.ActiveDecorationPreset.Variants.Count; i++) {
+        foreach (DecorationVariant vari in DecorationManager.Instance.ActiveDecorationPreset.Variants) {
             GameObject button = Instantiate(VariantListButtonPrefab.gameObject);
             button.transform.SetParent(VariantListScrollview.transform);
             button.transform.localScale = new Vector3(1f, 1f, 1f);
             VariantButton VariButtScript = button.GetComponent<VariantButton>();
-            VariButtScript.Initialize(i);
+            VariButtScript.Initialize(vari);
             VariantListButtons.Add(VariButtScript);
         }
     }
@@ -115,7 +120,7 @@ public class DecorationUI : MonoBehaviour {
         }
         InstantiatedListButtons.Clear();
 
-        foreach (Decoration decoration in DecorationManager.Instance.GetInstantiatedDecorationList()) {
+        foreach (DecorationInstantiated decoration in DecorationManager.Instance.GetInstantiatedDecorationList()) {
             GameObject button = Instantiate(InstantiatedListButtonPrefab.gameObject);
             button.transform.SetParent(InstantiatedScrollview.transform);
             button.transform.localScale = new Vector3(1f, 1f, 1f);

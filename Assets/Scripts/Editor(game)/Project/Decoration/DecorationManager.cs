@@ -6,7 +6,7 @@ using UnityEngine;
 public class DecorationManager : Singleton<DecorationManager> {
     
     List<DecorationPreset> DecorationPresets = new List<DecorationPreset>();
-    List<Decoration> DecorationsInstantiated = new List<Decoration>();
+    List<DecorationInstantiated> DecorationsInstantiated = new List<DecorationInstantiated>();
     public DecorationPreset ActiveDecorationPreset { get; private set; } // what is Selected in the DecorationUI
     public Vector3 DecorationSpawnPos;
 
@@ -24,7 +24,7 @@ public class DecorationManager : Singleton<DecorationManager> {
     }
 
     public void RenameSelectedDecoration(string name) {
-        ActiveDecorationPreset.SetName(name);
+        ActiveDecorationPreset.SetName(UniqueNameEnsure(name, DecorationEnsureType.Preset));
         FindAnyObjectByType<DecorationUI>().RefreshDecorationButtonList(); 
     }
 
@@ -36,21 +36,86 @@ public class DecorationManager : Singleton<DecorationManager> {
     }
 
     /* Variant Logic works only when there is a decoration selected */
-    public void SpawnVariant(int variantIdx) {
-        AddInstantiedDecorationToList(ActiveDecorationPreset.Spawn(DecorationSpawnPos, variantIdx));
+    public void SpawnVariant(DecorationVariant variant) {
+        AddInstantiedDecorationToList(ActiveDecorationPreset.Spawn(DecorationSpawnPos, variant));
         ToggleDecorationVariantEditorMenu(false);
         FindAnyObjectByType<DecorationUI>().RefreshInstantiatedList();
     }
 
-    public void RenameSelectedVariant(int variantIdx) {
-        
+    public void RenameVariant(DecorationVariant variant, string newName) {
+        variant.SetName(UniqueNameEnsure(newName, DecorationEnsureType.Variation));
+        FindAnyObjectByType<DecorationUI>().RefreshInstantiatedList();
+        ToggleDecorationVariantEditorMenu(true);
     }
 
-    public void DeleteSelectedVariant(int variantIdx) {
-
+    public void DeleteVariant(DecorationVariant variant) {
+        ActiveDecorationPreset.Variants.Remove(variant);
+        ToggleDecorationVariantEditorMenu(true);
     }
 
+    public void RenameInstantiated(DecorationInstantiated deco, string newName) {
+        deco.SetName(UniqueNameEnsure(newName, DecorationEnsureType.Instantiated));
+        FindAnyObjectByType<DecorationUI>().RefreshInstantiatedList();
+    }
 
+    public void DeleteInstantiated(DecorationInstantiated deco) {
+        DecorationsInstantiated.Remove(deco);
+        Destroy(deco.gameObject);
+        FindAnyObjectByType<DecorationUI>().RefreshInstantiatedList();
+    }
+
+    public bool DecorationPresetNameExists(string name) {
+        int count = DecorationPresets.Count(decorationPreset => decorationPreset.Name == name);
+        return count >= 2;
+    }
+
+    public enum DecorationEnsureType {
+        Preset,
+        Variation,
+        Instantiated
+    }
+
+    string UniqueNameEnsure(string name, DecorationEnsureType type) {
+        string baseName = name;
+        string uniqueName = baseName;
+        int copyNumber = 1;
+
+        bool NameExists(string checkName) {
+            switch (type) {
+                case DecorationEnsureType.Preset:
+                    return DecorationPresets.Any(dp => dp.Name == checkName);
+                case DecorationEnsureType.Variation:
+                    return ActiveDecorationPreset.Variants.Any(variant => variant.Name == checkName);
+                case DecorationEnsureType.Instantiated:
+                    return DecorationsInstantiated.Any(di => di.Name == checkName);
+                default:
+                    return false;
+            }
+        }
+
+        if (!NameExists(uniqueName)) {
+            return uniqueName;
+        }
+
+        while (NameExists(uniqueName)) {
+            int lastIndexOfOpenParenthesis = baseName.LastIndexOf('(');
+            int lastIndexOfCloseParenthesis = baseName.LastIndexOf(')');
+            if (lastIndexOfOpenParenthesis != -1 && lastIndexOfCloseParenthesis == baseName.Length - 1) {
+                string suffix = baseName.Substring(lastIndexOfOpenParenthesis + 1, lastIndexOfCloseParenthesis - lastIndexOfOpenParenthesis - 1);
+                if (int.TryParse(suffix, out int existingNumber)) {
+                    copyNumber = existingNumber + 1;
+                    baseName = baseName.Substring(0, lastIndexOfOpenParenthesis).Trim();
+                }
+            }
+            uniqueName = $"{baseName} ({copyNumber})";
+            copyNumber++;
+        }
+        return uniqueName;
+    }
+
+    public void SetActiveDecorationPreset(DecorationPreset decoration) {
+        ActiveDecorationPreset = decoration;
+    }
 
 
 
@@ -62,8 +127,8 @@ public class DecorationManager : Singleton<DecorationManager> {
     //    FindAnyObjectByType<EditorHUDui>().AddDecorationPrefabButton(decoPreset);
     }
 
-    public void UploadNewDecorationModel(ModelAsset modelAss) {
-        ActiveDecorationPreset.AddVariant(modelAss);
+    public void UploadNewDecorationVariant(string name, ModelAsset modelAss) {
+        ActiveDecorationPreset.AddVariant(name, modelAss);
     }
     /*
     public void SpawnActiveDecoration() {
@@ -72,106 +137,22 @@ public class DecorationManager : Singleton<DecorationManager> {
     }*/
 
     void AddInstantiedDecorationToList(GameObject DecorationGameObject) {
-        DecorationsInstantiated.Add(DecorationGameObject.GetComponent<Decoration>());
+        DecorationsInstantiated.Add(DecorationGameObject.GetComponent<DecorationInstantiated>());
         // Update the editor hud scrollview
      //   FindAnyObjectByType<EditorHUDui>().AddDecorationInSceneButton(DecorationGameObject);
     }
 
-    public void SetActiveDecorationPreset(DecorationPreset decoration) {
-        ActiveDecorationPreset = decoration;
-    }
+    
 
     public DecorationPreset GetActiveDecorationPreset() {
         return ActiveDecorationPreset;
     }
 
-    public List<Decoration> GetInstantiatedDecorationList() {
+    public List<DecorationInstantiated> GetInstantiatedDecorationList() {
         return DecorationsInstantiated;
-    }
-
-    public void EnterDecorationSettings() {
-        UImanager.Instance.ShowUI(UIType.DecorationPopUp);
-    }
-
-    public bool DecorationPresetNameExists(string name) {
-        int count = DecorationPresets.Count(decorationPreset => decorationPreset.Name == name);
-        return count >= 2;
     }
 
     public List<DecorationPreset> GetDecorationsList() {
         return DecorationPresets;
-    }
-
-
-    public List<SerializableDecorationPreset> SerializeDecorationPresets() {
-        List<SerializableDecorationPreset> serializedPresets = new List<SerializableDecorationPreset>();
-
-        foreach (var preset in DecorationPresets) {
-            SerializableDecorationPreset serializedPreset = new SerializableDecorationPreset {
-                name = preset.Name,
-                modelAssetIDs = new List<string>()
-            };
-
-            foreach (var variant in preset.Variants) {
-                serializedPreset.modelAssetIDs.Add(variant.ModelID); 
-            }
-
-            serializedPresets.Add(serializedPreset);
-        }
-
-        return serializedPresets;
-    }
-
-    public List<SerializableDecoration> SerializeDecorationsInstantiated() {
-        List<SerializableDecoration> serializedDecorations = new List<SerializableDecoration>();
-
-        foreach (var decoration in DecorationsInstantiated) {
-            SerializableDecoration serializedDecoration = new SerializableDecoration {
-                decorationPresetName = decoration.decorationPreset.Name,
-                modelAssetID = decoration.decorationPreset.Variants[decoration.decorationVariantIdx].ModelID,
-                position = decoration.transform.position
-            };
-
-            serializedDecorations.Add(serializedDecoration);
-        }
-
-        return serializedDecorations;
-    }
-    public void DeserializeDecorationPresets(List<SerializableDecorationPreset> serializedPresets) {
-        DecorationPresets.Clear();
-
-        foreach (var serializedPreset in serializedPresets) {
-            DecorationPreset preset = new DecorationPreset();
-            preset.SetName(serializedPreset.name);
-
-            foreach (var modelID in serializedPreset.modelAssetIDs) {
-                ModelAsset modelAsset = AssetManager.Instance.FindModelAssetByID(modelID);
-                preset.AddVariant(modelAsset);
-            }
-
-            AddDecorationPreset(preset);
-        }
-    }
-
-    public void DeserializeDecorationsInstantiated(List<SerializableDecoration> serializedDecorations) {
-        DecorationsInstantiated.Clear();
-
-        foreach (var serializedDecoration in serializedDecorations) {
-            DecorationPreset preset = FindDecorationPresetByName(serializedDecoration.decorationPresetName);
-            if (preset != null) {
-                int variantIdx = preset.Variants.FindIndex(v => v.ModelID == serializedDecoration.modelAssetID);
-                GameObject deco = preset.Spawn(serializedDecoration.position, variantIdx);
-                AddInstantiedDecorationToList(deco);
-            }
-        }
-        FindAnyObjectByType<DecorationUI>().RefreshDecorationButtonList();
-        FindAnyObjectByType<DecorationUI>().RefreshInstantiatedList();
-    }
-
-    DecorationPreset FindDecorationPresetByName(string name) {
-        foreach (DecorationPreset decoPre in DecorationPresets) {
-            if (decoPre.Name == name) return decoPre;
-        }
-        return null;
     }
 }

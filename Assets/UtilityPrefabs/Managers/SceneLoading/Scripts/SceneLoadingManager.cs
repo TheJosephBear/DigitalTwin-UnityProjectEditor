@@ -48,9 +48,10 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
         await Task.WhenAll(unloadTasks);
     }
 
-    public void InstantiateObjectInScene(GameObject gameObject, Vector3 position, SceneType scene) {
+    public GameObject InstantiateObjectInScene(GameObject gameObject, Vector3 position, SceneType scene) {
         GameObject go = Instantiate(gameObject, position, Quaternion.identity);
         SceneManager.MoveGameObjectToScene(go, SceneManager.GetSceneByName(scene.ToString()));
+        return go;
     }
 
     IEnumerator LoadSceneAsyncC(SceneField scene, TaskCompletionSource<bool> tcs, float loadingScreenLength, bool addToGameplayScenes) {

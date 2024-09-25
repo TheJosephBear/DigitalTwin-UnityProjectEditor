@@ -4,10 +4,11 @@ using Cinemachine;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Windows;
 
 public class DecorationInstantiatedButton : MonoBehaviour
 {
-    public Decoration decoration;
+    public DecorationInstantiated decoration;
     Button button;
     [SerializeField] private TextMeshProUGUI text;
 
@@ -15,11 +16,10 @@ public class DecorationInstantiatedButton : MonoBehaviour
         button = GetComponent<Button>();
     }
 
-    public void Initialize(Decoration deco) {
+    public void Initialize(DecorationInstantiated deco) {
         decoration = deco;
         button.onClick.AddListener(OnButtonClick);
-        button.onClick.AddListener(() => FindAnyObjectByType<DecorationUI>().RefreshDecorationButtonListSelection()); // Nechuárna ale nevím jak jinak aktualizovat ty outline všech tlaèítek
-        text.text = decoration.decorationPreset.Name;
+        text.text = decoration.Name;
     }
 
     void OnButtonClick() {
@@ -45,11 +45,11 @@ public class DecorationInstantiatedButton : MonoBehaviour
     public void onPrejmenovat() {
         PopUpTextInput.Instance.AskForInput("Pøejmenovat dekoraci ve scénì", (input) => {
             if (input != null)
-                DecorationManager.Instance.RenameSelectedDecoration(input);
+                DecorationManager.Instance.RenameInstantiated(decoration, input);
         });
     }
 
     public void onOdstranit() {
-      //  DecorationManager.Instance.DeleteSelectedDecoration();
+        DecorationManager.Instance.DeleteInstantiated(decoration);
     }
 }

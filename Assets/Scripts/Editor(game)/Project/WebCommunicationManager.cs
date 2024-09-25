@@ -52,6 +52,26 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
         }
     }
 
+    public void DuplicateProject(string name, System.Action<bool, string> callback) {
+        StartCoroutine(DuplicateProjectCoroutine(name, callback));
+    }
+
+    IEnumerator DuplicateProjectCoroutine(string name, System.Action<bool, string> callback) {
+        WWWForm form = new WWWForm();
+        form.AddField("projectName", name);
+
+        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/duplicate_project", form);
+        yield return www.SendWebRequest();
+
+        if (www.result != UnityWebRequest.Result.Success) {
+            Debug.LogError("Error editing project name: " + www.error);
+            callback(false, www.error);
+        } else {
+            Debug.Log("Project name edited successfully!");
+            callback(true, www.downloadHandler.text);
+        }
+    }
+
     public void DeleteProject(string projectName, System.Action<bool, string> callback) {
         StartCoroutine(DeleteProjectCoroutine(projectName, callback));
     }

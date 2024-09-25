@@ -65,6 +65,18 @@ public class EditorHUDui : UIBehaviour {
         GizmoController.Instance.SelectScale();
     }
 
+    public void onLeave() {
+        StartCoroutine(UnloadEditing());
+    }
+    IEnumerator UnloadEditing() {
+        var task = SceneLoadingManager.Instance.UnLoadSceneAsync(SceneType.Editing);
+        while (!task.IsCompleted) {
+            yield return null;
+        }
+        UImanager.Instance.HideUI(UIType.EditorHUD);
+        UImanager.Instance.ShowUI(UIType.Projects);
+
+    }
     /*
     public void onUploadMap() {
         AudioManager.Instance.PlaySound(SoundType.click);

@@ -10,23 +10,23 @@ public class DecorationPreset {
     /// </summary>
     
     public string Name { get; private set; }
-    public List<ModelAsset> Variants = new List<ModelAsset>();
+    public List<DecorationVariant> Variants = new List<DecorationVariant>();
 
-    public void AddVariant(ModelAsset model) {
-        if(Variants.Contains(model)) return;
-        Variants.Add(model);
+    public void AddVariant(string name, ModelAsset model) {
+        Variants.Add(new DecorationVariant(name, model));
     }
 
     public void SetName(string name) {
         Name = name;
     }
 
-    public GameObject Spawn(Vector3 pos, int variantIdx = 0) {
-        GameObject spawned = Variants[variantIdx].InstantiateModel(pos);
+    public GameObject Spawn(Vector3 pos, DecorationVariant variant) {
+        GameObject spawned = variant.Model.InstantiateModel(pos);
         spawned.SetActive(true);
-        Decoration decoScript = spawned.AddComponent<Decoration>();
+        DecorationInstantiated decoScript = spawned.AddComponent<DecorationInstantiated>();
         decoScript.decorationPreset = this;
-        decoScript.decorationVariantIdx = variantIdx;
+        decoScript.decorationVariant = variant;
+        decoScript.SetName(variant.Name);
         AddMeshColliderToAllChildren(spawned);
         return spawned;
     }
@@ -55,10 +55,4 @@ public class DecorationPreset {
 
     }
 
-}
-
-[Serializable]
-public class SerializableDecorationPreset {
-    public string name;
-    public List<string> modelAssetIDs;  
 }

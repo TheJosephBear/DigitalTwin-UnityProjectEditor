@@ -25,7 +25,7 @@ public class DecorationPresetUI : UIBehaviour {
         // die :(
         UImanager.Instance.HideUI(UIType.DecorationPopUp);
     }
-
+    /*
     public void onPridatVariantu() {
         FileBrowser.ShowLoadDialog(NewVariantAdded, null, FileBrowser.PickMode.Files, false, null, "Select OBJ File", "Select");
     }
@@ -36,7 +36,7 @@ public class DecorationPresetUI : UIBehaviour {
 
     public void onNahratModel() {
         FileBrowser.ShowLoadDialog(VariantEdited, null, FileBrowser.PickMode.Files, false, null, "Select OBJ File", "Select");
-    }
+    }*/
 
     public void onOdstranit() {
 
@@ -99,17 +99,17 @@ public class DecorationPresetUI : UIBehaviour {
     void HideUI() {
         UImanager.Instance.HideUI(UIType.DecorationPopUp);
     }
-
+    /*
     void NewVariantAdded(string[] paths) {
         if (paths.Length > 0) {
             string path = paths[0];
             if (Path.GetExtension(path).ToLower() == ".obj") {
                 ModelAsset modelAsset = AssetManager.Instance.CreateNewAsset(path);
-                DecorationManager.Instance.UploadNewDecorationModel(modelAsset);
+                DecorationManager.Instance.UploadNewDecorationVariant(modelAsset);
             }
         }
-    }
-
+    }*/
+    /*
     void VariantEdited(string[] paths) {
         if (paths.Length > 0) {
             string path = paths[0];
@@ -118,7 +118,7 @@ public class DecorationPresetUI : UIBehaviour {
                 DecorationManager.Instance.UploadNewDecorationModel(modelAsset);
             }
         }
-    }
+    }*/
 
     public override void Show() {
         canvas.SetActive(true);

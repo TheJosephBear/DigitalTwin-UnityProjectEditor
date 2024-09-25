@@ -66,10 +66,22 @@ public class ProjectListManager : Singleton<ProjectListManager> {
         WebCommunicationManager.Instance.EditProjectName(selectedProjectRefference.projectName, newName, (success, response) => {
             if (success) {
                 Debug.Log(response);
-                RefreshProjectListFromServer(null);
+                RefreshProjectListFromServer((resp) => { print(resp); });
                 FindAnyObjectByType<ProjectsUI>().RefreshProjectList();
             } else {
-                Debug.LogError("Failed" + response);
+                Debug.LogError("Failed " + response);
+            }
+        });
+    }
+
+    public void DuplicateProject(ProjectWebRefference project) {
+        WebCommunicationManager.Instance.DuplicateProject(project.projectName, (success, response) => {
+            if (success) {
+                Debug.Log(response);
+                RefreshProjectListFromServer((resp) => { print(resp); });
+                FindAnyObjectByType<ProjectsUI>().RefreshProjectList();
+            } else {
+                Debug.LogError("Failed " + response);
             }
         });
     }
@@ -78,7 +90,7 @@ public class ProjectListManager : Singleton<ProjectListManager> {
         WebCommunicationManager.Instance.DeleteProject(selectedProjectRefference.projectName, (success, response) => {
             if (success) {
                 Debug.Log("Project deleted: " + response);
-                RefreshProjectListFromServer(null);
+                RefreshProjectListFromServer((resp) => { print(resp); });
                 FindAnyObjectByType<ProjectsUI>().RefreshProjectList();
             } else {
                 Debug.LogError("Failed to deelte project: " + response);
