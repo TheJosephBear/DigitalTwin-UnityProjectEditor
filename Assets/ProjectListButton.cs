@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ProjectListButton : MonoBehaviour {
-
+    
     public TMP_Text projectNameText;
     ProjectWebRefference projectWebRefference;
 

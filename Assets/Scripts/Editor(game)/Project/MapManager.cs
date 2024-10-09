@@ -15,7 +15,7 @@ public class MapManager : Singleton<MapManager> {
 
     public void SpawnMap() {
         GameObject go = map.InstantiateModel(mapSpawnPosition);
-        go.SetActive(true);
+        go?.SetActive(true);
     }
 
     public SerializableMap SerializeMap() {
