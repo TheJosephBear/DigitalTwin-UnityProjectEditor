@@ -6,7 +6,7 @@ public class EditorInitializer : MonoBehaviour, Iinitializer
 {
     public void Initialize() {
         UImanager.Instance.ShowUI(UIType.EditorHUD);
-        Project.Instance.OpenProject(ProjectListManager.Instance.selectedProjectRefference);
+        ProjectManager.Instance.OpenProject(ProjectListManager.Instance.selectedProjectRefference);
     }
 
     public void StartRunning() {

@@ -18,6 +18,7 @@ public class ProjectsUI : UIBehaviour {
     public override void Show() {
         canvas.SetActive(true);
         Initialize();
+        UImanager.Instance.SetRaycasterFromLatestUI();
     }
 
     // Initialize and refresh the project list in the UI

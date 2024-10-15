@@ -36,6 +36,13 @@ public class AssetManager : Singleton<AssetManager> {
         return modelAsset;
     }
 
+    public void ClearEverything() {
+        foreach (ModelAsset modelAsset in assets) {
+            Destroy(modelAsset.gameObject);
+        }
+        assets.Clear();
+    }
+
     string GetFileHash(string filePath) {
         using (var md5 = MD5.Create()) {
             using (var stream = File.OpenRead(filePath)) {
@@ -47,7 +54,7 @@ public class AssetManager : Singleton<AssetManager> {
 
     public void UploadModelsToWeb() {
         foreach(ModelAsset modelAsset in assets) {
-            WebCommunicationManager.Instance.UploadFileToServer(modelAsset.filePath, modelAsset.ModelID, ProjectSaver.Instance.project.ProjectName);
+            WebCommunicationManager.Instance.UploadFileToServer(modelAsset.filePath, modelAsset.ModelID, ProjectManager.Instance.project.ProjectName);
         }
     }
 
@@ -79,7 +86,7 @@ public class AssetManager : Singleton<AssetManager> {
     }
 
     void DownloadModel(string objectID, System.Action<ModelAsset> onComplete) {
-        WebCommunicationManager.Instance.DownloadFileFromServer(objectID, ProjectSaver.Instance.project.ProjectName, fileData => {
+        WebCommunicationManager.Instance.DownloadFileFromServer(objectID, ProjectManager.Instance.project.ProjectName, fileData => {
             if (fileData == null) {
                 Debug.LogError("Failed to download model file.");
                 onComplete(null);

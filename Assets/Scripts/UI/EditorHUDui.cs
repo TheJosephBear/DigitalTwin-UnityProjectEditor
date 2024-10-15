@@ -16,6 +16,7 @@ public class EditorHUDui : UIBehaviour {
     public override void Show() {
         canvas.SetActive(true);
         GetComponent<DecorationUI>().ToggleVariantUI(false);
+        UImanager.Instance.SetRaycasterFromLatestUI();
     }
 
     public void onProjekt() {
@@ -41,12 +42,12 @@ public class EditorHUDui : UIBehaviour {
 
     public void onUlozit() {
         AudioManager.Instance.PlaySound(SoundType.click);
-        ProjectSaver.Instance.SaveProject();
+        ProjectManager.Instance.SaveProject();
     }
 
     public void onNahrat() {
         AudioManager.Instance.PlaySound(SoundType.click);
-        ProjectSaver.Instance.LoadProject();
+        ProjectManager.Instance.LoadProject();
     }
 
 
@@ -73,6 +74,7 @@ public class EditorHUDui : UIBehaviour {
         while (!task.IsCompleted) {
             yield return null;
         }
+        ProjectManager.Instance.CloseProject();
         UImanager.Instance.HideUI(UIType.EditorHUD);
         UImanager.Instance.ShowUI(UIType.Projects);
 

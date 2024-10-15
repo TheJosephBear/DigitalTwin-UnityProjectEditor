@@ -6,7 +6,7 @@ using UnityEngine;
 public class MapManager : Singleton<MapManager> {
 
     ModelAsset map;
-    public Vector3 mapSpawnPosition; 
+    public Vector3 mapSpawnPosition;
 
     public void UploadMapModel(ModelAsset newMap) {
         map = newMap;
@@ -16,6 +16,10 @@ public class MapManager : Singleton<MapManager> {
     public void SpawnMap() {
         GameObject go = map.InstantiateModel(mapSpawnPosition);
         go.SetActive(true);
+    }
+
+    public void ClearEverything() {
+        map = null;
     }
 
     public SerializableMap SerializeMap() {

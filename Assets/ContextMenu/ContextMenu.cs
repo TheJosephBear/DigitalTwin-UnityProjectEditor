@@ -44,6 +44,7 @@ public class ContextMenu : MonoBehaviour {
     }
 
     void CheckRightClickUI() {
+        print("checking rightclick");
         pointerEventData = new PointerEventData(eventSystem) {
             position = Input.mousePosition
         };
@@ -52,6 +53,8 @@ public class ContextMenu : MonoBehaviour {
         if(graphicRaycaster == null)
             graphicRaycaster = UImanager.Instance.graphicRaycasterLatest;
         graphicRaycaster?.Raycast(pointerEventData, results);
+
+        print("graphicRaycaster: "+ graphicRaycaster);
 
         foreach (var result in results) {
             if (result.gameObject == this.gameObject) {

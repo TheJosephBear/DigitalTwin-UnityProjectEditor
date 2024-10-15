@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Project : Singleton<Project> {
+public class Project : MonoBehaviour {
 
     /// <summary>
     /// Stores data needed for editor to worko
@@ -11,13 +11,14 @@ public class Project : Singleton<Project> {
     
     public string ProjectName { get; private set; }
 
-    protected override void Awake() {
-        base.Awake();
-    }
-
     public void OpenProject(ProjectWebRefference projectWebReff) {
-        GetComponent<ProjectSaver>().project = this;
         SetProjectName(projectWebReff.projectName);
+    }
+    
+    public void CloseProject() {
+        AssetManager.Instance.ClearEverything();
+        DecorationManager.Instance.ClearEverything();
+        MapManager.Instance.ClearEverything();
     }
 
 
@@ -28,10 +29,10 @@ public class Project : Singleton<Project> {
     public string SerializeProject() {
         SerializableProject serializableProject = new SerializableProject {
             projectName = ProjectName,
-       //     decorationPresets = DecorationManager.Instance.SerializeDecorationPresets(),
-       //     decorationsInstantiated = DecorationManager.Instance.SerializeDecorationsInstantiated(),
             map = MapManager.Instance.SerializeMap(),
-            modelAssets = AssetManager.Instance.SerializeAssetList()
+            modelAssets = AssetManager.Instance.SerializeAssetList(),
+            decorationPresets = DecorationManager.Instance.SerializeDecorationPresets(),
+            decorationsInstantiated = DecorationManager.Instance.SerializeDecorationsInstantiated()
         };
         return JsonUtility.ToJson(serializableProject);
     }
@@ -42,29 +43,43 @@ public class Project : Singleton<Project> {
 
     IEnumerator DeserializeCoroutine(string json) {
         SerializableProject serializedProject = JsonUtility.FromJson<SerializableProject>(json);
-
         SetProjectName(serializedProject.projectName);
-        // Wait for models to load
         bool isDeserializationComplete = false;
         AssetManager.Instance.DeserializeAssetList(serializedProject.modelAssets, () => {
             isDeserializationComplete = true;
         });
         yield return new WaitUntil(() => isDeserializationComplete);
-
-     //   DecorationManager.Instance.DeserializeDecorationPresets(serializedProject.decorationPresets);
-     //   DecorationManager.Instance.DeserializeDecorationsInstantiated(serializedProject.decorationsInstantiated);
+        DecorationManager.Instance.DeserializeDecorationPresets(serializedProject.decorationPresets);
+        DecorationManager.Instance.DeserializeDecorationsInstantiated(serializedProject.decorationsInstantiated);
         MapManager.Instance.DeserializeMap(serializedProject.map);
     }
-
-
-
 }
 
 [Serializable]
 public class SerializableProject {
     public string projectName;
- //   public List<SerializableDecorationPreset> decorationPresets;
-  //  public List<SerializableDecoration> decorationsInstantiated;
     public SerializableMap map;
     public List<SerializableModelAsset> modelAssets;
+    public List<SerializableDecorationPreset> decorationPresets;
+    public List<SerializableDecorationInstantiated> decorationsInstantiated;
+}
+
+[Serializable]
+public class SerializableDecorationPreset {
+    public string presetName;
+    public List<SerializableDecorationVariant> variants;
+}
+
+[Serializable]
+public class SerializableDecorationVariant {
+    public string variantName;
+    public string modelID;
+}
+
+[Serializable]
+public class SerializableDecorationInstantiated {
+    public string instanceName;
+    public string presetName;
+    public string variantName;
+    public Vector3 position;
 }

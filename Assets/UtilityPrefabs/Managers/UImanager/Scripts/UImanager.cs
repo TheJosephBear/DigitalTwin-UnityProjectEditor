@@ -14,7 +14,18 @@ public class UImanager : Singleton<UImanager> {
 
     protected override void Awake() {
         base.Awake();
+        SetUpCanvases();
         HideAllUIs();
+    }
+
+    void SetUpCanvases() {
+        foreach (UIElement element in uiElements) {
+            element.canvas = element.uiScript.canvas.GetComponent<Canvas>();
+        }
+    }
+
+    public void SetRaycasterFromLatestUI() {
+        graphicRaycasterLatest = uiElements.Find(element => element.uiType == openedUI)?.canvas.GetComponent<GraphicRaycaster>();
     }
 
     public void HideAllUIs() {
@@ -28,7 +39,6 @@ public class UImanager : Singleton<UImanager> {
         if (uiElement != null) {
             openedUI = uiElement.uiType;
             uiElement.uiScript.Show();
-            graphicRaycasterLatest = uiElement.canvas.GetComponent<GraphicRaycaster>();
             if (uiElement.defaultSelectedButton != null) EventSystem.current.SetSelectedGameObject(uiElement.defaultSelectedButton.gameObject); // this is Button. i want to select it via code
         } else {
             Debug.LogWarning($"UIType {uiType} not found.");
@@ -78,7 +88,7 @@ public enum UIType {
 [System.Serializable]
 public class UIElement {
     public UIType uiType;
-    public Canvas canvas;
     public UIBehaviour uiScript;
     public Button defaultSelectedButton;
+    public Canvas canvas;
 }

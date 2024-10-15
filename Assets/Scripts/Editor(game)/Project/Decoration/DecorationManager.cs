@@ -117,6 +117,11 @@ public class DecorationManager : Singleton<DecorationManager> {
         ActiveDecorationPreset = decoration;
     }
 
+    public void ClearEverything() {
+        DecorationPresets.Clear();
+        DecorationsInstantiated.Clear();
+        ActiveDecorationPreset = null;
+    }
 
 
 
@@ -124,25 +129,15 @@ public class DecorationManager : Singleton<DecorationManager> {
 
     void AddDecorationPreset(DecorationPreset decoPreset) {
        DecorationPresets.Add(decoPreset);
-    //    FindAnyObjectByType<EditorHUDui>().AddDecorationPrefabButton(decoPreset);
     }
 
     public void UploadNewDecorationVariant(string name, ModelAsset modelAss) {
         ActiveDecorationPreset.AddVariant(name, modelAss);
     }
-    /*
-    public void SpawnActiveDecoration() {
-        GameObject deco = ActiveDecorationPreset.Spawn(DecorationSpawnPos);
-        SpawnDecoration(deco);
-    }*/
 
     void AddInstantiedDecorationToList(GameObject DecorationGameObject) {
         DecorationsInstantiated.Add(DecorationGameObject.GetComponent<DecorationInstantiated>());
-        // Update the editor hud scrollview
-     //   FindAnyObjectByType<EditorHUDui>().AddDecorationInSceneButton(DecorationGameObject);
     }
-
-    
 
     public DecorationPreset GetActiveDecorationPreset() {
         return ActiveDecorationPreset;
@@ -154,5 +149,62 @@ public class DecorationManager : Singleton<DecorationManager> {
 
     public List<DecorationPreset> GetDecorationsList() {
         return DecorationPresets;
+    }
+
+    DecorationPreset GetPresetByName(string presetName) {
+        return DecorationPresets.Find(dp => dp.Name == presetName);
+    }
+
+    public List<SerializableDecorationPreset> SerializeDecorationPresets() {
+        List<SerializableDecorationPreset> serializablePresets = new List<SerializableDecorationPreset>();
+        foreach (var preset in DecorationPresets) {
+            SerializableDecorationPreset serializablePreset = new SerializableDecorationPreset {
+                presetName = preset.Name,
+                variants = preset.Variants.Select(v => new SerializableDecorationVariant {
+                    variantName = v.Name,
+                    modelID = v.Model.ModelID
+                }).ToList()
+            };
+            serializablePresets.Add(serializablePreset);
+        }
+        return serializablePresets;
+    }
+
+    public List<SerializableDecorationInstantiated> SerializeDecorationsInstantiated() {
+        List<SerializableDecorationInstantiated> serializableInstantiated = new List<SerializableDecorationInstantiated>();
+        foreach (var deco in DecorationsInstantiated) {
+            SerializableDecorationInstantiated instantiated = new SerializableDecorationInstantiated {
+                instanceName = deco.Name,
+                presetName = deco.decorationPreset.Name,
+                variantName = deco.decorationVariant.Name,
+                position = deco.transform.position
+            };
+            serializableInstantiated.Add(instantiated);
+        }
+        return serializableInstantiated;
+    }
+
+    public void DeserializeDecorationPresets(List<SerializableDecorationPreset> serializedPresets) {
+        foreach (var serializedPreset in serializedPresets) {
+            DecorationPreset preset = new DecorationPreset();
+            preset.SetName(serializedPreset.presetName);
+
+            foreach (var serializedVariant in serializedPreset.variants) {
+                ModelAsset modelAsset = AssetManager.Instance.FindModelAssetByID(serializedVariant.modelID);
+                preset.AddVariant(serializedVariant.variantName, modelAsset);
+            }
+            DecorationPresets.Add(preset);
+        }
+        FindAnyObjectByType<DecorationUI>().RefreshDecorationButtonList();
+    }
+
+    public void DeserializeDecorationsInstantiated(List<SerializableDecorationInstantiated> serializedInstantiated) {
+        foreach (var instantiated in serializedInstantiated) {
+            DecorationPreset preset = GetPresetByName(instantiated.presetName);
+            DecorationVariant variant = preset.Variants.FirstOrDefault(v => v.Name == instantiated.variantName);
+            SetActiveDecorationPreset(preset);
+            SpawnVariant(variant);
+        }
+        FindAnyObjectByType<DecorationUI>().RefreshInstantiatedList();
     }
 }
