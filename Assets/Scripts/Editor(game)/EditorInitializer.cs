@@ -21,7 +21,7 @@ public class EditorInitializer : MonoBehaviour, Iinitializer
     public IEnumerator ProjectLoading() {
         UImanager.Instance.ShowUI(UIType.LoadingScreen);
 
-        var loadTask = ProjectSaver.Instance.LoadProjectAsync();
+        var loadTask = ProjectManager.Instance.LoadProjectAsync();
         yield return new WaitUntil(() => loadTask.IsCompleted);
 
         if (loadTask.Result) {

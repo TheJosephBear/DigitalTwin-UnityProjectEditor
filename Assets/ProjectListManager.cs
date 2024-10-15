@@ -19,8 +19,8 @@ public class ProjectListManager : Singleton<ProjectListManager> {
                 //    RefreshProjectListFromServer(null);
                 // Simulate opening and saving the project
                 RefreshProjectListFromServer((a) => {
-                    Project.Instance.OpenProject(projectRefferenceList.Find(x => x.projectName == newProjectName));
-                    ProjectSaver.Instance.SaveProject();
+                    ProjectManager.Instance.OpenProject(projectRefferenceList.Find(x => x.projectName == newProjectName));
+                    ProjectManager.Instance.SaveProject();
                 });
             } else {
                 Debug.LogError("Failed to create project: " + response);

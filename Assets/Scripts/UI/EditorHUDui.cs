@@ -70,7 +70,7 @@ public class EditorHUDui : UIBehaviour {
         StartCoroutine(UnloadEditing());
     }
     IEnumerator UnloadEditing() {
-        ProjectSaver.Instance.SaveProject();
+        ProjectManager.Instance.SaveProject();
         var task = SceneLoadingManager.Instance.UnLoadSceneAsync(SceneType.Editing);
         while (!task.IsCompleted) {
             yield return null;
