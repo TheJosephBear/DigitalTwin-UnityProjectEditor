@@ -47,7 +47,7 @@ public class EditorHUDui : UIBehaviour {
 
     public void onNahrat() {
         AudioManager.Instance.PlaySound(SoundType.click);
-        ProjectManager.Instance.LoadProject();
+        print("not supported yet!");
     }
 
 
@@ -70,6 +70,7 @@ public class EditorHUDui : UIBehaviour {
         StartCoroutine(UnloadEditing());
     }
     IEnumerator UnloadEditing() {
+        ProjectSaver.Instance.SaveProject();
         var task = SceneLoadingManager.Instance.UnLoadSceneAsync(SceneType.Editing);
         while (!task.IsCompleted) {
             yield return null;

@@ -7,6 +7,7 @@ public class EditorInitializer : MonoBehaviour, Iinitializer
     public void Initialize() {
         UImanager.Instance.ShowUI(UIType.EditorHUD);
         ProjectManager.Instance.OpenProject(ProjectListManager.Instance.selectedProjectRefference);
+        StartCoroutine(ProjectLoading());
     }
 
     public void StartRunning() {
@@ -15,6 +16,19 @@ public class EditorInitializer : MonoBehaviour, Iinitializer
 
     public void Unload() {
 
+    }
+
+    public IEnumerator ProjectLoading() {
+        UImanager.Instance.ShowUI(UIType.LoadingScreen);
+
+        var loadTask = ProjectSaver.Instance.LoadProjectAsync();
+        yield return new WaitUntil(() => loadTask.IsCompleted);
+
+        if (loadTask.Result) {
+            UImanager.Instance.HideUI(UIType.LoadingScreen);
+        } else {
+            Debug.LogError("Failed to load the project.");
+        }
     }
 
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Project : MonoBehaviour {
@@ -37,11 +38,13 @@ public class Project : MonoBehaviour {
         return JsonUtility.ToJson(serializableProject);
     }
 
-    public void DeserializeProject(string json) {
-        StartCoroutine(DeserializeCoroutine(json));
+    public Task<bool> DeserializeProjectAsync(string json) {
+        var tcs = new TaskCompletionSource<bool>();
+        StartCoroutine(DeserializeCoroutine(json, tcs)); // Pass the TaskCompletionSource to the coroutine
+        return tcs.Task; // Return the task so it can be awaited
     }
 
-    IEnumerator DeserializeCoroutine(string json) {
+    IEnumerator DeserializeCoroutine(string json, TaskCompletionSource<bool> tcs) {
         SerializableProject serializedProject = JsonUtility.FromJson<SerializableProject>(json);
         SetProjectName(serializedProject.projectName);
         bool isDeserializationComplete = false;
@@ -49,9 +52,12 @@ public class Project : MonoBehaviour {
             isDeserializationComplete = true;
         });
         yield return new WaitUntil(() => isDeserializationComplete);
+
         DecorationManager.Instance.DeserializeDecorationPresets(serializedProject.decorationPresets);
         DecorationManager.Instance.DeserializeDecorationsInstantiated(serializedProject.decorationsInstantiated);
         MapManager.Instance.DeserializeMap(serializedProject.map);
+
+        tcs.SetResult(true); // Complete the task when everything is done
     }
 }
 

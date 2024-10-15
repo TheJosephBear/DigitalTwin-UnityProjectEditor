@@ -16,7 +16,12 @@ public class ProjectListManager : Singleton<ProjectListManager> {
         WebCommunicationManager.Instance.CreateProject(newProjectName, (success, response) => {
             if (success) {
                 Debug.Log("Project created: " + response);
-                RefreshProjectListFromServer((resp) => { print(resp); });
+                //    RefreshProjectListFromServer(null);
+                // Simulate opening and saving the project
+                RefreshProjectListFromServer((a) => {
+                    Project.Instance.OpenProject(projectRefferenceList.Find(x => x.projectName == newProjectName));
+                    ProjectSaver.Instance.SaveProject();
+                });
             } else {
                 Debug.LogError("Failed to create project: " + response);
             }

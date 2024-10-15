@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class ProjectManager : Singleton<ProjectManager> {
@@ -18,12 +19,21 @@ public class ProjectManager : Singleton<ProjectManager> {
         WebCommunicationManager.Instance.StartUpload(serializedProject, project.ProjectName);
     }
 
-    public void LoadProject() {
-        WebCommunicationManager.Instance.StartDataDownload(project.ProjectName, (data) => {
+
+    public async Task<bool> LoadProjectAsync() {
+        var tcs = new TaskCompletionSource<bool>();
+
+        // Start downloading data from the server
+        WebCommunicationManager.Instance.StartDataDownload(project.ProjectName, async (data) => {
             if (data != null) {
-                project.DeserializeProject(data);
+                bool success = await Project.Instance.DeserializeProjectAsync(data); // Await deserialization
+                tcs.SetResult(success); // Return true if the whole process succeeded
+            } else {
+                tcs.SetResult(false); // Task failed
             }
         });
+
+        return await tcs.Task; // Await the completion of the task
     }
 
     public void OpenProject(ProjectWebRefference projectWebReff) {
