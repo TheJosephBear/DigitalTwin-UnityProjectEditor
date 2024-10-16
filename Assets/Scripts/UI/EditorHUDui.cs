@@ -6,6 +6,8 @@ using SimpleFileBrowser;
 using UnityEngine;
 using UnityEngine.UI;
 using TransformGizmos;
+using System;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public class EditorHUDui : UIBehaviour {
 
@@ -47,7 +49,14 @@ public class EditorHUDui : UIBehaviour {
 
     public void onNahrat() {
         AudioManager.Instance.PlaySound(SoundType.click);
-        print("not supported yet!");
+
+        WebCommunicationManager.Instance.GenerateViewerIframe(ProjectManager.Instance.project.ProjectName, fileData => {
+            if (fileData == null) {
+                Debug.LogError("Failed to generate iframe.");
+                return;
+            }
+            PopUpTextInput.Instance.ShowCopyableText("Copy this to your website.", fileData);
+        });
     }
 
 

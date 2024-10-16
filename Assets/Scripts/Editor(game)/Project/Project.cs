@@ -46,6 +46,7 @@ public class Project : MonoBehaviour {
 
     IEnumerator DeserializeCoroutine(string json, TaskCompletionSource<bool> tcs) {
         SerializableProject serializedProject = JsonUtility.FromJson<SerializableProject>(json);
+        print("ay testing: "+serializedProject);
         SetProjectName(serializedProject.projectName);
         bool isDeserializationComplete = false;
         AssetManager.Instance.DeserializeAssetList(serializedProject.modelAssets, () => {

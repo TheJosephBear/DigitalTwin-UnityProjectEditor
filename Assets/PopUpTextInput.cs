@@ -27,6 +27,12 @@ public class PopUpTextInput : Singleton<PopUpTextInput> {
         onInputSubmitted = callback;
     }
 
+    public void ShowCopyableText(string windowMessage, string text) {
+        canvas.SetActive(true);
+        messageLabel.text = windowMessage;
+        inputField.text = text;
+    }
+
     public void OnSubmitButtonClicked() {
         AudioManager.Instance.PlaySound(SoundType.click);
         string userInput = inputField.text;

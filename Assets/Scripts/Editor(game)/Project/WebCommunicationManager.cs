@@ -212,6 +212,41 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
         }
     }
 
+    public void GenerateViewerIframe(string projectName, System.Action<string> callback) {
+        StartCoroutine(GenerateViewerIframeCoroutine(projectName, callback));
+    }
+
+    IEnumerator GenerateViewerIframeCoroutine(string projectName, System.Action<string> callback) {
+
+        string url = $"http://127.0.0.1:5000/generate_iframe?projectName={UnityWebRequest.EscapeURL(projectName)}";
+
+        UnityWebRequest www = UnityWebRequest.Get(url);
+        yield return www.SendWebRequest();
+
+        if (www.result != UnityWebRequest.Result.Success) {
+            Debug.LogError("Error generating iframe: " + www.error);
+            callback(null);
+        } else {
+            // Parse the JSON response
+            string jsonResponse = www.downloadHandler.text;
+            IframeResponse response = JsonUtility.FromJson<IframeResponse>(jsonResponse);
+
+            if (response != null && response.code == "SUCCESS") {
+                Debug.Log("Iframe generated successfully!");
+                callback(response.iframe_code); // Pass the iframe code back
+            } else {
+                Debug.LogError("Error in response: " + response.message);
+                callback(null);
+            }
+        }
+    }
+
+}
+[System.Serializable]
+public class IframeResponse {
+    public string iframe_code;
+    public string message;
+    public string code;
 }
 
 [System.Serializable]
