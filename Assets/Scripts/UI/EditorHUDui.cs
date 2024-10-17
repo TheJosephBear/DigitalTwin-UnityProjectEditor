@@ -55,6 +55,7 @@ public class EditorHUDui : UIBehaviour {
                 Debug.LogError("Failed to generate iframe.");
                 return;
             }
+            print("we got this garbage: " + fileData);
             PopUpTextInput.Instance.ShowCopyableText("Copy this to your website.", fileData);
         });
     }
