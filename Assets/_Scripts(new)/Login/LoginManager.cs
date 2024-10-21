@@ -19,8 +19,9 @@ public class LoginManager : Singleton<LoginManager> {
 
     public void Register(string username, string password) {
         if (TryRegister(username, password)) {
-            UImanager.Instance.ShowUI(UIType.Projects);
+            UImanager.Instance.ShowUI(UIType.Login);
             UImanager.Instance.HideUI(UIType.Register);
+            PopUp.Instance.ShowPopUpWindow("Registrace probìhla úspìšnì.");
         } else {
             PopUp.Instance.ShowPopUpWindow("Registrace selhala.");
         }
@@ -28,17 +29,19 @@ public class LoginManager : Singleton<LoginManager> {
 
     bool TryLogin(string username, string password) {
         bool success = true;
-        /* logic for login */
+        WebCommunicationManager.Instance.Login(username, password, (successBool, message) => {
+            success = successBool;
+            if (message!=null) print(message);
+        });
         return success;
     }
 
     bool TryRegister(string username, string password) {
         bool success = true;
-        /* logic for register */
+        WebCommunicationManager.Instance.Register(username, password, (successBool, message) => {
+            success = successBool;
+            if (message != null) print(message);
+        });
         return success;
     }
-
-
-
-
 }
