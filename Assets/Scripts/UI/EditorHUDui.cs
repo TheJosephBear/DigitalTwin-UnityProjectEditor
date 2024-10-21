@@ -50,7 +50,7 @@ public class EditorHUDui : UIBehaviour {
     public void onNahrat() {
         AudioManager.Instance.PlaySound(SoundType.click);
 
-        WebCommunicationManager.Instance.GenerateViewerIframe(ProjectManager.Instance.project.ProjectName, fileData => {
+        WebCommunicationManager.Instance.GenerateViewerIframe(ProjectManager.Instance.project.ProjectName, (successBool, fileData) => {
             if (fileData == null) {
                 Debug.LogError("Failed to generate iframe.");
                 return;

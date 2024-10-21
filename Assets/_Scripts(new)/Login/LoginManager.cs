@@ -8,24 +8,21 @@ public class LoginManager : Singleton<LoginManager> {
         base.Awake();
     }
 
-
     public void Login(string username, string password) {
         if(TryLogin(username, password)) {
-
             UImanager.Instance.ShowUI(UIType.Projects);
             UImanager.Instance.HideUI(UIType.Login);
-        } else { 
-            // show fail message
+        } else {
+            PopUp.Instance.ShowPopUpWindow("Jméno nebo heslo není správnì.");
         }
     }
 
     public void Register(string username, string password) {
         if (TryRegister(username, password)) {
-
             UImanager.Instance.ShowUI(UIType.Projects);
             UImanager.Instance.HideUI(UIType.Register);
         } else {
-            // show fail message
+            PopUp.Instance.ShowPopUpWindow("Registrace selhala.");
         }
     }
 

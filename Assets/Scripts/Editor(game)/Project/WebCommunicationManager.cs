@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -6,6 +7,192 @@ using UnityEngine.Networking;
 
 public class WebCommunicationManager : Singleton<WebCommunicationManager> {
 
+    public string serverUrl = "http://127.0.0.1:5000";
+
+    #region Login and Register
+
+    public void Login(string username, string password, System.Action<bool, string> callback) {
+        string url = $"{serverUrl}/loginUser";
+        Dictionary<string, string> formData = new Dictionary<string, string> { 
+            { "username", username },
+            { "password", password }
+        };
+        StartCoroutine(PostRequest(url, formData, callback));
+    }
+
+    public void Register(string username, string password, System.Action<bool, string> callback) {
+        string url = $"{serverUrl}/registerUser";
+        Dictionary<string, string> formData = new Dictionary<string, string> {
+            { "username", username },
+            { "password", password }
+        };
+        StartCoroutine(PostRequest(url, formData, callback));
+    }
+
+    #endregion
+
+    #region Projects
+
+    public void CreateProject(string projectName, System.Action<bool, string> callback) {
+        string url = $"{serverUrl}/createProject";
+        Dictionary<string, string> formData = new Dictionary<string, string> { { "projectName", projectName } };
+        StartCoroutine(PostRequest(url, formData, callback));
+    }
+
+    public void EditProjectName(string oldName, string newName, System.Action<bool, string> callback) {
+        string url = $"{serverUrl}/editProjectName";
+        Dictionary<string, string> formData = new Dictionary<string, string>
+        {
+            { "oldProjectName", oldName },
+            { "newProjectName", newName }
+        };
+        StartCoroutine(PostRequest(url, formData, callback));
+    }
+
+    public void DuplicateProject(string name, System.Action<bool, string> callback) {
+        string url = $"{serverUrl}/duplicate_project";
+        Dictionary<string, string> formData = new Dictionary<string, string> { { "projectName", name } };
+        StartCoroutine(PostRequest(url, formData, callback));
+    }
+
+    public void DeleteProject(string projectName, System.Action<bool, string> callback) {
+        string url = $"{serverUrl}/deleteProject";
+        Dictionary<string, string> formData = new Dictionary<string, string> { { "projectName", projectName } };
+        StartCoroutine(DeleteRequest(url, formData, callback));
+    }
+
+    public void FetchAllProjects(System.Action<List<string>> callback) {
+        string url = $"{serverUrl}/getAllProjects";
+        StartCoroutine(GetRequest<List<string>>(url, (success, data) => {
+            if (success) callback(data);
+            else callback(null);
+        }));
+    }
+
+    #endregion
+
+    #region Editor
+
+    // Upload project data (no models)
+    public void StartUpload(string data, string projectName) {
+        string url = $"{serverUrl}/uploadJson";
+        Dictionary<string, string> formData = new Dictionary<string, string>
+        {
+            { "myData", data },
+            { "projectName", projectName }
+        };
+        StartCoroutine(PostRequest(url, formData, null));
+    }
+
+    // Download project data (no models)
+    public void StartDataDownload(string projectName, System.Action<bool, string> callback) {
+        string url = $"{serverUrl}/download?projectName={UnityWebRequest.EscapeURL(projectName)}";
+        StartCoroutine(GetRequest(url, callback));
+    }
+
+    // Upload file into a project
+    public void UploadFileToServer(string path, string fileName, string projectName) {
+        string url = $"{serverUrl}/uploadFiles";
+        StartCoroutine(UploadFileRequest(url, path, fileName, projectName));
+    }
+
+    // Download file from a project
+    public void DownloadFileFromServer(string fileName, string projectName, System.Action<byte[]> callback) {
+        string url = $"{serverUrl}/downloadFiles?projectName={UnityWebRequest.EscapeURL(projectName)}&fileName={UnityWebRequest.EscapeURL(fileName)}.obj";
+        StartCoroutine(DownloadFileRequest(url, callback));
+    }
+
+    // Generate export iframe
+    public void GenerateViewerIframe(string projectName, System.Action<bool, string> callback) {
+        string url = $"{serverUrl}/generate_iframe?projectName={UnityWebRequest.EscapeURL(projectName)}";
+        StartCoroutine(GetRequest(url, callback));
+    }
+
+    #endregion
+
+    #region Private helper functions
+
+    IEnumerator PostRequest(string url, Dictionary<string, string> formData, System.Action<bool, string> callback) {
+        WWWForm form = new WWWForm();
+        foreach (var field in formData) {
+            form.AddField(field.Key, field.Value);
+        }
+
+        UnityWebRequest www = UnityWebRequest.Post(url, form);
+        yield return www.SendWebRequest();
+
+        HandleResponse(www, callback);
+    }
+
+    IEnumerator GetRequest<T>(string url, System.Action<bool, T> callback) {
+        UnityWebRequest www = UnityWebRequest.Get(url);
+        yield return www.SendWebRequest();
+
+        if (www.result == UnityWebRequest.Result.Success) {
+            T response = JsonUtility.FromJson<T>(www.downloadHandler.text);
+            callback(true, response);
+        } else {
+            Debug.LogError("Error fetching data: " + www.error);
+            callback(false, default);
+        }
+    }
+
+    IEnumerator DeleteRequest(string url, Dictionary<string, string> formData, System.Action<bool, string> callback) {
+        WWWForm form = new WWWForm();
+        foreach (var field in formData) {
+            form.AddField(field.Key, field.Value);
+        }
+
+        UnityWebRequest www = UnityWebRequest.Post(url, form);
+        www.method = UnityWebRequest.kHttpVerbDELETE;
+        yield return www.SendWebRequest();
+
+        HandleResponse(www, callback);
+    }
+
+    IEnumerator UploadFileRequest(string url, string path, string fileName, string projectName) {
+        byte[] fileData = File.ReadAllBytes(path);
+        WWWForm form = new WWWForm();
+        form.AddBinaryData("file", fileData, fileName + ".obj", "application/octet-stream");
+        form.AddField("projectName", projectName);
+
+        UnityWebRequest www = UnityWebRequest.Post(url, form);
+        yield return www.SendWebRequest();
+
+        if (www.result != UnityWebRequest.Result.Success) {
+            Debug.LogError("Error uploading file: " + www.error);
+        } else {
+            Debug.Log("File uploaded successfully!");
+        }
+    }
+
+    IEnumerator DownloadFileRequest(string url, System.Action<byte[]> callback) {
+        UnityWebRequest www = UnityWebRequest.Get(url);
+        yield return www.SendWebRequest();
+
+        if (www.result == UnityWebRequest.Result.Success) {
+            callback(www.downloadHandler.data);
+        } else {
+            Debug.LogError("Error downloading file: " + www.error);
+            callback(null);
+        }
+    }
+
+    void HandleResponse(UnityWebRequest www, System.Action<bool, string> callback) {
+        if (www.result != UnityWebRequest.Result.Success) {
+            Debug.LogError("Request failed: " + www.error);
+            callback?.Invoke(false, www.error);
+        } else {
+            Debug.Log("Request successful!");
+            callback?.Invoke(true, www.downloadHandler.text);
+        }
+    }
+
+    #endregion
+
+    #region ghost code
+    // this ghost code stays until i decide it is safe to remove it
+    /*
     public string serverUrlUploadJson = "http://127.0.0.1:5000/upload";
     public string serverUrlUploadFiles = "http://127.0.0.1:5000/uploadFiles";
     public string serverUrlDownload = "http://127.0.0.1:5000/download";
@@ -240,6 +427,9 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
             }
         }
     }
+    */
+
+    #endregion
 
 }
 [System.Serializable]
