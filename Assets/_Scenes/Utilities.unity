@@ -10108,7 +10108,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 868608526}
   m_OnClick:
     m_PersistentCalls:
@@ -23264,10 +23264,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b84f7ec118ebe34caf1ca36a26a0a5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverUrlUploadJson: http://127.0.0.1:5000/upload_editor_data
-  serverUrlUploadFiles: http://127.0.0.1:5000/upload_model_files
-  serverUrlDownload: http://127.0.0.1:5000/download
-  serverUrlDownloadFiles: http://127.0.0.1:5000/downloadModels
+  serverUrl: http://127.0.0.1:5000
 --- !u!1 &1857151599
 GameObject:
   m_ObjectHideFlags: 0

@@ -91,6 +91,23 @@ public class ProjectListManager : Singleton<ProjectListManager> {
         });
     }
 
+    public void ExportProject(ProjectWebRefference project) {
+        /*   WebCommunicationManager.Instance.GenerateViewerIframe(project.projectName, (successBool, fileData) => {
+               if (fileData == null) {
+                   Debug.LogError("Failed to generate iframe.");
+                   return;
+               }
+               PopUpTextInput.Instance.ShowCopyableText("Copy this to your website.", fileData);
+           });*/
+        WebCommunicationManager.Instance.GenerateViewerIframe(project.projectName, (fileData) => {
+            if (fileData == null) {
+                Debug.LogError("Failed to generate iframe.");
+                return;
+            }
+            PopUpTextInput.Instance.ShowCopyableText("Copy this to your website.", fileData);
+        });
+    }
+
     public void DeleteProject() {
         WebCommunicationManager.Instance.DeleteProject(selectedProjectRefference.projectName, (success, response) => {
             if (success) {

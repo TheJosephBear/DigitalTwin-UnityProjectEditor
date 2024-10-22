@@ -49,15 +49,7 @@ public class EditorHUDui : UIBehaviour {
 
     public void onNahrat() {
         AudioManager.Instance.PlaySound(SoundType.click);
-
-        WebCommunicationManager.Instance.GenerateViewerIframe(ProjectManager.Instance.project.ProjectName, (successBool, fileData) => {
-            if (fileData == null) {
-                Debug.LogError("Failed to generate iframe.");
-                return;
-            }
-            print("we got this garbage: " + fileData);
-            PopUpTextInput.Instance.ShowCopyableText("Copy this to your website.", fileData);
-        });
+        print("not supported yet!");
     }
 
 

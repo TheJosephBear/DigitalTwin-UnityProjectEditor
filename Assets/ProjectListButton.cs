@@ -44,6 +44,10 @@ public class ProjectListButton : MonoBehaviour {
 
     }
 
+    public void onExport() {
+        ProjectListManager.Instance.ExportProject(projectWebRefference);
+    }
+
     public void onOdstranit() {
         ProjectListManager.Instance.SelectProject(projectWebRefference);
         ProjectListManager.Instance.DeleteProject();

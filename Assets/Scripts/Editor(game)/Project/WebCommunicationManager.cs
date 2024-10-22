@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class WebCommunicationManager : Singleton<WebCommunicationManager> {
-
+    /*
     public string serverUrl = "http://127.0.0.1:5000";
 
     #region Login and Register
@@ -189,10 +189,10 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
     }
 
     #endregion
-
+    */
     #region ghost code
     // this ghost code stays until i decide it is safe to remove it
-    /*
+    
     public string serverUrlUploadJson = "http://127.0.0.1:5000/upload";
     public string serverUrlUploadFiles = "http://127.0.0.1:5000/uploadFiles";
     public string serverUrlDownload = "http://127.0.0.1:5000/download";
@@ -427,7 +427,7 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
             }
         }
     }
-    */
+    
 
     #endregion
 

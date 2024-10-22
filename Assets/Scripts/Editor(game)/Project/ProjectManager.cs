@@ -24,7 +24,15 @@ public class ProjectManager : Singleton<ProjectManager> {
         var tcs = new TaskCompletionSource<bool>();
 
         // Start downloading data from the server
-        WebCommunicationManager.Instance.StartDataDownload(project.ProjectName, async (successBool, data) => {
+        /*     WebCommunicationManager.Instance.StartDataDownload(project.ProjectName, async (successBool, data) => {
+                 if (data != null) {
+                     bool success = await project.DeserializeProjectAsync(data); // Await deserialization
+                     tcs.SetResult(success); // Return true if the whole process succeeded
+                 } else {
+                     tcs.SetResult(false); // Task failed
+                 }
+             });*/
+        WebCommunicationManager.Instance.StartDataDownload(project.ProjectName, async (data) => {
             if (data != null) {
                 bool success = await project.DeserializeProjectAsync(data); // Await deserialization
                 tcs.SetResult(success); // Return true if the whole process succeeded

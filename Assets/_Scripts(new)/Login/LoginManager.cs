@@ -29,19 +29,19 @@ public class LoginManager : Singleton<LoginManager> {
 
     bool TryLogin(string username, string password) {
         bool success = true;
-        WebCommunicationManager.Instance.Login(username, password, (successBool, message) => {
+    /*    WebCommunicationManager.Instance.Login(username, password, (successBool, message) => {
             success = successBool;
             if (message!=null) print(message);
-        });
+        });*/
         return success;
     }
 
     bool TryRegister(string username, string password) {
         bool success = true;
-        WebCommunicationManager.Instance.Register(username, password, (successBool, message) => {
+    /*    WebCommunicationManager.Instance.Register(username, password, (successBool, message) => {
             success = successBool;
             if (message != null) print(message);
-        });
+        });*/
         return success;
     }
 }
