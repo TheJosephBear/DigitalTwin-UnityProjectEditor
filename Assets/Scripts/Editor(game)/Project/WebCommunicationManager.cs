@@ -191,12 +191,51 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
     #endregion
     */
     #region ghost code
-    // this ghost code stays until i decide it is safe to remove it
-    
+
+
+    public string serverUrl = "http://127.0.0.1:5000";
     public string serverUrlUploadJson = "http://127.0.0.1:5000/upload";
     public string serverUrlUploadFiles = "http://127.0.0.1:5000/uploadFiles";
     public string serverUrlDownload = "http://127.0.0.1:5000/download";
     public string serverUrlDownloadFiles = "http://127.0.0.1:5000/downloadModels";
+
+    public void Login(string username, string password, System.Action<bool, string> callback) {
+        string url = $"{serverUrl}/login";
+        Dictionary<string, string> formData = new Dictionary<string, string> {
+            { "username", username },
+            { "password", password }
+        };
+        StartCoroutine(PostRequest(url, formData, callback));
+    }
+
+    public void Register(string username, string password, System.Action<bool, string> callback) {
+        string url = $"{serverUrl}/register";
+        Dictionary<string, string> formData = new Dictionary<string, string> {
+            { "username", username },
+            { "password", password }
+        };
+        StartCoroutine(PostRequest(url, formData, callback));
+    }
+    IEnumerator PostRequest(string url, Dictionary<string, string> formData, System.Action<bool, string> callback) {
+        // Prepare form data
+        WWWForm form = new WWWForm();
+        foreach (var field in formData) {
+            form.AddField(field.Key, field.Value);
+        }
+
+        // Send POST request
+        UnityWebRequest www = UnityWebRequest.Post(url, form);
+        yield return www.SendWebRequest();
+
+        // Handle response
+        if (www.result != UnityWebRequest.Result.Success) {
+            Debug.LogError("Error: " + www.error);
+            callback(false, www.error); // Error case, return false with the error message
+        } else {
+            Debug.Log("Response: " + www.downloadHandler.text);
+            callback(true, www.downloadHandler.text); // Success case, return true with the server's response
+        }
+    }
 
     public void CreateProject(string projectName, System.Action<bool, string> callback) {
         StartCoroutine(CreateProjectCoroutine(projectName, callback));
