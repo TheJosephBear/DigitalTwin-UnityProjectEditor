@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using TransformGizmos;
 using UnityEngine;
 
 public class MoveMovableObjects : MonoBehaviour {
@@ -9,12 +8,12 @@ public class MoveMovableObjects : MonoBehaviour {
     /// Transform manipulation is handled by GizmoController
     /// </summary>
      
-    GizmoController gizmoController;
+  //  GizmoController gizmoController;
     GameObject selectedObject;
     bool canMove = true;
 
-    private void Awake() {
-        gizmoController = GizmoController.Instance;
+    void Awake() {
+     //   gizmoController = GizmoController.Instance;
     }
 
     void Update() {
@@ -47,12 +46,12 @@ public class MoveMovableObjects : MonoBehaviour {
 
     void SelectObject(GameObject obj) {
         selectedObject = obj.transform.root.gameObject;
-        gizmoController.SelectGameObject(selectedObject);
+   //     gizmoController.SelectGameObject(selectedObject);
     }
 
     void DeselectObject() {
         selectedObject = null;
-        gizmoController.DeselectGameObject();
+    //    gizmoController.DeselectGameObject();
     }
 
     public void ToggleMoveEnable() {

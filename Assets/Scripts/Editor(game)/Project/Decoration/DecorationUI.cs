@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using SimpleFileBrowser;
 using UnityEngine;
-using WebGLFileUploader;
 
 public class DecorationUI : MonoBehaviour {
 

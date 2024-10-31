@@ -5,7 +5,6 @@ using System.IO;
 using SimpleFileBrowser;
 using UnityEngine;
 using UnityEngine.UI;
-using TransformGizmos;
 using System;
 using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
@@ -55,22 +54,23 @@ public class EditorHUDui : UIBehaviour {
 
     public void onPositionGizmo() {
         AudioManager.Instance.PlaySound(SoundType.click);
-        GizmoController.Instance.SelectMovement();
+      //  GizmoController.Instance.SelectMovement();
     }
 
     public void onRotationGizmo() {
         AudioManager.Instance.PlaySound(SoundType.click);
-        GizmoController.Instance.SelectRotation();
+    //    GizmoController.Instance.SelectRotation();
     }
 
     public void onScaleGizmo() {
         AudioManager.Instance.PlaySound(SoundType.click);
-        GizmoController.Instance.SelectScale();
+     //   GizmoController.Instance.SelectScale();
     }
 
     public void onLeave() {
         StartCoroutine(UnloadEditing());
     }
+
     IEnumerator UnloadEditing() {
         ProjectManager.Instance.SaveProject();
         var task = SceneLoadingManager.Instance.UnLoadSceneAsync(SceneType.Editing);
