@@ -615,7 +615,23 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   webGLPowerPreference: 2
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    Android: FG_WEBGLFB
+    EmbeddedLinux: FG_WEBGLFB
+    GameCoreScarlett: FG_WEBGLFB
+    GameCoreXboxOne: FG_WEBGLFB
+    LinuxHeadlessSimulation: FG_WEBGLFB
+    Lumin: FG_WEBGLFB
+    Nintendo Switch: FG_WEBGLFB
+    PS4: FG_WEBGLFB
+    PS5: FG_WEBGLFB
+    Stadia: FG_WEBGLFB
+    Standalone: FG_WEBGLFB
+    WebGL: FG_WEBGLFB
+    Windows Store Apps: FG_WEBGLFB
+    XboxOne: FG_WEBGLFB
+    iPhone: FG_WEBGLFB
+    tvOS: FG_WEBGLFB
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}

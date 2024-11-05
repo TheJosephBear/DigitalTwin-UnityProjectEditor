@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using SimpleFileBrowser;
 using System.IO;
 using UnityEngine;
+using FrostweepGames.Plugins.WebGLFileBrowser;
 
 public class MapUI : UIBehaviour {
 
@@ -14,33 +15,30 @@ public class MapUI : UIBehaviour {
 
     public void onNahrat() {
         AudioManager.Instance.PlaySound(SoundType.click);
-        FileBrowser.ShowLoadDialog(OnFileSelectedMap, null, FileBrowser.PickMode.Files, false, null, "Select OBJ File", "Select");
+        //    FileBrowser.ShowLoadDialog(OnFileSelectedMap, null, FileBrowser.PickMode.Files, false, null, "Select OBJ File", "Select");
+        FileBrowserManager.Instance.ShowLoadDialog(OnFileSelectedMap);
     }
 
     public void onPridatVariantu() {
-        FileBrowser.ShowLoadDialog(OnFileSelectedMapVar, null, FileBrowser.PickMode.Files, false, null, "Select OBJ File", "Select");
+        //    FileBrowser.ShowLoadDialog(OnFileSelectedMapVar, null, FileBrowser.PickMode.Files, false, null, "Select OBJ File", "Select");
+        FileBrowserManager.Instance.ShowLoadDialog(OnFileSelectedMapVar);
     }
 
 
-    void OnFileSelectedMap(string[] paths) {
-        if (paths.Length > 0) {
-            string path = paths[0];
-            if (Path.GetExtension(path).ToLower() == ".obj") {
-                MapManager.Instance.UploadBaseMapModel(AssetManager.Instance.CreateNewAsset(path));
-            } else {
-                PopUp.Instance.ShowPopUpWindow("Please select .obj file!");
-            }
+    void OnFileSelectedMap(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
+        if (files != null && files.Length > 0) {
+            MapManager.Instance.UploadBaseMapModel(AssetManager.Instance.CreateNewAsset(files[0].fileInfo.path));
+        } else {
+            PopUp.Instance.ShowPopUpWindow("Please select .obj file!");
         }
+
     }
 
-    void OnFileSelectedMapVar(string[] paths) {
-        if (paths.Length > 0) {
-            string path = paths[0];
-            if (Path.GetExtension(path).ToLower() == ".obj") {
-                MapManager.Instance.UploadMapVariant(AssetManager.Instance.CreateNewAsset(path));
-            } else {
-                PopUp.Instance.ShowPopUpWindow("Please select .obj file!");
-            }
+    void OnFileSelectedMapVar(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
+        if (files != null && files.Length > 0) {
+            MapManager.Instance.UploadMapVariant(AssetManager.Instance.CreateNewAsset(files[0].fileInfo.path));
+        } else {
+            PopUp.Instance.ShowPopUpWindow("Please select .obj file!");
         }
     }
 
