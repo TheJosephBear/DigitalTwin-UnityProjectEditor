@@ -629,7 +629,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4302795946195957851, guid: 6167b02eba5d1a243879462407f722b5, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4302795946195957851, guid: 6167b02eba5d1a243879462407f722b5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -971,7 +971,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 113, y: 30}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &45597718
 MonoBehaviour:
@@ -1220,7 +1220,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &84372835
 GameObject:
@@ -1460,7 +1460,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!1 &109255513
 GameObject:
@@ -2150,7 +2150,7 @@ Transform:
   m_Children:
   - {fileID: 229388374}
   m_Father: {fileID: 0}
-  m_RootOrder: 23
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &145532759
 MonoBehaviour:
@@ -2462,7 +2462,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 28
+  m_RootOrder: 24
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &189010336
 GameObject:
@@ -2910,7 +2910,7 @@ Transform:
   m_Children:
   - {fileID: 1940783770}
   m_Father: {fileID: 0}
-  m_RootOrder: 24
+  m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &223405560
 MonoBehaviour:
@@ -2969,7 +2969,7 @@ Transform:
   m_Children:
   - {fileID: 1376122307}
   m_Father: {fileID: 0}
-  m_RootOrder: 27
+  m_RootOrder: 23
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &229388370
 GameObject:
@@ -3091,7 +3091,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &241288959
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4028,7 +4028,7 @@ Transform:
   m_Children:
   - {fileID: 642712290}
   m_Father: {fileID: 0}
-  m_RootOrder: 19
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &296763816
 MonoBehaviour:
@@ -4284,9 +4284,9 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -7, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &311617106
 MonoBehaviour:
@@ -4585,7 +4585,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -4636,7 +4636,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1103136766340862487, guid: 49b9bb8ce56f3fb499772631157016be, type: 3}
       propertyPath: uiElements.Array.size
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1103136766340862487, guid: 49b9bb8ce56f3fb499772631157016be, type: 3}
       propertyPath: uiElements.Array.data[0].canvas
@@ -4701,10 +4701,10 @@ PrefabInstance:
     - target: {fileID: 1103136766340862487, guid: 49b9bb8ce56f3fb499772631157016be, type: 3}
       propertyPath: uiElements.Array.data[8].canvas
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2004983946}
     - target: {fileID: 1103136766340862487, guid: 49b9bb8ce56f3fb499772631157016be, type: 3}
       propertyPath: uiElements.Array.data[8].uiType
-      value: 8
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1103136766340862487, guid: 49b9bb8ce56f3fb499772631157016be, type: 3}
       propertyPath: uiElements.Array.data[0].uiScript
@@ -4741,7 +4741,7 @@ PrefabInstance:
     - target: {fileID: 1103136766340862487, guid: 49b9bb8ce56f3fb499772631157016be, type: 3}
       propertyPath: uiElements.Array.data[8].uiScript
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1441444100}
     - target: {fileID: 1103136766340862487, guid: 49b9bb8ce56f3fb499772631157016be, type: 3}
       propertyPath: uiElements.Array.data[4].defaultSelectedButton
       value: 
@@ -4756,7 +4756,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1103136766340862504, guid: 49b9bb8ce56f3fb499772631157016be, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1103136766340862504, guid: 49b9bb8ce56f3fb499772631157016be, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5536,6 +5536,141 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 381687025}
   m_CullTransparentMesh: 1
+--- !u!1 &387030972
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 387030973}
+  - component: {fileID: 387030975}
+  - component: {fileID: 387030974}
+  m_Layer: 5
+  m_Name: Text (TMP)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &387030973
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 387030972}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 818586569}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &387030974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 387030972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: "Nahr\xE1t novou variantu m\u011Bsta"
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 15
+  m_fontSizeBase: 15
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 1
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &387030975
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 387030972}
+  m_CullTransparentMesh: 1
 --- !u!1 &403192521
 GameObject:
   m_ObjectHideFlags: 0
@@ -6092,7 +6227,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -145}
+  m_AnchoredPosition: {x: 0, y: 70}
   m_SizeDelta: {x: 321, y: 19.8893}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &481633761
@@ -7445,6 +7580,8 @@ RectTransform:
   - {fileID: 360259086}
   - {fileID: 285398941}
   - {fileID: 481633760}
+  - {fileID: 818586569}
+  - {fileID: 1675517302}
   m_Father: {fileID: 1940783770}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7535,7 +7672,7 @@ Transform:
   m_Children:
   - {fileID: 96979846}
   m_Father: {fileID: 0}
-  m_RootOrder: 22
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &613480548
 MonoBehaviour:
@@ -8300,9 +8437,9 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -7, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &727803410
 MonoBehaviour:
@@ -8464,7 +8601,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 10}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &742091982
 MonoBehaviour:
@@ -8506,53 +8643,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!1 &744468459
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 744468461}
-  - component: {fileID: 744468460}
-  m_Layer: 0
-  m_Name: MovableClickListener
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &744468460
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 744468459}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56dc1f48d0bf86d4cbede7c44c81d351, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movableLayer:
-    serializedVersion: 2
-    m_Bits: 64
---- !u!4 &744468461
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 744468459}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.8335695, y: 6.9941998, z: -9.477694}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 16
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &745347465
 GameObject:
   m_ObjectHideFlags: 0
@@ -8765,7 +8855,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4037544633668764397, guid: 3792b63b9ed006d4daa3e0000fd98c15, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4037544633668764397, guid: 3792b63b9ed006d4daa3e0000fd98c15, type: 3}
       propertyPath: m_AnchorMin.x
@@ -8773,7 +8863,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4037544633668764397, guid: 3792b63b9ed006d4daa3e0000fd98c15, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4037544633668764397, guid: 3792b63b9ed006d4daa3e0000fd98c15, type: 3}
       propertyPath: m_SizeDelta.x
@@ -8813,11 +8903,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4037544633668764397, guid: 3792b63b9ed006d4daa3e0000fd98c15, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 63
       objectReference: {fileID: 0}
     - target: {fileID: 4037544633668764397, guid: 3792b63b9ed006d4daa3e0000fd98c15, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -20
       objectReference: {fileID: 0}
     - target: {fileID: 4037544633668764397, guid: 3792b63b9ed006d4daa3e0000fd98c15, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -8917,54 +9007,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 771998866}
   m_CullTransparentMesh: 1
---- !u!1 &791126672
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 791126673}
-  - component: {fileID: 791126674}
-  m_Layer: 0
-  m_Name: RTScene
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &791126673
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 791126672}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 811662738}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &791126674
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 791126672}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3200ed1cbbf587c4d9af5bcce73208f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _settings:
-    _canBeDisplayed: 1
-    _isExpanded: 1
-    _physicsMode: 2
 --- !u!1 &810774649
 GameObject:
   m_ObjectHideFlags: 0
@@ -9004,7 +9046,7 @@ RectTransform:
   m_AnchoredPosition: {x: -18, y: -124}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &811662736
+--- !u!1 &818586568
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9012,118 +9054,148 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 811662738}
-  - component: {fileID: 811662737}
-  m_Layer: 0
-  m_Name: RTGApp
+  - component: {fileID: 818586569}
+  - component: {fileID: 818586573}
+  - component: {fileID: 818586572}
+  - component: {fileID: 818586571}
+  - component: {fileID: 818586570}
+  m_Layer: 5
+  m_Name: NahrajVar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &811662737
+--- !u!224 &818586569
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 818586568}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 387030973}
+  m_Father: {fileID: 606901183}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 35}
+  m_SizeDelta: {x: 321, y: 19.8893}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &818586570
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 811662736}
+  m_GameObject: {fileID: 818586568}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 092bdabefbf9732439e23eb012953aec, type: 3}
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &811662738
-Transform:
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectDistance: {x: 2, y: -2}
+  m_UseGraphicAlpha: 1
+--- !u!114 &818586571
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 811662736}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1564206630}
-  - {fileID: 791126673}
-  - {fileID: 1916602570}
-  - {fileID: 1328193810}
-  - {fileID: 2014404607}
-  - {fileID: 1025252206}
-  - {fileID: 1077912232}
-  m_Father: {fileID: 0}
-  m_RootOrder: 15
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &817034785
-PrefabInstance:
+  m_GameObject: {fileID: 818586568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 818586572}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 223405560}
+        m_TargetAssemblyTypeName: MapUI, Assembly-CSharp
+        m_MethodName: onPridatVariantu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &818586572
+MonoBehaviour:
   m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 7278761250132207073, guid: 128e425d5d7e8fa44904ca6bfbdf7d0f, type: 3}
-      propertyPath: m_RootOrder
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 7278761250132207073, guid: 128e425d5d7e8fa44904ca6bfbdf7d0f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 79.348625
-      objectReference: {fileID: 0}
-    - target: {fileID: 7278761250132207073, guid: 128e425d5d7e8fa44904ca6bfbdf7d0f, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -179.75938
-      objectReference: {fileID: 0}
-    - target: {fileID: 7278761250132207073, guid: 128e425d5d7e8fa44904ca6bfbdf7d0f, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 186.42831
-      objectReference: {fileID: 0}
-    - target: {fileID: 7278761250132207073, guid: 128e425d5d7e8fa44904ca6bfbdf7d0f, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7278761250132207073, guid: 128e425d5d7e8fa44904ca6bfbdf7d0f, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7278761250132207073, guid: 128e425d5d7e8fa44904ca6bfbdf7d0f, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7278761250132207073, guid: 128e425d5d7e8fa44904ca6bfbdf7d0f, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7278761250132207073, guid: 128e425d5d7e8fa44904ca6bfbdf7d0f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7278761250132207073, guid: 128e425d5d7e8fa44904ca6bfbdf7d0f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7278761250132207073, guid: 128e425d5d7e8fa44904ca6bfbdf7d0f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8423090328071780460, guid: 128e425d5d7e8fa44904ca6bfbdf7d0f, type: 3}
-      propertyPath: movementSpeed
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 8423090328690857550, guid: 128e425d5d7e8fa44904ca6bfbdf7d0f, type: 3}
-      propertyPath: m_Priority
-      value: 9999
-      objectReference: {fileID: 0}
-    - target: {fileID: 8757212244760557912, guid: 128e425d5d7e8fa44904ca6bfbdf7d0f, type: 3}
-      propertyPath: m_Name
-      value: FreeCam
-      objectReference: {fileID: 0}
-    - target: {fileID: 8757212244760557912, guid: 128e425d5d7e8fa44904ca6bfbdf7d0f, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 128e425d5d7e8fa44904ca6bfbdf7d0f, type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 818586568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &818586573
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 818586568}
+  m_CullTransparentMesh: 1
 --- !u!1 &841156014
 GameObject:
   m_ObjectHideFlags: 0
@@ -10351,7 +10423,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &883031874
 GameObject:
@@ -10759,7 +10831,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 29
+  m_RootOrder: 25
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &908467529
 GameObject:
@@ -11460,7 +11532,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5411435685495245708, guid: cdfb21a6ff55fb94fa9ec0aadcbfdeef, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5411435685495245708, guid: cdfb21a6ff55fb94fa9ec0aadcbfdeef, type: 3}
       propertyPath: m_AnchorMin.x
@@ -11468,7 +11540,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5411435685495245708, guid: cdfb21a6ff55fb94fa9ec0aadcbfdeef, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5411435685495245708, guid: cdfb21a6ff55fb94fa9ec0aadcbfdeef, type: 3}
       propertyPath: m_SizeDelta.x
@@ -11508,11 +11580,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5411435685495245708, guid: cdfb21a6ff55fb94fa9ec0aadcbfdeef, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 63
       objectReference: {fileID: 0}
     - target: {fileID: 5411435685495245708, guid: cdfb21a6ff55fb94fa9ec0aadcbfdeef, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -20
       objectReference: {fileID: 0}
     - target: {fileID: 5411435685495245708, guid: cdfb21a6ff55fb94fa9ec0aadcbfdeef, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -11688,7 +11760,7 @@ PrefabInstance:
       objectReference: {fileID: 102900000, guid: 9fc0d4010bbf28b4594072e72b8655ab, type: 3}
     - target: {fileID: 4141608797493780777, guid: 614837752bae329479394d2922cc21b1, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4141608797493780777, guid: 614837752bae329479394d2922cc21b1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -12076,50 +12148,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1015190611}
   m_CullTransparentMesh: 1
---- !u!1 &1025252205
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1025252206}
-  - component: {fileID: 1025252207}
-  m_Layer: 0
-  m_Name: RTInputDevice
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1025252206
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1025252205}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 811662738}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1025252207
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1025252205}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e770d58ca963cd42a42328ab60b8216, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1030824404
 GameObject:
   m_ObjectHideFlags: 0
@@ -13447,52 +13475,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1075035081}
   m_CullTransparentMesh: 1
---- !u!1 &1077912231
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1077912232}
-  - component: {fileID: 1077912233}
-  m_Layer: 0
-  m_Name: RTUndoRedo
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1077912232
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1077912231}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 811662738}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1077912233
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1077912231}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf910afe7ec945e49824651f72101819, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _isEnabled: 1
-  _actionLimit: 50
 --- !u!1 &1078517903
 GameObject:
   m_ObjectHideFlags: 0
@@ -13775,7 +13757,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1093106149
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15511,50 +15493,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1198036679}
   m_CullTransparentMesh: 1
---- !u!1 &1199830714
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1199830716}
-  - component: {fileID: 1199830715}
-  m_Layer: 0
-  m_Name: GizmoManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1199830715
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1199830714}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea3dbf94da095df408bf10233efbeebf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1199830716
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1199830714}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.6597509, y: 5.07539, z: -1.3848429}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 14
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1226856715
 GameObject:
   m_ObjectHideFlags: 0
@@ -16067,9 +16005,9 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -7, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1281691304
 MonoBehaviour:
@@ -16122,126 +16060,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1281691302}
   m_CullTransparentMesh: 1
---- !u!1 &1283378223
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1283378226}
-  - component: {fileID: 1283378225}
-  - component: {fileID: 1283378224}
-  - component: {fileID: 1283378227}
-  m_Layer: 0
-  m_Name: Main Camera
-  m_TagString: MainCamera
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!81 &1283378224
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1283378223}
-  m_Enabled: 1
---- !u!20 &1283378225
-Camera:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1283378223}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
-  m_projectionMatrixMode: 1
-  m_GateFitMode: 2
-  m_FOVAxisMode: 0
-  m_SensorSize: {x: 36, y: 24}
-  m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
-  m_NormalizedViewPortRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
-  field of view: 60
-  orthographic: 0
-  orthographic size: 5
-  m_Depth: -1
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
-  m_TargetEye: 3
-  m_HDR: 1
-  m_AllowMSAA: 1
-  m_AllowDynamicResolution: 0
-  m_ForceIntoRT: 0
-  m_OcclusionCulling: 1
-  m_StereoConvergence: 10
-  m_StereoSeparation: 0.022
---- !u!4 &1283378226
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1283378223}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1958226573}
-  m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1283378227
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1283378223}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ShowDebugText: 0
-  m_ShowCameraFrustum: 1
-  m_IgnoreTimeScale: 0
-  m_WorldUpOverride: {fileID: 0}
-  m_UpdateMethod: 2
-  m_BlendUpdateMethod: 1
-  m_DefaultBlend:
-    m_Style: 1
-    m_Time: 2
-    m_CustomCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  m_CustomBlends: {fileID: 0}
-  m_CameraCutEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_CameraActivatedEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &1308379914
 GameObject:
   m_ObjectHideFlags: 0
@@ -16400,260 +16218,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ScrollViewContent: {fileID: 1663154181}
---- !u!1 &1328193809
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1328193810}
-  - component: {fileID: 1328193811}
-  m_Layer: 0
-  m_Name: RTFocusCamera
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1328193810
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1328193809}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 811662738}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1328193811
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1328193809}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12f935c5fc2c98b44af59680c04d7ae8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _targetCamera: {fileID: 1283378225}
-  _fieldOfView: 60
-  _settings:
-    _canBeDisplayed: 1
-    _isExpanded: 1
-    _canProcessInput: 0
-  _moveSettings:
-    _canBeDisplayed: 1
-    _isExpanded: 1
-    _moveSpeed: 2
-    _accelerationRate: 5
-  _panSettings:
-    _canBeDisplayed: 1
-    _isExpanded: 1
-    _panMode: 0
-    _standardPanSensitivity: 1
-    _smoothPanSensitivity: 0.7
-    _smoothValue: 4
-    _invertX: 0
-    _invertY: 0
-    _isPanningEnabled: 1
-  _lookAroundSettings:
-    _canBeDisplayed: 1
-    _isExpanded: 1
-    _lookAroundMode: 0
-    _standardLookAroundSensitivity: 1
-    _smoothLookAroundSensitivity: 5
-    smoothValue: 4
-    _invertX: 0
-    _invertY: 0
-    _isLookAroundEnabled: 1
-  _orbitSettings:
-    _canBeDisplayed: 1
-    _isExpanded: 1
-    _orbitMode: 0
-    _standardOrbitSensitivity: 1
-    _smoothOrbitSensitivity: 5
-    _smoothValue: 8
-    _invertX: 0
-    _invertY: 0
-    _isOrbitEnabled: 1
-  _zoomSettings:
-    _canBeDisplayed: 1
-    _isExpanded: 1
-    _zoomMode: 0
-    _orthoStandardZoomSensitivity: 1
-    _perspStandardZoomSensitivity: 1
-    _orthoSmoothZoomSensitivity: 5
-    _perspSmoothZoomSensitivity: 5
-    _orthoZoomSmoothValue: 5
-    _perspZoomSmoothValue: 5
-    _invertZoomAxis: 0
-    _isZoomEnabled: 1
-  _focusSettings:
-    _canBeDisplayed: 1
-    _isExpanded: 1
-    _focusMode: 2
-    _constantSpeed: 10
-    _smoothTime: 1.5
-    _focusDistanceAdd: 1.2
-  _rotationSwitchSettings:
-    _canBeDisplayed: 1
-    _isExpanded: 1
-    _switchMode: 1
-    _switchType: 0
-    _constantSwitchDurationInSeconds: 0.3
-    _smoothValue: 8
-  _projectionSwitchSettings:
-    _canBeDisplayed: 1
-    _isExpanded: 1
-    _switchMode: 0
-    _transitionDurationInSeconds: 0.23
-  _hotkeys:
-    _canBeDisplayed: 1
-    _isExpanded: 1
-    _moveForward:
-      _isEnabled: 1
-      _key: 119
-      _lCtrl: 0
-      _lCmd: 0
-      _lAlt: 0
-      _lShift: 0
-      _useStrictModifierCheck: 0
-      _lMouseBtn: 0
-      _rMouseBtn: 1
-      _mMouseBtn: 0
-      _useStrictMouseCheck: 0
-      _name: Move forward
-      _staticData:
-        CanHaveMouseButtons: 1
-    _moveBack:
-      _isEnabled: 1
-      _key: 115
-      _lCtrl: 0
-      _lCmd: 0
-      _lAlt: 0
-      _lShift: 0
-      _useStrictModifierCheck: 0
-      _lMouseBtn: 0
-      _rMouseBtn: 1
-      _mMouseBtn: 0
-      _useStrictMouseCheck: 0
-      _name: Move back
-      _staticData:
-        CanHaveMouseButtons: 1
-    _strafeLeft:
-      _isEnabled: 1
-      _key: 97
-      _lCtrl: 0
-      _lCmd: 0
-      _lAlt: 0
-      _lShift: 0
-      _useStrictModifierCheck: 0
-      _lMouseBtn: 0
-      _rMouseBtn: 1
-      _mMouseBtn: 0
-      _useStrictMouseCheck: 0
-      _name: Strafe left
-      _staticData:
-        CanHaveMouseButtons: 1
-    _strafeRight:
-      _isEnabled: 1
-      _key: 100
-      _lCtrl: 0
-      _lCmd: 0
-      _lAlt: 0
-      _lShift: 0
-      _useStrictModifierCheck: 0
-      _lMouseBtn: 0
-      _rMouseBtn: 1
-      _mMouseBtn: 0
-      _useStrictMouseCheck: 0
-      _name: Strafe right
-      _staticData:
-        CanHaveMouseButtons: 1
-    _moveUp:
-      _isEnabled: 1
-      _key: 101
-      _lCtrl: 0
-      _lCmd: 0
-      _lAlt: 0
-      _lShift: 0
-      _useStrictModifierCheck: 0
-      _lMouseBtn: 0
-      _rMouseBtn: 1
-      _mMouseBtn: 0
-      _useStrictMouseCheck: 0
-      _name: Move up
-      _staticData:
-        CanHaveMouseButtons: 1
-    _moveDown:
-      _isEnabled: 1
-      _key: 113
-      _lCtrl: 0
-      _lCmd: 0
-      _lAlt: 0
-      _lShift: 0
-      _useStrictModifierCheck: 0
-      _lMouseBtn: 0
-      _rMouseBtn: 1
-      _mMouseBtn: 0
-      _useStrictMouseCheck: 0
-      _name: Move down
-      _staticData:
-        CanHaveMouseButtons: 1
-    _pan:
-      _isEnabled: 1
-      _key: 0
-      _lCtrl: 0
-      _lCmd: 0
-      _lAlt: 0
-      _lShift: 0
-      _useStrictModifierCheck: 0
-      _lMouseBtn: 0
-      _rMouseBtn: 0
-      _mMouseBtn: 1
-      _useStrictMouseCheck: 0
-      _name: Pan
-      _staticData:
-        CanHaveMouseButtons: 1
-    _lookAround:
-      _isEnabled: 1
-      _key: 0
-      _lCtrl: 0
-      _lCmd: 0
-      _lAlt: 0
-      _lShift: 0
-      _useStrictModifierCheck: 0
-      _lMouseBtn: 0
-      _rMouseBtn: 1
-      _mMouseBtn: 0
-      _useStrictMouseCheck: 0
-      _name: Look around
-      _staticData:
-        CanHaveMouseButtons: 1
-    _orbit:
-      _isEnabled: 1
-      _key: 0
-      _lCtrl: 0
-      _lCmd: 0
-      _lAlt: 1
-      _lShift: 0
-      _useStrictModifierCheck: 0
-      _lMouseBtn: 0
-      _rMouseBtn: 1
-      _mMouseBtn: 0
-      _useStrictMouseCheck: 0
-      _name: Orbit
-      _staticData:
-        CanHaveMouseButtons: 1
 --- !u!1 &1334381209
 GameObject:
   m_ObjectHideFlags: 0
@@ -16688,7 +16252,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -17215,7 +16779,7 @@ Transform:
   m_Children:
   - {fileID: 1659358481}
   m_Father: {fileID: 0}
-  m_RootOrder: 20
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1385972223
 MonoBehaviour:
@@ -17875,6 +17439,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1439085282}
   m_CullTransparentMesh: 1
+--- !u!1 &1441444099
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1441444101}
+  - component: {fileID: 1441444100}
+  m_Layer: 0
+  m_Name: TwoMapsCameraView
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1441444100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1441444099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24b4616ac30677244b0c1b030a201ed3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvas: {fileID: 2004983942}
+--- !u!4 &1441444101
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1441444099}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 76.417564, y: 236.08267, z: -134.38696}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2004983947}
+  m_Father: {fileID: 0}
+  m_RootOrder: 19
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1443878061
 GameObject:
   m_ObjectHideFlags: 0
@@ -17917,7 +17527,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1456100866
 GameObject:
@@ -18231,7 +17841,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8302757767363119322, guid: 0e6ce7b5c21cbd544abfbe1fa6632a09, type: 3}
       propertyPath: m_RootOrder
-      value: 26
+      value: 22
       objectReference: {fileID: 0}
     - target: {fileID: 8302757767363119322, guid: 0e6ce7b5c21cbd544abfbe1fa6632a09, type: 3}
       propertyPath: m_LocalPosition.x
@@ -18435,7 +18045,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1477266088
 GameObject:
@@ -18665,7 +18275,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1496859634
 GameObject:
@@ -18909,7 +18519,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -19539,7 +19149,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Nahr\xE1t model m\u011Bsta"
+  m_text: "Nahr\xE1t z\xE1kladn\xED model m\u011Bsta"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -19898,3174 +19508,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1561565340}
   m_CullTransparentMesh: 1
---- !u!1 &1564206629
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1564206630}
-  - component: {fileID: 1564206631}
-  m_Layer: 0
-  m_Name: RTGizmosEngine
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1564206630
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1564206629}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 811662738}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1564206631
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1564206629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56ad6ff4da11be6469667bbd3e41843c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _mainToolbar:
-    _activeTabColor: {r: 0, g: 1, b: 0, a: 1}
-    _numTabsPerRow: 6
-    _tabs:
-    - _tooltip: General gizmo engine settings.
-      _text: General
-    - _tooltip: Scene gizmo specific settings.
-      _text: Scene gizmo
-    - _tooltip: Allows you to change move gizmo settings.
-      _text: Move gizmo
-    - _tooltip: Allows you to change rotation settings.
-      _text: Rotation gizmo
-    - _tooltip: Allows you to change scale gizmo settings.
-      _text: Scale gizmo
-    - _tooltip: Allows you to change universal gizmo settings.
-      _text: Universal gizmo
-    _activeTabIndex: 4
-  _settings:
-    _canBeDisplayed: 1
-    _isExpanded: 1
-    _enableGizmoSorting: 1
-  _sceneGizmoLookAndFeel:
-    _canBeDisplayed: 1
-    _isExpanded: 1
-    _midCapLookAndFeel:
-      _capType: 2
-      _fillMode: 0
-      _shadeMode: 0
-      _scale: 1
-      _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
-      _pyramidHeight: 1.65
-      _pyramidWidth: 0.8
-      _pyramidDepth: 0.8
-      _boxWidth: 1.01
-      _boxHeight: 1.01
-      _boxDepth: 1.01
-      _sphereRadius: 0.73
-      _trPrismWidth: 1
-      _trPrismHeight: 1
-      _trPrismDepth: 1
-      _isSphereBorderVisible: 0
-      _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-      _numSphereBorderPoints: 100
-      _color: {r: 0.8000001, g: 0.8000001, b: 0.8000001, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    _axesCapsLookAndFeel:
-    - _capType: 0
-      _fillMode: 0
-      _shadeMode: 0
-      _scale: 1
-      _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
-      _pyramidHeight: 1.65
-      _pyramidWidth: 0.8
-      _pyramidDepth: 0.8
-      _boxWidth: 0.7
-      _boxHeight: 0.7
-      _boxDepth: 0.7
-      _sphereRadius: 0.45
-      _trPrismWidth: 1
-      _trPrismHeight: 1
-      _trPrismDepth: 1
-      _isSphereBorderVisible: 0
-      _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-      _numSphereBorderPoints: 100
-      _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _capType: 0
-      _fillMode: 0
-      _shadeMode: 0
-      _scale: 1
-      _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
-      _pyramidHeight: 1.65
-      _pyramidWidth: 0.8
-      _pyramidDepth: 0.8
-      _boxWidth: 0.7
-      _boxHeight: 0.7
-      _boxDepth: 0.7
-      _sphereRadius: 0.45
-      _trPrismWidth: 1
-      _trPrismHeight: 1
-      _trPrismDepth: 1
-      _isSphereBorderVisible: 0
-      _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-      _numSphereBorderPoints: 100
-      _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _capType: 0
-      _fillMode: 0
-      _shadeMode: 0
-      _scale: 1
-      _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
-      _pyramidHeight: 1.65
-      _pyramidWidth: 0.8
-      _pyramidDepth: 0.8
-      _boxWidth: 0.7
-      _boxHeight: 0.7
-      _boxDepth: 0.7
-      _sphereRadius: 0.45
-      _trPrismWidth: 1
-      _trPrismHeight: 1
-      _trPrismDepth: 1
-      _isSphereBorderVisible: 0
-      _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-      _numSphereBorderPoints: 100
-      _color: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _capType: 0
-      _fillMode: 0
-      _shadeMode: 0
-      _scale: 1
-      _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
-      _pyramidHeight: 1.65
-      _pyramidWidth: 0.8
-      _pyramidDepth: 0.8
-      _boxWidth: 0.7
-      _boxHeight: 0.7
-      _boxDepth: 0.7
-      _sphereRadius: 0.45
-      _trPrismWidth: 1
-      _trPrismHeight: 1
-      _trPrismDepth: 1
-      _isSphereBorderVisible: 0
-      _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-      _numSphereBorderPoints: 100
-      _color: {r: 0.8000001, g: 0.8000001, b: 0.8000001, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _capType: 0
-      _fillMode: 0
-      _shadeMode: 0
-      _scale: 1
-      _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
-      _pyramidHeight: 1.65
-      _pyramidWidth: 0.8
-      _pyramidDepth: 0.8
-      _boxWidth: 0.7
-      _boxHeight: 0.7
-      _boxDepth: 0.7
-      _sphereRadius: 0.45
-      _trPrismWidth: 1
-      _trPrismHeight: 1
-      _trPrismDepth: 1
-      _isSphereBorderVisible: 0
-      _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-      _numSphereBorderPoints: 100
-      _color: {r: 0.8000001, g: 0.8000001, b: 0.8000001, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _capType: 0
-      _fillMode: 0
-      _shadeMode: 0
-      _scale: 1
-      _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
-      _pyramidHeight: 1.65
-      _pyramidWidth: 0.8
-      _pyramidDepth: 0.8
-      _boxWidth: 0.7
-      _boxHeight: 0.7
-      _boxDepth: 0.7
-      _sphereRadius: 0.45
-      _trPrismWidth: 1
-      _trPrismHeight: 1
-      _trPrismDepth: 1
-      _isSphereBorderVisible: 0
-      _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-      _numSphereBorderPoints: 100
-      _color: {r: 0.8000001, g: 0.8000001, b: 0.8000001, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    _screenCorner: 1
-    _screenOffset: {x: 0, y: 0}
-    _screenSize: 90
-    _axesLabelTint: {r: 1, g: 1, b: 1, a: 1}
-    _camPrjSwitchLabelTint: {r: 1, g: 1, b: 1, a: 0.7}
-    _isCamPrjSwitchLabelVisible: 1
-  _moveGizmoSettings2D:
-    _canBeDisplayed: 1
-    _isExpanded: 0
-    _dblSliderSettings:
-      _areaHoverEps: 0.00001
-      _borderLineHoverEps: 7
-      _thickBorderPolyHoverEps: 7
-      _offsetSnapStepRight: 1
-      _offsetSnapStepUp: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleMode: 1
-      _scaleSnapStepRight: 0.1
-      _scaleSnapStepUp: 0.1
-      _proportionalScaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    _sglSliderSettings:
-    - _lineHoverEps: 10
-      _boxHoverEps: 10
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _lineHoverEps: 10
-      _boxHoverEps: 10
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _lineHoverEps: 10
-      _boxHoverEps: 10
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _lineHoverEps: 10
-      _boxHoverEps: 10
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-  _moveGizmoSettings3D:
-    _canBeDisplayed: 1
-    _isExpanded: 0
-    _vertexSnapSettings:
-      _canBeDisplayed: 1
-      _isExpanded: 1
-      _snapDestinationLayers: -1
-      _canSnapToGrid: 1
-      _canSnapToObjectVerts: 1
-    _sglSliderSettings:
-    - _lineHoverEps: 0.7
-      _boxHoverEps: 0.5
-      _cylinderHoverEps: 0.5
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _lineHoverEps: 0.7
-      _boxHoverEps: 0.5
-      _cylinderHoverEps: 0.5
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _lineHoverEps: 0.7
-      _boxHoverEps: 0.5
-      _cylinderHoverEps: 0.5
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _lineHoverEps: 0.7
-      _boxHoverEps: 0.5
-      _cylinderHoverEps: 0.5
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _lineHoverEps: 0.7
-      _boxHoverEps: 0.5
-      _cylinderHoverEps: 0.5
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _lineHoverEps: 0.7
-      _boxHoverEps: 0.5
-      _cylinderHoverEps: 0.5
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    _dblSliderSettings:
-    - _areaHoverEps: 0
-      _extrudeHoverEps: 0.00001
-      _borderLineHoverEps: 0
-      _borderBoxHoverEps: 0
-      _borderTorusHoverEps: 0.7
-      _isCircleHoverCullEnabled: 0
-      _offsetSnapStepRight: 1
-      _offsetSnapStepUp: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleMode: 1
-      _scaleSnapStepRight: 0.1
-      _scaleSnapStepUp: 0.1
-      _proportionalScaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _areaHoverEps: 0
-      _extrudeHoverEps: 0.00001
-      _borderLineHoverEps: 0
-      _borderBoxHoverEps: 0
-      _borderTorusHoverEps: 0.7
-      _isCircleHoverCullEnabled: 0
-      _offsetSnapStepRight: 1
-      _offsetSnapStepUp: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleMode: 1
-      _scaleSnapStepRight: 0.1
-      _scaleSnapStepUp: 0.1
-      _proportionalScaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _areaHoverEps: 0
-      _extrudeHoverEps: 0.00001
-      _borderLineHoverEps: 0
-      _borderBoxHoverEps: 0
-      _borderTorusHoverEps: 0.7
-      _isCircleHoverCullEnabled: 0
-      _offsetSnapStepRight: 1
-      _offsetSnapStepUp: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleMode: 1
-      _scaleSnapStepRight: 0.1
-      _scaleSnapStepUp: 0.1
-      _proportionalScaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-  _moveGizmoLookAndFeel2D:
-    _canBeDisplayed: 1
-    _isExpanded: 0
-    _dblSliderLookAndFeel:
-      _fillMode: 1
-      _planeType: 0
-      _scale: 1
-      _quadWidth: 25
-      _quadHeight: 25
-      _circleRadius: 12
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 1, g: 1, b: 1, a: 0.3}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 0.3}
-      _borderColor: {r: 1, g: 1, b: 1, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _quadBorderType: 0
-      _circleBorderType: 0
-      _polygonBorderType: 0
-      _borderPolyThickness: 8
-    _sglSliderLookAndFeel:
-    - _lineType: 0
-      _fillMode: 0
-      _length: 50
-      _scale: 1
-      _boxThickness: 3
-      _isRotationArcVisible: 1
-      _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderColor: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _capLookAndFeel:
-        _fillMode: 0
-        _capType: 2
-        _scale: 1
-        _circleRadius: 12
-        _quadWidth: 25
-        _quadHeight: 25
-        _arrowBaseRadius: 5
-        _arrowHeight: 20
-        _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-        _borderColor: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-        _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _lineType: 0
-      _fillMode: 0
-      _length: 50
-      _scale: 1
-      _boxThickness: 3
-      _isRotationArcVisible: 1
-      _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderColor: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _capLookAndFeel:
-        _fillMode: 0
-        _capType: 2
-        _scale: 1
-        _circleRadius: 12
-        _quadWidth: 25
-        _quadHeight: 25
-        _arrowBaseRadius: 5
-        _arrowHeight: 20
-        _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-        _borderColor: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-        _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _lineType: 0
-      _fillMode: 0
-      _length: 50
-      _scale: 1
-      _boxThickness: 3
-      _isRotationArcVisible: 1
-      _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderColor: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _capLookAndFeel:
-        _fillMode: 0
-        _capType: 2
-        _scale: 1
-        _circleRadius: 12
-        _quadWidth: 25
-        _quadHeight: 25
-        _arrowBaseRadius: 5
-        _arrowHeight: 20
-        _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-        _borderColor: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-        _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _lineType: 0
-      _fillMode: 0
-      _length: 50
-      _scale: 1
-      _boxThickness: 3
-      _isRotationArcVisible: 1
-      _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderColor: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _capLookAndFeel:
-        _fillMode: 0
-        _capType: 2
-        _scale: 1
-        _circleRadius: 12
-        _quadWidth: 25
-        _quadHeight: 25
-        _arrowBaseRadius: 5
-        _arrowHeight: 20
-        _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-        _borderColor: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-        _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    _isDblSliderVisible: 1
-    _sglSliderVis: 01010000
-    _sglSliderCapVis: 01010000
-  _moveGizmoLookAndFeel3D:
-    _canBeDisplayed: 1
-    _isExpanded: 0
-    _isMidCapVisible: 0
-    _midCapLookAndFeel:
-      _capType: 2
-      _fillMode: 0
-      _shadeMode: 0
-      _scale: 1
-      _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
-      _pyramidHeight: 1.65
-      _pyramidWidth: 0.8
-      _pyramidDepth: 0.8
-      _boxWidth: 0.7
-      _boxHeight: 0.7
-      _boxDepth: 0.7
-      _sphereRadius: 0.67
-      _trPrismWidth: 1
-      _trPrismHeight: 1
-      _trPrismDepth: 1
-      _isSphereBorderVisible: 0
-      _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-      _numSphereBorderPoints: 100
-      _color: {r: 0.8000001, g: 0.8000001, b: 0.8000001, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    _vertSnapCapLookAndFeel:
-      _fillMode: 1
-      _capType: 0
-      _scale: 1
-      _circleRadius: 12
-      _quadWidth: 25
-      _quadHeight: 25
-      _arrowBaseRadius: 5
-      _arrowHeight: 20
-      _color: {r: 1, g: 1, b: 1, a: 0.3}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 0.3}
-      _borderColor: {r: 1, g: 1, b: 1, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    _sglSliderVis: 010101000000
-    _sglSliderCapVis: 010101000000
-    _dblSliderVis: 010101
-    _sglSlidersLookAndFeel:
-    - _shadeMode: 0
-      _lineType: 0
-      _fillMode: 0
-      _length: 5.5
-      _scale: 1
-      _useZoomFactor: 1
-      _boxHeight: 0.18
-      _boxDepth: 0.18
-      _cylinderRadius: 0.15
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _capLookAndFeel:
-        _capType: 0
-        _fillMode: 0
-        _shadeMode: 0
-        _scale: 1
-        _useZoomFactor: 1
-        _coneHeight: 1.65
-        _coneRadius: 0.5
-        _pyramidHeight: 1.65
-        _pyramidWidth: 0.8
-        _pyramidDepth: 0.8
-        _boxWidth: 0.7
-        _boxHeight: 0.7
-        _boxDepth: 0.7
-        _sphereRadius: 0.45
-        _trPrismWidth: 1
-        _trPrismHeight: 1
-        _trPrismDepth: 1
-        _isSphereBorderVisible: 0
-        _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-        _numSphereBorderPoints: 100
-        _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _shadeMode: 0
-      _lineType: 0
-      _fillMode: 0
-      _length: 5.5
-      _scale: 1
-      _useZoomFactor: 1
-      _boxHeight: 0.18
-      _boxDepth: 0.18
-      _cylinderRadius: 0.15
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _capLookAndFeel:
-        _capType: 0
-        _fillMode: 0
-        _shadeMode: 0
-        _scale: 1
-        _useZoomFactor: 1
-        _coneHeight: 1.65
-        _coneRadius: 0.5
-        _pyramidHeight: 1.65
-        _pyramidWidth: 0.8
-        _pyramidDepth: 0.8
-        _boxWidth: 0.7
-        _boxHeight: 0.7
-        _boxDepth: 0.7
-        _sphereRadius: 0.45
-        _trPrismWidth: 1
-        _trPrismHeight: 1
-        _trPrismDepth: 1
-        _isSphereBorderVisible: 0
-        _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-        _numSphereBorderPoints: 100
-        _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _shadeMode: 0
-      _lineType: 0
-      _fillMode: 0
-      _length: 5.5
-      _scale: 1
-      _useZoomFactor: 1
-      _boxHeight: 0.18
-      _boxDepth: 0.18
-      _cylinderRadius: 0.15
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _capLookAndFeel:
-        _capType: 0
-        _fillMode: 0
-        _shadeMode: 0
-        _scale: 1
-        _useZoomFactor: 1
-        _coneHeight: 1.65
-        _coneRadius: 0.5
-        _pyramidHeight: 1.65
-        _pyramidWidth: 0.8
-        _pyramidDepth: 0.8
-        _boxWidth: 0.7
-        _boxHeight: 0.7
-        _boxDepth: 0.7
-        _sphereRadius: 0.45
-        _trPrismWidth: 1
-        _trPrismHeight: 1
-        _trPrismDepth: 1
-        _isSphereBorderVisible: 0
-        _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-        _numSphereBorderPoints: 100
-        _color: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _shadeMode: 0
-      _lineType: 0
-      _fillMode: 0
-      _length: 5.5
-      _scale: 1
-      _useZoomFactor: 1
-      _boxHeight: 0.18
-      _boxDepth: 0.18
-      _cylinderRadius: 0.15
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _capLookAndFeel:
-        _capType: 0
-        _fillMode: 0
-        _shadeMode: 0
-        _scale: 1
-        _useZoomFactor: 1
-        _coneHeight: 1.65
-        _coneRadius: 0.5
-        _pyramidHeight: 1.65
-        _pyramidWidth: 0.8
-        _pyramidDepth: 0.8
-        _boxWidth: 0.7
-        _boxHeight: 0.7
-        _boxDepth: 0.7
-        _sphereRadius: 0.45
-        _trPrismWidth: 1
-        _trPrismHeight: 1
-        _trPrismDepth: 1
-        _isSphereBorderVisible: 0
-        _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-        _numSphereBorderPoints: 100
-        _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _shadeMode: 0
-      _lineType: 0
-      _fillMode: 0
-      _length: 5.5
-      _scale: 1
-      _useZoomFactor: 1
-      _boxHeight: 0.18
-      _boxDepth: 0.18
-      _cylinderRadius: 0.15
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _capLookAndFeel:
-        _capType: 0
-        _fillMode: 0
-        _shadeMode: 0
-        _scale: 1
-        _useZoomFactor: 1
-        _coneHeight: 1.65
-        _coneRadius: 0.5
-        _pyramidHeight: 1.65
-        _pyramidWidth: 0.8
-        _pyramidDepth: 0.8
-        _boxWidth: 0.7
-        _boxHeight: 0.7
-        _boxDepth: 0.7
-        _sphereRadius: 0.45
-        _trPrismWidth: 1
-        _trPrismHeight: 1
-        _trPrismDepth: 1
-        _isSphereBorderVisible: 0
-        _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-        _numSphereBorderPoints: 100
-        _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _shadeMode: 0
-      _lineType: 0
-      _fillMode: 0
-      _length: 5.5
-      _scale: 1
-      _useZoomFactor: 1
-      _boxHeight: 0.18
-      _boxDepth: 0.18
-      _cylinderRadius: 0.15
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _capLookAndFeel:
-        _capType: 0
-        _fillMode: 0
-        _shadeMode: 0
-        _scale: 1
-        _useZoomFactor: 1
-        _coneHeight: 1.65
-        _coneRadius: 0.5
-        _pyramidHeight: 1.65
-        _pyramidWidth: 0.8
-        _pyramidDepth: 0.8
-        _boxWidth: 0.7
-        _boxHeight: 0.7
-        _boxDepth: 0.7
-        _sphereRadius: 0.45
-        _trPrismWidth: 1
-        _trPrismHeight: 1
-        _trPrismDepth: 1
-        _isSphereBorderVisible: 0
-        _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-        _numSphereBorderPoints: 100
-        _color: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    _dblSlidersLookAndFeel:
-    - _planeType: 0
-      _scale: 1
-      _useZoomFactor: 1
-      _quadWidth: 1.5
-      _quadHeight: 1.5
-      _raTriangleXLength: 1
-      _raTriangleYLength: 1
-      _circleRadius: 0.5
-      _borderBoxHeight: 0.18
-      _borderBoxDepth: 0.18
-      _borderTorusThickness: 0.18
-      _numBorderTorusWireAxialSlices: 5
-      _borderCylTorusWidth: 0.18
-      _borderCylTorusHeight: 0.18
-      _shadeMode: 1
-      _color: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 0.3}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 0.3}
-      _borderColor: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderCircleCullAlphaScale: 0
-      _borderShadeMode: 0
-      _borderFillMode: 0
-      _quadBorderType: 0
-      _raTriangleBorderType: 0
-      _circleBorderType: 0
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-    - _planeType: 0
-      _scale: 1
-      _useZoomFactor: 1
-      _quadWidth: 1.5
-      _quadHeight: 1.5
-      _raTriangleXLength: 1
-      _raTriangleYLength: 1
-      _circleRadius: 0.5
-      _borderBoxHeight: 0.18
-      _borderBoxDepth: 0.18
-      _borderTorusThickness: 0.18
-      _numBorderTorusWireAxialSlices: 5
-      _borderCylTorusWidth: 0.18
-      _borderCylTorusHeight: 0.18
-      _shadeMode: 1
-      _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 0.3}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 0.3}
-      _borderColor: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderCircleCullAlphaScale: 0
-      _borderShadeMode: 0
-      _borderFillMode: 0
-      _quadBorderType: 0
-      _raTriangleBorderType: 0
-      _circleBorderType: 0
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-    - _planeType: 0
-      _scale: 1
-      _useZoomFactor: 1
-      _quadWidth: 1.5
-      _quadHeight: 1.5
-      _raTriangleXLength: 1
-      _raTriangleYLength: 1
-      _circleRadius: 0.5
-      _borderBoxHeight: 0.18
-      _borderBoxDepth: 0.18
-      _borderTorusThickness: 0.18
-      _numBorderTorusWireAxialSlices: 5
-      _borderCylTorusWidth: 0.18
-      _borderCylTorusHeight: 0.18
-      _shadeMode: 1
-      _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 0.3}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 0.3}
-      _borderColor: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderCircleCullAlphaScale: 0
-      _borderShadeMode: 0
-      _borderFillMode: 0
-      _quadBorderType: 0
-      _raTriangleBorderType: 0
-      _circleBorderType: 0
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-  _moveGizmoHotkeys:
-    _canBeDisplayed: 1
-    _isExpanded: 0
-    _enable2DMode:
-      _isEnabled: 1
-      _key: 0
-      _lCtrl: 0
-      _lCmd: 0
-      _lAlt: 0
-      _lShift: 1
-      _useStrictModifierCheck: 1
-      _lMouseBtn: 0
-      _rMouseBtn: 0
-      _mMouseBtn: 0
-      _useStrictMouseCheck: 0
-      _name: Enable 2D mode
-      _staticData:
-        CanHaveMouseButtons: 0
-    _enableSnapping:
-      _isEnabled: 1
-      _key: 0
-      _lCtrl: 1
-      _lCmd: 0
-      _lAlt: 0
-      _lShift: 0
-      _useStrictModifierCheck: 1
-      _lMouseBtn: 0
-      _rMouseBtn: 0
-      _mMouseBtn: 0
-      _useStrictMouseCheck: 0
-      _name: Enable snapping
-      _staticData:
-        CanHaveMouseButtons: 0
-    _enableVertexSnapping:
-      _isEnabled: 1
-      _key: 118
-      _lCtrl: 0
-      _lCmd: 0
-      _lAlt: 0
-      _lShift: 0
-      _useStrictModifierCheck: 0
-      _lMouseBtn: 0
-      _rMouseBtn: 0
-      _mMouseBtn: 0
-      _useStrictMouseCheck: 0
-      _name: Enable vertex snapping
-      _staticData:
-        CanHaveMouseButtons: 0
-  _objectMoveGizmoSettings:
-    _canBeDisplayed: 1
-    _isExpanded: 0
-    _transformableLayers: -1
-  _rotationGizmoSettings3D:
-    _canBeDisplayed: 1
-    _isExpanded: 0
-    _camRightSnapStep: 15
-    _camUpSnapStep: 15
-    _sliderSettings:
-    - _areaHoverEps: 0.00001
-      _extrudeHoverEps: 0.00001
-      _borderLineHoverEps: 0.7
-      _borderBoxHoverEps: 0.7
-      _borderTorusHoverEps: 0.4
-      _isCircleHoverCullEnabled: 1
-      _offsetSnapStepRight: 1
-      _offsetSnapStepUp: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleMode: 1
-      _scaleSnapStepRight: 0.1
-      _scaleSnapStepUp: 0.1
-      _proportionalScaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _areaHoverEps: 0.00001
-      _extrudeHoverEps: 0.00001
-      _borderLineHoverEps: 0.7
-      _borderBoxHoverEps: 0.7
-      _borderTorusHoverEps: 0.4
-      _isCircleHoverCullEnabled: 1
-      _offsetSnapStepRight: 1
-      _offsetSnapStepUp: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleMode: 1
-      _scaleSnapStepRight: 0.1
-      _scaleSnapStepUp: 0.1
-      _proportionalScaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _areaHoverEps: 0.00001
-      _extrudeHoverEps: 0.00001
-      _borderLineHoverEps: 0.7
-      _borderBoxHoverEps: 0.7
-      _borderTorusHoverEps: 0.4
-      _isCircleHoverCullEnabled: 1
-      _offsetSnapStepRight: 1
-      _offsetSnapStepUp: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleMode: 1
-      _scaleSnapStepRight: 0.1
-      _scaleSnapStepUp: 0.1
-      _proportionalScaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    _camLookSliderSettings:
-      _areaHoverEps: 0.00001
-      _borderLineHoverEps: 7
-      _thickBorderPolyHoverEps: 7
-      _offsetSnapStepRight: 1
-      _offsetSnapStepUp: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleMode: 1
-      _scaleSnapStepRight: 0.1
-      _scaleSnapStepUp: 0.1
-      _proportionalScaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-  _rotationGizmoLookAndFeel3D:
-    _canBeDisplayed: 1
-    _isExpanded: 0
-    _isMidCapVisible: 1
-    _midCapLookAndFeel:
-      _capType: 3
-      _fillMode: 0
-      _shadeMode: 0
-      _scale: 1
-      _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
-      _pyramidHeight: 1.65
-      _pyramidWidth: 0.8
-      _pyramidDepth: 0.8
-      _boxWidth: 0.7
-      _boxHeight: 0.7
-      _boxDepth: 0.7
-      _sphereRadius: 6.5
-      _trPrismWidth: 1
-      _trPrismHeight: 1
-      _trPrismDepth: 1
-      _isSphereBorderVisible: 1
-      _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-      _numSphereBorderPoints: 100
-      _color: {r: 0.3, g: 0.3, b: 0.3, a: 0.12}
-      _hoveredColor: {r: 0.3, g: 0.3, b: 0.3, a: 0.12}
-    _axesVis: 010101
-    _axesLookAndFeel:
-    - _planeType: 2
-      _scale: 1
-      _useZoomFactor: 1
-      _quadWidth: 1
-      _quadHeight: 1
-      _raTriangleXLength: 1
-      _raTriangleYLength: 1
-      _circleRadius: 6.5
-      _borderBoxHeight: 0.18
-      _borderBoxDepth: 0.18
-      _borderTorusThickness: 0.18
-      _numBorderTorusWireAxialSlices: 2
-      _borderCylTorusWidth: 0.18
-      _borderCylTorusHeight: 0.18
-      _shadeMode: 1
-      _color: {r: 1, g: 1, b: 1, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderColor: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderCircleCullAlphaScale: 0
-      _borderShadeMode: 0
-      _borderFillMode: 0
-      _quadBorderType: 0
-      _raTriangleBorderType: 0
-      _circleBorderType: 0
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-    - _planeType: 2
-      _scale: 1
-      _useZoomFactor: 1
-      _quadWidth: 1
-      _quadHeight: 1
-      _raTriangleXLength: 1
-      _raTriangleYLength: 1
-      _circleRadius: 6.5
-      _borderBoxHeight: 0.18
-      _borderBoxDepth: 0.18
-      _borderTorusThickness: 0.18
-      _numBorderTorusWireAxialSlices: 2
-      _borderCylTorusWidth: 0.18
-      _borderCylTorusHeight: 0.18
-      _shadeMode: 1
-      _color: {r: 1, g: 1, b: 1, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderColor: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderCircleCullAlphaScale: 0
-      _borderShadeMode: 0
-      _borderFillMode: 0
-      _quadBorderType: 0
-      _raTriangleBorderType: 0
-      _circleBorderType: 0
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-    - _planeType: 2
-      _scale: 1
-      _useZoomFactor: 1
-      _quadWidth: 1
-      _quadHeight: 1
-      _raTriangleXLength: 1
-      _raTriangleYLength: 1
-      _circleRadius: 6.5
-      _borderBoxHeight: 0.18
-      _borderBoxDepth: 0.18
-      _borderTorusThickness: 0.18
-      _numBorderTorusWireAxialSlices: 2
-      _borderCylTorusWidth: 0.18
-      _borderCylTorusHeight: 0.18
-      _shadeMode: 1
-      _color: {r: 1, g: 1, b: 1, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderColor: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderCircleCullAlphaScale: 0
-      _borderShadeMode: 0
-      _borderFillMode: 0
-      _quadBorderType: 0
-      _raTriangleBorderType: 0
-      _circleBorderType: 0
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-    _isCamLookSliderVisible: 1
-    _camLookSliderRadiusOffset: 0.65
-    _camLookSliderLookAndFeel:
-      _fillMode: 2
-      _planeType: 2
-      _scale: 1
-      _quadWidth: 25
-      _quadHeight: 25
-      _circleRadius: 12
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 1, g: 1, b: 1, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderColor: {r: 1, g: 1, b: 1, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _quadBorderType: 0
-      _circleBorderType: 0
-      _polygonBorderType: 0
-      _borderPolyThickness: 4
-  _rotationGizmoHotkeys:
-    _canBeDisplayed: 1
-    _isExpanded: 0
-    _enableSnapping:
-      _isEnabled: 1
-      _key: 0
-      _lCtrl: 1
-      _lCmd: 0
-      _lAlt: 0
-      _lShift: 0
-      _useStrictModifierCheck: 1
-      _lMouseBtn: 0
-      _rMouseBtn: 0
-      _mMouseBtn: 0
-      _useStrictMouseCheck: 0
-      _name: Enable snapping
-      _staticData:
-        CanHaveMouseButtons: 0
-  _objectRotationGizmoSettings:
-    _canBeDisplayed: 1
-    _isExpanded: 0
-    _transformableLayers: -1
-  _scaleGizmoSettings3D:
-    _canBeDisplayed: 1
-    _isExpanded: 0
-    _uniformSnapStep: 0.1
-    _sglSliderSettings:
-    - _lineHoverEps: 0.7
-      _boxHoverEps: 0.5
-      _cylinderHoverEps: 0.5
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 0.6
-    - _lineHoverEps: 0.7
-      _boxHoverEps: 0.5
-      _cylinderHoverEps: 0.5
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 0.6
-    - _lineHoverEps: 0.7
-      _boxHoverEps: 0.5
-      _cylinderHoverEps: 0.5
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 0.6
-    - _lineHoverEps: 0.7
-      _boxHoverEps: 0.5
-      _cylinderHoverEps: 0.5
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 0.6
-    - _lineHoverEps: 0.7
-      _boxHoverEps: 0.5
-      _cylinderHoverEps: 0.5
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 0.6
-    - _lineHoverEps: 0.7
-      _boxHoverEps: 0.5
-      _cylinderHoverEps: 0.5
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 0.6
-    _dblSliderSettings:
-    - _areaHoverEps: 0
-      _extrudeHoverEps: 0.00001
-      _borderLineHoverEps: 0
-      _borderBoxHoverEps: 0
-      _borderTorusHoverEps: 0.7
-      _isCircleHoverCullEnabled: 0
-      _offsetSnapStepRight: 1
-      _offsetSnapStepUp: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleMode: 1
-      _scaleSnapStepRight: 0.1
-      _scaleSnapStepUp: 0.1
-      _proportionalScaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _areaHoverEps: 0
-      _extrudeHoverEps: 0.00001
-      _borderLineHoverEps: 0
-      _borderBoxHoverEps: 0
-      _borderTorusHoverEps: 0.7
-      _isCircleHoverCullEnabled: 0
-      _offsetSnapStepRight: 1
-      _offsetSnapStepUp: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleMode: 1
-      _scaleSnapStepRight: 0.1
-      _scaleSnapStepUp: 0.1
-      _proportionalScaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _areaHoverEps: 0
-      _extrudeHoverEps: 0.00001
-      _borderLineHoverEps: 0
-      _borderBoxHoverEps: 0
-      _borderTorusHoverEps: 0.7
-      _isCircleHoverCullEnabled: 0
-      _offsetSnapStepRight: 1
-      _offsetSnapStepUp: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleMode: 1
-      _scaleSnapStepRight: 0.1
-      _scaleSnapStepUp: 0.1
-      _proportionalScaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-  _scaleGizmoLookAndFeel3D:
-    _canBeDisplayed: 1
-    _isExpanded: 0
-    _midCapLookAndFeel:
-      _capType: 2
-      _fillMode: 0
-      _shadeMode: 0
-      _scale: 1
-      _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
-      _pyramidHeight: 1.65
-      _pyramidWidth: 0.8
-      _pyramidDepth: 0.8
-      _boxWidth: 0.9
-      _boxHeight: 0.9
-      _boxDepth: 0.9
-      _sphereRadius: 0.65
-      _trPrismWidth: 1
-      _trPrismHeight: 1
-      _trPrismDepth: 1
-      _isSphereBorderVisible: 0
-      _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-      _numSphereBorderPoints: 100
-      _color: {r: 0.8000001, g: 0.8000001, b: 0.8000001, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    _sglSliderVis: 010101000000
-    _sglSliderCapVis: 010101000000
-    _dblSliderVis: 010101
-    _scaleGuideLookAndFeel:
-      _useZoomFactor: 1
-      _xAxisColor: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _yAxisColor: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _zAxisColor: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-      _axisLength: 2
-    _isScaleGuideVisible: 1
-    _sglSlidersLookAndFeel:
-    - _shadeMode: 0
-      _lineType: 0
-      _fillMode: 0
-      _length: 5.5
-      _scale: 1
-      _useZoomFactor: 1
-      _boxHeight: 0.18
-      _boxDepth: 0.18
-      _cylinderRadius: 0.15
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _capLookAndFeel:
-        _capType: 2
-        _fillMode: 0
-        _shadeMode: 0
-        _scale: 1
-        _useZoomFactor: 1
-        _coneHeight: 1.65
-        _coneRadius: 0.5
-        _pyramidHeight: 1.65
-        _pyramidWidth: 0.8
-        _pyramidDepth: 0.8
-        _boxWidth: 0.7
-        _boxHeight: 0.7
-        _boxDepth: 0.7
-        _sphereRadius: 0.45
-        _trPrismWidth: 1
-        _trPrismHeight: 1
-        _trPrismDepth: 1
-        _isSphereBorderVisible: 0
-        _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-        _numSphereBorderPoints: 100
-        _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _shadeMode: 0
-      _lineType: 0
-      _fillMode: 0
-      _length: 5.5
-      _scale: 1
-      _useZoomFactor: 1
-      _boxHeight: 0.18
-      _boxDepth: 0.18
-      _cylinderRadius: 0.15
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _capLookAndFeel:
-        _capType: 2
-        _fillMode: 0
-        _shadeMode: 0
-        _scale: 1
-        _useZoomFactor: 1
-        _coneHeight: 1.65
-        _coneRadius: 0.5
-        _pyramidHeight: 1.65
-        _pyramidWidth: 0.8
-        _pyramidDepth: 0.8
-        _boxWidth: 0.7
-        _boxHeight: 0.7
-        _boxDepth: 0.7
-        _sphereRadius: 0.45
-        _trPrismWidth: 1
-        _trPrismHeight: 1
-        _trPrismDepth: 1
-        _isSphereBorderVisible: 0
-        _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-        _numSphereBorderPoints: 100
-        _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _shadeMode: 0
-      _lineType: 0
-      _fillMode: 0
-      _length: 5.5
-      _scale: 1
-      _useZoomFactor: 1
-      _boxHeight: 0.18
-      _boxDepth: 0.18
-      _cylinderRadius: 0.15
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _capLookAndFeel:
-        _capType: 2
-        _fillMode: 0
-        _shadeMode: 0
-        _scale: 1
-        _useZoomFactor: 1
-        _coneHeight: 1.65
-        _coneRadius: 0.5
-        _pyramidHeight: 1.65
-        _pyramidWidth: 0.8
-        _pyramidDepth: 0.8
-        _boxWidth: 0.7
-        _boxHeight: 0.7
-        _boxDepth: 0.7
-        _sphereRadius: 0.45
-        _trPrismWidth: 1
-        _trPrismHeight: 1
-        _trPrismDepth: 1
-        _isSphereBorderVisible: 0
-        _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-        _numSphereBorderPoints: 100
-        _color: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _shadeMode: 0
-      _lineType: 0
-      _fillMode: 0
-      _length: 5.5
-      _scale: 1
-      _useZoomFactor: 1
-      _boxHeight: 0.18
-      _boxDepth: 0.18
-      _cylinderRadius: 0.15
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _capLookAndFeel:
-        _capType: 2
-        _fillMode: 0
-        _shadeMode: 0
-        _scale: 1
-        _useZoomFactor: 1
-        _coneHeight: 1.65
-        _coneRadius: 0.5
-        _pyramidHeight: 1.65
-        _pyramidWidth: 0.8
-        _pyramidDepth: 0.8
-        _boxWidth: 0.7
-        _boxHeight: 0.7
-        _boxDepth: 0.7
-        _sphereRadius: 0.45
-        _trPrismWidth: 1
-        _trPrismHeight: 1
-        _trPrismDepth: 1
-        _isSphereBorderVisible: 0
-        _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-        _numSphereBorderPoints: 100
-        _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _shadeMode: 0
-      _lineType: 0
-      _fillMode: 0
-      _length: 5.5
-      _scale: 1
-      _useZoomFactor: 1
-      _boxHeight: 0.18
-      _boxDepth: 0.18
-      _cylinderRadius: 0.15
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _capLookAndFeel:
-        _capType: 2
-        _fillMode: 0
-        _shadeMode: 0
-        _scale: 1
-        _useZoomFactor: 1
-        _coneHeight: 1.65
-        _coneRadius: 0.5
-        _pyramidHeight: 1.65
-        _pyramidWidth: 0.8
-        _pyramidDepth: 0.8
-        _boxWidth: 0.7
-        _boxHeight: 0.7
-        _boxDepth: 0.7
-        _sphereRadius: 0.45
-        _trPrismWidth: 1
-        _trPrismHeight: 1
-        _trPrismDepth: 1
-        _isSphereBorderVisible: 0
-        _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-        _numSphereBorderPoints: 100
-        _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _shadeMode: 0
-      _lineType: 0
-      _fillMode: 0
-      _length: 5.5
-      _scale: 1
-      _useZoomFactor: 1
-      _boxHeight: 0.18
-      _boxDepth: 0.18
-      _cylinderRadius: 0.15
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _capLookAndFeel:
-        _capType: 2
-        _fillMode: 0
-        _shadeMode: 0
-        _scale: 1
-        _useZoomFactor: 1
-        _coneHeight: 1.65
-        _coneRadius: 0.5
-        _pyramidHeight: 1.65
-        _pyramidWidth: 0.8
-        _pyramidDepth: 0.8
-        _boxWidth: 0.7
-        _boxHeight: 0.7
-        _boxDepth: 0.7
-        _sphereRadius: 0.45
-        _trPrismWidth: 1
-        _trPrismHeight: 1
-        _trPrismDepth: 1
-        _isSphereBorderVisible: 0
-        _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-        _numSphereBorderPoints: 100
-        _color: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    _dblSlidersLookAndFeel:
-    - _planeType: 1
-      _scale: 1
-      _useZoomFactor: 1
-      _quadWidth: 1
-      _quadHeight: 1
-      _raTriangleXLength: 1.9
-      _raTriangleYLength: 1.9
-      _circleRadius: 0.5
-      _borderBoxHeight: 0.18
-      _borderBoxDepth: 0.18
-      _borderTorusThickness: 0.18
-      _numBorderTorusWireAxialSlices: 5
-      _borderCylTorusWidth: 0.18
-      _borderCylTorusHeight: 0.18
-      _shadeMode: 1
-      _color: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 0.3}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 0.3}
-      _borderColor: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderCircleCullAlphaScale: 0
-      _borderShadeMode: 0
-      _borderFillMode: 0
-      _quadBorderType: 0
-      _raTriangleBorderType: 0
-      _circleBorderType: 0
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-    - _planeType: 1
-      _scale: 1
-      _useZoomFactor: 1
-      _quadWidth: 1
-      _quadHeight: 1
-      _raTriangleXLength: 1.9
-      _raTriangleYLength: 1.9
-      _circleRadius: 0.5
-      _borderBoxHeight: 0.18
-      _borderBoxDepth: 0.18
-      _borderTorusThickness: 0.18
-      _numBorderTorusWireAxialSlices: 5
-      _borderCylTorusWidth: 0.18
-      _borderCylTorusHeight: 0.18
-      _shadeMode: 1
-      _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 0.3}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 0.3}
-      _borderColor: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderCircleCullAlphaScale: 0
-      _borderShadeMode: 0
-      _borderFillMode: 0
-      _quadBorderType: 0
-      _raTriangleBorderType: 0
-      _circleBorderType: 0
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-    - _planeType: 1
-      _scale: 1
-      _useZoomFactor: 1
-      _quadWidth: 1
-      _quadHeight: 1
-      _raTriangleXLength: 1.9
-      _raTriangleYLength: 1.9
-      _circleRadius: 0.5
-      _borderBoxHeight: 0.18
-      _borderBoxDepth: 0.18
-      _borderTorusThickness: 0.18
-      _numBorderTorusWireAxialSlices: 5
-      _borderCylTorusWidth: 0.18
-      _borderCylTorusHeight: 0.18
-      _shadeMode: 1
-      _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 0.3}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 0.3}
-      _borderColor: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderCircleCullAlphaScale: 0
-      _borderShadeMode: 0
-      _borderFillMode: 0
-      _quadBorderType: 0
-      _raTriangleBorderType: 0
-      _circleBorderType: 0
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-  _scaleGizmoHotkeys:
-    _canBeDisplayed: 1
-    _isExpanded: 0
-    _enableSnapping:
-      _isEnabled: 1
-      _key: 0
-      _lCtrl: 1
-      _lCmd: 0
-      _lAlt: 0
-      _lShift: 0
-      _useStrictModifierCheck: 1
-      _lMouseBtn: 0
-      _rMouseBtn: 0
-      _mMouseBtn: 0
-      _useStrictMouseCheck: 0
-      _name: Enable snapping
-      _staticData:
-        CanHaveMouseButtons: 0
-    _changeMultiAxisMode:
-      _isEnabled: 1
-      _key: 0
-      _lCtrl: 0
-      _lCmd: 0
-      _lAlt: 0
-      _lShift: 1
-      _useStrictModifierCheck: 1
-      _lMouseBtn: 0
-      _rMouseBtn: 0
-      _mMouseBtn: 0
-      _useStrictMouseCheck: 0
-      _name: Change multi-axis mode
-      _staticData:
-        CanHaveMouseButtons: 0
-  _objectScaleGizmoSettings:
-    _canBeDisplayed: 1
-    _isExpanded: 0
-    _transformableLayers: -1
-  _universalGizmoConfig:
-    _canBeDisplayed: 1
-    _isExpanded: 1
-    _inheritCategory: 0
-    _inheritType: 3
-    _displayCategory: 0
-  _universalGizmoSettings2D:
-    _canBeDisplayed: 1
-    _isExpanded: 0
-    _displayCategory: 0
-    _mvDblSliderSettings:
-      _areaHoverEps: 0.00001
-      _borderLineHoverEps: 7
-      _thickBorderPolyHoverEps: 7
-      _offsetSnapStepRight: 1
-      _offsetSnapStepUp: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleMode: 1
-      _scaleSnapStepRight: 0.1
-      _scaleSnapStepUp: 0.1
-      _proportionalScaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    _mvSglSliderSettings:
-    - _lineHoverEps: 10
-      _boxHoverEps: 10
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _lineHoverEps: 10
-      _boxHoverEps: 10
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _lineHoverEps: 10
-      _boxHoverEps: 10
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _lineHoverEps: 10
-      _boxHoverEps: 10
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-  _universalGizmoSettings3D:
-    _canBeDisplayed: 1
-    _isExpanded: 0
-    _displayCategory: 0
-    _mvVertexSnapSettings:
-      _canBeDisplayed: 1
-      _isExpanded: 1
-      _snapDestinationLayers: -1
-      _canSnapToGrid: 1
-      _canSnapToObjectVerts: 1
-    _mvSglSliderSettings:
-    - _lineHoverEps: 0.7
-      _boxHoverEps: 0.5
-      _cylinderHoverEps: 0.5
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _lineHoverEps: 0.7
-      _boxHoverEps: 0.5
-      _cylinderHoverEps: 0.5
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _lineHoverEps: 0.7
-      _boxHoverEps: 0.5
-      _cylinderHoverEps: 0.5
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _lineHoverEps: 0.7
-      _boxHoverEps: 0.5
-      _cylinderHoverEps: 0.5
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _lineHoverEps: 0.7
-      _boxHoverEps: 0.5
-      _cylinderHoverEps: 0.5
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _lineHoverEps: 0.7
-      _boxHoverEps: 0.5
-      _cylinderHoverEps: 0.5
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    _mvDblSliderSettings:
-    - _areaHoverEps: 0
-      _extrudeHoverEps: 0.00001
-      _borderLineHoverEps: 0
-      _borderBoxHoverEps: 0
-      _borderTorusHoverEps: 0.7
-      _isCircleHoverCullEnabled: 0
-      _offsetSnapStepRight: 1
-      _offsetSnapStepUp: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleMode: 1
-      _scaleSnapStepRight: 0.1
-      _scaleSnapStepUp: 0.1
-      _proportionalScaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _areaHoverEps: 0
-      _extrudeHoverEps: 0.00001
-      _borderLineHoverEps: 0
-      _borderBoxHoverEps: 0
-      _borderTorusHoverEps: 0.7
-      _isCircleHoverCullEnabled: 0
-      _offsetSnapStepRight: 1
-      _offsetSnapStepUp: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleMode: 1
-      _scaleSnapStepRight: 0.1
-      _scaleSnapStepUp: 0.1
-      _proportionalScaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _areaHoverEps: 0
-      _extrudeHoverEps: 0.00001
-      _borderLineHoverEps: 0
-      _borderBoxHoverEps: 0
-      _borderTorusHoverEps: 0.7
-      _isCircleHoverCullEnabled: 0
-      _offsetSnapStepRight: 1
-      _offsetSnapStepUp: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleMode: 1
-      _scaleSnapStepRight: 0.1
-      _scaleSnapStepUp: 0.1
-      _proportionalScaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    _rtCamRightSnapStep: 15
-    _rtCamUpSnapStep: 15
-    _rtSliderSettings:
-    - _areaHoverEps: 0.00001
-      _extrudeHoverEps: 0.00001
-      _borderLineHoverEps: 0.7
-      _borderBoxHoverEps: 0.7
-      _borderTorusHoverEps: 0.4
-      _isCircleHoverCullEnabled: 1
-      _offsetSnapStepRight: 1
-      _offsetSnapStepUp: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleMode: 1
-      _scaleSnapStepRight: 0.1
-      _scaleSnapStepUp: 0.1
-      _proportionalScaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _areaHoverEps: 0.00001
-      _extrudeHoverEps: 0.00001
-      _borderLineHoverEps: 0.7
-      _borderBoxHoverEps: 0.7
-      _borderTorusHoverEps: 0.4
-      _isCircleHoverCullEnabled: 1
-      _offsetSnapStepRight: 1
-      _offsetSnapStepUp: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleMode: 1
-      _scaleSnapStepRight: 0.1
-      _scaleSnapStepUp: 0.1
-      _proportionalScaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _areaHoverEps: 0.00001
-      _extrudeHoverEps: 0.00001
-      _borderLineHoverEps: 0.7
-      _borderBoxHoverEps: 0.7
-      _borderTorusHoverEps: 0.4
-      _isCircleHoverCullEnabled: 1
-      _offsetSnapStepRight: 1
-      _offsetSnapStepUp: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleMode: 1
-      _scaleSnapStepRight: 0.1
-      _scaleSnapStepUp: 0.1
-      _proportionalScaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    _rtCamLookSliderSettings:
-      _areaHoverEps: 0.00001
-      _borderLineHoverEps: 7
-      _thickBorderPolyHoverEps: 7
-      _offsetSnapStepRight: 1
-      _offsetSnapStepUp: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleMode: 1
-      _scaleSnapStepRight: 0.1
-      _scaleSnapStepUp: 0.1
-      _proportionalScaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    _scUniformSnapStep: 0.1
-    _scSglSliderSettings:
-    - _lineHoverEps: 0.7
-      _boxHoverEps: 0.5
-      _cylinderHoverEps: 0.5
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 0.6
-    - _lineHoverEps: 0.7
-      _boxHoverEps: 0.5
-      _cylinderHoverEps: 0.5
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 0.6
-    - _lineHoverEps: 0.7
-      _boxHoverEps: 0.5
-      _cylinderHoverEps: 0.5
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 0.6
-    - _lineHoverEps: 0.7
-      _boxHoverEps: 0.5
-      _cylinderHoverEps: 0.5
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 0.6
-    - _lineHoverEps: 0.7
-      _boxHoverEps: 0.5
-      _cylinderHoverEps: 0.5
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 0.6
-    - _lineHoverEps: 0.7
-      _boxHoverEps: 0.5
-      _cylinderHoverEps: 0.5
-      _offsetSnapStep: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 0.6
-    _scDblSliderSettings:
-    - _areaHoverEps: 0
-      _extrudeHoverEps: 0.00001
-      _borderLineHoverEps: 0
-      _borderBoxHoverEps: 0
-      _borderTorusHoverEps: 0.7
-      _isCircleHoverCullEnabled: 0
-      _offsetSnapStepRight: 1
-      _offsetSnapStepUp: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleMode: 1
-      _scaleSnapStepRight: 0.1
-      _scaleSnapStepUp: 0.1
-      _proportionalScaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _areaHoverEps: 0
-      _extrudeHoverEps: 0.00001
-      _borderLineHoverEps: 0
-      _borderBoxHoverEps: 0
-      _borderTorusHoverEps: 0.7
-      _isCircleHoverCullEnabled: 0
-      _offsetSnapStepRight: 1
-      _offsetSnapStepUp: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleMode: 1
-      _scaleSnapStepRight: 0.1
-      _scaleSnapStepUp: 0.1
-      _proportionalScaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-    - _areaHoverEps: 0
-      _extrudeHoverEps: 0.00001
-      _borderLineHoverEps: 0
-      _borderBoxHoverEps: 0
-      _borderTorusHoverEps: 0.7
-      _isCircleHoverCullEnabled: 0
-      _offsetSnapStepRight: 1
-      _offsetSnapStepUp: 1
-      _rotationSnapStep: 15
-      _rotationSnapMode: 0
-      _scaleMode: 1
-      _scaleSnapStepRight: 0.1
-      _scaleSnapStepUp: 0.1
-      _proportionalScaleSnapStep: 0.1
-      _offsetSensitivity: 1
-      _rotationSensitivity: 0.45
-      _scaleSensitivity: 1
-  _universalGizmoLookAndFeel2D:
-    _canBeDisplayed: 1
-    _isExpanded: 0
-    _displayCategory: 0
-    _mvDblSliderLookAndFeel:
-      _fillMode: 1
-      _planeType: 0
-      _scale: 1
-      _quadWidth: 25
-      _quadHeight: 25
-      _circleRadius: 12
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 1, g: 1, b: 1, a: 0.3}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 0.3}
-      _borderColor: {r: 1, g: 1, b: 1, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _quadBorderType: 0
-      _circleBorderType: 0
-      _polygonBorderType: 0
-      _borderPolyThickness: 8
-    _mvSglSliderLookAndFeel:
-    - _lineType: 0
-      _fillMode: 0
-      _length: 50
-      _scale: 1
-      _boxThickness: 3
-      _isRotationArcVisible: 1
-      _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderColor: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _capLookAndFeel:
-        _fillMode: 0
-        _capType: 2
-        _scale: 1
-        _circleRadius: 12
-        _quadWidth: 25
-        _quadHeight: 25
-        _arrowBaseRadius: 5
-        _arrowHeight: 20
-        _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-        _borderColor: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-        _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _lineType: 0
-      _fillMode: 0
-      _length: 50
-      _scale: 1
-      _boxThickness: 3
-      _isRotationArcVisible: 1
-      _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderColor: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _capLookAndFeel:
-        _fillMode: 0
-        _capType: 2
-        _scale: 1
-        _circleRadius: 12
-        _quadWidth: 25
-        _quadHeight: 25
-        _arrowBaseRadius: 5
-        _arrowHeight: 20
-        _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-        _borderColor: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-        _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _lineType: 0
-      _fillMode: 0
-      _length: 50
-      _scale: 1
-      _boxThickness: 3
-      _isRotationArcVisible: 1
-      _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderColor: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _capLookAndFeel:
-        _fillMode: 0
-        _capType: 2
-        _scale: 1
-        _circleRadius: 12
-        _quadWidth: 25
-        _quadHeight: 25
-        _arrowBaseRadius: 5
-        _arrowHeight: 20
-        _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-        _borderColor: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-        _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _lineType: 0
-      _fillMode: 0
-      _length: 50
-      _scale: 1
-      _boxThickness: 3
-      _isRotationArcVisible: 1
-      _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderColor: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _capLookAndFeel:
-        _fillMode: 0
-        _capType: 2
-        _scale: 1
-        _circleRadius: 12
-        _quadWidth: 25
-        _quadHeight: 25
-        _arrowBaseRadius: 5
-        _arrowHeight: 20
-        _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-        _borderColor: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-        _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    _isMvDblSliderVisible: 1
-    _mvSglSliderVis: 01010000
-    _mvSglSliderCapVis: 01010000
-  _universalGizmoLookAndFeel3D:
-    _canBeDisplayed: 1
-    _isExpanded: 0
-    _displayCategory: 0
-    _mvVertSnapCapLookAndFeel:
-      _fillMode: 1
-      _capType: 0
-      _scale: 1
-      _circleRadius: 12
-      _quadWidth: 25
-      _quadHeight: 25
-      _arrowBaseRadius: 5
-      _arrowHeight: 20
-      _color: {r: 1, g: 1, b: 1, a: 0.3}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 0.3}
-      _borderColor: {r: 1, g: 1, b: 1, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    _mvSglSliderVis: 010101000000
-    _mvSglSliderCapVis: 010101000000
-    _mvDblSliderVis: 010101
-    _mvSglSlidersLookAndFeel:
-    - _shadeMode: 0
-      _lineType: 0
-      _fillMode: 0
-      _length: 5.5
-      _scale: 1
-      _useZoomFactor: 1
-      _boxHeight: 0.18
-      _boxDepth: 0.18
-      _cylinderRadius: 0.15
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _capLookAndFeel:
-        _capType: 0
-        _fillMode: 0
-        _shadeMode: 0
-        _scale: 1
-        _useZoomFactor: 1
-        _coneHeight: 1.65
-        _coneRadius: 0.5
-        _pyramidHeight: 1.65
-        _pyramidWidth: 0.8
-        _pyramidDepth: 0.8
-        _boxWidth: 0.7
-        _boxHeight: 0.7
-        _boxDepth: 0.7
-        _sphereRadius: 0.45
-        _trPrismWidth: 1
-        _trPrismHeight: 1
-        _trPrismDepth: 1
-        _isSphereBorderVisible: 0
-        _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-        _numSphereBorderPoints: 100
-        _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _shadeMode: 0
-      _lineType: 0
-      _fillMode: 0
-      _length: 5.5
-      _scale: 1
-      _useZoomFactor: 1
-      _boxHeight: 0.18
-      _boxDepth: 0.18
-      _cylinderRadius: 0.15
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _capLookAndFeel:
-        _capType: 0
-        _fillMode: 0
-        _shadeMode: 0
-        _scale: 1
-        _useZoomFactor: 1
-        _coneHeight: 1.65
-        _coneRadius: 0.5
-        _pyramidHeight: 1.65
-        _pyramidWidth: 0.8
-        _pyramidDepth: 0.8
-        _boxWidth: 0.7
-        _boxHeight: 0.7
-        _boxDepth: 0.7
-        _sphereRadius: 0.45
-        _trPrismWidth: 1
-        _trPrismHeight: 1
-        _trPrismDepth: 1
-        _isSphereBorderVisible: 0
-        _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-        _numSphereBorderPoints: 100
-        _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _shadeMode: 0
-      _lineType: 0
-      _fillMode: 0
-      _length: 5.5
-      _scale: 1
-      _useZoomFactor: 1
-      _boxHeight: 0.18
-      _boxDepth: 0.18
-      _cylinderRadius: 0.15
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _capLookAndFeel:
-        _capType: 0
-        _fillMode: 0
-        _shadeMode: 0
-        _scale: 1
-        _useZoomFactor: 1
-        _coneHeight: 1.65
-        _coneRadius: 0.5
-        _pyramidHeight: 1.65
-        _pyramidWidth: 0.8
-        _pyramidDepth: 0.8
-        _boxWidth: 0.7
-        _boxHeight: 0.7
-        _boxDepth: 0.7
-        _sphereRadius: 0.45
-        _trPrismWidth: 1
-        _trPrismHeight: 1
-        _trPrismDepth: 1
-        _isSphereBorderVisible: 0
-        _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-        _numSphereBorderPoints: 100
-        _color: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _shadeMode: 0
-      _lineType: 0
-      _fillMode: 0
-      _length: 5.5
-      _scale: 1
-      _useZoomFactor: 1
-      _boxHeight: 0.18
-      _boxDepth: 0.18
-      _cylinderRadius: 0.15
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _capLookAndFeel:
-        _capType: 0
-        _fillMode: 0
-        _shadeMode: 0
-        _scale: 1
-        _useZoomFactor: 1
-        _coneHeight: 1.65
-        _coneRadius: 0.5
-        _pyramidHeight: 1.65
-        _pyramidWidth: 0.8
-        _pyramidDepth: 0.8
-        _boxWidth: 0.7
-        _boxHeight: 0.7
-        _boxDepth: 0.7
-        _sphereRadius: 0.45
-        _trPrismWidth: 1
-        _trPrismHeight: 1
-        _trPrismDepth: 1
-        _isSphereBorderVisible: 0
-        _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-        _numSphereBorderPoints: 100
-        _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _shadeMode: 0
-      _lineType: 0
-      _fillMode: 0
-      _length: 5.5
-      _scale: 1
-      _useZoomFactor: 1
-      _boxHeight: 0.18
-      _boxDepth: 0.18
-      _cylinderRadius: 0.15
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _capLookAndFeel:
-        _capType: 0
-        _fillMode: 0
-        _shadeMode: 0
-        _scale: 1
-        _useZoomFactor: 1
-        _coneHeight: 1.65
-        _coneRadius: 0.5
-        _pyramidHeight: 1.65
-        _pyramidWidth: 0.8
-        _pyramidDepth: 0.8
-        _boxWidth: 0.7
-        _boxHeight: 0.7
-        _boxDepth: 0.7
-        _sphereRadius: 0.45
-        _trPrismWidth: 1
-        _trPrismHeight: 1
-        _trPrismDepth: 1
-        _isSphereBorderVisible: 0
-        _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-        _numSphereBorderPoints: 100
-        _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _shadeMode: 0
-      _lineType: 0
-      _fillMode: 0
-      _length: 5.5
-      _scale: 1
-      _useZoomFactor: 1
-      _boxHeight: 0.18
-      _boxDepth: 0.18
-      _cylinderRadius: 0.15
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _capLookAndFeel:
-        _capType: 0
-        _fillMode: 0
-        _shadeMode: 0
-        _scale: 1
-        _useZoomFactor: 1
-        _coneHeight: 1.65
-        _coneRadius: 0.5
-        _pyramidHeight: 1.65
-        _pyramidWidth: 0.8
-        _pyramidDepth: 0.8
-        _boxWidth: 0.7
-        _boxHeight: 0.7
-        _boxDepth: 0.7
-        _sphereRadius: 0.45
-        _trPrismWidth: 1
-        _trPrismHeight: 1
-        _trPrismDepth: 1
-        _isSphereBorderVisible: 0
-        _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-        _numSphereBorderPoints: 100
-        _color: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    _mvDblSlidersLookAndFeel:
-    - _planeType: 0
-      _scale: 1
-      _useZoomFactor: 1
-      _quadWidth: 1.5
-      _quadHeight: 1.5
-      _raTriangleXLength: 1
-      _raTriangleYLength: 1
-      _circleRadius: 0.5
-      _borderBoxHeight: 0.18
-      _borderBoxDepth: 0.18
-      _borderTorusThickness: 0.18
-      _numBorderTorusWireAxialSlices: 5
-      _borderCylTorusWidth: 0.18
-      _borderCylTorusHeight: 0.18
-      _shadeMode: 1
-      _color: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 0.3}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 0.3}
-      _borderColor: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderCircleCullAlphaScale: 0
-      _borderShadeMode: 0
-      _borderFillMode: 0
-      _quadBorderType: 0
-      _raTriangleBorderType: 0
-      _circleBorderType: 0
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-    - _planeType: 0
-      _scale: 1
-      _useZoomFactor: 1
-      _quadWidth: 1.5
-      _quadHeight: 1.5
-      _raTriangleXLength: 1
-      _raTriangleYLength: 1
-      _circleRadius: 0.5
-      _borderBoxHeight: 0.18
-      _borderBoxDepth: 0.18
-      _borderTorusThickness: 0.18
-      _numBorderTorusWireAxialSlices: 5
-      _borderCylTorusWidth: 0.18
-      _borderCylTorusHeight: 0.18
-      _shadeMode: 1
-      _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 0.3}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 0.3}
-      _borderColor: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderCircleCullAlphaScale: 0
-      _borderShadeMode: 0
-      _borderFillMode: 0
-      _quadBorderType: 0
-      _raTriangleBorderType: 0
-      _circleBorderType: 0
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-    - _planeType: 0
-      _scale: 1
-      _useZoomFactor: 1
-      _quadWidth: 1.5
-      _quadHeight: 1.5
-      _raTriangleXLength: 1
-      _raTriangleYLength: 1
-      _circleRadius: 0.5
-      _borderBoxHeight: 0.18
-      _borderBoxDepth: 0.18
-      _borderTorusThickness: 0.18
-      _numBorderTorusWireAxialSlices: 5
-      _borderCylTorusWidth: 0.18
-      _borderCylTorusHeight: 0.18
-      _shadeMode: 1
-      _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 0.3}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 0.3}
-      _borderColor: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderCircleCullAlphaScale: 0
-      _borderShadeMode: 0
-      _borderFillMode: 0
-      _quadBorderType: 0
-      _raTriangleBorderType: 0
-      _circleBorderType: 0
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-    _isRtMidCapVisible: 1
-    _rtMidCapLookAndFeel:
-      _capType: 3
-      _fillMode: 0
-      _shadeMode: 0
-      _scale: 1
-      _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
-      _pyramidHeight: 1.65
-      _pyramidWidth: 0.8
-      _pyramidDepth: 0.8
-      _boxWidth: 0.7
-      _boxHeight: 0.7
-      _boxDepth: 0.7
-      _sphereRadius: 6.5
-      _trPrismWidth: 1
-      _trPrismHeight: 1
-      _trPrismDepth: 1
-      _isSphereBorderVisible: 1
-      _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-      _numSphereBorderPoints: 100
-      _color: {r: 0.3, g: 0.3, b: 0.3, a: 0.12}
-      _hoveredColor: {r: 0.3, g: 0.3, b: 0.3, a: 0.12}
-    _rtAxesVis: 010101
-    _rtAxesLookAndFeel:
-    - _planeType: 2
-      _scale: 1
-      _useZoomFactor: 1
-      _quadWidth: 1
-      _quadHeight: 1
-      _raTriangleXLength: 1
-      _raTriangleYLength: 1
-      _circleRadius: 6.5
-      _borderBoxHeight: 0.18
-      _borderBoxDepth: 0.18
-      _borderTorusThickness: 0.18
-      _numBorderTorusWireAxialSlices: 2
-      _borderCylTorusWidth: 0.18
-      _borderCylTorusHeight: 0.18
-      _shadeMode: 1
-      _color: {r: 1, g: 1, b: 1, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderColor: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderCircleCullAlphaScale: 0
-      _borderShadeMode: 0
-      _borderFillMode: 0
-      _quadBorderType: 0
-      _raTriangleBorderType: 0
-      _circleBorderType: 0
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-    - _planeType: 2
-      _scale: 1
-      _useZoomFactor: 1
-      _quadWidth: 1
-      _quadHeight: 1
-      _raTriangleXLength: 1
-      _raTriangleYLength: 1
-      _circleRadius: 6.5
-      _borderBoxHeight: 0.18
-      _borderBoxDepth: 0.18
-      _borderTorusThickness: 0.18
-      _numBorderTorusWireAxialSlices: 2
-      _borderCylTorusWidth: 0.18
-      _borderCylTorusHeight: 0.18
-      _shadeMode: 1
-      _color: {r: 1, g: 1, b: 1, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderColor: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderCircleCullAlphaScale: 0
-      _borderShadeMode: 0
-      _borderFillMode: 0
-      _quadBorderType: 0
-      _raTriangleBorderType: 0
-      _circleBorderType: 0
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-    - _planeType: 2
-      _scale: 1
-      _useZoomFactor: 1
-      _quadWidth: 1
-      _quadHeight: 1
-      _raTriangleXLength: 1
-      _raTriangleYLength: 1
-      _circleRadius: 6.5
-      _borderBoxHeight: 0.18
-      _borderBoxDepth: 0.18
-      _borderTorusThickness: 0.18
-      _numBorderTorusWireAxialSlices: 2
-      _borderCylTorusWidth: 0.18
-      _borderCylTorusHeight: 0.18
-      _shadeMode: 1
-      _color: {r: 1, g: 1, b: 1, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderColor: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderCircleCullAlphaScale: 0
-      _borderShadeMode: 0
-      _borderFillMode: 0
-      _quadBorderType: 0
-      _raTriangleBorderType: 0
-      _circleBorderType: 0
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-    _isRtCamLookSliderVisible: 1
-    _rtCamLookSliderRadiusOffset: 0.65
-    _rtCamLookSliderLookAndFeel:
-      _fillMode: 2
-      _planeType: 2
-      _scale: 1
-      _quadWidth: 25
-      _quadHeight: 25
-      _circleRadius: 12
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 1, g: 1, b: 1, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderColor: {r: 1, g: 1, b: 1, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _quadBorderType: 0
-      _circleBorderType: 0
-      _polygonBorderType: 0
-      _borderPolyThickness: 4
-    _scMidCapLookAndFeel:
-      _capType: 2
-      _fillMode: 0
-      _shadeMode: 0
-      _scale: 1
-      _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
-      _pyramidHeight: 1.65
-      _pyramidWidth: 0.8
-      _pyramidDepth: 0.8
-      _boxWidth: 0.9
-      _boxHeight: 0.9
-      _boxDepth: 0.9
-      _sphereRadius: 0.65
-      _trPrismWidth: 1
-      _trPrismHeight: 1
-      _trPrismDepth: 1
-      _isSphereBorderVisible: 0
-      _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-      _numSphereBorderPoints: 100
-      _color: {r: 0.8000001, g: 0.8000001, b: 0.8000001, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    _scSglSliderVis: 010101000000
-    _scSglSliderCapVis: 010101000000
-    _scDblSliderVis: 010101
-    _isScMidCapVisible: 1
-    _scScaleGuideLookAndFeel:
-      _useZoomFactor: 1
-      _xAxisColor: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _yAxisColor: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _zAxisColor: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-      _axisLength: 2
-    _isScScaleGuideVisible: 1
-    _scSglSlidersLookAndFeel:
-    - _shadeMode: 0
-      _lineType: 0
-      _fillMode: 0
-      _length: 5.5
-      _scale: 1
-      _useZoomFactor: 1
-      _boxHeight: 0.18
-      _boxDepth: 0.18
-      _cylinderRadius: 0.15
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _capLookAndFeel:
-        _capType: 2
-        _fillMode: 0
-        _shadeMode: 0
-        _scale: 1
-        _useZoomFactor: 1
-        _coneHeight: 1.65
-        _coneRadius: 0.5
-        _pyramidHeight: 1.65
-        _pyramidWidth: 0.8
-        _pyramidDepth: 0.8
-        _boxWidth: 0.7
-        _boxHeight: 0.7
-        _boxDepth: 0.7
-        _sphereRadius: 0.45
-        _trPrismWidth: 1
-        _trPrismHeight: 1
-        _trPrismDepth: 1
-        _isSphereBorderVisible: 0
-        _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-        _numSphereBorderPoints: 100
-        _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _shadeMode: 0
-      _lineType: 0
-      _fillMode: 0
-      _length: 5.5
-      _scale: 1
-      _useZoomFactor: 1
-      _boxHeight: 0.18
-      _boxDepth: 0.18
-      _cylinderRadius: 0.15
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _capLookAndFeel:
-        _capType: 2
-        _fillMode: 0
-        _shadeMode: 0
-        _scale: 1
-        _useZoomFactor: 1
-        _coneHeight: 1.65
-        _coneRadius: 0.5
-        _pyramidHeight: 1.65
-        _pyramidWidth: 0.8
-        _pyramidDepth: 0.8
-        _boxWidth: 0.7
-        _boxHeight: 0.7
-        _boxDepth: 0.7
-        _sphereRadius: 0.45
-        _trPrismWidth: 1
-        _trPrismHeight: 1
-        _trPrismDepth: 1
-        _isSphereBorderVisible: 0
-        _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-        _numSphereBorderPoints: 100
-        _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _shadeMode: 0
-      _lineType: 0
-      _fillMode: 0
-      _length: 5.5
-      _scale: 1
-      _useZoomFactor: 1
-      _boxHeight: 0.18
-      _boxDepth: 0.18
-      _cylinderRadius: 0.15
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _capLookAndFeel:
-        _capType: 2
-        _fillMode: 0
-        _shadeMode: 0
-        _scale: 1
-        _useZoomFactor: 1
-        _coneHeight: 1.65
-        _coneRadius: 0.5
-        _pyramidHeight: 1.65
-        _pyramidWidth: 0.8
-        _pyramidDepth: 0.8
-        _boxWidth: 0.7
-        _boxHeight: 0.7
-        _boxDepth: 0.7
-        _sphereRadius: 0.45
-        _trPrismWidth: 1
-        _trPrismHeight: 1
-        _trPrismDepth: 1
-        _isSphereBorderVisible: 0
-        _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-        _numSphereBorderPoints: 100
-        _color: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _shadeMode: 0
-      _lineType: 0
-      _fillMode: 0
-      _length: 5.5
-      _scale: 1
-      _useZoomFactor: 1
-      _boxHeight: 0.18
-      _boxDepth: 0.18
-      _cylinderRadius: 0.15
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _capLookAndFeel:
-        _capType: 2
-        _fillMode: 0
-        _shadeMode: 0
-        _scale: 1
-        _useZoomFactor: 1
-        _coneHeight: 1.65
-        _coneRadius: 0.5
-        _pyramidHeight: 1.65
-        _pyramidWidth: 0.8
-        _pyramidDepth: 0.8
-        _boxWidth: 0.7
-        _boxHeight: 0.7
-        _boxDepth: 0.7
-        _sphereRadius: 0.45
-        _trPrismWidth: 1
-        _trPrismHeight: 1
-        _trPrismDepth: 1
-        _isSphereBorderVisible: 0
-        _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-        _numSphereBorderPoints: 100
-        _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _shadeMode: 0
-      _lineType: 0
-      _fillMode: 0
-      _length: 5.5
-      _scale: 1
-      _useZoomFactor: 1
-      _boxHeight: 0.18
-      _boxDepth: 0.18
-      _cylinderRadius: 0.15
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _capLookAndFeel:
-        _capType: 2
-        _fillMode: 0
-        _shadeMode: 0
-        _scale: 1
-        _useZoomFactor: 1
-        _coneHeight: 1.65
-        _coneRadius: 0.5
-        _pyramidHeight: 1.65
-        _pyramidWidth: 0.8
-        _pyramidDepth: 0.8
-        _boxWidth: 0.7
-        _boxHeight: 0.7
-        _boxDepth: 0.7
-        _sphereRadius: 0.45
-        _trPrismWidth: 1
-        _trPrismHeight: 1
-        _trPrismDepth: 1
-        _isSphereBorderVisible: 0
-        _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-        _numSphereBorderPoints: 100
-        _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    - _shadeMode: 0
-      _lineType: 0
-      _fillMode: 0
-      _length: 5.5
-      _scale: 1
-      _useZoomFactor: 1
-      _boxHeight: 0.18
-      _boxDepth: 0.18
-      _cylinderRadius: 0.15
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-      _color: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _capLookAndFeel:
-        _capType: 2
-        _fillMode: 0
-        _shadeMode: 0
-        _scale: 1
-        _useZoomFactor: 1
-        _coneHeight: 1.65
-        _coneRadius: 0.5
-        _pyramidHeight: 1.65
-        _pyramidWidth: 0.8
-        _pyramidDepth: 0.8
-        _boxWidth: 0.7
-        _boxHeight: 0.7
-        _boxDepth: 0.7
-        _sphereRadius: 0.45
-        _trPrismWidth: 1
-        _trPrismHeight: 1
-        _trPrismDepth: 1
-        _isSphereBorderVisible: 0
-        _sphereBorderColor: {r: 1, g: 1, b: 1, a: 1}
-        _numSphereBorderPoints: 100
-        _color: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-        _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-    _scDblSlidersLookAndFeel:
-    - _planeType: 1
-      _scale: 1
-      _useZoomFactor: 1
-      _quadWidth: 1
-      _quadHeight: 1
-      _raTriangleXLength: 1.9
-      _raTriangleYLength: 1.9
-      _circleRadius: 0.5
-      _borderBoxHeight: 0.18
-      _borderBoxDepth: 0.18
-      _borderTorusThickness: 0.18
-      _numBorderTorusWireAxialSlices: 5
-      _borderCylTorusWidth: 0.18
-      _borderCylTorusHeight: 0.18
-      _shadeMode: 1
-      _color: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 0.3}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 0.3}
-      _borderColor: {r: 0.227451, g: 0.4784314, b: 0.9725491, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderCircleCullAlphaScale: 0
-      _borderShadeMode: 0
-      _borderFillMode: 0
-      _quadBorderType: 0
-      _raTriangleBorderType: 0
-      _circleBorderType: 0
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-    - _planeType: 1
-      _scale: 1
-      _useZoomFactor: 1
-      _quadWidth: 1
-      _quadHeight: 1
-      _raTriangleXLength: 1.9
-      _raTriangleYLength: 1.9
-      _circleRadius: 0.5
-      _borderBoxHeight: 0.18
-      _borderBoxDepth: 0.18
-      _borderTorusThickness: 0.18
-      _numBorderTorusWireAxialSlices: 5
-      _borderCylTorusWidth: 0.18
-      _borderCylTorusHeight: 0.18
-      _shadeMode: 1
-      _color: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 0.3}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 0.3}
-      _borderColor: {r: 0.8588236, g: 0.24313727, b: 0.1137255, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderCircleCullAlphaScale: 0
-      _borderShadeMode: 0
-      _borderFillMode: 0
-      _quadBorderType: 0
-      _raTriangleBorderType: 0
-      _circleBorderType: 0
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-    - _planeType: 1
-      _scale: 1
-      _useZoomFactor: 1
-      _quadWidth: 1
-      _quadHeight: 1
-      _raTriangleXLength: 1.9
-      _raTriangleYLength: 1.9
-      _circleRadius: 0.5
-      _borderBoxHeight: 0.18
-      _borderBoxDepth: 0.18
-      _borderTorusThickness: 0.18
-      _numBorderTorusWireAxialSlices: 5
-      _borderCylTorusWidth: 0.18
-      _borderCylTorusHeight: 0.18
-      _shadeMode: 1
-      _color: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 0.3}
-      _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 0.3}
-      _borderColor: {r: 0.6039216, g: 0.95294124, b: 0.28235295, a: 1}
-      _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
-      _borderCircleCullAlphaScale: 0
-      _borderShadeMode: 0
-      _borderFillMode: 0
-      _quadBorderType: 0
-      _raTriangleBorderType: 0
-      _circleBorderType: 0
-      _isRotationArcVisible: 1
-      _rotationArcLookAndFeel:
-        _useShortestRotation: 1
-        _fillFlags: 3
-        _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
-        _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
-  _universalGizmoHotkeys:
-    _canBeDisplayed: 1
-    _isExpanded: 0
-    _enable2DMode:
-      _isEnabled: 1
-      _key: 0
-      _lCtrl: 0
-      _lCmd: 0
-      _lAlt: 0
-      _lShift: 1
-      _useStrictModifierCheck: 1
-      _lMouseBtn: 0
-      _rMouseBtn: 0
-      _mMouseBtn: 0
-      _useStrictMouseCheck: 0
-      _name: Enable 2D mode
-      _staticData:
-        CanHaveMouseButtons: 0
-    _enableSnapping:
-      _isEnabled: 1
-      _key: 0
-      _lCtrl: 1
-      _lCmd: 0
-      _lAlt: 0
-      _lShift: 0
-      _useStrictModifierCheck: 1
-      _lMouseBtn: 0
-      _rMouseBtn: 0
-      _mMouseBtn: 0
-      _useStrictMouseCheck: 0
-      _name: Enable snapping
-      _staticData:
-        CanHaveMouseButtons: 0
-    _enableVertexSnapping:
-      _isEnabled: 1
-      _key: 118
-      _lCtrl: 0
-      _lCmd: 0
-      _lAlt: 0
-      _lShift: 0
-      _useStrictModifierCheck: 0
-      _lMouseBtn: 0
-      _rMouseBtn: 0
-      _mMouseBtn: 0
-      _useStrictMouseCheck: 0
-      _name: Enable vertex snapping
-      _staticData:
-        CanHaveMouseButtons: 0
-  _objectUniversalGizmoSettings:
-    _canBeDisplayed: 1
-    _isExpanded: 0
-    _transformableLayers: -1
 --- !u!1 &1567622462
 GameObject:
   m_ObjectHideFlags: 0
@@ -23075,6 +19517,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1567622465}
+  - component: {fileID: 1567622466}
   - component: {fileID: 1567622464}
   - component: {fileID: 1567622463}
   m_Layer: 0
@@ -23123,8 +19566,20 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1567622466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1567622462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6178b0306e205f240a0b6c55f23e3526, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1569563477
 GameObject:
   m_ObjectHideFlags: 0
@@ -24277,6 +20732,214 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1640752698}
   m_CullTransparentMesh: 1
+--- !u!1 &1640870177
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1640870178}
+  - component: {fileID: 1640870180}
+  - component: {fileID: 1640870179}
+  m_Layer: 5
+  m_Name: renderTexSec
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1640870178
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640870177}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2004983947}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 240.02356, y: -47.12657}
+  m_SizeDelta: {x: 316.1789, y: 354.4587}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1640870179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640870177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 8400000, guid: 3b162dadba4566b42a8d23b55a46d706, type: 2}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!222 &1640870180
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640870177}
+  m_CullTransparentMesh: 1
+--- !u!1 &1647079395
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1647079396}
+  - component: {fileID: 1647079398}
+  - component: {fileID: 1647079397}
+  m_Layer: 5
+  m_Name: Text (TMP)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1647079396
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1647079395}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1675517302}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1647079397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1647079395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: "Uk\xE1zat varianty vedle sebe"
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 15
+  m_fontSizeBase: 15
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 1
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1647079398
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1647079395}
+  m_CullTransparentMesh: 1
 --- !u!1 &1648248596
 GameObject:
   m_ObjectHideFlags: 0
@@ -24583,7 +21246,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 113, y: 30}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1663154182
 MonoBehaviour:
@@ -24788,7 +21451,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1666968179
 GameObject:
@@ -24878,7 +21541,7 @@ GameObject:
   - component: {fileID: 1667637446}
   - component: {fileID: 1667637447}
   m_Layer: 0
-  m_Name: ProjectList
+  m_Name: ProjectListManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24897,7 +21560,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1667637447
 MonoBehaviour:
@@ -24942,7 +21605,7 @@ Transform:
   m_Children:
   - {fileID: 109255517}
   m_Father: {fileID: 0}
-  m_RootOrder: 25
+  m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1670296907
 MonoBehaviour:
@@ -24957,6 +21620,156 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 109255513}
+--- !u!1 &1675517301
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1675517302}
+  - component: {fileID: 1675517306}
+  - component: {fileID: 1675517305}
+  - component: {fileID: 1675517304}
+  - component: {fileID: 1675517303}
+  m_Layer: 5
+  m_Name: "uka\u017EVar"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1675517302
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675517301}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1647079396}
+  m_Father: {fileID: 606901183}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 321, y: 19.8893}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1675517303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675517301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectDistance: {x: 2, y: -2}
+  m_UseGraphicAlpha: 1
+--- !u!114 &1675517304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675517301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1675517305}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 223405560}
+        m_TargetAssemblyTypeName: MapUI, Assembly-CSharp
+        m_MethodName: onUkazVedleSebe
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1675517305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675517301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1675517306
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675517301}
+  m_CullTransparentMesh: 1
 --- !u!1 &1676634713
 GameObject:
   m_ObjectHideFlags: 0
@@ -25048,7 +21861,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1677472870
 RectTransform:
   m_ObjectHideFlags: 0
@@ -25378,7 +22191,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1727899042
 GameObject:
@@ -25602,7 +22415,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 18
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1736087556
 GameObject:
@@ -26220,7 +23033,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1857151601}
         m_TargetAssemblyTypeName: ProjectsUI, Assembly-CSharp
-        m_MethodName: onNewProject
+        m_MethodName: CreateNewProject
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -26940,7 +23753,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1832535273
 MonoBehaviour:
@@ -26967,8 +23780,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serverUrl: http://127.0.0.1:5000
-  serverUrlUploadJson: http://127.0.0.1:5000/upload
-  serverUrlUploadFiles: http://127.0.0.1:5000/uploadFiles
+  serverUrlUploadJson: http://127.0.0.1:5000/upload_editor_data
+  serverUrlUploadFiles: http://127.0.0.1:5000/upload_model_files
   serverUrlDownload: http://127.0.0.1:5000/download
   serverUrlDownloadFiles: http://127.0.0.1:5000/downloadModels
 --- !u!1 &1857151599
@@ -26982,7 +23795,7 @@ GameObject:
   - component: {fileID: 1857151600}
   - component: {fileID: 1857151601}
   m_Layer: 0
-  m_Name: Projects
+  m_Name: ProjectsList
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27002,7 +23815,7 @@ Transform:
   m_Children:
   - {fileID: 568652071}
   m_Father: {fileID: 0}
-  m_RootOrder: 21
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1857151601
 MonoBehaviour:
@@ -27788,97 +24601,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding: {x: -8, y: -5, z: -8, w: -5}
   m_Softness: {x: 0, y: 0}
---- !u!1 &1916602569
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1916602570}
-  - component: {fileID: 1916602571}
-  m_Layer: 0
-  m_Name: RTSceneGrid
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1916602570
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1916602569}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 811662738}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1916602571
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1916602569}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ed9eacce5abd004d8f8e75b1f1a5025, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _hotkeys:
-    _canBeDisplayed: 1
-    _isExpanded: 1
-    _gridUp:
-      _isEnabled: 1
-      _key: 93
-      _lCtrl: 0
-      _lCmd: 0
-      _lAlt: 0
-      _lShift: 0
-      _useStrictModifierCheck: 1
-      _lMouseBtn: 0
-      _rMouseBtn: 0
-      _mMouseBtn: 0
-      _useStrictMouseCheck: 0
-      _name: Grid up
-      _staticData:
-        CanHaveMouseButtons: 0
-    _gridDown:
-      _isEnabled: 1
-      _key: 91
-      _lCtrl: 0
-      _lCmd: 0
-      _lAlt: 0
-      _lShift: 0
-      _useStrictModifierCheck: 1
-      _lMouseBtn: 0
-      _rMouseBtn: 0
-      _mMouseBtn: 0
-      _useStrictMouseCheck: 0
-      _name: Grid down
-      _staticData:
-        CanHaveMouseButtons: 0
-  _settings:
-    _canBeDisplayed: 1
-    _isExpanded: 1
-    _isVisible: 1
-    _cellSizeX: 1
-    _cellSizeZ: 1
-    _yOffset: 0
-    _rotationAngles: {x: 0, y: 0, z: 0}
-    _upDownStep: 1
-  _lookAndFeel:
-    _canBeDisplayed: 1
-    _isExpanded: 1
-    _lineColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 0.40000004}
-    _useCellFading: 1
 --- !u!1 &1927908045
 GameObject:
   m_ObjectHideFlags: 0
@@ -28513,81 +25235,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1943058911}
   m_CullTransparentMesh: 1
---- !u!1 &1958226572
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1958226573}
-  - component: {fileID: 1958226574}
-  m_Layer: 0
-  m_Name: pivotArrowVisibilityCamera
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1958226573
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1958226572}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1283378226}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!20 &1958226574
-Camera:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1958226572}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_ClearFlags: 3
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
-  m_projectionMatrixMode: 1
-  m_GateFitMode: 2
-  m_FOVAxisMode: 0
-  m_SensorSize: {x: 36, y: 24}
-  m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
-  m_NormalizedViewPortRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
-  field of view: 60
-  orthographic: 0
-  orthographic size: 5
-  m_Depth: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 8
-  m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
-  m_TargetEye: 3
-  m_HDR: 1
-  m_AllowMSAA: 1
-  m_AllowDynamicResolution: 0
-  m_ForceIntoRT: 0
-  m_OcclusionCulling: 1
-  m_StereoConvergence: 10
-  m_StereoSeparation: 0.022
 --- !u!1 &1962831085
 GameObject:
   m_ObjectHideFlags: 0
@@ -29180,7 +25827,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2003359869}
   m_CullTransparentMesh: 1
---- !u!1 &2014404606
+--- !u!1 &2004983942
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -29188,50 +25835,122 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2014404607}
-  - component: {fileID: 2014404608}
-  m_Layer: 0
-  m_Name: RTCameraBackground
+  - component: {fileID: 2004983947}
+  - component: {fileID: 2004983946}
+  - component: {fileID: 2004983945}
+  - component: {fileID: 2004983944}
+  - component: {fileID: 2004983943}
+  m_Layer: 5
+  m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2014404607
-Transform:
+--- !u!95 &2004983943
+Animator:
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2014404606}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 811662738}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2014404608
+  m_GameObject: {fileID: 2004983942}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9918c0026ffa6574e90d0fc63a2e6a94, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2004983944
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2014404606}
+  m_GameObject: {fileID: 2004983942}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 721f683337a2041469bf0e17a8546508, type: 3}
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bkSettings:
-    _canBeDisplayed: 1
-    _isExpanded: 1
-    _firstColor: {r: 0.2784314, g: 0.2784314, b: 0.2784314, a: 1}
-    _secondColor: {r: 0, g: 0, b: 0, a: 1}
-    _gradientOffset: 0
-    _isVisible: 0
-  _renderIgnoreCameras: []
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!114 &2004983945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2004983942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UiScaleMode: 1
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 800, y: 600}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
+--- !u!223 &2004983946
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2004983942}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 0
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!224 &2004983947
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2004983942}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2065240362}
+  - {fileID: 1640870178}
+  m_Father: {fileID: 1441444101}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 0}
 --- !u!1 &2019670629
 GameObject:
   m_ObjectHideFlags: 0
@@ -29760,6 +26479,79 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2064877708}
+  m_CullTransparentMesh: 1
+--- !u!1 &2065240361
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2065240362}
+  - component: {fileID: 2065240364}
+  - component: {fileID: 2065240363}
+  m_Layer: 5
+  m_Name: renderTexBase
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2065240362
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065240361}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2004983947}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -76.155396, y: -47.126564}
+  m_SizeDelta: {x: 316.1789, y: 354.462}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2065240363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065240361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 8400000, guid: ac917534075cbf24cad824b187c81024, type: 2}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!222 &2065240364
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065240361}
   m_CullTransparentMesh: 1
 --- !u!1 &2065749680
 GameObject:
@@ -30325,3 +27117,60 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2130869847}
   m_CullTransparentMesh: 1
+--- !u!1001 &1283149902462965744
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4320960438031472970, guid: cc4943233e5f9b149a7b2eed38880e3a, type: 3}
+      propertyPath: m_RootOrder
+      value: 26
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320960438031472970, guid: cc4943233e5f9b149a7b2eed38880e3a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320960438031472970, guid: cc4943233e5f9b149a7b2eed38880e3a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 26.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320960438031472970, guid: cc4943233e5f9b149a7b2eed38880e3a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -42.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320960438031472970, guid: cc4943233e5f9b149a7b2eed38880e3a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.96481794
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320960438031472970, guid: cc4943233e5f9b149a7b2eed38880e3a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.26291892
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320960438031472970, guid: cc4943233e5f9b149a7b2eed38880e3a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320960438031472970, guid: cc4943233e5f9b149a7b2eed38880e3a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320960438031472970, guid: cc4943233e5f9b149a7b2eed38880e3a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 30.487
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320960438031472970, guid: cc4943233e5f9b149a7b2eed38880e3a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320960438031472970, guid: cc4943233e5f9b149a7b2eed38880e3a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7155193460111970791, guid: cc4943233e5f9b149a7b2eed38880e3a, type: 3}
+      propertyPath: m_Name
+      value: CamSecondaryMap
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: cc4943233e5f9b149a7b2eed38880e3a, type: 3}

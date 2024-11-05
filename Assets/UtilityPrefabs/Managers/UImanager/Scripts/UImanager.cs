@@ -83,7 +83,8 @@ public enum UIType {
     ProjectSettings,
     DecorationMain,
     NewProject,
-    LoadingScreen
+    LoadingScreen,
+    TwoMapCamera
 }
 
 [System.Serializable]
