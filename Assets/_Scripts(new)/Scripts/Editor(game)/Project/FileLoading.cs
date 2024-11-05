@@ -27,5 +27,23 @@ public class FileLoading : Singleton<FileLoading> {
         return null;
     }
 
+    public GameObject LoadModel(FrostweepGames.Plugins.WebGLFileBrowser.File file) {
+        using (MemoryStream memoryStream = new MemoryStream(file.data)) {
+            // Load the OBJ model from the MemoryStream
+            GameObject loadedObject = new OBJLoader().Load(memoryStream);
+            loadedObject.SetActive(false);
+            return loadedObject;
+        }
+    }
+
+    public GameObject LoadModel(byte[] file) {
+        using (MemoryStream memoryStream = new MemoryStream(file)) {
+            // Load the OBJ model from the MemoryStream
+            GameObject loadedObject = new OBJLoader().Load(memoryStream);
+            loadedObject.SetActive(false);
+            return loadedObject;
+        }
+    }
+
 
 }

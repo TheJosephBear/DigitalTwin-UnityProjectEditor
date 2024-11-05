@@ -26,8 +26,9 @@ public class MapUI : UIBehaviour {
 
 
     void OnFileSelectedMap(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
+        print("OnFileSelectedMap");
         if (files != null && files.Length > 0) {
-            MapManager.Instance.UploadBaseMapModel(AssetManager.Instance.CreateNewAsset(files[0].fileInfo.path));
+            MapManager.Instance.UploadBaseMapModel(AssetManager.Instance.CreateNewAsset(files[0]));
         } else {
             PopUp.Instance.ShowPopUpWindow("Please select .obj file!");
         }
@@ -36,7 +37,7 @@ public class MapUI : UIBehaviour {
 
     void OnFileSelectedMapVar(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
         if (files != null && files.Length > 0) {
-            MapManager.Instance.UploadMapVariant(AssetManager.Instance.CreateNewAsset(files[0].fileInfo.path));
+            MapManager.Instance.UploadMapVariant(AssetManager.Instance.CreateNewAsset(files[0]));
         } else {
             PopUp.Instance.ShowPopUpWindow("Please select .obj file!");
         }

@@ -14,9 +14,10 @@ public class AssetManager : Singleton<AssetManager> {
     public GameObject AssetContainer; // parent gameobject to all uploaded models that will turn to assets
     List<ModelAsset> assets = new List<ModelAsset>();
 
-    public ModelAsset CreateNewAsset(string path) {
+    public ModelAsset CreateNewAsset(FrostweepGames.Plugins.WebGLFileBrowser.File file) {
         // Duplication check
-        string fileHash = GetFileHash(path);
+        print("trying to access path for hash");
+        string fileHash = GetFileHash(file.data);
         foreach (var asset in assets) {
             if (asset.FileHash == fileHash) {
                 Debug.Log("Model already uploaded.");
@@ -24,12 +25,13 @@ public class AssetManager : Singleton<AssetManager> {
             }
         }
         // New asset creation
-        GameObject newAssetGo = FileLoading.Instance.LoadModel(path);
+        print("calling the fileloading for loading the model via FILE");
+        GameObject newAssetGo = FileLoading.Instance.LoadModel(file);
         newAssetGo.transform.parent = AssetContainer.transform;
         ModelAsset modelAsset = newAssetGo.AddComponent<ModelAsset>();
         modelAsset.GenerateUniqueID();
         modelAsset.FileHash = fileHash;
-        modelAsset.filePath = path;
+        modelAsset.filePath = file.fileInfo.path;
         modelAsset.SetModelGameObject(newAssetGo);
         assets.Add(modelAsset);
         newAssetGo.SetActive(false);
@@ -43,12 +45,10 @@ public class AssetManager : Singleton<AssetManager> {
         assets.Clear();
     }
 
-    string GetFileHash(string filePath) {
+    string GetFileHash(byte[] fileData) {
         using (var md5 = MD5.Create()) {
-            using (var stream = File.OpenRead(filePath)) {
-                byte[] hashBytes = md5.ComputeHash(stream);
-                return System.BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
-            }
+            byte[] hashBytes = md5.ComputeHash(fileData);
+            return System.BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
         }
     }
 
@@ -93,29 +93,37 @@ public class AssetManager : Singleton<AssetManager> {
                 return;
             }
 
-            string localPath = Path.Combine(Application.persistentDataPath, objectID + ".obj");
-            File.WriteAllBytes(localPath, fileData);
+            string fileHash = GetFileHash(fileData);
 
-            LoadModelAsset(localPath, onComplete);
+            // Check if the model is already loaded based on its hash
+            foreach (var asset in assets) {
+                if (asset.FileHash == fileHash) {
+                    Debug.Log("Model already uploaded.");
+                    onComplete(asset);
+                    return;
+                }
+            }
+
+            // Load the model directly from the byte data without saving to file
+            LoadModelAsset(fileData, fileHash, onComplete);
         });
     }
 
-    void LoadModelAsset(string path, System.Action<ModelAsset> onComplete) {
-        string fileHash = GetFileHash(path);
+    void LoadModelAsset(byte[] fileData, string fileHash, System.Action<ModelAsset> onComplete) {
+        // Use FileLoading to load the model from the byte array
+        GameObject newAssetGo = FileLoading.Instance.LoadModel(fileData);
 
-        foreach (var asset in assets) {
-            if (asset.FileHash == fileHash) {
-                Debug.Log("Model already uploaded.");
-                onComplete(asset);
-                return;
-            }
+        if (newAssetGo == null) {
+            Debug.LogError("Failed to load model from data.");
+            onComplete(null);
+            return;
         }
-        GameObject newAssetGo = FileLoading.Instance.LoadModel(path);
-        print("model is loaded in the assetManager");
+
         newAssetGo.transform.parent = AssetContainer.transform;
 
+        // Set up the ModelAsset component with necessary properties
         ModelAsset modelAsset = newAssetGo.AddComponent<ModelAsset>();
-        modelAsset.filePath = path;
+        modelAsset.FileHash = fileHash;
         modelAsset.SetModelGameObject(newAssetGo);
         assets.Add(modelAsset);
         newAssetGo.SetActive(false);
