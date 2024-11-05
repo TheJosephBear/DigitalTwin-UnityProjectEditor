@@ -7,15 +7,15 @@ public class EditorManager : Singleton<EditorManager> {
     /// Controls the state of the Editor itself
     /// </summary>
 
-    EditorViewMode viewModeCurrent;
+    public EditorViewMode ViewModeCurrent { get; private set; }
 
-    void Awake() {
+    protected override void Awake() {
+        base.Awake();
 
     }
 
-
     public void ChangeEditorViewMode(EditorViewMode viewMode) {
-        viewModeCurrent = viewMode;
+        ViewModeCurrent = viewMode;
         switch (viewMode) {
             case EditorViewMode.classic:
                 ViewModeClassic();
@@ -27,12 +27,19 @@ public class EditorManager : Singleton<EditorManager> {
     }
 
     void ViewModeClassic() {
+        UImanager.Instance.HideUI(UIType.TwoMapCamera);
 
     }
 
     void ViewModeTwoMaps() {
-        // Kamera má extra kameru, ta vidí tu extra verzi, render texture ukazuje vedle sebe
+        if (!MapManager.Instance.hasVariant())
+            return;
+
+        UImanager.Instance.ShowUI(UIType.TwoMapCamera);
+        MapManager.Instance.SpawnSelectedVariant(0);
+        FindAnyObjectByType<TwoMapsUI>().UpdateDropDown();
     }
+
 
 
 }

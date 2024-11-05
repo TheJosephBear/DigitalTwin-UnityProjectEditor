@@ -10,18 +10,22 @@ public class MapManager : Singleton<MapManager> {
     List<ModelAsset> mapVariants = new List<ModelAsset>();
     public Vector3 mapSpawnPosition;
 
-    List<GameObject> spinniiiieeee = new List<GameObject>();
+    GameObject currentMapVarInstance;
+
+    //  List<GameObject> spinniiiieeee = new List<GameObject>();
 
     void Update() {
+        /*
         foreach (GameObject go in spinniiiieeee) {
             //Spin it 
             go.transform.Rotate(0, 0 * Time.deltaTime, 100 * Time.deltaTime);
         }
+        */
     }
 
     public void UploadBaseMapModel(ModelAsset newMap) {
         baseMap = newMap;
-        //    SpawnMap();
+        SpawnMap();
     }
 
     public void UploadMapVariant(ModelAsset newMap) {
@@ -29,21 +33,26 @@ public class MapManager : Singleton<MapManager> {
     }
 
     public void SpawnMap() {
-        print("base map is: " + baseMap?.name);
         GameObject go = baseMap?.InstantiateModel(mapSpawnPosition);
         go?.SetActive(true);
+        /*
         if (go != null) spinniiiieeee.Add(go);
         if (go != null) go.transform.Rotate(new Vector3(-90, 0, 0));
+        */
     }
-    // pøidat list pro výbìr do ui co tam je vidìt, zatím jen ten první
-    public void SpawnMapVariant() {
-        print("variant map is: " + mapVariants[0]?.name);
-        GameObject go = mapVariants[0]?.InstantiateModel(mapSpawnPosition);
-        go?.SetActive(true);
-        AddLayerToAllChildren(go);
-        if (go != null) go.transform.Rotate(new Vector3(-90,0,0));
-        if (go != null) spinniiiieeee.Add(go);
+
+    public void SpawnSelectedVariant(int index) {
+        if (currentMapVarInstance != null) {
+            Destroy(currentMapVarInstance);
+            currentMapVarInstance = null;
+        }
+        if (index >= 0 && index < mapVariants.Count) {
+            currentMapVarInstance = mapVariants[index]?.InstantiateModel(mapSpawnPosition);
+            currentMapVarInstance?.SetActive(true);
+            AddLayerToAllChildren(currentMapVarInstance);
+        }
     }
+    
 
     void AddLayerToAllChildren(GameObject g) {
         foreach (Transform child in g.GetComponentsInChildren<Transform>()) {
@@ -58,6 +67,15 @@ public class MapManager : Singleton<MapManager> {
     public void ClearEverything() {
         baseMap = null;
     }
+
+    public bool hasVariant() {
+        return mapVariants.Count > 0;
+    }
+
+    public List<ModelAsset> GetVariants() {
+        return mapVariants;
+    }
+
 
     public SerializableMap SerializeMap() {
         if (baseMap == null) {

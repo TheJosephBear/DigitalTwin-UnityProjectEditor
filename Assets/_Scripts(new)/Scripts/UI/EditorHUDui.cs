@@ -20,6 +20,17 @@ public class EditorHUDui : UIBehaviour {
         UImanager.Instance.SetRaycasterFromLatestUI();
     }
 
+    public void onDveMapy() {
+        //Togle zobrazeniMapy
+        if(EditorManager.Instance.ViewModeCurrent == EditorViewMode.classic) {
+            EditorManager.Instance.ChangeEditorViewMode(EditorViewMode.twoMaps);
+        } else if(EditorManager.Instance.ViewModeCurrent == EditorViewMode.twoMaps) {
+            EditorManager.Instance.ChangeEditorViewMode(EditorViewMode.classic);
+        }
+    }
+
+
+
     public void onProjekt() {
         AudioManager.Instance.PlaySound(SoundType.click);
         UImanager.Instance.ShowUI(UIType.ProjectSettings);

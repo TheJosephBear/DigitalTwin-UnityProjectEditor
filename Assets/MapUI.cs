@@ -21,11 +21,6 @@ public class MapUI : UIBehaviour {
         FileBrowser.ShowLoadDialog(OnFileSelectedMapVar, null, FileBrowser.PickMode.Files, false, null, "Select OBJ File", "Select");
     }
 
-    public void onUkazVedleSebe() {
-        MapManager.Instance.SpawnMap();
-        MapManager.Instance.SpawnMapVariant();
-        UImanager.Instance.ShowUI(UIType.TwoMapCamera);
-    }
 
     void OnFileSelectedMap(string[] paths) {
         if (paths.Length > 0) {

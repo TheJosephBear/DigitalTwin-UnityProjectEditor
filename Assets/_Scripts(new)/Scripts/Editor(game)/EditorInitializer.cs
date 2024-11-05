@@ -6,7 +6,7 @@ public class EditorInitializer : MonoBehaviour, Iinitializer
 {
     public void Initialize() {
         UImanager.Instance.ShowUI(UIType.EditorHUD);
-        PopUp.Instance.ShowPopUpWindow("You have sucessfuly opened project " + ProjectManager.Instance.project.ProjectName);
+     //   PopUp.Instance.ShowPopUpWindow("You have sucessfuly opened project " + ProjectManager.Instance.project.ProjectName);
         StartCoroutine(ProjectLoading());
     }
 
@@ -27,7 +27,7 @@ public class EditorInitializer : MonoBehaviour, Iinitializer
         if (loadTask.Result) {
             UImanager.Instance.HideUI(UIType.LoadingScreen);
         } else {
-            Debug.LogError("Failed to load the project.");
+            PopUp.Instance.ShowPopUpWindow("Failed to load the project.");
         }
     }
 
