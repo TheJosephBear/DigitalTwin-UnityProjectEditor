@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.63739324, g: 0.68244255, b: 0.9083734, a: 1}
+  m_IndirectSpecularColor: {r: 0.637367, g: 0.6828255, b: 0.90858686, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -16449,7 +16449,7 @@ MonoBehaviour:
   _settings:
     _canBeDisplayed: 1
     _isExpanded: 1
-    _canProcessInput: 1
+    _canProcessInput: 0
   _moveSettings:
     _canBeDisplayed: 1
     _isExpanded: 1
@@ -19958,7 +19958,7 @@ MonoBehaviour:
       _text: Scale gizmo
     - _tooltip: Allows you to change universal gizmo settings.
       _text: Universal gizmo
-    _activeTabIndex: 0
+    _activeTabIndex: 4
   _settings:
     _canBeDisplayed: 1
     _isExpanded: 1
