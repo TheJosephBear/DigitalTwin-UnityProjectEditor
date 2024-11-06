@@ -7,6 +7,10 @@ public class EditorManager : Singleton<EditorManager> {
     /// Controls the state of the Editor itself
     /// </summary>
 
+    public GameObject TwoCameraPrefab;
+    public Vector3 TwoCameraPrefabSpawnPosition;
+    GameObject TwoCameraInstantiated;
+
     public EditorViewMode ViewModeCurrent { get; private set; }
 
     protected override void Awake() {
@@ -28,13 +32,14 @@ public class EditorManager : Singleton<EditorManager> {
 
     void ViewModeClassic() {
         UImanager.Instance.HideUI(UIType.TwoMapCamera);
-
+        if(TwoCameraInstantiated!=null) Destroy(TwoCameraInstantiated);
     }
 
     void ViewModeTwoMaps() {
         if (!MapManager.Instance.hasVariant())
             return;
 
+        TwoCameraInstantiated = SceneLoadingManager.Instance.InstantiateObjectInScene(TwoCameraPrefab, TwoCameraPrefabSpawnPosition, SceneType.Editing);
         UImanager.Instance.ShowUI(UIType.TwoMapCamera);
         MapManager.Instance.SpawnSelectedVariant(0);
         FindAnyObjectByType<TwoMapsUI>().UpdateDropDown();

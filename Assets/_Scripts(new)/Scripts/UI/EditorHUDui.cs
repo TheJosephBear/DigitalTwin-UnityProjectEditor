@@ -1,12 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Dummiesman;
-using System.IO;
-using SimpleFileBrowser;
-using UnityEngine;
-using UnityEngine.UI;
-using System;
-using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public class EditorHUDui : UIBehaviour {
 
@@ -29,7 +22,9 @@ public class EditorHUDui : UIBehaviour {
         }
     }
 
-
+    public void onPridatKameru() {
+        InterestPointManager.Instance.CreateNewInterestPoint();
+    }
 
     public void onProjekt() {
         AudioManager.Instance.PlaySound(SoundType.click);
