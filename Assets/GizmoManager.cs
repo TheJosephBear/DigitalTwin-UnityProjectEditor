@@ -1,3 +1,4 @@
+using Cinemachine;
 using RTG;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +11,11 @@ public class GizmoManager : Singleton<GizmoManager> {
 
     public void SetTargetGameObject(GameObject go) {
         targetObject = go;
+    }
+
+    public void HideGizmo() {
+        RTGizmosEngine.Get.RemoveGizmo(transformGizmo.Gizmo);
+        transformGizmo = null;
     }
 
     public void ShowUniversalGizmo() {
@@ -41,6 +47,13 @@ public class GizmoManager : Singleton<GizmoManager> {
         transformGizmo.SetTargetObject(targetObject);
         transformGizmo.SetTransformSpace(GizmoSpace.Local);
     }
+
+
+    /* If i want the camera to move around while still using the cinemachine... 
+     * Otherwise i have to turn off the cinemachine brain when in default editor state 
+     */
+
+
 
     /*foreach (var targetName in moveTargetNames)
             {

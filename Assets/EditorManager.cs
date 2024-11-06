@@ -27,12 +27,16 @@ public class EditorManager : Singleton<EditorManager> {
             case EditorViewMode.twoMaps:
                 ViewModeTwoMaps();
                 break;
+            case EditorViewMode.showingOffCamera:
+                ViewModeCameraShowing();
+                break;
         }
     }
 
     void ViewModeClassic() {
         UImanager.Instance.HideUI(UIType.TwoMapCamera);
-        if(TwoCameraInstantiated!=null) Destroy(TwoCameraInstantiated);
+        if (TwoCameraInstantiated != null) Destroy(TwoCameraInstantiated);
+        InterestPointManager.Instance.DeactivateInterestPoint();
     }
 
     void ViewModeTwoMaps() {
@@ -45,11 +49,15 @@ public class EditorManager : Singleton<EditorManager> {
         FindAnyObjectByType<TwoMapsUI>().UpdateDropDown();
     }
 
+    void ViewModeCameraShowing() {
+        InterestPointManager.Instance.ActivateInterestPoint();
+    }
 
 
 }
 
 public enum EditorViewMode {
     classic,
-    twoMaps
+    twoMaps,
+    showingOffCamera
 }

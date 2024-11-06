@@ -15,9 +15,9 @@ public class EditorHUDui : UIBehaviour {
 
     public void onDveMapy() {
         //Togle zobrazeniMapy
-        if(EditorManager.Instance.ViewModeCurrent == EditorViewMode.classic) {
+        if (EditorManager.Instance.ViewModeCurrent == EditorViewMode.classic) {
             EditorManager.Instance.ChangeEditorViewMode(EditorViewMode.twoMaps);
-        } else if(EditorManager.Instance.ViewModeCurrent == EditorViewMode.twoMaps) {
+        } else if (EditorManager.Instance.ViewModeCurrent == EditorViewMode.twoMaps) {
             EditorManager.Instance.ChangeEditorViewMode(EditorViewMode.classic);
         }
     }
@@ -25,6 +25,15 @@ public class EditorHUDui : UIBehaviour {
     public void onPridatKameru() {
         InterestPointManager.Instance.CreateNewInterestPoint();
     }
+
+    public void onPrepnoutNaKameru() {
+        if (EditorManager.Instance.ViewModeCurrent == EditorViewMode.classic) {
+            EditorManager.Instance.ChangeEditorViewMode(EditorViewMode.showingOffCamera);
+        } else if (EditorManager.Instance.ViewModeCurrent == EditorViewMode.showingOffCamera) {
+            EditorManager.Instance.ChangeEditorViewMode(EditorViewMode.classic);
+        }
+    }
+
 
     public void onProjekt() {
         AudioManager.Instance.PlaySound(SoundType.click);
@@ -60,17 +69,17 @@ public class EditorHUDui : UIBehaviour {
 
     public void onPositionGizmo() {
         AudioManager.Instance.PlaySound(SoundType.click);
-      //  GizmoController.Instance.SelectMovement();
+        //  GizmoController.Instance.SelectMovement();
     }
 
     public void onRotationGizmo() {
         AudioManager.Instance.PlaySound(SoundType.click);
-    //    GizmoController.Instance.SelectRotation();
+        //    GizmoController.Instance.SelectRotation();
     }
 
     public void onScaleGizmo() {
         AudioManager.Instance.PlaySound(SoundType.click);
-     //   GizmoController.Instance.SelectScale();
+        //   GizmoController.Instance.SelectScale();
     }
 
     public void onLeave() {

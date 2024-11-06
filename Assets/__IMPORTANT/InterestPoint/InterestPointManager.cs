@@ -8,15 +8,31 @@ public class InterestPointManager : Singleton<InterestPointManager> {
     List<InterestPoint> interestPoints = new List<InterestPoint>();
     public Vector3 interestPointSpawnPosition;
 
-    GameObject currentInterestPoint;
+    InterestPoint currentInterestPoint;
+    public bool isActivelyShowingCam = false;
+
+    protected override void Awake() {
+        base.Awake();
+    }
 
     public void CreateNewInterestPoint() {
         InterestPoint newInterestPoint = SceneLoadingManager.Instance.InstantiateObjectInScene(InterestPointPrefab, interestPointSpawnPosition, SceneType.Editing).GetComponent<InterestPoint>();
         interestPoints.Add(newInterestPoint);
+        newInterestPoint.Deactivate();
+    }
+
+    public void SetActiveInterestPoint(InterestPoint ip) {
+        currentInterestPoint = ip;
     }
 
     public void ActivateInterestPoint() {
+        isActivelyShowingCam = true;
+        currentInterestPoint?.Activate();
+    }
 
+    public void DeactivateInterestPoint() {
+        isActivelyShowingCam = false;
+        currentInterestPoint?.Deactivate();
     }
 
     public List<InterestPoint> GetInterestPoints() {

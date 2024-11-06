@@ -2615,7 +2615,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4159745496313102969}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e653bab7fb20e499bda25e1b646fea, type: 3}
   m_Name: 
@@ -2656,6 +2656,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4159745496729114931}
   - component: {fileID: 4159745496729114930}
+  - component: {fileID: 8961990003709445310}
   m_Layer: 9
   m_Name: InterestPoint
   m_TagString: Untagged
@@ -2693,3 +2694,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vcam: {fileID: 4159745496313102969}
+--- !u!65 &8961990003709445310
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4159745496729114929}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1.2383766, z: 2.0192146}
+  m_Center: {x: 0, y: -0.11918831, z: -0.5096073}
