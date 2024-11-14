@@ -195,7 +195,7 @@ public class DecorationManager : Singleton<DecorationManager> {
             }
             DecorationPresets.Add(preset);
         }
-        FindAnyObjectByType<DecorationUI>().RefreshDecorationButtonList();
+      //  FindAnyObjectByType<DecorationUI>().RefreshDecorationButtonList();
     }
 
     public void DeserializeDecorationsInstantiated(List<SerializableDecorationInstantiated> serializedInstantiated) {
@@ -205,6 +205,6 @@ public class DecorationManager : Singleton<DecorationManager> {
             SetActiveDecorationPreset(preset);
             SpawnVariant(variant);
         }
-        FindAnyObjectByType<DecorationUI>().RefreshInstantiatedList();
+     //   FindAnyObjectByType<DecorationUI>().RefreshInstantiatedList();
     }
 }

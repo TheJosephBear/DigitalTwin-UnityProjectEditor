@@ -43,10 +43,10 @@ public class DecorationInstantiatedButton : MonoBehaviour
     }
 
     public void onPrejmenovat() {
-        PopUpTextInput.Instance.AskForInput("Pøejmenovat dekoraci ve scénì", (input) => {
+    /*    PopUpTextInput.Instance.AskForInput("Pøejmenovat dekoraci ve scénì", (input) => {
             if (input != null)
                 DecorationManager.Instance.RenameInstantiated(decoration, input);
-        });
+        });*/
     }
 
     public void onOdstranit() {

@@ -48,10 +48,10 @@ public class DecorationButton : MonoBehaviour {
 
     public void onPrejmenovat() {
         GetSelected();
-        PopUpTextInput.Instance.AskForInput("Pøejmenovat dekoraci", (input) => {
+  /*      PopUpTextInput.Instance.AskForInput("Pøejmenovat dekoraci", (input) => {
             if (input!=null) 
                 DecorationManager.Instance.RenameSelectedDecoration(input);
-        });
+        });*/
     }
 
     public void onOdstranit() {

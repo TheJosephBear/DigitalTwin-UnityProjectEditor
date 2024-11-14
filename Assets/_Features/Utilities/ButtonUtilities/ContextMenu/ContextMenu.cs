@@ -24,7 +24,7 @@ public class ContextMenu : MonoBehaviour {
         contextMenuPrefab = manager.contextMenuPrefab;
         buttonPrefab = manager.buttonPrefab;
         eventSystem = EventSystem.current;
-        graphicRaycaster = UImanager.Instance.graphicRaycasterLatest;
+        graphicRaycaster = UImanager.Instance.GetRaycaster();
     }
 
     void Update() {
@@ -51,7 +51,7 @@ public class ContextMenu : MonoBehaviour {
 
         var results = new List<RaycastResult>();
         if(graphicRaycaster == null)
-            graphicRaycaster = UImanager.Instance.graphicRaycasterLatest;
+            graphicRaycaster = UImanager.Instance.GetRaycaster();
         graphicRaycaster?.Raycast(pointerEventData, results);
 
         print("graphicRaycaster: "+ graphicRaycaster);

@@ -58,7 +58,7 @@ public class SoundBoardEditor : Editor {
         }
 
         string enumName = "SoundType";
-        string filePath = FindOrCreateEnumFile(enumName);
+        string filePath = "Assets/Enums/SoundType.cs";
 
         using (StreamWriter writer = new StreamWriter(filePath, false)) {
             writer.WriteLine("public enum " + enumName);
@@ -75,23 +75,6 @@ public class SoundBoardEditor : Editor {
         AssetDatabase.Refresh();
     }
 
-    private string FindOrCreateEnumFile(string enumName) {
-        string[] guids = AssetDatabase.FindAssets(enumName + " t:script");
-        string filePath;
-
-        if (guids.Length > 0) {
-            filePath = AssetDatabase.GUIDToAssetPath(guids[0]);
-        } else {
-            string folderPath = EditorUtility.OpenFolderPanel("Select Folder to Save Enum File", Application.dataPath, "");
-            if (string.IsNullOrEmpty(folderPath)) {
-                throw new System.Exception("Folder path not selected.");
-            }
-            string relativeFolderPath = "Assets" + folderPath.Substring(Application.dataPath.Length);
-            filePath = Path.Combine(relativeFolderPath, enumName + ".cs");
-        }
-
-        return filePath;
-    }
 }
 
 #endif

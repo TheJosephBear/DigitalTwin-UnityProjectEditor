@@ -23,7 +23,7 @@ public class DecorationPresetUI : UIBehaviour {
       //  UImanager.Instance.HideUI(UIType.DecorationMain);
       //  UImanager.Instance.ShowUI(UIType.DecorationMain);
         // die :(
-        UImanager.Instance.HideUI(UIType.DecorationPopUp);
+   //     UImanager.Instance.HideUI(UIType.DecorationPopUp);
     }
     /*
     public void onPridatVariantu() {
@@ -97,7 +97,7 @@ public class DecorationPresetUI : UIBehaviour {
     }
 
     void HideUI() {
-        UImanager.Instance.HideUI(UIType.DecorationPopUp);
+     //   UImanager.Instance.HideUI(UIType.DecorationPopUp);
     }
     /*
     void NewVariantAdded(string[] paths) {
@@ -121,11 +121,8 @@ public class DecorationPresetUI : UIBehaviour {
     }*/
 
     public override void Show() {
-        canvas.SetActive(true);
+        base.Show();
         Initialize();
     }
 
-    public override void Hide() {
-        canvas.SetActive(false);
-    }
 }

@@ -62,7 +62,7 @@ public class SceneListEditor : Editor {
         }
 
         string enumName = "SceneType";
-        string filePath = Path.Combine(Application.dataPath, enumName + ".cs");
+        string filePath = "Assets/Enums/SceneType.cs";
 
         using (StreamWriter writer = new StreamWriter(filePath, false)) {
             writer.WriteLine("public enum " + enumName);

@@ -31,10 +31,10 @@ public class VariantButton : MonoBehaviour {
     }
 
     public void onPrejmenovat() {
-        PopUpTextInput.Instance.AskForInput("Pøejmenovat dekoraci", (input) => {
+     /*   PopUpTextInput.Instance.AskForInput("Pøejmenovat dekoraci", (input) => {
             if (input != null)
                 DecorationManager.Instance.RenameVariant(variant, input);
-        });
+        });*/
     }
 
     public void onOdstranit() {
