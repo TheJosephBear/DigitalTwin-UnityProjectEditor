@@ -7,12 +7,16 @@ public class InterestPointManager : Singleton<InterestPointManager> {
     public GameObject InterestPointPrefab;
     List<InterestPoint> interestPoints = new List<InterestPoint>();
     public Vector3 interestPointSpawnPosition;
+    public GameObject cameraViewUI;
+    public Camera previewCam;
 
     InterestPoint currentInterestPoint;
     public bool isActivelyShowingCam = false;
 
     protected override void Awake() {
         base.Awake();
+
+        ToggleCameraPreview(false);
     }
 
     public void CreateNewInterestPoint() {
@@ -23,6 +27,7 @@ public class InterestPointManager : Singleton<InterestPointManager> {
 
     public void SetActiveInterestPoint(InterestPoint ip) {
         currentInterestPoint = ip;
+        ToggleCameraPreview(true);
     }
 
     public void ActivateInterestPoint() {
@@ -37,6 +42,16 @@ public class InterestPointManager : Singleton<InterestPointManager> {
 
     public List<InterestPoint> GetInterestPoints() {
         return interestPoints;
+    }
+
+    void ToggleCameraPreview(bool toggleOn) {
+        if (toggleOn) {
+            // Move the camera to the current vcam - must be continous so child
+            previewCam.transform.SetParent(currentInterestPoint.gameObject.transform);
+        }
+        // Toggle UI and cam
+        cameraViewUI.SetActive(toggleOn);
+        previewCam.gameObject.SetActive(toggleOn);
     }
 
 
