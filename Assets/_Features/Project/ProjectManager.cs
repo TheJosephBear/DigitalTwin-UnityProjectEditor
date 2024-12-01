@@ -17,16 +17,16 @@ public class ProjectManager : Singleton<ProjectManager> {
         AssetManager.Instance.UploadModelsToWeb();
         string serializedProject = project.SerializeProject();
         print("serializedProjectIs: "+serializedProject);
-        WebCommunicationManager.Instance.StartUpload(serializedProject, project.ProjectName);
+        ServerCommunicationManager.Instance.StartUpload(serializedProject, project.ProjectName);
     }
 
 
     public async Task<bool> LoadProjectAsync() {
         var tcs = new TaskCompletionSource<bool>();
-        WebCommunicationManager.Instance.StartDataDownload(project.ProjectName, async (data) => {
+        ServerCommunicationManager.Instance.StartDataDownload(project.ProjectName, async (success, data) => {
             if (data != null) {
-                bool success = await project.DeserializeProjectAsync(data);
-                tcs.SetResult(success);
+                bool deserializeSuccess = await project.DeserializeProjectAsync(data);
+                tcs.SetResult(deserializeSuccess);
             } else {
                 tcs.SetResult(false);
             }

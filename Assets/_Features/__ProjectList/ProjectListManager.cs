@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class ProjectListManager : Singleton<ProjectListManager> {
 
@@ -26,41 +27,35 @@ public class ProjectListManager : Singleton<ProjectListManager> {
     public void CreateNewProject() {
         // Popup
         PopUp.Instance.AskForInput("Jméno projektu", (userInput) => {
-            if (!string.IsNullOrEmpty(userInput)) {
-                // Handle input and create project
-                string newProjectName = UniqueNameEnsure(userInput);
-                WebCommunicationManager.Instance.CreateProject(newProjectName, (success, response) => {
-                    if (success) {
-                        Debug.Log("Project created: " + response);
-                        // This is refreshProjectList logic, i didnt want to add the async because of one time need for it
-                        WebCommunicationManager.Instance.FetchAllProjects((projects) => {
-                            if (projects != null) {
-                                projectRefferenceList.Clear();
-                                foreach (string project in projects) {
-                                    projectRefferenceList.Add(CreateProjectWebRefference(project));
-                                }
-                                FindAnyObjectByType<ProjectListUI>().RefreshProjectList();
-                                // Simulate opening and saving the project
-                                ProjectManager.Instance.OpenProject(projectRefferenceList.Find(x => x.projectName == newProjectName));
-                                ProjectManager.Instance.SaveProject();
-                            } else {
-                                PopUp.Instance.ShowPopUpWindow("Naèítání projektù selhalo.");
-                            }
-                        });
-                    } else {
-                        PopUp.Instance.ShowPopUpWindow("Vytvoøení projektu selhalo: " + response);
-                    }
-                });
-            } else {
+            if (string.IsNullOrEmpty(userInput)) {
                 Debug.Log("Input was cancelled or empty.");
+                return;
             }
+            // Handle input and create project
+            string newProjectName = UniqueNameEnsure(userInput);
+            ServerCommunicationManager.Instance.CreateProject(newProjectName, (success, response) => {
+                if (!success) {
+                    PopUp.Instance.ShowPopUpWindow("Vytvoøení projektu selhalo: " + response);
+                }
+
+                Debug.Log("Project created: " + response);
+                FetchAndRefreshProjectList(() => {
+                    // Simulate opening and saving the project
+                    var createdProject = projectRefferenceList.Find(x => x.projectName == newProjectName);
+                    if (createdProject == null) {
+                        Debug.LogWarning("Created project not found in the refreshed list.");
+                    }
+                    ProjectManager.Instance.OpenProject(createdProject);
+                    ProjectManager.Instance.SaveProject();
+                });
+            });
         });
     }
 
     public void RenameProject(ProjectWebRefference projectWebRefference) {
         PopUp.Instance.AskForInput("Pøejmenovat projekt", (userInput) => {
             if (!string.IsNullOrEmpty(userInput)) {
-                WebCommunicationManager.Instance.EditProjectName(projectWebRefference.projectName, userInput, (success, response) => {
+                ServerCommunicationManager.Instance.EditProjectName(projectWebRefference.projectName, userInput, (success, response) => {
                     if (success) {
                         Debug.Log(response);
                         RefreshProjectListFromServer();
@@ -75,7 +70,7 @@ public class ProjectListManager : Singleton<ProjectListManager> {
     }
 
     public void DuplicateProject(ProjectWebRefference projectWebRefference) {
-        WebCommunicationManager.Instance.DuplicateProject(projectWebRefference.projectName, (success, response) => {
+        ServerCommunicationManager.Instance.DuplicateProject(projectWebRefference.projectName, (success, response) => {
             if (success) {
                 Debug.Log(response);
                 RefreshProjectListFromServer();
@@ -86,12 +81,13 @@ public class ProjectListManager : Singleton<ProjectListManager> {
     }
 
     public void ExportProject(ProjectWebRefference projectWebRefference) {
-        WebCommunicationManager.Instance.GenerateViewerIframe(projectWebRefference.projectName, (fileData) => {
-            if (fileData == null) {
+        ServerCommunicationManager.Instance.GenerateViewerIframe(projectWebRefference.projectName, (success, data) => {
+            if (data == null) {
                 Debug.LogError("Failed to generate iframe.");
                 return;
             }
-            PopUp.Instance.ShowCopyableText("Zkopírujte toto do vaší stránky.", fileData);
+            print($"in ExportProject response is: {data} {success}");
+            PopUp.Instance.ShowCopyableText("Zkopírujte toto do vaší stránky.", data);
         });
     }
 
@@ -100,7 +96,7 @@ public class ProjectListManager : Singleton<ProjectListManager> {
     }
 
     public void DeleteProject(ProjectWebRefference projectWebRefference) {
-        WebCommunicationManager.Instance.DeleteProject(projectWebRefference.projectName, (success, response) => {
+        ServerCommunicationManager.Instance.DeleteProject(projectWebRefference.projectName, (success, response) => {
             if (success) {
                 PopUp.Instance.ShowPopUpWindow("Projekt smazán!");
                 RefreshProjectListFromServer();
@@ -110,17 +106,22 @@ public class ProjectListManager : Singleton<ProjectListManager> {
         });
     }
 
+
     public void RefreshProjectListFromServer() {
-        WebCommunicationManager.Instance.FetchAllProjects((projects) => {
-            if (projects != null) {
-                projectRefferenceList.Clear();
-                foreach (string project in projects) {
-                    projectRefferenceList.Add(CreateProjectWebRefference(project));
-                }
-                FindAnyObjectByType<ProjectListUI>().RefreshProjectList();
-            } else {
+        FetchAndRefreshProjectList();
+    }
+
+    private void FetchAndRefreshProjectList(Action onComplete = null) {
+        ServerCommunicationManager.Instance.FetchAllProjects((success, projects) => {
+            if (!success) {
                 PopUp.Instance.ShowPopUpWindow("Naèítání projektù selhalo.");
             }
+            projectRefferenceList.Clear();
+            foreach (string project in projects) {
+                projectRefferenceList.Add(CreateProjectWebRefference(project));
+            }
+            FindAnyObjectByType<ProjectListUI>().RefreshProjectList();
+            onComplete?.Invoke(); // Call additional actions if provided
         });
     }
 

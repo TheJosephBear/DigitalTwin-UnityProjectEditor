@@ -20,18 +20,13 @@ public class PopUp : Singleton<PopUp> {
         UImanager.Instance.GetActiveUIscript().GetComponent<PopUpMessageUI>().SetText(text);
     }
 
-
     public void AskForInput(string message, Action<string> callback) {
         UImanager.Instance.ShowUI(UIType.PopUpInputUI);
-        UImanager.Instance.GetActiveUIscript().GetComponent<PopUpInputUI>().AskForInput(message, (input) => {
-            onInputSubmitted = callback;
-        });
+        UImanager.Instance.GetActiveUIscript().GetComponent<PopUpInputUI>().AskForInput(message, callback);
     }
 
     public void ShowCopyableText(string message, string text) {
         UImanager.Instance.ShowUI(UIType.PopUpInputUI);
         UImanager.Instance.GetActiveUIscript().GetComponent<PopUpInputUI>().ShowCopyableText(message, text);
     }
-
-
 }

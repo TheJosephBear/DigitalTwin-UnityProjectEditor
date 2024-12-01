@@ -44,7 +44,6 @@ public class ContextMenu : MonoBehaviour {
     }
 
     void CheckRightClickUI() {
-        print("checking rightclick");
         pointerEventData = new PointerEventData(eventSystem) {
             position = Input.mousePosition
         };
@@ -54,7 +53,7 @@ public class ContextMenu : MonoBehaviour {
             graphicRaycaster = UImanager.Instance.GetRaycaster();
         graphicRaycaster?.Raycast(pointerEventData, results);
 
-        print("graphicRaycaster: "+ graphicRaycaster);
+    //    print("graphicRaycaster: "+ graphicRaycaster);
 
         foreach (var result in results) {
             if (result.gameObject == this.gameObject) {
@@ -69,7 +68,6 @@ public class ContextMenu : MonoBehaviour {
     }
 
     void OpenContextMenu(Vector2 clickPos) {
-        print("opening context menu");
         GameObject canvas = Instantiate(canvasPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         activeContextMenu = Instantiate(contextMenuPrefab, canvas.transform);
         SetContextMenuSize();
@@ -90,7 +88,6 @@ public class ContextMenu : MonoBehaviour {
     }
 
     void SetContextMenuPosition(Vector2 clickPosition) {
-        print("setting position");
         Vector2 menuSize = activeContextMenu.GetComponent<RectTransform>().sizeDelta;
         Vector2 position = clickPosition;
 
@@ -117,7 +114,6 @@ public class ContextMenu : MonoBehaviour {
     }
 
     void SetContextMenuSize() {
-        print("setting size");
         float buttonHeight = buttonPrefab.GetComponent<RectTransform>().sizeDelta.y;
         float totalHeight = (buttonHeight * buttons.Count) + (2 * (buttons.Count - 1));
         activeContextMenu.GetComponent<RectTransform>().sizeDelta = new Vector2(activeContextMenu.GetComponent<RectTransform>().sizeDelta.x, totalHeight);

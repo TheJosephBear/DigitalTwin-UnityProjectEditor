@@ -12,7 +12,7 @@ public class LoginManager : Singleton<LoginManager> {
     }
 
     public void Login(string username, string password) {
-        WebCommunicationManager.Instance.Login(username, password, (successBool, message) => {
+        ServerCommunicationManager.Instance.Login(username, password, (successBool, message) => {
             if (successBool) {
                 // Unload login scene and load project list
                 StartCoroutine(GoToProjectList());
@@ -24,7 +24,7 @@ public class LoginManager : Singleton<LoginManager> {
     }
 
     public void Register(string username, string password) {
-        WebCommunicationManager.Instance.Register(username, password, (successBool, message) => {
+        ServerCommunicationManager.Instance.Register(username, password, (successBool, message) => {
             if (successBool) {
                 UImanager.Instance.ShowUI(UIType.Login);
                 UImanager.Instance.HideUI(UIType.Register);

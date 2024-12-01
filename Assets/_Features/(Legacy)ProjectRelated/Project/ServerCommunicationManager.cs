@@ -5,14 +5,14 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class WebCommunicationManager : Singleton<WebCommunicationManager> {
-    /*
+public class ServerCommunicationManager : Singleton<ServerCommunicationManager> {
+    
     public string serverUrl = "http://127.0.0.1:5000";
 
     #region Login and Register
 
     public void Login(string username, string password, System.Action<bool, string> callback) {
-        string url = $"{serverUrl}/loginUser";
+        string url = $"{serverUrl}/login";
         Dictionary<string, string> formData = new Dictionary<string, string> { 
             { "username", username },
             { "password", password }
@@ -21,7 +21,7 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
     }
 
     public void Register(string username, string password, System.Action<bool, string> callback) {
-        string url = $"{serverUrl}/registerUser";
+        string url = $"{serverUrl}/register";
         Dictionary<string, string> formData = new Dictionary<string, string> {
             { "username", username },
             { "password", password }
@@ -35,7 +35,7 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
 
     public void CreateProject(string projectName, System.Action<bool, string> callback) {
         string url = $"{serverUrl}/createProject";
-        Dictionary<string, string> formData = new Dictionary<string, string> { { "projectName", projectName } };
+        Dictionary<string, string> formData = new Dictionary<string, string> { { "project_name", projectName } };
         StartCoroutine(PostRequest(url, formData, callback));
     }
 
@@ -51,21 +51,27 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
 
     public void DuplicateProject(string name, System.Action<bool, string> callback) {
         string url = $"{serverUrl}/duplicate_project";
-        Dictionary<string, string> formData = new Dictionary<string, string> { { "projectName", name } };
+        Dictionary<string, string> formData = new Dictionary<string, string> { { "project_name", name } };
         StartCoroutine(PostRequest(url, formData, callback));
     }
 
     public void DeleteProject(string projectName, System.Action<bool, string> callback) {
         string url = $"{serverUrl}/deleteProject";
-        Dictionary<string, string> formData = new Dictionary<string, string> { { "projectName", projectName } };
+        Dictionary<string, string> formData = new Dictionary<string, string> { { "project_name", projectName } };
         StartCoroutine(DeleteRequest(url, formData, callback));
     }
 
-    public void FetchAllProjects(System.Action<List<string>> callback) {
+    public void FetchAllProjects(System.Action<bool, List<string>> callback) {
         string url = $"{serverUrl}/getAllProjects";
-        StartCoroutine(GetRequest<List<string>>(url, (success, data) => {
-            if (success) callback(data);
-            else callback(null);
+        StartCoroutine(GetRequest<ProjectListResponse>(url, (success, data) => {
+            callback(success, data.projects);
+        }));
+    }
+
+    public void GenerateViewerIframe(string projectName, System.Action<bool, string> callback) {
+        string url = $"{serverUrl}/generate_iframe?project_name={UnityWebRequest.EscapeURL(projectName)}";
+        StartCoroutine(GetRequest<IframeResponse>(url, (success, data) => {
+            callback(success, data.iframe_code);
         }));
     }
 
@@ -75,38 +81,33 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
 
     // Upload project data (no models)
     public void StartUpload(string data, string projectName) {
-        string url = $"{serverUrl}/uploadJson";
+        string url = $"{serverUrl}/upload_editor_data";
         Dictionary<string, string> formData = new Dictionary<string, string>
         {
             { "myData", data },
-            { "projectName", projectName }
+            { "project_name", projectName }
         };
         StartCoroutine(PostRequest(url, formData, null));
     }
 
     // Download project data (no models)
     public void StartDataDownload(string projectName, System.Action<bool, string> callback) {
-        string url = $"{serverUrl}/download?projectName={UnityWebRequest.EscapeURL(projectName)}";
+        string url = $"{serverUrl}/download?project_name={UnityWebRequest.EscapeURL(projectName)}";
         StartCoroutine(GetRequest(url, callback));
     }
 
     // Upload file into a project
     public void UploadFileToServer(string path, string fileName, string projectName) {
-        string url = $"{serverUrl}/uploadFiles";
+        string url = $"{serverUrl}/upload_model_files";
         StartCoroutine(UploadFileRequest(url, path, fileName, projectName));
     }
 
     // Download file from a project
     public void DownloadFileFromServer(string fileName, string projectName, System.Action<byte[]> callback) {
-        string url = $"{serverUrl}/downloadFiles?projectName={UnityWebRequest.EscapeURL(projectName)}&fileName={UnityWebRequest.EscapeURL(fileName)}.obj";
+        string url = $"{serverUrl}/downloadModels?project_name={UnityWebRequest.EscapeURL(projectName)}&fileName={UnityWebRequest.EscapeURL(fileName)}.obj";
         StartCoroutine(DownloadFileRequest(url, callback));
     }
 
-    // Generate export iframe
-    public void GenerateViewerIframe(string projectName, System.Action<bool, string> callback) {
-        string url = $"{serverUrl}/generate_iframe?projectName={UnityWebRequest.EscapeURL(projectName)}";
-        StartCoroutine(GetRequest(url, callback));
-    }
 
     #endregion
 
@@ -117,7 +118,6 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
         foreach (var field in formData) {
             form.AddField(field.Key, field.Value);
         }
-
         UnityWebRequest www = UnityWebRequest.Post(url, form);
         yield return www.SendWebRequest();
 
@@ -154,7 +154,7 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
         byte[] fileData = File.ReadAllBytes(path);
         WWWForm form = new WWWForm();
         form.AddBinaryData("file", fileData, fileName + ".obj", "application/octet-stream");
-        form.AddField("projectName", projectName);
+        form.AddField("project_name", projectName);
 
         UnityWebRequest www = UnityWebRequest.Post(url, form);
         yield return www.SendWebRequest();
@@ -189,10 +189,10 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
     }
 
     #endregion
-    */
+    
     #region ghost code
 
-
+    /*
     public string serverUrl = "http://127.0.0.1:5000";
     public string serverUrlUploadJson = "http://127.0.0.1:5000/upload_editor_data";
     public string serverUrlUploadFiles = "http://127.0.0.1:5000/uploadFiles";
@@ -467,7 +467,7 @@ public class WebCommunicationManager : Singleton<WebCommunicationManager> {
         }
     }
     
-
+    */
     #endregion
 
 }
