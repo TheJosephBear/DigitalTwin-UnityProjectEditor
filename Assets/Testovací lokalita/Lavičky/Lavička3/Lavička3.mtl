@@ -1,0 +1,21 @@
+#
+## Alias OBJ Material File
+# Exported from SketchUp, (c) 2000-2012 Trimble Navigation Limited
+
+newmtl Material04
+Ka 0.000000 0.000000 0.000000
+Kd 0.600000 0.388235 0.203922
+Ks 0.330000 0.330000 0.330000
+map_Kd Lavička3/Material04.jpg
+
+newmtl FrontColor
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.330000 0.330000 0.330000
+
+newmtl Material01
+Ka 0.000000 0.000000 0.000000
+Kd 0.152941 0.152941 0.152941
+Ks 0.330000 0.330000 0.330000
+map_Kd Lavička3/Material01.jpg
+

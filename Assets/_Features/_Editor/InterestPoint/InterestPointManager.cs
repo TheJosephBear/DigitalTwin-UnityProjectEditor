@@ -48,6 +48,7 @@ public class InterestPointManager : Singleton<InterestPointManager> {
         if (toggleOn) {
             // Move the camera to the current vcam - must be continous so child
             previewCam.transform.SetParent(currentInterestPoint.gameObject.transform);
+            previewCam.transform.localPosition = new Vector3(0, 0, 0);
         }
         // Toggle UI and cam
         cameraViewUI.SetActive(toggleOn);

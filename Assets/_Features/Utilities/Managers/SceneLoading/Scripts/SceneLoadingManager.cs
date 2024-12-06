@@ -15,7 +15,7 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
     }
 
 
-    public async Task<bool> LoadSceneAsync(SceneType sceneType, float loadingScreenLength, bool addToGameplayScenes = false) {
+    public async Task<bool> LoadSceneAsync(SceneType sceneType, float loadingScreenLength = 0f, bool addToGameplayScenes = false) {
         SceneField scene = SceneList.Instance.GetScene(sceneType);
         var tcs = new TaskCompletionSource<bool>();
         StartCoroutine(LoadSceneAsyncC(scene, tcs, loadingScreenLength, addToGameplayScenes));
