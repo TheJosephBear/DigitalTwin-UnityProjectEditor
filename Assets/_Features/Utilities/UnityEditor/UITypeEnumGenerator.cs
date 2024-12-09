@@ -3,6 +3,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 public class UITypeEnumGenerator {
     // Create a menu item directly under "Tools" in the Unity Editor
     [MenuItem("Tools/Generate UIType Enum")]
@@ -52,3 +53,4 @@ public class UITypeEnumGenerator {
         return validName;
     }
 }
+#endif
