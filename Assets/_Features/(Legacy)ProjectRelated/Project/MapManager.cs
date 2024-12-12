@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using RTG;
 using UnityEngine;
+using static UnityEngine.InputSystem.Android.LowLevel.AndroidGameControllerState;
 
 public class MapManager : Singleton<MapManager> {
 
@@ -11,17 +12,6 @@ public class MapManager : Singleton<MapManager> {
     public Vector3 mapSpawnPosition;
 
     GameObject currentMapVarInstance;
-
-    //  List<GameObject> spinniiiieeee = new List<GameObject>();
-
-    void Update() {
-        /*
-        foreach (GameObject go in spinniiiieeee) {
-            //Spin it 
-            go.transform.Rotate(0, 0 * Time.deltaTime, 100 * Time.deltaTime);
-        }
-        */
-    }
 
     public void UploadBaseMapModel(ModelAsset newMap) {
         baseMap = newMap;
@@ -35,10 +25,6 @@ public class MapManager : Singleton<MapManager> {
     public void SpawnMap() {
         GameObject go = baseMap?.InstantiateModel(mapSpawnPosition);
         go?.SetActive(true);
-        /*
-        if (go != null) spinniiiieeee.Add(go);
-        if (go != null) go.transform.Rotate(new Vector3(-90, 0, 0));
-        */
     }
 
     public void SpawnSelectedVariant(int index) {
@@ -52,7 +38,7 @@ public class MapManager : Singleton<MapManager> {
             AddLayerToAllChildren(currentMapVarInstance);
         }
     }
-    
+
 
     void AddLayerToAllChildren(GameObject g) {
         foreach (Transform child in g.GetComponentsInChildren<Transform>()) {
@@ -77,30 +63,50 @@ public class MapManager : Singleton<MapManager> {
     }
 
 
-    public SerializableMap SerializeMap() {
+    public SerializableMap Serialize() {
         if (baseMap == null) {
             return null;
         }
 
+        List<SerializableMapVariant> variantListSerialized = new List<SerializableMapVariant>();
+
+        foreach (var variant in mapVariants) {
+            variantListSerialized.Add(new SerializableMapVariant {
+                modelID = variant.ModelID
+            });
+        }
+
         SerializableMap serializedMap = new SerializableMap {
-            modelAssetID = baseMap.ModelID,
-            spawnPosition = mapSpawnPosition
+            baseModelID = baseMap.ModelID,
+            variants = variantListSerialized
         };
 
         return serializedMap;
     }
-    public void DeserializeMap(SerializableMap serializedMap) {
+    public void Deserialize(SerializableMap serializedMap) {
         if (serializedMap == null) return;
 
-        ModelAsset mapAsset = AssetManager.Instance.FindModelAssetByID(serializedMap.modelAssetID);
+        // Deserialize base map
+        ModelAsset mapAsset = AssetManager.Instance.FindModelAssetByID(serializedMap.baseModelID);
         UploadBaseMapModel(mapAsset);
-        mapSpawnPosition = serializedMap.spawnPosition;
         SpawnMap();
+
+        // Deserialize variants
+        foreach (var variant in serializedMap.variants) {
+            ModelAsset modelAsset = AssetManager.Instance.FindModelAssetByID(variant.modelID);
+            UploadMapVariant(modelAsset);
+        }
     }
 
 }
+
 [Serializable]
 public class SerializableMap {
-    public string modelAssetID;
-    public Vector3 spawnPosition;
+    public string baseModelID; // base map
+    public List<SerializableMapVariant> variants;
+}
+
+[Serializable]
+public class SerializableMapVariant {
+    public string modelID;
 }

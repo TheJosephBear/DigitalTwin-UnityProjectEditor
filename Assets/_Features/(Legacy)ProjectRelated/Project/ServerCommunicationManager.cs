@@ -93,7 +93,10 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
     // Download project data (no models)
     public void StartDataDownload(string projectName, System.Action<bool, string> callback) {
         string url = $"{serverUrl}/download?project_name={UnityWebRequest.EscapeURL(projectName)}";
-        StartCoroutine(GetRequest(url, callback));
+    //    StartCoroutine(GetRequest(url, callback));
+        StartCoroutine(GetRequest<string>(url, (success, data) => {
+            callback(success, data);
+        }, true));
     }
 
     // Upload file into a project
@@ -104,7 +107,7 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
 
     // Download file from a project
     public void DownloadFileFromServer(string fileName, string projectName, System.Action<byte[]> callback) {
-        string url = $"{serverUrl}/downloadModels?project_name={UnityWebRequest.EscapeURL(projectName)}&fileName={UnityWebRequest.EscapeURL(fileName)}.obj";
+        string url = $"{serverUrl}/downloadModels?project_name={UnityWebRequest.EscapeURL(projectName)}&file_name={UnityWebRequest.EscapeURL(fileName)}.obj";
         StartCoroutine(DownloadFileRequest(url, callback));
     }
 
@@ -124,15 +127,25 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
         HandleResponse(www, callback);
     }
 
-    IEnumerator GetRequest<T>(string url, System.Action<bool, T> callback) {
+    public IEnumerator GetRequest<T>(string url, System.Action<bool, T> callback, bool returnAsString = false) {
         UnityWebRequest www = UnityWebRequest.Get(url);
         yield return www.SendWebRequest();
 
         if (www.result == UnityWebRequest.Result.Success) {
-            T response = JsonUtility.FromJson<T>(www.downloadHandler.text);
-            callback(true, response);
+            try {
+                if (returnAsString) {
+                    object response = www.downloadHandler.text;
+                    callback(true, (T)response);
+                } else {
+                    T response = JsonUtility.FromJson<T>(www.downloadHandler.text);
+                    callback(true, response);
+                }
+            } catch (System.Exception ex) {
+                Debug.LogError("Error parsing response: " + ex.Message);
+                callback(false, default);
+            }
         } else {
-            Debug.LogError("Error fetching data: " + www.error);
+            Debug.Log("Error fetching data: " + www.error);
             callback(false, default);
         }
     }

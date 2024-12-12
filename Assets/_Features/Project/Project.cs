@@ -7,19 +7,42 @@ using UnityEngine;
 public class Project : MonoBehaviour {
 
     /// <summary>
-    /// Stores data needed for editor to worko
+    /// Stores editor data
     /// </summary>
     
     public string ProjectName { get; private set; }
 
+    // Opening the project in editor
     public void OpenProject(ProjectWebRefference projectWebReff) {
         SetProjectName(projectWebReff.projectName);
     }
     
+    // Leaving from editor
     public void CloseProject() {
         AssetManager.Instance.ClearEverything();
         DecorationManager.Instance.ClearEverything();
         MapManager.Instance.ClearEverything();
+        InterestPointManager.Instance.ClearEverything();
+    }
+
+    // Serialization for saving purposes
+    public string SerializeProject() {
+        SerializableProject serializableProject = new SerializableProject {
+            projectName = ProjectName,
+            modelAssets = AssetManager.Instance.SerializeAssetList(),
+            map = MapManager.Instance.Serialize(),
+            interestPointManager = InterestPointManager.Instance.Serialize()
+       //     decorationPresets = DecorationManager.Instance.SerializeDecorationPresets(),
+       //     decorationsInstantiated = DecorationManager.Instance.SerializeDecorationsInstantiated()
+        };
+        return JsonUtility.ToJson(serializableProject);
+    }
+
+    // Deserialization for loading purposes
+    public Task<bool> DeserializeProjectAsync(string json) {
+        var tcs = new TaskCompletionSource<bool>();
+        StartCoroutine(DeserializeCoroutine(json, tcs)); 
+        return tcs.Task; 
     }
 
 
@@ -27,25 +50,10 @@ public class Project : MonoBehaviour {
         ProjectName = projectName;
     }
 
-    public string SerializeProject() {
-        SerializableProject serializableProject = new SerializableProject {
-            projectName = ProjectName,
-            map = MapManager.Instance.SerializeMap(),
-            modelAssets = AssetManager.Instance.SerializeAssetList(),
-            decorationPresets = DecorationManager.Instance.SerializeDecorationPresets(),
-            decorationsInstantiated = DecorationManager.Instance.SerializeDecorationsInstantiated()
-        };
-        return JsonUtility.ToJson(serializableProject);
-    }
-
-    public Task<bool> DeserializeProjectAsync(string json) {
-        var tcs = new TaskCompletionSource<bool>();
-        StartCoroutine(DeserializeCoroutine(json, tcs)); // Pass the TaskCompletionSource to the coroutine
-        return tcs.Task; // Return the task so it can be awaited
-    }
-
     IEnumerator DeserializeCoroutine(string json, TaskCompletionSource<bool> tcs) {
         SerializableProject serializedProject = JsonUtility.FromJson<SerializableProject>(json);
+        print("seru projekt je: " + serializedProject);
+        print("json stringus je: " + json);
         SetProjectName(serializedProject.projectName);
         bool isDeserializationComplete = false;
         AssetManager.Instance.DeserializeAssetList(serializedProject.modelAssets, () => {
@@ -53,9 +61,10 @@ public class Project : MonoBehaviour {
         });
         yield return new WaitUntil(() => isDeserializationComplete);
 
-        DecorationManager.Instance.DeserializeDecorationPresets(serializedProject.decorationPresets);
-        DecorationManager.Instance.DeserializeDecorationsInstantiated(serializedProject.decorationsInstantiated);
-        MapManager.Instance.DeserializeMap(serializedProject.map);
+     //   DecorationManager.Instance.DeserializeDecorationPresets(serializedProject.decorationPresets);
+    //    DecorationManager.Instance.DeserializeDecorationsInstantiated(serializedProject.decorationsInstantiated);
+        MapManager.Instance.Deserialize(serializedProject.map);
+        InterestPointManager.Instance.Deserialize(serializedProject.interestPointManager);
 
         tcs.SetResult(true); // Complete the task when everything is done
     }
@@ -66,9 +75,13 @@ public class SerializableProject {
     public string projectName;
     public SerializableMap map;
     public List<SerializableModelAsset> modelAssets;
-    public List<SerializableDecorationPreset> decorationPresets;
-    public List<SerializableDecorationInstantiated> decorationsInstantiated;
+    public SerializableInterestPointManager interestPointManager;
+    //    public List<SerializableDecorationPreset> decorationPresets;
+    //    public List<SerializableDecorationInstantiated> decorationsInstantiated;
 }
+
+
+
 
 [Serializable]
 public class SerializableDecorationPreset {

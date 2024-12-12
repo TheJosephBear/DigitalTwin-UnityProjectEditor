@@ -79,20 +79,9 @@ public class EditorHUDui : UIBehaviour {
     }
 
     public void onLeave() {
-        StartCoroutine(UnloadEditing());
-    }
-
-    IEnumerator UnloadEditing() {
-        ProjectManager.Instance.SaveProject();
-        var task = SceneLoadingManager.Instance.UnLoadSceneAsync(SceneType.Editing);
-        while (!task.IsCompleted) {
-            yield return null;
-        }
         ProjectManager.Instance.CloseProject();
-   //     UImanager.Instance.HideUI(UIType.EditorHUD);
-    //    UImanager.Instance.ShowUI(UIType.Projects);
-
     }
+
     /*
     public void onUploadMap() {
         AudioManager.Instance.PlaySound(SoundType.click);
