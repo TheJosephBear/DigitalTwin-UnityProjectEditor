@@ -16,7 +16,9 @@ public class InterestPointManager : Singleton<InterestPointManager> {
 
     protected override void Awake() {
         base.Awake();
+    }
 
+    void OnEnable() {
         ToggleCameraPreview(false);
     }
 
@@ -45,16 +47,18 @@ public class InterestPointManager : Singleton<InterestPointManager> {
     public List<InterestPoint> GetInterestPoints() {
         return interestPoints;
     }
+
     public void ClearEverything() {
         DeactivateInterestPoint();
         SetActiveInterestPoint(null);
         Utilities.DestroyAllGameObjects(interestPoints);
     }
 
-    void ToggleCameraPreview(bool toggleOn) {
-        if(cameraViewUI == null || previewCam == null || currentInterestPoint == null) return;
+    public void ToggleCameraPreview(bool toggleOn) {
+        if(cameraViewUI == null || previewCam == null) return;
 
         if (toggleOn) {
+            if (currentInterestPoint == null) return;
             // Move the camera to the current vcam - must be continous so child
             previewCam.transform.SetParent(currentInterestPoint.gameObject.transform);
             previewCam.transform.localPosition = new Vector3(0, 0, 0);
@@ -64,6 +68,12 @@ public class InterestPointManager : Singleton<InterestPointManager> {
         cameraViewUI.SetActive(toggleOn);
         previewCam.gameObject.SetActive(toggleOn);
     }
+
+    public void FillEditorObjectUI() {
+        print("velikost pøed: "+interestPoints.Count);
+        EditorObjectManager.Instance.FillEditorObjectListUI(interestPoints, "Kamery");
+    }
+
     public SerializableInterestPointManager Serialize() { 
         List<SerializableInterestPoint> serializablePoints = new List<SerializableInterestPoint>();
         foreach (var interestPoint in interestPoints) {
@@ -76,7 +86,13 @@ public class InterestPointManager : Singleton<InterestPointManager> {
         };
         return serializedManager;
     }
+
     public void Deserialize(SerializableInterestPointManager serializedManager) {
+        if (serializedManager == null || serializedManager.interestPoints == null) {
+            print("Interest point manager deserialization failed");
+            return;
+        }
+
         foreach (var serializedInterestPoint in serializedManager.interestPoints) {
             InterestPoint iPoint = CreateNewInterestPoint().GetComponent<InterestPoint>();
             iPoint.Deserialize(serializedInterestPoint);

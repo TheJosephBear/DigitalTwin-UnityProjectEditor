@@ -30,6 +30,15 @@ public class EditorHUDui : UIBehaviour {
         }
     }
 
+    public void OnKamery() {
+        EditorObjectManager.Instance.ToggleUI(true);
+        InterestPointManager.Instance.FillEditorObjectUI();
+    }
+
+    public void OnMapy() {
+
+    }
+
 
     public void onProjekt() {
         AudioManager.Instance.PlaySound(SoundType.click);

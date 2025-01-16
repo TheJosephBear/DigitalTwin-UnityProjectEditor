@@ -13,7 +13,8 @@ public class EditorDebugger : MonoBehaviour {
         var load = SceneManager.LoadSceneAsync("Utilities", LoadSceneMode.Additive);
         yield return new WaitUntil(()=> load.isDone);
         yield return new WaitForSeconds(1f);
-        UImanager.Instance.ShowUI(UIType.EditorHUD);
+        FindAnyObjectByType<EditorInitializer>().Initialize();
+        FindAnyObjectByType<EditorInitializer>().StartRunning();
     }
 
 }

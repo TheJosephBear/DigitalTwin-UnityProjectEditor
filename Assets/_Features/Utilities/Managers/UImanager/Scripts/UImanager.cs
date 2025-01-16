@@ -43,8 +43,16 @@ public class UImanager : Singleton<UImanager> {
         }
     }
 
+    public void ToggleUI(UIType uiType, bool toggleOn) {
+        if (toggleOn) {
+            ShowUI(uiType);
+        } else {
+            HideUI(uiType);
+        }
+    }
+
     public void SetRaycasterFromLatestUI() {
-        graphicRaycaster = activeUIscript.GetComponent<GraphicRaycaster>(); 
+        graphicRaycaster = activeUIscript.GetComponent<GraphicRaycaster>();
     }
 
     public GraphicRaycaster GetRaycaster() {

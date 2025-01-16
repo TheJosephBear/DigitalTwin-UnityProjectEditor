@@ -3,15 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InterestPoint : MonoBehaviour, IClickable {
+public class InterestPoint : EditorObjectBase, IClickable {
 
     public GameObject vcam;
-    public string Name { get; private set; }
-
-
-    public void Rename(string newName) {
-        Name = newName;
-    }
 
     public void OnClick() {
     //    print("im clicked and the editor viewmode is: "+ EditorManager.Instance.ViewModeCurrent);

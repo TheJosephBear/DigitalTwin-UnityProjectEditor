@@ -1,12 +1,13 @@
 public enum UIType
 {
-    PopUpMessageUI = 0,
+    EditorObjectInfoUI = 0,
     PopUpInputUI = 1,
-    Login = 2,
-    LoadingScreen = 3,
-    ProjectsList = 4,
-    EditorHUD = 5,
-    MapUI = 6,
-    Register = 7,
-    TwoMapsCameraView = 8,
+    LoadingScreen = 2,
+    PopUpMessageUI = 3,
+    Register = 4,
+    MapUI = 5,
+    Login = 6,
+    TwoMapsCameraView = 7,
+    EditorHUD = 8,
+    ProjectsList = 9,
 }

@@ -61,8 +61,11 @@ public class Project : MonoBehaviour {
         });
         yield return new WaitUntil(() => isDeserializationComplete);
 
-     //   DecorationManager.Instance.DeserializeDecorationPresets(serializedProject.decorationPresets);
-    //    DecorationManager.Instance.DeserializeDecorationsInstantiated(serializedProject.decorationsInstantiated);
+        //   DecorationManager.Instance.DeserializeDecorationPresets(serializedProject.decorationPresets);
+        //    DecorationManager.Instance.DeserializeDecorationsInstantiated(serializedProject.decorationsInstantiated);
+        print("trying map manager");
+        print(MapManager.Instance.name);
+
         MapManager.Instance.Deserialize(serializedProject.map);
         InterestPointManager.Instance.Deserialize(serializedProject.interestPointManager);
 

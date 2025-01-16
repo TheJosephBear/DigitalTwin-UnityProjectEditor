@@ -9,16 +9,18 @@ public class ProjectListManager : Singleton<ProjectListManager> {
     List<ProjectWebRefference> projectRefferenceList = new List<ProjectWebRefference>();
 
     public void OpenProject(ProjectWebRefference projectWebRefference) {
-        ProjectManager.Instance.OpenProject(projectWebRefference);
-        StartCoroutine(LoadEditing());
+        StartCoroutine(LoadEditing(projectWebRefference));
     }
 
-    IEnumerator LoadEditing() {
+    IEnumerator LoadEditing(ProjectWebRefference projectWebRefference) {
         UImanager.Instance.ShowUI(UIType.LoadingScreen);
         var loading = SceneLoadingManager.Instance.LoadSceneAsync(SceneType.Editing, 0f);
         while (!loading.IsCompleted) {
             yield return null;
         }
+        // Open the project (download project data) after the editor scene has been loaded
+        ProjectManager.Instance.OpenProject(projectWebRefference);
+
         UImanager.Instance.HideUI(UIType.LoadingScreen);
         UImanager.Instance.HideUI(UIType.ProjectsList);
         var unloadTask = SceneLoadingManager.Instance.UnLoadSceneAsync(SceneType.ProjectList); // No need to wait for this

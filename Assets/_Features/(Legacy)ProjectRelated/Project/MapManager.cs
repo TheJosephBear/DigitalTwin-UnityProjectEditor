@@ -13,6 +13,10 @@ public class MapManager : Singleton<MapManager> {
 
     GameObject currentMapVarInstance;
 
+    protected override void Awake() {
+        base.Awake();
+    }
+
     public void UploadBaseMapModel(ModelAsset newMap) {
         baseMap = newMap;
         SpawnMap();
