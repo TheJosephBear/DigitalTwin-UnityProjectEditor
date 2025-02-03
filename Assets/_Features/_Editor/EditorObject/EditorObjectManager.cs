@@ -19,7 +19,13 @@ public class EditorObjectManager : Singleton<EditorObjectManager> {
     }
 
     // fill ui with given data (of abstract class)
-    public void FillEditorObjectListUI<T>(List<T> objectList, string title) where T : EditorObjectBase {
+  /*  public void FillEditorObjectListUI<T>(List<T> objectList, string title) where T : EditorObjectBase {
+        UI.SetTitle(title);
+        UI.FillList(objectList);
+    }
+  */
+
+    public void FillEditorObjectListUI(List<EditorObjectBase> objectList, string title) {
         UI.SetTitle(title);
         UI.FillList(objectList);
     }

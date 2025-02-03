@@ -7,6 +7,7 @@ public class InterestPointManager : Singleton<InterestPointManager> {
     
     public GameObject InterestPointPrefab;
     List<InterestPoint> interestPoints = new List<InterestPoint>();
+ //   List<EditorObjectBase> interestPoints = new List<EditorObjectBase>();
     public Vector3 interestPointSpawnPosition;
     public GameObject cameraViewUI;
     public Camera previewCam;
@@ -70,8 +71,14 @@ public class InterestPointManager : Singleton<InterestPointManager> {
     }
 
     public void FillEditorObjectUI() {
-        print("velikost pøed: "+interestPoints.Count);
-        EditorObjectManager.Instance.FillEditorObjectListUI(interestPoints, "Kamery");
+    //    print("velikost pøed: "+interestPoints.Count);
+        List<EditorObjectBase> abstractList = new List<EditorObjectBase>();
+        foreach (InterestPoint point in interestPoints) {
+            EditorObjectBase abstractReff = point;
+            abstractList.Add(point);
+        }
+      //  EditorObjectManager.Instance.FillEditorObjectListUI(interestPoints, "Kamery");
+        EditorObjectManager.Instance.FillEditorObjectListUI(abstractList, "Kamery");
     }
 
     public SerializableInterestPointManager Serialize() { 
