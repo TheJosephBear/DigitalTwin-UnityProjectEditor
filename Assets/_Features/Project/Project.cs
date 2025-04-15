@@ -52,8 +52,6 @@ public class Project : MonoBehaviour {
 
     IEnumerator DeserializeCoroutine(string json, TaskCompletionSource<bool> tcs) {
         SerializableProject serializedProject = JsonUtility.FromJson<SerializableProject>(json);
-        print("seru projekt je: " + serializedProject);
-        print("json stringus je: " + json);
         SetProjectName(serializedProject.projectName);
         bool isDeserializationComplete = false;
         AssetManager.Instance.DeserializeAssetList(serializedProject.modelAssets, () => {
@@ -63,7 +61,6 @@ public class Project : MonoBehaviour {
 
         //   DecorationManager.Instance.DeserializeDecorationPresets(serializedProject.decorationPresets);
         //    DecorationManager.Instance.DeserializeDecorationsInstantiated(serializedProject.decorationsInstantiated);
-        print("trying map manager");
         print(MapManager.Instance.name);
 
         MapManager.Instance.Deserialize(serializedProject.map);
