@@ -9,6 +9,10 @@ public class EditorHUDui : UIBehaviour {
         UImanager.Instance.SetRaycasterFromLatestUI();
     }
 
+    public void OnGeoMap() {
+        GeoMapManager.Instance.ToggleMapOnGeoMap();
+    }
+
     public void onDveMapy() {
         //Togle zobrazeniMapy
         if (EditorManager.Instance.ViewModeCurrent == EditorViewMode.classic) {
