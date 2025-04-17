@@ -6,7 +6,7 @@ public class EditorInitializer : MonoBehaviour, Iinitializer
 {
     public void Initialize() {
         UImanager.Instance.ShowUI(UIType.EditorHUD);
-        UImanager.Instance.ShowUI(UIType.EditorObjectInfoUI);
+   //     UImanager.Instance.ShowUI(UIType.EditorObjectInfoUI);
         //   PopUp.Instance.ShowPopUpWindow("You have sucessfuly opened project " + ProjectManager.Instance.project.ProjectName);
     }
 

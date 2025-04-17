@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public static class Utilities {
     /// <summary>
@@ -57,5 +59,19 @@ public static class Utilities {
         }
 
         return uniqueName;
+    }
+
+    public static List<GameObject> GetDropdownItems(TMP_Dropdown dropdown) {
+        var templateInstance = dropdown.template;
+        var content = templateInstance.GetComponentInChildren<ScrollRect>()
+                                      .content;
+
+        List<GameObject> itemObjects = new List<GameObject>();
+
+        foreach (Transform child in content) {
+            itemObjects.Add(child.gameObject);
+        }
+
+        return itemObjects;
     }
 }

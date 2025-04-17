@@ -45,8 +45,7 @@ public class EditorManager : Singleton<EditorManager> {
 
         TwoCameraInstantiated = SceneLoadingManager.Instance.InstantiateObjectInScene(TwoCameraPrefab, TwoCameraPrefabSpawnPosition, SceneType.Editing);
         UImanager.Instance.ShowUI(UIType.TwoMapsCameraView);
-        MapManager.Instance.SpawnSelectedVariant(0);
-        FindAnyObjectByType<TwoMapsUI>().UpdateDropDown();
+        FindAnyObjectByType<TwoMapsUI>().Initialize();
     }
 
     void ViewModeCameraShowing() {
