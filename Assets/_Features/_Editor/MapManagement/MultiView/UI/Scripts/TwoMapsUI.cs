@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class TwoMapsUI : UIBehaviour {
@@ -10,107 +11,91 @@ public class TwoMapsUI : UIBehaviour {
     public TMP_Dropdown DropDownSecondary;
 
     private List<MapVariant> _mapVariants = new List<MapVariant>();
-    private MapVariant _lockedVariant = null;
 
     public void Initialize() {
-        UpdateDropDown();
+        UpdateDropDowns();
         if (_mapVariants.Count > 0) {
             MapDisplayManager.Instance.ShowVariant(_mapVariants[0], MapPriority.Secondary);
         }
     }
 
-    public void UpdateDropDown() {
-        _mapVariants = MapManager.Instance.GetVariants();
+    public void UpdateDropDowns() {
+        // Cache selected indexes
+        int selectedPrimary = DropDownPrimary.value;
+        int selectedSecondary = DropDownSecondary.value;
+
+        // Prevent event stacking
+        DropDownPrimary.onValueChanged.RemoveAllListeners();
+        DropDownSecondary.onValueChanged.RemoveAllListeners();
+
         DropDownPrimary.ClearOptions();
         DropDownSecondary.ClearOptions();
-        List<string> options = new List<string>();
 
+        _mapVariants = MapManager.Instance.GetVariants();
+        List<string> options = new List<string>(_mapVariants.Count);
         foreach (var variant in _mapVariants) {
             options.Add(variant.ModelAsset.ModelID);
         }
 
         DropDownPrimary.AddOptions(options);
         DropDownSecondary.AddOptions(options);
+
         DropDownPrimary.onValueChanged.AddListener(OnMapVariantSelectedPrimary);
         DropDownSecondary.onValueChanged.AddListener(OnMapVariantSelectedSecondary);
-        HookDropdownItemLogic(DropDownPrimary);
-        HookDropdownItemLogic(DropDownSecondary);
 
-    }
+        // Restore selected values if still valid
+        DropDownPrimary.value = Mathf.Clamp(selectedPrimary, 0, _mapVariants.Count - 1);
+        DropDownSecondary.value = Mathf.Clamp(selectedSecondary, 0, _mapVariants.Count - 1);
 
-    public void HookDropdownItemLogic(TMP_Dropdown dropdown) {
-        StartCoroutine(SetupDropdownItemsAfterExpand(dropdown));
+        // Initialize dropdown UI items AFTER frame to ensure instantiation
+        StartCoroutine(SetupDropdownItemsAfterExpand(DropDownPrimary));
+        StartCoroutine(SetupDropdownItemsAfterExpand(DropDownSecondary));
     }
 
     private IEnumerator SetupDropdownItemsAfterExpand(TMP_Dropdown dropdown) {
-        yield return new WaitForEndOfFrame(); // Wait until dropdown has expanded
+        // Wait until dropdown is populated & visible
+        dropdown.Show();
+        yield return new WaitForEndOfFrame();
 
         var scroll = dropdown.template.GetComponentInChildren<ScrollRect>();
         if (scroll == null) yield break;
 
         Transform content = scroll.content;
 
-        for (int i = 0; i < content.childCount; i++) {
-            var itemGO = content.GetChild(i).gameObject;
-            var itemScript = itemGO.GetComponent<MultiviewDropdownItem>();
+        // Ensure dropdown options are visible before trying to access instantiated items
+        yield return new WaitForSeconds(0.05f); // ensures UI has caught up
 
-            if (itemScript != null && i < _mapVariants.Count) {
-                MapVariant variant = _mapVariants[i];
-                itemScript.Initialize(variant);
+        for (int i = 0; i < content.childCount && i < _mapVariants.Count; i++) {
+            GameObject itemGO = content.GetChild(i).gameObject;
+            MultiviewDropdownItem itemScript = itemGO.GetComponent<MultiviewDropdownItem>();
+            if (itemScript != null) {
+                itemScript.Initialize(_mapVariants[i]);
             }
         }
+
+        // Close and reopen dropdown to reflect new visuals (optional)
+        EventSystem.current.SetSelectedGameObject(null);
+        dropdown.Hide(); // If accessible
     }
 
     public void OnMapLockToggle(MapVariant toggledVariant) {
-        if (_lockedVariant == toggledVariant) {
-            _lockedVariant.IsLocked = false;
-            _lockedVariant = null;
-        } else {
-            if (_lockedVariant != null)
-                _lockedVariant.IsLocked = false;
-            toggledVariant.IsLocked = true;
-            _lockedVariant = toggledVariant;
-        }
-
-        UpdateDropdownItemVisuals(DropDownPrimary);
-        UpdateDropdownItemVisuals(DropDownSecondary);
+        toggledVariant.IsLocked = !toggledVariant.IsLocked;
+        UpdateDropDowns(); // this will now preserve selection
     }
-
-    private void UpdateDropdownItemVisuals(TMP_Dropdown dropdown) {
-        var scroll = dropdown.template.GetComponentInChildren<ScrollRect>();
-        if (scroll == null) return;
-
-        Transform content = scroll.content;
-        int mapVariantIdx = 0;
-        for (int i = 0; i < content.childCount; i++) {
-            var itemGO = content.GetChild(i).gameObject;
-            var itemScript = itemGO.GetComponent<MultiviewDropdownItem>();
-
-            if (itemScript != null && mapVariantIdx < _mapVariants.Count) {
-                bool shouldGray = _lockedVariant != null && _lockedVariant != _mapVariants[mapVariantIdx];
-                itemScript.LockButton.image.color = shouldGray ? Color.gray : Color.black;
-                mapVariantIdx++;
-            }
-        }
-    }
-
 
     private void OnMapVariantSelectedPrimary(int index) {
         if (index >= 0 && index < _mapVariants.Count) {
-            MapVariant selectedVariant = _mapVariants[index];
             MapDisplayManager.Instance.ShowVariant(_mapVariants[index], MapPriority.Primary);
         } else {
-            print("Selected index out of bounds for map variants.");
+            Debug.LogWarning("Primary index out of range.");
         }
     }
 
     private void OnMapVariantSelectedSecondary(int index) {
         if (index >= 0 && index < _mapVariants.Count) {
-            MapVariant selectedVariant = _mapVariants[index];
             MapDisplayManager.Instance.ShowVariant(_mapVariants[index], MapPriority.Secondary);
         } else {
-            print("Selected index out of bounds for map variants.");
+            Debug.LogWarning("Secondary index out of range.");
         }
     }
-
 }

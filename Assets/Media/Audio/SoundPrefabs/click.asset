@@ -16,5 +16,5 @@ MonoBehaviour:
   mixerType: 0
   clip: {fileID: 8300000, guid: 8713402573b108a44a3f86a7ef5e35d2, type: 3}
   loop: 0
-  volume: 1
+  volume: 0
   pitch: 1
