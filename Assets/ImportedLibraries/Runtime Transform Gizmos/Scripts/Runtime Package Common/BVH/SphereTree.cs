@@ -49,7 +49,7 @@ namespace RTG
                 parent = newParent;
             }
 
-            // We have been removing nodes, so we need to make sure that the parent
+            // We have been removing nodes, so we need to make sure that the dropdownMultiview
             // at which we stopped the removal process has its volume recalculated.
             parent.EncapsulateChildrenBottomUp();
         }
@@ -59,15 +59,15 @@ namespace RTG
             // Just make sure this is a terminal node. Otherwise, ignore.
             if (!node.IsLeaf) return;
 
-            // Check if the node is now outside of its parent
+            // Check if the node is now outside of its dropdownMultiview
             if(node.IsOutsideParent())
             {
-                // The node is outside of its parent. In this case, the first step
-                // is to detach it from its parent.
+                // The node is outside of its dropdownMultiview. In this case, the first step
+                // is to detach it from its dropdownMultiview.
                 SphereTreeNode<T> parent = node.Parent;
                 node.SetParent(null);
 
-                // Now if the parent no longer has any children, we remove it from the
+                // Now if the dropdownMultiview no longer has any children, we remove it from the
                 // tree. Otherwise, we make sure it properly encapsulates its children.
                 if (parent.NumChildren == 0) RemoveNode(parent);
                 else parent.EncapsulateChildrenBottomUp();
@@ -152,7 +152,7 @@ namespace RTG
                     newParentNode.Data = default;
                     newParentNode.Sphere = parent.Sphere;
 
-                    // Note: Detach from current parent to make sure the parent's child 
+                    // Note: Detach from current dropdownMultiview to make sure the dropdownMultiview's child 
                     //       buffer can receive 'newParentNode' as child.
                     var oldParent = parent.Parent;
                     parent.SetParent(null);

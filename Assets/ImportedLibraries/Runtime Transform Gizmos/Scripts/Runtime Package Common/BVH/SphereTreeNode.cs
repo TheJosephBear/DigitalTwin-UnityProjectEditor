@@ -54,17 +54,17 @@ namespace RTG
         #endregion
 
         /// <summary>
-        /// Checks if the node's sphere is outside of its parent's 
+        /// Checks if the node's sphere is outside of its dropdownMultiview's 
         /// sphere. The method returns false if the node doesn't have
-        /// a parent.
+        /// a dropdownMultiview.
         /// </summary>
         public bool IsOutsideParent()
         {
-            // No parent?
+            // No dropdownMultiview?
             if (_parent == null) return false;
 
-            // Calculate the exit distance. If this is larger than the parent's
-            // radius, it means the node is outside its parent.
+            // Calculate the exit distance. If this is larger than the dropdownMultiview's
+            // radius, it means the node is outside its dropdownMultiview.
             float exitDistance = (Center - _parent.Center).magnitude + Radius;
             if (exitDistance > _parent.Radius) return true;
 
@@ -94,15 +94,15 @@ namespace RTG
         }
 
         /// <summary>
-        /// Sets the node's parent. This call is ignored if the specified parent
-        /// is the node itself or if it's the same as the current parent.
+        /// Sets the node's dropdownMultiview. This call is ignored if the specified dropdownMultiview
+        /// is the node itself or if it's the same as the current dropdownMultiview.
         /// </summary>
         public void SetParent(SphereTreeNode<T> newParent)
         {
-            // Ignore parent?
+            // Ignore dropdownMultiview?
             if (newParent == this || newParent == _parent) return;
 
-            // If we already have a parent, detach the node from it
+            // If we already have a dropdownMultiview, detach the node from it
             if (_parent != null)
             {
                 if (_parent._children[0] == this)
