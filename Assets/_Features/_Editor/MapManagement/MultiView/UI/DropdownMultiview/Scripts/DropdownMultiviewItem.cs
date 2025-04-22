@@ -27,12 +27,8 @@ public class DropdownMultiviewItem : MonoBehaviour {
         originalItem.IsOverriden = true;
         originalItem.button.onClick.RemoveAllListeners(); // the original function still gets called.
         originalItem.button.onClick.AddListener(() => {
-            print("it got called :-)");
             if (!mapVariant.IsLocked && dropdownMultiview.IsAnythingLocked()) {
-                print("dropdown multiview item cant be selected, something else is locked!");
             } else if (mapVariant.IsLocked || !mapVariant.IsLocked && !dropdownMultiview.IsAnythingLocked()) {
-                print("map var locked: " + mapVariant.IsLocked);
-                print("anything locked: " + dropdownMultiview.IsAnythingLocked());
                 originalItem.onClick.Invoke();
                 onSelectableClick?.Invoke();
             }

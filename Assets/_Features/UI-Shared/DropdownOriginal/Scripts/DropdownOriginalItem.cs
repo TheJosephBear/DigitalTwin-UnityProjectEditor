@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class DropdownOriginalItem : MonoBehaviour
 {
     public Button button;
+    public GameObject IsSelectedVisualizer;
     public TMP_Text label;
 
     public System.Action onClick;
@@ -17,7 +18,11 @@ public class DropdownOriginalItem : MonoBehaviour
         if (IsOverriden) return;
         this.onClick = onClick;
         button.onClick.RemoveAllListeners();
-        button.onClick.AddListener(() => { onClick?.Invoke(); print("original function got called"); });
+        button.onClick.AddListener(() => { onClick?.Invoke();});
+    }
+
+    public void SetSelected(bool isSelected) {
+        IsSelectedVisualizer.SetActive(isSelected ? true : false);
     }
 
     public string GetLabel() => label.text;

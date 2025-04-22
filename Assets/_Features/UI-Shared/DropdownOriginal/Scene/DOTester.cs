@@ -11,7 +11,7 @@ public class DOTester : MonoBehaviour {
         dropdown.Setup(items, OnItemSelected);
     }
 
-    void OnItemSelected(string value) {
-        Debug.Log($"Selected: {value}");
+    void OnItemSelected(int idx) {
+        Debug.Log($"Selected: {idx}");
     }
 }

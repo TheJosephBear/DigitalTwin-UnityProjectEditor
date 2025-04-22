@@ -7,8 +7,8 @@ using UnityEngine.UI;
 
 public class TwoMapsUI : UIBehaviour {
 
-    public TMP_Dropdown DropDownPrimary;
-    public TMP_Dropdown DropDownSecondary;
+    public DropdownMultiview DropDownPrimary;
+    public DropdownMultiview DropDownSecondary;
 
     private List<MapVariant> _mapVariants = new List<MapVariant>();
 
@@ -20,6 +20,16 @@ public class TwoMapsUI : UIBehaviour {
     }
 
     public void UpdateDropDowns() {
+        List<MapVariant> mapVariants = MapManager.Instance.GetVariants();
+        // for now use IDs for names...
+        foreach (MapVariant item in mapVariants) {
+            item.Name = item.ModelAsset.ModelID;
+        }
+
+        DropDownPrimary.SetupMultiview(mapVariants);
+        DropDownSecondary.SetupMultiview(mapVariants);
+
+        /*
         // Cache selected indexes
         int selectedPrimary = DropDownPrimary.value;
         int selectedSecondary = DropDownSecondary.value;
@@ -50,6 +60,7 @@ public class TwoMapsUI : UIBehaviour {
         // Initialize dropdown UI items AFTER frame to ensure instantiation
         StartCoroutine(SetupDropdownItemsAfterExpand(DropDownPrimary));
         StartCoroutine(SetupDropdownItemsAfterExpand(DropDownSecondary));
+        */
     }
 
     private IEnumerator SetupDropdownItemsAfterExpand(TMP_Dropdown dropdown) {

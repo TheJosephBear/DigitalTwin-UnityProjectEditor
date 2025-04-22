@@ -1,24 +1,22 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
-using static UnityEditor.Progress;
-using System.Reflection;
 
 public class DropdownOriginal : MonoBehaviour {
     [Header("UI Refs")]
     public GameObject itemPrefab;
     public GameObject TempButton;
-    public Transform itemParent;
+    public Transform itemParent; 
 
     private List<DropdownOriginalItem> items = new();
-    private DropdownOriginalItem selectedItem;
-    private Action<string> onValueChanged;
+    private DropdownOriginalItem selectedItem; 
+    Action<int> onIndexChanged;
     private bool isExpanded = false;
 
-    public void Setup(List<string> options, Action<string> onValueChanged = null) {
+    public void Setup(List<string> options, Action<int> onIndexChanged = null) { 
         DestroyImmediate(TempButton);
         ClearItems();
-        this.onValueChanged = onValueChanged;
+        this.onIndexChanged = onIndexChanged;
 
         for (int i = 0; i < options.Count; i++) {
             string label = options[i];
@@ -32,9 +30,9 @@ public class DropdownOriginal : MonoBehaviour {
 
         if (items.Count > 0) {
             selectedItem = items[0];
-            // Replace selected item's callback with toggle handler
             selectedItem.Setup(selectedItem.GetLabel(), ToggleDropdown);
-            onValueChanged?.Invoke(selectedItem.GetLabel());
+            selectedItem.SetSelected(true);
+            onIndexChanged?.Invoke(0); 
             UpdateVisibleItems();
         }
     }
@@ -48,22 +46,19 @@ public class DropdownOriginal : MonoBehaviour {
     }
 
     public void OnItemSelected(int selectedIndex) {
-        string selectedLabel = items[selectedIndex].GetLabel();
+        selectedItem = items[selectedIndex];
 
-        SwapItems(0, selectedIndex);
-        selectedItem = items[0];
-        selectedItem.Setup(selectedLabel, ToggleDropdown);
+        onIndexChanged?.Invoke(selectedIndex);
+        ToggleDropdown();
 
-        for (int i = 1; i < items.Count; i++) {
-            // I have to save it to a new variable because otherwise it puts in the "i" variable refference
-            // and not a number, so it calls i==3 when the button is pressed, pretty stupid if u ask me
-            int correctIndex = i;
-            items[i].Setup(items[i].GetLabel(), () => OnItemSelected(correctIndex));
+        for (int i = 0; i < items.Count; i++) {
+            items[i].SetSelected(i == selectedIndex);
         }
 
-        onValueChanged?.Invoke(selectedLabel);
-        ToggleDropdown(); 
+        UpdateVisibleItems();
     }
+
+
 
     private void ToggleDropdown() {
         isExpanded = !isExpanded;
@@ -71,10 +66,19 @@ public class DropdownOriginal : MonoBehaviour {
     }
 
     private void UpdateVisibleItems() {
-        for (int i = 0; i < items.Count; i++) {
-            items[i].gameObject.SetActive(isExpanded || i == 0);
+        if (isExpanded) {
+            selectedItem.transform.SetSiblingIndex(0);
+
+            for (int i = 0; i < items.Count; i++) {
+                items[i].gameObject.SetActive(true);
+            }
+        } else {
+            for (int i = 0; i < items.Count; i++) {
+                items[i].gameObject.SetActive(items[i] == selectedItem);
+            }
         }
     }
+
 
     private void SwapItems(int a, int b) {
         // Swap list
@@ -86,4 +90,7 @@ public class DropdownOriginal : MonoBehaviour {
         items[a].transform.SetSiblingIndex(a);
         items[b].transform.SetSiblingIndex(b);
     }
+
+    public int GetSelectedIndex() => items.IndexOf(selectedItem);
+
 }

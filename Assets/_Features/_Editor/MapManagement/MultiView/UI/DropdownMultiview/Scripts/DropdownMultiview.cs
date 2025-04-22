@@ -1,11 +1,15 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
-using static UnityEditor.Progress;
+using System;
 
 public class DropdownMultiview : MonoBehaviour {
+
+    public MapPriority MapPriority;
+
     private DropdownOriginal dropdown;
     private List<DropdownMultiviewItem> multiviewItems = new();
+    private List<MapVariant> _mapVariants;
 
     private MapVariant currentlyLocked = null;
 
@@ -14,9 +18,10 @@ public class DropdownMultiview : MonoBehaviour {
     }
 
     public void SetupMultiview(List<MapVariant> variants) {
+        _mapVariants = variants;
         List<string> labels = variants.ConvertAll(v => v.Name);
 
-        dropdown.Setup(labels, OnItemSelected);
+        dropdown.Setup(labels, OnItemSelectedByIndex);
 
         multiviewItems.Clear();
 
@@ -25,7 +30,6 @@ public class DropdownMultiview : MonoBehaviour {
             if (item != null) {
                 item.Setup(variants[i], this);
                 StartCoroutine(ConnectItemCoroutine(item, item.GetComponent<DropdownOriginalItem>()));
-            
                 multiviewItems.Add(item);
             }
         }
@@ -42,12 +46,11 @@ public class DropdownMultiview : MonoBehaviour {
 
     IEnumerator ConnectItemCoroutine(DropdownMultiviewItem multi, DropdownOriginalItem original) {
         yield return new WaitForEndOfFrame();
-        multi.ConnectToOriginalItem(original.GetComponent<DropdownOriginalItem>());
+        multi.ConnectToOriginalItem(original);
     }
 
     public void OnLockToggled(DropdownMultiviewItem toggledItem) {
-
-        if (IsAnythingLocked() && !toggledItem.mapVariant.IsLocked) return; 
+        if (IsAnythingLocked() && !toggledItem.mapVariant.IsLocked) return;
 
         foreach (DropdownMultiviewItem item in multiviewItems) {
             if (item != toggledItem) {
@@ -61,7 +64,6 @@ public class DropdownMultiview : MonoBehaviour {
             item.UpdateLockVisual();
         }
 
-        // Select the item also
         toggledItem.GetComponent<DropdownOriginalItem>().button.onClick.Invoke();
     }
 
@@ -73,7 +75,14 @@ public class DropdownMultiview : MonoBehaviour {
         }
         return false;
     }
-    private void OnItemSelected(string selectedLabel) {
-        Debug.Log($"Selected: {selectedLabel}");
+
+    private void OnItemSelectedByIndex(int index) {
+        print("calling index " + index);
+        if (_mapVariants == null || index < 0 || index >= _mapVariants.Count) {
+            Debug.LogWarning("Invalid index selected from dropdown.");
+            return;
+        }
+
+        MapDisplayManager.Instance.ShowVariant(_mapVariants[index], MapPriority);
     }
 }
