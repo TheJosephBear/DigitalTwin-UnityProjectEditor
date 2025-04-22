@@ -65,7 +65,7 @@ namespace RTG
             _objectScaleGizmo = RTGizmosEngine.Get.CreateObjectScaleGizmo();
             _objectUniversalGizmo = RTGizmosEngine.Get.CreateObjectUniversalGizmo();
 
-            // Call the 'SetEnabled' function on the parent gizmo to make sure
+            // Call the 'SetEnabled' function on the dropdownMultiview gizmo to make sure
             // the gizmos are initially hidden in the scene. We want the gizmo
             // to show only when we have a target object available.
             _objectMoveGizmo.Gizmo.SetEnabled(false);

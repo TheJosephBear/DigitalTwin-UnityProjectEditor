@@ -267,7 +267,7 @@ namespace RTG
             // Null or empty collection?
             if (gameObjects == null) return new List<GameObject>();
 
-            // Loop through each game object inside the collection and check if it has a parent which
+            // Loop through each game object inside the collection and check if it has a dropdownMultiview which
             // resides in the same collection.
             var parents = new List<GameObject>(10);
             foreach(var gameObject in gameObjects)
@@ -276,17 +276,17 @@ namespace RTG
                 bool foundParent = false;
                 Transform objectTransform = gameObject.transform;
 
-                // Now we need to check if the current object has a parent inside the collection
+                // Now we need to check if the current object has a dropdownMultiview inside the collection
                 foreach(var possibleParent in gameObjects)
                 {
                     // Same as current object?
                     if (possibleParent != gameObject)
                     {
-                        // Is the current object a child of the possible parent object?
+                        // Is the current object a child of the possible dropdownMultiview object?
                         if(objectTransform.IsChildOf(possibleParent.transform))
                         {
                             // Yes, it is. Set the boolean flag and break out of the loop. There
-                            // is no need to go any further because we found a parent so we know
+                            // is no need to go any further because we found a dropdownMultiview so we know
                             // that this object can be discarded.
                             foundParent = true;
                             break;
@@ -294,7 +294,7 @@ namespace RTG
                     }
                 }
 
-                // If no parent was found, add the object to the output list
+                // If no dropdownMultiview was found, add the object to the output list
                 if (!foundParent) parents.Add(gameObject);
             }
 

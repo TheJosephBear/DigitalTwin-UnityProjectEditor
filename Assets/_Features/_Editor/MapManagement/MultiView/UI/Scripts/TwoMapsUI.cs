@@ -67,9 +67,9 @@ public class TwoMapsUI : UIBehaviour {
 
         for (int i = 0; i < content.childCount && i < _mapVariants.Count; i++) {
             GameObject itemGO = content.GetChild(i).gameObject;
-            MultiviewDropdownItem itemScript = itemGO.GetComponent<MultiviewDropdownItem>();
+            DropdownMultiviewItem itemScript = itemGO.GetComponent<DropdownMultiviewItem>();
             if (itemScript != null) {
-                itemScript.Initialize(_mapVariants[i]);
+          //      itemScript.Initialize(_mapVariants[i]);
             }
         }
 

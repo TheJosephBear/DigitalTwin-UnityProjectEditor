@@ -11,7 +11,7 @@ public class AssetManager : Singleton<AssetManager> {
     /// Creates assets from uploaded models for easier upload and download
     /// </summary>
     
-    public GameObject AssetContainer; // parent gameobject to all uploaded models that will turn to assets
+    public GameObject AssetContainer; // dropdownMultiview gameobject to all uploaded models that will turn to assets
     List<ModelAsset> assets = new List<ModelAsset>();
 
     public ModelAsset CreateNewAsset(FrostweepGames.Plugins.WebGLFileBrowser.File file) {

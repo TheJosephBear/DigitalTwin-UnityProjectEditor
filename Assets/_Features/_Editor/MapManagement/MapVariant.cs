@@ -55,7 +55,7 @@ public class MapVariant : MonoBehaviour {
     #region GettersSetters
 
     // isLocked
-    public bool IsLocked { get => _isLocked; set { _isLocked = value; print("Changing lockstate to "+value); } }
+    public bool IsLocked { get => _isLocked; set { _isLocked = value; print($"({Name}): Changing lockstate to "+value); } }
 
     // modelAsset
     public ModelAsset ModelAsset { get => _modelAsset; set => _modelAsset = value; }
