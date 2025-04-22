@@ -30,7 +30,7 @@ public class DropdownOriginal : MonoBehaviour {
 
         if (items.Count > 0) {
             selectedItem = items[0];
-            selectedItem.Setup(selectedItem.GetLabel(), ToggleDropdown);
+       //     selectedItem.Setup(selectedItem.GetLabel(), ToggleDropdown);
             selectedItem.SetSelected(true);
             onIndexChanged?.Invoke(0); 
             UpdateVisibleItems();
