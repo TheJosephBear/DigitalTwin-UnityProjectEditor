@@ -48,6 +48,9 @@ public class GizmoManager : Singleton<GizmoManager> {
         transformGizmo.SetTransformSpace(GizmoSpace.Local);
     }
 
+    public bool IsShowingGizmo() {
+        return transformGizmo != null;
+    }
 
     /* If i want the camera to move around while still using the cinemachine... 
      * Otherwise i have to turn off the cinemachine brain when in default editor state 

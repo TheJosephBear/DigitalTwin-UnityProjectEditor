@@ -51,20 +51,23 @@ public class MapManager : Singleton<MapManager> {
 
         List<SerializableMapVariant> variantListSerialized = new List<SerializableMapVariant>();
         foreach (var variant in _mapVariants) {
-            variantListSerialized.Add(variant.Serialize());
+            if (variant != null && variant.ModelAsset != null) {
+                variantListSerialized.Add(variant.Serialize());
+            }
         }
 
         return new SerializableMap {
-            baseModelID = _baseMap.ModelAsset.ModelID,
+       //     baseModelID = _baseMap.ModelAsset.ModelID,
             variants = variantListSerialized
         };
     }
 
+
     public void Deserialize(SerializableMap serializedMap) {
         if (serializedMap == null) return;
 
-        var baseAsset = AssetManager.Instance.FindModelAssetByID(serializedMap.baseModelID);
-        UploadBaseMapModel(baseAsset);
+    //    var baseAsset = AssetManager.Instance.FindModelAssetByID(serializedMap.baseModelID);
+        UploadBaseMapModel(AssetManager.Instance.FindModelAssetByID(serializedMap.baseMap.modelID));
         SpawnMap();
 
         foreach (var variant in serializedMap.variants) {
@@ -77,6 +80,6 @@ public class MapManager : Singleton<MapManager> {
 
 [Serializable]
 public class SerializableMap {
-    public string baseModelID; // base map
+    public SerializableMapVariant baseMap;
     public List<SerializableMapVariant> variants;
 }

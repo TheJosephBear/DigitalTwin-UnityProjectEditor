@@ -51,6 +51,11 @@ public class MapVariant : MonoBehaviour {
         };
     }
 
+    public void Deserialize(SerializableMapVariant serializedMap) {
+        ModelAsset = AssetManager.Instance.FindModelAssetByID(serializedMap.modelID);
+        IsBaseMap = serializedMap.isBaseMap;
+    }
+
 
     #region GettersSetters
 
