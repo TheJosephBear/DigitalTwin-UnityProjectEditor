@@ -11,7 +11,7 @@ public class InterestPoint : EditorObjectBase, IClickable {
     //    print("im clicked and the editor viewmode is: "+ EditorManager.Instance.ViewModeCurrent);
         if (EditorManager.Instance.ViewModeCurrent != EditorViewMode.showingOffCamera) {
             GizmoManager.Instance.SetTargetGameObject(gameObject);
-            GizmoManager.Instance.ShowUniversalGizmo();
+            GizmoManager.Instance.ShowGizmo(MovableType.Universal);
             InterestPointManager.Instance.SetActiveInterestPoint(this);
         }
     }
@@ -35,6 +35,22 @@ public class InterestPoint : EditorObjectBase, IClickable {
     public void Deserialize(SerializableInterestPoint interestPoint) {
         transform.position = interestPoint.position;
         transform.eulerAngles = interestPoint.eulerRotation; 
+    }
+
+    public void OnClickDown() {
+        throw new NotImplementedException();
+    }
+
+    public void OnClickUp() {
+        throw new NotImplementedException();
+    }
+
+    public void OnHover() {
+        throw new NotImplementedException();
+    }
+
+    public void OnUnhover() {
+        throw new NotImplementedException();
     }
 }
 

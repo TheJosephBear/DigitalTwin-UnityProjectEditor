@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -451,11 +452,22 @@ public class OnlineMapsTileSetControl : OnlineMapsControlBaseDynamicMesh
     protected override bool HitTest(Vector2 position)
     {
 #if NGUI
+        print("ngui whatever");
         if (UICamera.Raycast(position)) return false;
 #endif
         Rect rect = currentCamera.rect;
         if (rect.width == 0 || rect.height == 0) return false;
-        return cl.Raycast(currentCamera.ScreenPointToRay(position), out lastRaycastHit, OnlineMapsUtils.maxRaycastDistance);
+
+        Ray ray = currentCamera.ScreenPointToRay(position);
+        RaycastHit hit;
+        bool hitSomething = Physics.Raycast(ray, out hit, OnlineMapsUtils.maxRaycastDistance);
+        if(!Physics.Raycast(ray, out hit, OnlineMapsUtils.maxRaycastDistance)) {
+            return false;
+        }
+        if (hit.transform.GetComponent<OnlineMaps>() == null || !hitSomething) {
+            return false;
+        }
+        return cl.Raycast(ray, out lastRaycastHit, OnlineMapsUtils.maxRaycastDistance);
     }
 
     private void InitDrawingsMesh()

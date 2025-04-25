@@ -5,28 +5,33 @@ using UnityEngine;
 
 public class GeoMapManager : Singleton<GeoMapManager> {
 
-    public GameObject OnlineMapGameObject;
+    public OnlineMaps OnlineMapsReff;
     public GameObject vcam;
 
     protected override void Awake() {
         base.Awake();
-        OnlineMapGameObject.SetActive(false);
+        OnlineMapsReff.gameObject.SetActive(false);
         vcam.SetActive(false);
     }
 
     private void Update() {
-        if (OnlineMapGameObject.activeSelf) {
-            OnlineMaps map = OnlineMapGameObject.GetComponent<OnlineMaps>();
+        if (OnlineMapsReff.gameObject.activeSelf) {
+            OnlineMaps map = OnlineMapsReff;
             double lng = map.position.x;
             double lat = map.position.y;
-            print($"Map position (center): Latitude = {lat}, Longitude = {lng}");
+      //      print($"Map position (center): Latitude = {lat}, Longitude = {lng}");
         }
     }
 
     public void ToggleMapOnGeoMap() {
-        OnlineMapGameObject.SetActive(!OnlineMapGameObject.activeSelf);
+        OnlineMapsReff.gameObject.SetActive(!OnlineMapsReff.gameObject.activeSelf);
         vcam.SetActive(!vcam.activeSelf);
         StartCoroutine(DisableVcams());
+    }
+
+    public void ToggleGeoMapControl() {
+        OnlineMapsReff.GetComponent<OnlineMapsTileSetControl>().enabled = !OnlineMapsReff.GetComponent<OnlineMapsTileSetControl>().enabled;
+        print(OnlineMapsReff.enabled);
     }
 
     IEnumerator DisableVcams() {
