@@ -11,7 +11,7 @@ public class GeoMapManager : Singleton<GeoMapManager> {
     protected override void Awake() {
         base.Awake();
         OnlineMapsReff.gameObject.SetActive(false);
-        vcam.SetActive(false);
+        if(vcam!=null) vcam.SetActive(false);
     }
 
     private void Update() {
@@ -25,7 +25,7 @@ public class GeoMapManager : Singleton<GeoMapManager> {
 
     public void ToggleMapOnGeoMap() {
         OnlineMapsReff.gameObject.SetActive(!OnlineMapsReff.gameObject.activeSelf);
-        vcam.SetActive(!vcam.activeSelf);
+        if (vcam != null) vcam.SetActive(!vcam.activeSelf);
         StartCoroutine(DisableVcams());
     }
 

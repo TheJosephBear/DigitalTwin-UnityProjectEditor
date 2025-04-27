@@ -6,7 +6,7 @@ public class GeoMapLocalizationTester : MonoBehaviour {
     
     void Start() {
         GeoMapManager.Instance.ToggleMapOnGeoMap();
-        GeoMapLocalizationManager.Instance.EnterLockingPhase();
+        GeoMapLocalizationManager.Instance.Setup();
     }
 
 }

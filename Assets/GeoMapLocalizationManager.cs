@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using RTG;
 using UnityEngine;
 
 public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
@@ -9,6 +10,22 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
     /// </summary>
 
     public GameObject BaseMap;
+    public GeoLocalizationUI GeoLocalizationUIreff;
+    RTGApp _rtgReff;
+
+    protected override void Awake() {
+        base.Awake();
+        _rtgReff = FindAnyObjectByType<RTGApp>();
+    }
+
+    public void Setup() {
+        _rtgReff.gameObject.SetActive(false);
+        EnterLockingPhase();
+    }
+
+    public void Exit() {
+        _rtgReff.gameObject.SetActive(true);
+    }
 
     public void EnterLockingPhase() {
         BaseMap.SetActive(false);
@@ -16,6 +33,7 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
     }
 
     public void EnterPlacingPhase() {
+        _rtgReff.gameObject.SetActive(true);
         LockGeoMapZoom();
         BaseMap.SetActive(true);
     }
@@ -25,16 +43,14 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
     }
 
     void LockGeoMapZoom() {
-        GeoMapManager.Instance.OnlineMapsReff.GetComponent<OnlineMapsTileSetControl>().allowZoom = false;
+        GeoMapManager.Instance.OnlineMapsReff.GetComponent<OnlineMapsTileSetControl>().allowZoom = !GeoMapManager.Instance.OnlineMapsReff.GetComponent<OnlineMapsTileSetControl>().allowZoom;
     }
 
     void SaveGeoMapPosition() {
-        // lat, long, elev
-        print(GeoMapManager.Instance.OnlineMapsReff.position.x+" "+GeoMapManager.Instance.OnlineMapsReff.position.y);
         ElevationFetcher.Instance.GetElevation(GeoMapManager.Instance.OnlineMapsReff.position, elevation => {
-            Debug.Log($"Elevation: {elevation} meters");
-        },
-        error => {
+            GeoLocalizationUIreff.PrintInfo($"Lokalita umístìna na {GeoMapManager.Instance.OnlineMapsReff.position.x}, {GeoMapManager.Instance.OnlineMapsReff.position.y} \n" +
+            $"Nadmoøská výška lokality je {elevation} metrù.");
+        }, error => {
             Debug.LogError(error);
         });
     }

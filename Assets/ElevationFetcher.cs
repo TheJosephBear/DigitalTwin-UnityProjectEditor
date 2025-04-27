@@ -22,7 +22,6 @@ public class ElevationFetcher : Singleton<ElevationFetcher> {
 
     public void GetElevation(Vector2 latLon, Action<float> onSuccess, Action<string> onError = null) {
         StartCoroutine(GetElevationRoutine(new List<Vector2> { latLon }, result => {
-            print(result);
             if (result.Length > 0) onSuccess?.Invoke(result[0].elevation);
             else onError?.Invoke("No elevation data returned.");
         }, onError));
@@ -42,7 +41,6 @@ public class ElevationFetcher : Singleton<ElevationFetcher> {
     $"{ll.y.ToString(CultureInfo.InvariantCulture)},{ll.x.ToString(CultureInfo.InvariantCulture)}"));
         string fullUrl = $"{apiUrl}?locations={locations}";
 
-        print("fullUrl url: "+ fullUrl);
         using UnityWebRequest request = UnityWebRequest.Get(fullUrl);
         request.SetRequestHeader("Content-Type", "application/json");
 
@@ -52,7 +50,6 @@ public class ElevationFetcher : Singleton<ElevationFetcher> {
             onError?.Invoke($"Error fetching elevation: {request.error}");
         } else {
             try {
-                print("raw response: " + request.downloadHandler.text);
                 var response = JsonUtility.FromJson<ElevationResponse>(request.downloadHandler.text);
                 onSuccess?.Invoke(response.results);
             } catch (Exception ex) {
