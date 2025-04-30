@@ -7,19 +7,19 @@ public class GeoMapManager : Singleton<GeoMapManager> {
 
     public OnlineMaps OnlineMapsReff;
     public GameObject vcam;
+    int _equator = 40075000;
 
     protected override void Awake() {
         base.Awake();
         OnlineMapsReff.gameObject.SetActive(false);
         if(vcam!=null) vcam.SetActive(false);
+
+        ZoomToFitScale(100);
     }
 
     private void Update() {
-        if (OnlineMapsReff.gameObject.activeSelf) {
-            OnlineMaps map = OnlineMapsReff;
-            double lng = map.position.x;
-            double lat = map.position.y;
-      //      print($"Map position (center): Latitude = {lat}, Longitude = {lng}");
+        if (OnlineMapsReff.gameObject.activeSelf) {     
+            // print("Mìøítko (pixel vs metr): 1 : " + GetCurrentMapScale());
         }
     }
 
@@ -31,7 +31,26 @@ public class GeoMapManager : Singleton<GeoMapManager> {
 
     public void ToggleGeoMapControl() {
         OnlineMapsReff.GetComponent<OnlineMapsTileSetControl>().enabled = !OnlineMapsReff.GetComponent<OnlineMapsTileSetControl>().enabled;
-        print(OnlineMapsReff.enabled);
+    }
+
+    // Returns maps current map to ground scale as an int (1 : returned value)
+    public float GetCurrentMapScale() {
+        float size;
+        if (OnlineMapsReff.zoom < 5) size = (_equator / (1 << OnlineMapsReff.zoom) * OnlineMapsReff.zoomFactor * OnlineMapsReff.width / OnlineMapsUtils.tileSize);
+        else size = (OnlineMapsUtils.DistanceBetweenPoints(OnlineMapsReff.topLeftPosition, OnlineMapsReff.bottomRightPosition).x * 1000);
+        return size / OnlineMapsReff.width;
+    }
+
+    // Zoom the Geo map to fit the given scale (1 : wanted scale)
+    public void ZoomToFitScale(float requiredScale, float threshold = 0.1f) {
+        float step = 0.01f;
+        OnlineMapsReff.floatZoom = 3f;
+
+        // Currently bruteforcing because i have no idea how else to do it
+        while (Mathf.Abs(GetCurrentMapScale() - requiredScale) >= threshold) {
+            OnlineMapsReff.floatZoom += step;
+            if (OnlineMapsReff.floatZoom > 20) return;
+        }
     }
 
     IEnumerator DisableVcams() {

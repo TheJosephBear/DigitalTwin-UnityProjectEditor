@@ -6,19 +6,16 @@ public class ObjectClickManager : Singleton<ObjectClickManager> {
     private List<IClickable> currentHovered = new List<IClickable>();
     private List<IClickable> currentClicked = new List<IClickable>();
 
-    private Camera mainCamera;
-
-    protected override void Awake() {
-        mainCamera = Camera.main;
-    }
-
     void Update() {
         HandleHover();
         HandleClick();
     }
 
     void HandleHover() {
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        if (Camera.main == null)
+            return;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
         List<IClickable> newHovered = new List<IClickable>();
