@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using RTG;
 using UnityEngine;
+using static OnlineMapsGoogleDirectionsResult;
 
 public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
     /// <summary>
@@ -29,12 +30,13 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
 
     public void EnterLockingPhase() {
         BaseMap.SetActive(false);
-        GeoMapManager.Instance.OnlineMapsReff.GetComponent<OnlineMapsTileSetControl>().allowZoom = true;
+   //     GeoMapManager.Instance.OnlineMapsReff.GetComponent<OnlineMapsTileSetControl>().allowZoom = true;
     }
 
     public void EnterPlacingPhase() {
         _rtgReff.gameObject.SetActive(true);
-        LockGeoMapZoom();
+        //     LockGeoMapZoom();
+        GeoMapManager.Instance.ToggleGeoMapControl();
         BaseMap.SetActive(true);
     }
 
@@ -47,8 +49,11 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
     }
 
     void SaveGeoMapPosition() {
-        ElevationFetcher.Instance.GetElevation(GeoMapManager.Instance.OnlineMapsReff.position, elevation => {
-            GeoLocalizationUIreff.PrintInfo($"Lokalita umístìna na {GeoMapManager.Instance.OnlineMapsReff.position.x}, {GeoMapManager.Instance.OnlineMapsReff.position.y} \n" +
+        double lng, lat;
+        OnlineMapsTileSetControl.instance.GetCoordsByWorldPosition(BaseMap.transform.position, out lng, out lat);
+
+        ElevationFetcher.Instance.GetElevation(new Vector2((float)lng, (float)lat), elevation => {
+            GeoLocalizationUIreff.PrintInfo($"Lokalita umístìna na {lng}, {lat} \n" +
             $"Nadmoøská výška lokality je {elevation} metrù.");
         }, error => {
             Debug.LogError(error);

@@ -9,7 +9,7 @@ public class BaseMapLocalizationMode : MonoBehaviour, IClickable {
     }
 
     public void OnClickDown() {
-        GeoMapManager.Instance.ToggleGeoMapControl();
+    //    GeoMapManager.Instance.ToggleGeoMapControl();
     }
 
     public void OnClickUp() {
