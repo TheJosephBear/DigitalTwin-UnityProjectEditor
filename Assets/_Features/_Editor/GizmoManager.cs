@@ -49,6 +49,51 @@ public class GizmoManager : Singleton<GizmoManager> {
         transformGizmo.SetTransformSpace(GizmoSpace.Local);
     }
 
+    public void ShowGizmo(List<MovableType> types, List<GizmoAxis> axes) {
+        HideGizmo();
+
+        if (types == null || axes == null || types.Count == 0 || axes.Count == 0) {
+            Debug.LogWarning("No MovableType or GizmoAxis selected.");
+            return;
+        }
+
+        GizmoAxis axisFlags = GizmoAxis.None;
+        foreach (var ax in axes)
+            axisFlags |= ax;
+
+        foreach (var type in types) {
+            ObjectTransformGizmo gizmo = null;
+
+            switch (type) {
+                case MovableType.Position:
+                    gizmo = RTGizmosEngine.Get.CreateObjectMoveGizmo();
+                    ApplyPositionAxisConstraint(gizmo, targetObject, axisFlags);
+                    break;
+
+                case MovableType.Rotation:
+                    gizmo = RTGizmosEngine.Get.CreateObjectRotationGizmo();
+                    ApplyRotationAxisConstraint(gizmo.Gizmo.RotationGizmo, gizmo, targetObject, axisFlags);
+                    break;
+
+                case MovableType.Scale:
+                    gizmo = RTGizmosEngine.Get.CreateObjectScaleGizmo();
+                    ApplyScaleAxisConstraint(gizmo, targetObject, axisFlags);
+                    break;
+
+                case MovableType.Universal:
+                    gizmo = RTGizmosEngine.Get.CreateObjectUniversalGizmo();
+                    ApplyUniversalAxisConstraint(gizmo, targetObject, axisFlags);
+                    break;
+            }
+
+            if (gizmo != null) {
+                gizmo.SetTargetObject(targetObject);
+                gizmo.SetTransformSpace(GizmoSpace.Local);
+                transformGizmo = gizmo;
+            }
+        }
+    }
+
 
     public bool IsShowingGizmo() {
         return transformGizmo != null;
@@ -181,5 +226,6 @@ public enum GizmoAxis {
     X,
     Y,
     Z,
-    All
+    All,
+    None,
 }

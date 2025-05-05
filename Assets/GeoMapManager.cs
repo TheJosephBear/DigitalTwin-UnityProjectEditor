@@ -13,13 +13,11 @@ public class GeoMapManager : Singleton<GeoMapManager> {
         base.Awake();
         OnlineMapsReff.gameObject.SetActive(false);
         if(vcam!=null) vcam.SetActive(false);
-
-        ZoomToFitScale(100);
     }
 
     private void Update() {
-        if (OnlineMapsReff.gameObject.activeSelf) {     
-            // print("Mìøítko (pixel vs metr): 1 : " + GetCurrentMapScale());
+        if (OnlineMapsReff.gameObject.activeSelf) {
+            GetCurrentMapScale();
         }
     }
 
@@ -38,6 +36,7 @@ public class GeoMapManager : Singleton<GeoMapManager> {
         float size;
         if (OnlineMapsReff.zoom < 5) size = (_equator / (1 << OnlineMapsReff.zoom) * OnlineMapsReff.zoomFactor * OnlineMapsReff.width / OnlineMapsUtils.tileSize);
         else size = (OnlineMapsUtils.DistanceBetweenPoints(OnlineMapsReff.topLeftPosition, OnlineMapsReff.bottomRightPosition).x * 1000);
+        print("Width of the map in irl meters: " + size);
         return size / OnlineMapsReff.width;
     }
 
@@ -51,6 +50,7 @@ public class GeoMapManager : Singleton<GeoMapManager> {
             OnlineMapsReff.floatZoom += step;
             if (OnlineMapsReff.floatZoom > 20) return;
         }
+        print("Finished scale zooming, it should be 1: " + GetCurrentMapScale());
     }
 
     IEnumerator DisableVcams() {
