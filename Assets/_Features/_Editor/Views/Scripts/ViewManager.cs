@@ -3,16 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InterestPointManager : Singleton<InterestPointManager> {
-    
-    public GameObject InterestPointPrefab;
-    List<InterestPoint> interestPoints = new List<InterestPoint>();
+public class ViewManager : Singleton<ViewManager> {
+
+    public SceneType SceneToInstantiate = SceneType.Editing;
+    public GameObject ViewPointPrefab;
+    List<ViewPoint> viewPoints = new List<ViewPoint>();
  //   List<EditorObjectBase> interestPoints = new List<EditorObjectBase>();
-    public Vector3 interestPointSpawnPosition;
+    public Vector3 viewPointSpawnPosition;
     public GameObject cameraViewUI;
     public Camera previewCam;
 
-    InterestPoint currentInterestPoint;
+    ViewPoint currentViewPoint;
     public bool isActivelyShowingCam = false;
 
     protected override void Awake() {
@@ -23,47 +24,47 @@ public class InterestPointManager : Singleton<InterestPointManager> {
         ToggleCameraPreview(false);
     }
 
-    public GameObject CreateNewInterestPoint() {
-        InterestPoint newInterestPoint = SceneLoadingManager.Instance.InstantiateObjectInScene(InterestPointPrefab, interestPointSpawnPosition, SceneType.Editing).GetComponent<InterestPoint>();
-        interestPoints.Add(newInterestPoint);
+    public GameObject CreateNewViewPoint() {
+        ViewPoint newInterestPoint = SceneLoadingManager.Instance.InstantiateObjectInScene(ViewPointPrefab, viewPointSpawnPosition, SceneToInstantiate).GetComponent<ViewPoint>();
+        viewPoints.Add(newInterestPoint);
         newInterestPoint.Deactivate();
         return newInterestPoint.gameObject;
     }
 
-    public void SetActiveInterestPoint(InterestPoint ip) {
-        currentInterestPoint = ip;
+    public void SetActiveViewPoint(ViewPoint ip) {
+        currentViewPoint = ip;
         ToggleCameraPreview(true);
     }
 
-    public void ActivateInterestPoint() {
+    public void ActivateViewPoint() {
         isActivelyShowingCam = true;
-        currentInterestPoint?.Activate();
+        currentViewPoint?.Activate();
     }
 
-    public void DeactivateInterestPoint() {
+    public void DeactivateViewPoint() {
         isActivelyShowingCam = false;
-        currentInterestPoint?.Deactivate();
+        currentViewPoint?.Deactivate();
     }
 
-    public List<InterestPoint> GetInterestPoints() {
-        return interestPoints;
+    public List<ViewPoint> GetViewPoints() {
+        return viewPoints;
     }
 
     public void ClearEverything() {
-        DeactivateInterestPoint();
-        SetActiveInterestPoint(null);
-        Utilities.DestroyAllGameObjects(interestPoints);
+        DeactivateViewPoint();
+        SetActiveViewPoint(null);
+        Utilities.DestroyAllGameObjects(viewPoints);
     }
 
     public void ToggleCameraPreview(bool toggleOn) {
         if(cameraViewUI == null || previewCam == null) return;
 
         if (toggleOn) {
-            if (currentInterestPoint == null) return;
+            if (currentViewPoint == null) return;
             // Move the camera to the current vcam - must be continous so child
-            previewCam.transform.SetParent(currentInterestPoint.gameObject.transform);
+            previewCam.transform.SetParent(currentViewPoint.gameObject.transform);
             previewCam.transform.localPosition = new Vector3(0, 0, 0);
-            previewCam.transform.rotation = currentInterestPoint.transform.rotation;
+            previewCam.transform.rotation = currentViewPoint.transform.rotation;
         }
         // Toggle UI and cam
         cameraViewUI.SetActive(toggleOn);
@@ -73,7 +74,7 @@ public class InterestPointManager : Singleton<InterestPointManager> {
     public void FillEditorObjectUI() {
     //    print("velikost pøed: "+interestPoints.Count);
         List<EditorObjectBase> abstractList = new List<EditorObjectBase>();
-        foreach (InterestPoint point in interestPoints) {
+        foreach (ViewPoint point in viewPoints) {
             EditorObjectBase abstractReff = point;
             abstractList.Add(point);
         }
@@ -83,7 +84,7 @@ public class InterestPointManager : Singleton<InterestPointManager> {
 
     public SerializableInterestPointManager Serialize() { 
         List<SerializableInterestPoint> serializablePoints = new List<SerializableInterestPoint>();
-        foreach (var interestPoint in interestPoints) {
+        foreach (var interestPoint in viewPoints) {
             SerializableInterestPoint instantiated = interestPoint.Serialize();
             serializablePoints.Add(instantiated);
         }
@@ -101,7 +102,7 @@ public class InterestPointManager : Singleton<InterestPointManager> {
         }
 
         foreach (var serializedInterestPoint in serializedManager.interestPoints) {
-            InterestPoint iPoint = CreateNewInterestPoint().GetComponent<InterestPoint>();
+            ViewPoint iPoint = CreateNewViewPoint().GetComponent<ViewPoint>();
             iPoint.Deserialize(serializedInterestPoint);
         }
     }

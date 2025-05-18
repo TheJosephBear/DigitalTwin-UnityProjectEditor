@@ -40,11 +40,17 @@ public class MapManager : Singleton<MapManager> {
         return _mapVariants.Count > 0;
     }
 
+    public bool IsMapUploaded() {
+        return _baseMap != null;
+    }
+
     public List<MapVariant> GetVariants() {
         var allVariants = new List<MapVariant>(_mapVariants);
         if (_baseMap != null) allVariants.Add(_baseMap);
         return allVariants;
     }
+
+    #region Serialization
 
     public SerializableMap Serialize() {
         if (_baseMap == null) return null;
@@ -75,6 +81,9 @@ public class MapManager : Singleton<MapManager> {
             UploadMapVariant(asset);
         }
     }
+
+    #endregion
+
 }
 
 

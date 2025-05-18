@@ -23,20 +23,12 @@ public class EditorHUDui : UIBehaviour {
     }
 
     public void onPridatKameru() {
-        InterestPointManager.Instance.CreateNewInterestPoint();
+        ViewManager.Instance.CreateNewViewPoint();
+        GetComponent<ViewPointUI>()?.UpdateViewButtonList();
     }
 
     public void onPrepnoutNaKameru() {
-        if (EditorManager.Instance.ViewModeCurrent == EditorViewMode.classic) {
-            EditorManager.Instance.ChangeEditorViewMode(EditorViewMode.showingOffCamera);
-        } else if (EditorManager.Instance.ViewModeCurrent == EditorViewMode.showingOffCamera) {
-            EditorManager.Instance.ChangeEditorViewMode(EditorViewMode.classic);
-        }
-    }
-
-    public void OnKamery() {
-        EditorObjectManager.Instance.ToggleUI(true);
-        InterestPointManager.Instance.FillEditorObjectUI();
+        EditorManager.Instance.ToggleCameraViewMode();
     }
 
     public void OnMapy() {
@@ -45,50 +37,28 @@ public class EditorHUDui : UIBehaviour {
 
 
     public void onProjekt() {
-        AudioManager.Instance.PlaySound(SoundType.click);
   //      UImanager.Instance.ShowUI(UIType.ProjectSettings);
     }
 
     public void onDekorace() {
-        AudioManager.Instance.PlaySound(SoundType.click);
   //      UImanager.Instance.ShowUI(UIType.DecorationMain);
     }
 
     public void onMesto() {
-        AudioManager.Instance.PlaySound(SoundType.click);
-        UImanager.Instance.ShowUI(UIType.MapUI);
+
     }
 
     public void onProstredi() {
-        AudioManager.Instance.PlaySound(SoundType.click);
         print("not supported yet!");
         //    UImanager.Instance.ShowUI(UIType.ProjectSettings);
     }
 
     public void onUlozit() {
-        AudioManager.Instance.PlaySound(SoundType.click);
         ProjectManager.Instance.SaveProject();
     }
 
     public void onNahrat() {
-        AudioManager.Instance.PlaySound(SoundType.click);
         print("not supported yet!");
-    }
-
-
-    public void onPositionGizmo() {
-        AudioManager.Instance.PlaySound(SoundType.click);
-        //  GizmoController.Instance.SelectMovement();
-    }
-
-    public void onRotationGizmo() {
-        AudioManager.Instance.PlaySound(SoundType.click);
-        //    GizmoController.Instance.SelectRotation();
-    }
-
-    public void onScaleGizmo() {
-        AudioManager.Instance.PlaySound(SoundType.click);
-        //   GizmoController.Instance.SelectScale();
     }
 
     public void onLeave() {

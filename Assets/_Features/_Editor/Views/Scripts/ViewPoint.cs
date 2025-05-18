@@ -3,16 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InterestPoint : EditorObjectBase, IClickable {
+public class ViewPoint : EditorObjectBase, IClickable {
 
     public GameObject vcam;
 
     public void OnClick() {
-    //    print("im clicked and the editor viewmode is: "+ EditorManager.Instance.ViewModeCurrent);
         if (EditorManager.Instance.ViewModeCurrent != EditorViewMode.showingOffCamera) {
             GizmoManager.Instance.SetTargetGameObject(gameObject);
             GizmoManager.Instance.ShowGizmo(MovableType.Universal);
-            InterestPointManager.Instance.SetActiveInterestPoint(this);
+            ViewManager.Instance.SetActiveViewPoint(this);
         }
     }
 
@@ -38,19 +37,19 @@ public class InterestPoint : EditorObjectBase, IClickable {
     }
 
     public void OnClickDown() {
-        throw new NotImplementedException();
+
     }
 
     public void OnClickUp() {
-        throw new NotImplementedException();
+
     }
 
     public void OnHover() {
-        throw new NotImplementedException();
+
     }
 
     public void OnUnhover() {
-        throw new NotImplementedException();
+
     }
 }
 

@@ -18,6 +18,14 @@ public class EditorManager : Singleton<EditorManager> {
 
     }
 
+    public void ToggleCameraViewMode() {
+        if (ViewModeCurrent == EditorViewMode.classic) {
+            ChangeEditorViewMode(EditorViewMode.showingOffCamera);
+        } else if (ViewModeCurrent == EditorViewMode.showingOffCamera) {
+            ChangeEditorViewMode(EditorViewMode.classic);
+        }
+    }
+
     public void ChangeEditorViewMode(EditorViewMode viewMode) {
         ViewModeCurrent = viewMode;
         switch (viewMode) {
@@ -36,7 +44,7 @@ public class EditorManager : Singleton<EditorManager> {
     void ViewModeClassic() {
         UImanager.Instance.HideUI(UIType.TwoMapsCameraView);
         if (TwoCameraInstantiated != null) Destroy(TwoCameraInstantiated);
-        InterestPointManager.Instance.DeactivateInterestPoint();
+        ViewManager.Instance.DeactivateViewPoint();
     }
 
     void ViewModeTwoMaps() {
@@ -49,7 +57,7 @@ public class EditorManager : Singleton<EditorManager> {
     }
 
     void ViewModeCameraShowing() {
-        InterestPointManager.Instance.ActivateInterestPoint();
+        ViewManager.Instance.ActivateViewPoint();
     }
 
 

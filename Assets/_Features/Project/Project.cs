@@ -22,7 +22,7 @@ public class Project : MonoBehaviour {
         AssetManager.Instance.ClearEverything();
         DecorationManager.Instance.ClearEverything();
         MapManager.Instance.ClearEverything();
-        InterestPointManager.Instance.ClearEverything();
+        ViewManager.Instance.ClearEverything();
     }
 
     // Serialization for saving purposes
@@ -31,7 +31,7 @@ public class Project : MonoBehaviour {
             projectName = ProjectName,
             modelAssets = AssetManager.Instance.SerializeAssetList(),
             map = MapManager.Instance.Serialize(),
-            interestPointManager = InterestPointManager.Instance.Serialize()
+            interestPointManager = ViewManager.Instance.Serialize()
        //     decorationPresets = DecorationManager.Instance.SerializeDecorationPresets(),
        //     decorationsInstantiated = DecorationManager.Instance.SerializeDecorationsInstantiated()
         };
@@ -64,7 +64,7 @@ public class Project : MonoBehaviour {
         print(MapManager.Instance.name);
 
         MapManager.Instance.Deserialize(serializedProject.map);
-        InterestPointManager.Instance.Deserialize(serializedProject.interestPointManager);
+        ViewManager.Instance.Deserialize(serializedProject.interestPointManager);
 
         tcs.SetResult(true); // Complete the task when everything is done
     }
