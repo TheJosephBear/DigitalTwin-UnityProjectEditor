@@ -76,8 +76,7 @@ public class DropdownMultiview : MonoBehaviour {
         return false;
     }
 
-    private void OnItemSelectedByIndex(int index) {
-        print("calling index " + index);
+    private void OnItemSelectedByIndex(int index) { 
         if (_mapVariants == null || index < 0 || index >= _mapVariants.Count) {
             Debug.LogWarning("Invalid index selected from dropdown.");
             return;

@@ -51,7 +51,7 @@ public class MapDisplayManager : Singleton<MapDisplayManager> {
                 break;
         }
 
-        GameObject cloneGO = Instantiate(originalVariant.gameObject, MapManager.Instance.mapSpawnPosition, Quaternion.identity);
+        GameObject cloneGO = SceneLoadingManager.Instance.InstantiateObjectInScene(originalVariant.gameObject, MapManager.Instance.mapSpawnPosition, SceneType.Editing);  
 
         MapVariant clone = cloneGO.AddComponent<MapVariant>();
         clone.ModelAsset = originalVariant.ModelAsset;
