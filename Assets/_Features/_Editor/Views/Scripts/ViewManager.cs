@@ -54,6 +54,7 @@ public class ViewManager : Singleton<ViewManager> {
         DeactivateViewPoint();
         SetActiveViewPoint(null);
         Utilities.DestroyAllGameObjects(viewPoints);
+        FindAnyObjectByType<ViewPointUI>().ClearViewButtonList();
     }
 
     public void ToggleCameraPreview(bool toggleOn) {

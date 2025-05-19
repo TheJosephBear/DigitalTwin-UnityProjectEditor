@@ -16,5 +16,6 @@ public class GeoSearchResultButton : MonoBehaviour {
 
     public void OnClick() {
         OnlineMaps.instance.SetPositionAndZoom(longitude, latitude, 16f);
+        FindAnyObjectByType<GeoSearch>().ClearResults();
     }
 }

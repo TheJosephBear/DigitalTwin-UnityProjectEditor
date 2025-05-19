@@ -13,11 +13,7 @@ public class ViewPointUI : MonoBehaviour {
     }
 
     public void UpdateViewButtonList() {
-        foreach (Transform child in ScrollViewContentRefference.transform) {
-            if (child.GetComponent<ScrolviewAlwaysLastItem>() == null) {
-                Destroy(child.gameObject);
-            }
-        }
+        ClearViewButtonList();
 
         foreach (ViewPoint vp in ViewManager.Instance.GetViewPoints()) {
             ViewHUDButton buttonScript = Instantiate(ViewPointButtonPrefab, ScrollViewContentRefference.transform).GetComponent<ViewHUDButton>();
@@ -25,7 +21,11 @@ public class ViewPointUI : MonoBehaviour {
         }
     }
 
-    void AddViewButtonToList() {
-
+    public void ClearViewButtonList() {
+        foreach (Transform child in ScrollViewContentRefference.transform) {
+            if (child.GetComponent<ScrolviewAlwaysLastItem>() == null) {
+                Destroy(child.gameObject);
+            }
+        }
     }
 }

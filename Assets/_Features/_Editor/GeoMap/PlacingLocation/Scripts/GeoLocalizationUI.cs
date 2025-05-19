@@ -33,11 +33,11 @@ public class GeoLocalizationUI : UIBehaviour {
     }
 
     public void OnLockGeoMap() {
-        GeoMapLocalizationManager.Instance.EnterLockingPhase();
+        GeoMapLocalizationManager.Instance.LockGeoMap();
     }
 
     public void OnPlaceMapModel() {
-        GeoMapLocalizationManager.Instance.EnterPlacingPhase();
+        GeoMapLocalizationManager.Instance.PlaceMapModel();
     }
 
     public void OnExit() {

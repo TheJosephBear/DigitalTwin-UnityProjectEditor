@@ -55,7 +55,7 @@ public class GeoSearch : MonoBehaviour {
             return;
         }
 
-        ClearOldResults();
+        ClearResults();
 
         lastTopResult = null;
 
@@ -69,7 +69,7 @@ public class GeoSearch : MonoBehaviour {
         }
     }
 
-    void ClearOldResults() {
+    public void ClearResults() {
         foreach (Transform child in resultButtonContainerRefference.transform) {
             Destroy(child.gameObject);
         }

@@ -45,6 +45,10 @@ public class GeoMapManager : Singleton<GeoMapManager> {
         OnlineMapsReff.GetComponent<OnlineMapsTileSetControl>().enabled = !OnlineMapsReff.GetComponent<OnlineMapsTileSetControl>().enabled;
     }
 
+    public void ToggleGeoMapControl(bool toggleOn) {
+        OnlineMapsReff.GetComponent<OnlineMapsTileSetControl>().enabled = toggleOn;
+    }
+
     // Returns maps current map to ground scale as an int (1 : returned value)
     public float GetCurrentMapScale() {
         float size;

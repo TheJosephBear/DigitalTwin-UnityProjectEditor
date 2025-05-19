@@ -25,17 +25,21 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
 
     public void Setup() {
         _rtgReff.gameObject.SetActive(false);
+        ToggleGeoMapZoom(true);
+        GeoMapManager.Instance.ToggleGeoMapControl(true);
         // Create base map copy
-        if (_baseMapCopy == null) {
+        if (_baseMapCopy == null && MapManager.Instance.IsBaseMapUploaded()) {
             MapVariant baseMapReff = MapManager.Instance.GetBaseMap();
             if (!baseMapReff.IsVisible) {
                 baseMapReff.ToggleMeshVisibility(true);
             }
             _baseMapCopy = SceneLoadingManager.Instance.InstantiateObjectInScene(MapManager.Instance.GetBaseMap().ModelAsset.ModelGameObject, MapCenterPosition, ActiveSceneType);
+            Movable movableScript = _baseMapCopy.AddComponent<Movable>();
+            movableScript.ShownAxis = GizmoAxis.All;
+            movableScript.MovableType = MovableType.Universal;
+            _baseMapCopy.AddComponent<BoxCollider>().size = new Vector3(10, 10, 10);
             _baseMapCopy.SetActive(false);
             baseMapReff.ToggleMeshVisibility(false);
-        } else {
-        
         }
     }
 
@@ -46,28 +50,22 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
     }
 
 
-    public void EnterLockingPhase() {
-    //    _baseMapCopy?.SetActive(true);
-   //     GeoMapManager.Instance.OnlineMapsReff.GetComponent<OnlineMapsTileSetControl>().allowZoom = true;
-    }
-
-    public void EnterPlacingPhase() {
-        _rtgReff.gameObject.SetActive(true);
-        //     LockGeoMapZoom();
-        GeoMapManager.Instance.ToggleGeoMapControl();
+    public void LockGeoMap() {
+        ToggleGeoMapZoom(false);
+        GeoMapManager.Instance.ToggleGeoMapControl(false);
         _baseMapCopy.SetActive(true);
-        print("Should be on");
+        _rtgReff.gameObject.SetActive(true);
     }
 
-    public void SaveLocalizationSettings() {
-        SaveGeoMapPosition();
+    public void PlaceMapModel() {
+        SaveGeoMapData();
     }
 
-    void LockGeoMapZoom() {
-        GeoMapManager.Instance.OnlineMapsReff.GetComponent<OnlineMapsTileSetControl>().allowZoom = !GeoMapManager.Instance.OnlineMapsReff.GetComponent<OnlineMapsTileSetControl>().allowZoom;
+    void ToggleGeoMapZoom(bool toggleOn) {
+        GeoMapManager.Instance.OnlineMapsReff.GetComponent<OnlineMapsTileSetControl>().allowZoom = toggleOn;
     }
 
-    void SaveGeoMapPosition() {
+    void SaveGeoMapData() {
         double lng, lat;
         OnlineMapsTileSetControl.instance.GetCoordsByWorldPosition(_baseMapCopy.transform.position, out lng, out lat);
 
