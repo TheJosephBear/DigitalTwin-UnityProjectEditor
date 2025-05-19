@@ -8,7 +8,7 @@ public class ViewPoint : EditorObjectBase, IClickable {
     public GameObject vcam;
 
     public void OnClick() {
-        if (EditorManager.Instance.ViewModeCurrent != EditorViewMode.showingOffCamera) {
+        if (EditorManager.Instance.EditorModeCurrent != EditorMode.showingOffCamera) {
             GizmoManager.Instance.SetTargetGameObject(gameObject);
             GizmoManager.Instance.ShowGizmo(MovableType.Universal);
             ViewManager.Instance.SetActiveViewPoint(this);

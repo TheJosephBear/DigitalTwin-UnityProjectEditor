@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MapManager : Singleton<MapManager> {
@@ -17,6 +18,7 @@ public class MapManager : Singleton<MapManager> {
         addedMap.ModelAsset = newMap;
         addedMap.gameObject.SetActive(true);
         addedMap.IsBaseMap = true;
+        addedMap.AddComponent<Movable>();
         _baseMap = addedMap;
         SpawnMap();
     }

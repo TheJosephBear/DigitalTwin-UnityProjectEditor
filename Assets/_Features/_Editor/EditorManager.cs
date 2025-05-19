@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class EditorManager : Singleton<EditorManager> {
     /// <summary>
-    /// Controls the state of the Editor itself
+    /// Controls the state of the Editor
     /// </summary>
 
     public GameObject TwoCameraPrefab;
     public Vector3 TwoCameraPrefabSpawnPosition;
     GameObject TwoCameraInstantiated;
 
-    public EditorViewMode ViewModeCurrent { get; private set; }
+    public EditorMode EditorModeCurrent { get; private set; }
 
     protected override void Awake() {
         base.Awake();
@@ -19,23 +19,23 @@ public class EditorManager : Singleton<EditorManager> {
     }
 
     public void ToggleCameraViewMode() {
-        if (ViewModeCurrent == EditorViewMode.classic) {
-            ChangeEditorViewMode(EditorViewMode.showingOffCamera);
-        } else if (ViewModeCurrent == EditorViewMode.showingOffCamera) {
-            ChangeEditorViewMode(EditorViewMode.classic);
+        if (EditorModeCurrent == EditorMode.classic) {
+            ChangeEditorMode(EditorMode.showingOffCamera);
+        } else if (EditorModeCurrent == EditorMode.showingOffCamera) {
+            ChangeEditorMode(EditorMode.classic);
         }
     }
 
-    public void ChangeEditorViewMode(EditorViewMode viewMode) {
-        ViewModeCurrent = viewMode;
+    public void ChangeEditorMode(EditorMode viewMode) {
+        EditorModeCurrent = viewMode;
         switch (viewMode) {
-            case EditorViewMode.classic:
+            case EditorMode.classic:
                 ViewModeClassic();
                 break;
-            case EditorViewMode.twoMaps:
+            case EditorMode.twoMaps:
                 ViewModeTwoMaps();
                 break;
-            case EditorViewMode.showingOffCamera:
+            case EditorMode.showingOffCamera:
                 ViewModeCameraShowing();
                 break;
         }
@@ -63,8 +63,12 @@ public class EditorManager : Singleton<EditorManager> {
 
 }
 
-public enum EditorViewMode {
+public enum EditorMode {
     classic,
     twoMaps,
-    showingOffCamera
+    showingOffCamera,
+    // New
+    Freecam,
+    GeoLocalization,
+    View
 }

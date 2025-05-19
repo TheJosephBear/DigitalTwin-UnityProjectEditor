@@ -7,6 +7,11 @@ public class ViewPointUI : MonoBehaviour {
     public GameObject ViewPointButtonPrefab;
     public GameObject ScrollViewContentRefference;
 
+    public void OnAddView() {
+        ViewManager.Instance.CreateNewViewPoint();
+        UpdateViewButtonList();
+    }
+
     public void UpdateViewButtonList() {
         foreach (Transform child in ScrollViewContentRefference.transform) {
             if (child.GetComponent<ScrolviewAlwaysLastItem>() == null) {

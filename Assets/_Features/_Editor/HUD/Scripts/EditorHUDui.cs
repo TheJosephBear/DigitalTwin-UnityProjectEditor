@@ -9,61 +9,47 @@ public class EditorHUDui : UIBehaviour {
         UImanager.Instance.SetRaycasterFromLatestUI();
     }
 
+    #region ButtonFunctions
+
+    public void OnMapUpload() {
+        UImanager.Instance.ShowUI(UIType.MapUI);
+    }
+
     public void OnGeoMap() {
         GeoMapManager.Instance.ToggleMapOnGeoMap();
     }
 
-    public void onDveMapy() {
+    public void OnTwoMapView() {
         //Togle zobrazeniMapy
-        if (EditorManager.Instance.ViewModeCurrent == EditorViewMode.classic) {
-            EditorManager.Instance.ChangeEditorViewMode(EditorViewMode.twoMaps);
-        } else if (EditorManager.Instance.ViewModeCurrent == EditorViewMode.twoMaps) {
-            EditorManager.Instance.ChangeEditorViewMode(EditorViewMode.classic);
+        if (EditorManager.Instance.EditorModeCurrent == EditorMode.classic) {
+            EditorManager.Instance.ChangeEditorMode(EditorMode.twoMaps);
+        } else if (EditorManager.Instance.EditorModeCurrent == EditorMode.twoMaps) {
+            EditorManager.Instance.ChangeEditorMode(EditorMode.classic);
         }
     }
 
-    public void onPridatKameru() {
-        ViewManager.Instance.CreateNewViewPoint();
-        GetComponent<ViewPointUI>()?.UpdateViewButtonList();
+    public void OnSave() {
+        ProjectManager.Instance.SaveProject();
     }
 
+    public void OnLeave() {
+        ProjectManager.Instance.CloseProject();
+    }
+
+    #endregion
+
+    /*
+     
     public void onPrepnoutNaKameru() {
         EditorManager.Instance.ToggleCameraViewMode();
     }
 
-    public void OnMapy() {
-
-    }
-
-
-    public void onProjekt() {
-  //      UImanager.Instance.ShowUI(UIType.ProjectSettings);
-    }
+    
 
     public void onDekorace() {
   //      UImanager.Instance.ShowUI(UIType.DecorationMain);
     }
 
-    public void onMesto() {
-
-    }
-
-    public void onProstredi() {
-        print("not supported yet!");
-        //    UImanager.Instance.ShowUI(UIType.ProjectSettings);
-    }
-
-    public void onUlozit() {
-        ProjectManager.Instance.SaveProject();
-    }
-
-    public void onNahrat() {
-        print("not supported yet!");
-    }
-
-    public void onLeave() {
-        ProjectManager.Instance.CloseProject();
-    }
 
     /*
     public void onUploadMap() {
