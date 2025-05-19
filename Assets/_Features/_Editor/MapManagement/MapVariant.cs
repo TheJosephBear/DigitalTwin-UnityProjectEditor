@@ -1,14 +1,12 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.UIElements.ToolbarMenu;
 
 public class MapVariant : MonoBehaviour {
 
     private string _name = "";
     private bool _isBaseMap = false;
     private bool _isLocked = false;
+    private bool _isVisible = false;
     private ModelAsset _modelAsset;
 
     public void ToggleMeshVisibility(bool toggleOn) {
@@ -18,6 +16,7 @@ public class MapVariant : MonoBehaviour {
                 child.GetComponent<MeshRenderer>().enabled = toggleOn;
             }
         }
+        _isVisible = toggleOn;
     }
 
     public void SetMeshLayer(MapPriority priority) {
@@ -67,6 +66,7 @@ public class MapVariant : MonoBehaviour {
 
     // isBaseMap
     public bool IsBaseMap { get => _isBaseMap; set => _isBaseMap = value; }
+    public bool IsVisible { get => _isVisible; private set => _isVisible = value; }
     public string Name { get => _name; set => _name = value; }
 
     #endregion

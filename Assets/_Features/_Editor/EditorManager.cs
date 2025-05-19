@@ -9,7 +9,6 @@ public class EditorManager : Singleton<EditorManager> {
 
     public GameObject TwoCameraPrefab;
     public Vector3 TwoCameraPrefabSpawnPosition;
-    GameObject TwoCameraInstantiated;
 
     public EditorMode EditorModeCurrent { get; private set; }
 
@@ -18,57 +17,71 @@ public class EditorManager : Singleton<EditorManager> {
 
     }
 
-    public void ToggleCameraViewMode() {
-        if (EditorModeCurrent == EditorMode.classic) {
-            ChangeEditorMode(EditorMode.showingOffCamera);
-        } else if (EditorModeCurrent == EditorMode.showingOffCamera) {
-            ChangeEditorMode(EditorMode.classic);
+    public void ToggleViewMode() {
+        if (EditorModeCurrent == EditorMode.Freecam) {
+            ChangeEditorMode(EditorMode.View);
+        } else if (EditorModeCurrent == EditorMode.View) {
+            ChangeEditorMode(EditorMode.Freecam);
         }
     }
 
-    public void ChangeEditorMode(EditorMode viewMode) {
-        EditorModeCurrent = viewMode;
-        switch (viewMode) {
-            case EditorMode.classic:
-                ViewModeClassic();
+    public void ChangeEditorMode(EditorMode editorMode) {
+        EditorModeCurrent = editorMode;
+        switch (editorMode) {
+            case EditorMode.Freecam:
+                EnterModeFreecam();
                 break;
-            case EditorMode.twoMaps:
-                ViewModeTwoMaps();
+            case EditorMode.GeoLocalization:
+                EnterModeGeolocation();
                 break;
-            case EditorMode.showingOffCamera:
-                ViewModeCameraShowing();
+            case EditorMode.TwoMaps:
+                EnterModeTwoCameras();
+                break;
+            case EditorMode.View:
+                EnterModeView();
                 break;
         }
     }
 
-    void ViewModeClassic() {
-        UImanager.Instance.HideUI(UIType.TwoMapsCameraView);
-        if (TwoCameraInstantiated != null) Destroy(TwoCameraInstantiated);
+    #region Editor mode logic
+
+    void EnterModeFreecam() {
+        UImanager.Instance.ShowUI(UIType.EditorHUD);
+  //      if (TwoCameraInstantiated != null) Destroy(TwoCameraInstantiated);
         ViewManager.Instance.DeactivateViewPoint();
     }
 
-    void ViewModeTwoMaps() {
-        if (!MapManager.Instance.hasVariant())
-            return;
-
-        TwoCameraInstantiated = SceneLoadingManager.Instance.InstantiateObjectInScene(TwoCameraPrefab, TwoCameraPrefabSpawnPosition, SceneType.Editing);
-        UImanager.Instance.ShowUI(UIType.TwoMapsCameraView);
-        FindAnyObjectByType<TwoMapsUI>().Initialize();
+    void EnterModeGeolocation() {
+        if (MapManager.Instance.IsBaseMapUploaded()) {
+            UImanager.Instance.HideUI(UIType.EditorHUD);
+            MapManager.Instance.ToggleMapVisibility();
+            GeoMapManager.Instance.ActivateGeoLocalization();
+        } else {
+            MessageDisplayManager.Instance.DisplayMessage("Upload a map model first!");
+        }
     }
 
-    void ViewModeCameraShowing() {
+    void EnterModeTwoCameras() {
+        if (!MapManager.Instance.hasVariant()) {
+            MessageDisplayManager.Instance.DisplayMessage("No variants added!");
+            return;
+        }
+
+        UImanager.Instance.HideUI(UIType.EditorHUD);
+        MapDisplayManager.Instance.EnterMultiView();
+    }
+
+    void EnterModeView() {
         ViewManager.Instance.ActivateViewPoint();
     }
 
+    #endregion
 
 }
 
 public enum EditorMode {
-    classic,
-    twoMaps,
-    showingOffCamera,
-    // New
     Freecam,
     GeoLocalization,
-    View
+    TwoMaps,
+    View,
 }

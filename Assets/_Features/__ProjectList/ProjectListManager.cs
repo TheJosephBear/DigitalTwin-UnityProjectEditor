@@ -42,6 +42,7 @@ public class ProjectListManager : Singleton<ProjectListManager> {
 
                 Debug.Log("Project created: " + response);
                 FetchAndRefreshProjectList(() => {
+                    /* IDK WHY BUT REMOVING THIS FIXES THE PROJECT CREATION FATAL ERROR
                     // Simulate opening and saving the project
                     var createdProject = projectRefferenceList.Find(x => x.projectName == newProjectName);
                     if (createdProject == null) {
@@ -49,6 +50,7 @@ public class ProjectListManager : Singleton<ProjectListManager> {
                     }
                     ProjectManager.Instance.OpenProject(createdProject);
                     ProjectManager.Instance.SaveProject();
+                    */
                 });
             });
         });

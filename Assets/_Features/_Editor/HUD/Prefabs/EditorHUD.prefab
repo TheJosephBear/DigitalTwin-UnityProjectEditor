@@ -180,7 +180,7 @@ RectTransform:
   - {fileID: 7422552887245366280}
   - {fileID: 2589710397935556440}
   m_Father: {fileID: 7978733768550033811}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1529,7 +1529,7 @@ RectTransform:
   m_Children:
   - {fileID: 4360689919608867872}
   m_Father: {fileID: 7978733768550033811}
-  m_RootOrder: 6
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3447,7 +3447,7 @@ RectTransform:
   m_Children:
   - {fileID: 7794580857768350261}
   m_Father: {fileID: 7978733768550033811}
-  m_RootOrder: 5
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -5668,7 +5668,7 @@ RectTransform:
   - {fileID: 6771719925197311677}
   - {fileID: 6771719925112880750}
   m_Father: {fileID: 7978733768550033811}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -6371,7 +6371,7 @@ RectTransform:
   m_Children:
   - {fileID: 947558980726602669}
   m_Father: {fileID: 7978733768550033811}
-  m_RootOrder: 2
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
@@ -6794,13 +6794,13 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 5464342152892935472}
+  - {fileID: 7866267603474616525}
+  - {fileID: 721491502213146070}
   - {fileID: 6771719924298217864}
   - {fileID: 6771719925461124759}
   - {fileID: 6771719924542683533}
   - {fileID: 6771719925310263810}
-  - {fileID: 5464342152892935472}
-  - {fileID: 7866267603474616525}
-  - {fileID: 721491502213146070}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7309,7 +7309,7 @@ RectTransform:
   - {fileID: 6771719925481304482}
   - {fileID: 6771719925768813218}
   m_Father: {fileID: 7978733768550033811}
-  m_RootOrder: 3
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -7500,7 +7500,7 @@ RectTransform:
   - {fileID: 6771719924490136187}
   - {fileID: 6771719925513736649}
   m_Father: {fileID: 7978733768550033811}
-  m_RootOrder: 1
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -10507,7 +10507,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1863190268550901723, guid: 393b80a1e9bbb6848ae0af8fdb2ac486, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: onLeave
+      value: OnLeave
       objectReference: {fileID: 0}
     - target: {fileID: 1863190268550901723, guid: 393b80a1e9bbb6848ae0af8fdb2ac486, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -10653,7 +10653,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1863190268550901723, guid: 393b80a1e9bbb6848ae0af8fdb2ac486, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: onUlozit
+      value: OnSave
       objectReference: {fileID: 0}
     - target: {fileID: 1863190268550901723, guid: 393b80a1e9bbb6848ae0af8fdb2ac486, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -10799,7 +10799,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1863190268550901723, guid: 393b80a1e9bbb6848ae0af8fdb2ac486, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: onDveMapy
+      value: OnTwoMapView
       objectReference: {fileID: 0}
     - target: {fileID: 1863190268550901723, guid: 393b80a1e9bbb6848ae0af8fdb2ac486, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName

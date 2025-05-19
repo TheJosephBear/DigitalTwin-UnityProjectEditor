@@ -3,8 +3,35 @@ using UnityEngine;
 
 public class MapDisplayManager : Singleton<MapDisplayManager> {
 
+    public GameObject MultiviewCamerasPrefab;
+    public Vector3 MultiviewCamerasSpawnPosition;
+
+    private MultiviewUI _multiviewUIRefference;
+    private GameObject _multivewCamerasRefference;
     private MapVariant _primaryMapInstance;
     private MapVariant _secondaryMapInstance;
+
+    public void EnterMultiView() {
+        if (_multiviewUIRefference == null) {
+            _multiviewUIRefference = FindAnyObjectByType<MultiviewUI>();
+        }
+
+        if(_multivewCamerasRefference == null) {
+            _multivewCamerasRefference = SceneLoadingManager.Instance.InstantiateObjectInScene(MultiviewCamerasPrefab, MultiviewCamerasSpawnPosition, SceneType.Editing);
+        } else {
+            _multivewCamerasRefference.SetActive(true);
+        }
+        
+        UImanager.Instance.ShowUI(UIType.TwoMapsCameraView);
+    }
+
+    public void Exit() {
+        _multivewCamerasRefference.SetActive(false);
+        UImanager.Instance.HideUI(UIType.TwoMapsCameraView);
+        EditorManager.Instance.ChangeEditorMode(EditorMode.Freecam);
+    }
+
+
 
     public void ShowVariant(MapVariant originalVariant, MapPriority priority) {
         if (originalVariant == null) {

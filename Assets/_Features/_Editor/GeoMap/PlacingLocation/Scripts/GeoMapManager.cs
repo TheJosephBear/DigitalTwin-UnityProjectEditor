@@ -15,16 +15,30 @@ public class GeoMapManager : Singleton<GeoMapManager> {
         if(vcam!=null) vcam.SetActive(false);
     }
 
-    private void Update() {
-        if (OnlineMapsReff.gameObject.activeSelf) {
-            GetCurrentMapScale();
-        }
+
+    public void ActivateGeoLocalization() {
+        UImanager.Instance.ShowUI(UIType.GeoLocalizationUI);
+        ToggleGeoMap(true);
+        GeoMapLocalizationManager.Instance.Setup();
     }
 
-    public void ToggleMapOnGeoMap() {
+    public void ExitGeoLocalization() {
+        UImanager.Instance.HideUI(UIType.GeoLocalizationUI);
+        ToggleGeoMap(false);
+        GeoMapLocalizationManager.Instance.Exit();
+        EditorManager.Instance.ChangeEditorMode(EditorMode.Freecam);
+    }
+
+
+
+    public void ToggleGeoMap() {
         OnlineMapsReff.gameObject.SetActive(!OnlineMapsReff.gameObject.activeSelf);
         if (vcam != null) vcam.SetActive(!vcam.activeSelf);
-        StartCoroutine(DisableVcams());
+    }
+
+    public void ToggleGeoMap(bool toggleOn) {
+        OnlineMapsReff.gameObject.SetActive(toggleOn);
+        if (vcam != null) vcam.SetActive(toggleOn);
     }
 
     public void ToggleGeoMapControl() {
@@ -36,7 +50,6 @@ public class GeoMapManager : Singleton<GeoMapManager> {
         float size;
         if (OnlineMapsReff.zoom < 5) size = (_equator / (1 << OnlineMapsReff.zoom) * OnlineMapsReff.zoomFactor * OnlineMapsReff.width / OnlineMapsUtils.tileSize);
         else size = (OnlineMapsUtils.DistanceBetweenPoints(OnlineMapsReff.topLeftPosition, OnlineMapsReff.bottomRightPosition).x * 1000);
-        print("Width of the map in irl meters: " + size);
         return size / OnlineMapsReff.width;
     }
 
@@ -50,14 +63,6 @@ public class GeoMapManager : Singleton<GeoMapManager> {
             OnlineMapsReff.floatZoom += step;
             if (OnlineMapsReff.floatZoom > 20) return;
         }
-        print("Finished scale zooming, it should be 1: " + GetCurrentMapScale());
-    }
-
-    IEnumerator DisableVcams() {
-        if (Camera.main.GetComponent<CinemachineBrain>().IsBlending) {
-            yield return null;  
-        }
-        
     }
 
 }

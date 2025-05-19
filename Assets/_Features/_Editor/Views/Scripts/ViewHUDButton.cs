@@ -7,7 +7,7 @@ public class ViewHUDButton : MonoBehaviour {
 
     public void OnClick() {
         ViewManager.Instance.SetActiveViewPoint(ViewPointRefference);
-        EditorManager.Instance.ToggleCameraViewMode();
+        EditorManager.Instance.ToggleViewMode();
     }
 
 }

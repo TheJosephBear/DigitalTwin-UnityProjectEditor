@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class GeoLocalizationUI : MonoBehaviour {
+public class GeoLocalizationUI : UIBehaviour {
 
     public TextMeshProUGUI InfoTextReff;
     public TMP_InputField ZoomScaleInputFieldReff;
@@ -31,4 +31,17 @@ public class GeoLocalizationUI : MonoBehaviour {
         Basemapreff.OnClickDown();
         Basemapreff.OnClickDown();
     }
+
+    public void OnLockGeoMap() {
+        GeoMapLocalizationManager.Instance.EnterLockingPhase();
+    }
+
+    public void OnPlaceMapModel() {
+        GeoMapLocalizationManager.Instance.EnterPlacingPhase();
+    }
+
+    public void OnExit() {
+        GeoMapManager.Instance.ExitGeoLocalization();
+    }
+
 }

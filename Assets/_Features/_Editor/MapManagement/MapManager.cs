@@ -33,6 +33,10 @@ public class MapManager : Singleton<MapManager> {
         _baseMap?.ToggleMeshVisibility(true);
     }
 
+    public void ToggleMapVisibility() {
+        _baseMap.ToggleMeshVisibility(!_baseMap.IsVisible);
+    }
+
     public void ClearEverything() {
         _baseMap = null;
         _mapVariants.Clear();
@@ -42,8 +46,12 @@ public class MapManager : Singleton<MapManager> {
         return _mapVariants.Count > 0;
     }
 
-    public bool IsMapUploaded() {
+    public bool IsBaseMapUploaded() {
         return _baseMap != null;
+    }
+
+    public MapVariant GetBaseMap() {
+        return _baseMap;
     }
 
     public List<MapVariant> GetVariants() {

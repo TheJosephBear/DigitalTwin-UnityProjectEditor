@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48c16b12f6ea3ea469f18e0b1e4ecd8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectListScene: 2
+  projectListScene: 3
 --- !u!4 &272088547
 Transform:
   m_ObjectHideFlags: 0

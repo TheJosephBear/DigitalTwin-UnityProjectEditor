@@ -16,16 +16,20 @@ public class EditorHUDui : UIBehaviour {
     }
 
     public void OnGeoMap() {
-        GeoMapManager.Instance.ToggleMapOnGeoMap();
+        EditorManager.Instance.ChangeEditorMode(EditorMode.GeoLocalization);
     }
 
     public void OnTwoMapView() {
+        EditorManager.Instance.ChangeEditorMode(EditorMode.TwoMaps);
+
+        /*
         //Togle zobrazeniMapy
-        if (EditorManager.Instance.EditorModeCurrent == EditorMode.classic) {
-            EditorManager.Instance.ChangeEditorMode(EditorMode.twoMaps);
-        } else if (EditorManager.Instance.EditorModeCurrent == EditorMode.twoMaps) {
-            EditorManager.Instance.ChangeEditorMode(EditorMode.classic);
+        if (EditorManager.Instance.EditorModeCurrent == EditorMode.Freecam) {
+            EditorManager.Instance.ChangeEditorMode(EditorMode.TwoMaps);
+        } else if (EditorManager.Instance.EditorModeCurrent == EditorMode.TwoMaps) {
+            EditorManager.Instance.ChangeEditorMode(EditorMode.Freecam);
         }
+        */
     }
 
     public void OnSave() {

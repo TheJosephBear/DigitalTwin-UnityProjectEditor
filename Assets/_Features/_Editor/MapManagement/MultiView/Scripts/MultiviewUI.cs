@@ -5,18 +5,27 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class TwoMapsUI : UIBehaviour {
+public class MultiviewUI : UIBehaviour {
 
     public DropdownMultiview DropDownPrimary;
     public DropdownMultiview DropDownSecondary;
 
     private List<MapVariant> _mapVariants = new List<MapVariant>();
 
+    public override void Show() {
+        base.Show();
+        Initialize();
+    }
+
     public void Initialize() {
         UpdateDropDowns();
         if (_mapVariants.Count > 0) {
             MapDisplayManager.Instance.ShowVariant(_mapVariants[0], MapPriority.Secondary);
         }
+    }
+
+    public void OnLeave() {
+        MapDisplayManager.Instance.Exit();
     }
 
     public void UpdateDropDowns() {
