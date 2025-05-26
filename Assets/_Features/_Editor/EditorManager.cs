@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 
 public class EditorManager : Singleton<EditorManager> {
@@ -7,6 +8,7 @@ public class EditorManager : Singleton<EditorManager> {
     /// Controls the state of the Editor
     /// </summary>
 
+    public CinemachineBrain CinemachineBrainRefference;
     public GameObject TwoCameraPrefab;
     public Vector3 TwoCameraPrefabSpawnPosition;
 
@@ -49,11 +51,13 @@ public class EditorManager : Singleton<EditorManager> {
         UImanager.Instance.ShowUI(UIType.EditorHUD);
   //      if (TwoCameraInstantiated != null) Destroy(TwoCameraInstantiated);
         ViewManager.Instance.DeactivateViewPoint();
+        CinemachineBrainRefference.enabled = (false);
     }
 
     void EnterModeGeolocation() {
         if (MapManager.Instance.IsBaseMapUploaded()) {
             UImanager.Instance.HideUI(UIType.EditorHUD);
+            CinemachineBrainRefference.enabled = (true);
             MapManager.Instance.ToggleMapVisibility();
             GeoMapManager.Instance.ActivateGeoLocalization();
         } else {
@@ -68,10 +72,12 @@ public class EditorManager : Singleton<EditorManager> {
         }
 
         UImanager.Instance.HideUI(UIType.EditorHUD);
+        CinemachineBrainRefference.enabled = (true);
         MapDisplayManager.Instance.EnterMultiView();
     }
 
     void EnterModeView() {
+        CinemachineBrainRefference.enabled = (true);
         ViewManager.Instance.ActivateViewPoint();
     }
 

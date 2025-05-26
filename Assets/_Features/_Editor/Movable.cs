@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Movable : MonoBehaviour, IClickable {
 
-    public MovableType MovableType;
+    public GizmoType MovableType;
     public GizmoAxis ShownAxis;
 
     public void OnClick() {

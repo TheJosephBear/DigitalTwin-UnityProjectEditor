@@ -21,11 +21,11 @@ public class GeoLocalizationUI : UIBehaviour {
     }
 
     public void RotPos() {
-        if (Basemapreff.MovableType == MovableType.Rotation) {
-            Basemapreff.MovableType = MovableType.Position;
+        if (Basemapreff.MovableType == GizmoType.Rotation) {
+            Basemapreff.MovableType = GizmoType.Position;
             Basemapreff.ShownAxis = GizmoAxis.All;
         } else {
-            Basemapreff.MovableType = MovableType.Rotation;
+            Basemapreff.MovableType = GizmoType.Rotation;
             Basemapreff.ShownAxis = GizmoAxis.Y;
         }
         Basemapreff.OnClickDown();

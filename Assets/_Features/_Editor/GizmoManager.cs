@@ -6,216 +6,236 @@ using UnityEngine;
 
 public class GizmoManager : Singleton<GizmoManager> {
 
-    private GameObject targetObject;
-    private ObjectTransformGizmo transformGizmo = null;
+    private ObjectTransformGizmo _objectMoveGizmo;
+    private ObjectTransformGizmo _objectRotationGizmo;
+    private ObjectTransformGizmo _objectScaleGizmo;
+    private ObjectTransformGizmo _objectUniversalGizmo;
+
+    private GizmoType _activeGizmoType;
+    /// <summary>
+    /// A reference to the current work gizmo. If the work gizmo id is GizmoId.Move, then
+    /// this will point to '_objectMoveGizmo'. For GizmoId.Rotate, it will point to 
+    /// '_objectRotationGizmo' and so on.
+    /// </summary>
+    private ObjectTransformGizmo _activeGizmoObject;
+    /// <summary>
+    /// A reference to the target object. This is the object that will be manipulated by
+    /// the gizmos and it will always be picked from the scene via a mouse click. This will
+    /// be set to null when the user clicks in thin air.
+    /// </summary>
+    private GameObject _targetObject;
+
+    private void Start() {
+        // Create the 4 gizmos
+        _objectMoveGizmo = RTGizmosEngine.Get.CreateObjectMoveGizmo();
+        _objectRotationGizmo = RTGizmosEngine.Get.CreateObjectRotationGizmo();
+        _objectScaleGizmo = RTGizmosEngine.Get.CreateObjectScaleGizmo();
+        _objectUniversalGizmo = RTGizmosEngine.Get.CreateObjectUniversalGizmo();
+
+        // Call the 'SetEnabled' function on the parent gizmo to make sure
+        // the gizmos are initially hidden in the scene. We want the gizmo
+        // to show only when we have a target object available.
+        _objectMoveGizmo.Gizmo.SetEnabled(false);
+        _objectRotationGizmo.Gizmo.SetEnabled(false);
+        _objectScaleGizmo.Gizmo.SetEnabled(false);
+        _objectUniversalGizmo.Gizmo.SetEnabled(false);
+
+        // We initialize the work gizmo to the move gizmo by default. This means
+        // that the first time an object is clicked, the move gizmo will appear.
+        // You can change the default gizmo, by simply changing these 2 lines of
+        // code. For example, if you wanted the scale gizmo to be the default work
+        // gizmo, replace '_objectMoveGizmo' with '_objectScaleGizmo' and GizmoId.Move
+        // with GizmoId.Scale.
+        _activeGizmoObject = _objectMoveGizmo;
+        _activeGizmoType = GizmoType.Position;
+    }
+
+    #region public functions
 
     public void SetTargetGameObject(GameObject go) {
-        targetObject = go;
+        OnTargetObjectChanged(go);
+    }
+
+    public void ShowGizmo(GizmoType type, GizmoAxis axis = GizmoAxis.All, bool UniversalGizmoScaleDisabled = false) {
+        SetWorkGizmoId(type);
+        if (UniversalGizmoScaleDisabled) {
+            RestrictUniversalScaleHandle();
+        }
+    }
+
+    public void ShowGizmo(GizmoType type, List<GizmoAxis> enabledAxisList, bool UniversalGizmoScaleDisabled = false) {
+        SetWorkGizmoId(type);
+        if (UniversalGizmoScaleDisabled) {
+            RestrictUniversalScaleHandle();
+        }
+        ApplyRestrictions(type, enabledAxisList);
     }
 
     public void HideGizmo() {
-        if (transformGizmo != null) {
-            RTGizmosEngine.Get.RemoveGizmo(transformGizmo.Gizmo);
-            transformGizmo = null;
+        if (_activeGizmoObject != null) {
+            RTGizmosEngine.Get.RemoveGizmo(_activeGizmoObject.Gizmo);
+            _activeGizmoObject = null;
         }
     }
-
-    public void ShowGizmo(MovableType type, GizmoAxis axis = GizmoAxis.All) {
-        HideGizmo();
-
-        switch (type) {
-            case MovableType.Universal:
-                transformGizmo = RTGizmosEngine.Get.CreateObjectUniversalGizmo();
-                ApplyUniversalAxisConstraint(transformGizmo, targetObject, axis);
-                break;
-
-            case MovableType.Position:
-                transformGizmo = RTGizmosEngine.Get.CreateObjectMoveGizmo();
-                ApplyPositionAxisConstraint(transformGizmo, targetObject, axis);
-                break;
-
-            case MovableType.Rotation:
-                transformGizmo = RTGizmosEngine.Get.CreateObjectRotationGizmo();
-                ApplyRotationAxisConstraint(transformGizmo.Gizmo.RotationGizmo, transformGizmo, targetObject, axis);
-                break;
-
-            case MovableType.Scale:
-                transformGizmo = RTGizmosEngine.Get.CreateObjectScaleGizmo();
-                ApplyScaleAxisConstraint(transformGizmo, targetObject, axis);
-                break;
-        }
-
-        transformGizmo.SetTargetObject(targetObject);
-        transformGizmo.SetTransformSpace(GizmoSpace.Local);
-    }
-
-    public void ShowGizmo(List<MovableType> types, List<GizmoAxis> axes) {
-        HideGizmo();
-
-        if (types == null || axes == null || types.Count == 0 || axes.Count == 0) {
-            Debug.LogWarning("No MovableType or GizmoAxis selected.");
-            return;
-        }
-
-        GizmoAxis axisFlags = GizmoAxis.None;
-        foreach (var ax in axes)
-            axisFlags |= ax;
-
-        foreach (var type in types) {
-            ObjectTransformGizmo gizmo = null;
-
-            switch (type) {
-                case MovableType.Position:
-                    gizmo = RTGizmosEngine.Get.CreateObjectMoveGizmo();
-                    ApplyPositionAxisConstraint(gizmo, targetObject, axisFlags);
-                    break;
-
-                case MovableType.Rotation:
-                    gizmo = RTGizmosEngine.Get.CreateObjectRotationGizmo();
-                    ApplyRotationAxisConstraint(gizmo.Gizmo.RotationGizmo, gizmo, targetObject, axisFlags);
-                    break;
-
-                case MovableType.Scale:
-                    gizmo = RTGizmosEngine.Get.CreateObjectScaleGizmo();
-                    ApplyScaleAxisConstraint(gizmo, targetObject, axisFlags);
-                    break;
-
-                case MovableType.Universal:
-                    gizmo = RTGizmosEngine.Get.CreateObjectUniversalGizmo();
-                    ApplyUniversalAxisConstraint(gizmo, targetObject, axisFlags);
-                    break;
-            }
-
-            if (gizmo != null) {
-                gizmo.SetTargetObject(targetObject);
-                gizmo.SetTransformSpace(GizmoSpace.Local);
-                transformGizmo = gizmo;
-            }
-        }
-    }
-
-
     public bool IsShowingGizmo() {
-        return transformGizmo != null;
-    }
-
-    #region Constraint functions
-
-    private void ApplyUniversalAxisConstraint(ObjectTransformGizmo universalGizmo, GameObject target, GizmoAxis axis) {
-        var restrictions = new ObjectTransformGizmo.ObjectRestrictions();
-
-        // Position
-        for (int i = 0; i < 3; i++)
-            restrictions.SetCanMoveAlongAxis(i, axis == GizmoAxis.All || i == (int)axis);
-
-        // Rotation
-        if (axis != GizmoAxis.X) restrictions.SetIsAffectedByHandle(GizmoHandleId.XRotationSlider, false);
-        if (axis != GizmoAxis.Y) restrictions.SetIsAffectedByHandle(GizmoHandleId.YRotationSlider, false);
-        if (axis != GizmoAxis.Z) restrictions.SetIsAffectedByHandle(GizmoHandleId.ZRotationSlider, false);
-        if (axis != GizmoAxis.All) restrictions.SetIsAffectedByHandle(GizmoHandleId.CamXYRotation, false);
-
-        // Scale
-        for (int i = 0; i < 3; i++)
-            restrictions.SetCanScaleAlongAxis(i, axis == GizmoAxis.All || i == (int)axis);
-
-        universalGizmo.RegisterObjectRestrictions(target, restrictions);
-    }
-
-    private void ApplyPositionAxisConstraint(ObjectTransformGizmo moveGizmo, GameObject target, GizmoAxis axis) {
-        var restrictions = new ObjectTransformGizmo.ObjectRestrictions();
-        for (int i = 0; i < 3; i++)
-            restrictions.SetCanMoveAlongAxis(i, axis == GizmoAxis.All || i == (int)axis);
-
-        moveGizmo.RegisterObjectRestrictions(target, restrictions);
-    }
-
-    private void ApplyRotationAxisConstraint(RotationGizmo rotationGizmo, ObjectTransformGizmo objectTransformGizmo, GameObject target, GizmoAxis axis) {
-        var restrictions = new ObjectTransformGizmo.ObjectRestrictions();
-
-        if (axis != GizmoAxis.X) restrictions.SetIsAffectedByHandle(GizmoHandleId.XRotationSlider, false);
-        if (axis != GizmoAxis.Y) restrictions.SetIsAffectedByHandle(GizmoHandleId.YRotationSlider, false);
-        if (axis != GizmoAxis.Z) restrictions.SetIsAffectedByHandle(GizmoHandleId.ZRotationSlider, false);
-        if (axis != GizmoAxis.All) restrictions.SetIsAffectedByHandle(GizmoHandleId.CamXYRotation, false);
-
-        objectTransformGizmo.RegisterObjectRestrictions(target, restrictions);
-
-        // Also visually disable
-        foreach (var (ax, id) in new Dictionary<GizmoAxis, int>
-        {
-        { GizmoAxis.X, GizmoHandleId.XRotationSlider },
-        { GizmoAxis.Y, GizmoHandleId.YRotationSlider },
-        { GizmoAxis.Z, GizmoHandleId.ZRotationSlider }
-    }) {
-            var handle = rotationGizmo.Gizmo.GetHandleById_SystemCall(id);
-            bool show = axis == GizmoAxis.All || ax == axis;
-            handle.SetHoverable(show);
-            handle.SetVisible(show);
-        }
-
-        var camXYHandle = rotationGizmo.Gizmo.GetHandleById_SystemCall(GizmoHandleId.CamXYRotation);
-        camXYHandle.SetHoverable(axis == GizmoAxis.All);
-        camXYHandle.SetVisible(axis == GizmoAxis.All);
-    }
-
-    private void ApplyScaleAxisConstraint(ObjectTransformGizmo scaleGizmo, GameObject target, GizmoAxis axis) {
-        var restrictions = new ObjectTransformGizmo.ObjectRestrictions();
-        for (int i = 0; i < 3; i++)
-            restrictions.SetCanScaleAlongAxis(i, axis == GizmoAxis.All || i == (int)axis);
-
-        scaleGizmo.RegisterObjectRestrictions(target, restrictions);
+        return _activeGizmoObject != null;
     }
 
     #endregion
 
 
-    /* If i want the camera to move around while still using the cinemachine... 
-     * Otherwise i have to turn off the cinemachine brain when in default editor state 
-     */
+    /// <summary>
+    /// This function is called to change the type of work gizmo.
+    /// </summary>
+    private void SetWorkGizmoId(GizmoType gizmoId) {
+        // Start with a clean slate and disable all gizmos
+        _objectMoveGizmo.Gizmo.SetEnabled(false);
+        _objectRotationGizmo.Gizmo.SetEnabled(false);
+        _objectScaleGizmo.Gizmo.SetEnabled(false);
+        _objectUniversalGizmo.Gizmo.SetEnabled(false);
 
-    /*foreach (var targetName in moveTargetNames)
-            {
-                var transformGizmo = RTGizmosEngine.Get.CreateObjectMoveGizmo();
+        _activeGizmoType = gizmoId;
+        switch (gizmoId) {
+            case GizmoType.Position:
+                _activeGizmoObject = _objectMoveGizmo;
+                break;
+            case GizmoType.Rotation:
+                _activeGizmoObject = _objectRotationGizmo;
+                // Strange rotation outside the classic handles - disable it
+                RestrictRotationBallHandle();
+                break;
+            case GizmoType.Scale:
+                _activeGizmoObject = _objectScaleGizmo;
+                break;
+            case GizmoType.Universal:
+                _activeGizmoObject = _objectUniversalGizmo;
+                // Strange rotation outside the classic handles - disable it
+                RestrictRotationBallHandle();
+                break;
+        }
 
-                GameObject targetObject = GameObject.Find(targetName);
-                transformGizmo.SetTargetObject(targetObject);
-                transformGizmo.Gizmo.MoveGizmo.SetVertexSnapTargetObjects(new List<GameObject> { targetObject });
-                transformGizmo.SetTransformSpace(GizmoSpace.Local);
-            }
-            
-            var rotationTargetNames = new string[] { "Cylinder", "Red Cube" };
-            foreach (var targetName in rotationTargetNames)
-            {
-                var transformGizmo = RTGizmosEngine.Get.CreateObjectRotationGizmo();
+        if (_targetObject != null) _activeGizmoObject.Gizmo.SetEnabled(true);
+    }
 
-                GameObject targetObject = GameObject.Find(targetName);
-                transformGizmo.SetTargetObject(targetObject);
-                transformGizmo.SetTransformSpace(GizmoSpace.Local);
-            }
+    /// <summary>
+    /// Called from when the user clicks on a game object
+    /// that is different from the current target object. The function takes care
+    /// of adjusting the gizmo states accordingly.
+    /// </summary>
+    private void OnTargetObjectChanged(GameObject newTargetObject) {
+        // Store the new target object
+        _targetObject = newTargetObject;
 
-            var scaleTargetNames = new string[] { "Cylinder (1)", "Sphere (1)" };
-            foreach (var targetName in scaleTargetNames)
-            {
-                var transformGizmo = RTGizmosEngine.Get.CreateObjectScaleGizmo();
+        // Is the target object valid?
+        if (_targetObject != null) {
+            // It is. Now call 'SetTargetObject' for all gizmos. After the next 4 lines
+            // of code are executed, all gizmos will be able to control this object.
+            _objectMoveGizmo.SetTargetObject(_targetObject);
+            _objectRotationGizmo.SetTargetObject(_targetObject);
+            _objectScaleGizmo.SetTargetObject(_targetObject);
+            _objectUniversalGizmo.SetTargetObject(_targetObject);
 
-                GameObject targetObject = GameObject.Find(targetName);
-                transformGizmo.SetTargetObject(targetObject);
-                transformGizmo.SetTransformSpace(GizmoSpace.Local);
-            }
+            // Make sure the work gizmo is enabled. We always activate the work gizmo when
+            // a target object is valid. There is no need to check if the gizmo is already
+            // enabled. The 'SetEnabled' call will simply be ignored if that is the case.
+            _activeGizmoObject.Gizmo.SetEnabled(true);
+        } else {
+            // The target object is null. In this case, we don't want any gizmos to be visible
+            // in the scene, so we disable all of them.
+            _objectMoveGizmo.Gizmo.SetEnabled(false);
+            _objectRotationGizmo.Gizmo.SetEnabled(false);
+            _objectScaleGizmo.Gizmo.SetEnabled(false);
+            _objectUniversalGizmo.Gizmo.SetEnabled(false);
+        }
+    }
 
-            var universalTargetNames = new string[] { "Blue Cube (1)", "Green Cube" };
-            foreach (var targetName in universalTargetNames)
-            {
-                var transformGizmo = RTGizmosEngine.Get.CreateObjectUniversalGizmo();
+    #region Gizmo restriction functions
 
-                GameObject targetObject = GameObject.Find(targetName);
-                transformGizmo.SetTargetObject(targetObject);
-                transformGizmo.Gizmo.UniversalGizmo.SetMvVertexSnapTargetObjects(new List<GameObject> { targetObject });
-                transformGizmo.SetTransformSpace(GizmoSpace.Local);
-            }*/
+    private void ApplyRestrictions(GizmoType type, List<GizmoAxis> enabledAxisList) {
+        if (_targetObject == null) return;
 
+        ObjectTransformGizmo gizmo = null;
+
+        switch (type) {
+            case GizmoType.Position:
+                gizmo = _objectMoveGizmo;
+                break;
+            case GizmoType.Rotation:
+                gizmo = _objectRotationGizmo;
+                break;
+            case GizmoType.Scale:
+                gizmo = _objectScaleGizmo;
+                break;
+            case GizmoType.Universal:
+                gizmo = _objectUniversalGizmo;
+                break;
+        }
+
+        if (gizmo == null) return;
+
+        ObjectTransformGizmo.ObjectRestrictions restrictions = CreateNewRestrictionObject(gizmo, _targetObject);
+
+        // Helper for checking if an axis is enabled
+        bool IsAxisEnabled(GizmoAxis axis) => enabledAxisList.Contains(axis) || enabledAxisList.Contains(GizmoAxis.All);
+
+        // Position and Scale: Disable movement/scale along each axis
+        if (type == GizmoType.Position || type == GizmoType.Universal) {
+            restrictions.SetCanMoveAlongAxis(0, IsAxisEnabled(GizmoAxis.X));
+            restrictions.SetCanMoveAlongAxis(1, IsAxisEnabled(GizmoAxis.Y));
+            restrictions.SetCanMoveAlongAxis(2, IsAxisEnabled(GizmoAxis.Z));
+        }
+
+        if (type == GizmoType.Scale || type == GizmoType.Universal) {
+            restrictions.SetCanScaleAlongAxis(0, IsAxisEnabled(GizmoAxis.X));
+            restrictions.SetCanScaleAlongAxis(1, IsAxisEnabled(GizmoAxis.Y));
+            restrictions.SetCanScaleAlongAxis(2, IsAxisEnabled(GizmoAxis.Z));
+        }
+
+        if (type == GizmoType.Rotation || type == GizmoType.Universal) {
+            restrictions.SetIsAffectedByHandle(GizmoHandleId.XRotationSlider, IsAxisEnabled(GizmoAxis.X));
+            restrictions.SetIsAffectedByHandle(GizmoHandleId.YRotationSlider, IsAxisEnabled(GizmoAxis.Y));
+            restrictions.SetIsAffectedByHandle(GizmoHandleId.ZRotationSlider, IsAxisEnabled(GizmoAxis.Z));
+        }
+
+        gizmo.RegisterObjectRestrictions(_targetObject, restrictions);
+    }
+
+
+    private void RestrictRotationBallHandle() {
+        ObjectTransformGizmo.ObjectRestrictions restrictionsRot = CreateNewRestrictionObject(_objectRotationGizmo, _targetObject);
+        ObjectTransformGizmo.ObjectRestrictions restrictionsUni = CreateNewRestrictionObject(_objectUniversalGizmo, _targetObject);
+        restrictionsRot.SetIsAffectedByHandle(GizmoHandleId.CamXYRotation, false);
+        restrictionsUni.SetIsAffectedByHandle(GizmoHandleId.CamXYRotation, false);
+        _objectRotationGizmo.RegisterObjectRestrictions(_targetObject, restrictionsRot);
+        _objectUniversalGizmo.RegisterObjectRestrictions(_targetObject, restrictionsUni);
+    }
+
+    private void RestrictUniversalScaleHandle() {
+        ObjectTransformGizmo.ObjectRestrictions restrictions = CreateNewRestrictionObject(_objectUniversalGizmo, _targetObject);
+        restrictions.SetCanScaleAlongAxis(0, false);
+        restrictions.SetCanScaleAlongAxis(1, false);
+        restrictions.SetCanScaleAlongAxis(2, false);
+        _objectUniversalGizmo.RegisterObjectRestrictions(_targetObject, restrictions);
+    }
+
+    private ObjectTransformGizmo.ObjectRestrictions CreateNewRestrictionObject(ObjectTransformGizmo gizmoGameObject, GameObject targetGameObject) {
+        if (gizmoGameObject == null) {
+            print("gizmo object is null!");
+            return null;
+        }
+        if (targetGameObject == null) {
+            print("_targetObject is null!");
+            return null;
+        }
+        ObjectTransformGizmo.ObjectRestrictions restrictions = new ObjectTransformGizmo.ObjectRestrictions();
+        ObjectTransformGizmo.ObjectRestrictions originalRestrictions = gizmoGameObject.GetObjectRestrictions(targetGameObject); ;
+        if (originalRestrictions != null) restrictions = originalRestrictions;
+        return restrictions;
+    }
+    #endregion
 }
 
-public enum MovableType {
+public enum GizmoType {
     Rotation,
     Position,
     Scale,

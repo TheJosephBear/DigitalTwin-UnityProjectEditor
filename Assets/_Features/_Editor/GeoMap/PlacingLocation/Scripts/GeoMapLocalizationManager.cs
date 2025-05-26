@@ -36,7 +36,7 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
             _baseMapCopy = SceneLoadingManager.Instance.InstantiateObjectInScene(MapManager.Instance.GetBaseMap().ModelAsset.ModelGameObject, MapCenterPosition, ActiveSceneType);
             Movable movableScript = _baseMapCopy.AddComponent<Movable>();
             movableScript.ShownAxis = GizmoAxis.All;
-            movableScript.MovableType = MovableType.Universal;
+            movableScript.MovableType = GizmoType.Universal;
             _baseMapCopy.AddComponent<BoxCollider>().size = new Vector3(10, 10, 10);
             _baseMapCopy.SetActive(false);
             baseMapReff.ToggleMeshVisibility(false);

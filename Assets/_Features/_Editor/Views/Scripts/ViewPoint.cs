@@ -7,10 +7,10 @@ public class ViewPoint : EditorObjectBase, IClickable {
 
     public GameObject vcam;
 
-    public void OnClick() {
+    public void OnClickDown() {
         if (EditorManager.Instance.EditorModeCurrent != EditorMode.View) {
             GizmoManager.Instance.SetTargetGameObject(gameObject);
-            GizmoManager.Instance.ShowGizmo(MovableType.Universal);
+            GizmoManager.Instance.ShowGizmo(GizmoType.Universal, UniversalGizmoScaleDisabled: true);
             ViewManager.Instance.SetActiveViewPoint(this);
         }
     }
@@ -36,7 +36,7 @@ public class ViewPoint : EditorObjectBase, IClickable {
         transform.eulerAngles = interestPoint.eulerRotation; 
     }
 
-    public void OnClickDown() {
+    public void OnClick() {
 
     }
 
