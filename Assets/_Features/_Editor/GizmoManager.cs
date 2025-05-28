@@ -73,8 +73,7 @@ public class GizmoManager : Singleton<GizmoManager> {
 
     public void HideGizmo() {
         if (_activeGizmoObject != null) {
-            RTGizmosEngine.Get.RemoveGizmo(_activeGizmoObject.Gizmo);
-            _activeGizmoObject = null;
+            _activeGizmoObject.Gizmo.SetEnabled(true);
         }
     }
     public bool IsShowingGizmo() {
@@ -205,7 +204,9 @@ public class GizmoManager : Singleton<GizmoManager> {
         ObjectTransformGizmo.ObjectRestrictions restrictionsRot = CreateNewRestrictionObject(_objectRotationGizmo, _targetObject);
         ObjectTransformGizmo.ObjectRestrictions restrictionsUni = CreateNewRestrictionObject(_objectUniversalGizmo, _targetObject);
         restrictionsRot.SetIsAffectedByHandle(GizmoHandleId.CamXYRotation, false);
+        restrictionsRot.SetIsAffectedByHandle(GizmoHandleId.CamZRotation, false);
         restrictionsUni.SetIsAffectedByHandle(GizmoHandleId.CamXYRotation, false);
+        restrictionsUni.SetIsAffectedByHandle(GizmoHandleId.CamZRotation, false);
         _objectRotationGizmo.RegisterObjectRestrictions(_targetObject, restrictionsRot);
         _objectUniversalGizmo.RegisterObjectRestrictions(_targetObject, restrictionsUni);
     }

@@ -28,7 +28,20 @@ public class EditorManager : Singleton<EditorManager> {
     }
 
     public void ChangeEditorMode(EditorMode editorMode) {
+        // If changing from view mode
+        if (EditorModeCurrent == EditorMode.View) {
+            // Return camera to the original position
+            ViewManager.Instance.DeactivateViewPoint();
+            CinemachineBrain brain = CinemachineCore.Instance.GetActiveBrain(0);
+            var originalBlend = brain.m_DefaultBlend;
+            var newBlend = new CinemachineBlendDefinition(originalBlend.m_Style, 0.001f); 
+            brain.m_DefaultBlend = newBlend;
+            brain.ManualUpdate();
+            brain.m_DefaultBlend = originalBlend;
+        }
+
         EditorModeCurrent = editorMode;
+
         switch (editorMode) {
             case EditorMode.Freecam:
                 EnterModeFreecam();
@@ -50,7 +63,6 @@ public class EditorManager : Singleton<EditorManager> {
     void EnterModeFreecam() {
         UImanager.Instance.ShowUI(UIType.EditorHUD);
   //      if (TwoCameraInstantiated != null) Destroy(TwoCameraInstantiated);
-        ViewManager.Instance.DeactivateViewPoint();
         CinemachineBrainRefference.enabled = (false);
     }
 
@@ -78,6 +90,7 @@ public class EditorManager : Singleton<EditorManager> {
 
     void EnterModeView() {
         CinemachineBrainRefference.enabled = (true);
+        CinemachineCore.Instance.GetActiveBrain(0).ManualUpdate();
         ViewManager.Instance.ActivateViewPoint();
     }
 
