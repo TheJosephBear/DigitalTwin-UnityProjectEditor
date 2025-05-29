@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using RTG;
+using Unity.VisualScripting;
 using UnityEngine;
 using static OnlineMapsGoogleDirectionsResult;
 
@@ -14,17 +15,17 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
     public SceneType ActiveSceneType = SceneType.Editing;
 
     GameObject _baseMapCopy;
-    RTGApp _rtgReff;
+    GizmoManager gizmoManager;
     GeoLocalizationData _geoData;
 
 
     protected override void Awake() {
         base.Awake();
-        _rtgReff = FindAnyObjectByType<RTGApp>();
+        gizmoManager = GizmoManager.Instance;
     }
 
     public void Setup() {
-        _rtgReff.gameObject.SetActive(false);
+        gizmoManager.HideGizmo();
         ToggleGeoMapZoom(true);
         GeoMapManager.Instance.ToggleGeoMapControl(true);
         // Create base map copy
@@ -34,17 +35,30 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
                 baseMapReff.ToggleMeshVisibility(true);
             }
             _baseMapCopy = SceneLoadingManager.Instance.InstantiateObjectInScene(MapManager.Instance.GetBaseMap().ModelAsset.ModelGameObject, MapCenterPosition, ActiveSceneType);
-            Movable movableScript = _baseMapCopy.AddComponent<Movable>();
-            movableScript.ShownAxis = GizmoAxis.All;
+
+            // Add mesh collider
+            foreach (Transform child in _baseMapCopy.GetComponentsInChildren<Transform>()) {
+                if (child.GetComponent<MeshRenderer>() != null || child.GetComponent<MeshFilter>() != null) {
+                    child.AddComponent<MeshCollider>();
+                }
+            }
+
+            // Add movable component for clickability
+            BaseMapCopyMovable movableScript = _baseMapCopy.AddComponent<BaseMapCopyMovable>();
+
+            // Setup gizmo axes and restrictions
+            List<GizmoAxis> axes = new List<GizmoAxis> { GizmoAxis.X, GizmoAxis.Y, GizmoAxis.Z };
+            movableScript.ShownAxis = axes;
             movableScript.MovableType = GizmoType.Universal;
-            _baseMapCopy.AddComponent<BoxCollider>().size = new Vector3(10, 10, 10);
+
+            // Disable the map at the beginning
             _baseMapCopy.SetActive(false);
             baseMapReff.ToggleMeshVisibility(false);
         }
     }
 
     public void Exit() {
-        _rtgReff.gameObject.SetActive(true);
+        gizmoManager.HideGizmo();
         _baseMapCopy.SetActive(false);
         MapManager.Instance.GetBaseMap().ToggleMeshVisibility(true);
     }
@@ -54,7 +68,8 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
         ToggleGeoMapZoom(false);
         GeoMapManager.Instance.ToggleGeoMapControl(false);
         _baseMapCopy.SetActive(true);
-        _rtgReff.gameObject.SetActive(true);
+        gizmoManager.HideGizmo();
+
     }
 
     public void PlaceMapModel() {

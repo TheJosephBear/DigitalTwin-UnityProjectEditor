@@ -21,7 +21,16 @@ public class ObjectClickManager : Singleton<ObjectClickManager> {
         List<IClickable> newHovered = new List<IClickable>();
 
         if (Physics.Raycast(ray, out hit)) {
-            var clickables = hit.collider.GetComponents<IClickable>();
+            var hitCollider = hit.collider;
+
+            // Try getting clickables from the hit object
+            var clickables = new List<IClickable>(hitCollider.GetComponents<IClickable>());
+
+            // If none found, check the root GameObject
+            if (clickables.Count == 0 && hitCollider.transform.root != null) {
+                clickables.AddRange(hitCollider.transform.root.GetComponents<IClickable>());
+            }
+
             newHovered.AddRange(clickables);
         }
 
@@ -58,4 +67,5 @@ public class ObjectClickManager : Singleton<ObjectClickManager> {
             currentClicked.Clear();
         }
     }
+
 }

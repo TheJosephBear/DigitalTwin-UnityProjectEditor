@@ -73,11 +73,19 @@ public class GizmoManager : Singleton<GizmoManager> {
 
     public void HideGizmo() {
         if (_activeGizmoObject != null) {
-            _activeGizmoObject.Gizmo.SetEnabled(true);
+            _activeGizmoObject.Gizmo.SetEnabled(false);
         }
     }
     public bool IsShowingGizmo() {
-        return _activeGizmoObject != null;
+        return _activeGizmoObject.Gizmo.IsEnabled;
+    }
+
+    public GameObject GetTargetObject() {
+        return _targetObject;
+    }
+
+    public ObjectTransformGizmo GetActiveGizmo() {
+        return _activeGizmoObject;
     }
 
     #endregion
@@ -149,6 +157,26 @@ public class GizmoManager : Singleton<GizmoManager> {
     }
 
     #region Gizmo restriction functions
+
+    public void SetCustomRestrictions(ObjectTransformGizmo.ObjectRestrictions customRestrictions) {
+        if (_targetObject == null || _activeGizmoObject == null) return;
+
+        ObjectTransformGizmo.ObjectRestrictions restrictions = CreateNewRestrictionObject(_objectUniversalGizmo, _targetObject);
+        // I am too frustrated. doing it correctly via the custom restrictions doesnt seem to work, lets try to do it here
+        restrictions.SetCanMoveAlongAxis(0, true);
+        restrictions.SetCanMoveAlongAxis(1, false);
+        restrictions.SetCanMoveAlongAxis(2, true);
+        restrictions.SetIsAffectedByHandle(GizmoHandleId.CamZRotation, true);
+        restrictions.SetIsAffectedByHandle(GizmoHandleId.CamXYRotation, false);
+        restrictions.SetIsAffectedByHandle(GizmoHandleId.XRotationSlider, false);
+        restrictions.SetIsAffectedByHandle(GizmoHandleId.YRotationSlider, false);
+        restrictions.SetIsAffectedByHandle(GizmoHandleId.ZRotationSlider, false);
+        restrictions.SetCanScaleAlongAxis(0, false);
+        restrictions.SetCanScaleAlongAxis(1, false);
+        restrictions.SetCanScaleAlongAxis(2, false);
+
+        _objectUniversalGizmo.RegisterObjectRestrictions(_targetObject, restrictions);
+    }
 
     private void ApplyRestrictions(GizmoType type, List<GizmoAxis> enabledAxisList) {
         if (_targetObject == null) return;
@@ -234,6 +262,7 @@ public class GizmoManager : Singleton<GizmoManager> {
         return restrictions;
     }
     #endregion
+
 }
 
 public enum GizmoType {

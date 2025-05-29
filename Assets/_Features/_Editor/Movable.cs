@@ -5,16 +5,14 @@ using UnityEngine;
 public class Movable : MonoBehaviour, IClickable {
 
     public GizmoType MovableType;
-    public GizmoAxis ShownAxis;
+    public List<GizmoAxis> ShownAxis;
 
     public void OnClick() {
 
     }
 
-    public void OnClickDown() {
-        if (GizmoManager.Instance.IsShowingGizmo()) {
-            GizmoManager.Instance.HideGizmo();
-        } else {
+    public virtual void OnClickDown() {
+        if (GizmoManager.Instance.GetTargetObject() != this && !GizmoManager.Instance.IsShowingGizmo()) {
             GizmoManager.Instance.SetTargetGameObject(gameObject);
             GizmoManager.Instance.ShowGizmo(MovableType, ShownAxis);
         }

@@ -20,18 +20,6 @@ public class GeoLocalizationUI : UIBehaviour {
         }
     }
 
-    public void RotPos() {
-        if (Basemapreff.MovableType == GizmoType.Rotation) {
-            Basemapreff.MovableType = GizmoType.Position;
-            Basemapreff.ShownAxis = GizmoAxis.All;
-        } else {
-            Basemapreff.MovableType = GizmoType.Rotation;
-            Basemapreff.ShownAxis = GizmoAxis.Y;
-        }
-        Basemapreff.OnClickDown();
-        Basemapreff.OnClickDown();
-    }
-
     public void OnLockGeoMap() {
         GeoMapLocalizationManager.Instance.LockGeoMap();
     }
