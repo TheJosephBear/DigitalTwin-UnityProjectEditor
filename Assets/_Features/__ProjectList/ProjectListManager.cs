@@ -42,15 +42,13 @@ public class ProjectListManager : Singleton<ProjectListManager> {
 
                 Debug.Log("Project created: " + response);
                 FetchAndRefreshProjectList(() => {
-                    /* IDK WHY BUT REMOVING THIS FIXES THE PROJECT CREATION FATAL ERROR
-                    // Simulate opening and saving the project
-                    var createdProject = projectRefferenceList.Find(x => x.projectName == newProjectName);
+                    // Open created project
+                    ProjectWebRefference createdProject = projectRefferenceList.Find(x => x.projectName == newProjectName);
                     if (createdProject == null) {
                         Debug.LogWarning("Created project not found in the refreshed list.");
                     }
-                    ProjectManager.Instance.OpenProject(createdProject);
-                    ProjectManager.Instance.SaveProject();
-                    */
+                    // need web reff for the created project
+                    OpenProject(createdProject);
                 });
             });
         });

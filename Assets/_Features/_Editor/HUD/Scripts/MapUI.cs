@@ -9,12 +9,10 @@ public class MapUI : UIBehaviour {
 
 
     public void onX() {
-        AudioManager.Instance.PlaySound(SoundType.click);
         UImanager.Instance.HideUI(UIType.MapUI);
     }
 
     public void onNahrat() {
-        AudioManager.Instance.PlaySound(SoundType.click);
         FileBrowserManager.Instance.ShowLoadDialog(OnFileSelectedMap);
     }
 

@@ -46,7 +46,7 @@ public class ProjectManager : Singleton<ProjectManager> {
     public IEnumerator ProjectLoading() {
         UImanager.Instance.ShowUI(UIType.LoadingScreen);
 
-        var loadTask = ProjectManager.Instance.LoadProjectAsync();
+        var loadTask = LoadProjectAsync();
         yield return new WaitUntil(() => loadTask.IsCompleted);
 
         if (loadTask.Result) {

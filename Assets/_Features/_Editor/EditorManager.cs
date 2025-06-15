@@ -96,6 +96,10 @@ public class EditorManager : Singleton<EditorManager> {
 
     #endregion
 
+    public void ExitEditor() {
+        ProjectManager.Instance.CloseProject();
+    }
+
 }
 
 public enum EditorMode {

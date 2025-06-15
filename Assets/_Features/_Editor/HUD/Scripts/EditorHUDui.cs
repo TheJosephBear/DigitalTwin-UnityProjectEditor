@@ -37,7 +37,7 @@ public class EditorHUDui : UIBehaviour {
     }
 
     public void OnLeave() {
-        ProjectManager.Instance.CloseProject();
+        EditorManager.Instance.ExitEditor();
     }
 
     #endregion
