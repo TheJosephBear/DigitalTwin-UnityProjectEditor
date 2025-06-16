@@ -4,20 +4,22 @@ using UnityEngine;
 public class MapDisplayManager : Singleton<MapDisplayManager> {
 
     public GameObject MultiviewCamerasPrefab;
-    public Vector3 MultiviewCamerasSpawnPosition;
 
+    private Transform _multiviewCamerasSpawnPosition;
     private MultiviewUI _multiviewUIRefference;
     private GameObject _multivewCamerasRefference;
     private MapVariant _primaryMapInstance;
     private MapVariant _secondaryMapInstance;
 
     public void EnterMultiView() {
+        _multiviewCamerasSpawnPosition = EditorCameraManager.Instance.GetFreeCamTransform();
+
         if (_multiviewUIRefference == null) {
             _multiviewUIRefference = FindAnyObjectByType<MultiviewUI>();
         }
 
         if(_multivewCamerasRefference == null) {
-            _multivewCamerasRefference = SceneLoadingManager.Instance.InstantiateObjectInScene(MultiviewCamerasPrefab, MultiviewCamerasSpawnPosition, SceneType.Editing);
+            _multivewCamerasRefference = SceneLoadingManager.Instance.InstantiateObjectInScene(MultiviewCamerasPrefab, _multiviewCamerasSpawnPosition.position, SceneType.Editing);
         } else {
             _multivewCamerasRefference.SetActive(true);
         }

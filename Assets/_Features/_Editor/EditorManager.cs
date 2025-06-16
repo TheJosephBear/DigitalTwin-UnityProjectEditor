@@ -55,18 +55,27 @@ public class EditorManager : Singleton<EditorManager> {
             case EditorMode.View:
                 EnterModeView();
                 break;
+            case EditorMode.Initialization:
+                EnterModeInitialization();
+                break;
         }
     }
 
     #region Editor mode logic
 
+    void EnterModeInitialization() {
+        UImanager.Instance.ShowUI(UIType.EditorInitUI);
+    }
+
     void EnterModeFreecam() {
+        UImanager.Instance.HideUI(UIType.EditorInitUI);
         UImanager.Instance.ShowUI(UIType.EditorHUD);
   //      if (TwoCameraInstantiated != null) Destroy(TwoCameraInstantiated);
         CinemachineBrainRefference.enabled = (false);
     }
 
     void EnterModeGeolocation() {
+        UImanager.Instance.HideUI(UIType.EditorInitUI);
         if (MapManager.Instance.IsBaseMapUploaded()) {
             UImanager.Instance.HideUI(UIType.EditorHUD);
             CinemachineBrainRefference.enabled = (true);
@@ -103,6 +112,7 @@ public class EditorManager : Singleton<EditorManager> {
 }
 
 public enum EditorMode {
+    Initialization,
     Freecam,
     GeoLocalization,
     TwoMaps,

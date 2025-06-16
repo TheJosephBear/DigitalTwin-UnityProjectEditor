@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EditorInitUI : MonoBehaviour
-{
+public class EditorInitUI : UIBehaviour {
     public void OnMapUpload() {
         FileBrowserManager.Instance.ShowLoadDialog(OnFileSelectedMap);
     }

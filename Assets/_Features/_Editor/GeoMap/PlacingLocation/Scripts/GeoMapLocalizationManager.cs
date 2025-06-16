@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using RTG;
 using Unity.VisualScripting;
 using UnityEngine;
-using static OnlineMapsGoogleDirectionsResult;
-
 public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
     /// <summary>
     /// Handles the process of localization
@@ -90,6 +88,7 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
                 latitude = (float)lat,
                 elevation = elevation,
             };
+            GeoMapManager.Instance.ExitGeoLocalization();
         }, error => {
             Debug.LogError(error);
         });

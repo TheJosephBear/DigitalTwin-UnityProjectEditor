@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EditorInitializer : MonoBehaviour, Iinitializer
-{
+public class EditorInitializer : MonoBehaviour, Iinitializer {
     public void Initialize() {
-        EditorManager.Instance.ChangeEditorMode(EditorMode.Freecam);
         // Ask for base model
         // After uploading model succesfully open geomap
-        FileBrowserManager.Instance.ShowLoadDialog(OnFileSelectedMap);
+        EditorManager.Instance.ChangeEditorMode(EditorMode.Initialization);
 
     }
 
@@ -17,18 +15,9 @@ public class EditorInitializer : MonoBehaviour, Iinitializer
     }
 
     public void Unload() {
-        UImanager.Instance.HideUI(UIType.EditorHUD);
-    }
-
-    void OnFileSelectedMap(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
-        if (files != null && files.Length > 0) {
-            MapManager.Instance.UploadBaseMapModel(AssetManager.Instance.CreateNewAsset(files[0]));
-            // After uploading model succesfully open geomap
-            EditorManager.Instance.ChangeEditorMode(EditorMode.GeoLocalization);
-        } else {
-            PopUp.Instance.ShowPopUpWindow("Please select .obj file!");
-        }
-
+   //     UImanager.Instance.HideUI(UIType.EditorHUD);
+     //   UImanager.Instance.HideUI(UIType.EditorInitUI);
+        UImanager.Instance.HideAllUIs();
     }
 
 }
