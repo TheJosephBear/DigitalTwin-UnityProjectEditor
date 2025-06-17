@@ -30,10 +30,6 @@ public class MultiviewUI : UIBehaviour {
 
     public void UpdateDropDowns() {
         List<MapVariant> mapVariants = MapManager.Instance.GetVariants();
-        // for now use IDs for names...
-        foreach (MapVariant item in mapVariants) {
-            item.Name = item.ModelAsset.ModelID;
-        }
 
         DropDownPrimary.SetupMultiview(mapVariants);
         DropDownSecondary.SetupMultiview(mapVariants);

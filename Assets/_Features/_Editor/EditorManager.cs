@@ -76,14 +76,10 @@ public class EditorManager : Singleton<EditorManager> {
 
     void EnterModeGeolocation() {
         UImanager.Instance.HideUI(UIType.EditorInitUI);
-        if (MapManager.Instance.IsBaseMapUploaded()) {
-            UImanager.Instance.HideUI(UIType.EditorHUD);
-            CinemachineBrainRefference.enabled = (true);
-            MapManager.Instance.ToggleMapVisibility();
-            GeoMapManager.Instance.ActivateGeoLocalization();
-        } else {
-            MessageDisplayManager.Instance.DisplayMessage("Upload a map model first!");
-        }
+        UImanager.Instance.HideUI(UIType.EditorHUD);
+        CinemachineBrainRefference.enabled = (true);
+        MapManager.Instance.ToggleMapVisibility();
+        GeoMapManager.Instance.ActivateGeoLocalization();
     }
 
     void EnterModeTwoCameras() {

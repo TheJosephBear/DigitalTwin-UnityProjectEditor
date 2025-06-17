@@ -20,6 +20,10 @@ public class GeoLocalizationUI : UIBehaviour {
         }
     }
 
+    public void OnUploadMap() {
+        FileBrowserManager.Instance.ShowLoadDialog(OnFileSelectedMap);
+    }
+
     public void OnLockGeoMap() {
         GeoMapLocalizationManager.Instance.LockGeoMap();
     }
@@ -30,6 +34,16 @@ public class GeoLocalizationUI : UIBehaviour {
 
     public void OnExit() {
         GeoMapManager.Instance.ExitGeoLocalization();
+    }
+
+    void OnFileSelectedMap(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
+        if (files != null && files.Length > 0) {
+            MapManager.Instance.UploadBaseMapModel(AssetManager.Instance.CreateNewAsset(files[0]));
+            GeoMapLocalizationManager.Instance.Setup();
+        } else {
+            PopUp.Instance.ShowPopUpWindow("Please select .obj file!");
+        }
+
     }
 
 }

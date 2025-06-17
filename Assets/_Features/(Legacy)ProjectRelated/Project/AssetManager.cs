@@ -29,6 +29,7 @@ public class AssetManager : Singleton<AssetManager> {
         GameObject newAssetGo = FileLoading.Instance.LoadModel(file);
         newAssetGo.transform.parent = AssetContainer.transform;
         ModelAsset modelAsset = newAssetGo.AddComponent<ModelAsset>();
+        modelAsset.FileName = file.fileInfo.fullName;
         modelAsset.GenerateUniqueID();
         modelAsset.FileHash = fileHash;
         modelAsset.filePath = file.fileInfo.path;

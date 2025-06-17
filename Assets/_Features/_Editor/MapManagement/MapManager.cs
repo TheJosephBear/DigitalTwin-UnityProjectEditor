@@ -18,7 +18,8 @@ public class MapManager : Singleton<MapManager> {
         addedMap.ModelAsset = newMap;
         addedMap.gameObject.SetActive(true);
         addedMap.IsBaseMap = true;
-     //   addedMap.AddComponent<Movable>();
+        addedMap.Name = newMap.FileName;
+        //   addedMap.AddComponent<Movable>();
         _baseMap = addedMap;
         SpawnMap();
     }
@@ -26,6 +27,7 @@ public class MapManager : Singleton<MapManager> {
     public void UploadMapVariant(ModelAsset newMap) {
         MapVariant addedMap = newMap.InstantiateModel(mapSpawnPosition).AddComponent<MapVariant>();
         addedMap.ModelAsset = newMap;
+        addedMap.Name = newMap.FileName;
         _mapVariants.Add(addedMap);
     }
 
@@ -34,7 +36,7 @@ public class MapManager : Singleton<MapManager> {
     }
 
     public void ToggleMapVisibility() {
-        _baseMap.ToggleMeshVisibility(!_baseMap.IsVisible);
+        _baseMap?.ToggleMeshVisibility(!_baseMap.IsVisible);
     }
 
     public void ClearEverything() {

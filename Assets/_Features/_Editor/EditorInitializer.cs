@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class EditorInitializer : MonoBehaviour, Iinitializer {
     public void Initialize() {
-        // Ask for base model
-        // After uploading model succesfully open geomap
-        EditorManager.Instance.ChangeEditorMode(EditorMode.Initialization);
+        // Show geo map right away
+        EditorManager.Instance.ChangeEditorMode(EditorMode.GeoLocalization);
+
 
     }
 

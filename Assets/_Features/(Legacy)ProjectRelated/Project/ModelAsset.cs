@@ -11,6 +11,7 @@ public class ModelAsset : MonoBehaviour {
     
     public string ModelID { get; set; }
     public GameObject ModelGameObject { get; private set; }
+    public string FileName;
     public string FileHash { get; set; }
     public string filePath;
 

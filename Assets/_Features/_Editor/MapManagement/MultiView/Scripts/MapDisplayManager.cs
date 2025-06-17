@@ -5,25 +5,29 @@ public class MapDisplayManager : Singleton<MapDisplayManager> {
 
     public GameObject MultiviewCamerasPrefab;
 
-    private Transform _multiviewCamerasSpawnPosition;
+    private Transform _multiviewCamerasSpawnTransform;
     private MultiviewUI _multiviewUIRefference;
     private GameObject _multivewCamerasRefference;
     private MapVariant _primaryMapInstance;
     private MapVariant _secondaryMapInstance;
 
     public void EnterMultiView() {
-        _multiviewCamerasSpawnPosition = EditorCameraManager.Instance.GetFreeCamTransform();
+        _multiviewCamerasSpawnTransform = EditorCameraManager.Instance.GetFreeCamTransform();
 
         if (_multiviewUIRefference == null) {
             _multiviewUIRefference = FindAnyObjectByType<MultiviewUI>();
         }
 
         if(_multivewCamerasRefference == null) {
-            _multivewCamerasRefference = SceneLoadingManager.Instance.InstantiateObjectInScene(MultiviewCamerasPrefab, _multiviewCamerasSpawnPosition.position, SceneType.Editing);
+            _multivewCamerasRefference = SceneLoadingManager.Instance.InstantiateObjectInScene(MultiviewCamerasPrefab, _multiviewCamerasSpawnTransform.position, SceneType.Editing);
         } else {
             _multivewCamerasRefference.SetActive(true);
         }
-        
+
+        // Update camera position
+        _multivewCamerasRefference.transform.position = _multiviewCamerasSpawnTransform.position;
+        _multivewCamerasRefference.transform.rotation = _multiviewCamerasSpawnTransform.rotation;
+
         UImanager.Instance.ShowUI(UIType.TwoMapsCameraView);
     }
 
