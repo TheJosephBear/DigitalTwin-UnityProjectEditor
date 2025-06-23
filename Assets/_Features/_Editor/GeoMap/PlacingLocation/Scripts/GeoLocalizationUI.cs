@@ -20,12 +20,16 @@ public class GeoLocalizationUI : UIBehaviour {
         }
     }
 
+    public void OnZoomSliderUpdate(float value) {
+        GeoMapLocalizationManager.Instance.ZoomMap(value);
+    }
+
     public void OnUploadMap() {
         FileBrowserManager.Instance.ShowLoadDialog(OnFileSelectedMap);
     }
 
     public void OnLockGeoMap() {
-        GeoMapLocalizationManager.Instance.LockGeoMap();
+        GeoMapLocalizationManager.Instance.ToggleLock();
     }
 
     public void OnPlaceMapModel() {

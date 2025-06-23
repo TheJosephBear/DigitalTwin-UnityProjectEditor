@@ -11,10 +11,12 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
 
     public Vector3 MapCenterPosition;
     public SceneType ActiveSceneType = SceneType.Editing;
+    public float MapTransparency = 0.8f;
 
     GameObject _baseMapCopy;
     GizmoManager gizmoManager;
     GeoLocalizationData _geoData;
+    bool _lastLockToggle = false;
 
 
     protected override void Awake() {
@@ -38,6 +40,8 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
             foreach (Transform child in _baseMapCopy.GetComponentsInChildren<Transform>()) {
                 if (child.GetComponent<MeshRenderer>() != null || child.GetComponent<MeshFilter>() != null) {
                     child.AddComponent<MeshCollider>();
+                    // Also make it transparent
+                    MakeMaterialsTransparent(child.gameObject, MapTransparency);
                 }
             }
 
@@ -55,19 +59,26 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
         }
     }
 
+    public void ZoomMap(float value) {
+        GeoMapManager.Instance.ZoomMap(value);
+    }
+
     public void Exit() {
         gizmoManager.HideGizmo();
         _baseMapCopy.SetActive(false);
         MapManager.Instance.GetBaseMap().ToggleMeshVisibility(true);
     }
 
+    public void ToggleLock() {
+        _lastLockToggle = !_lastLockToggle; 
+        LockGeoMap(_lastLockToggle);
+    }
 
-    public void LockGeoMap() {
-        ToggleGeoMapZoom(false);
-        GeoMapManager.Instance.ToggleGeoMapControl(false);
-        _baseMapCopy.SetActive(true);
+    void LockGeoMap(bool lockToggle) {
+        ToggleGeoMapZoom(!lockToggle);
+        GeoMapManager.Instance.ToggleGeoMapControl(!lockToggle);
+        _baseMapCopy.SetActive(lockToggle);
         gizmoManager.HideGizmo();
-
     }
 
     public void PlaceMapModel() {
@@ -92,6 +103,23 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
         }, error => {
             Debug.LogError(error);
         });
+    }
+
+    void MakeMaterialsTransparent(GameObject targetObject, float transparency) {
+        Renderer rend = targetObject.GetComponent<Renderer>();
+        Material[] materials = rend.materials;
+        foreach(Material mat in materials) {
+            Color color = mat.color;
+            color.a = transparency;
+            mat.color = color;
+            mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+            mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            mat.SetInt("_ZWrite", 0);
+            mat.DisableKeyword("_ALPHATEST_ON");
+            mat.EnableKeyword("_ALPHABLEND_ON");
+            mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+            mat.renderQueue = 3000;
+        }
     }
 }
 

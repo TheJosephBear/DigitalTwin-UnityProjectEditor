@@ -8,6 +8,7 @@ public class GeoMapManager : Singleton<GeoMapManager> {
     public OnlineMaps OnlineMapsReff;
     public GameObject vcam;
     int _equator = 40075000;
+    float _previousZoomValue;
 
     protected override void Awake() {
         base.Awake();
@@ -29,7 +30,11 @@ public class GeoMapManager : Singleton<GeoMapManager> {
         EditorManager.Instance.ChangeEditorMode(EditorMode.Freecam);
     }
 
-
+    public void ZoomMap(float zoomValue) {
+        float delta = zoomValue - _previousZoomValue;
+        OnlineMapsReff.floatZoom += delta;
+        _previousZoomValue = zoomValue;
+    }
 
     public void ToggleGeoMap() {
         OnlineMapsReff.gameObject.SetActive(!OnlineMapsReff.gameObject.activeSelf);
