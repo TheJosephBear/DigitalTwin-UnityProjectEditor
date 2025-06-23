@@ -14,19 +14,35 @@ public class ViewManager : Singleton<ViewManager> {
     public Camera previewCam;
 
     ViewPoint currentViewPoint;
+    CustomMovement _movementScript;
     public bool isActivelyShowingCam = false;
 
     protected override void Awake() {
         base.Awake();
+        _movementScript = GetComponent<CustomMovement>();
     }
 
     void OnEnable() {
         ToggleCameraPreview(false);
     }
 
+    public void StartViewMoving() {
+        ActivateViewPoint();
+        // Start controlling it
+        _movementScript.SetTarget(currentViewPoint.gameObject);
+    }
+
+    public void ExitViewMoving() {
+        DeactivateViewPoint();
+        _movementScript.SetTarget(null);
+    }
+
     public GameObject CreateNewViewPoint() {
+        Transform freecamTrans = EditorCameraManager.Instance.GetFreeCamTransform();
+        viewPointSpawnPosition = freecamTrans.position;
         ViewPoint newInterestPoint = SceneLoadingManager.Instance.InstantiateObjectInScene(ViewPointPrefab, viewPointSpawnPosition, SceneToInstantiate).GetComponent<ViewPoint>();
         viewPoints.Add(newInterestPoint);
+        newInterestPoint.transform.rotation = freecamTrans.rotation;
         newInterestPoint.Deactivate();
         return newInterestPoint.gameObject;
     }
@@ -51,7 +67,7 @@ public class ViewManager : Singleton<ViewManager> {
     }
 
     public void ClearEverything() {
-        DeactivateViewPoint();
+        ExitViewMoving();
         SetActiveViewPoint(null);
         Utilities.DestroyAllGameObjects(viewPoints);
         FindAnyObjectByType<ViewPointUI>().ClearViewButtonList();

@@ -31,13 +31,15 @@ public class EditorManager : Singleton<EditorManager> {
         // If changing from view mode
         if (EditorModeCurrent == EditorMode.View) {
             // Return camera to the original position
-            ViewManager.Instance.DeactivateViewPoint();
+            ViewManager.Instance.ExitViewMoving();
+            /*
             CinemachineBrain brain = CinemachineCore.Instance.GetActiveBrain(0);
             var originalBlend = brain.m_DefaultBlend;
             var newBlend = new CinemachineBlendDefinition(originalBlend.m_Style, 0.001f); 
             brain.m_DefaultBlend = newBlend;
             brain.ManualUpdate();
             brain.m_DefaultBlend = originalBlend;
+            */
         }
 
         EditorModeCurrent = editorMode;
@@ -70,13 +72,14 @@ public class EditorManager : Singleton<EditorManager> {
     void EnterModeFreecam() {
         UImanager.Instance.HideUI(UIType.EditorInitUI);
         UImanager.Instance.ShowUI(UIType.EditorHUD);
-  //      if (TwoCameraInstantiated != null) Destroy(TwoCameraInstantiated);
-        CinemachineBrainRefference.enabled = (false);
+        //      if (TwoCameraInstantiated != null) Destroy(TwoCameraInstantiated);
+        StartCoroutine(DisableCinemachineAfterTransition());
     }
 
     void EnterModeGeolocation() {
         UImanager.Instance.HideUI(UIType.EditorInitUI);
         UImanager.Instance.HideUI(UIType.EditorHUD);
+        EditorCameraManager.Instance.UpdateFreeCamVcamPosition();
         CinemachineBrainRefference.enabled = (true);
         MapManager.Instance.ToggleMapVisibility();
         GeoMapManager.Instance.ActivateGeoLocalization();
@@ -88,21 +91,31 @@ public class EditorManager : Singleton<EditorManager> {
             return;
         }
 
+        EditorCameraManager.Instance.UpdateFreeCamVcamPosition();
         UImanager.Instance.HideUI(UIType.EditorHUD);
         CinemachineBrainRefference.enabled = (true);
         MapDisplayManager.Instance.EnterMultiView();
     }
 
     void EnterModeView() {
+        EditorCameraManager.Instance.UpdateFreeCamVcamPosition();
         CinemachineBrainRefference.enabled = (true);
         CinemachineCore.Instance.GetActiveBrain(0).ManualUpdate();
-        ViewManager.Instance.ActivateViewPoint();
+        ViewManager.Instance.StartViewMoving();
     }
 
     #endregion
 
     public void ExitEditor() {
         ProjectManager.Instance.CloseProject();
+    }
+
+    IEnumerator DisableCinemachineAfterTransition() {
+        yield return new WaitForSeconds(0.01f); // Wait so the blend can start
+        while (CinemachineBrainRefference.IsBlending) {
+            yield return null;
+        }
+        CinemachineBrainRefference.enabled = (false);
     }
 
 }
