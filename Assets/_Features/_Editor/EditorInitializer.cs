@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EditorInitializer : MonoBehaviour, Iinitializer {
     public void Initialize() {
+        SceneLoadingManager.Instance.SetActiveScene(SceneType.Editing);
         // Show geo map right away
         EditorManager.Instance.ChangeEditorMode(EditorMode.GeoLocalization);
 

@@ -62,6 +62,11 @@ public class MapManager : Singleton<MapManager> {
         return allVariants;
     }
 
+    public void SetBaseMapPositionAndRotation(Vector3 position, Quaternion rotation) {
+        _baseMap.gameObject.transform.position = position;
+        _baseMap.gameObject.transform.rotation = rotation;
+    }
+
     #region Serialization
 
     public SerializableMap Serialize() {

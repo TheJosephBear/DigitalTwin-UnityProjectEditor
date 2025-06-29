@@ -83,6 +83,7 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
 
     public void PlaceMapModel() {
         SaveGeoMapData();
+        ApplyTransformToBaseMap();
     }
 
     void ToggleGeoMapZoom(bool toggleOn) {
@@ -103,6 +104,10 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
         }, error => {
             Debug.LogError(error);
         });
+    }
+
+    void ApplyTransformToBaseMap() {
+        MapManager.Instance.SetBaseMapPositionAndRotation(_baseMapCopy.transform.position, _baseMapCopy.transform.rotation);
     }
 
     void MakeMaterialsTransparent(GameObject targetObject, float transparency) {

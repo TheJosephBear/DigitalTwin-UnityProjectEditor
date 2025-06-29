@@ -14,6 +14,31 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
         base.Awake();
     }
 
+    /* Sets a loaded scene to be "Active scene" - active scenes environment settings are prioritized */
+    public void SetActiveScene(SceneType sceneType) {
+        SceneField sceneField = SceneList.Instance.GetScene(sceneType);
+        Scene scene = SceneManager.GetSceneByName(sceneField.SceneName);
+
+        if (scene.isLoaded) {
+            SceneManager.SetActiveScene(scene);
+        } else {
+            Debug.LogWarning($"Scene {scene.name} is not loaded and cannot be set as active.");
+        }
+    }
+
+    public SceneType GetActiveScene() {
+        Scene activeScene = SceneManager.GetActiveScene();
+
+        foreach (SceneType sceneType in Enum.GetValues(typeof(SceneType))) {
+            SceneField sceneField = SceneList.Instance.GetScene(sceneType);
+            if (sceneField.SceneName == activeScene.name) {
+                return sceneType;
+            }
+        }
+
+        Debug.LogWarning($"Active scene '{activeScene.name}' does not match any known SceneType.");
+        return SceneType.Editing;
+    }
 
     public async Task<bool> LoadSceneAsync(SceneType sceneType, float loadingScreenLength = 0f, bool addToGameplayScenes = false) {
         SceneField scene = SceneList.Instance.GetScene(sceneType);

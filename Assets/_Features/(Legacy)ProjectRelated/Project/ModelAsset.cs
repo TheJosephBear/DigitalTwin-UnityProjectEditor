@@ -22,7 +22,8 @@ public class ModelAsset : MonoBehaviour {
     public void SetModelGameObject(GameObject modelGameObject) {  ModelGameObject = modelGameObject; }
 
     public GameObject InstantiateModel(Vector3 pos) {
-        return SceneLoadingManager.Instance.InstantiateObjectInScene(ModelGameObject, pos, SceneType.Editing);
+        SceneLoadingManager slm = SceneLoadingManager.Instance;
+        return slm.InstantiateObjectInScene(ModelGameObject, pos, slm.GetActiveScene());
     }
 
 }
