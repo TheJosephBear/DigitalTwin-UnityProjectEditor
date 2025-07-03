@@ -62,6 +62,10 @@ public class MapManager : Singleton<MapManager> {
         return allVariants;
     }
 
+    public List<MapVariant> GetVariantsWithoutBase() {
+        return new List<MapVariant>(_mapVariants);
+    }
+
     public void SetBaseMapPositionAndRotation(Vector3 position, Quaternion rotation) {
         _baseMap.gameObject.transform.position = position;
         _baseMap.gameObject.transform.rotation = rotation;

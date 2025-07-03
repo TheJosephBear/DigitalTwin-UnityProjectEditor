@@ -5,104 +5,105 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class MapVarAdjustUI : UIBehaviour {
-
     public TMP_Dropdown DropdownRefference;
+
     public TMP_InputField posXInput, posYInput, posZInput;
     public TMP_InputField rotXInput, rotYInput, rotZInput;
 
-    private MapVariant _selectedVariant;
+    private List<MapVariant> _variantList;
 
     public void FillDropdown(List<MapVariant> variants) {
-        DropdownRefference.ClearOptions();
+        _variantList = variants;
 
+        DropdownRefference.ClearOptions();
         List<string> names = new List<string>();
-        foreach (var variant in variants) {
+
+        foreach (var variant in variants)
             names.Add(variant.Name);
-        }
 
         DropdownRefference.AddOptions(names);
         DropdownRefference.onValueChanged.AddListener(OnDropdownSelected);
 
-        // Auto-select first if exists
         if (variants.Count > 0) {
-            SelectVariant(variants[0]);
             DropdownRefference.value = 0;
+            SelectVariant(variants[0]);
         }
     }
 
-    public void OnDropdownSelected(int index) {
-        List<MapVariant> variants = MapManager.Instance.GetVariants();
-        if (index >= 0 && index < variants.Count) {
-            SelectVariant(variants[index]);
-        }
-    }
-
-    void SelectVariant(MapVariant variant) {
-        _selectedVariant = variant;
+    private void Update() {
         UpdateTransformValues();
     }
 
+    public void OnDropdownSelected(int index) {
+        if (index >= 0 && index < _variantList.Count)
+            SelectVariant(_variantList[index]);
+    }
+
+    private void SelectVariant(MapVariant variant) {
+        MapVariantAdjustManager.Instance.SelectVariant(variant);
+    }
     public void UpdateTransformValues() {
-        if (_selectedVariant == null) return;
+        var manager = MapVariantAdjustManager.Instance;
 
-        Vector3 pos = _selectedVariant.transform.position;
-        Vector3 rot = _selectedVariant.transform.rotation.eulerAngles;
+        Vector3 pos = manager.GetPosition();
+        Vector3 rot = manager.GetRotationEuler();
 
-        posXInput.text = pos.x.ToString("F2");
-        posYInput.text = pos.y.ToString("F2");
-        posZInput.text = pos.z.ToString("F2");
+        if (!posXInput.isFocused) posXInput.text = pos.x.ToString("F2");
+        if (!posYInput.isFocused) posYInput.text = pos.y.ToString("F2");
+        if (!posZInput.isFocused) posZInput.text = pos.z.ToString("F2");
 
-        rotXInput.text = rot.x.ToString("F2");
-        rotYInput.text = rot.y.ToString("F2");
-        rotZInput.text = rot.z.ToString("F2");
+        if (!rotXInput.isFocused) rotXInput.text = rot.x.ToString("F2");
+        if (!rotYInput.isFocused) rotYInput.text = rot.y.ToString("F2");
+        if (!rotZInput.isFocused) rotZInput.text = rot.z.ToString("F2");
     }
 
-    public void OnTransformPositionChangedX(float newValue) {
-        if (_selectedVariant != null) {
-            Vector3 pos = _selectedVariant.transform.position;
-            _selectedVariant.transform.position = new Vector3(newValue, pos.y, pos.z);
-            UpdateTransformValues();
-        }
+
+    public void ClearTexts() {
+        /*
+        posXInput.text = "";
+        posYInput.text = "";
+        posZInput.text = "";
+
+        rotXInput.text = "";
+        rotYInput.text = "";
+        rotZInput.text = "";
+        */
     }
 
-    public void OnTransformPositionChangedY(float newValue) {
-        if (_selectedVariant != null) {
-            Vector3 pos = _selectedVariant.transform.position;
-            _selectedVariant.transform.position = new Vector3(pos.x, newValue, pos.z);
-            UpdateTransformValues();
-        }
+    #region Position and Rotation Inputs
+
+    private void ApplySafePosition() {
+        Vector3 current = MapVariantAdjustManager.Instance.GetPosition();
+        float x = TryParseOr(current.x, posXInput.text);
+        float y = TryParseOr(current.y, posYInput.text);
+        float z = TryParseOr(current.z, posZInput.text);
+
+        MapVariantAdjustManager.Instance.UpdatePosition(new Vector3(x, y, z));
     }
 
-    public void OnTransformPositionChangedZ(float newValue) {
-        if (_selectedVariant != null) {
-            Vector3 pos = _selectedVariant.transform.position;
-            _selectedVariant.transform.position = new Vector3(pos.x, pos.y, newValue);
-            UpdateTransformValues();
-        }
+    public void OnTransformPositionChangedX(string _) => ApplySafePosition();
+    public void OnTransformPositionChangedY(string _) => ApplySafePosition();
+    public void OnTransformPositionChangedZ(string _) => ApplySafePosition();
+
+    private float TryParseOr(float fallback, string input) {
+        return float.TryParse(input, out float val) ? val : fallback;
     }
 
-    public void OnTransformRotationChangedX(float newValue) {
-        if (_selectedVariant != null) {
-            Vector3 rot = _selectedVariant.transform.rotation.eulerAngles;
-            _selectedVariant.transform.rotation = Quaternion.Euler(newValue, rot.y, rot.z);
-            UpdateTransformValues();
-        }
+    private void ApplySafeRotation() {
+        Vector3 current = MapVariantAdjustManager.Instance.GetRotationEuler();
+        float x = TryParseOr(current.x, rotXInput.text);
+        float y = TryParseOr(current.y, rotYInput.text);
+        float z = TryParseOr(current.z, rotZInput.text);
+
+        MapVariantAdjustManager.Instance.UpdateRotation(new Vector3(x, y, z));
     }
 
-    public void OnTransformRotationChangedY(float newValue) {
-        if (_selectedVariant != null) {
-            Vector3 rot = _selectedVariant.transform.rotation.eulerAngles;
-            _selectedVariant.transform.rotation = Quaternion.Euler(rot.x, newValue, rot.z);
-            UpdateTransformValues();
-        }
-    }
+    public void OnTransformRotationChangedX(string _) => ApplySafeRotation();
+    public void OnTransformRotationChangedY(string _) => ApplySafeRotation();
+    public void OnTransformRotationChangedZ(string _) => ApplySafeRotation();
 
-    public void OnTransformRotationChangedZ(float newValue) {
-        if (_selectedVariant != null) {
-            Vector3 rot = _selectedVariant.transform.rotation.eulerAngles;
-            _selectedVariant.transform.rotation = Quaternion.Euler(rot.x, rot.y, newValue);
-            UpdateTransformValues();
-        }
-    }
+
+    #endregion
+
 
 }

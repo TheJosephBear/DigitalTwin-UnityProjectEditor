@@ -32,6 +32,7 @@ public class AdjustingVariantsTester : MonoBehaviour {
     void OnFileSelectedVar(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
         if (files != null && files.Length > 0) {
             MapManager.Instance.UploadMapVariant(AssetManager.Instance.CreateNewAsset(files[0]));
+            MapVariantAdjustManager.Instance.EnterAdjusting();
         } else {
             PopUp.Instance.ShowPopUpWindow("Please select .obj file!");
         }
