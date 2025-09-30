@@ -26,13 +26,28 @@ public class SurveyManager : Singleton<SurveyManager> {
     void AddPageAndQuestion() {
         qm.CreatePage();
         qm.ShowPage(0);
+  //      qm.selectedPage = 0;
         QTQuestionPageManager selectedPage = GetSelectedPage();
         selectedPage.AddItem(i_type: QuestionItemsEnum.LinearScale);
+        selectedPage.selectedItem = selectedPage.questionItems[0];
+        QTLinearScale linearScale = selectedPage.selectedItem.GetComponent<QTLinearScale>();
+        linearScale.question = "Wawwaaaaa";
+        linearScale.AddOption(scriptBased: true, a_value: "1", a_option: "Vùbec");
+        linearScale.AddOption(scriptBased: true, a_value: "2", a_option: "Trošku");
+        linearScale.AddOption(scriptBased: true, a_value: "3", a_option: "Prcám");
+        linearScale.AddOption(scriptBased: true, a_value: "4", a_option: "Trošku");
+        linearScale.AddOption(scriptBased: true, a_value: "5", a_option: "Ranec");
+
+
     }
 
 
 
     QTQuestionPageManager GetSelectedPage() {
+        print("Get selected page");
+        print(qm);
+        print(qm.questionPages[qm.selectedPage]);
+        print(qm.questionPages[qm.selectedPage].GetComponent<QTQuestionPageManager>());
         return qm.questionPages[qm.selectedPage].GetComponent<QTQuestionPageManager>();
     }
 

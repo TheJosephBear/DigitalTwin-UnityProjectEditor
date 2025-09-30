@@ -432,7 +432,7 @@ GameObject:
   - component: {fileID: 415571116}
   - component: {fileID: 415571115}
   m_Layer: 0
-  m_Name: QuestionnareManager
+  m_Name: SurveyManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1755,11 +1755,11 @@ MonoBehaviour:
   showTopPanel: 1
   instructionText: This is an instruction text for this question page.
   questionItems: []
-  type: 3
+  type: 2
   headerName: Item
   question: This is a question.
   automaticFill: 1
-  selectedIndex: -1
+  selectedIndex: 0
   moveItemPressed: 0
   selectedItem: {fileID: 0}
   desiredPage: 0

@@ -108,16 +108,19 @@ namespace QuestionnaireToolkit.Scripts
         /// <summary>
         /// Adds a new radio button option to the linear scale item.
         /// </summary>
-        public void AddOption(bool import = false, QTQuestionnaireManager manager = null, bool mandatory = false, string a_value = null, string a_option = null)
+        public void AddOption(bool import = false, QTQuestionnaireManager manager = null, bool mandatory = false, string a_value = null, string a_option = null, bool scriptBased = false)
         {
-            if (import)
+            if (import || scriptBased)
             {
                 answerRequired = mandatory;
                 answerValue = a_value;
                 answerOption = a_option;
                 _questionnaireManager = manager;
             }
-            
+
+            // Pokus o dosazení manageru v runtime
+            _questionnaireManager = FindAnyObjectByType<QTQuestionnaireManager>();
+
             // Instantiate a new radio button option inside the question item
             var contentParentTransform = transform.GetChild(1);
             var o = Resources.Load("QuestionnaireToolkitPrefabs/LinearScaleOption");
@@ -139,6 +142,8 @@ namespace QuestionnaireToolkit.Scripts
             {
                 g.name = answerValue + "_" + answerOption;
             }
+            print("V knihovně vidím:");
+            print(g.name);
             g.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = g.name.Split('_')[1];
             g.GetComponent<Toggle>().group = contentParentTransform.GetComponent<ToggleGroup>();
             
