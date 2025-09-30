@@ -3,7 +3,26 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - QTVideo
+  - QTSelectionHighlight
+  - QTDropdown
+  - QTLinearScale
+  - QTTextInput
+  - QTImage
+  - QTOptionOther
+  - QTQuestionPage
+  - QTText
+  - QTQuestionnaireManager
+  - QTMultipleChoice
+  - QTButton
+  - QTSlider
+  - QTManager
+  - QTCheckboxes
+  - QTCheckboxesGrid
+  - QTGridOption
+  - QTGridRowHeader
+  - QTMultipleChoiceGrid
   layers:
   - Default
   - TransparentFX
