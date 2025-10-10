@@ -1,0 +1,57 @@
+fileFormatVersion: 2
+guid: e8f9343853b26a044a5d6825e2b240a8
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: ac69724a0d29c2b43917235d0115eedc, type: 3}
+  _pages:
+  - enabled: 1
+    id: 0:1
+    name: Views
+  - enabled: 1
+    id: 33:139
+    name: Material Design Icons
+  - enabled: 1
+    id: 32:260
+    name: Design
+  - enabled: 1
+    id: 28:449
+    name: Components
+  _fonts:
+  - fontName: Roboto-Regular
+    font: {instanceID: 0}
+  - fontName: Roboto-Medium
+    font: {instanceID: 0}
+  - fontName: Noto Sans-Regular
+    font: {instanceID: 0}
+  - fontName: Google Sans-Medium
+    font: {instanceID: 0}
+  - fontName: Inria Serif-Bold
+    font: {instanceID: 0}
+  _fallbackFont: {instanceID: 0}
+  _pageReferences:
+  - {instanceID: 0}
+  - {instanceID: 0}
+  - {instanceID: 0}
+  - {instanceID: 0}
+  _layer: 5
+  _pixelsPerUnit: 100
+  _scaleFactor: 1
+  _gradientResolution: 128
+  _minTextureSize: 64
+  _maxTextureSize: 1024
+  _rectTextureSize: 32
+  _rectResolutionScale: 1
+  _wrapMode: 1
+  _filterMode: 1
+  _sampleCount: 4
+  _expandEdges: 0
+  _markExternalAssetAsDependency: 1
+  _generateUniqueNodeName: 0
+  _localizationConverter: 
+  _effectConverters: []
+  _assetBindings: []

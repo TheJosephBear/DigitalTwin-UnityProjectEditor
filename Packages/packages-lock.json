@@ -1,5 +1,32 @@
 {
   "dependencies": {
+    "com.cdm.figma": {
+      "version": "https://github.com/cdmvision/unity-figma-importer.git#1.9.2",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "2.0.2",
+        "com.unity.vectorgraphics": "2.0.0-preview.24"
+      },
+      "hash": "b7ca468aec6559ce6fd189547697de2d6d870db5"
+    },
+    "com.cdm.figma.ui": {
+      "version": "https://github.com/cdmvision/unity-figma-importer.git#1.9.2-ugui",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.cdm.figma": "1.9.2",
+        "com.unity.nuget.newtonsoft-json": "2.0.2",
+        "com.unity.vectorgraphics": "2.0.0-preview.24"
+      },
+      "hash": "bb4448b376d28bdc858e4ca844ff8075501f0541"
+    },
+    "com.unity.2d.sprite": {
+      "version": "1.0.0",
+      "depth": 2,
+      "source": "builtin",
+      "dependencies": {}
+    },
     "com.unity.cinemachine": {
       "version": "2.8.9",
       "depth": 0,
@@ -78,6 +105,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.nuget.newtonsoft-json": {
+      "version": "3.2.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.performance.profile-analyzer": {
       "version": "1.2.2",
       "depth": 1,
@@ -153,6 +187,25 @@
         "com.unity.modules.ui": "1.0.0",
         "com.unity.modules.imgui": "1.0.0"
       }
+    },
+    "com.unity.vectorgraphics": {
+      "version": "2.0.0-preview.24",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0",
+        "com.unity.2d.sprite": "1.0.0",
+        "com.unity.modules.ui": "1.0.0",
+        "com.unity.modules.physics": "1.0.0",
+        "com.unity.modules.animation": "1.0.0",
+        "com.unity.modules.physics2d": "1.0.0",
+        "com.unity.modules.uielements": "1.0.0",
+        "com.unity.modules.imageconversion": "1.0.0",
+        "com.unity.modules.unitywebrequest": "1.0.0",
+        "com.unity.modules.unitywebrequestwww": "1.0.0",
+        "com.unity.modules.unitywebrequesttexture": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
     },
     "com.unity.visualscripting": {
       "version": "1.8.0",
