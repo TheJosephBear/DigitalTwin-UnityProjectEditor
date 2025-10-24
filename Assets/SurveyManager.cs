@@ -6,12 +6,14 @@ using UnityEngine;
 using QuestionnaireToolkit;
 using static QuestionnaireToolkit.Scripts.QTQuestionPageManager;
 using TMPro;
+using System;
 
 public class SurveyManager : Singleton<SurveyManager> {
 
     QTQuestionnaireManager _qm;
-    QTLinearScale _selectedLinearScale;
-    QTMultipleChoice _selectedMultipleChoice;
+
+    IQuestionAdapter _selectedQuestion;
+
 
     void Start() {
         // Load & instantiate prefab
@@ -40,9 +42,46 @@ public class SurveyManager : Singleton<SurveyManager> {
 
     public void AddPageToQuestionnare() {
         _qm.CreatePage();
-        _qm.ShowPage(_qm.questionPages.Count-1); // Select page
+        _qm.ShowPage(_qm.questionPages.Count - 1); // Select page
     }
 
+    // Adding new questions to the selected page
+    public void AddNewQuestion(QuestionItemsEnum type) {
+        QTQuestionPageManager selectedPage = GetSelectedPage();
+        selectedPage.type = type;
+        selectedPage.AddItem();
+        selectedPage.selectedItem = selectedPage.questionItems[selectedPage.questionItems.Count - 1];
+
+        switch (type) {
+            case QuestionItemsEnum.MultipleChoice:
+                _selectedQuestion = new MultipleChoiceAdapter(selectedPage.selectedItem.GetComponent<QTMultipleChoice>());
+                break;
+
+            case QuestionItemsEnum.LinearScale:
+                _selectedQuestion = new LinearScaleAdapter(selectedPage.selectedItem.GetComponent<QTLinearScale>());
+                break;
+        }
+    }
+
+    public void SetQuestionText(string newQuestionText) {
+        _selectedQuestion.SetQuestionText(newQuestionText);
+    }
+
+    public int AddQuestionOption() {
+        _selectedQuestion.AddOption();
+        return _selectedQuestion.GetOptionsCount()-1;
+    }
+
+    public void SetOptionText(int optionIndex, string optionText) {
+        _selectedQuestion.SetOptionText(optionIndex, optionText);
+    }
+
+    public void RemoveOption(int optionIndex) {
+        _selectedQuestion.RemoveOption(optionIndex);
+    }
+
+
+    /*
     public void AddQuestionToSelectedPageLinearScale(string question) {
         QTQuestionPageManager selectedPage = GetSelectedPage();
         selectedPage.question = question;
@@ -50,12 +89,12 @@ public class SurveyManager : Singleton<SurveyManager> {
         selectedPage.AddItem();
         selectedPage.selectedItem = selectedPage.questionItems[selectedPage.questionItems.Count - 1];
         QTLinearScale linearScale = selectedPage.selectedItem.GetComponent<QTLinearScale>();
-        _selectedLinearScale = linearScale;
+        selectedQuestion = linearScale;
         //    _selectedLinearScale.question = question;
     }
 
     public void SetLinearScaleQuestion(string question) {
-        _selectedLinearScale.question = question;
+        selectedQuestion.question = question;
     }
 
     public void AddLinearScaleOption(string optionText) {
@@ -89,7 +128,7 @@ public class SurveyManager : Singleton<SurveyManager> {
         return optionPairs;
     }
 
-
+    */
     public void GetOptionListMultiple() {
 
     }
@@ -108,7 +147,7 @@ public class SurveyManager : Singleton<SurveyManager> {
     void AddPageAndQuestion() {
         _qm.CreatePage();
         _qm.ShowPage(0);
-  //      qm.selectedPage = 0;
+        //      qm.selectedPage = 0;
         QTQuestionPageManager selectedPage = GetSelectedPage();
         selectedPage.AddItem(i_type: QuestionItemsEnum.LinearScale);
         selectedPage.selectedItem = selectedPage.questionItems[0];
@@ -126,11 +165,11 @@ public class SurveyManager : Singleton<SurveyManager> {
 
 
     QTQuestionPageManager GetSelectedPage() {
-    /*    print("Get selected page");
-        print(_qm);
-        print("The idx of selected page is: " + _qm.selectedPage);
-        print(_qm.questionPages[_qm.selectedPage]);
-        print(_qm.questionPages[_qm.selectedPage].GetComponent<QTQuestionPageManager>());*/
+        /*    print("Get selected page");
+            print(_qm);
+            print("The idx of selected page is: " + _qm.selectedPage);
+            print(_qm.questionPages[_qm.selectedPage]);
+            print(_qm.questionPages[_qm.selectedPage].GetComponent<QTQuestionPageManager>());*/
         return _qm.questionPages[_qm.selectedPage].GetComponent<QTQuestionPageManager>();
     }
 
@@ -141,13 +180,13 @@ public class SurveyManager : Singleton<SurveyManager> {
     // Save questionnaire structure/settings as JSON
     public void SaveQuestionnaireSettings(string filePath) {
         // Built-in export
-    //    qm.ExportQuestionnaire(filePath);
+        //    qm.ExportQuestionnaire(filePath);
         Debug.Log($"Questionnaire exported to {filePath}");
     }
 
     // Load questionnaire settings from JSON
     public void LoadQuestionnaireSettings(string filePath) {
-   //    qm.ImportQuestionnaire(filePath);
+        //    qm.ImportQuestionnaire(filePath);
         Debug.Log($"Questionnaire imported from {filePath}");
     }
 
@@ -162,15 +201,15 @@ public class SurveyManager : Singleton<SurveyManager> {
     // Collect results manually and serialize to JSON
     private string GetResultsAsJson() {
         var resultData = new System.Collections.Generic.Dictionary<string, object>();
-/*
-        foreach (var page in qm.Pages) {
-            foreach (var item in page.Items) {
-                string header = item.HeaderName;
-                object answer = item.GetValue(); // Each item type has value (string, int, list, etc.)
-                resultData[header] = answer;
-            }
-        }
-*/
+        /*
+                foreach (var page in qm.Pages) {
+                    foreach (var item in page.Items) {
+                        string header = item.HeaderName;
+                        object answer = item.GetValue(); // Each item type has value (string, int, list, etc.)
+                        resultData[header] = answer;
+                    }
+                }
+        */
         return JsonUtility.ToJson(new SerializationWrapper(resultData), true);
     }
 

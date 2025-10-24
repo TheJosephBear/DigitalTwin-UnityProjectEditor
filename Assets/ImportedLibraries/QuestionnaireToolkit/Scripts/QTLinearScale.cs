@@ -11,14 +11,13 @@ namespace QuestionnaireToolkit.Scripts
     /// This class is used to manage (add, remove, edit) options of a LinearScale question item and to edit its general properties.
     /// </summary>
     [ExecuteInEditMode]
-    public class QTLinearScale : MonoBehaviour
-    {
+    public class QTLinearScale : MonoBehaviour {
         // bool to determine if this question items must be answered
         public bool answerRequired = true;
         // the name of the item which appears in the results file as header entry
         public string headerName = "";
         private string _oldHeaderName = "";
-        
+
         // the displayed question of this question item
         public string question = "";
         // list which contains the radio button options of this item
@@ -34,8 +33,8 @@ namespace QuestionnaireToolkit.Scripts
 
         private QTQuestionnaireManager _questionnaireManager;
         private QTQuestionPageManager _questionPageManager;
-        
-//#if UNITY_EDITOR
+
+        //#if UNITY_EDITOR
         private void Start()
         {
             _questionnaireManager = transform.parent.parent.parent.parent.parent.GetComponent<QTQuestionnaireManager>();
@@ -78,12 +77,12 @@ namespace QuestionnaireToolkit.Scripts
             }
         }
 
-        private void OnValidate()
+        public void OnValidate()
         {
             try
             {
-                if (!Application.isPlaying)
-                {
+             //   if (!Application.isPlaying)
+            //    {
                     // update headerName field
                     if (!_oldHeaderName.Equals(headerName))
                     {
@@ -97,7 +96,7 @@ namespace QuestionnaireToolkit.Scripts
             
                     // update required bool
                     transform.GetChild(0).GetChild(0).gameObject.SetActive(answerRequired);
-                }
+          //      }
             }
             catch (Exception)
             {
@@ -142,8 +141,6 @@ namespace QuestionnaireToolkit.Scripts
             {
                 g.name = answerValue + "_" + answerOption;
             }
-            print("V knihovně vidím:");
-            print(g.name);
             g.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = g.name.Split('_')[1];
             g.GetComponent<Toggle>().group = contentParentTransform.GetComponent<ToggleGroup>();
             

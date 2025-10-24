@@ -80,12 +80,12 @@ namespace QuestionnaireToolkit.Scripts
             }
         }
 
-        private void OnValidate()
+        public void OnValidate()
         {
             try
             {
-                if (!Application.isPlaying)
-                {
+          //      if (!Application.isPlaying)
+           //     {
                     // update headerName field
                     if (!_oldHeaderName.Equals(headerName))
                     {
@@ -102,7 +102,7 @@ namespace QuestionnaireToolkit.Scripts
                     
                     // update others field visibility
                     transform.GetChild(1).GetChild(options.Count).gameObject.SetActive(includeOtherOption);
-                }
+         //       }
             }
             catch (Exception)
             {
