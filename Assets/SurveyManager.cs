@@ -5,6 +5,7 @@ using System.IO;
 using UnityEngine;
 using QuestionnaireToolkit;
 using static QuestionnaireToolkit.Scripts.QTQuestionPageManager;
+using TMPro;
 
 public class SurveyManager : Singleton<SurveyManager> {
 
@@ -75,6 +76,22 @@ public class SurveyManager : Singleton<SurveyManager> {
         _selectedMultipleChoice.answerOption = optionText;
         _selectedMultipleChoice.answerValue = _selectedMultipleChoice.options.Count.ToString();
         _selectedMultipleChoice.AddOption();
+    }
+
+    public List<(string text, GameObject option)> GetOptionListLinear() {
+        var optionPairs = new List<(string, GameObject)>();
+
+        foreach (GameObject option in _selectedLinearScale.options) {
+            string optionText = option.GetComponentInChildren<TextMeshProUGUI>().text;
+            optionPairs.Add((optionText, option));
+        }
+
+        return optionPairs;
+    }
+
+
+    public void GetOptionListMultiple() {
+
     }
 
     public void SaveQuestionnare() {

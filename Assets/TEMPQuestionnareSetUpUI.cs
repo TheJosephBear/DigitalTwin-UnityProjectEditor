@@ -9,7 +9,21 @@ public class TEMPQuestionnareSetUpUI : MonoBehaviour {
 
     public TMP_InputField QuestionTextInputFieldReff;
     public TMP_InputField OptionTextInputFieldReff;
+    public Transform AddedOptionListParentReff;
+    public SurveyAddedOption AddedOptionUIPrefab;
+
     QuestionItemsEnum _addedQuestionType = QuestionItemsEnum.LinearScale;
+
+
+
+    public void UpdateOptionList() {
+        foreach (var (text, obj) in SurveyManager.Instance.GetOptionListLinear()) {
+            Instantiate(AddedOptionUIPrefab, AddedOptionListParentReff).SetOptionName(text);
+        }
+    }
+
+
+
 
     public void SaveQuestionnare() {
         SurveyManager.Instance.SaveQuestionnare();
