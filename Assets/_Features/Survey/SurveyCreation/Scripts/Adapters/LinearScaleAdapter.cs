@@ -33,12 +33,34 @@ namespace QuestionnaireToolkit {
         }
 
         public void RemoveOption(int optionIndex) {
-            _linearScale.DeleteItem(GetOptionsCount()-1, optionIndex);
+            _linearScale.DeleteItem(GetOptionsCount() - 1, optionIndex);
             _linearScale.OnValidate();
+        }
+
+        public List<QTOptionsData> GetOptionsData() {
+            List<QTOptionsData> data = new List<QTOptionsData>();
+            int idx = 0;
+
+            foreach (var option in _linearScale.options) {
+                string[] parts = option.name.Split('_');
+                string value = parts.Length > 0 ? parts[0] : "";
+                string text = parts.Length > 1 ? parts[1] : "";
+
+                data.Add(new QTOptionsData {
+                    idx = idx,
+                    questionText = text
+                });
+                idx++;
+            }
+            return data;
         }
 
         public int GetOptionsCount() {
             return _linearScale.options.Count;
+        }
+
+        public string GetQuestionText() {
+            return _linearScale.question;
         }
     }
 }

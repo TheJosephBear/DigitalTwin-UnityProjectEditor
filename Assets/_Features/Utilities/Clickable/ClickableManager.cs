@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectClickManager : Singleton<ObjectClickManager> {
+public class ClickableManager : Singleton<ClickableManager> {
     private List<IClickable> currentHovered = new List<IClickable>();
     private List<IClickable> currentClicked = new List<IClickable>();
 

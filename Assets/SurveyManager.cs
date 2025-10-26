@@ -52,15 +52,20 @@ public class SurveyManager : Singleton<SurveyManager> {
         selectedPage.AddItem();
         selectedPage.selectedItem = selectedPage.questionItems[selectedPage.questionItems.Count - 1];
 
+        SelectQuestion(selectedPage.selectedItem, type);
+    }
+
+    public void SelectQuestion(GameObject questionGO, QuestionItemsEnum type) {
         switch (type) {
             case QuestionItemsEnum.MultipleChoice:
-                _selectedQuestion = new MultipleChoiceAdapter(selectedPage.selectedItem.GetComponent<QTMultipleChoice>());
+                _selectedQuestion = new MultipleChoiceAdapter(questionGO.GetComponent<QTMultipleChoice>());
                 break;
 
             case QuestionItemsEnum.LinearScale:
-                _selectedQuestion = new LinearScaleAdapter(selectedPage.selectedItem.GetComponent<QTLinearScale>());
+                _selectedQuestion = new LinearScaleAdapter(questionGO.GetComponent<QTLinearScale>());
                 break;
         }
+        print("New question selected! " + type);
     }
 
     public void SetQuestionText(string newQuestionText) {
@@ -79,58 +84,13 @@ public class SurveyManager : Singleton<SurveyManager> {
     public void RemoveOption(int optionIndex) {
         _selectedQuestion.RemoveOption(optionIndex);
     }
-
-
-    /*
-    public void AddQuestionToSelectedPageLinearScale(string question) {
-        QTQuestionPageManager selectedPage = GetSelectedPage();
-        selectedPage.question = question;
-        selectedPage.type = QuestionItemsEnum.LinearScale;
-        selectedPage.AddItem();
-        selectedPage.selectedItem = selectedPage.questionItems[selectedPage.questionItems.Count - 1];
-        QTLinearScale linearScale = selectedPage.selectedItem.GetComponent<QTLinearScale>();
-        selectedQuestion = linearScale;
-        //    _selectedLinearScale.question = question;
+    
+    public List<QTOptionsData> GetOptionsData() {
+        return _selectedQuestion.GetOptionsData();
     }
 
-    public void SetLinearScaleQuestion(string question) {
-        selectedQuestion.question = question;
-    }
-
-    public void AddLinearScaleOption(string optionText) {
-        _selectedLinearScale.AddOption(scriptBased: true, a_value: "1", a_option: optionText);
-    }
-
-    public void AddQuestionToSelectedPageMultipleChoice(string question) {
-        QTQuestionPageManager selectedPage = GetSelectedPage();
-        selectedPage.question = question;
-        selectedPage.type = QuestionItemsEnum.MultipleChoice;
-        selectedPage.AddItem();
-        selectedPage.selectedItem = selectedPage.questionItems[selectedPage.questionItems.Count - 1];
-        QTMultipleChoice multipleChoice = selectedPage.selectedItem.GetComponent<QTMultipleChoice>();
-        _selectedMultipleChoice = multipleChoice;
-    }
-
-    public void AddMultipleChoiceOption(string optionText) {
-        _selectedMultipleChoice.answerOption = optionText;
-        _selectedMultipleChoice.answerValue = _selectedMultipleChoice.options.Count.ToString();
-        _selectedMultipleChoice.AddOption();
-    }
-
-    public List<(string text, GameObject option)> GetOptionListLinear() {
-        var optionPairs = new List<(string, GameObject)>();
-
-        foreach (GameObject option in _selectedLinearScale.options) {
-            string optionText = option.GetComponentInChildren<TextMeshProUGUI>().text;
-            optionPairs.Add((optionText, option));
-        }
-
-        return optionPairs;
-    }
-
-    */
-    public void GetOptionListMultiple() {
-
+    public string GetQuestionText() {
+        return _selectedQuestion.GetQuestionText();
     }
 
     public void SaveQuestionnare() {
@@ -219,6 +179,4 @@ public class SurveyManager : Singleton<SurveyManager> {
         public System.Collections.Generic.Dictionary<string, object> dict;
         public SerializationWrapper(System.Collections.Generic.Dictionary<string, object> d) { dict = d; }
     }
-
-
 }

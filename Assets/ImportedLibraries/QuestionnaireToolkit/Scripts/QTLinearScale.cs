@@ -7,6 +7,12 @@ using UnityEngine.UI;
 
 namespace QuestionnaireToolkit.Scripts
 {
+
+    public class QTOptionsData {
+        public int idx;
+        public string questionText;
+    }
+
     /// <summary>
     /// This class is used to manage (add, remove, edit) options of a LinearScale question item and to edit its general properties.
     /// </summary>

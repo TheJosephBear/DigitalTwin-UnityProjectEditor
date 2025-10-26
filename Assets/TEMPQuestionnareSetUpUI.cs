@@ -10,6 +10,10 @@ public class TEMPQuestionnareSetUpUI : MonoBehaviour {
     public Transform AddedOptionListParentReff;
     public SurveyAddedOption AddedOptionUIPrefab;
 
+    public TMP_InputField QuestionTextReff;
+
+
+
     QuestionItemsEnum _addedQuestionType = QuestionItemsEnum.LinearScale;
 
     /*
@@ -55,12 +59,7 @@ public class TEMPQuestionnareSetUpUI : MonoBehaviour {
 
     public void AddOptionToQuestion() {
         int questionIdx = SurveyManager.Instance.AddQuestionOption();
-        // Add it to UI
-        Instantiate(AddedOptionUIPrefab, AddedOptionListParentReff).GetComponent<SurveyAddedOption>().Initialize(
-            name: "", 
-            index: questionIdx, 
-            rootUIReff: this
-        );
+        AddQuestionOptionToUIList(questionIdx);
     }
 
     public void SetOptionText(int optionIndex, string text) {
@@ -70,6 +69,64 @@ public class TEMPQuestionnareSetUpUI : MonoBehaviour {
     public void RemoveOption(int optionIndex) {
         SurveyManager.Instance.RemoveOption(optionIndex);
     }
+    private void OnEnable() {
+        UIClickableManager.Instance.OnUIClicked += HandleUIClick;
+    }
 
+    private void OnDisable() {
+        UIClickableManager.Instance.OnUIClicked -= HandleUIClick;
+    }
 
+    private void HandleUIClick(List<GameObject> clickedObject) {
+
+        QTLinearScale linScale;
+        QTMultipleChoice multiChoice;
+
+        string questionText = "";
+        GameObject selectedGO;
+        QuestionItemsEnum type;
+
+        foreach (GameObject go in clickedObject) {
+
+            if(go.GetComponent<QTLinearScale>() != null) {
+                questionText = go.GetComponent<QTLinearScale>().question;
+                selectedGO = go;
+                type = QuestionItemsEnum.LinearScale;
+
+                FillUIWithQuestionData(selectedGO, type);
+
+            } else if (go.GetComponent<QTMultipleChoice>() != null) {
+                questionText = go.GetComponent<QTMultipleChoice>().question;
+                selectedGO = go;
+                type = QuestionItemsEnum.MultipleChoice;
+
+                FillUIWithQuestionData(selectedGO, type);
+
+            }
+        }
+    }
+
+    void FillUIWithQuestionData(GameObject selectedGO, QuestionItemsEnum type) {
+        SurveyManager manager = SurveyManager.Instance;
+        manager.SelectQuestion(selectedGO, type);
+        List<QTOptionsData> data = SurveyManager.Instance.GetOptionsData();
+
+        QuestionTextReff.SetTextWithoutNotify(manager.GetQuestionText());
+        ClearQuestionOptionList();
+        foreach (QTOptionsData item in data) {
+            AddQuestionOptionToUIList(item.idx, item.questionText);
+        }
+    }
+
+    void AddQuestionOptionToUIList(int questionIdx, string optionText = "") {
+        Instantiate(AddedOptionUIPrefab, AddedOptionListParentReff).GetComponent<SurveyAddedOption>().Initialize(
+            name: optionText,
+            index: questionIdx,
+            rootUIReff: this
+        );
+    }
+
+    void ClearQuestionOptionList() {
+        Utilities.KillAllChildren(AddedOptionListParentReff);
+    }
 }
