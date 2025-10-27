@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class SurveyAddedOption : MonoBehaviour
-{
-    public TEMPQuestionnareSetUpUI _rootUIReff;
+public class SurveyAddedOption : MonoBehaviour {
+    TEMPQuestionnareSetUpUI _rootUIReff;
     int _optionIndex = 0;
 
     public TMP_InputField InputFieldReff;
@@ -15,7 +14,7 @@ public class SurveyAddedOption : MonoBehaviour
     }
 
     public void Initialize(string name, int index, TEMPQuestionnareSetUpUI rootUIReff) {
-        InputFieldReff.text = name;
+        InputFieldReff.SetTextWithoutNotify(name);
         _optionIndex = index;
         _rootUIReff = rootUIReff;
     }

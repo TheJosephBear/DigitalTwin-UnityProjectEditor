@@ -24,6 +24,9 @@ public class TEMPQuestionnareSetUpUI : MonoBehaviour {
     }
     */
 
+    private void Start() {
+        UIClickableManager.Instance.OnUIClicked += HandleUIClick;
+    }
 
 
     public void SaveQuestionnare() {
@@ -40,6 +43,7 @@ public class TEMPQuestionnareSetUpUI : MonoBehaviour {
 
     public void AddQuestionToSelectedPage() {
         SurveyManager.Instance.AddNewQuestion(_addedQuestionType);
+        FillUIWithQuestionData(_addedQuestionType);
     }
 
     public void SetAddedQuestionType(int idx) {
@@ -68,9 +72,6 @@ public class TEMPQuestionnareSetUpUI : MonoBehaviour {
 
     public void RemoveOption(int optionIndex) {
         SurveyManager.Instance.RemoveOption(optionIndex);
-    }
-    private void OnEnable() {
-        UIClickableManager.Instance.OnUIClicked += HandleUIClick;
     }
 
     private void OnDisable() {
@@ -109,6 +110,17 @@ public class TEMPQuestionnareSetUpUI : MonoBehaviour {
     void FillUIWithQuestionData(GameObject selectedGO, QuestionItemsEnum type) {
         SurveyManager manager = SurveyManager.Instance;
         manager.SelectQuestion(selectedGO, type);
+        List<QTOptionsData> data = SurveyManager.Instance.GetOptionsData();
+
+        QuestionTextReff.SetTextWithoutNotify(manager.GetQuestionText());
+        ClearQuestionOptionList();
+        foreach (QTOptionsData item in data) {
+            AddQuestionOptionToUIList(item.idx, item.questionText);
+        }
+    }
+
+    void FillUIWithQuestionData(QuestionItemsEnum type) {
+        SurveyManager manager = SurveyManager.Instance;
         List<QTOptionsData> data = SurveyManager.Instance.GetOptionsData();
 
         QuestionTextReff.SetTextWithoutNotify(manager.GetQuestionText());

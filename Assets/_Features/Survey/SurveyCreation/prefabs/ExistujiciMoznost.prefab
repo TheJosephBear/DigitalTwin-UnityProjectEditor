@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6854ce94e77b8c84bb1b463a86841f08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OptionIndex: 0
+  _rootUIReff: {fileID: 0}
   InputFieldReff: {fileID: 7671371748950806108}
 --- !u!1001 &4270527718559674995
 PrefabInstance:
@@ -148,7 +148,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5149769567537284169, guid: bee6aea5880b0e04fa8eaf5fbf443328, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 799
+      value: 689.0059
       objectReference: {fileID: 0}
     - target: {fileID: 5149769567537284169, guid: bee6aea5880b0e04fa8eaf5fbf443328, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -306,7 +306,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1032987646604764188, guid: 354fd3ce745bafd4996b403b7d90ad22, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 112.994
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1032987646604764188, guid: 354fd3ce745bafd4996b403b7d90ad22, type: 3}
       propertyPath: m_AnchoredPosition.y
