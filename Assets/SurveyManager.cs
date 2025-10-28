@@ -93,6 +93,15 @@ public class SurveyManager : Singleton<SurveyManager> {
         return _selectedQuestion.GetQuestionText();
     }
 
+    public void SetQuestionTargetView(int idx) {
+        _selectedQuestion.SetTargetView(ViewManager.Instance.GetViewPoints()[idx]);
+    }
+
+
+
+
+
+
     public void SaveQuestionnare() {
         _qm.ExportPages();
     }
@@ -101,6 +110,7 @@ public class SurveyManager : Singleton<SurveyManager> {
         _qm.importPath = _qm.exportPath + "/MyQuestionnaire.json";
         _qm.ImportPages();
     }
+
 
 
 

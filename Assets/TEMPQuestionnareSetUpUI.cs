@@ -74,6 +74,11 @@ public class TEMPQuestionnareSetUpUI : MonoBehaviour {
         SurveyManager.Instance.RemoveOption(optionIndex);
     }
 
+    public void SetQuestionTargetView(int idx) {
+
+    }
+
+
     private void OnDisable() {
         UIClickableManager.Instance.OnUIClicked -= HandleUIClick;
     }

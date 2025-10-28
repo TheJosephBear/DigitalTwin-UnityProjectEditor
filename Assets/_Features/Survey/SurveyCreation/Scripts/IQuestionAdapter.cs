@@ -13,7 +13,8 @@ namespace QuestionnaireToolkit {
         public void RemoveOption(int optionIndex);
         public List<QTOptionsData> GetOptionsData();
         public int GetOptionsCount();
-
+        public void SetTargetView(ViewPoint vp);
+        public void GetTargetView();
 
     }
 }
