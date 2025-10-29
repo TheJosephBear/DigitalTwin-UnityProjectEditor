@@ -79,6 +79,27 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
         return go;
     }
 
+    public GameObject InstantiateObjectInScene(GameObject gameObject, SceneType scene) {
+        GameObject go = Instantiate(gameObject, new Vector3(0,0,0), Quaternion.identity);
+        SceneManager.MoveGameObjectToScene(go, SceneManager.GetSceneByName(scene.ToString()));
+        return go;
+    }
+
+    // Instantiate into active scene
+    public GameObject InstantiateObjectInScene(GameObject gameObject) {
+        GameObject go = Instantiate(gameObject, new Vector3(0, 0, 0), Quaternion.identity);
+        SceneType scene = GetActiveScene();
+        SceneManager.MoveGameObjectToScene(go, SceneManager.GetSceneByName(scene.ToString()));
+        return go;
+    }
+
+    public GameObject InstantiateObjectInScene(GameObject gameObject, Vector3 position) {
+        GameObject go = Instantiate(gameObject, position, Quaternion.identity);
+        SceneType scene = GetActiveScene();
+        SceneManager.MoveGameObjectToScene(go, SceneManager.GetSceneByName(scene.ToString()));
+        return go;
+    }
+
     IEnumerator LoadSceneAsyncC(SceneField scene, TaskCompletionSource<bool> tcs, float loadingScreenLength, bool addToGameplayScenes) {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive);
         while (!asyncLoad.isDone) {

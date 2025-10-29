@@ -10,6 +10,8 @@ using System;
 
 public class SurveyManager : Singleton<SurveyManager> {
 
+    SurveyBuilder SurveyBuilderPrefab;
+    
     QTQuestionnaireManager _qm;
 
     IQuestionAdapter _selectedQuestion;
@@ -23,12 +25,21 @@ public class SurveyManager : Singleton<SurveyManager> {
 
         //   AddPageAndQuestion();
 
-
-
-
         // Start manually
         _qm.StartQuestionnaire();
     }
+
+    public void EnterSurveyBuilding() {
+        SurveyBuilder builder = SceneLoadingManager.Instance
+            .InstantiateObjectInScene(SurveyBuilderPrefab.gameObject)
+            .GetComponent<SurveyBuilder>();
+        builder.Initialize();
+    }
+
+    public void StartSurveyRuntime() {
+
+    }
+
 
     public void CreateNewQuestionnare() {
         // Inicializace
@@ -140,15 +151,10 @@ public class SurveyManager : Singleton<SurveyManager> {
 
 
     QTQuestionPageManager GetSelectedPage() {
-        /*    print("Get selected page");
-            print(_qm);
-            print("The idx of selected page is: " + _qm.selectedPage);
-            print(_qm.questionPages[_qm.selectedPage]);
-            print(_qm.questionPages[_qm.selectedPage].GetComponent<QTQuestionPageManager>());*/
         return _qm.questionPages[_qm.selectedPage].GetComponent<QTQuestionPageManager>();
     }
 
-    QTQuestionPageManager GetPageManagerByIndex(int index) {
+    QTQuestionPageManager GetPageByIndex(int index) {
         return _qm.questionPages[index].GetComponent<QTQuestionPageManager>();
     }
 
