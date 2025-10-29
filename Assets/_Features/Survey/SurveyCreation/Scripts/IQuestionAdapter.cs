@@ -14,7 +14,7 @@ namespace QuestionnaireToolkit {
         public List<QTOptionsData> GetOptionsData();
         public int GetOptionsCount();
         public void SetTargetView(ViewPoint vp);
-        public void GetTargetView();
+        public ViewPoint GetTargetView();
 
     }
 }

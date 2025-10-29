@@ -65,5 +65,13 @@ namespace QuestionnaireToolkit {
         public string GetQuestionText() {
             return _multipleChoice.question;
         }
+
+        public void SetTargetView(ViewPoint vp) {
+            _multipleChoice.TargetViewPoint = vp;
+        }
+
+        public ViewPoint GetTargetView() {
+            return _multipleChoice.TargetViewPoint;
+        }
     }
 }

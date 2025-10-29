@@ -97,6 +97,11 @@ public class SurveyManager : Singleton<SurveyManager> {
         _selectedQuestion.SetTargetView(ViewManager.Instance.GetViewPoints()[idx]);
     }
 
+    public ViewPoint GetQuestionTargetView() {
+        print("Getting the linear scale target vp: " + _selectedQuestion.GetTargetView());
+        return _selectedQuestion.GetTargetView();
+    }
+
 
 
 
@@ -125,7 +130,7 @@ public class SurveyManager : Singleton<SurveyManager> {
         linearScale.question = "Wawwaaaaa";
         linearScale.AddOption(scriptBased: true, a_value: "1", a_option: "Vùbec");
         linearScale.AddOption(scriptBased: true, a_value: "2", a_option: "Trošku");
-        linearScale.AddOption(scriptBased: true, a_value: "3", a_option: "Prcám");
+        linearScale.AddOption(scriptBased: true, a_value: "3", a_option: "meh");
         linearScale.AddOption(scriptBased: true, a_value: "4", a_option: "Trošku");
         linearScale.AddOption(scriptBased: true, a_value: "5", a_option: "Ranec");
 

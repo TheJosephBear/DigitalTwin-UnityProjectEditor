@@ -11,8 +11,7 @@ namespace QuestionnaireToolkit.Scripts
     /// This class is used to manage (add, remove, edit) options of a MultipleChoice question item and to edit its general properties.
     /// </summary>
     [ExecuteInEditMode]
-    public class QTMultipleChoice : MonoBehaviour
-    {
+    public class QTMultipleChoice : QTQuestion {
         // bool to determine if this question items must be answered
         public bool answerRequired = true;
         // the name of the item which appears in the results file as header entry

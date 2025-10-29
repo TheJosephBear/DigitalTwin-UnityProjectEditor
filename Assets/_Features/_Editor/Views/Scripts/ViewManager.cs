@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ViewManager : Singleton<ViewManager> {
 
@@ -16,6 +17,10 @@ public class ViewManager : Singleton<ViewManager> {
     ViewPoint currentViewPoint;
     CustomMovement _movementScript;
     public bool isActivelyShowingCam = false;
+
+    [System.Serializable]
+    public class OnViewAdded : UnityEvent<ViewPoint> { }
+    public OnViewAdded OnViewPointAddedEvent;
 
     protected override void Awake() {
         base.Awake();
@@ -38,12 +43,18 @@ public class ViewManager : Singleton<ViewManager> {
     }
 
     public GameObject CreateNewViewPoint() {
-        Transform freecamTrans = EditorCameraManager.Instance.GetFreeCamTransform();
-        viewPointSpawnPosition = freecamTrans.position;
+        Transform freecamTrans = EditorCameraManager.Instance?.GetFreeCamTransform(); // Dependability..
+        if(freecamTrans != null)
+            viewPointSpawnPosition = freecamTrans.position;
+
         ViewPoint newInterestPoint = SceneLoadingManager.Instance.InstantiateObjectInScene(ViewPointPrefab, viewPointSpawnPosition, SceneToInstantiate).GetComponent<ViewPoint>();
+        newInterestPoint.SetName("Default view point name" + new System.Random().Next(0,100) );
         viewPoints.Add(newInterestPoint);
-        newInterestPoint.transform.rotation = freecamTrans.rotation;
+        if (freecamTrans != null)
+            newInterestPoint.transform.rotation = freecamTrans.rotation;
         newInterestPoint.Deactivate();
+
+        OnViewPointAddedEvent.Invoke(newInterestPoint);
         return newInterestPoint.gameObject;
     }
 

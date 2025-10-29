@@ -13,11 +13,15 @@ namespace QuestionnaireToolkit.Scripts
         public string questionText;
     }
 
+    public abstract class QTQuestion : MonoBehaviour {
+        public ViewPoint TargetViewPoint;
+    }
+
     /// <summary>
     /// This class is used to manage (add, remove, edit) options of a LinearScale question item and to edit its general properties.
     /// </summary>
     [ExecuteInEditMode]
-    public class QTLinearScale : MonoBehaviour {
+    public class QTLinearScale : QTQuestion {
         // bool to determine if this question items must be answered
         public bool answerRequired = true;
         // the name of the item which appears in the results file as header entry

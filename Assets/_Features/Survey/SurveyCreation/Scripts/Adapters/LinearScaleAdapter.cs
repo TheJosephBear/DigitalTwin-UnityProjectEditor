@@ -62,5 +62,13 @@ namespace QuestionnaireToolkit {
         public string GetQuestionText() {
             return _linearScale.question;
         }
+
+        public void SetTargetView(ViewPoint vp) {
+            _linearScale.TargetViewPoint = vp;
+        }
+
+        public ViewPoint GetTargetView() {
+            return _linearScale.TargetViewPoint;
+        }
     }
 }

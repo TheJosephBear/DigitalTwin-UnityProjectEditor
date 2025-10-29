@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using QuestionnaireToolkit.Scripts;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using static QuestionnaireToolkit.Scripts.QTQuestionPageManager;
 
@@ -11,6 +12,7 @@ public class TEMPQuestionnareSetUpUI : MonoBehaviour {
     public SurveyAddedOption AddedOptionUIPrefab;
 
     public TMP_InputField QuestionTextReff;
+    public TMP_Dropdown ViewPointDropdownReff;
 
 
 
@@ -26,6 +28,8 @@ public class TEMPQuestionnareSetUpUI : MonoBehaviour {
 
     private void Start() {
         UIClickableManager.Instance.OnUIClicked += HandleUIClick;
+        ViewManager.Instance.OnViewPointAddedEvent.AddListener(HandleViewPointCreated);
+        UpdateViewDropdown();
     }
 
 
@@ -75,12 +79,34 @@ public class TEMPQuestionnareSetUpUI : MonoBehaviour {
     }
 
     public void SetQuestionTargetView(int idx) {
+        SurveyManager.Instance.SetQuestionTargetView(idx);
+    }
 
+    public void UpdateViewDropdown() {
+
+        ViewPointDropdownReff.ClearOptions();
+        List<string> optionNames = new List<string>();
+
+        foreach (var vp in ViewManager.Instance.GetViewPoints()) {
+            optionNames.Add(vp.Name);
+        }
+
+        ViewPointDropdownReff.AddOptions(optionNames);
+
+        if (optionNames.Count > 0)
+            ViewPointDropdownReff.value = 0;
+
+        ViewPointDropdownReff.RefreshShownValue();
     }
 
 
     private void OnDisable() {
         UIClickableManager.Instance.OnUIClicked -= HandleUIClick;
+        ViewManager.Instance.OnViewPointAddedEvent.RemoveListener(HandleViewPointCreated);
+    }
+
+    private void HandleViewPointCreated(ViewPoint vp) {
+        UpdateViewDropdown();
     }
 
     private void HandleUIClick(List<GameObject> clickedObject) {
@@ -116,11 +142,18 @@ public class TEMPQuestionnareSetUpUI : MonoBehaviour {
         SurveyManager manager = SurveyManager.Instance;
         manager.SelectQuestion(selectedGO, type);
         List<QTOptionsData> data = SurveyManager.Instance.GetOptionsData();
-
+        // Question text
         QuestionTextReff.SetTextWithoutNotify(manager.GetQuestionText());
+        // Options
         ClearQuestionOptionList();
         foreach (QTOptionsData item in data) {
             AddQuestionOptionToUIList(item.idx, item.questionText);
+        }
+        // Viewpoint
+        ViewPoint vp = SurveyManager.Instance.GetQuestionTargetView();
+        if (vp != null) {
+            int indexToSelect = ViewPointDropdownReff.options.FindIndex(option => option.text == vp.Name);
+            ViewPointDropdownReff.SetValueWithoutNotify(indexToSelect);
         }
     }
 
