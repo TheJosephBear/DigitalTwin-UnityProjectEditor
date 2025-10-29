@@ -997,7 +997,19 @@ MonoBehaviour:
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 518379429}
+        m_TargetAssemblyTypeName: TEMPQuestionnareSetUpUI, Assembly-CSharp
+        m_MethodName: SetQuestionTargetView
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_AlphaFadeSpeed: 0.15
 --- !u!224 &243209243
 RectTransform:
@@ -1008,7 +1020,7 @@ RectTransform:
   m_GameObject: {fileID: 243209241}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4.3856, y: 4.3856, z: 4.3856}
+  m_LocalScale: {x: 4.597, y: 4.597, z: 4.597}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1612980043}
@@ -1019,8 +1031,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -315, y: 319}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: -1.831, y: 307}
+  m_SizeDelta: {x: 289.288, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &243209244
 MonoBehaviour:
@@ -2119,6 +2131,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7044977111450090819, guid: f829c45f4f85eb7418c0cd45082ebb70, type: 3}
+      propertyPath: SceneToInstantiate
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 7044977111450090819, guid: f829c45f4f85eb7418c0cd45082ebb70, type: 3}
+      propertyPath: viewPointSpawnPosition.x
+      value: -100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7044977111450090819, guid: f829c45f4f85eb7418c0cd45082ebb70, type: 3}
+      propertyPath: viewPointSpawnPosition.z
+      value: -100
+      objectReference: {fileID: 0}
     - target: {fileID: 8794994671491001252, guid: f829c45f4f85eb7418c0cd45082ebb70, type: 3}
       propertyPath: m_RootOrder
       value: 8
@@ -6499,7 +6523,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -7.5, y: -0.5}
+  m_AnchoredPosition: {x: -7.4999847, y: -0.5}
   m_SizeDelta: {x: -35, y: -13}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1633894733
