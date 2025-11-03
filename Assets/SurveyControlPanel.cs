@@ -6,10 +6,11 @@ using Unity.VisualScripting;
 using UnityEngine;
 using static QuestionnaireToolkit.Scripts.QTQuestionPageManager;
 
-public class TEMPQuestionnareSetUpUI : MonoBehaviour {
+public class SurveyControlPanel : MonoBehaviour {
 
     public Transform AddedOptionListParentReff;
     public SurveyAddedOption AddedOptionUIPrefab;
+    public SurveyBuilder surveyBuilder;
 
     public TMP_InputField QuestionTextReff;
     public TMP_Dropdown ViewPointDropdownReff;
@@ -32,21 +33,25 @@ public class TEMPQuestionnareSetUpUI : MonoBehaviour {
         UpdateViewDropdown();
     }
 
+    public void Initialize(SurveyBuilder sb) {
+        surveyBuilder = sb;
+    }
+
 
     public void SaveQuestionnare() {
-        SurveyManager.Instance.SaveQuestionnare();
+        surveyBuilder.SaveQuestionnare();
     }
 
     public void LoadQuestionnare() {
-        SurveyManager.Instance.LoadQuestionnare();
+        surveyBuilder.LoadQuestionnare();
     }
 
     public void AddPageToQuestionnare() {
-        SurveyManager.Instance.AddPageToQuestionnare();
+        surveyBuilder.AddPageToQuestionnare();
     }
 
     public void AddQuestionToSelectedPage() {
-        SurveyManager.Instance.AddNewQuestion(_addedQuestionType);
+        surveyBuilder.AddNewQuestion(_addedQuestionType);
         FillUIWithQuestionData(_addedQuestionType);
     }
 
@@ -62,24 +67,24 @@ public class TEMPQuestionnareSetUpUI : MonoBehaviour {
     }
 
     public void SetQuestionText(string text) {
-        SurveyManager.Instance.SetQuestionText(text);
+        surveyBuilder.SetQuestionText(text);
     }
 
     public void AddOptionToQuestion() {
-        int questionIdx = SurveyManager.Instance.AddQuestionOption();
+        int questionIdx = surveyBuilder.AddQuestionOption();
         AddQuestionOptionToUIList(questionIdx);
     }
 
     public void SetOptionText(int optionIndex, string text) {
-        SurveyManager.Instance.SetOptionText(optionIndex, text);
+        surveyBuilder.SetOptionText(optionIndex, text);
     }
 
     public void RemoveOption(int optionIndex) {
-        SurveyManager.Instance.RemoveOption(optionIndex);
+        surveyBuilder.RemoveOption(optionIndex);
     }
 
     public void SetQuestionTargetView(int idx) {
-        SurveyManager.Instance.SetQuestionTargetView(idx);
+        surveyBuilder.SetQuestionTargetView(idx);
     }
 
     public void UpdateViewDropdown() {
@@ -139,18 +144,17 @@ public class TEMPQuestionnareSetUpUI : MonoBehaviour {
     }
 
     void FillUIWithQuestionData(GameObject selectedGO, QuestionItemsEnum type) {
-        SurveyManager manager = SurveyManager.Instance;
-        manager.SelectQuestion(selectedGO, type);
-        List<QTOptionsData> data = SurveyManager.Instance.GetOptionsData();
+        surveyBuilder.SelectQuestion(selectedGO, type);
+        List<QTOptionsData> data = surveyBuilder.GetOptionsData();
         // Question text
-        QuestionTextReff.SetTextWithoutNotify(manager.GetQuestionText());
+        QuestionTextReff.SetTextWithoutNotify(surveyBuilder.GetQuestionText());
         // Options
         ClearQuestionOptionList();
         foreach (QTOptionsData item in data) {
             AddQuestionOptionToUIList(item.idx, item.questionText);
         }
         // Viewpoint
-        ViewPoint vp = SurveyManager.Instance.GetQuestionTargetView();
+        ViewPoint vp = surveyBuilder.GetQuestionTargetView();
         if (vp != null) {
             int indexToSelect = ViewPointDropdownReff.options.FindIndex(option => option.text == vp.Name);
             ViewPointDropdownReff.SetValueWithoutNotify(indexToSelect);
@@ -158,10 +162,9 @@ public class TEMPQuestionnareSetUpUI : MonoBehaviour {
     }
 
     void FillUIWithQuestionData(QuestionItemsEnum type) {
-        SurveyManager manager = SurveyManager.Instance;
-        List<QTOptionsData> data = SurveyManager.Instance.GetOptionsData();
+        List<QTOptionsData> data = surveyBuilder.GetOptionsData();
 
-        QuestionTextReff.SetTextWithoutNotify(manager.GetQuestionText());
+        QuestionTextReff.SetTextWithoutNotify(surveyBuilder.GetQuestionText());
         ClearQuestionOptionList();
         foreach (QTOptionsData item in data) {
             AddQuestionOptionToUIList(item.idx, item.questionText);

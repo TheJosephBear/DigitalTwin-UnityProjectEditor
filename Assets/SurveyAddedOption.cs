@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 
 public class SurveyAddedOption : MonoBehaviour {
-    TEMPQuestionnareSetUpUI _rootUIReff;
+    SurveyControlPanel _rootUIReff;
     int _optionIndex = 0;
 
     public TMP_InputField InputFieldReff;
@@ -13,7 +13,7 @@ public class SurveyAddedOption : MonoBehaviour {
         _rootUIReff.RemoveOption(_optionIndex);
     }
 
-    public void Initialize(string name, int index, TEMPQuestionnareSetUpUI rootUIReff) {
+    public void Initialize(string name, int index, SurveyControlPanel rootUIReff) {
         InputFieldReff.SetTextWithoutNotify(name);
         _optionIndex = index;
         _rootUIReff = rootUIReff;

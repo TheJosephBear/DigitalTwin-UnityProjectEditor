@@ -60,6 +60,9 @@ public class EditorManager : Singleton<EditorManager> {
             case EditorMode.Initialization:
                 EnterModeInitialization();
                 break;
+            case EditorMode.SurveyCreation:
+                EnterModeSurvey();
+                break;
         }
     }
 
@@ -104,6 +107,11 @@ public class EditorManager : Singleton<EditorManager> {
         ViewManager.Instance.StartViewMoving();
     }
 
+    void EnterModeSurvey() {
+        SurveyManager.Instance.EnterSurveyBuilding();
+        UImanager.Instance.HideUI(UIType.EditorHUD);
+    }
+
     #endregion
 
     public void ExitEditor() {
@@ -126,4 +134,5 @@ public enum EditorMode {
     GeoLocalization,
     TwoMaps,
     View,
+    SurveyCreation,
 }

@@ -7,12 +7,42 @@ using static QuestionnaireToolkit.Scripts.QTQuestionPageManager;
 
 public class SurveyBuilder : MonoBehaviour {
 
+    public GameObject QuestionnarePrefab;
+    public GameObject ObstructorPrefab;
+    public GameObject ControlPanelPrefab;
+
+    public Vector3 QuestionnareCanvasOffset;
+
     QTQuestionnaireManager _qm;
     IQuestionAdapter _selectedQuestion;
 
-    // Load the needed assets
+    // Load the needed assets and setup
     public void Initialize() {
+        // Position everything in front of the camera
+        // (asset UI is in worldspace so we need to hide it)
+        InstantiateQuestionnare();
 
+        _qm.StartQuestionnaire();
+    }
+
+    void InstantiateQuestionnare() {
+        Camera cam = Camera.main;
+        if (cam == null) return;
+
+        Quaternion uiRotation = cam.transform.rotation;
+
+        GameObject questionnaireInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(QuestionnarePrefab, cam.transform.position);
+        questionnaireInstance.transform.rotation = uiRotation;
+        questionnaireInstance.transform.position += questionnaireInstance.transform.TransformVector(QuestionnareCanvasOffset);
+
+        GameObject obstructor = SceneLoadingManager.Instance.InstantiateObjectInScene(ObstructorPrefab, questionnaireInstance.transform.position);
+        obstructor.transform.rotation = uiRotation;
+        obstructor.transform.position -= cam.transform.forward * -2f;
+
+        GameObject controlPanel = SceneLoadingManager.Instance.InstantiateObjectInScene(ControlPanelPrefab.gameObject);
+
+        controlPanel.GetComponent<SurveyControlPanel>().Initialize(this);
+        _qm = questionnaireInstance.GetComponent<QTQuestionnaireManager>();
     }
 
     // Select created question instance (works with UI calls)

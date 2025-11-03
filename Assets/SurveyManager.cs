@@ -6,10 +6,11 @@ using UnityEngine;
 using QuestionnaireToolkit;
 using TMPro;
 using System;
+using static QuestionnaireToolkit.Scripts.QTQuestionPageManager;
 
 public class SurveyManager : Singleton<SurveyManager> {
 
-    SurveyBuilder SurveyBuilderPrefab;
+    public SurveyBuilder SurveyBuilderPrefab;
     
     QTQuestionnaireManager _qm;
 
@@ -19,13 +20,13 @@ public class SurveyManager : Singleton<SurveyManager> {
     void Start() {
         // Load & instantiate prefab
         //    GameObject qmPrefab = Resources.Load<GameObject>("QuestionnaireToolkit/Prefabs/QuestionnaireManager");
-        _qm = FindAnyObjectByType<QTQuestionnaireManager>();
-        _qm.exportPath = System.IO.Path.Combine(Application.dataPath, "QuestionnaresSaved"); // Assets/QuestionnaresSaved
+    //    _qm = FindAnyObjectByType<QTQuestionnaireManager>();
+    //    _qm.exportPath = System.IO.Path.Combine(Application.dataPath, "QuestionnaresSaved"); // Assets/QuestionnaresSaved
 
         //   AddPageAndQuestion();
 
         // Start manually
-        _qm.StartQuestionnaire();
+     //   _qm.StartQuestionnaire();
     }
 
     public void EnterSurveyBuilding() {

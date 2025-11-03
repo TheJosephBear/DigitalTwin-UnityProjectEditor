@@ -32,6 +32,11 @@ public class EditorHUDui : UIBehaviour {
         */
     }
 
+    public void OnSurvey() {
+        EditorManager.Instance.ChangeEditorMode(EditorMode.SurveyCreation);
+
+    }
+
     public void OnSave() {
         ProjectManager.Instance.SaveProject();
     }
