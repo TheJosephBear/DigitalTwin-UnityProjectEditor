@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using QuestionnaireToolkit;
-using static QuestionnaireToolkit.Scripts.QTQuestionPageManager;
 using TMPro;
 using System;
 
@@ -66,6 +65,10 @@ public class SurveyManager : Singleton<SurveyManager> {
         SelectQuestion(selectedPage.selectedItem, type);
     }
 
+
+
+
+
     public void SelectQuestion(GameObject questionGO, QuestionItemsEnum type) {
         switch (type) {
             case QuestionItemsEnum.MultipleChoice:
@@ -78,6 +81,10 @@ public class SurveyManager : Singleton<SurveyManager> {
         }
         print("New question selected! " + type);
     }
+
+
+
+
 
     public void SetQuestionText(string newQuestionText) {
         _selectedQuestion.SetQuestionText(newQuestionText);
