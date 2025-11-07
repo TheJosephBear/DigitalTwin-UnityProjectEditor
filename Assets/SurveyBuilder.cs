@@ -15,14 +15,23 @@ public class SurveyBuilder : MonoBehaviour {
 
     QTQuestionnaireManager _qm;
     IQuestionAdapter _selectedQuestion;
+    int _originalCullingMask;
 
     // Load the needed assets and setup
     public void Initialize() {
         // Position everything in front of the camera
         // (asset UI is in worldspace so we need to hide it)
         InstantiateQuestionnare();
+        // Set camera to see only UI
+        _originalCullingMask = Camera.main.cullingMask;
+        Camera.main.cullingMask = 1 << LayerMask.NameToLayer("UI");
 
         _qm.StartQuestionnaire();
+    }
+
+    public void ExitSurveyBuilding() {
+        // Restore original visible layers
+        Camera.main.cullingMask = _originalCullingMask;
     }
 
     void InstantiateQuestionnare() {
