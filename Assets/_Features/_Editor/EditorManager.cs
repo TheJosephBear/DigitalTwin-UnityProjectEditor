@@ -110,6 +110,7 @@ public class EditorManager : Singleton<EditorManager> {
     void EnterModeSurvey() {
         SurveyManager.Instance.EnterSurveyBuilding();
         UImanager.Instance.HideUI(UIType.EditorHUD);
+        ViewManager.Instance.ToggleCameraPreview(false);
     }
 
     #endregion

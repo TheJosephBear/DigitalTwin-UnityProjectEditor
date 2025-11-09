@@ -13,6 +13,11 @@ public class MapManager : Singleton<MapManager> {
         base.Awake();
     }
 
+    // Do budoucna nastavovat spawn position po posunu v geo mapì
+    private void Update() {
+        if(_baseMap!=null) mapSpawnPosition = _baseMap.transform.position;
+    }
+
     public void UploadBaseMapModel(ModelAsset newMap) {
         MapVariant addedMap = newMap.InstantiateModel(mapSpawnPosition).AddComponent<MapVariant>();
         addedMap.ModelAsset = newMap;

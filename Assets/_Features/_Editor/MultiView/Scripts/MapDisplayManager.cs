@@ -32,6 +32,8 @@ public class MapDisplayManager : Singleton<MapDisplayManager> {
     }
 
     public void Exit() {
+        _primaryMapInstance.gameObject.SetActive(false);
+        _secondaryMapInstance.gameObject.SetActive(false);
         _multivewCamerasRefference.SetActive(false);
         UImanager.Instance.HideUI(UIType.TwoMapsCameraView);
         EditorManager.Instance.ChangeEditorMode(EditorMode.Freecam);

@@ -16,6 +16,9 @@ public class SurveyBuilder : MonoBehaviour {
     QTQuestionnaireManager _qm;
     IQuestionAdapter _selectedQuestion;
     int _originalCullingMask;
+    GameObject _questionnareInstance;
+    GameObject _obstructorInstance;
+    GameObject _controlPanelInstance;
 
     // Load the needed assets and setup
     public void Initialize() {
@@ -32,6 +35,11 @@ public class SurveyBuilder : MonoBehaviour {
     public void ExitSurveyBuilding() {
         // Restore original visible layers
         Camera.main.cullingMask = _originalCullingMask;
+        _questionnareInstance.SetActive(false);
+        _obstructorInstance.SetActive(false);
+        _controlPanelInstance.SetActive(false);
+        // Volat level editor je špatný, ale to se opraví po refaktorizaci editor managera
+        EditorManager.Instance.ChangeEditorMode(EditorMode.Freecam);
     }
 
     void InstantiateQuestionnare() {
@@ -40,18 +48,30 @@ public class SurveyBuilder : MonoBehaviour {
 
         Quaternion uiRotation = cam.transform.rotation;
 
-        GameObject questionnaireInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(QuestionnarePrefab, cam.transform.position);
-        questionnaireInstance.transform.rotation = uiRotation;
-        questionnaireInstance.transform.position += questionnaireInstance.transform.TransformVector(QuestionnareCanvasOffset);
+        if (_questionnareInstance == null) {
+            _questionnareInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(QuestionnarePrefab, cam.transform.position);
+        } else {
+            _questionnareInstance.SetActive(true);  
+        }
 
-        GameObject obstructor = SceneLoadingManager.Instance.InstantiateObjectInScene(ObstructorPrefab, questionnaireInstance.transform.position);
-        obstructor.transform.rotation = uiRotation;
-        obstructor.transform.position -= cam.transform.forward * -2f;
+        _questionnareInstance.transform.rotation = uiRotation;
+        _questionnareInstance.transform.position += _questionnareInstance.transform.TransformVector(QuestionnareCanvasOffset);
 
-        GameObject controlPanel = SceneLoadingManager.Instance.InstantiateObjectInScene(ControlPanelPrefab.gameObject);
+        if (_obstructorInstance == null) {
+            _obstructorInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(ObstructorPrefab, _questionnareInstance.transform.position);
+        } else {
+            _obstructorInstance.SetActive(true);
+        }
 
-        controlPanel.GetComponent<SurveyControlPanel>().Initialize(this);
-        _qm = questionnaireInstance.GetComponent<QTQuestionnaireManager>();
+        _obstructorInstance.transform.rotation = uiRotation;
+        _obstructorInstance.transform.position -= cam.transform.forward * -2f;
+
+        if (_controlPanelInstance == null) {
+            _controlPanelInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(ControlPanelPrefab.gameObject);
+            _controlPanelInstance.GetComponent<SurveyControlPanel>().Initialize(this);
+        }
+
+        _qm = _questionnareInstance.GetComponent<QTQuestionnaireManager>();
     }
 
     // Select created question instance (works with UI calls)

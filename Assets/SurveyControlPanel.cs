@@ -37,20 +37,23 @@ public class SurveyControlPanel : MonoBehaviour {
         surveyBuilder = sb;
     }
 
+    public void OnExit() {
+        surveyBuilder.ExitSurveyBuilding();
+    }
 
-    public void SaveQuestionnare() {
+    public void OnSave() {
         surveyBuilder.SaveQuestionnare();
     }
 
-    public void LoadQuestionnare() {
+    public void OnLoad() {
         surveyBuilder.LoadQuestionnare();
     }
 
-    public void AddPageToQuestionnare() {
+    public void OnAddPage() {
         surveyBuilder.AddPageToQuestionnare();
     }
 
-    public void AddQuestionToSelectedPage() {
+    public void OnAddQuestion() {
         surveyBuilder.AddNewQuestion(_addedQuestionType);
         FillUIWithQuestionData(_addedQuestionType);
     }
