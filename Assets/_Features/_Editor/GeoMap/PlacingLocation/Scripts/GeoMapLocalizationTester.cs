@@ -13,7 +13,7 @@ public class GeoMapLocalizationTester : MonoBehaviour {
         var load = SceneManager.LoadSceneAsync("Utilities", LoadSceneMode.Additive);
         yield return new WaitUntil(() => load.isDone);
         yield return new WaitForSeconds(0.2f);
-        GeoMapManager.Instance.ActivateGeoLocalization();
+        EditorManager.Instance.GeoMapManager.ActivateGeoLocalization();
     }
 
 }

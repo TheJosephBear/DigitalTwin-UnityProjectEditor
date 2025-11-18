@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class MapManager : Singleton<MapManager> {
+public class MapManager : MonoBehaviour {
 
     MapVariant _baseMap;
     List<MapVariant> _mapVariants = new List<MapVariant>();
     public Vector3 mapSpawnPosition;
-
-    protected override void Awake() {
-        base.Awake();
-    }
 
     // Do budoucna nastavovat spawn position po posunu v geo mapì
     private void Update() {
@@ -45,8 +41,8 @@ public class MapManager : Singleton<MapManager> {
     }
 
     public void ClearEverything() {
-        _baseMap = null;
         _mapVariants.Clear();
+        _baseMap = null;
     }
 
     public bool hasVariant() {

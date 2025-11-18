@@ -583,7 +583,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6429724319150634840}
         m_TargetAssemblyTypeName: LoginRegister, Assembly-CSharp
         m_MethodName: GoToLogin
         m_Mode: 1
@@ -1145,11 +1145,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5149769567523544376, guid: bee6aea5880b0e04fa8eaf5fbf443328, type: 3}
       propertyPath: m_text
-      value: "P\u0159ihl\xE1sit se"
+      value: Registrovat se
+      objectReference: {fileID: 0}
+    - target: {fileID: 5149769567523544376, guid: bee6aea5880b0e04fa8eaf5fbf443328, type: 3}
+      propertyPath: m_fontSize
+      value: 21.05
       objectReference: {fileID: 0}
     - target: {fileID: 5149769567523544376, guid: bee6aea5880b0e04fa8eaf5fbf443328, type: 3}
       propertyPath: m_fontStyle
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5149769567523544376, guid: bee6aea5880b0e04fa8eaf5fbf443328, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 21.05
       objectReference: {fileID: 0}
     - target: {fileID: 5149769567537284166, guid: bee6aea5880b0e04fa8eaf5fbf443328, type: 3}
       propertyPath: m_Name

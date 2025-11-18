@@ -13,9 +13,9 @@ public class EditorInitUI : UIBehaviour {
 
     void OnFileSelectedMap(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
         if (files != null && files.Length > 0) {
-            MapManager.Instance.UploadBaseMapModel(AssetManager.Instance.CreateNewAsset(files[0]));
+            EditorManager.Instance.MapManager.UploadBaseMapModel(AssetManager.Instance.CreateNewAsset(files[0]));
             // Open Geo localization
-            EditorManager.Instance.ChangeEditorMode(EditorMode.GeoLocalization);
+            EditorManager.Instance.ChangeEditorMode(EditorState.GeoLocalization);
         } else {
             PopUp.Instance.ShowPopUpWindow("Please select .obj file!");
         }

@@ -29,7 +29,7 @@ public class SurveyControlPanel : MonoBehaviour {
 
     private void Start() {
         UIClickableManager.Instance.OnUIClicked += HandleUIClick;
-        ViewManager.Instance.OnViewPointAddedEvent.AddListener(HandleViewPointCreated);
+        EditorManager.Instance.ViewManager.OnViewPointAddedEvent.AddListener(HandleViewPointCreated);
         UpdateViewDropdown();
     }
 
@@ -95,7 +95,7 @@ public class SurveyControlPanel : MonoBehaviour {
         ViewPointDropdownReff.ClearOptions();
         List<string> optionNames = new List<string>();
 
-        foreach (var vp in ViewManager.Instance.GetViewPoints()) {
+        foreach (var vp in EditorManager.Instance.ViewManager.GetViewPoints()) {
             optionNames.Add(vp.Name);
         }
 
@@ -110,7 +110,7 @@ public class SurveyControlPanel : MonoBehaviour {
 
     private void OnDisable() {
         UIClickableManager.Instance.OnUIClicked -= HandleUIClick;
-        ViewManager.Instance.OnViewPointAddedEvent.RemoveListener(HandleViewPointCreated);
+        EditorManager.Instance.ViewManager.OnViewPointAddedEvent.RemoveListener(HandleViewPointCreated);
     }
 
     private void HandleViewPointCreated(ViewPoint vp) {

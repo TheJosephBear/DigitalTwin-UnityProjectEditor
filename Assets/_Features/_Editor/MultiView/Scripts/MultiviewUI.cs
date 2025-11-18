@@ -20,16 +20,16 @@ public class MultiviewUI : UIBehaviour {
     public void Initialize() {
         UpdateDropDowns();
         if (_mapVariants.Count > 0) {
-            MapDisplayManager.Instance.ShowVariant(_mapVariants[0], MapPriority.Secondary);
+            EditorManager.Instance.MultiViewManager.ShowVariant(_mapVariants[0], MapPriority.Secondary);
         }
     }
 
     public void OnLeave() {
-        MapDisplayManager.Instance.Exit();
+        EditorManager.Instance.MultiViewManager.Exit();
     }
 
     public void UpdateDropDowns() {
-        List<MapVariant> mapVariants = MapManager.Instance.GetVariants();
+        List<MapVariant> mapVariants = EditorManager.Instance.MapManager.GetVariants();
 
         DropDownPrimary.SetupMultiview(mapVariants);
         DropDownSecondary.SetupMultiview(mapVariants);
@@ -68,7 +68,7 @@ public class MultiviewUI : UIBehaviour {
 
     private void OnMapVariantSelectedPrimary(int index) {
         if (index >= 0 && index < _mapVariants.Count) {
-            MapDisplayManager.Instance.ShowVariant(_mapVariants[index], MapPriority.Primary);
+            EditorManager.Instance.MultiViewManager.ShowVariant(_mapVariants[index], MapPriority.Primary);
         } else {
             Debug.LogWarning("Primary index out of range.");
         }
@@ -76,7 +76,7 @@ public class MultiviewUI : UIBehaviour {
 
     private void OnMapVariantSelectedSecondary(int index) {
         if (index >= 0 && index < _mapVariants.Count) {
-            MapDisplayManager.Instance.ShowVariant(_mapVariants[index], MapPriority.Secondary);
+            EditorManager.Instance.MultiViewManager.ShowVariant(_mapVariants[index], MapPriority.Secondary);
         } else {
             Debug.LogWarning("Secondary index out of range.");
         }

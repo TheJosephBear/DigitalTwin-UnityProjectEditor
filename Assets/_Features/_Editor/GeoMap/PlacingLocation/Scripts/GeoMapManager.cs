@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 
-public class GeoMapManager : Singleton<GeoMapManager> {
+public class GeoMapManager : MonoBehaviour {
 
     public OnlineMaps OnlineMapsReff;
     public GameObject vcam;
     int _equator = 40075000;
     float _previousZoomValue;
 
-    protected override void Awake() {
-        base.Awake();
+    void Awake() {
         OnlineMapsReff.gameObject.SetActive(false);
         if(vcam!=null) vcam.SetActive(false);
     }
@@ -27,7 +26,7 @@ public class GeoMapManager : Singleton<GeoMapManager> {
         UImanager.Instance.HideUI(UIType.GeoLocalizationUI);
         ToggleGeoMap(false);
         GeoMapLocalizationManager.Instance.Exit();
-        EditorManager.Instance.ChangeEditorMode(EditorMode.Freecam);
+        EditorManager.Instance.ChangeEditorMode(EditorState.Freecam);
     }
 
     public void ZoomMap(float zoomValue) {

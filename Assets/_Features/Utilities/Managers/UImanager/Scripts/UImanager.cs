@@ -26,6 +26,7 @@ public class UImanager : Singleton<UImanager> {
     public void ShowUI(UIType uiType) {
         foreach (UIBehaviour ui in uiList) {
             if (ui.gameObject.name == uiType.ToString()) {
+                print("UI manager is showing ui " + uiType);
                 activeUIscript = ui;
                 ui.Show();
                 return;
@@ -37,6 +38,7 @@ public class UImanager : Singleton<UImanager> {
         foreach (UIBehaviour ui in uiList) {
             if (ui.gameObject.name == uiType.ToString()) {
                 activeUIscript = null;
+                print("UI manager is HIDING ui " + uiType);
                 ui.Hide();
                 return;
             }
@@ -44,6 +46,7 @@ public class UImanager : Singleton<UImanager> {
     }
 
     public void ToggleUI(UIType uiType, bool toggleOn) {
+        print("UI manager is TOGGLING ui " + uiType + " " + toggleOn);
         if (toggleOn) {
             ShowUI(uiType);
         } else {

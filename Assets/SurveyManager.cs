@@ -8,7 +8,7 @@ using TMPro;
 using System;
 using static QuestionnaireToolkit.Scripts.QTQuestionPageManager;
 
-public class SurveyManager : Singleton<SurveyManager> {
+public class SurveyManager : MonoBehaviour {
 
     public SurveyBuilder SurveyBuilderPrefab;
     
@@ -113,7 +113,7 @@ public class SurveyManager : Singleton<SurveyManager> {
     }
 
     public void SetQuestionTargetView(int idx) {
-        _selectedQuestion.SetTargetView(ViewManager.Instance.GetViewPoints()[idx]);
+        _selectedQuestion.SetTargetView(EditorManager.Instance.ViewManager.GetViewPoints()[idx]);
     }
 
     public ViewPoint GetQuestionTargetView() {

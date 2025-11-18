@@ -15,6 +15,6 @@ public class ViewTester : MonoBehaviour {
         yield return new WaitUntil(() => load.isDone);
         yield return new WaitForSeconds(0.2f);
         UImanager.Instance.ShowUI(UIType.EditorHUD);
-        EditorManager.Instance.ChangeEditorMode(EditorMode.Freecam);
+        EditorManager.Instance.ChangeEditorMode(EditorState.Freecam);
     }
 }

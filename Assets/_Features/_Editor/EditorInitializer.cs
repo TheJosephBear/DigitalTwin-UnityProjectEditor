@@ -6,7 +6,7 @@ public class EditorInitializer : MonoBehaviour, Iinitializer {
     public void Initialize() {
         SceneLoadingManager.Instance.SetActiveScene(SceneType.Editing);
         // Show geo map right away
-        EditorManager.Instance.ChangeEditorMode(EditorMode.GeoLocalization);
+        EditorManager.Instance.ChangeEditorMode(EditorState.GeoLocalization);
 
 
     }
@@ -16,9 +16,9 @@ public class EditorInitializer : MonoBehaviour, Iinitializer {
     }
 
     public void Unload() {
-   //     UImanager.Instance.HideUI(UIType.EditorHUD);
+        UImanager.Instance.HideUI(UIType.EditorHUD);
      //   UImanager.Instance.HideUI(UIType.EditorInitUI);
-        UImanager.Instance.HideAllUIs();
+     //   UImanager.Instance.HideAllUIs();
     }
 
 }

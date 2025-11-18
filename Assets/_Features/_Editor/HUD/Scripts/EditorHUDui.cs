@@ -16,11 +16,11 @@ public class EditorHUDui : UIBehaviour {
     }
 
     public void OnGeoMap() {
-        EditorManager.Instance.ChangeEditorMode(EditorMode.GeoLocalization);
+        EditorManager.Instance.ChangeEditorMode(EditorState.GeoLocalization);
     }
 
     public void OnTwoMapView() {
-        EditorManager.Instance.ChangeEditorMode(EditorMode.TwoMaps);
+        EditorManager.Instance.ChangeEditorMode(EditorState.MultiView);
 
         /*
         //Togle zobrazeniMapy
@@ -33,7 +33,7 @@ public class EditorHUDui : UIBehaviour {
     }
 
     public void OnSurvey() {
-        EditorManager.Instance.ChangeEditorMode(EditorMode.SurveyCreation);
+        EditorManager.Instance.ChangeEditorMode(EditorState.SurveyCreation);
 
     }
 

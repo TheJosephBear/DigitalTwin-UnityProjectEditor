@@ -39,7 +39,7 @@ public class SurveyBuilder : MonoBehaviour {
         _obstructorInstance.SetActive(false);
         _controlPanelInstance.SetActive(false);
         // Volat level editor je špatný, ale to se opraví po refaktorizaci editor managera
-        EditorManager.Instance.ChangeEditorMode(EditorMode.Freecam);
+        EditorManager.Instance.ChangeEditorMode(EditorState.Freecam);
     }
 
     void InstantiateQuestionnare() {
@@ -132,7 +132,7 @@ public class SurveyBuilder : MonoBehaviour {
     }
 
     public void SetQuestionTargetView(int idx) {
-        _selectedQuestion.SetTargetView(ViewManager.Instance.GetViewPoints()[idx]);
+        _selectedQuestion.SetTargetView(EditorManager.Instance.ViewManager.GetViewPoints()[idx]);
     }
 
     #endregion

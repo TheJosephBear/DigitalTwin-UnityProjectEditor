@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ViewManager : Singleton<ViewManager> {
+public class ViewManager : MonoBehaviour {
 
     public SceneType SceneToInstantiate = SceneType.Editing;
     public GameObject ViewPointPrefab;
@@ -22,8 +22,7 @@ public class ViewManager : Singleton<ViewManager> {
     public class OnViewAdded : UnityEvent<ViewPoint> { }
     public OnViewAdded OnViewPointAddedEvent;
 
-    protected override void Awake() {
-        base.Awake();
+    void Awake() {
         _movementScript = GetComponent<CustomMovement>();
     }
 
@@ -43,7 +42,7 @@ public class ViewManager : Singleton<ViewManager> {
     }
 
     public GameObject CreateNewViewPoint() {
-        Transform freecamTrans = EditorCameraManager.Instance?.GetFreeCamTransform(); // Dependability..
+        Transform freecamTrans = EditorManager.Instance.EditorCameraManager?.GetFreeCamTransform(); // Dependability..
         if(freecamTrans != null)
             viewPointSpawnPosition = freecamTrans.position;
 

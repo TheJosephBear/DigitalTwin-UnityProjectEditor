@@ -17,8 +17,8 @@ public class MapVariantAdjustManager : Singleton<MapVariantAdjustManager> {
         UIreff.GetComponent<UIBehaviour>().Show();
         _UIscript = FindAnyObjectByType<MapVarAdjustUI>();
         // Create gameobject copy of each variant
-        print(MapManager.Instance.GetVariantsWithoutBase().Count);
-        foreach (MapVariant original in MapManager.Instance.GetVariantsWithoutBase()) {
+        print(EditorManager.Instance.MapManager.GetVariantsWithoutBase().Count);
+        foreach (MapVariant original in EditorManager.Instance.MapManager.GetVariantsWithoutBase()) {
             MapVariant copy = Instantiate(original);
             copy.Name = original.Name;
             // Make variant copies movable
@@ -33,7 +33,7 @@ public class MapVariantAdjustManager : Singleton<MapVariantAdjustManager> {
         // Load variant copies into UI dropdown
         _UIscript.FillDropdown(variantCopies);
         // Show base map solid
-        MapManager.Instance.GetBaseMap().ToggleMeshVisibility(true);
+        EditorManager.Instance.MapManager.GetBaseMap().ToggleMeshVisibility(true);
         // Select and show the first variant in list
         SelectVariant(variantCopies[0]);
     }

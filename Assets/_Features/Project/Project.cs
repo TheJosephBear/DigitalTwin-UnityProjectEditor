@@ -21,8 +21,8 @@ public class Project : MonoBehaviour {
     public void CloseProject() {
         AssetManager.Instance.ClearEverything();
         DecorationManager.Instance.ClearEverything();
-        MapManager.Instance.ClearEverything();
-        ViewManager.Instance.ClearEverything();
+        EditorManager.Instance.MapManager.ClearEverything();
+        EditorManager.Instance.ViewManager.ClearEverything();
     }
 
     // Serialization for saving purposes
@@ -30,8 +30,8 @@ public class Project : MonoBehaviour {
         SerializableProject serializableProject = new SerializableProject {
             projectName = ProjectName,
             modelAssets = AssetManager.Instance.SerializeAssetList(),
-            map = MapManager.Instance.Serialize(),
-            interestPointManager = ViewManager.Instance.Serialize()
+            map = EditorManager.Instance.MapManager.Serialize(),
+            interestPointManager = EditorManager.Instance.ViewManager.Serialize()
        //     decorationPresets = DecorationManager.Instance.SerializeDecorationPresets(),
        //     decorationsInstantiated = DecorationManager.Instance.SerializeDecorationsInstantiated()
         };
@@ -61,10 +61,10 @@ public class Project : MonoBehaviour {
 
         //   DecorationManager.Instance.DeserializeDecorationPresets(serializedProject.decorationPresets);
         //    DecorationManager.Instance.DeserializeDecorationsInstantiated(serializedProject.decorationsInstantiated);
-        print(MapManager.Instance.name);
+        print(EditorManager.Instance.MapManager.name);
 
-        MapManager.Instance.Deserialize(serializedProject.map);
-        ViewManager.Instance.Deserialize(serializedProject.interestPointManager);
+        EditorManager.Instance.MapManager.Deserialize(serializedProject.map);
+        EditorManager.Instance.ViewManager.Deserialize(serializedProject.interestPointManager);
 
         tcs.SetResult(true); // Complete the task when everything is done
     }

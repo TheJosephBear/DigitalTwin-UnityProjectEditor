@@ -82,6 +82,6 @@ public class DropdownMultiview : MonoBehaviour {
             return;
         }
 
-        MapDisplayManager.Instance.ShowVariant(_mapVariants[index], MapPriority);
+        EditorManager.Instance.MultiViewManager.ShowVariant(_mapVariants[index], MapPriority);
     }
 }

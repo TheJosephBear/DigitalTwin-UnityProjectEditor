@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapDisplayManager : Singleton<MapDisplayManager> {
+public class MultiViewManager : MonoBehaviour {
 
     public GameObject MultiviewCamerasPrefab;
 
@@ -12,7 +12,7 @@ public class MapDisplayManager : Singleton<MapDisplayManager> {
     private MapVariant _secondaryMapInstance;
 
     public void EnterMultiView() {
-        _multiviewCamerasSpawnTransform = EditorCameraManager.Instance.GetFreeCamTransform();
+        _multiviewCamerasSpawnTransform = EditorManager.Instance.EditorCameraManager.GetFreeCamTransform();
 
         if (_multiviewUIRefference == null) {
             _multiviewUIRefference = FindAnyObjectByType<MultiviewUI>();
@@ -36,7 +36,7 @@ public class MapDisplayManager : Singleton<MapDisplayManager> {
         _secondaryMapInstance.gameObject.SetActive(false);
         _multivewCamerasRefference.SetActive(false);
         UImanager.Instance.HideUI(UIType.TwoMapsCameraView);
-        EditorManager.Instance.ChangeEditorMode(EditorMode.Freecam);
+        EditorManager.Instance.ChangeEditorMode(EditorState.Freecam);
     }
 
 
@@ -59,7 +59,7 @@ public class MapDisplayManager : Singleton<MapDisplayManager> {
                 break;
         }
 
-        GameObject cloneGO = SceneLoadingManager.Instance.InstantiateObjectInScene(originalVariant.gameObject, MapManager.Instance.mapSpawnPosition, SceneType.Editing);  
+        GameObject cloneGO = SceneLoadingManager.Instance.InstantiateObjectInScene(originalVariant.gameObject, EditorManager.Instance.MapManager.mapSpawnPosition, SceneType.Editing);  
 
         MapVariant clone = cloneGO.AddComponent<MapVariant>();
         clone.ModelAsset = originalVariant.ModelAsset;
