@@ -9,12 +9,12 @@ public class Project : MonoBehaviour {
     /// <summary>
     /// Stores editor data
     /// </summary>
-    
+     
     public string ProjectName { get; private set; }
 
     // Opening the project in editor
-    public void OpenProject(ProjectWebRefference projectWebReff) {
-        SetProjectName(projectWebReff.projectName);
+    public void OpenProject(ProjectMetadata projectWebReff) {
+        SetProjectName(projectWebReff.ProjectName);
     }
     
     // Leaving from editor
@@ -28,10 +28,10 @@ public class Project : MonoBehaviour {
     // Serialization for saving purposes
     public string SerializeProject() {
         SerializableProject serializableProject = new SerializableProject {
-            projectName = ProjectName,
-            modelAssets = AssetManager.Instance.SerializeAssetList(),
-            map = EditorManager.Instance.MapManager.Serialize(),
-            interestPointManager = EditorManager.Instance.ViewManager.Serialize()
+            ProjectName = ProjectName,
+            SerializedModelAssets = AssetManager.Instance.SerializeAssetList(),
+            SerializedMap = EditorManager.Instance.MapManager.Serialize(),
+            SerializedViewPointManager = EditorManager.Instance.ViewManager.Serialize()
        //     decorationPresets = DecorationManager.Instance.SerializeDecorationPresets(),
        //     decorationsInstantiated = DecorationManager.Instance.SerializeDecorationsInstantiated()
         };
@@ -52,9 +52,9 @@ public class Project : MonoBehaviour {
 
     IEnumerator DeserializeCoroutine(string json, TaskCompletionSource<bool> tcs) {
         SerializableProject serializedProject = JsonUtility.FromJson<SerializableProject>(json);
-        SetProjectName(serializedProject.projectName);
+        SetProjectName(serializedProject.ProjectName);
         bool isDeserializationComplete = false;
-        AssetManager.Instance.DeserializeAssetList(serializedProject.modelAssets, () => {
+        AssetManager.Instance.DeserializeAssetList(serializedProject.SerializedModelAssets, () => {
             isDeserializationComplete = true;
         });
         yield return new WaitUntil(() => isDeserializationComplete);
@@ -63,8 +63,8 @@ public class Project : MonoBehaviour {
         //    DecorationManager.Instance.DeserializeDecorationsInstantiated(serializedProject.decorationsInstantiated);
         print(EditorManager.Instance.MapManager.name);
 
-        EditorManager.Instance.MapManager.Deserialize(serializedProject.map);
-        EditorManager.Instance.ViewManager.Deserialize(serializedProject.interestPointManager);
+        EditorManager.Instance.MapManager.Deserialize(serializedProject.SerializedMap);
+        EditorManager.Instance.ViewManager.Deserialize(serializedProject.SerializedViewPointManager);
 
         tcs.SetResult(true); // Complete the task when everything is done
     }
@@ -72,10 +72,11 @@ public class Project : MonoBehaviour {
 
 [Serializable]
 public class SerializableProject {
-    public string projectName;
-    public SerializableMap map;
-    public List<SerializableModelAsset> modelAssets;
-    public SerializableInterestPointManager interestPointManager;
+    public string ProjectID;
+    public string ProjectName;
+    public SerializableMap SerializedMap;
+    public List<SerializableModelAsset> SerializedModelAssets;
+    public SerializableViewPointManager SerializedViewPointManager;
     //    public List<SerializableDecorationPreset> decorationPresets;
     //    public List<SerializableDecorationInstantiated> decorationsInstantiated;
 }

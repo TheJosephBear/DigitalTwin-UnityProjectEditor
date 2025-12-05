@@ -109,26 +109,26 @@ public class ViewManager : MonoBehaviour {
         EditorObjectManager.Instance.FillEditorObjectListUI(abstractList, "Kamery");
     }
 
-    public SerializableInterestPointManager Serialize() { 
-        List<SerializableInterestPoint> serializablePoints = new List<SerializableInterestPoint>();
+    public SerializableViewPointManager Serialize() { 
+        List<SerializableViewPoint> serializablePoints = new List<SerializableViewPoint>();
         foreach (var interestPoint in viewPoints) {
-            SerializableInterestPoint instantiated = interestPoint.Serialize();
+            SerializableViewPoint instantiated = interestPoint.Serialize();
             serializablePoints.Add(instantiated);
         }
 
-        SerializableInterestPointManager serializedManager = new SerializableInterestPointManager {
-            interestPoints = serializablePoints
+        SerializableViewPointManager serializedManager = new SerializableViewPointManager {
+            ViewPoints = serializablePoints
         };
         return serializedManager;
     }
 
-    public void Deserialize(SerializableInterestPointManager serializedManager) {
-        if (serializedManager == null || serializedManager.interestPoints == null) {
+    public void Deserialize(SerializableViewPointManager serializedManager) {
+        if (serializedManager == null || serializedManager.ViewPoints == null) {
             print("Interest point manager deserialization failed");
             return;
         }
 
-        foreach (var serializedInterestPoint in serializedManager.interestPoints) {
+        foreach (var serializedInterestPoint in serializedManager.ViewPoints) {
             ViewPoint iPoint = CreateNewViewPoint().GetComponent<ViewPoint>();
             iPoint.Deserialize(serializedInterestPoint);
         }
@@ -137,6 +137,6 @@ public class ViewManager : MonoBehaviour {
 }
 
 [Serializable]
-public class SerializableInterestPointManager {
-    public List<SerializableInterestPoint> interestPoints;
+public class SerializableViewPointManager {
+    public List<SerializableViewPoint> ViewPoints;
 }

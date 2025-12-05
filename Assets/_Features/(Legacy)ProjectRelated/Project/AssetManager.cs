@@ -55,7 +55,7 @@ public class AssetManager : Singleton<AssetManager> {
 
     public void UploadModelsToWeb() {
         foreach(ModelAsset modelAsset in assets) {
-            ServerCommunicationManager.Instance.UploadFileToServer(modelAsset.filePath, modelAsset.ModelID, ProjectManager.Instance.project.ProjectName);
+            ServerCommunicationManager.Instance.UploadFileToServer(modelAsset.filePath, modelAsset.ModelID, ProjectManager.Instance.SelectedProject.ProjectName);
         }
     }
 
@@ -87,7 +87,7 @@ public class AssetManager : Singleton<AssetManager> {
     }
 
     void DownloadModel(string objectID, System.Action<ModelAsset> onComplete) {
-        ServerCommunicationManager.Instance.DownloadFileFromServer(objectID, ProjectManager.Instance.project.ProjectName, fileData => {
+        ServerCommunicationManager.Instance.DownloadFileFromServer(objectID, ProjectManager.Instance.SelectedProject.ProjectName, fileData => {
             if (fileData == null) {
                 Debug.LogError("Failed to download model file.");
                 onComplete(null);

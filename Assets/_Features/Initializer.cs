@@ -4,17 +4,18 @@ using UnityEngine.SceneManagement;
 
 public class Initializer : MonoBehaviour {
     /// <summary>
-    /// This is the first script ever called. Sets up utilities and loads the first scene
+    /// This is the first script ever called. 
+    /// Sets up utilities and loads the first scene
     /// </summary>
 
     public SceneType firstSceneToLoad;
 
 
     void Awake() {
-        StartCoroutine(ShowLogin());
+        StartCoroutine(LoadUitlitiesAndLogin());
     }
 
-    IEnumerator ShowLogin() {
+    IEnumerator LoadUitlitiesAndLogin() {
         AsyncOperation loading = SceneManager.LoadSceneAsync("Utilities", LoadSceneMode.Additive);
         while (!loading.isDone) {
             yield return null;

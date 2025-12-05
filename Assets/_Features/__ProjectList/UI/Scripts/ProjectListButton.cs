@@ -6,81 +6,45 @@ using UnityEngine.UI;
 
 public class ProjectListButton : MonoBehaviour {
     
-    public TMP_Text projectNameText;
-    ProjectWebRefference projectWebRefference;
+    public TMP_Text ProjectNameText;
+    ProjectMetadata _projectMetadata;
+    ProjectListUI _projectListUI;
 
-    public void Initialize(ProjectWebRefference project) {
-        projectWebRefference = project;
-        SetButtonText(projectWebRefference.projectName);
-   //     GetComponent<Button>().onClick.AddListener(OnClick);
+    public void Initialize(ProjectMetadata project, ProjectListUI UIScript) {
+        _projectMetadata = project;
+        SetButtonText(_projectMetadata.ProjectName);
+        _projectListUI = UIScript;
     }
 
     void SetButtonText(string projectName) {
-        projectNameText.text = projectName;
+        ProjectNameText.text = projectName;
     }
 
     public void OnOpenProject() {
-        ProjectListManager.Instance.OpenProject(projectWebRefference);
+        _projectListUI.OnOpenProject(_projectMetadata);
     }
 
     public void OnCreateNewProject() {
-        ProjectListManager.Instance.CreateNewProject();
+        _projectListUI.OnCreateNewProject();
     }
 
     public void OnRenameProject() {
-        ProjectListManager.Instance.RenameProject(projectWebRefference);
+        _projectListUI.OnRenameProject(_projectMetadata);
     }
 
     public void OnDuplicateProject() {
-        ProjectListManager.Instance.DuplicateProject(projectWebRefference);
+        _projectListUI.OnDuplicateProject(_projectMetadata);
     }
 
     public void OnExportProject() {
-        ProjectListManager.Instance.ExportProject(projectWebRefference);
+        _projectListUI.OnExportProject(_projectMetadata);
     }
 
     public void OnShowFeedBack() {
-        ProjectListManager.Instance.ShowFeedBack(projectWebRefference);
+        _projectListUI.OnShowFeedBack(_projectMetadata);
     }
 
     public void OnDeleteProject() {
-        ProjectListManager.Instance.DeleteProject(projectWebRefference);
+        _projectListUI.OnDeleteProject(_projectMetadata);
     }
-
-    /*
-    public void OnClick() {
-        ProjectListManager.Instance.SelectProject(projectWebRefference);
-    }
-
-    public void onOtevrit() {
-        ProjectListManager.Instance.SelectProject(projectWebRefference);
-        ProjectListManager.Instance.OpenProject();
-    }
-
-    public void onPrejmenovat() {
-        ProjectListManager.Instance.SelectProject(projectWebRefference);
-        PopUpTextInput.Instance.AskForInput("Nové jméno", (input) => { 
-            ProjectListManager.Instance.RenameProject(input);
-        });
-    }
-
-    public void onDuplikovat() {
-        ProjectListManager.Instance.DuplicateProject(projectWebRefference);
-    }
-
-    public void onZpetnavVaz() {
-        ProjectListManager.Instance.SelectProject(projectWebRefference);
-
-    }
-
-    public void onExport() {
-        ProjectListManager.Instance.ExportProject(projectWebRefference);
-    }
-
-    public void onOdstranit() {
-        ProjectListManager.Instance.SelectProject(projectWebRefference);
-        ProjectListManager.Instance.DeleteProject();
-
-    }
-    */
 }

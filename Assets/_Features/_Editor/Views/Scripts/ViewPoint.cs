@@ -27,14 +27,14 @@ public class ViewPoint : EditorObjectBase, IClickable {
         vcam.SetActive(false);
     }
 
-    public SerializableInterestPoint Serialize() {
-        return new SerializableInterestPoint {
+    public SerializableViewPoint Serialize() {
+        return new SerializableViewPoint {
             position = transform.position,
             eulerRotation = transform.eulerAngles 
         };
     }
 
-    public void Deserialize(SerializableInterestPoint interestPoint) {
+    public void Deserialize(SerializableViewPoint interestPoint) {
         transform.position = interestPoint.position;
         transform.eulerAngles = interestPoint.eulerRotation; 
     }
@@ -57,7 +57,7 @@ public class ViewPoint : EditorObjectBase, IClickable {
 }
 
 [Serializable]
-public class SerializableInterestPoint {
+public class SerializableViewPoint {
     public Vector3 position;
     public Vector3 eulerRotation;
 }
