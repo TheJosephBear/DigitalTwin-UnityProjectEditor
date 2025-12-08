@@ -13,7 +13,7 @@ public class EditorInitUI : UIBehaviour {
 
     void OnFileSelectedMap(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
         if (files != null && files.Length > 0) {
-            EditorManager.Instance.MapManager.UploadBaseMapModel(AssetManager.Instance.CreateNewAsset(files[0]));
+            EditorManager.Instance.MapManager.SetBaseMapModel(AssetManager.Instance.CreateNewAsset(files[0]));
             // Open Geo localization
             EditorManager.Instance.ChangeEditorMode(EditorState.GeoLocalization);
         } else {

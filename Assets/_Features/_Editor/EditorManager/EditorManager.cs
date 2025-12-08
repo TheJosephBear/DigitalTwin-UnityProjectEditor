@@ -13,6 +13,7 @@ public class EditorManager : Singleton<EditorManager> {
 
     // Services
     [Header("Service refferences")]
+    public EditorProjectSerializer ProjectSerializer;
     public EditorCameraManager EditorCameraManager;
     public MapManager MapManager;
     public GeoMapManager GeoMapManager;
@@ -49,12 +50,41 @@ public class EditorManager : Singleton<EditorManager> {
         _activeStateScript.Enter();
     }
 
+    public void SaveProject() {
+        ProjectManager.Instance.SaveProject(ProjectSerializer.SerializeProject());
+    }
+
     public void ExitEditor() {
-        ProjectManager.Instance.CloseProject();
+        StartCoroutine(ExitEditorCoroutine());
+    }
+
+    IEnumerator ExitEditorCoroutine() {
+        UImanager.Instance.ShowUI(UIType.LoadingScreen);
+
+        // Save project
+        SaveProject();
+
+        // Clear managers
+        ClearManagers();
+
+        // Change scenes
+        var loadTask = SceneLoadingManager.Instance.LoadSceneAsync(SceneType.ProjectList);
+        while (!loadTask.IsCompleted) {
+            yield return null;
+        }
+
+        UImanager.Instance.HideUI(UIType.LoadingScreen);
+        var unloadTask = SceneLoadingManager.Instance.UnLoadSceneAsync(SceneType.Editing);
     }
 
     void InitializeStateList() {
         _editorStateScripts = StateParent.GetComponentsInChildren<EditorStateBase>().ToList();
+    }
+
+    void ClearManagers() {
+        AssetManager.Instance.ClearEverything();
+        MapManager.ClearEverything();
+        ViewManager.ClearEverything();
     }
 }
 

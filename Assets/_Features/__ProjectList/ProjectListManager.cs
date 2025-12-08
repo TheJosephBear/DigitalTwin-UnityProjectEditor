@@ -24,28 +24,33 @@ public class ProjectListManager : Singleton<ProjectListManager> {
         }));
     }
 
-    IEnumerator LoadEditing() {
-        UImanager.Instance.ShowUI(UIType.LoadingScreen);
-        var loading = SceneLoadingManager.Instance.LoadSceneAsync(SceneType.Editing, 0f);
-        while (!loading.IsCompleted) {
-            yield return null;
-        }
-        // Open the project (download project data) after the editor scene has been loaded
-        // ProjectManager.Instance.OpenProject(projectWebRefference); // NOOOOOO
-
-        UImanager.Instance.HideUI(UIType.LoadingScreen);
-        UImanager.Instance.HideUI(UIType.ProjectsList);
-        SceneLoadingManager.Instance.UnLoadSceneAsync(SceneType.ProjectList);
-    }
-
     #region Context menu actions
+
 
     public void OpenProject(ProjectMetadata projectMedata) {
         // Download selected project data
         // Editor then deserializes it once the scene is loaded
-        StartCoroutine(ProjectManager.Instance.DownloadAllProjectsMetadataCoroutine((list) => {
-            StartCoroutine(LoadEditing());
+        StartCoroutine(OpenProjectCoroutine(projectMedata));
+    }
+
+    IEnumerator OpenProjectCoroutine(ProjectMetadata projectMetadata) {
+        bool downloadFinished = false;
+
+        UImanager.Instance.ShowUI(UIType.LoadingScreen);
+        StartCoroutine(ProjectManager.Instance.DownloadSelectedProjectData(projectMetadata, (list) => {
+            downloadFinished = true;
         }));
+
+        while (!downloadFinished)
+            yield return null;
+
+        var loading = SceneLoadingManager.Instance.LoadSceneAsync(SceneType.Editing, 0f);
+        while (!loading.IsCompleted)
+            yield return null;
+
+        UImanager.Instance.HideUI(UIType.LoadingScreen);
+        UImanager.Instance.HideUI(UIType.ProjectsList);
+        SceneLoadingManager.Instance.UnLoadSceneAsync(SceneType.ProjectList);
     }
 
     public void CreateNewProject() {

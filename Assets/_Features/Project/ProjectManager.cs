@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using System.Linq;
 
 public class ProjectManager : Singleton<ProjectManager> {
 
@@ -16,23 +17,36 @@ public class ProjectManager : Singleton<ProjectManager> {
     }
 
     /// <summary>
+    /// Save new project data into the database
+    /// </summary>
+    public void SaveProject(SerializableProject serializableProject) {
+        AssetManager.Instance.UploadModelsToWeb(); // WHY THE FUCK IS ASSET MANAGER UPLOADING IT??? IT IS PART OF THE PROJECT!!!
+        string serializedProject = JsonUtility.ToJson(serializableProject);
+        ServerCommunicationManager.Instance.StartUpload(serializedProject, serializableProject.ProjectName);
+    }
+
+    /// <summary>
     /// Download selected projects whole data
     /// </summary>
     /// 
-    public IEnumerator DownloadSelectedProjectData(System.Action<string> onFinished) {
+    public IEnumerator DownloadSelectedProjectData(ProjectMetadata projectMetadata, System.Action<string> onFinished) {
         if (SelectedProject == null) yield break;
 
         bool finished = false;
         bool success = false;
         string downloadedData = "";
 
-        ServerCommunicationManager.Instance.StartDataDownload(SelectedProject.ProjectName, async (successful, data) => {
-            downloadedData = data;
-            success = successful;
-            finished = true;
-
+        ServerCommunicationManager.Instance.StartDataDownload(projectMetadata.ProjectName, async (successful, data) => {
             //       bool deserializeSuccess = await SelectedProject.DeserializeProjectAsync(data);;
-            if (data == null) success = false;
+            success = false;
+            if (data != null) {
+                downloadedData = data;
+                success = successful;
+                finished = true;
+
+                SelectedProject = new Project();
+                SelectedProject.CreateSerializedProjectFromJson(data);
+            }
         });
 
         yield return new WaitUntil(() => finished);
@@ -57,8 +71,9 @@ public class ProjectManager : Singleton<ProjectManager> {
             }
 
             string newProjectName = UniqueNameEnsure(userInput);
+            string id = Guid.NewGuid().ToString();
 
-            ServerCommunicationManager.Instance.CreateProject(newProjectName, (success, response) => {
+            ServerCommunicationManager.Instance.CreateProject(newProjectName, id, (success, response) => {
                 if (!success) {
                     PopUp.Instance.ShowPopUpWindow("Vytvoøení projektu selhalo: " + response);
                 }
@@ -124,19 +139,6 @@ public class ProjectManager : Singleton<ProjectManager> {
 
     #endregion
 
-    #region Editor actions
-
-    
-
-    /// <summary>
-    /// Save new project data into the database
-    /// </summary>
-    public void SaveProject() {
-
-    }
-
-    #endregion
-
     #region Project Metadata
 
     /// <summary>
@@ -163,6 +165,8 @@ public class ProjectManager : Singleton<ProjectManager> {
 
         _projectMetadataList.Clear();
 
+
+
         foreach (string project in projects) {
             _projectMetadataList.Add(CreateProjectMetadataClass(project));
         }
@@ -181,64 +185,6 @@ public class ProjectManager : Singleton<ProjectManager> {
     }
 
     #endregion
-
-    /*
-    public void SaveProject() {
-        AssetManager.Instance.UploadModelsToWeb();
-        string serializedProject = project.SerializeProject();
-        ServerCommunicationManager.Instance.StartUpload(serializedProject, project.ProjectName);
-    }
-    */
-
-    public async Task<bool> LoadProjectIntoSceneAsync() {
-        var tcs = new TaskCompletionSource<bool>();
-        ServerCommunicationManager.Instance.StartDataDownload(SelectedProject.ProjectName, async (success, data) => {
-            if (data != null) {
-                print("the data i got is: " + data);
-                bool deserializeSuccess = await SelectedProject.DeserializeProjectAsync(data);
-                tcs.SetResult(deserializeSuccess);
-            } else {
-                tcs.SetResult(false);
-            }
-        });
-        return await tcs.Task;
-    }
-    /*
-    public void OpenProject(ProjectMetadata projectWebReff) {
-        SelectedProject.OpenProject(projectWebReff);
-        StartCoroutine(ProjectLoading());
-    }
-    */
-    public void CloseProject() {
-        StartCoroutine(CloseProjectCoroutine());
-    }
-
-    public IEnumerator ProjectLoading() {
-        UImanager.Instance.ShowUI(UIType.LoadingScreen);
-
-        var loadTask = LoadProjectIntoSceneAsync();
-        yield return new WaitUntil(() => loadTask.IsCompleted);
-
-        if (loadTask.Result) {
-            UImanager.Instance.HideUI(UIType.LoadingScreen);
-        } else {
-         //   PopUp.Instance.ShowPopUpWindow("Failed to load the project.");  // when there is nothing to load, the pop up message is shown regarldess, NOT NEEDED
-        }
-    }
-
-    IEnumerator CloseProjectCoroutine() {
-        UImanager.Instance.ShowUI(UIType.LoadingScreen);
-        var loadTask = SceneLoadingManager.Instance.LoadSceneAsync(SceneType.ProjectList);
-        while (!loadTask.IsCompleted) {
-            yield return null;
-        }
-        SelectedProject.CloseProject();
-        var unloadTask = SceneLoadingManager.Instance.UnLoadSceneAsync(SceneType.Editing);
-        while (!unloadTask.IsCompleted) {
-            yield return null;
-        }
-        UImanager.Instance.HideUI(UIType.LoadingScreen);
-    }
 
     string UniqueNameEnsure(string name) {
         string baseName = name;
@@ -268,5 +214,4 @@ public class ProjectManager : Singleton<ProjectManager> {
         }
         return uniqueName;
     }
-
 }

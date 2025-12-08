@@ -6,14 +6,14 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class ServerCommunicationManager : Singleton<ServerCommunicationManager> {
-    
+
     public string serverUrl = "http://127.0.0.1:5000";
 
     #region Login and Register
 
     public void Login(string username, string password, System.Action<bool, string> callback) {
         string url = $"{serverUrl}/login";
-        Dictionary<string, string> formData = new Dictionary<string, string> { 
+        Dictionary<string, string> formData = new Dictionary<string, string> {
             { "username", username },
             { "password", password }
         };
@@ -33,9 +33,14 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
 
     #region Projects
 
-    public void CreateProject(string projectName, System.Action<bool, string> callback) {
+    public void CreateProject(string projectName, string projectId, System.Action<bool, string> callback) {
         string url = $"{serverUrl}/createProject";
-        Dictionary<string, string> formData = new Dictionary<string, string> { { "project_name", projectName } };
+
+        Dictionary<string, string> formData = new Dictionary<string, string> {
+            { "project_name", projectName },
+            { "project_id", projectId }
+        };
+
         StartCoroutine(PostRequest(url, formData, callback));
     }
 
@@ -93,7 +98,7 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
     // Download project data (no models)
     public void StartDataDownload(string projectName, System.Action<bool, string> callback) {
         string url = $"{serverUrl}/download?project_name={UnityWebRequest.EscapeURL(projectName)}";
-    //    StartCoroutine(GetRequest(url, callback));
+        //    StartCoroutine(GetRequest(url, callback));
         StartCoroutine(GetRequest<string>(url, (success, data) => {
             callback(success, data);
         }, true));
@@ -119,6 +124,12 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
     IEnumerator PostRequest(string url, Dictionary<string, string> formData, System.Action<bool, string> callback) {
         WWWForm form = new WWWForm();
         foreach (var field in formData) {
+            print("------------");
+            print("PostRequest");
+            print("field" + field);
+            print("fieldK" + field.Key);
+            print("fieldV" + field.Value);
+            print("------------");
             form.AddField(field.Key, field.Value);
         }
         UnityWebRequest www = UnityWebRequest.Post(url, form);
@@ -166,6 +177,14 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
     IEnumerator UploadFileRequest(string url, string path, string fileName, string projectName) {
         byte[] fileData = File.ReadAllBytes(path);
         WWWForm form = new WWWForm();
+
+        print("------------");
+        print("Upload file request");
+        print("path" + path);
+        print("filename" + fileName);
+        print("projectname" + projectName);
+        print("------------");
+
         form.AddBinaryData("file", fileData, fileName + ".obj", "application/octet-stream");
         form.AddField("project_name", projectName);
 
@@ -202,7 +221,7 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
     }
 
     #endregion
-    
+
     #region ghost code
 
     /*

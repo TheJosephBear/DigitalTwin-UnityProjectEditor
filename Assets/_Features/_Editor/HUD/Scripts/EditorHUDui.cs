@@ -38,7 +38,7 @@ public class EditorHUDui : UIBehaviour {
     }
 
     public void OnSave() {
-        ProjectManager.Instance.SaveProject();
+        EditorManager.Instance.SaveProject();
     }
 
     public void OnLeave() {

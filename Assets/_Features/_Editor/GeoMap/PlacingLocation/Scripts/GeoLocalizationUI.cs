@@ -42,7 +42,7 @@ public class GeoLocalizationUI : UIBehaviour {
 
     void OnFileSelectedMap(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
         if (files != null && files.Length > 0) {
-            EditorManager.Instance.MapManager.UploadBaseMapModel(AssetManager.Instance.CreateNewAsset(files[0]));
+            EditorManager.Instance.MapManager.SetBaseMapModel(AssetManager.Instance.CreateNewAsset(files[0]));
             GeoMapLocalizationManager.Instance.Setup();
         } else {
             PopUp.Instance.ShowPopUpWindow("Please select .obj file!");

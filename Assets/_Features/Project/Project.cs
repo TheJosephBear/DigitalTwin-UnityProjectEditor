@@ -5,68 +5,15 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 public class Project : MonoBehaviour {
-
-    /// <summary>
-    /// Stores editor data
-    /// </summary>
-     
+    public string ProjectID { get; private set; }
     public string ProjectName { get; private set; }
-
-    // Opening the project in editor
-    public void OpenProject(ProjectMetadata projectWebReff) {
-        SetProjectName(projectWebReff.ProjectName);
-    }
-    
-    // Leaving from editor
-    public void CloseProject() {
-        AssetManager.Instance.ClearEverything();
-        DecorationManager.Instance.ClearEverything();
-        EditorManager.Instance.MapManager.ClearEverything();
-        EditorManager.Instance.ViewManager.ClearEverything();
-    }
-
-    // Serialization for saving purposes
-    public string SerializeProject() {
-        SerializableProject serializableProject = new SerializableProject {
-            ProjectName = ProjectName,
-            SerializedModelAssets = AssetManager.Instance.SerializeAssetList(),
-            SerializedMap = EditorManager.Instance.MapManager.Serialize(),
-            SerializedViewPointManager = EditorManager.Instance.ViewManager.Serialize()
-       //     decorationPresets = DecorationManager.Instance.SerializeDecorationPresets(),
-       //     decorationsInstantiated = DecorationManager.Instance.SerializeDecorationsInstantiated()
-        };
-        return JsonUtility.ToJson(serializableProject);
-    }
+    public SerializableProject SerializedProject { get; private set; }
 
     // Deserialization for loading purposes
-    public Task<bool> DeserializeProjectAsync(string json) {
-        var tcs = new TaskCompletionSource<bool>();
-        StartCoroutine(DeserializeCoroutine(json, tcs)); 
-        return tcs.Task; 
-    }
-
-
-    void SetProjectName(string projectName) {
-        ProjectName = projectName;
-    }
-
-    IEnumerator DeserializeCoroutine(string json, TaskCompletionSource<bool> tcs) {
-        SerializableProject serializedProject = JsonUtility.FromJson<SerializableProject>(json);
-        SetProjectName(serializedProject.ProjectName);
-        bool isDeserializationComplete = false;
-        AssetManager.Instance.DeserializeAssetList(serializedProject.SerializedModelAssets, () => {
-            isDeserializationComplete = true;
-        });
-        yield return new WaitUntil(() => isDeserializationComplete);
-
-        //   DecorationManager.Instance.DeserializeDecorationPresets(serializedProject.decorationPresets);
-        //    DecorationManager.Instance.DeserializeDecorationsInstantiated(serializedProject.decorationsInstantiated);
-        print(EditorManager.Instance.MapManager.name);
-
-        EditorManager.Instance.MapManager.Deserialize(serializedProject.SerializedMap);
-        EditorManager.Instance.ViewManager.Deserialize(serializedProject.SerializedViewPointManager);
-
-        tcs.SetResult(true); // Complete the task when everything is done
+    public void CreateSerializedProjectFromJson(string json) {
+        SerializedProject = JsonUtility.FromJson<SerializableProject>(json);
+        ProjectID = SerializedProject.ProjectID;
+        ProjectName = SerializedProject.ProjectName;
     }
 }
 

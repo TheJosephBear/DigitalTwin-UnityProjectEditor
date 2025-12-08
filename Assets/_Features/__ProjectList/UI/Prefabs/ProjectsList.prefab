@@ -259,9 +259,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: ProjectsUI, Assembly-CSharp
-        m_MethodName: CreateNewProject
+      - m_Target: {fileID: 4022333872749817881}
+        m_TargetAssemblyTypeName: ProjectListUI, Assembly-CSharp
+        m_MethodName: OnCreateNewProject
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

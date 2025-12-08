@@ -3,10 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EditorInitializer : MonoBehaviour, Iinitializer {
+
+    EditorProjectSerializer _projectDeserializer;
+
+    void Awake() {
+        _projectDeserializer = FindAnyObjectByType<EditorProjectSerializer>();    
+    }
+
     public void Initialize() {
         SceneLoadingManager.Instance.SetActiveScene(SceneType.Editing);
-        // Show geo map right away
-        EditorManager.Instance.ChangeEditorMode(EditorState.GeoLocalization);
+
+        // Deserialize the selected project
+        _projectDeserializer.DeserializeProject(ProjectManager.Instance.SelectedProject);
+
+        // Show geo map right away if there is no base map model
+        if(!EditorManager.Instance.MapManager.IsBaseMapUploaded())
+            EditorManager.Instance.ChangeEditorMode(EditorState.GeoLocalization);
 
 
     }

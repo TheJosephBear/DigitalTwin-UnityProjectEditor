@@ -14,7 +14,8 @@ public class MapManager : MonoBehaviour {
         if(_baseMap!=null) mapSpawnPosition = _baseMap.transform.position;
     }
 
-    public void UploadBaseMapModel(ModelAsset newMap) {
+    public void SetBaseMapModel(ModelAsset newMap) {
+        print("Setting base map model");
         MapVariant addedMap = newMap.InstantiateModel(mapSpawnPosition).AddComponent<MapVariant>();
         addedMap.ModelAsset = newMap;
         addedMap.gameObject.SetActive(true);
@@ -92,10 +93,10 @@ public class MapManager : MonoBehaviour {
 
 
     public void Deserialize(SerializableMap serializedMap) {
-        if (serializedMap == null) return;
+        if (serializedMap == null || serializedMap.baseMap == null) return;
 
     //    var baseAsset = AssetManager.Instance.FindModelAssetByID(serializedMap.baseModelID);
-        UploadBaseMapModel(AssetManager.Instance.FindModelAssetByID(serializedMap.baseMap.modelID));
+        SetBaseMapModel(AssetManager.Instance.FindModelAssetByID(serializedMap.baseMap.modelID));
         SpawnMap();
 
         foreach (var variant in serializedMap.variants) {
