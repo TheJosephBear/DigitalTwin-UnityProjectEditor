@@ -15,12 +15,39 @@ public class ProjectManager : Singleton<ProjectManager> {
         SelectedProject = GetComponent<Project>();
     }
 
-    #region Project List actions
+    /// <summary>
+    /// Download selected projects whole data
+    /// </summary>
+    /// 
+    public IEnumerator DownloadSelectedProjectData(System.Action<string> onFinished) {
+        if (SelectedProject == null) yield break;
 
-    public void OpenProject(ProjectMetadata projectMedata) {
-        // Download the projectmetadata data into the Selected Project
-        DownloadProjectData();
+        bool finished = false;
+        bool success = false;
+        string downloadedData = "";
+
+        ServerCommunicationManager.Instance.StartDataDownload(SelectedProject.ProjectName, async (successful, data) => {
+            downloadedData = data;
+            success = successful;
+            finished = true;
+
+            //       bool deserializeSuccess = await SelectedProject.DeserializeProjectAsync(data);;
+            if (data == null) success = false;
+        });
+
+        yield return new WaitUntil(() => finished);
+
+        if (!success) {
+            PopUp.Instance.ShowPopUpWindow("Naèítání projektù selhalo.");
+            onFinished(null);
+            yield break;
+        }
+
+        onFinished(downloadedData);
     }
+
+
+    #region Project List actions
 
     public void CreateNewProject(Action onCompleted) {
         PopUp.Instance.AskForInput("Jméno projektu", (userInput) => {
@@ -99,12 +126,7 @@ public class ProjectManager : Singleton<ProjectManager> {
 
     #region Editor actions
 
-    /// <summary>
-    /// Download all project data
-    /// </summary>
-    public void DownloadProjectData() {
-
-    }
+    
 
     /// <summary>
     /// Save new project data into the database
@@ -120,14 +142,13 @@ public class ProjectManager : Singleton<ProjectManager> {
     /// <summary>
     /// Download all of the users projects metadata for project list
     /// </summary>
-    public IEnumerator DownloadAllProjectsMetadataCoroutine(
-    System.Action<List<ProjectMetadata>> onFinished) {
+    public IEnumerator DownloadAllProjectsMetadataCoroutine(System.Action<List<ProjectMetadata>> onFinished) {
         bool finished = false;
         bool success = false;
         List<string> projects = null;
 
-        ServerCommunicationManager.Instance.FetchAllProjects((ok, proj) => {
-            success = ok;
+        ServerCommunicationManager.Instance.FetchAllProjects((successful, proj) => {
+            success = successful;
             projects = proj;
             finished = true;
         });

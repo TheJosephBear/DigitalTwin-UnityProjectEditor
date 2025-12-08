@@ -41,10 +41,11 @@ public class ProjectListManager : Singleton<ProjectListManager> {
     #region Context menu actions
 
     public void OpenProject(ProjectMetadata projectMedata) {
-        ProjectManager.Instance.OpenProject(projectMedata);
-        // Do the opening in project manager
-        // That sets all the data we need, using it is editors job
-        StartCoroutine(LoadEditing());
+        // Download selected project data
+        // Editor then deserializes it once the scene is loaded
+        StartCoroutine(ProjectManager.Instance.DownloadAllProjectsMetadataCoroutine((list) => {
+            StartCoroutine(LoadEditing());
+        }));
     }
 
     public void CreateNewProject() {
