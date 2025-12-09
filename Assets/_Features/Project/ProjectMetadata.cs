@@ -10,7 +10,7 @@ public class ProjectMetadata {
     /// Refference for getting all project data from the web.
     /// </summary>
 
-    public string ProjectID;
-    public string ProjectName;
+    public string projectId;
+    public string projectName;
 
 }

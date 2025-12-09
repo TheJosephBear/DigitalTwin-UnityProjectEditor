@@ -13,20 +13,24 @@ public class Project : MonoBehaviour {
         print("CREATE SERIALIZED PROJECT IN PROJECT CLASS");
         SerializedProject = JsonUtility.FromJson<SerializableProject>(json);
         print("serialized project:");
-        print("ID: " + SerializedProject.ProjectID);
-        print("Name: " + SerializedProject.ProjectName);
-        ProjectID = SerializedProject.ProjectID;
-        ProjectName = SerializedProject.ProjectName;
+        print("ID: " + SerializedProject.projectId);
+        print("Name: " + SerializedProject.projectName);
+        ProjectID = SerializedProject.projectId;
+        ProjectName = SerializedProject.projectName;
     }
 }
 
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// SERIALIZABLES MUST HAVE LOWERCASE FIRST LETTER BECAUSE OF THE WAY JSON UTILITY HANDLES IT
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 [Serializable]
 public class SerializableProject {
-    public string ProjectID;
-    public string ProjectName;
-    public SerializableMap SerializedMap;
-    public List<SerializableModelAsset> SerializedModelAssets;
-    public SerializableViewPointManager SerializedViewPointManager;
+    public string projectId;
+    public string projectName;
+    public SerializableMap serializedMap;
+    public List<SerializableModelAsset> serializedModelAssets;
+    public SerializableViewPointManager serializedViewPointManager;
     //    public List<SerializableDecorationPreset> decorationPresets;
     //    public List<SerializableDecorationInstantiated> decorationsInstantiated;
 }

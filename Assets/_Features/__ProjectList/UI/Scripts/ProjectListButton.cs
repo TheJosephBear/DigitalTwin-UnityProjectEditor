@@ -12,7 +12,7 @@ public class ProjectListButton : MonoBehaviour {
 
     public void Initialize(ProjectMetadata project, ProjectListUI UIScript) {
         _projectMetadata = project;
-        SetButtonText(_projectMetadata.ProjectName);
+        SetButtonText(_projectMetadata.projectName);
         _projectListUI = UIScript;
     }
 

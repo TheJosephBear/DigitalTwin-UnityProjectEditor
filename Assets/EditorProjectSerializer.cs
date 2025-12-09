@@ -8,11 +8,11 @@ public class EditorProjectSerializer : MonoBehaviour {
         Project OpenedProject = ProjectManager.Instance.SelectedProject;
 
         SerializableProject serializableProject = new SerializableProject {
-            ProjectID = OpenedProject.ProjectID,
-            ProjectName = OpenedProject.ProjectName,
-            SerializedModelAssets = AssetManager.Instance.SerializeAssetList(),
-            SerializedMap = EditorManager.Instance.MapManager.Serialize(),
-            SerializedViewPointManager = EditorManager.Instance.ViewManager.Serialize()
+            projectId = OpenedProject.ProjectID,
+            projectName = OpenedProject.ProjectName,
+            serializedModelAssets = AssetManager.Instance.SerializeAssetList(),
+            serializedMap = EditorManager.Instance.MapManager.Serialize(),
+            serializedViewPointManager = EditorManager.Instance.ViewManager.Serialize()
         };
         return serializableProject;
     }
@@ -28,14 +28,14 @@ public class EditorProjectSerializer : MonoBehaviour {
         
         // Wait for asset manager
         bool isAssetDeserializationComplete = false;
-        AssetManager.Instance.DeserializeAssetList(serializedProject.SerializedModelAssets, () => {
+        AssetManager.Instance.DeserializeAssetList(serializedProject.serializedModelAssets, () => {
             isAssetDeserializationComplete = true;
         });
         yield return new WaitUntil(() => isAssetDeserializationComplete);
 
         // Deserialize everything else
-        EditorManager.Instance.MapManager.Deserialize(serializedProject.SerializedMap);
-        EditorManager.Instance.ViewManager.Deserialize(serializedProject.SerializedViewPointManager);
+        EditorManager.Instance.MapManager.Deserialize(serializedProject.serializedMap);
+        EditorManager.Instance.ViewManager.Deserialize(serializedProject.serializedViewPointManager);
 
         UImanager.Instance.HideUI(UIType.LoadingScreen);
     }

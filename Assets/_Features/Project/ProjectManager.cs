@@ -23,7 +23,7 @@ public class ProjectManager : Singleton<ProjectManager> {
     public void SaveProject(SerializableProject serializableProject) {
         AssetManager.Instance.UploadModelsToWeb(); // WHY THE FUCK IS ASSET MANAGER UPLOADING IT??? IT IS PART OF THE PROJECT!!!
         string serializedProject = JsonUtility.ToJson(serializableProject);
-        ServerCommunicationManager.Instance.StartUpload(serializedProject, serializableProject.ProjectName);
+        ServerCommunicationManager.Instance.StartUpload(serializedProject, serializableProject.projectName);
     }
 
     /// <summary>
@@ -37,7 +37,7 @@ public class ProjectManager : Singleton<ProjectManager> {
         bool success = false;
         string downloadedData = "";
 
-        ServerCommunicationManager.Instance.StartDataDownload(projectMetadata.ProjectName, async (successful, data) => {
+        ServerCommunicationManager.Instance.StartDataDownload(projectMetadata.projectName, async (successful, data) => {
             //       bool deserializeSuccess = await SelectedProject.DeserializeProjectAsync(data);;
             success = false;
             if (data != null) {
@@ -92,7 +92,7 @@ public class ProjectManager : Singleton<ProjectManager> {
                 return;
             }
 
-            ServerCommunicationManager.Instance.EditProjectName(projectMetadata.ProjectName, userInput, (success, response) => {
+            ServerCommunicationManager.Instance.EditProjectName(projectMetadata.projectName, userInput, (success, response) => {
                 if (!success) {
                     PopUp.Instance.ShowPopUpWindow("Failed " + response);
                 }
@@ -103,7 +103,7 @@ public class ProjectManager : Singleton<ProjectManager> {
     }
 
     public void DuplicateProject(ProjectMetadata projectMetadata, Action onCompleted) {
-        ServerCommunicationManager.Instance.DuplicateProject(projectMetadata.ProjectName, (success, response) => {
+        ServerCommunicationManager.Instance.DuplicateProject(projectMetadata.projectName, (success, response) => {
             if (!success) {
                 PopUp.Instance.ShowPopUpWindow("Duplikování projektu selhalo: " + response);
             }
@@ -113,7 +113,7 @@ public class ProjectManager : Singleton<ProjectManager> {
     }
 
     public void DeleteProject(ProjectMetadata projectMetadata, Action onCompleted) {
-        ServerCommunicationManager.Instance.DeleteProject(projectMetadata.ProjectName, (success, response) => {
+        ServerCommunicationManager.Instance.DeleteProject(projectMetadata.projectName, (success, response) => {
             if (!success) {
                 PopUp.Instance.ShowPopUpWindow("Projekt se nepodaøilo smazat! " + response);
             } else {
@@ -129,7 +129,7 @@ public class ProjectManager : Singleton<ProjectManager> {
     }
 
     public void GetProjectIframeExport(ProjectMetadata projectMedata) {
-        ServerCommunicationManager.Instance.GenerateViewerIframe(projectMedata.ProjectName, (success, data) => {
+        ServerCommunicationManager.Instance.GenerateViewerIframe(projectMedata.projectName, (success, data) => {
             if (data == null) {
                 PopUp.Instance.ShowPopUpWindow("Failed to generate iframe.");
                 return;
@@ -169,8 +169,8 @@ public class ProjectManager : Singleton<ProjectManager> {
         _projectMetadataList.Clear();
 
         foreach (ProjectMetadata project in projects) {
-            print(project.ProjectID);
-            print(project.ProjectName);
+            print(project.projectId);
+            print(project.projectName);
             _projectMetadataList.Add(project);
         }
 
@@ -189,7 +189,7 @@ public class ProjectManager : Singleton<ProjectManager> {
         int copyNumber = 1;
 
         bool NameExists(string checkName) {
-            return _projectMetadataList.Any(wr => wr.ProjectName == checkName);
+            return _projectMetadataList.Any(wr => wr.projectName == checkName);
         }
 
         if (!NameExists(uniqueName)) {
