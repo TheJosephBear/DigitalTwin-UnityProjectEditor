@@ -8,7 +8,6 @@ public class ProjectListInitializer : MonoBehaviour, Iinitializer {
     }
 
     public void StartRunning() {
-        print("Should show project list");
         UImanager.Instance.ShowUI(UIType.ProjectsList);
     }
 

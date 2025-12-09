@@ -9,9 +9,12 @@ public class Project : MonoBehaviour {
     public string ProjectName { get; private set; }
     public SerializableProject SerializedProject { get; private set; }
 
-    // Deserialization for loading purposes
     public void CreateSerializedProjectFromJson(string json) {
+        print("CREATE SERIALIZED PROJECT IN PROJECT CLASS");
         SerializedProject = JsonUtility.FromJson<SerializableProject>(json);
+        print("serialized project:");
+        print("ID: " + SerializedProject.ProjectID);
+        print("Name: " + SerializedProject.ProjectName);
         ProjectID = SerializedProject.ProjectID;
         ProjectName = SerializedProject.ProjectName;
     }

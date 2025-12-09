@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using System.Linq;
+using QuestionnaireToolkit.Scripts.SimpleJSON;
 
 public class ProjectManager : Singleton<ProjectManager> {
 
@@ -44,6 +45,7 @@ public class ProjectManager : Singleton<ProjectManager> {
                 success = successful;
                 finished = true;
 
+                print(data);
                 SelectedProject = new Project();
                 SelectedProject.CreateSerializedProjectFromJson(data);
             }
@@ -147,10 +149,11 @@ public class ProjectManager : Singleton<ProjectManager> {
     public IEnumerator DownloadAllProjectsMetadataCoroutine(System.Action<List<ProjectMetadata>> onFinished) {
         bool finished = false;
         bool success = false;
-        List<string> projects = null;
+        ProjectMetadata[] projects = null;
 
         ServerCommunicationManager.Instance.FetchAllProjects((successful, proj) => {
             success = successful;
+            print(proj);
             projects = proj;
             finished = true;
         });
@@ -165,19 +168,13 @@ public class ProjectManager : Singleton<ProjectManager> {
 
         _projectMetadataList.Clear();
 
-
-
-        foreach (string project in projects) {
-            _projectMetadataList.Add(CreateProjectMetadataClass(project));
+        foreach (ProjectMetadata project in projects) {
+            print(project.ProjectID);
+            print(project.ProjectName);
+            _projectMetadataList.Add(project);
         }
 
         onFinished(_projectMetadataList);
-    }
-
-    ProjectMetadata CreateProjectMetadataClass(string project) {
-        ProjectMetadata p = new ProjectMetadata();
-        p.ProjectName = project;
-        return p;
     }
 
     public List<ProjectMetadata> GetProjectMetadataList() {
