@@ -21,6 +21,10 @@ public class EditorProjectSerializer : MonoBehaviour {
         StartCoroutine(DeserializeCoroutine(project));
     }
 
+    public IEnumerator DeserializeProjectCoroutinable(Project project) {
+        yield return StartCoroutine(DeserializeCoroutine(project));
+    }
+
     IEnumerator DeserializeCoroutine(Project project) {
         UImanager.Instance.ShowUI(UIType.LoadingScreen);
 

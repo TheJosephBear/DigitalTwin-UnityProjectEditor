@@ -98,17 +98,6 @@ public class ViewManager : MonoBehaviour {
         previewCam.gameObject.SetActive(toggleOn);
     }
 
-    public void FillEditorObjectUI() {
-    //    print("velikost pøed: "+interestPoints.Count);
-        List<EditorObjectBase> abstractList = new List<EditorObjectBase>();
-        foreach (ViewPoint point in viewPoints) {
-            EditorObjectBase abstractReff = point;
-            abstractList.Add(point);
-        }
-      //  EditorObjectManager.Instance.FillEditorObjectListUI(interestPoints, "Kamery");
-        EditorObjectManager.Instance.FillEditorObjectListUI(abstractList, "Kamery");
-    }
-
     public SerializableViewPointManager Serialize() { 
         List<SerializableViewPoint> serializablePoints = new List<SerializableViewPoint>();
         foreach (var interestPoint in viewPoints) {
@@ -132,6 +121,8 @@ public class ViewManager : MonoBehaviour {
             ViewPoint iPoint = CreateNewViewPoint().GetComponent<ViewPoint>();
             iPoint.Deserialize(serializedInterestPoint);
         }
+        
+        FindAnyObjectByType<ViewPointUI>().UpdateViewButtonList(); // Handle differently in the future pls
     }
 
 }

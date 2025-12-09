@@ -11,16 +11,7 @@ public class EditorInitializer : MonoBehaviour, Iinitializer {
     }
 
     public void Initialize() {
-        SceneLoadingManager.Instance.SetActiveScene(SceneType.Editing);
-
-        // Deserialize the selected project
-        _projectDeserializer.DeserializeProject(ProjectManager.Instance.SelectedProject);
-
-        // Show geo map right away if there is no base map model
-        if(!EditorManager.Instance.MapManager.IsBaseMapUploaded())
-            EditorManager.Instance.ChangeEditorMode(EditorState.GeoLocalization);
-
-
+        StartCoroutine(InitializeCoroutine());
     }
 
     public void StartRunning() {
@@ -33,4 +24,17 @@ public class EditorInitializer : MonoBehaviour, Iinitializer {
      //   UImanager.Instance.HideAllUIs();
     }
 
+    public IEnumerator InitializeCoroutine() {
+        SceneLoadingManager.Instance.SetActiveScene(SceneType.Editing);
+
+        // Wait for project deserialization
+        yield return StartCoroutine(_projectDeserializer.DeserializeProjectCoroutinable(
+            ProjectManager.Instance.SelectedProject));
+
+        if (!EditorManager.Instance.MapManager.IsBaseMapUploaded()) {
+            EditorManager.Instance.ChangeEditorMode(EditorState.GeoLocalization);
+        } else {
+            EditorManager.Instance.ChangeEditorMode(EditorState.Freecam);
+        }
+    }
 }

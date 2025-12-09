@@ -86,7 +86,7 @@ public class MapManager : MonoBehaviour {
         }
 
         return new SerializableMap {
-       //     baseModelID = _baseMap.ModelAsset.ModelID,
+            baseMap = _baseMap.Serialize(),
             variants = variantListSerialized
         };
     }
