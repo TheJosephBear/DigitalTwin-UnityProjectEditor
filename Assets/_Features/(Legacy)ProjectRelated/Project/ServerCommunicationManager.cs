@@ -171,6 +171,11 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
     }
 
     IEnumerator UploadFileRequest(string url, string path, string fileName, string projectName) {
+        if(path == null) {
+            Debug.LogError("Upload file request err: PATH IS NULL");
+            yield break;
+        }
+
         byte[] fileData = File.ReadAllBytes(path);
         WWWForm form = new WWWForm();
         form.AddBinaryData("file", fileData, fileName + ".obj", "application/octet-stream");

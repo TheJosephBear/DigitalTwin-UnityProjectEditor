@@ -31,6 +31,7 @@ public class SerializableProject {
     public SerializableMap serializedMap;
     public List<SerializableModelAsset> serializedModelAssets;
     public SerializableViewPointManager serializedViewPointManager;
+    public SerializableGeoMap serializedGeoMap;
     //    public List<SerializableDecorationPreset> decorationPresets;
     //    public List<SerializableDecorationInstantiated> decorationsInstantiated;
 }

@@ -1,16 +1,21 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 public class GeoMapManager : MonoBehaviour {
 
     public OnlineMaps OnlineMapsReff;
     public GameObject vcam;
+    GeoMapLocalizationManager _localizationManager;
     int _equator = 40075000;
     float _previousZoomValue;
 
     void Awake() {
+        _localizationManager = GeoMapLocalizationManager.Instance;
+
         OnlineMapsReff.gameObject.SetActive(false);
         if(vcam!=null) vcam.SetActive(false);
     }
@@ -73,4 +78,21 @@ public class GeoMapManager : MonoBehaviour {
         }
     }
 
+    public SerializableGeoMap SerializeManager() {
+        return new SerializableGeoMap {
+            geoData = GeoMapLocalizationManager.Instance.GetPlacementMapData()
+        };
+    }
+
+    public void DeserializeManager(SerializableGeoMap serializedData) {
+        if (serializedData == null || serializedData.geoData == null)
+            return;
+
+        GeoMapLocalizationManager.Instance.InitializeWithPlacementMapData(serializedData.geoData);
+    }
+}
+
+[Serializable]
+public class SerializableGeoMap {
+    public GeoLocalizationData geoData;
 }

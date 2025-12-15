@@ -31,15 +31,17 @@ public class ProjectManager : Singleton<ProjectManager> {
     /// </summary>
     /// 
     public IEnumerator DownloadSelectedProjectData(ProjectMetadata projectMetadata, System.Action<string> onFinished) {
-        if (SelectedProject == null) yield break;
+  //      if (SelectedProject == null) yield break;
 
         bool finished = false;
         bool success = false;
         string downloadedData = "";
 
+        print("Project man downloads data");
         ServerCommunicationManager.Instance.StartDataDownload(projectMetadata.projectName, async (successful, data) => {
             //       bool deserializeSuccess = await SelectedProject.DeserializeProjectAsync(data);;
             success = false;
+            print("data is: " + data);
             if (data != null) {
                 downloadedData = data;
                 success = successful;

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EditorProjectSerializer : MonoBehaviour {
@@ -12,7 +13,8 @@ public class EditorProjectSerializer : MonoBehaviour {
             projectName = OpenedProject.ProjectName,
             serializedModelAssets = AssetManager.Instance.SerializeAssetList(),
             serializedMap = EditorManager.Instance.MapManager.Serialize(),
-            serializedViewPointManager = EditorManager.Instance.ViewManager.Serialize()
+            serializedViewPointManager = EditorManager.Instance.ViewManager.Serialize(),
+            serializedGeoMap = EditorManager.Instance.GeoMapManager.SerializeManager()
         };
         return serializableProject;
     }
@@ -40,6 +42,7 @@ public class EditorProjectSerializer : MonoBehaviour {
         // Deserialize everything else
         EditorManager.Instance.MapManager.Deserialize(serializedProject.serializedMap);
         EditorManager.Instance.ViewManager.Deserialize(serializedProject.serializedViewPointManager);
+        EditorManager.Instance.GeoMapManager.DeserializeManager(serializedProject.serializedGeoMap);
 
         UImanager.Instance.HideUI(UIType.LoadingScreen);
     }

@@ -28,6 +28,7 @@ public class ProjectListManager : Singleton<ProjectListManager> {
 
 
     public void OpenProject(ProjectMetadata projectMedata) {
+        print("open project started");
         // Download selected project data
         // Editor then deserializes it once the scene is loaded
         StartCoroutine(OpenProjectCoroutine(projectMedata));
@@ -37,6 +38,7 @@ public class ProjectListManager : Singleton<ProjectListManager> {
         bool downloadFinished = false;
 
         UImanager.Instance.ShowUI(UIType.LoadingScreen);
+        print("started project download");
         StartCoroutine(ProjectManager.Instance.DownloadSelectedProjectData(projectMetadata, (list) => {
             downloadFinished = true;
         }));
@@ -44,9 +46,13 @@ public class ProjectListManager : Singleton<ProjectListManager> {
         while (!downloadFinished)
             yield return null;
 
+        print(" project downloaded");
+        print(" loading editor");
         var loading = SceneLoadingManager.Instance.LoadSceneAsync(SceneType.Editing, 0f);
         while (!loading.IsCompleted)
             yield return null;
+
+        print("editor loaded");
 
         UImanager.Instance.HideUI(UIType.LoadingScreen);
         UImanager.Instance.HideUI(UIType.ProjectsList);

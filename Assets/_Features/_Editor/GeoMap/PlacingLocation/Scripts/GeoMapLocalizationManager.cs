@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using RTG;
@@ -86,6 +87,19 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
         ApplyTransformToBaseMap();
     }
 
+    public GeoLocalizationData GetPlacementMapData() {
+        return _geoData;
+    }
+
+    public void InitializeWithPlacementMapData(GeoLocalizationData geoData) {
+        _geoData = geoData;
+        print("We got the geodata now!");
+        print(geoData);
+        print(geoData.longtitude);
+        print(geoData.latitude);
+        print(geoData.elevation);
+    }
+
     void ToggleGeoMapZoom(bool toggleOn) {
         EditorManager.Instance.GeoMapManager.OnlineMapsReff.GetComponent<OnlineMapsTileSetControl>().allowZoom = toggleOn;
     }
@@ -128,6 +142,7 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
     }
 }
 
+[Serializable]
 public class GeoLocalizationData {
     public float longtitude, latitude, elevation;
 }
