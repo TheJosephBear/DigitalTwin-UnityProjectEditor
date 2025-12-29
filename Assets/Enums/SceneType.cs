@@ -6,6 +6,7 @@ public enum SceneType
     Login,
     ProjectList,
     Utilities,
+    Viewing,
     EditorUserInitUI,
     AdjustingVariantsScene,
     PlacingLocation,

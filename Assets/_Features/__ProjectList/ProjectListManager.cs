@@ -39,7 +39,7 @@ public class ProjectListManager : Singleton<ProjectListManager> {
 
         UImanager.Instance.ShowUI(UIType.LoadingScreen);
         print("started project download");
-        StartCoroutine(ProjectManager.Instance.DownloadSelectedProjectData(projectMetadata, (list) => {
+        StartCoroutine(ProjectManager.Instance.DownloadProjectData(projectMetadata, (list) => {
             downloadFinished = true;
         }));
 

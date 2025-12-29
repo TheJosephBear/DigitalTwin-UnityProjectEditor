@@ -26,32 +26,44 @@ public class ProjectManager : Singleton<ProjectManager> {
         ServerCommunicationManager.Instance.StartUpload(serializedProject, serializableProject.projectName);
     }
 
+
+
+
     /// <summary>
     /// Download selected projects whole data
     /// </summary>
     /// 
-    public IEnumerator DownloadSelectedProjectData(ProjectMetadata projectMetadata, System.Action<string> onFinished) {
-  //      if (SelectedProject == null) yield break;
+    public IEnumerator DownloadProjectData(ProjectMetadata projectMetadata, System.Action<string> onFinished) {
+        yield return DownloadProjectDataCoroutine(projectMetadata.projectName, onFinished);
+    }
 
+    public IEnumerator DownloadProjectData(string projectName, System.Action<string> onFinished) {
+        yield return DownloadProjectDataCoroutine(projectName, onFinished);
+    }
+
+    private IEnumerator DownloadProjectDataCoroutine(string projectName, System.Action<string> onFinished) {
         bool finished = false;
         bool success = false;
         string downloadedData = "";
 
-        print("Project man downloads data");
-        ServerCommunicationManager.Instance.StartDataDownload(projectMetadata.projectName, async (successful, data) => {
-            //       bool deserializeSuccess = await SelectedProject.DeserializeProjectAsync(data);;
-            success = false;
-            print("data is: " + data);
-            if (data != null) {
-                downloadedData = data;
-                success = successful;
-                finished = true;
+        ServerCommunicationManager.Instance.StartDataDownload(
+            projectName,
+            async (successful, data) => {
+                success = false;
 
-                print(data);
-                SelectedProject = new Project();
-                SelectedProject.CreateSerializedProjectFromJson(data);
-            }
-        });
+                print("data is: " + data);
+
+                if (data != null) {
+                    downloadedData = data;
+                    success = successful;
+                    finished = true;
+
+                    SelectedProject = new Project();
+                    SelectedProject.CreateSerializedProjectFromJson(data);
+                } else {
+                    finished = true;
+                }
+            });
 
         yield return new WaitUntil(() => finished);
 
