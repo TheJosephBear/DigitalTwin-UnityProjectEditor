@@ -15,6 +15,7 @@ public enum SceneType
     DropdownMultiview,
     MultiViewScene,
     ViewsScene,
+    AssetManagementTestScene,
     SurvCreation,
     DropdownOriginal,
     Example,

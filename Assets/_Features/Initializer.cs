@@ -42,11 +42,11 @@ public class Initializer : MonoBehaviour {
     }
 
     IEnumerator LoadUitlitiesAndEnterFirstScene(SceneType firstScene) {
+        UImanager.Instance.ShowUI(UIType.LoadingScreen);
         AsyncOperation loading = SceneManager.LoadSceneAsync("Utilities", LoadSceneMode.Additive);
         while (!loading.isDone) {
             yield return null;
         }
-        UImanager.Instance.ShowUI(UIType.LoadingScreen);
         var loadTask = SceneLoadingManager.Instance.LoadSceneAsync(firstScene, 0f);
         yield return new WaitUntil(() => loadTask.IsCompleted);
         if (loadTask.Result) {

@@ -63,7 +63,7 @@ public class EditorHUDui : UIBehaviour {
     /*
     public void onUploadMap() {
         AudioManager.Instance.PlaySound(SoundType.click);
-        FileBrowser.ShowLoadDialog(OnFileSelectedMap, null, FileBrowser.PickMode.Files, false, null, "Select OBJ File", "Select");
+        FileBrowser.ShowLoadDialog(OnFileSelected, null, FileBrowser.PickMode.Files, false, null, "Select OBJ File", "Select");
     }
 
 
@@ -84,7 +84,7 @@ public class EditorHUDui : UIBehaviour {
 
     
 
-    void OnFileSelectedMap(string[] paths) {
+    void OnFileSelected(string[] paths) {
         if (paths.Length > 0) {
             string path = paths[0];
             if (Path.GetExtension(path).ToLower() == ".obj") {

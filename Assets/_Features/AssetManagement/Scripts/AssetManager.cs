@@ -86,8 +86,9 @@ public class AssetManager : Singleton<AssetManager> {
         return null;
     }
 
-    void DownloadModel(string objectID, System.Action<ModelAsset> onComplete) {
-        ServerCommunicationManager.Instance.DownloadFileFromServer(objectID, ProjectManager.Instance.SelectedProject.ProjectName, fileData => {
+    public ModelAsset DownloadModel(string objectID, string projectName, System.Action<ModelAsset> onComplete) {
+        ModelAsset modelAsset = null;
+        ServerCommunicationManager.Instance.DownloadFileFromServer(objectID, projectName, fileData => {
             if (fileData == null) {
                 Debug.LogError("Failed to download model file.");
                 onComplete(null);
@@ -106,18 +107,20 @@ public class AssetManager : Singleton<AssetManager> {
             }
 
             // Load the model directly from the byte data without saving to file
-            LoadModelAsset(fileData, fileHash, onComplete);
+            modelAsset = LoadModelAsset(fileData, fileHash, onComplete);
         });
+
+        return modelAsset;
     }
 
-    void LoadModelAsset(byte[] fileData, string fileHash, System.Action<ModelAsset> onComplete) {
+    ModelAsset LoadModelAsset(byte[] fileData, string fileHash, System.Action<ModelAsset> onComplete) {
         // Use FileLoading to load the model from the byte array
         GameObject newAssetGo = FileLoading.Instance.LoadModel(fileData);
 
         if (newAssetGo == null) {
             Debug.LogError("Failed to load model from data.");
             onComplete(null);
-            return;
+            return null;
         }
 
         newAssetGo.transform.parent = AssetContainer.transform;
@@ -129,6 +132,7 @@ public class AssetManager : Singleton<AssetManager> {
         assets.Add(modelAsset);
         newAssetGo.SetActive(false);
         onComplete(modelAsset);
+        return modelAsset;
     }
 
     public void DeserializeAssetList(List<SerializableModelAsset> data, System.Action onComplete = null) {
@@ -138,7 +142,10 @@ public class AssetManager : Singleton<AssetManager> {
     IEnumerator DeserializeAssetsCoroutine(List<SerializableModelAsset> data, System.Action onComplete) {
         foreach (SerializableModelAsset serializableAsset in data) {
             bool isDone = false;
-            DownloadModel(serializableAsset.modelID, modelAsset => {
+            DownloadModel(
+                objectID: serializableAsset.modelID,
+                projectName: ProjectManager.Instance.SelectedProject.ProjectName, 
+                onComplete: modelAsset => {
                 if (modelAsset != null) {
                     modelAsset.ModelID = serializableAsset.modelID;
                     modelAsset.FileHash = serializableAsset.fileHash;
