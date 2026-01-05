@@ -11,19 +11,27 @@ public class Initializer : MonoBehaviour {
 
     public SceneType firstSceneToLoadEditor;
     public SceneType firstSceneToLoadViewer;
-
+    public bool LoadEditorInUnityEditor;
 
     void Awake() {
-        InitializeCorrectAppMode();
+#if UNITY_EDITOR
+        if (LoadEditorInUnityEditor) {
+            EnterEditorMode();
+        } else {
+            EnterViewerMode();
+        }
+#else
+            InitializeCorrectAppMode();
+#endif
     }
 
     void InitializeCorrectAppMode() {
         string viewing = GetUrlParameter("viewing");
         print(viewing);
-        if(viewing == "False") {
+        if(viewing == "False" || viewing == "false") {
             print("entering editor mode");
             EnterEditorMode();
-        } else if (viewing == "True") {
+        } else if (viewing == "True" || viewing == "true") {
             print("entering viewer mode");
             EnterViewerMode();
         } else {
@@ -42,11 +50,11 @@ public class Initializer : MonoBehaviour {
     }
 
     IEnumerator LoadUitlitiesAndEnterFirstScene(SceneType firstScene) {
-        UImanager.Instance.ShowUI(UIType.LoadingScreen);
         AsyncOperation loading = SceneManager.LoadSceneAsync("Utilities", LoadSceneMode.Additive);
         while (!loading.isDone) {
             yield return null;
         }
+        UImanager.Instance.ShowUI(UIType.LoadingScreen);
         var loadTask = SceneLoadingManager.Instance.LoadSceneAsync(firstScene, 0f);
         yield return new WaitUntil(() => loadTask.IsCompleted);
         if (loadTask.Result) {
