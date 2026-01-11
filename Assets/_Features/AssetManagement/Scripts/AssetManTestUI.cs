@@ -19,9 +19,9 @@ public class AssetManTestUI : MonoBehaviour {
 
             modelAsset.gameObject.SetActive(true);
         });
-
+  
     }
-
+    
     void OnFileSelected(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
         if (files != null && files.Length > 0) {
             ModelAsset createdAsset = AssetManager.Instance.CreateNewAsset(files[0]);
@@ -30,4 +30,5 @@ public class AssetManTestUI : MonoBehaviour {
             PopUp.Instance.ShowPopUpWindow("Please select .obj file!");
         }
     }
+    
 }

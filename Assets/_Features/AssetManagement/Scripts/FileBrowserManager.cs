@@ -5,6 +5,7 @@ using FrostweepGames.Plugins.WebGLFileBrowser;
 using UnityEngine;
 
 public class FileBrowserManager : Singleton<FileBrowserManager> {
+    
     Action<File[]> onFilesSelectedCallback;
 
     protected override void Awake() {
@@ -33,4 +34,5 @@ public class FileBrowserManager : Singleton<FileBrowserManager> {
     void FileOpenFailedEventHandler(string error) {
         Debug.LogError($"File open failed: {error}");
     }
+    
 }

@@ -39,7 +39,7 @@ public class GeoLocalizationUI : UIBehaviour {
     public void OnExit() {
         EditorManager.Instance.GeoMapManager.ExitGeoLocalization();
     }
-
+    
     void OnFileSelectedMap(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
         if (files != null && files.Length > 0) {
             EditorManager.Instance.MapManager.SetBaseMapModel(AssetManager.Instance.CreateNewAsset(files[0]));
@@ -49,5 +49,5 @@ public class GeoLocalizationUI : UIBehaviour {
         }
 
     }
-
+    
 }

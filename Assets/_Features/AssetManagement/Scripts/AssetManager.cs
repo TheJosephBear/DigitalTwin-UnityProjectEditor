@@ -12,7 +12,7 @@ public class AssetManager : Singleton<AssetManager> {
     
     public GameObject AssetContainer; // dropdownMultiview gameobject to all uploaded models that will turn to assets
     List<ModelAsset> assets = new List<ModelAsset>();
-
+    
     public ModelAsset CreateNewAsset(FrostweepGames.Plugins.WebGLFileBrowser.File file) {
         // Duplication check
         print("trying to access path for hash");
@@ -37,7 +37,7 @@ public class AssetManager : Singleton<AssetManager> {
         newAssetGo.SetActive(false);
         return modelAsset;
     }
-
+    
     public void ClearEverything() {
         foreach (ModelAsset modelAsset in assets) {
             Destroy(modelAsset.gameObject);
@@ -155,4 +155,5 @@ public class AssetManager : Singleton<AssetManager> {
         }
         onComplete?.Invoke();
     }
+    
 }

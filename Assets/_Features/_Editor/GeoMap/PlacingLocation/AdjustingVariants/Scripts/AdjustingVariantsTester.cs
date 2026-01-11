@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class AdjustingVariantsTester : MonoBehaviour {
 #if UNITY_EDITOR
-
+    
     private void Awake() {
         StartCoroutine(LoadCouroutine());
     }
@@ -38,6 +38,6 @@ public class AdjustingVariantsTester : MonoBehaviour {
         }
 
     }
-
+    
 #endif
 }

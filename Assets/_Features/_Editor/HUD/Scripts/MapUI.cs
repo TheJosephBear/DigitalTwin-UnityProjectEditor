@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using SimpleFileBrowser;
 using System.IO;
 using UnityEngine;
-using FrostweepGames.Plugins.WebGLFileBrowser;
+// using FrostweepGames.Plugins.WebGLFileBrowser;
 
 public class MapUI : UIBehaviour {
 
@@ -19,7 +19,7 @@ public class MapUI : UIBehaviour {
     public void onPridatVariantu() {
         FileBrowserManager.Instance.ShowLoadDialog(OnFileSelectedMapVar);
     }
-
+    
 
     void OnFileSelectedMap(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
         if (files != null && files.Length > 0) {
@@ -37,5 +37,5 @@ public class MapUI : UIBehaviour {
             PopUp.Instance.ShowPopUpWindow("Please select .obj file!");
         }
     }
-
+    
 }
