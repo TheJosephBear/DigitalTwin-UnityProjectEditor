@@ -7,7 +7,6 @@ using UnityEngine;
 
 public class MapUI : UIBehaviour {
 
-
     public void onX() {
         UIManager.Instance.HideUI(UIType.MapUI);
     }
@@ -19,7 +18,6 @@ public class MapUI : UIBehaviour {
     public void onPridatVariantu() {
         FileBrowserManager.Instance.ShowLoadDialog(OnFileSelectedMapVar);
     }
-    
 
     void OnFileSelectedMap(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
         if (files != null && files.Length > 0) {
