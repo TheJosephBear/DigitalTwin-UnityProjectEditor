@@ -18,13 +18,13 @@ public class GeoMapManager : MonoBehaviour {
 
 
     public void ActivateGeoLocalization() {
-        UImanager.Instance.ShowUI(UIType.GeoLocalizationUI);
+        UIManager.Instance.ShowUI(UIType.GeoLocalizationUI);
         ToggleGeoMap(true);
         GeoMapLocalizationManager.Instance.Setup();
     }
 
     public void ExitGeoLocalization() {
-        UImanager.Instance.HideUI(UIType.GeoLocalizationUI);
+        UIManager.Instance.HideUI(UIType.GeoLocalizationUI);
         ToggleGeoMap(false);
         GeoMapLocalizationManager.Instance.Exit();
         EditorManager.Instance.ChangeEditorMode(EditorState.Freecam);

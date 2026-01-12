@@ -16,7 +16,7 @@ public class LoginManager : Singleton<LoginManager> {
             if (successBool) {
                 // Unload login scene and load project list
                 StartCoroutine(GoToProjectList());
-                UImanager.Instance.HideUI(UIType.Login);
+                UIManager.Instance.HideUI(UIType.Login);
             } else {
                 PopUp.Instance.ShowPopUpWindow("Jméno nebo heslo není správnì.");
             }
@@ -26,8 +26,8 @@ public class LoginManager : Singleton<LoginManager> {
     public void Register(string username, string password) {
         ServerCommunicationManager.Instance.Register(username, password, (successBool, message) => {
             if (successBool) {
-                UImanager.Instance.ShowUI(UIType.Login);
-                UImanager.Instance.HideUI(UIType.Register);
+                UIManager.Instance.ShowUI(UIType.Login);
+                UIManager.Instance.HideUI(UIType.Register);
                 PopUp.Instance.ShowPopUpWindow("Registrace probìhla úspìšnì.");
             } else {
                 PopUp.Instance.ShowPopUpWindow("Registrace selhala.");
@@ -39,7 +39,7 @@ public class LoginManager : Singleton<LoginManager> {
         var loadTask = SceneLoadingManager.Instance.LoadSceneAsync(projectListScene, 0f);
         yield return new WaitUntil(() => loadTask.IsCompleted);
         if (loadTask.Result) {
-            UImanager.Instance.HideUI(UIType.Login);
+            UIManager.Instance.HideUI(UIType.Login);
             var unloadTask = SceneLoadingManager.Instance.UnLoadSceneAsync(SceneType.Login); // No need to wait for this
         } else {
             Debug.LogError("Failed to load project list scene.");

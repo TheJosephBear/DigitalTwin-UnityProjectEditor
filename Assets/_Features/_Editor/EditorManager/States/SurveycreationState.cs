@@ -5,7 +5,7 @@ using UnityEngine;
 public class SurveycreationState : EditorStateBase {
     public override void Enter() {
         EditorManager.Instance.SurveyManager.EnterSurveyBuilding();
-        UImanager.Instance.HideUI(UIType.EditorHUD);
+        UIManager.Instance.HideUI(UIType.EditorHUD);
         EditorManager.Instance.ViewManager.ToggleCameraPreview(false);
     }
 

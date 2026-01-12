@@ -19,9 +19,9 @@ public class EditorInitializer : MonoBehaviour, Iinitializer {
     }
 
     public void Unload() {
-        UImanager.Instance.HideUI(UIType.EditorHUD);
-     //   UImanager.Instance.HideUI(UIType.EditorInitUI);
-     //   UImanager.Instance.HideAllUIs();
+        UIManager.Instance.HideUI(UIType.EditorHUD);
+     //   UIManager.Instance.HideUI(UIType.EditorInitUI);
+     //   UIManager.Instance.HideAllUIs();
     }
 
     public IEnumerator InitializeCoroutine() {

@@ -28,7 +28,7 @@ public class EditorProjectSerializer : MonoBehaviour {
     }
 
     IEnumerator DeserializeCoroutine(Project project) {
-        UImanager.Instance.ShowUI(UIType.LoadingScreen);
+        UIManager.Instance.ShowUI(UIType.LoadingScreen);
 
         SerializableProject serializedProject = project.SerializedProject;
         
@@ -44,7 +44,7 @@ public class EditorProjectSerializer : MonoBehaviour {
         EditorManager.Instance.ViewManager.Deserialize(serializedProject.serializedViewPointManager);
         EditorManager.Instance.GeoMapManager.DeserializeManager(serializedProject.serializedGeoMap);
 
-        UImanager.Instance.HideUI(UIType.LoadingScreen);
+        UIManager.Instance.HideUI(UIType.LoadingScreen);
     }
 
 }

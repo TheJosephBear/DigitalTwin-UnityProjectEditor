@@ -20,12 +20,12 @@ public class InitializerBasic : MonoBehaviour, Iinitializer {
     }
 
     IEnumerator LoadUitlities() {
-        UImanager.Instance.ShowUI(UIType.LoadingScreen);
+        UIManager.Instance.ShowUI(UIType.LoadingScreen);
         AsyncOperation loading = SceneManager.LoadSceneAsync("Utilities", LoadSceneMode.Additive);
         while (!loading.isDone) {
             yield return null;
         }
         
-        UImanager.Instance.HideUI(UIType.LoadingScreen);
+        UIManager.Instance.HideUI(UIType.LoadingScreen);
     }
 }

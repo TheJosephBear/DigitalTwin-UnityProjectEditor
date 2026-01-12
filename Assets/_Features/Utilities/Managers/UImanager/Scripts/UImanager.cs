@@ -4,30 +4,29 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UImanager : Singleton<UImanager> {
+public class UIManager : Singleton<UIManager> {
 
-    List<UIBehaviour> uiList = new List<UIBehaviour>();
-    UIBehaviour activeUIscript;
-
-    GraphicRaycaster graphicRaycaster;
+    List<UIBehaviour> _uiList = new List<UIBehaviour>();
+    UIBehaviour _activeUIscript;
+    GraphicRaycaster _graphicRaycaster;
 
     protected override void Awake() {
         base.Awake();
-        uiList = FindObjectsOfType<UIBehaviour>().ToList();
+        _uiList = FindObjectsByType<UIBehaviour>(sortMode: FindObjectsSortMode.None).ToList();
         StartCoroutine(InitializeAndHideUI());
     }
 
     public void HideAllUIs() {
-        foreach (var ui in uiList) {
+        foreach (var ui in _uiList) {
             ui.Hide();
         }
     }
 
     public void ShowUI(UIType uiType) {
-        foreach (UIBehaviour ui in uiList) {
+        foreach (UIBehaviour ui in _uiList) {
             if (ui.gameObject.name == uiType.ToString()) {
           //      print("UI manager is showing ui " + uiType);
-                activeUIscript = ui;
+                _activeUIscript = ui;
                 ui.Show();
                 return;
             }
@@ -35,9 +34,9 @@ public class UImanager : Singleton<UImanager> {
     }
 
     public void HideUI(UIType uiType) {
-        foreach (UIBehaviour ui in uiList) {
+        foreach (UIBehaviour ui in _uiList) {
             if (ui.gameObject.name == uiType.ToString()) {
-                activeUIscript = null;
+                _activeUIscript = null;
          //       print("UI manager is HIDING ui " + uiType);
                 ui.Hide();
                 return;
@@ -55,15 +54,15 @@ public class UImanager : Singleton<UImanager> {
     }
 
     public void SetRaycasterFromLatestUI() {
-        graphicRaycaster = activeUIscript.GetComponent<GraphicRaycaster>();
+        _graphicRaycaster = _activeUIscript.GetComponent<GraphicRaycaster>();
     }
 
     public GraphicRaycaster GetRaycaster() {
-        return graphicRaycaster;
+        return _graphicRaycaster;
     }
 
     public UIBehaviour GetActiveUIscript() {
-        return activeUIscript;
+        return _activeUIscript;
     }
 
     #region Support Functions
@@ -75,7 +74,7 @@ public class UImanager : Singleton<UImanager> {
     }
 
     bool isAllUIAwaken() {
-        foreach (var ui in uiList) {
+        foreach (var ui in _uiList) {
             if (!ui.IsSetup()) return false;
         }
         return true;

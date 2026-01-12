@@ -9,7 +9,7 @@ public class PopUpMessageUI : UIBehaviour {
 
     public void Exit() {
         AudioManager.Instance.PlaySound(SoundType.click);
-        UImanager.Instance.HideUI(UIType.PopUpMessageUI);
+        UIManager.Instance.HideUI(UIType.PopUpMessageUI);
     }
 
     public void SetText(string text) {

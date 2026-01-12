@@ -54,11 +54,11 @@ public class Initializer : MonoBehaviour {
         while (!loading.isDone) {
             yield return null;
         }
-        UImanager.Instance.ShowUI(UIType.LoadingScreen);
+        UIManager.Instance.ShowUI(UIType.LoadingScreen);
         var loadTask = SceneLoadingManager.Instance.LoadSceneAsync(firstScene, 0f);
         yield return new WaitUntil(() => loadTask.IsCompleted);
         if (loadTask.Result) {
-            UImanager.Instance.HideUI(UIType.LoadingScreen);
+            UIManager.Instance.HideUI(UIType.LoadingScreen);
         } else {
             Debug.LogError("Failed to load FIRST scene.");
         }

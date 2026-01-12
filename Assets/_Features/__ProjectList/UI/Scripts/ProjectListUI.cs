@@ -13,7 +13,7 @@ public class ProjectListUI : UIBehaviour {
     public override void Show() {
         base.Show();
         Initialize();
-        UImanager.Instance.SetRaycasterFromLatestUI();
+        UIManager.Instance.SetRaycasterFromLatestUI();
     }
 
     public void Initialize() {

@@ -28,14 +28,14 @@ public class MultiViewManager : MonoBehaviour {
         _multivewCamerasRefference.transform.position = _multiviewCamerasSpawnTransform.position;
         _multivewCamerasRefference.transform.rotation = _multiviewCamerasSpawnTransform.rotation;
 
-        UImanager.Instance.ShowUI(UIType.TwoMapsCameraView);
+        UIManager.Instance.ShowUI(UIType.TwoMapsCameraView);
     }
 
     public void Exit() {
         _primaryMapInstance.gameObject.SetActive(false);
         _secondaryMapInstance.gameObject.SetActive(false);
         _multivewCamerasRefference.SetActive(false);
-        UImanager.Instance.HideUI(UIType.TwoMapsCameraView);
+        UIManager.Instance.HideUI(UIType.TwoMapsCameraView);
         EditorManager.Instance.ChangeEditorMode(EditorState.Freecam);
     }
 

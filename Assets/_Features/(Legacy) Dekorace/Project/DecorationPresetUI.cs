@@ -20,10 +20,10 @@ public class DecorationPresetUI : UIBehaviour {
         AudioManager.Instance.PlaySound(SoundType.click);
         SaveSettings();
         // Reset the decoration UI to refresh the list
-      //  UImanager.Instance.HideUI(UIType.DecorationMain);
-      //  UImanager.Instance.ShowUI(UIType.DecorationMain);
+      //  UIManager.Instance.HideUI(UIType.DecorationMain);
+      //  UIManager.Instance.ShowUI(UIType.DecorationMain);
         // die :(
-   //     UImanager.Instance.HideUI(UIType.DecorationPopUp);
+   //     UIManager.Instance.HideUI(UIType.DecorationPopUp);
     }
     /*
     public void onPridatVariantu() {
@@ -97,7 +97,7 @@ public class DecorationPresetUI : UIBehaviour {
     }
 
     void HideUI() {
-     //   UImanager.Instance.HideUI(UIType.DecorationPopUp);
+     //   UIManager.Instance.HideUI(UIType.DecorationPopUp);
     }
     /*
     void NewVariantAdded(string[] paths) {

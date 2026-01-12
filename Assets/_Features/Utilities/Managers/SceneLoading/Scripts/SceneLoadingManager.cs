@@ -8,15 +8,20 @@ using UnityEngine.SceneManagement;
 public class SceneLoadingManager : Singleton<SceneLoadingManager> {
 
     private List<SceneField> loadedScenes = new List<SceneField>();
-    private List<SceneField> loadedGameplayScenes = new List<SceneField>();
 
     protected override void Awake() {
         base.Awake();
     }
 
-    /* Sets a loaded scene to be "Active scene" - active scenes environment settings are prioritized */
+    /// <summary>
+    /// Sets a loaded scene to be the "Active Scene".
+    /// The active scene's environment settings (like lighting and skybox) are prioritized.
+    /// </summary>
+    /// <param name="sceneType">The SceneType enum representing the scene to activate.</param>
     public void SetActiveScene(SceneType sceneType) {
+        // Retrieves the SceneField data from the global list
         SceneField sceneField = SceneList.Instance.GetScene(sceneType);
+        // Gets the actual UnityEngine.Scene object by its name
         Scene scene = SceneManager.GetSceneByName(sceneField.SceneName);
 
         if (scene.isLoaded) {
@@ -26,6 +31,10 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
         }
     }
 
+    /// <summary>
+    /// Retrieves the SceneType enumeration value that corresponds to the current active scene in Unity.
+    /// </summary>
+    /// <returns>The SceneType enum of the active scene. Returns SceneType.Editing if no match is found.</returns>
     public SceneType GetActiveScene() {
         Scene activeScene = SceneManager.GetActiveScene();
 
@@ -40,19 +49,37 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
         return SceneType.Editing;
     }
 
-    public async Task<bool> LoadSceneAsync(SceneType sceneType, float loadingScreenLength = 0f, bool addToGameplayScenes = false) {
+    /// <summary>
+    /// Asynchronously loads a scene additively, waits for completion, runs the Iinitializer, and waits for an optional delay to call the StartRunning function of the IInitializer.
+    /// </summary>
+    /// <param name="sceneType">The SceneType of the scene to load.</param>
+    /// <param name="loadingScreenLength">The minimum time (in seconds) to wait after the scene is initialized before calling IInitializers StartRunning function and returning (e.g., to keep a loading screen visible).</param>
+    /// <returns>A Task that completes with true if the scene was loaded and initialized successfully, otherwise false (though error logging handles failure).</returns>
+    public async Task<bool> LoadSceneAsync(SceneType sceneType, float loadingScreenLength = 0f) {
+        // Gets the scene data
         SceneField scene = SceneList.Instance.GetScene(sceneType);
+        // TaskCompletionSource bridges the Coroutine (Unity's async) with the C# Task system
         var tcs = new TaskCompletionSource<bool>();
-        StartCoroutine(LoadSceneAsyncC(scene, tcs, loadingScreenLength, addToGameplayScenes));
+        StartCoroutine(LoadSceneAsyncC(scene, tcs, loadingScreenLength));
         return await tcs.Task;
     }
 
+    /// <summary>
+    /// Synchronously loads a scene additively.
+    /// Note: Does not run the scene's Iinitializer. For proper initialization, use LoadSceneAsync.
+    /// </summary>
+    /// <param name="sceneType">The SceneType of the scene to load.</param>
     public void LoadScene(SceneType sceneType) {
         SceneField scene = SceneList.Instance.GetScene(sceneType);
         SceneManager.LoadScene(scene, LoadSceneMode.Additive);
         loadedScenes.Add(scene);
     }
 
+    /// <summary>
+    /// Asynchronously unloads a scene, first calling the Iinitializer's Unload method.
+    /// </summary>
+    /// <param name="sceneType">The SceneType of the scene to unload.</param>
+    /// <returns>A Task that completes with true when the scene is fully unloaded.</returns>
     public async Task<bool> UnLoadSceneAsync(SceneType sceneType) {
         SceneField scene = SceneList.Instance.GetScene(sceneType);
         var tcs = new TaskCompletionSource<bool>();
@@ -60,32 +87,36 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
         return await tcs.Task;
     }
 
-    public async Task UnLoadAllGameplayScenes() {
-        List<Task<bool>> unloadTasks = new List<Task<bool>>();
-        foreach (SceneField scene in loadedGameplayScenes) {
-            if (Enum.TryParse(scene.SceneName, out SceneType sceneType)) {
-                unloadTasks.Add(UnLoadSceneAsync(sceneType));
-            } else {
-                Debug.LogWarning($"Invalid scene name: {scene.SceneName}");
-            }
-        }
-        loadedGameplayScenes.Clear();
-        await Task.WhenAll(unloadTasks);
-    }
-
+    /// <summary>
+    /// Instantiates a GameObject at a specific position and moves it into a specified scene.
+    /// </summary>
+    /// <param name="gameObject">The prefab or GameObject to instantiate.</param>
+    /// <param name="position">The world position for the new object.</param>
+    /// <param name="scene">The SceneType defining the target scene.</param>
+    /// <returns>The newly instantiated GameObject.</returns>
     public GameObject InstantiateObjectInScene(GameObject gameObject, Vector3 position, SceneType scene) {
         GameObject go = Instantiate(gameObject, position, Quaternion.identity);
         SceneManager.MoveGameObjectToScene(go, SceneManager.GetSceneByName(scene.ToString()));
         return go;
     }
 
+    /// <summary>
+    /// Instantiates a GameObject at (0, 0, 0) and moves it into a specified scene.
+    /// </summary>
+    /// <param name="gameObject">The prefab or GameObject to instantiate.</param>
+    /// <param name="scene">The SceneType defining the target scene.</param>
+    /// <returns>The newly instantiated GameObject.</returns>
     public GameObject InstantiateObjectInScene(GameObject gameObject, SceneType scene) {
-        GameObject go = Instantiate(gameObject, new Vector3(0,0,0), Quaternion.identity);
+        GameObject go = Instantiate(gameObject, new Vector3(0, 0, 0), Quaternion.identity);
         SceneManager.MoveGameObjectToScene(go, SceneManager.GetSceneByName(scene.ToString()));
         return go;
     }
 
-    // Instantiate into active scene
+    /// <summary>
+    /// Instantiates a GameObject at (0, 0, 0) and moves it into the current Active Scene.
+    /// </summary>
+    /// <param name="gameObject">The prefab or GameObject to instantiate.</param>
+    /// <returns>The newly instantiated GameObject.</returns>
     public GameObject InstantiateObjectInScene(GameObject gameObject) {
         GameObject go = Instantiate(gameObject, new Vector3(0, 0, 0), Quaternion.identity);
         SceneType scene = GetActiveScene();
@@ -93,6 +124,12 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
         return go;
     }
 
+    /// <summary>
+    /// Instantiates a GameObject at a specific position and moves it into the current Active Scene.
+    /// </summary>
+    /// <param name="gameObject">The prefab or GameObject to instantiate.</param>
+    /// <param name="position">The world position for the new object.</param>
+    /// <returns>The newly instantiated GameObject.</returns>
     public GameObject InstantiateObjectInScene(GameObject gameObject, Vector3 position) {
         GameObject go = Instantiate(gameObject, position, Quaternion.identity);
         SceneType scene = GetActiveScene();
@@ -100,20 +137,21 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
         return go;
     }
 
-    IEnumerator LoadSceneAsyncC(SceneField scene, TaskCompletionSource<bool> tcs, float loadingScreenLength, bool addToGameplayScenes) {
+    // Coroutine implementations (Internal/Private)
+
+    IEnumerator LoadSceneAsyncC(SceneField scene, TaskCompletionSource<bool> tcs, float loadingScreenLength) {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive);
         while (!asyncLoad.isDone) {
             yield return null;
         }
         loadedScenes.Add(scene);
-        if (addToGameplayScenes) loadedGameplayScenes.Add(scene);
         yield return CallSceneInitializerC(scene, loadingScreenLength);
         tcs.SetResult(true);
     }
 
     IEnumerator UnloadSceneAsyncC(SceneField scene, TaskCompletionSource<bool> tcs) {
         Iinitializer initializer = FindInitializerInScene(scene);
-        initializer?.Unload();
+        initializer?.Unload(); // Call the initializer's cleanup method
         AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(scene);
         while (!asyncUnload.isDone) {
             yield return null;
@@ -126,16 +164,18 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
 
     IEnumerator CallSceneInitializerC(SceneField scene, float waitAfterInitialization) {
         Iinitializer initializer = FindInitializerInScene(scene);
-        initializer?.Initialize();
+        initializer?.Initialize(); // Run initial setup tasks
 
         yield return new WaitForSeconds(waitAfterInitialization);
 
-        initializer?.StartRunning();
+        initializer?.StartRunning(); // Signal the scene is fully ready
     }
 
     Iinitializer FindInitializerInScene(SceneField scene) {
+        // Only searches root objects of the target scene
         GameObject[] rootObjects = SceneManager.GetSceneByName(scene.SceneName).GetRootGameObjects();
         foreach (GameObject obj in rootObjects) {
+            // Searches the root object and its children for the Iinitializer component
             Iinitializer initializer = obj.GetComponentInChildren<Iinitializer>();
             if (initializer != null) {
                 return initializer;

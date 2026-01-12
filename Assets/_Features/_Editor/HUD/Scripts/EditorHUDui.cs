@@ -6,13 +6,13 @@ public class EditorHUDui : UIBehaviour {
     public override void Show() {
         base.Show();
     //    GetComponent<DecorationUI>().ToggleVariantUI(false);
-        UImanager.Instance.SetRaycasterFromLatestUI();
+        UIManager.Instance.SetRaycasterFromLatestUI();
     }
 
     #region ButtonFunctions
 
     public void OnMapUpload() {
-        UImanager.Instance.ShowUI(UIType.MapUI);
+        UIManager.Instance.ShowUI(UIType.MapUI);
     }
 
     public void OnGeoMap() {
@@ -56,7 +56,7 @@ public class EditorHUDui : UIBehaviour {
     
 
     public void onDekorace() {
-  //      UImanager.Instance.ShowUI(UIType.DecorationMain);
+  //      UIManager.Instance.ShowUI(UIType.DecorationMain);
     }
 
 

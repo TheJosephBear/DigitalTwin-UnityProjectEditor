@@ -11,7 +11,7 @@ public class MultiviewState : EditorStateBase {
         }
 
         EditorManager.Instance.EditorCameraManager.UpdateFreeCamVcamPosition();
-        UImanager.Instance.HideUI(UIType.EditorHUD);
+        UIManager.Instance.HideUI(UIType.EditorHUD);
         EditorManager.Instance.EditorCameraManager.ToggleCinemachineBrain(true);
         EditorManager.Instance.MultiViewManager.EnterMultiView();
     }

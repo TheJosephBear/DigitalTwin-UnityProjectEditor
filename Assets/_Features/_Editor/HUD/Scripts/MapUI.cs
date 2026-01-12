@@ -9,7 +9,7 @@ public class MapUI : UIBehaviour {
 
 
     public void onX() {
-        UImanager.Instance.HideUI(UIType.MapUI);
+        UIManager.Instance.HideUI(UIType.MapUI);
     }
 
     public void onNahrat() {

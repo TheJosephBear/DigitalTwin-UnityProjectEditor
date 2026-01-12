@@ -10,14 +10,14 @@ public class LoginRegister : UIBehaviour {
 
     public void GoToLogin() {
         AudioManager.Instance.PlaySound(SoundType.click);
-        UImanager.Instance.ShowUI(UIType.Login);
-        UImanager.Instance.HideUI(UIType.Register);
+        UIManager.Instance.ShowUI(UIType.Login);
+        UIManager.Instance.HideUI(UIType.Register);
     }
 
     public void GoToRegister() {
         AudioManager.Instance.PlaySound(SoundType.click);
-        UImanager.Instance.ShowUI(UIType.Register);
-        UImanager.Instance.HideUI(UIType.Login);
+        UIManager.Instance.ShowUI(UIType.Register);
+        UIManager.Instance.HideUI(UIType.Login);
     }
 
     public void Login() {

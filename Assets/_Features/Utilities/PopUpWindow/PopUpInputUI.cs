@@ -26,12 +26,12 @@ public class PopUpInputUI : UIBehaviour {
         AudioManager.Instance.PlaySound(SoundType.click);
         string userInput = inputField.text;
         onInputSubmitted?.Invoke(userInput); 
-        UImanager.Instance.HideUI(UIType.PopUpInputUI);
+        UIManager.Instance.HideUI(UIType.PopUpInputUI);
     }
 
     public void OnCancelButtonClicked() {
         AudioManager.Instance.PlaySound(SoundType.click);
         onInputSubmitted?.Invoke(null); 
-        UImanager.Instance.HideUI(UIType.PopUpInputUI);
+        UIManager.Instance.HideUI(UIType.PopUpInputUI);
     }
 }

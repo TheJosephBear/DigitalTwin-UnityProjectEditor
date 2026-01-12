@@ -15,7 +15,7 @@ public class EditorObjectManager : Singleton<EditorObjectManager> {
         if (UI == null) {
             UI = FindAnyObjectByType<EditorObjectInfoUI>();
         }
-   //     UImanager.Instance.ToggleUI(UIType.EditorObjectInfoUI, show);
+   //     UIManager.Instance.ToggleUI(UIType.EditorObjectInfoUI, show);
     }
 
     // fill ui with given data (of abstract class)

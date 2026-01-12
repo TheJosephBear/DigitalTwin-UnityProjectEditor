@@ -59,7 +59,7 @@ public class EditorManager : Singleton<EditorManager> {
     }
 
     IEnumerator ExitEditorCoroutine() {
-        UImanager.Instance.ShowUI(UIType.LoadingScreen);
+        UIManager.Instance.ShowUI(UIType.LoadingScreen);
 
         // Save project
         SaveProject();
@@ -73,7 +73,7 @@ public class EditorManager : Singleton<EditorManager> {
             yield return null;
         }
 
-        UImanager.Instance.HideUI(UIType.LoadingScreen);
+        UIManager.Instance.HideUI(UIType.LoadingScreen);
         var unloadTask = SceneLoadingManager.Instance.UnLoadSceneAsync(SceneType.Editing);
     }
 

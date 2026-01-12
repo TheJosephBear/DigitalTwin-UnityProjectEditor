@@ -16,17 +16,17 @@ public class PopUp : Singleton<PopUp> {
 
     // Only shows message
     public void ShowPopUpWindow(string text) {
-        UImanager.Instance.ShowUI(UIType.PopUpMessageUI);   
-        UImanager.Instance.GetActiveUIscript().GetComponent<PopUpMessageUI>().SetText(text);
+        UIManager.Instance.ShowUI(UIType.PopUpMessageUI);   
+        UIManager.Instance.GetActiveUIscript().GetComponent<PopUpMessageUI>().SetText(text);
     }
 
     public void AskForInput(string message, Action<string> callback) {
-        UImanager.Instance.ShowUI(UIType.PopUpInputUI);
-        UImanager.Instance.GetActiveUIscript().GetComponent<PopUpInputUI>().AskForInput(message, callback);
+        UIManager.Instance.ShowUI(UIType.PopUpInputUI);
+        UIManager.Instance.GetActiveUIscript().GetComponent<PopUpInputUI>().AskForInput(message, callback);
     }
 
     public void ShowCopyableText(string message, string text) {
-        UImanager.Instance.ShowUI(UIType.PopUpInputUI);
-        UImanager.Instance.GetActiveUIscript().GetComponent<PopUpInputUI>().ShowCopyableText(message, text);
+        UIManager.Instance.ShowUI(UIType.PopUpInputUI);
+        UIManager.Instance.GetActiveUIscript().GetComponent<PopUpInputUI>().ShowCopyableText(message, text);
     }
 }

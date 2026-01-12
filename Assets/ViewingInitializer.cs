@@ -13,7 +13,7 @@ public class ViewingInitializer : MonoBehaviour {
     IEnumerator InitializeViewer(string projectName) {
         bool downloadFinished = false;
 
-        UImanager.Instance.ShowUI(UIType.LoadingScreen);
+        UIManager.Instance.ShowUI(UIType.LoadingScreen);
         StartCoroutine(ProjectManager.Instance.DownloadProjectData(projectName, (list) => {
             downloadFinished = true;
         }));
@@ -23,7 +23,7 @@ public class ViewingInitializer : MonoBehaviour {
 
         DeserializeProject(ProjectManager.Instance.SelectedProject);
 
-        UImanager.Instance.HideUI(UIType.LoadingScreen);
+        UIManager.Instance.HideUI(UIType.LoadingScreen);
     }
 
     public void DeserializeProject(Project project) {
@@ -35,7 +35,7 @@ public class ViewingInitializer : MonoBehaviour {
     }
 
     IEnumerator DeserializeCoroutine(Project project) {
-        UImanager.Instance.ShowUI(UIType.LoadingScreen);
+        UIManager.Instance.ShowUI(UIType.LoadingScreen);
 
         SerializableProject serializedProject = project.SerializedProject;
 
@@ -51,7 +51,7 @@ public class ViewingInitializer : MonoBehaviour {
         EditorManager.Instance.ViewManager.Deserialize(serializedProject.serializedViewPointManager);
         EditorManager.Instance.GeoMapManager.DeserializeManager(serializedProject.serializedGeoMap);
 
-        UImanager.Instance.HideUI(UIType.LoadingScreen);
+        UIManager.Instance.HideUI(UIType.LoadingScreen);
     }
 
     public static string GetUrlParameter(string parameterName) {

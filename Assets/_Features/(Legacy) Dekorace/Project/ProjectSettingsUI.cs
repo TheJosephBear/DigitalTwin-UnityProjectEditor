@@ -8,7 +8,7 @@ public class ProjectSettingsUI : UIBehaviour {
 
     public void onX() {
         AudioManager.Instance.PlaySound(SoundType.click);
-  //      UImanager.Instance.HideUI(UIType.ProjectSettings);
+  //      UIManager.Instance.HideUI(UIType.ProjectSettings);
     }
 
 }

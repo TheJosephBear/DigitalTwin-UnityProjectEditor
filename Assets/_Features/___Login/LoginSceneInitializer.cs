@@ -8,7 +8,7 @@ public class LoginSceneInitializer : MonoBehaviour, Iinitializer {
     }
 
     public void StartRunning() {
-        UImanager.Instance.ShowUI(UIType.Login);
+        UIManager.Instance.ShowUI(UIType.Login);
     }
 
     public void Unload() {

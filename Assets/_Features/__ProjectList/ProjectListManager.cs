@@ -37,7 +37,7 @@ public class ProjectListManager : Singleton<ProjectListManager> {
     IEnumerator OpenProjectCoroutine(ProjectMetadata projectMetadata) {
         bool downloadFinished = false;
 
-        UImanager.Instance.ShowUI(UIType.LoadingScreen);
+        UIManager.Instance.ShowUI(UIType.LoadingScreen);
         print("started project download");
         StartCoroutine(ProjectManager.Instance.DownloadProjectData(projectMetadata, (list) => {
             downloadFinished = true;
@@ -54,8 +54,8 @@ public class ProjectListManager : Singleton<ProjectListManager> {
 
         print("editor loaded");
 
-        UImanager.Instance.HideUI(UIType.LoadingScreen);
-        UImanager.Instance.HideUI(UIType.ProjectsList);
+        UIManager.Instance.HideUI(UIType.LoadingScreen);
+        UIManager.Instance.HideUI(UIType.ProjectsList);
         SceneLoadingManager.Instance.UnLoadSceneAsync(SceneType.ProjectList);
     }
 
