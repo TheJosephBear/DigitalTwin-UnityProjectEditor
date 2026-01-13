@@ -1,116 +1,141 @@
 using Dummiesman;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
 public class ModelImporting : MonoBehaviour {
-
-    [Header("Source Paths")]
-    public string objFilePath; // full path to your .obj file
-    public string mtlFilePath; // full path to your .mtl file
-    public string textureFilePath; // full path to your texture .png
+    [Header("Source Folder (contains .obj, .mtl, textures)")]
+    public string modelFolderPath; // e.g., "C:/Users/User/Desktop/CityBuilding"
 
     private string persistentFolder;
 
     void Start() {
+        ClearPersistentRuntimeFolder();
+            
+        if (string.IsNullOrEmpty(modelFolderPath) || !Directory.Exists(modelFolderPath)) {
+            Debug.LogError("Model folder path is invalid: " + modelFolderPath);
+            return;
+        }
+
         persistentFolder = Path.Combine(Application.persistentDataPath, "RuntimeObjs");
+        Directory.CreateDirectory(persistentFolder);
 
-        // Make sure folder exists
-        if (!Directory.Exists(persistentFolder))
-            Directory.CreateDirectory(persistentFolder);
+        CopyFolderToPersistent(modelFolderPath, persistentFolder);
 
-        // Copy files to persistentDataPath
-        string objDest = CopyFileToPersistent(objFilePath);
-        string mtlDest = CopyFileToPersistent(mtlFilePath);
-        string textureDest = CopyFileToPersistent(textureFilePath);
-
-        // Load OBJ
-        LoadObjWithTexture(objDest, textureDest);
-    }
-
-    string CopyFileToPersistent(string sourcePath) {
-        if (!File.Exists(sourcePath)) {
-            Debug.LogError("File not found: " + sourcePath);
-            return null;
-        }
-
-        string fileName = Path.GetFileName(sourcePath);
-        string destPath = Path.Combine(persistentFolder, fileName);
-        File.Copy(sourcePath, destPath, true);
-        return destPath;
-    }
-
-    void LoadObjAtRuntime(string objPath) {
-        if (string.IsNullOrEmpty(objPath)) {
-            Debug.LogError("OBJ path is null or empty.");
+        string objPath = FindFileByExtension(persistentFolder, ".obj");
+        if (objPath == null) {
+            Debug.LogError("No OBJ file found in folder!");
             return;
         }
 
-        // Dummiesman requires the OBJ file path
-        GameObject loadedObj = new OBJLoader().Load(objPath);
-
-        if (loadedObj != null) {
-            loadedObj.transform.position = Vector3.zero;
-            loadedObj.transform.localScale = Vector3.one;
-
-            Debug.Log("OBJ loaded successfully!");
-        } else {
-            Debug.LogError("Failed to load OBJ.");
-        }
-
-        PrintCopiedFiles(persistentFolder);
-
-        if (loadedObj != null) {
-            var renderers = loadedObj.GetComponentsInChildren<Renderer>();
-            foreach (var rend in renderers) {
-                Debug.Log("Renderer: " + rend.name + ", Material: " + rend.sharedMaterial.name + ", Has mainTexture: " + (rend.sharedMaterial.mainTexture != null));
-            }
-        }
-
+        LoadObjWithMaterials(objPath);
     }
 
-    public void LoadObjWithTexture(string objPath, string texturePath) {
-        GameObject loadedObj = new OBJLoader().Load(objPath);
+    #region File Copy Utilities
+    private void CopyFolderToPersistent(string sourceFolder, string targetFolder) {
+        foreach (string filePath in Directory.GetFiles(sourceFolder)) {
+            string destPath = Path.Combine(targetFolder, Path.GetFileName(filePath));
+            File.Copy(filePath, destPath, true);
+            Debug.Log("Copied file: " + destPath);
+        }
+    }
 
+    private string FindFileByExtension(string folder, string extension) {
+        string[] files = Directory.GetFiles(folder, "*" + extension);
+        return files.Length > 0 ? files[0] : null;
+    }
+    #endregion
+
+    #region Runtime OBJ & Material Loader
+    private void LoadObjWithMaterials(string objPath) {
+        GameObject loadedObj = new OBJLoader().Load(objPath);
         if (loadedObj == null) {
-            Debug.LogError("Failed to load OBJ.");
+            Debug.LogError("Failed to load OBJ: " + objPath);
             return;
         }
 
-        // Load texture manually
-        if (!File.Exists(texturePath)) {
-            Debug.LogError("Texture file not found: " + texturePath);
-            return;
+        string folder = Path.GetDirectoryName(objPath);
+        string mtlPath = Path.ChangeExtension(objPath, ".mtl");
+
+        if (File.Exists(mtlPath)) {
+            ApplyMaterialsFromMtl(loadedObj, mtlPath, folder);
+        } else {
+            Debug.LogWarning("No MTL file found. OBJ loaded without materials.");
         }
 
-        byte[] fileData = File.ReadAllBytes(texturePath);
-        Texture2D texture = new Texture2D(2, 2);
-        texture.LoadImage(fileData); // Load PNG/JPG into Texture2D
+        loadedObj.transform.position = Vector3.zero;
+        loadedObj.transform.localScale = Vector3.one;
 
-        // Apply texture to all materials
-        Renderer[] renderers = loadedObj.GetComponentsInChildren<Renderer>();
-        foreach (Renderer rend in renderers) {
-            foreach (var mat in rend.materials) {
-                mat.mainTexture = texture;
+        Debug.Log("OBJ loaded successfully: " + loadedObj.name);
+    }
+
+    private void ApplyMaterialsFromMtl(GameObject obj, string mtlPath, string folder) {
+        string[] lines = File.ReadAllLines(mtlPath);
+
+        // Map: material name  texture path
+        Dictionary<string, string> materialToTexture = new Dictionary<string, string>();
+        string currentMaterial = null;
+
+        foreach (string rawLine in lines) {
+            string line = rawLine.Trim();
+
+            if (line.StartsWith("newmtl ")) {
+                currentMaterial = line.Substring(7).Trim();
+            } else if (line.StartsWith("map_Kd ") && currentMaterial != null) {
+                string texName = line.Substring(7).Trim();
+                string texPath = Path.Combine(folder, Path.GetFileName(texName));
+                materialToTexture[currentMaterial] = texPath;
             }
         }
 
-        Debug.Log("OBJ loaded with texture applied!");
+        Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
+        foreach (Renderer renderer in renderers) {
+            foreach (Material mat in renderer.materials) {
+                string cleanName = mat.name.Replace(" (Instance)", "");
+
+                if (!materialToTexture.TryGetValue(cleanName, out string texPath))
+                    continue;
+
+                if (!File.Exists(texPath)) {
+                    Debug.LogWarning($"Texture not found for {cleanName}: {texPath}");
+                    continue;
+                }
+
+                byte[] data = File.ReadAllBytes(texPath);
+                Texture2D tex = new Texture2D(2, 2);
+                tex.LoadImage(data);
+
+                mat.mainTexture = tex;
+                Debug.Log($"Applied texture {texPath} material {cleanName}");
+            }
+        }
     }
 
+    #endregion
 
-    public void PrintCopiedFiles(string folderPath) {
-        if (!Directory.Exists(folderPath)) {
-            Debug.LogError("Folder does not exist: " + folderPath);
+
+    private void ClearPersistentRuntimeFolder() {
+        string runtimeFolder = Path.Combine(Application.persistentDataPath, "RuntimeObjs");
+
+        if (!Directory.Exists(runtimeFolder))
             return;
-        }
 
-        Debug.Log("=== Files in persistent folder ===");
-        string[] files = Directory.GetFiles(folderPath);
-        foreach (string file in files) {
-            Debug.Log("Found file: " + file);
+        try {
+            DirectoryInfo dir = new DirectoryInfo(runtimeFolder);
+
+            foreach (FileInfo file in dir.GetFiles()) {
+                file.Delete();
+            }
+
+            foreach (DirectoryInfo subDir in dir.GetDirectories()) {
+                subDir.Delete(true);
+            }
+
+            Debug.Log("Persistent runtime folder cleared: " + runtimeFolder);
+        } catch (Exception e) {
+            Debug.LogError("Failed to clear persistent runtime folder: " + e.Message);
         }
-        Debug.Log("===============================");
     }
 
 }
