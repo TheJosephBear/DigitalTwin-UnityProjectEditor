@@ -24,12 +24,13 @@ public class AssetManager : Singleton<AssetManager> {
             }
         }
         // New asset creation
-        print("calling the fileloading for loading the model via FILE");
-        GameObject newAssetGo = FileLoadingManager.Instance.LoadObj(file.fileInfo.path);
+        //   GameObject newAssetGo = FileLoadingManager.Instance.LoadObj(file.fileInfo.path);
+        string hash = GenerateUniqueID();
+        GameObject newAssetGo = FileLoadingManager.Instance.UploadFromPC(file.fileInfo.path, hash);
         newAssetGo.transform.parent = AssetContainer.transform;
         ModelAsset modelAsset = newAssetGo.AddComponent<ModelAsset>();
         modelAsset.FileName = file.fileInfo.fullName;
-        modelAsset.GenerateUniqueID();
+        modelAsset.ModelID = hash;
         modelAsset.FileHash = fileHash;
         modelAsset.filePath = file.fileInfo.path;
         modelAsset.SetModelGameObject(newAssetGo);
@@ -112,9 +113,14 @@ public class AssetManager : Singleton<AssetManager> {
         return modelAsset;
     }
 
+    string GenerateUniqueID() {
+        return Guid.NewGuid().ToString();
+    }
+
     ModelAsset LoadModelAsset(byte[] fileData, string fileHash, System.Action<ModelAsset> onComplete) {
         // Use FileLoadingManager to load the model from the byte array
-        GameObject newAssetGo = FileLoadingManager.Instance.LoadObj(fileData.);
+        //     GameObject newAssetGo = FileLoadingManager.Instance.LoadModel(fileData);
+        GameObject newAssetGo = null;
 
         if (newAssetGo == null) {
             Debug.LogError("Failed to load model from data.");
