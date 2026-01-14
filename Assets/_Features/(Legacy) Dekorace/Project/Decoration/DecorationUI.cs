@@ -38,7 +38,7 @@ public class DecorationUI : MonoBehaviour {
         if (paths.Length > 0) {
             string path = paths[0];
             if (Path.GetExtension(path).ToLower() == ".obj") {
-          //      ModelAsset newModel = AssetManager.Instance.CreateNewAsset(path);
+          //      ModelAsset newModel = AssetManager.Instance.CreateNewAssetFromFile(path);
          //       DecorationManager.Instance.UploadNewDecorationVariant("New Variant", newModel);
                 ToggleVariantUI(true);
             } else {

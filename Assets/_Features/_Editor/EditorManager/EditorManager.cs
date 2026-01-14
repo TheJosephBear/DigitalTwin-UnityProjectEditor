@@ -82,7 +82,7 @@ public class EditorManager : Singleton<EditorManager> {
     }
 
     void ClearManagers() {
-        AssetManager.Instance.ClearEverything();
+        AssetManager.Instance.ClearManager();
         MapManager.ClearEverything();
         ViewManager.ClearEverything();
     }

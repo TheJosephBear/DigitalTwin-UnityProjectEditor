@@ -162,7 +162,7 @@ public class DecorationManager : Singleton<DecorationManager> {
                 presetName = preset.Name,
                 variants = preset.Variants.Select(v => new SerializableDecorationVariant {
                     variantName = v.Name,
-                    modelID = v.Model.ModelID
+            //        modelID = v.Model.FileHash
                 }).ToList()
             };
             serializablePresets.Add(serializablePreset);
@@ -190,7 +190,7 @@ public class DecorationManager : Singleton<DecorationManager> {
             preset.SetName(serializedPreset.presetName);
 
             foreach (var serializedVariant in serializedPreset.variants) {
-                ModelAsset modelAsset = AssetManager.Instance.FindModelAssetByID(serializedVariant.modelID);
+                ModelAsset modelAsset = AssetManager.Instance.FindModelAssetByFileHash(serializedVariant.modelID);
                 preset.AddVariant(serializedVariant.variantName, modelAsset);
             }
             DecorationPresets.Add(preset);

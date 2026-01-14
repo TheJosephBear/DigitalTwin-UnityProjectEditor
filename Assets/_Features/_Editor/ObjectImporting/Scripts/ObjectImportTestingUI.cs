@@ -9,12 +9,16 @@ public class ObjectImportTestingUI : MonoBehaviour {
         FileBrowserManager.Instance.ShowLoadDialog(NactiModelVole);
     }
 
+    public void OnUploadToWeb() {
+        AssetManager.Instance.UploadModelsToWeb();
+    }
+
     public void OnDownload() {
 
     }
 
     void NactiModelVole(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
-            AssetManager.Instance.CreateNewAsset(files[0]);
+            AssetManager.Instance.CreateNewAssetFromFile(files[0]);
    //     FileLoadingManager.Instance.UploadFromPC(files[0].fileInfo.path);
 
     }

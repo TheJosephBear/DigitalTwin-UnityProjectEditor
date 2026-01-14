@@ -10,12 +10,11 @@ public class AssetManager : Singleton<AssetManager> {
     /// Creates assets from uploaded models for easier upload and download
     /// </summary>
     
-    public GameObject AssetContainer; // dropdownMultiview gameobject to all uploaded models that will turn to assets
+    public GameObject AssetContainer; // Parent gameobject for uploaded models
     List<ModelAsset> assets = new List<ModelAsset>();
     
-    public ModelAsset CreateNewAsset(FrostweepGames.Plugins.WebGLFileBrowser.File file) {
+    public ModelAsset CreateNewAssetFromFile(FrostweepGames.Plugins.WebGLFileBrowser.File file) {
         // Duplication check
-        print("trying to access path for hash");
         string fileHash = GetFileHash(file.data);
         foreach (var asset in assets) {
             if (asset.FileHash == fileHash) {
@@ -23,27 +22,38 @@ public class AssetManager : Singleton<AssetManager> {
                 return asset;
             }
         }
+
         // New asset creation
-        //   GameObject newAssetGo = FileLoadingManager.Instance.LoadObj(file.fileInfo.path);
-        string hash = GenerateUniqueID();
-        GameObject newAssetGo = FileLoadingManager.Instance.UploadFromPC(file.fileInfo.path, hash);
+        GameObject newAssetGo = FileLoadingManager.Instance.UploadFromPC(file.fileInfo.path, fileHash);
         newAssetGo.transform.parent = AssetContainer.transform;
         ModelAsset modelAsset = newAssetGo.AddComponent<ModelAsset>();
         modelAsset.FileName = file.fileInfo.fullName;
-        modelAsset.ModelID = hash;
         modelAsset.FileHash = fileHash;
-        modelAsset.filePath = file.fileInfo.path;
         modelAsset.SetModelGameObject(newAssetGo);
         assets.Add(modelAsset);
         newAssetGo.SetActive(false);
         return modelAsset;
     }
-    
-    public void ClearEverything() {
+
+    public ModelAsset FindModelAssetByFileHash(string fileHash) {
+        foreach (ModelAsset modelAsset in assets) {
+            if (modelAsset.FileHash == fileHash) return modelAsset;
+        }
+        print("modelAsset with fileHash " + fileHash + " doesn't exist.");
+        return null;
+    }
+
+    public void ClearManager() {
         foreach (ModelAsset modelAsset in assets) {
             Destroy(modelAsset.gameObject);
         }
         assets.Clear();
+    }
+
+    #region Helper functions
+
+    string GenerateUniqueID() {
+        return Guid.NewGuid().ToString();
     }
 
     string GetFileHash(byte[] fileData) {
@@ -53,40 +63,77 @@ public class AssetManager : Singleton<AssetManager> {
         }
     }
 
-    public void UploadModelsToWeb() {
-        foreach(ModelAsset modelAsset in assets) {
-            ServerCommunicationManager.Instance.UploadFileToServer(modelAsset.filePath, modelAsset.ModelID, ProjectManager.Instance.SelectedProject.ProjectName);
-        }
-    }
+    #endregion
+
+    #region Serialization
 
     public List<SerializableModelAsset> SerializeAssetList() {
         List<SerializableModelAsset> serializableAssets = new List<SerializableModelAsset>();
 
         foreach (ModelAsset asset in assets) {
             SerializableModelAsset serializableAsset = new SerializableModelAsset {
-                modelID = asset.ModelID,
                 fileHash = asset.FileHash
             };
             serializableAssets.Add(serializableAsset);
         }
 
-        foreach (SerializableModelAsset asset in serializableAssets) {
-            print(asset.modelID);
-            print(asset.fileHash);
-        }
-
         return serializableAssets;
     }
 
-    public ModelAsset FindModelAssetByID(string id) {
+    public void UploadModelsToWeb() {
         foreach (ModelAsset modelAsset in assets) {
-            if (modelAsset.ModelID == id) return modelAsset;
+            List<string> pathsToFiles = FileLoadingManager.Instance.GetAllFilesForAsset(modelAsset.FileHash);
+            print(pathsToFiles.Count);
+            foreach (string path in pathsToFiles) {
+                print("saving path: "+path);
+                string fileName = Path.GetFileName(path);
+                ServerCommunicationManager.Instance.UploadFileToServer(
+                    path,
+                    fileName,
+                    ProjectManager.Instance.SelectedProject.ProjectName,
+                    modelAsset.FileHash
+                );
+            }
         }
-        print("modelAsset with id " + id + " doesn't exist.");
-        return null;
     }
 
-    public ModelAsset DownloadModel(string objectID, string projectName, System.Action<ModelAsset> onComplete) {
+
+    #endregion
+
+    #region Deseralization
+
+    public void DeserializeAssetList(List<SerializableModelAsset> data, System.Action onComplete = null) {
+        StartCoroutine(DeserializeAssetCoroutine(data, onComplete));
+    }
+
+    IEnumerator DeserializeAssetCoroutine(List<SerializableModelAsset> data, System.Action onComplete) {
+        foreach (SerializableModelAsset serializableAsset in data) {
+   /*         bool isDone = false;
+            DownloadAsset(
+                objectID: serializableAsset.modelID,
+                projectName: ProjectManager.Instance.SelectedProject.ProjectName, 
+                onComplete: modelAsset => {
+                if (modelAsset != null) {
+                    modelAsset.AssetID = serializableAsset.modelID;
+                    modelAsset.FileHash = serializableAsset.fileHash;
+                }
+                isDone = true;
+            });
+            yield return new WaitUntil(() => isDone);*/
+        }
+        onComplete?.Invoke();
+        yield break;
+    }
+
+    /// <summary>
+    /// Function that downloads the asset files based on the asset ID.
+    /// Used in deseralization process
+    /// </summary>
+    /// <param name="objectID"></param>
+    /// <param name="projectName"></param>
+    /// <param name="onComplete"></param>
+    /// <returns></returns>
+    ModelAsset DownloadAsset(string objectID, string projectName, System.Action<ModelAsset> onComplete) {
         ModelAsset modelAsset = null;
         ServerCommunicationManager.Instance.DownloadFileFromServer(objectID, projectName, fileData => {
             if (fileData == null) {
@@ -97,7 +144,7 @@ public class AssetManager : Singleton<AssetManager> {
 
             string fileHash = GetFileHash(fileData);
 
-            // Check if the model is already loaded based on its hash
+            // Check if the model is already loaded based on its ID
             foreach (var asset in assets) {
                 if (asset.FileHash == fileHash) {
                     Debug.Log("Model already uploaded.");
@@ -107,17 +154,21 @@ public class AssetManager : Singleton<AssetManager> {
             }
 
             // Load the model directly from the byte data without saving to file
-            modelAsset = LoadModelAsset(fileData, fileHash, onComplete);
+            modelAsset = CreateNewAssetFromByteArray(fileData, fileHash, onComplete);
         });
 
         return modelAsset;
     }
 
-    string GenerateUniqueID() {
-        return Guid.NewGuid().ToString();
-    }
-
-    ModelAsset LoadModelAsset(byte[] fileData, string fileHash, System.Action<ModelAsset> onComplete) {
+    /// <summary>
+    /// Creating the asset gameobject with all data loaded in attached ModelAsset script.
+    /// Used in deseralization process.
+    /// </summary>
+    /// <param name="fileData"></param>
+    /// <param name="fileHash"></param>
+    /// <param name="onComplete"></param>
+    /// <returns></returns>
+    ModelAsset CreateNewAssetFromByteArray(byte[] fileData, string fileHash, System.Action<ModelAsset> onComplete) {
         // Use FileLoadingManager to load the model from the byte array
         //     GameObject newAssetGo = FileLoadingManager.Instance.LoadModel(fileData);
         GameObject newAssetGo = null;
@@ -140,26 +191,6 @@ public class AssetManager : Singleton<AssetManager> {
         return modelAsset;
     }
 
-    public void DeserializeAssetList(List<SerializableModelAsset> data, System.Action onComplete = null) {
-        StartCoroutine(DeserializeAssetCoroutine(data, onComplete));
-    }
+    #endregion
 
-    IEnumerator DeserializeAssetCoroutine(List<SerializableModelAsset> data, System.Action onComplete) {
-        foreach (SerializableModelAsset serializableAsset in data) {
-            bool isDone = false;
-            DownloadModel(
-                objectID: serializableAsset.modelID,
-                projectName: ProjectManager.Instance.SelectedProject.ProjectName, 
-                onComplete: modelAsset => {
-                if (modelAsset != null) {
-                    modelAsset.ModelID = serializableAsset.modelID;
-                    modelAsset.FileHash = serializableAsset.fileHash;
-                }
-                isDone = true;
-            });
-            yield return new WaitUntil(() => isDone);
-        }
-        onComplete?.Invoke();
-    }
-    
 }

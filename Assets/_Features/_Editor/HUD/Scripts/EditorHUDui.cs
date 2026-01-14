@@ -88,7 +88,7 @@ public class EditorHUDui : UIBehaviour {
         if (paths.Length > 0) {
             string path = paths[0];
             if (Path.GetExtension(path).ToLower() == ".obj") {
-                MapManager.Instance.UploadMapModel(AssetManager.Instance.CreateNewAsset(path));
+                MapManager.Instance.UploadMapModel(AssetManager.Instance.CreateNewAssetFromFile(path));
             } else {
                 PopUp.Instance.ShowPopUpWindow("Please select .obj file!");
             }

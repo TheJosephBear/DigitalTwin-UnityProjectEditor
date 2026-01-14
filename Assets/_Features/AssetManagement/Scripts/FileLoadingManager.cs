@@ -3,8 +3,17 @@ using System.Collections.Generic;
 using Dummiesman;
 using System.IO;
 using UnityEngine;
+using System.Linq;
 
+/// <summary>
+/// Responsible for creating GameObjects from files from any source.
+/// </summary>
+/// <remarks>
+/// For creating GameObjects that will be part of the Digital twin project, use <see cref="AssetManager"/> instead.
+/// </remarks>
 public class FileLoadingManager : Singleton<FileLoadingManager> {
+
+
 
     #region Public interface for uploading from pc
 
@@ -57,6 +66,25 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
     }
 
     #endregion
+
+    public string GetPathToFiles(string assetHash) {
+        return GetPersistentAssetPath(assetHash);
+    }
+
+    /// <summary>
+    /// Returns all files for a given asset identified by its fileHash.
+    /// Includes OBJ, MTL, textures, or any other files stored in the asset folder.
+    /// </summary>
+    public List<string> GetAllFilesForAsset(string fileHash) {
+        string folderPath = GetPathToFiles(fileHash);
+
+        if (!Directory.Exists(folderPath))
+            return new List<string>(); // empty list if folder doesn't exist
+
+        return new List<string>(Directory.GetFiles(folderPath));
+    }
+
+
 
     #region Object loading from PC helpers
 

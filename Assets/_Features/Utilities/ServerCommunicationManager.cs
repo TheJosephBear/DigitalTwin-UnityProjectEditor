@@ -106,9 +106,9 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
     }
 
     // Upload file into a project
-    public void UploadFileToServer(string path, string fileName, string projectName) {
+    public void UploadFileToServer(string path, string fileName, string projectName, string assetHash) {
         string url = $"{serverUrl}/upload_model_files";
-        StartCoroutine(UploadFileRequest(url, path, fileName, projectName));
+        StartCoroutine(UploadFileRequest(url, path, fileName, projectName, assetHash));
     }
 
     // Download file from a project
@@ -170,24 +170,30 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
         HandleResponse(www, callback);
     }
 
-    IEnumerator UploadFileRequest(string url, string path, string fileName, string projectName) {
-        if(path == null) {
+    IEnumerator UploadFileRequest(string url, string path, string fileName, string projectName, string assetHash) {
+        print("uploading");
+        print("project name: "+projectName);
+        if (path == null) {
             Debug.LogError("Upload file request err: PATH IS NULL");
             yield break;
         }
 
         byte[] fileData = File.ReadAllBytes(path);
         WWWForm form = new WWWForm();
-        form.AddBinaryData("file", fileData, fileName + ".obj", "application/octet-stream");
+
+        // Use actual file extension from the path
+        string extension = Path.GetExtension(fileName);
+        form.AddBinaryData("file", fileData, fileName, "application/octet-stream");
         form.AddField("project_name", projectName);
+        form.AddField("asset_hash", assetHash); // send assetHash so server knows which asset this file belongs to
 
         UnityWebRequest www = UnityWebRequest.Post(url, form);
         yield return www.SendWebRequest();
 
         if (www.result != UnityWebRequest.Result.Success) {
-            Debug.LogError("Error uploading file: " + www.error);
+            Debug.LogError($"Error uploading file {fileName}: {www.error}");
         } else {
-            Debug.Log("File uploaded successfully!");
+            Debug.Log($"File {fileName} uploaded successfully for asset {assetHash}!");
         }
     }
 

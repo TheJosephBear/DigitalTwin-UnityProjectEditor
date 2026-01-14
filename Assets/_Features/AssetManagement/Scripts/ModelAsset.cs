@@ -8,16 +8,10 @@ public class ModelAsset : MonoBehaviour {
     /// All uploaded models have this script attached for easier save/load manipulation. 
     /// When serializing instantiated objects in scene they will refference only the ID of the model.
     /// </summary>
-    
-    public string ModelID { get; set; }
+
+    public string FileHash { get; set; }
     public GameObject ModelGameObject { get; private set; }
     public string FileName;
-    public string FileHash { get; set; }
-    public string filePath;
-
-    public void GenerateUniqueID() {
-        ModelID = Guid.NewGuid().ToString();
-    }
 
     public void SetModelGameObject(GameObject modelGameObject) {  ModelGameObject = modelGameObject; }
 
@@ -30,6 +24,5 @@ public class ModelAsset : MonoBehaviour {
 
 [Serializable]
 public class SerializableModelAsset {
-    public string modelID;
     public string fileHash;
 }

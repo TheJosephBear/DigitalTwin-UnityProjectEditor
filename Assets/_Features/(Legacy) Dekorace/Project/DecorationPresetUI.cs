@@ -104,7 +104,7 @@ public class DecorationPresetUI : UIBehaviour {
         if (paths.Length > 0) {
             string path = paths[0];
             if (Path.GetExtension(path).ToLower() == ".obj") {
-                ModelAsset modelAsset = AssetManager.Instance.CreateNewAsset(path);
+                ModelAsset modelAsset = AssetManager.Instance.CreateNewAssetFromFile(path);
                 DecorationManager.Instance.UploadNewDecorationVariant(modelAsset);
             }
         }
@@ -114,7 +114,7 @@ public class DecorationPresetUI : UIBehaviour {
         if (paths.Length > 0) {
             string path = paths[0];
             if (Path.GetExtension(path).ToLower() == ".obj") {
-                ModelAsset modelAsset = AssetManager.Instance.CreateNewAsset(path);
+                ModelAsset modelAsset = AssetManager.Instance.CreateNewAssetFromFile(path);
                 DecorationManager.Instance.UploadNewDecorationModel(modelAsset);
             }
         }

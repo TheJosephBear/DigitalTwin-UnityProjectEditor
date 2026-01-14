@@ -45,13 +45,13 @@ public class MapVariant : MonoBehaviour {
 
     public SerializableMapVariant Serialize() {
         return new SerializableMapVariant {
-            modelID = ModelAsset.ModelID,
+            modelFileHash = ModelAsset.FileHash,
             isBaseMap = IsBaseMap,
         };
     }
 
     public void Deserialize(SerializableMapVariant serializedMap) {
-        ModelAsset = AssetManager.Instance.FindModelAssetByID(serializedMap.modelID);
+        ModelAsset = AssetManager.Instance.FindModelAssetByFileHash(serializedMap.modelFileHash);
         IsBaseMap = serializedMap.isBaseMap;
     }
 
@@ -79,6 +79,6 @@ public enum MapPriority {
 
 [Serializable]
 public class SerializableMapVariant {
-    public string modelID;
+    public string modelFileHash;
     public bool isBaseMap;
 }

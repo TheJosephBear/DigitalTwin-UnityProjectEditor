@@ -95,12 +95,12 @@ public class MapManager : MonoBehaviour {
     public void Deserialize(SerializableMap serializedMap) {
         if (serializedMap == null || serializedMap.baseMap == null) return;
 
-    //    var baseAsset = AssetManager.Instance.FindModelAssetByID(serializedMap.baseModelID);
-        SetBaseMapModel(AssetManager.Instance.FindModelAssetByID(serializedMap.baseMap.modelID));
+    //    var baseAsset = AssetManager.Instance.FindModelAssetByFileHash(serializedMap.baseModelID);
+        SetBaseMapModel(AssetManager.Instance.FindModelAssetByFileHash(serializedMap.baseMap.modelFileHash));
         SpawnMap();
 
         foreach (var variant in serializedMap.variants) {
-            var asset = AssetManager.Instance.FindModelAssetByID(variant.modelID);
+            var asset = AssetManager.Instance.FindModelAssetByFileHash(variant.modelFileHash);
             UploadMapVariant(asset);
         }
     }
