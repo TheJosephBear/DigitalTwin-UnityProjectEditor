@@ -137,5 +137,4 @@ public class ModelImporting : MonoBehaviour {
             Debug.LogError("Failed to clear persistent runtime folder: " + e.Message);
         }
     }
-
 }

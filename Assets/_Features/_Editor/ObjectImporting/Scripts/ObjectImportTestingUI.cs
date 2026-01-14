@@ -14,17 +14,8 @@ public class ObjectImportTestingUI : MonoBehaviour {
     }
 
     void NactiModelVole(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
-
-        string targetDir = Application.persistentDataPath + "/Capobara/";
-        Directory.CreateDirectory(targetDir);
-
-        File.Copy(
-            @"C:\Users\josef\Desktop\Capobara\Capybara09180.obj",
-            targetDir + "Capybara09180.obj",
-            true
-        );
-
-        new OBJLoader().Load(targetDir + "Capybara09180.obj");
+    //    FileLoadingManager.Instance.LoadObj(files[0].fileInfo.path); // works well
+        AssetManager.Instance.CreateNewAsset(files[0]);
 
     }
 

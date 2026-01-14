@@ -25,7 +25,7 @@ public class AssetManager : Singleton<AssetManager> {
         }
         // New asset creation
         print("calling the fileloading for loading the model via FILE");
-        GameObject newAssetGo = FileLoading.Instance.LoadModel(file);
+        GameObject newAssetGo = FileLoadingManager.Instance.LoadObj(file.fileInfo.path);
         newAssetGo.transform.parent = AssetContainer.transform;
         ModelAsset modelAsset = newAssetGo.AddComponent<ModelAsset>();
         modelAsset.FileName = file.fileInfo.fullName;
@@ -113,8 +113,8 @@ public class AssetManager : Singleton<AssetManager> {
     }
 
     ModelAsset LoadModelAsset(byte[] fileData, string fileHash, System.Action<ModelAsset> onComplete) {
-        // Use FileLoading to load the model from the byte array
-        GameObject newAssetGo = FileLoading.Instance.LoadModel(fileData);
+        // Use FileLoadingManager to load the model from the byte array
+        GameObject newAssetGo = FileLoadingManager.Instance.LoadObj(fileData.);
 
         if (newAssetGo == null) {
             Debug.LogError("Failed to load model from data.");
@@ -135,10 +135,10 @@ public class AssetManager : Singleton<AssetManager> {
     }
 
     public void DeserializeAssetList(List<SerializableModelAsset> data, System.Action onComplete = null) {
-        StartCoroutine(DeserializeAssetsCoroutine(data, onComplete));
+        StartCoroutine(DeserializeAssetCoroutine(data, onComplete));
     }
 
-    IEnumerator DeserializeAssetsCoroutine(List<SerializableModelAsset> data, System.Action onComplete) {
+    IEnumerator DeserializeAssetCoroutine(List<SerializableModelAsset> data, System.Action onComplete) {
         foreach (SerializableModelAsset serializableAsset in data) {
             bool isDone = false;
             DownloadModel(
