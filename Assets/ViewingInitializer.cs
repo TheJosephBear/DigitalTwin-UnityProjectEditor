@@ -30,10 +30,6 @@ public class ViewingInitializer : MonoBehaviour {
         StartCoroutine(DeserializeCoroutine(project));
     }
 
-    public IEnumerator DeserializeProjectCoroutinable(Project project) {
-        yield return StartCoroutine(DeserializeCoroutine(project));
-    }
-
     IEnumerator DeserializeCoroutine(Project project) {
         UIManager.Instance.ShowUI(UIType.LoadingScreen);
 

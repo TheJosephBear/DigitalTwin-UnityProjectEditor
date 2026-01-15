@@ -112,11 +112,29 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
     }
 
     // Download file from a project
-    public void DownloadFileFromServer(string fileName, string projectName, System.Action<byte[]> callback) {
-        string url = $"{serverUrl}/downloadModels?project_name={UnityWebRequest.EscapeURL(projectName)}&file_name={UnityWebRequest.EscapeURL(fileName)}.obj";
+    public void DownloadFileFromServer(
+    string projectName,
+    string assetHash,
+    string fileName,
+    System.Action<byte[]> callback) {
+
+        string url =
+            $"{serverUrl}/downloadModels" +
+            $"?project_name={UnityWebRequest.EscapeURL(projectName)}" +
+            $"&asset_hash={UnityWebRequest.EscapeURL(assetHash)}" +
+            $"&file_name={UnityWebRequest.EscapeURL(fileName)}";
+
         StartCoroutine(DownloadFileRequest(url, callback));
     }
 
+    public void ListFilesForAsset(string projectName, string assetHash, System.Action<List<string>> callback) {
+        string url =
+            $"{serverUrl}/list_model_files" +
+            $"?project_name={UnityWebRequest.EscapeURL(projectName)}" +
+            $"&asset_hash={UnityWebRequest.EscapeURL(assetHash)}";
+
+        StartCoroutine(ListFilesRequest(url, callback));
+    }
 
     #endregion
 
@@ -219,6 +237,18 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
         }
     }
 
+    IEnumerator ListFilesRequest(string url, System.Action<List<string>> callback) {
+        UnityWebRequest www = UnityWebRequest.Get(url);
+        yield return www.SendWebRequest();
+
+        if (www.result == UnityWebRequest.Result.Success) {
+            print(www.downloadHandler.text);
+            callback(JsonUtility.FromJson<StringListWrapper>(www.downloadHandler.text).items);
+        } else {
+            callback(null);
+        }
+    }
+
     #endregion
 
 
@@ -233,4 +263,9 @@ public class IframeResponse {
 [System.Serializable]
 public class ProjectListResponse {
     public ProjectMetadata[] projects;
+}
+
+[Serializable]
+class StringListWrapper {
+    public List<string> items;
 }

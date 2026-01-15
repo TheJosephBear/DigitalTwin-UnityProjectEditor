@@ -21,7 +21,7 @@ public class ProjectManager : Singleton<ProjectManager> {
     /// Save new project data into the database
     /// </summary>
     public void SaveProject(SerializableProject serializableProject) {
-        AssetManager.Instance.UploadModelsToWeb(); // WHY THE FUCK IS ASSET MANAGER UPLOADING IT??? IT IS PART OF THE PROJECT!!!
+        AssetManager.Instance.UploadModelsToWeb(SelectedProject.ProjectName);
         string serializedProject = JsonUtility.ToJson(serializableProject);
         ServerCommunicationManager.Instance.StartUpload(serializedProject, serializableProject.projectName);
     }

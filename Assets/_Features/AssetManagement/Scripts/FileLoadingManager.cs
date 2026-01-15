@@ -62,8 +62,17 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
     /// <returns>Instantiated model GameObject, deactivated by default.</returns>
     public GameObject BuildFromDownloadedFiles(string assetHash) {
         string root = GetPersistentAssetPath(assetHash);
-        return BuildObjFromCopiedFiles(root);
+
+        string[] objFiles = Directory.GetFiles(root, "*.obj");
+        if (objFiles.Length == 0) {
+            Debug.LogError($"No OBJ file found in asset folder: {root}");
+            return null;
+        }
+
+        // Use the first OBJ file found
+        return BuildObjFromCopiedFiles(objFiles[0]);
     }
+
 
     #endregion
 

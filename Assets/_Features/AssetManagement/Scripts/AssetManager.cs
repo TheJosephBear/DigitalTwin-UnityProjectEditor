@@ -80,7 +80,7 @@ public class AssetManager : Singleton<AssetManager> {
         return serializableAssets;
     }
 
-    public void UploadModelsToWeb() {
+    public void UploadModelsToWeb(string projectNameToUploadTo) {
         foreach (ModelAsset modelAsset in assets) {
             List<string> pathsToFiles = FileLoadingManager.Instance.GetAllFilesForAsset(modelAsset.FileHash);
             print(pathsToFiles.Count);
@@ -90,7 +90,7 @@ public class AssetManager : Singleton<AssetManager> {
                 ServerCommunicationManager.Instance.UploadFileToServer(
                     path,
                     fileName,
-                    ProjectManager.Instance.SelectedProject.ProjectName,
+                    projectNameToUploadTo,
                     modelAsset.FileHash
                 );
             }
@@ -108,57 +108,102 @@ public class AssetManager : Singleton<AssetManager> {
 
     IEnumerator DeserializeAssetCoroutine(List<SerializableModelAsset> data, System.Action onComplete) {
         foreach (SerializableModelAsset serializableAsset in data) {
-   /*         bool isDone = false;
+            bool isDone = false;
+
             DownloadAsset(
-                objectID: serializableAsset.modelID,
-                projectName: ProjectManager.Instance.SelectedProject.ProjectName, 
+                assetHash: serializableAsset.fileHash,
+                projectName: ProjectManager.Instance.SelectedProject.ProjectName,
                 onComplete: modelAsset => {
-                if (modelAsset != null) {
-                    modelAsset.AssetID = serializableAsset.modelID;
-                    modelAsset.FileHash = serializableAsset.fileHash;
-                }
-                isDone = true;
-            });
-            yield return new WaitUntil(() => isDone);*/
+                    if (modelAsset != null) {
+                        modelAsset.FileHash = serializableAsset.fileHash;
+                    }
+                    isDone = true;
+                });
+
+            yield return new WaitUntil(() => isDone);
         }
+
         onComplete?.Invoke();
-        yield break;
     }
 
-    /// <summary>
-    /// Function that downloads the asset files based on the asset ID.
-    /// Used in deseralization process
-    /// </summary>
-    /// <param name="objectID"></param>
-    /// <param name="projectName"></param>
-    /// <param name="onComplete"></param>
-    /// <returns></returns>
-    ModelAsset DownloadAsset(string objectID, string projectName, System.Action<ModelAsset> onComplete) {
-        ModelAsset modelAsset = null;
-        ServerCommunicationManager.Instance.DownloadFileFromServer(objectID, projectName, fileData => {
-            if (fileData == null) {
-                Debug.LogError("Failed to download model file.");
-                onComplete(null);
-                return;
+
+    ModelAsset DownloadAsset(string assetHash, string projectName, System.Action<ModelAsset> onComplete) {
+        // already loaded?
+        foreach (var asset in assets) {
+            if (asset.FileHash == assetHash) {
+                onComplete(asset);
+                return asset;
             }
+        }
 
-            string fileHash = GetFileHash(fileData);
-
-            // Check if the model is already loaded based on its ID
-            foreach (var asset in assets) {
-                if (asset.FileHash == fileHash) {
-                    Debug.Log("Model already uploaded.");
-                    onComplete(asset);
-                    return;
-                }
-            }
-
-            // Load the model directly from the byte data without saving to file
-            modelAsset = CreateNewAssetFromByteArray(fileData, fileHash, onComplete);
-        });
-
-        return modelAsset;
+        StartCoroutine(DownloadAssetCoroutine(assetHash, projectName, onComplete));
+        return null;
     }
+
+    IEnumerator DownloadAssetCoroutine(string assetHash, string projectName, System.Action<ModelAsset> onComplete) {
+
+        // get file list
+        List<string> fileNames = null;
+        bool listDone = false;
+
+        ServerCommunicationManager.Instance.ListFilesForAsset(
+            projectName,
+            assetHash,
+            files => {
+                fileNames = files;
+                listDone = true;
+            });
+
+        yield return new WaitUntil(() => listDone);
+
+        if (fileNames == null || fileNames.Count == 0) {
+            onComplete(null);
+            yield break;
+        }
+
+        // download each file
+        foreach (string fileName in fileNames) {
+            bool fileDone = false;
+
+            ServerCommunicationManager.Instance.DownloadFileFromServer(
+                projectName,
+                assetHash,
+                fileName,
+                data => {
+                    if (data == null) {
+                        fileDone = true;
+                        return;
+                    }
+
+                    // decide type by extension
+                    string ext = Path.GetExtension(fileName).ToLower();
+
+                    if (ext == ".obj")
+                        FileLoadingManager.Instance.CreateOBJFromBytes(assetHash, fileName, data);
+                    else if (ext == ".mtl")
+                        FileLoadingManager.Instance.CreateMTLFromBytes(assetHash, fileName, data);
+                    else
+                        FileLoadingManager.Instance.CreateTextureFromBytes(assetHash, fileName, data);
+
+                    fileDone = true;
+                });
+
+            yield return new WaitUntil(() => fileDone);
+        }
+
+        // build GameObject
+        GameObject go = FileLoadingManager.Instance.BuildFromDownloadedFiles(assetHash);
+        go.transform.parent = AssetContainer.transform;
+        go.SetActive(false);
+
+        ModelAsset modelAsset = go.AddComponent<ModelAsset>();
+        modelAsset.FileHash = assetHash;
+        modelAsset.SetModelGameObject(go);
+
+        assets.Add(modelAsset);
+        onComplete(modelAsset);
+    }
+
 
     /// <summary>
     /// Creating the asset gameobject with all data loaded in attached ModelAsset script.
