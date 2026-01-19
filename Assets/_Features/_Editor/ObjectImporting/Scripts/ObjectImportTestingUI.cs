@@ -24,6 +24,10 @@ public class ObjectImportTestingUI : MonoBehaviour {
         FileBrowserManager.Instance.ShowLoadDialog(OnFileSelected);
     }
 
+    public void OnUploadWebGL() {
+        FileBrowserManager.Instance.ShowLoadDialog(OnFilesSelected, ".obj, .png, .mtl", multipleSelection: true);
+    }
+
     public void OnUploadToWeb() {
         ProjectManager.Instance.SaveProject(SerializeProject());
     }
@@ -35,6 +39,12 @@ public class ObjectImportTestingUI : MonoBehaviour {
     #endregion
 
     void OnFileSelected(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
+        AssetManager.Instance.CreateNewAssetFromFile(files[0]);
+        //     FileLoadingManager.Instance.UploadFromPC(files[0].fileInfo.path);
+
+    }
+
+    void OnFilesSelected(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
         AssetManager.Instance.CreateNewAssetFromFile(files[0]);
         //     FileLoadingManager.Instance.UploadFromPC(files[0].fileInfo.path);
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Dummiesman;
 using System.IO;
 using UnityEngine;
+using FrostweepGames.Plugins.WebGLFileBrowser;
 using System.Linq;
 
 /// <summary>
@@ -17,6 +18,14 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
 
     #region Public interface for uploading from pc
 
+    /// <summary>
+    /// Upload that uses path information.
+    /// Works only in editor and pc build.
+    /// </summary>
+    /// <remarks>For WebGL build use  <see cref="UploadFromWebGLFile"/ </remarks>
+    /// <param name="folderOrObjPath"></param>
+    /// <param name="fileHash"></param>
+    /// <returns></returns>
     public GameObject UploadFromPC(string folderOrObjPath, string fileHash) {
         ResolveOriginalPaths(folderOrObjPath, out string objPath, out string folderPath);
 
@@ -24,6 +33,42 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
 
         return BuildObjFromCopiedFiles(copiedObjPath);
     }
+
+    /// <summary>
+    /// Upload that uses FrostweepGames File class.
+    /// Works only in editor and pc build.
+    /// </summary>
+    /// <param name="files"></param>
+    /// <param name="fileHash"></param>
+    /// <returns></returns>
+    public GameObject UploadFromWebGLFile(
+        FrostweepGames.Plugins.WebGLFileBrowser.File file,
+        string fileHash
+    ) {
+        string targetRoot = GetPersistentAssetPath(fileHash);
+        print("target root: " + targetRoot);
+
+        string objPath = null;
+
+        string targetPath = Path.Combine(targetRoot, file.fileInfo.name);
+        System.IO.File.WriteAllBytes(targetPath, file.data);
+        print("target path: "+targetPath);
+
+        print(file.fileInfo.name);
+        print(file.fileInfo.extension);
+
+        if (file.fileInfo.extension == ".obj")
+            objPath = targetPath;
+
+        if (objPath == null) {
+            Debug.LogError("No OBJ file provided.");
+            return null;
+        }
+
+        return BuildObjFromCopiedFiles(objPath);
+    }
+
+
 
     #endregion
 
@@ -118,27 +163,27 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
 
         // Copy OBJ
         string targetObjPath = Path.Combine(targetRoot, Path.GetFileName(objPath));
-        File.Copy(objPath, targetObjPath, true);
+        System.IO.File.Copy(objPath, targetObjPath, true);
 
         // Copy MTL if exists
         string sourceMtlPath = Path.ChangeExtension(objPath, ".mtl");
-        if (!File.Exists(sourceMtlPath))
+        if (!System.IO.File.Exists(sourceMtlPath))
             return targetObjPath;
 
         string targetMtlPath = Path.Combine(targetRoot, Path.GetFileName(sourceMtlPath));
-        File.Copy(sourceMtlPath, targetMtlPath, true);
+        System.IO.File.Copy(sourceMtlPath, targetMtlPath, true);
 
         // Copy textures referenced by MTL
         foreach (string tex in ExtractTexturesFromMtl(sourceMtlPath, sourceFolder)) {
             string targetTexPath = Path.Combine(targetRoot, Path.GetFileName(tex));
-            File.Copy(tex, targetTexPath, true);
+            System.IO.File.Copy(tex, targetTexPath, true);
         }
 
         return targetObjPath;
     }
 
     private IEnumerable<string> ExtractTexturesFromMtl(string mtlPath, string folder) {
-        foreach (string raw in File.ReadAllLines(mtlPath)) {
+        foreach (string raw in System.IO.File.ReadAllLines(mtlPath)) {
             string line = raw.Trim();
             if (!line.StartsWith("map_Kd "))
                 continue;
@@ -146,7 +191,7 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
             string texName = line.Substring(7).Trim();
             string fullPath = Path.Combine(folder, Path.GetFileName(texName));
 
-            if (File.Exists(fullPath))
+            if (System.IO.File.Exists(fullPath))
                 yield return fullPath;
         }
     }
@@ -162,7 +207,7 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
         string copiedFolder = Path.GetDirectoryName(copiedObjPath);
         string copiedMtlPath = Path.ChangeExtension(copiedObjPath, ".mtl");
 
-        if (File.Exists(copiedMtlPath))
+        if (System.IO.File.Exists(copiedMtlPath))
             ApplyMaterialsFromMtl(obj, copiedMtlPath, copiedFolder);
 
         return obj;
@@ -172,7 +217,7 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
     /// Parses an MTL file and applies the textures to the materials on the loaded model.
     /// </summary>
     private void ApplyMaterialsFromMtl(GameObject obj, string mtlPath, string folder) {
-        string[] lines = File.ReadAllLines(mtlPath);
+        string[] lines = System.IO.File.ReadAllLines(mtlPath);
         Dictionary<string, string> materialToTexture = new Dictionary<string, string>();
         string currentMaterial = null;
 
@@ -194,12 +239,12 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
                 if (!materialToTexture.TryGetValue(cleanName, out string texPath))
                     continue;
 
-                if (!File.Exists(texPath)) {
+                if (!System.IO.File.Exists(texPath)) {
                     Debug.LogWarning($"Texture not found for {cleanName}: {texPath}");
                     continue;
                 }
 
-                byte[] data = File.ReadAllBytes(texPath);
+                byte[] data = System.IO.File.ReadAllBytes(texPath);
                 Texture2D tex = new Texture2D(2, 2);
                 tex.LoadImage(data);
                 mat.mainTexture = tex;
@@ -219,7 +264,7 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
     private void WriteFile(string assetHash, string fileName, byte[] data) {
         string root = GetPersistentAssetPath(assetHash);
         string path = Path.Combine(root, fileName);
-        File.WriteAllBytes(path, data);
+        System.IO.File.WriteAllBytes(path, data);
     }
 
     #endregion

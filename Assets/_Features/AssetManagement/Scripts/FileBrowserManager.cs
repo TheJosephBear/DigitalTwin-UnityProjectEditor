@@ -39,11 +39,11 @@ public class FileBrowserManager : Singleton<FileBrowserManager> {
     /// <param name="filterExtensions">
     /// File extensions to filter by (e.g. "obj", "png"). Defaults to "obj".
     /// </param>
-    public void ShowLoadDialog(Action<File[]> onFilesSelected, string filterExtensions = "obj") {
+    public void ShowLoadDialog(Action<File[]> onFilesSelected, string filterExtensions = "obj", bool multipleSelection = false) {
         onFilesSelectedCallback = onFilesSelected;
         WebGLFileBrowser.OpenFilePanelWithFilters(
             WebGLFileBrowser.GetFilteredFileExtensions(filterExtensions),
-            false
+            multipleSelection
         );
     }
 

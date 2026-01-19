@@ -13,7 +13,11 @@ public class AssetManager : Singleton<AssetManager> {
     public GameObject AssetContainer; // Parent gameobject for uploaded models
     List<ModelAsset> assets = new List<ModelAsset>();
     
-    public ModelAsset CreateNewAssetFromFile(FrostweepGames.Plugins.WebGLFileBrowser.File file) {
+    public ModelAsset CreateNewAssetFromFile(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
+
+        FrostweepGames.Plugins.WebGLFileBrowser.File objFile;
+
+
         // Duplication check
         string fileHash = GetFileHash(file.data);
         foreach (var asset in assets) {
@@ -24,7 +28,7 @@ public class AssetManager : Singleton<AssetManager> {
         }
 
         // New asset creation
-        GameObject newAssetGo = FileLoadingManager.Instance.UploadFromPC(file.fileInfo.path, fileHash);
+        GameObject newAssetGo = FileLoadingManager.Instance.UploadFromWebGLFile(file, fileHash);
         newAssetGo.transform.parent = AssetContainer.transform;
         ModelAsset modelAsset = newAssetGo.AddComponent<ModelAsset>();
         modelAsset.FileName = file.fileInfo.fullName;
