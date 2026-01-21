@@ -1,4 +1,5 @@
 using Dummiesman;
+using FrostweepGames.Plugins.WebGLFileBrowser;
 using System;
 using System.Collections;
 using System.IO;
@@ -25,7 +26,8 @@ public class ObjectImportTestingUI : MonoBehaviour {
     }
 
     public void OnUploadWebGL() {
-        FileBrowserManager.Instance.ShowLoadDialog(OnFilesSelected, ".obj, .png, .mtl", multipleSelection: true);
+        // This function is used only in editor/pc build and makes the user select the whole folder instead of the singular files
+        FileBrowserManager.Instance.ShowLoadDialogDebugMultiFile(OnFoldersSelected, "obj, mtl, png, jpg", true);
     }
 
     public void OnUploadToWeb() {
@@ -39,13 +41,12 @@ public class ObjectImportTestingUI : MonoBehaviour {
     #endregion
 
     void OnFileSelected(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
-        AssetManager.Instance.CreateNewAssetFromFile(files[0]);
-        //     FileLoadingManager.Instance.UploadFromPC(files[0].fileInfo.path);
-
+      //  AssetManager.Instance.CreateNewAssetFromFiles(files);
+        FileLoadingManager.Instance.UploadFromPC(files[0].fileInfo.path, "something");
     }
 
-    void OnFilesSelected(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
-        AssetManager.Instance.CreateNewAssetFromFile(files[0]);
+    void OnFoldersSelected(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
+        AssetManager.Instance.CreateNewAssetFromFiles(files);
         //     FileLoadingManager.Instance.UploadFromPC(files[0].fileInfo.path);
 
     }

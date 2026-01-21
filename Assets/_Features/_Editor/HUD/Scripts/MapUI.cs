@@ -12,16 +12,16 @@ public class MapUI : UIBehaviour {
     }
 
     public void onNahrat() {
-        FileBrowserManager.Instance.ShowLoadDialog(OnFileSelectedMap);
+        FileBrowserManager.Instance.ShowLoadDialog(OnFileSelectedMap, "obj, mtl, png, jpg, jpeg", true);
     }
 
     public void onPridatVariantu() {
-        FileBrowserManager.Instance.ShowLoadDialog(OnFileSelectedMapVar);
+        FileBrowserManager.Instance.ShowLoadDialog(OnFileSelectedMapVar, "obj, mtl, png, jpg, jpeg", true);
     }
 
     void OnFileSelectedMap(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
         if (files != null && files.Length > 0) {
-            EditorManager.Instance.MapManager.SetBaseMapModel(AssetManager.Instance.CreateNewAssetFromFile(files[0]));
+            EditorManager.Instance.MapManager.SetBaseMapModel(AssetManager.Instance.CreateNewAssetFromFiles(files));
         } else {
             PopUp.Instance.ShowPopUpWindow("Please select .obj file!");
         }
@@ -30,7 +30,7 @@ public class MapUI : UIBehaviour {
 
     void OnFileSelectedMapVar(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
         if (files != null && files.Length > 0) {
-            EditorManager.Instance.MapManager.UploadMapVariant(AssetManager.Instance.CreateNewAssetFromFile(files[0]));
+            EditorManager.Instance.MapManager.UploadMapVariant(AssetManager.Instance.CreateNewAssetFromFiles(files));
         } else {
             PopUp.Instance.ShowPopUpWindow("Please select .obj file!");
         }

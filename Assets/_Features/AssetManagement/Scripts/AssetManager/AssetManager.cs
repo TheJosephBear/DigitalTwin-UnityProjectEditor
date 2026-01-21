@@ -9,15 +9,11 @@ public class AssetManager : Singleton<AssetManager> {
     /// <summary>
     /// Creates assets from uploaded models for easier upload and download
     /// </summary>
-    
+
     public GameObject AssetContainer; // Parent gameobject for uploaded models
     List<ModelAsset> assets = new List<ModelAsset>();
-    
-    public ModelAsset CreateNewAssetFromFile(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
 
-        FrostweepGames.Plugins.WebGLFileBrowser.File objFile;
-
-
+    public ModelAsset CreateNewAssetFromFile(FrostweepGames.Plugins.WebGLFileBrowser.File file) {
         // Duplication check
         string fileHash = GetFileHash(file.data);
         foreach (var asset in assets) {
@@ -36,6 +32,58 @@ public class AssetManager : Singleton<AssetManager> {
         modelAsset.SetModelGameObject(newAssetGo);
         assets.Add(modelAsset);
         newAssetGo.SetActive(false);
+        return modelAsset;
+    }
+
+    public ModelAsset CreateNewAssetFromFiles(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
+        if (files == null || files.Length == 0) {
+            Debug.LogError("No files selected.");
+            return null;
+        }
+
+        // 1. Find OBJ file
+        FrostweepGames.Plugins.WebGLFileBrowser.File objFile = null;
+        foreach (var f in files) {
+            if (f.fileInfo.extension.ToLower() == "obj" || f.fileInfo.extension.ToLower() == ".obj") {
+                objFile = f;
+                break;
+            }
+        }
+
+        if (objFile == null) {
+            Debug.LogError("No OBJ file in selection.");
+            return null;
+        }
+
+        // 2. Hash based on OBJ (or improve later)
+        string fileHash = GetFileHash(objFile.data);
+
+        // 3. Duplication check
+        foreach (var asset in assets) {
+            if (asset.FileHash == fileHash) {
+                Debug.Log("Model already uploaded.");
+                return asset;
+            }
+        }
+
+        // 4. Upload full bundle
+        GameObject newAssetGo =
+            FileLoadingManager.Instance.UploadFromWebGLFiles(files, fileHash);
+
+        if (newAssetGo == null)
+            return null;
+
+        // 5. Register asset
+        newAssetGo.transform.parent = AssetContainer.transform;
+
+        ModelAsset modelAsset = newAssetGo.AddComponent<ModelAsset>();
+        modelAsset.FileName = objFile.fileInfo.fullName;
+        modelAsset.FileHash = fileHash;
+        modelAsset.SetModelGameObject(newAssetGo);
+
+        assets.Add(modelAsset);
+        newAssetGo.SetActive(false);
+
         return modelAsset;
     }
 
@@ -89,7 +137,7 @@ public class AssetManager : Singleton<AssetManager> {
             List<string> pathsToFiles = FileLoadingManager.Instance.GetAllFilesForAsset(modelAsset.FileHash);
             print(pathsToFiles.Count);
             foreach (string path in pathsToFiles) {
-                print("saving path: "+path);
+                print("saving path: " + path);
                 string fileName = Path.GetFileName(path);
                 ServerCommunicationManager.Instance.UploadFileToServer(
                     path,

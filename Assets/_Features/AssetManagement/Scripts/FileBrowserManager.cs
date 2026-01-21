@@ -47,6 +47,13 @@ public class FileBrowserManager : Singleton<FileBrowserManager> {
         );
     }
 
+    public void ShowLoadDialogDebugMultiFile(Action<FrostweepGames.Plugins.WebGLFileBrowser.File[]> onFilesSelected, string filterExtensions = "obj, mtl, png, jpg", bool multipleSelection = false) {
+        onFilesSelectedCallback = onFilesSelected;
+        WebGLFileBrowser.OpenFolderPanelWithFilters(
+            WebGLFileBrowser.GetFilteredFileExtensions(filterExtensions)
+        );
+    }
+
     /// <summary>
     /// Handles successful file selection events from the WebGL file browser.
     /// </summary>

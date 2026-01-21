@@ -16,7 +16,7 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
 
 
 
-    #region Public interface for uploading from pc
+    #region Public interface for uploading from PC
 
     /// <summary>
     /// Upload that uses path information.
@@ -52,7 +52,7 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
 
         string targetPath = Path.Combine(targetRoot, file.fileInfo.name);
         System.IO.File.WriteAllBytes(targetPath, file.data);
-        print("target path: "+targetPath);
+        print("target path: " + targetPath);
 
         print(file.fileInfo.name);
         print(file.fileInfo.extension);
@@ -67,6 +67,33 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
 
         return BuildObjFromCopiedFiles(objPath);
     }
+
+    public GameObject UploadFromWebGLFiles(
+        FrostweepGames.Plugins.WebGLFileBrowser.File[] files,
+        string fileHash
+    ) {
+        string targetRoot = GetPersistentAssetPath(fileHash);
+
+        string objPath = null;
+
+        foreach (var file in files) {
+            print("Found a while: " + file.fileInfo.fullName);
+            string targetPath = Path.Combine(targetRoot, file.fileInfo.fullName);
+            System.IO.File.WriteAllBytes(targetPath, file.data);
+
+            if (file.fileInfo.extension.ToLower() == "obj" || file.fileInfo.extension.ToLower() == ".obj")
+                objPath = targetPath;
+        }
+
+        if (objPath == null) {
+            Debug.LogError("No OBJ file provided.");
+            return null;
+        }
+
+        return BuildObjFromCopiedFiles(objPath);
+    }
+
+
 
 
 
@@ -201,14 +228,19 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
     #region Object building (for when you have all the files uploaded to unity)
 
     private GameObject BuildObjFromCopiedFiles(string copiedObjPath) {
+
         GameObject obj = new OBJLoader().Load(copiedObjPath);
         obj.SetActive(false);
 
         string copiedFolder = Path.GetDirectoryName(copiedObjPath);
         string copiedMtlPath = Path.ChangeExtension(copiedObjPath, ".mtl");
 
-        if (System.IO.File.Exists(copiedMtlPath))
+        print("Looking for mtl named: " + copiedMtlPath);
+        if (System.IO.File.Exists(copiedMtlPath)) {
             ApplyMaterialsFromMtl(obj, copiedMtlPath, copiedFolder);
+        } else {
+            print("No materials found");
+        }
 
         return obj;
     }
