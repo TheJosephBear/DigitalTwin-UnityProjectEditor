@@ -78,7 +78,10 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
 
         foreach (var file in files) {
             print("Found a while: " + file.fileInfo.fullName);
-            string targetPath = Path.Combine(targetRoot, file.fileInfo.fullName);
+            string targetPath = Path.Combine(
+                targetRoot,
+                Path.GetFileName(file.fileInfo.fullName)
+            );
             System.IO.File.WriteAllBytes(targetPath, file.data);
 
             if (file.fileInfo.extension.ToLower() == "obj" || file.fileInfo.extension.ToLower() == ".obj")
@@ -259,7 +262,17 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
                 currentMaterial = line.Substring(7).Trim();
             } else if (line.StartsWith("map_Kd ") && currentMaterial != null) {
                 string texName = line.Substring(7).Trim();
-                string texPath = Path.Combine(folder, Path.GetFileName(texName));
+
+                // normalize MTL path (Windows -> WebGL)
+                texName = texName.Replace("\\", "/");
+
+                // extract filename safely
+                string fileName = texName.Contains("/")
+                    ? texName.Substring(texName.LastIndexOf("/") + 1)
+                    : texName;
+
+                string texPath = Path.Combine(folder, fileName);
+
                 materialToTexture[currentMaterial] = texPath;
             }
         }
