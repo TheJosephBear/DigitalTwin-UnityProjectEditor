@@ -37,17 +37,9 @@ public class GeoLocalizationUI : UIBehaviour {
     }
 
     public void OnUploadMap() {
-        FileBrowserManager.Instance.ShowLoadDialog(OnFilesSelectedMap, "obj, mtl, png, jpg, jpeg", true);
-    }
-
-    void OnFilesSelectedMap(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
-        if (files != null && files.Length > 0) {
-            EditorManager.Instance.MapManager.SetBaseMapModel(AssetManager.Instance.CreateNewAssetFromFiles(files));
+        ModelUploadManager.Instance.AskForModel((createdAsset) => {
+            EditorManager.Instance.MapManager.SetBaseMapModel(createdAsset);
             GeoMapLocalizationManager.Instance.Setup();
-        } else {
-            PopUp.Instance.ShowPopUpWindow("Please select .obj file!");
-        }
-
+        });
     }
-    
 }

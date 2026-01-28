@@ -20,6 +20,7 @@ public class PopUpInputUI : UIBehaviour {
     public void ShowCopyableText(string windowMessage, string text) {
         messageLabel.text = windowMessage;
         inputField.text = text;
+        onInputSubmitted = null;
     }
 
     public void OnSubmitButtonClicked() {

@@ -61,7 +61,7 @@ public class ProjectListManager : Singleton<ProjectListManager> {
 
     public void CreateNewProject() {
         ProjectManager.Instance.CreateNewProject(() => {
-            _ui.RefreshProjectList(); // Only refresh here
+            _ui.RefreshProjectList();
         });
     }
 
