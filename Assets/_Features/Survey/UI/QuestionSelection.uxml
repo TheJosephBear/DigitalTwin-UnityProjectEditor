@@ -1,0 +1,40 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement style="flex-grow: 1;">
+        <ui:Button style="flex-direction: row; align-items: center;">
+            <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/radiobox-marked.png?fileID=2800000&amp;guid=37e9f9f378ccfdc408c1f609b92c11ab&amp;type=3#radiobox-marked&quot;); -unity-background-scale-mode: scale-to-fit; width: 32px; height: 32px;" />
+            <ui:Label text="Multiple choice" style="font-size: 16px;" />
+        </ui:Button>
+        <ui:Button style="flex-direction: row; align-items: center;">
+            <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/checkbox-outline.png?fileID=2800000&amp;guid=59ce6c32913445d4ea17176e8eaa821c&amp;type=3#checkbox-outline&quot;); -unity-background-scale-mode: scale-to-fit; width: 32px; height: 32px;" />
+            <ui:Label text="Checkboxes" style="font-size: 16px;" />
+        </ui:Button>
+        <ui:Button style="flex-direction: row; align-items: center;">
+            <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/text-short.png?fileID=2800000&amp;guid=4437d033329d26d4fb2d51929e6859fa&amp;type=3#text-short&quot;); -unity-background-scale-mode: scale-to-fit; width: 32px; height: 32px;" />
+            <ui:Label text="Short answer" style="font-size: 16px;" />
+        </ui:Button>
+        <ui:Button style="flex-direction: row; align-items: center;">
+            <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/text-long.png?fileID=2800000&amp;guid=109d9144e1e668e4e9421d69b95d1fed&amp;type=3#text-long&quot;); -unity-background-scale-mode: scale-to-fit; width: 32px; height: 32px;" />
+            <ui:Label text="Paragraph" style="font-size: 16px;" />
+        </ui:Button>
+        <ui:Button style="flex-direction: row; align-items: center;">
+            <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/arrow-down-drop-circle-outline.png?fileID=2800000&amp;guid=d342d52e4cc2cab439825f82f1446c63&amp;type=3#arrow-down-drop-circle-outline&quot;); -unity-background-scale-mode: scale-to-fit; width: 32px; height: 32px;" />
+            <ui:Label text="Dropdown" style="font-size: 16px;" />
+        </ui:Button>
+        <ui:Button style="flex-direction: row; align-items: center;">
+            <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/dots-grid.png?fileID=2800000&amp;guid=e33b5d874beaea7449ae151cfc33622c&amp;type=3#dots-grid&quot;); -unity-background-scale-mode: scale-to-fit; width: 32px; height: 32px;" />
+            <ui:Label text="Multiple choice grid" style="font-size: 16px;" />
+        </ui:Button>
+        <ui:Button style="flex-direction: row; align-items: center;">
+            <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/grid.png?fileID=2800000&amp;guid=13bd22408d8dec548ae2c44a66a972ec&amp;type=3#grid&quot;); -unity-background-scale-mode: scale-to-fit; width: 32px; height: 32px;" />
+            <ui:Label text="Checkbox grid" style="font-size: 16px;" />
+        </ui:Button>
+        <ui:Button style="flex-direction: row; align-items: center;">
+            <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/image-multiple-outline.png?fileID=2800000&amp;guid=ec7fb72a04c535948a0e19a96b81d5ee&amp;type=3#image-multiple-outline&quot;); -unity-background-scale-mode: scale-to-fit; width: 32px; height: 32px;" />
+            <ui:Label text="Image choice" style="font-size: 16px;" />
+        </ui:Button>
+        <ui:Button style="flex-direction: row; align-items: center;">
+            <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/tune-variant.png?fileID=2800000&amp;guid=e3afdd3fd3406684aa08feaea540d51c&amp;type=3#tune-variant&quot;); -unity-background-scale-mode: scale-to-fit; width: 32px; height: 32px;" />
+            <ui:Label text="Linear scale" style="font-size: 16px;" />
+        </ui:Button>
+    </ui:VisualElement>
+</ui:UXML>
