@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +8,7 @@ public class EditorObjectButton : MonoBehaviour {
 
     
     public void onPridatNovy() {
-        // øekni si manageru at prida
+        // Å™ekni si manageru at prida
     }
 
     public void onVybrat() {
@@ -16,7 +16,7 @@ public class EditorObjectButton : MonoBehaviour {
     }
 
     public void onPrejmenovat() {
-        PopUp.Instance.AskForInput("Zadejte nový název", (input) => {
+        PopUp.Instance.AskForInput("Zadejte novÃ½ nÃ¡zev", (input) => {
      //       EditorObjectInstance.SetName(Utilities.UniqueNameEnsure(input));
         });
     }

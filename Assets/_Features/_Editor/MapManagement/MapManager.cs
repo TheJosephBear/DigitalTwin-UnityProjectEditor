@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,7 +9,7 @@ public class MapManager : MonoBehaviour {
     List<MapVariant> _mapVariants = new List<MapVariant>();
     public Vector3 mapSpawnPosition;
 
-    // Do budoucna nastavovat spawn position po posunu v geo map�
+    // Do budoucna nastavovat spawn position po posunu v geo mapě
     private void Update() {
         if(_baseMap!=null) mapSpawnPosition = _baseMap.transform.position;
     }

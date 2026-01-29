@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -18,7 +18,7 @@ public class VariantButton : MonoBehaviour {
     public void Initialize(DecorationVariant vari) {
         variant = vari;
         button.onClick.AddListener(OnButtonClick);
-  //      button.onClick.AddListener(() => FindAnyObjectByType<DecorationUI>().RefreshVariantButtonListSelection()); // Nechuárna ale nevím jak jinak aktualizovat ty outline všech tlaèítek
+  //      button.onClick.AddListener(() => FindAnyObjectByType<DecorationUI>().RefreshVariantButtonListSelection()); // NechuÂÃ¡rna ale nevÃ­m jak jinak aktualizovat ty outline vÅ¡ech tlaÄÃ­tek
         text.text = variant.Name;
     }
 
@@ -31,7 +31,7 @@ public class VariantButton : MonoBehaviour {
     }
 
     public void onPrejmenovat() {
-     /*   PopUpTextInput.Instance.AskForInput("Pøejmenovat dekoraci", (input) => {
+     /*   PopUpTextInput.Instance.AskForInput("PÅ™ejmenovat dekoraci", (input) => {
             if (input != null)
                 DecorationManager.Instance.RenameVariant(variant, input);
         });*/

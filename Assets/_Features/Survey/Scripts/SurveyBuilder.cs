@@ -1,4 +1,4 @@
-using QuestionnaireToolkit.Scripts;
+ï»¿using QuestionnaireToolkit.Scripts;
 using QuestionnaireToolkit;
 using System.Collections;
 using System.Collections.Generic;
@@ -38,7 +38,7 @@ public class SurveyBuilder : MonoBehaviour {
         _questionnareInstance.SetActive(false);
         _obstructorInstance.SetActive(false);
         _controlPanelInstance.SetActive(false);
-        // Volat level editor je špatnı, ale to se opraví po refaktorizaci editor managera
+        // Volat level editor je Å¡patnÃ½, ale to se opravÃ­ po refaktorizaci editor managera
         EditorManager.Instance.ChangeEditorMode(EditorState.Freecam);
     }
 
@@ -119,8 +119,8 @@ public class SurveyBuilder : MonoBehaviour {
     #region Setting
 
     public void SetQuestionnareName(string name) {
-        // Název není souèást balíku
-        // Název bude pøidán pøi redesignu
+        // NÃ¡zev nenÃ­ souÄÃ¡st balÃ­ku
+        // NÃ¡zev bude pÅ™idÃ¡n pÅ™i redesignu
     }
 
     public void SetQuestionText(string newQuestionText) {

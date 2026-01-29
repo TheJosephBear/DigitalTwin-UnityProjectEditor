@@ -1,4 +1,4 @@
-using System;
+Ôªøusing System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -68,7 +68,7 @@ public class ProjectManager : Singleton<ProjectManager> {
         yield return new WaitUntil(() => finished);
 
         if (!success) {
-            PopUp.Instance.ShowPopUpWindow("NaËÌt·nÌ projekt˘ selhalo.");
+            PopUp.Instance.ShowPopUpWindow("Naƒç√≠t√°n√≠ projekt≈Ø selhalo.");
             onFinished(null);
             yield break;
         }
@@ -80,7 +80,7 @@ public class ProjectManager : Singleton<ProjectManager> {
     #region Project List actions
 
     public void CreateNewProject(Action onCompleted) {
-        PopUp.Instance.AskForInput("JmÈno projektu", (userInput) => {
+        PopUp.Instance.AskForInput("Jm√©no projektu", (userInput) => {
             if (string.IsNullOrEmpty(userInput)) {
                 PopUp.Instance.ShowPopUpWindow("Input was cancelled or empty.");
                 return;
@@ -91,7 +91,7 @@ public class ProjectManager : Singleton<ProjectManager> {
 
             ServerCommunicationManager.Instance.CreateProject(newProjectName, id, (success, response) => {
                 if (!success) {
-                    PopUp.Instance.ShowPopUpWindow("Vytvo¯enÌ projektu selhalo: " + response);
+                    PopUp.Instance.ShowPopUpWindow("Vytvo≈ôen√≠ projektu selhalo: " + response);
                 }
 
                 onCompleted?.Invoke();
@@ -100,7 +100,7 @@ public class ProjectManager : Singleton<ProjectManager> {
     }
 
     public void RenameProject(ProjectMetadata projectMetadata, Action onCompleted) {
-        PopUp.Instance.AskForInput("P¯ejmenovat projekt", (userInput) => {
+        PopUp.Instance.AskForInput("P≈ôejmenovat projekt", (userInput) => {
             if (string.IsNullOrEmpty(userInput)) {
                 PopUp.Instance.ShowPopUpWindow("Input was cancelled or empty.");
                 return;
@@ -119,7 +119,7 @@ public class ProjectManager : Singleton<ProjectManager> {
     public void DuplicateProject(ProjectMetadata projectMetadata, Action onCompleted) {
         ServerCommunicationManager.Instance.DuplicateProject(projectMetadata.projectName, (success, response) => {
             if (!success) {
-                PopUp.Instance.ShowPopUpWindow("Duplikov·nÌ projektu selhalo: " + response);
+                PopUp.Instance.ShowPopUpWindow("Duplikov√°n√≠ projektu selhalo: " + response);
             }
 
             onCompleted?.Invoke();
@@ -129,9 +129,9 @@ public class ProjectManager : Singleton<ProjectManager> {
     public void DeleteProject(ProjectMetadata projectMetadata, Action onCompleted) {
         ServerCommunicationManager.Instance.DeleteProject(projectMetadata.projectName, (success, response) => {
             if (!success) {
-                PopUp.Instance.ShowPopUpWindow("Projekt se nepoda¯ilo smazat! " + response);
+                PopUp.Instance.ShowPopUpWindow("Projekt se nepoda≈ôilo smazat! " + response);
             } else {
-                PopUp.Instance.ShowPopUpWindow("Projekt smaz·n!");
+                PopUp.Instance.ShowPopUpWindow("Projekt smaz√°n!");
             }
 
             onCompleted?.Invoke();
@@ -139,7 +139,7 @@ public class ProjectManager : Singleton<ProjectManager> {
     }
 
     public void GetProjectSurveyResponseData(ProjectMetadata projectMedata) {
-        PopUp.Instance.ShowPopUpWindow("Toto zatÌm nic nedÏl·!");
+        PopUp.Instance.ShowPopUpWindow("Toto zat√≠m nic nedƒõl√°!");
     }
 
     public void GetProjectIframeExport(ProjectMetadata projectMedata) {
@@ -149,7 +149,7 @@ public class ProjectManager : Singleton<ProjectManager> {
                 return;
             }
 
-            PopUp.Instance.ShowCopyableText("ZkopÌrujte toto do vaöÌ str·nky.", data);
+            PopUp.Instance.ShowCopyableText("Zkop√≠rujte toto do va≈°√≠ str√°nky.", data);
         });
     }
 
@@ -175,7 +175,7 @@ public class ProjectManager : Singleton<ProjectManager> {
         yield return new WaitUntil(() => finished);
 
         if (!success) {
-            PopUp.Instance.ShowPopUpWindow("NaËÌt·nÌ projekt˘ selhalo.");
+            PopUp.Instance.ShowPopUpWindow("Naƒç√≠t√°n√≠ projekt≈Ø selhalo.");
             onFinished(null);
             yield break;
         }

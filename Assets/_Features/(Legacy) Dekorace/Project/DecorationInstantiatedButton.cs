@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using TMPro;
@@ -43,7 +43,7 @@ public class DecorationInstantiatedButton : MonoBehaviour
     }
 
     public void onPrejmenovat() {
-    /*    PopUpTextInput.Instance.AskForInput("Pøejmenovat dekoraci ve scénì", (input) => {
+    /*    PopUpTextInput.Instance.AskForInput("PÅ™ejmenovat dekoraci ve scÃ©nÄ›", (input) => {
             if (input != null)
                 DecorationManager.Instance.RenameInstantiated(decoration, input);
         });*/

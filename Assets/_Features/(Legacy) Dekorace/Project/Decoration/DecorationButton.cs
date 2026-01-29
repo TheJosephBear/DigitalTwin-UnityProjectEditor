@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -19,7 +19,7 @@ public class DecorationButton : MonoBehaviour {
     public void Initialize(DecorationPreset deco) {
         decorationPreset = deco;
         button.onClick.AddListener(OnButtonClick);
-        button.onClick.AddListener(() => FindAnyObjectByType<DecorationUI>().RefreshDecorationButtonListSelection()); // Nechuárna ale nevím jak jinak aktualizovat ty outline všech tlaèítek
+        button.onClick.AddListener(() => FindAnyObjectByType<DecorationUI>().RefreshDecorationButtonListSelection()); // NechuÅ¥Ã¡rna ale nevÃ­m jak jinak aktualizovat ty outline vÅ¡ech tlaÄÃ­tek
         text.text = decorationPreset.Name;
     }
 
@@ -38,18 +38,18 @@ public class DecorationButton : MonoBehaviour {
     }
 
     public void GetUnselected() {
-        SelectedOutline.enabled = false;    
+        SelectedOutline.enabled = false;
     }
 
     public void onOtevrit() {
         GetSelected();
-        DecorationManager.Instance.ToggleDecorationVariantEditorMenu(true);   
+        DecorationManager.Instance.ToggleDecorationVariantEditorMenu(true);
     }
 
     public void onPrejmenovat() {
         GetSelected();
-  /*      PopUpTextInput.Instance.AskForInput("Pøejmenovat dekoraci", (input) => {
-            if (input!=null) 
+  /*      PopUpTextInput.Instance.AskForInput("PÅ™ejmenovat dekoraci", (input) => {
+            if (input!=null)
                 DecorationManager.Instance.RenameSelectedDecoration(input);
         });*/
     }

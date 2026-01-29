@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static SimpleFileBrowser.FileBrowser;
@@ -18,7 +18,7 @@ public class LoginManager : Singleton<LoginManager> {
                 StartCoroutine(GoToProjectList());
                 UIManager.Instance.HideUI(UIType.Login);
             } else {
-                PopUp.Instance.ShowPopUpWindow("Jméno nebo heslo není správnì.");
+                PopUp.Instance.ShowPopUpWindow("JmÃ©no nebo heslo nenÃ­ sprÃ¡vnÄ›.");
             }
         });
     }
@@ -28,7 +28,7 @@ public class LoginManager : Singleton<LoginManager> {
             if (successBool) {
                 UIManager.Instance.ShowUI(UIType.Login);
                 UIManager.Instance.HideUI(UIType.Register);
-                PopUp.Instance.ShowPopUpWindow("Registrace probìhla úspìšnì.");
+                PopUp.Instance.ShowPopUpWindow("Registrace probÄ›hla ÃºspÄ›Å¡nÄ›.");
             } else {
                 PopUp.Instance.ShowPopUpWindow("Registrace selhala.");
             }
