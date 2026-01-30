@@ -5,6 +5,71 @@ using System.Collections.Generic;
 using UnityEngine;
 using static QuestionnaireToolkit.Scripts.QTQuestionPageManager;
 
+namespace SurveySystem {
+    public class SurveyBuilder : MonoBehaviour {
+        private Survey _activeSurvey;
+
+        public Survey CreateNewSurvey() {
+            _activeSurvey = new Survey();
+            return _activeSurvey;
+        }
+
+        public void SetActiveSurvey(Survey survey) {
+            _activeSurvey = survey;
+        }
+
+        public void SetSurveyName(string name) {
+            _activeSurvey.Name = name;
+        }
+
+        public void AddNewQuestion(QuestionType type) {
+            QuestionBase question = type switch {
+                QuestionType.MultipleChoiceSingle => new QuestionMultipleChoiceSingleAnswer(),
+         //       QuestionType.MultipleChoiceMultiple => new MultiChoiceMultiple(),
+                _ => null
+            };
+
+            _activeSurvey.AddNewQuestion(question);
+        }
+
+        public void RemoveQuestion(int idx) {
+            _activeSurvey.RemoveQuestion(idx);
+        }
+
+        public void SetQuestionTitle(string title) {
+            _activeSurvey.ActiveQuestion.Title = title;
+        }
+
+        public void SetQuestionDescription(string description) {
+            _activeSurvey.ActiveQuestion.Description = description;
+        }
+
+        public void AddNewAnswerToQuestion() {
+            _activeSurvey.ActiveQuestion.AddNewAnswer();
+        }
+
+        public void SetActiveAnswer(int idx) {
+            _activeSurvey.ActiveQuestion.SetActiveAnswer(idx);
+        }
+
+        public void SetAnswerText(string text) {
+            _activeSurvey.ActiveQuestion.ActiveAnswer.Text = text;
+        }
+
+        public void RemoveAnswer(int idx) {
+            _activeSurvey.ActiveQuestion.RemoveAnswer(idx);
+        }
+
+        public string ExportSurveyAsJson() {
+            string jsonString = "";
+
+            return jsonString;
+        }
+    }
+}
+
+
+// I want to avoid errors before i get rid of the old code so here it stays for now
 public class SurveyBuilder : MonoBehaviour {
 
     public GameObject QuestionnarePrefab;
