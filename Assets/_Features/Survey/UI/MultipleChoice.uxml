@@ -5,7 +5,7 @@
     <ui:VisualElement name="container" style="flex-grow: 1;">
         <ui:VisualElement name="question-title-bar" style="flex-grow: 0; flex-direction: row; align-items: center;">
             <ui:Instance template="Question-title" name="Question-title" style="flex-grow: 1;" />
-            <ui:VisualElement name="edit-button" style="flex-grow: 0; width: 32px; height: 32px; background-image: url(&quot;project://database/Assets/UIToolkit/Icons/pencil-outline.png?fileID=2800000&amp;guid=2b11358c908ae27429e1f940d2ac878e&amp;type=3#pencil-outline&quot;);" />
+            <ui:VisualElement name="edit-button" style="flex-grow: 0; width: 32px; height: 32px; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/pencil-outline.png?fileID=2800000&amp;guid=2b11358c908ae27429e1f940d2ac878e&amp;type=3#pencil-outline&quot;);" />
         </ui:VisualElement>
         <ui:Instance template="Question-description" name="Question-description" />
         <ui:VisualElement style="flex-grow: 0; flex-direction: row; align-self: flex-end;">
