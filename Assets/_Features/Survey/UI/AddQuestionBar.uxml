@@ -1,9 +1,9 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Template name="QuestionSelection" src="project://database/Assets/_Features/Survey/UI/QuestionSelection.uxml?fileID=9197481963319205126&amp;guid=5fc280527885572498dd8152cbd24b60&amp;type=3#QuestionSelection" />
-    <ui:VisualElement name="VisualElement" style="flex-grow: 0; flex-direction: row; align-items: center;">
+    <ui:VisualElement name="container" style="flex-grow: 0; flex-direction: row; align-items: center;">
         <ui:VisualElement style="flex-grow: 1; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/minus.png?fileID=2800000&amp;guid=0a7db974b6850a34f95d8091324c7345&amp;type=3#minus&quot;); height: 24px; -unity-background-scale-mode: stretch-to-fill; background-size: 150% 100%;" />
-        <ui:Button name="AddQuestionButton" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/plus-box-outline.png?fileID=2800000&amp;guid=f36423156a503d3479c3bcfe41cdb280&amp;type=3#plus-box-outline&quot;); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; width: 32px; height: 32px;" />
+        <ui:Button name="add-question-bar" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/plus-box-outline.png?fileID=2800000&amp;guid=f36423156a503d3479c3bcfe41cdb280&amp;type=3#plus-box-outline&quot;); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; width: 32px; height: 32px;" />
         <ui:VisualElement style="flex-grow: 1; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/minus.png?fileID=2800000&amp;guid=0a7db974b6850a34f95d8091324c7345&amp;type=3#minus&quot;); height: 24px; background-size: 150% 100%;" />
     </ui:VisualElement>
-    <ui:Instance template="QuestionSelection" name="QuestionSelection" style="left: 50%; right: auto; top: 25px; display: none; position: absolute;" />
+    <ui:Instance template="QuestionSelection" name="question-selection" style="left: 50%; right: auto; top: 25px; display: none; position: absolute;" />
 </ui:UXML>

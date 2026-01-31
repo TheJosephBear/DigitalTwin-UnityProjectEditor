@@ -13,7 +13,7 @@ public class SurveyController : Singleton<SurveyController>
     void Start()
     {
         _root = gameObject.GetComponent<UIDocument>().rootVisualElement;
-        _scrollViewContent = _root.Q<ScrollView>("SurveyScrollView").contentContainer;
+        _scrollViewContent = _root.Q<ScrollView>("survey-scroll-view").contentContainer;
     }
 
     public void AddQuestion(string questionType)
@@ -27,7 +27,7 @@ public class SurveyController : Singleton<SurveyController>
         }
         else
         {
-            _scrollViewContent.Add(new Label($"Question: {questionType}"));
+            _scrollViewContent.Add(new Label($"Question template '{questionType}' is missing"));
         }
         
         // Placeholder for adding question logic

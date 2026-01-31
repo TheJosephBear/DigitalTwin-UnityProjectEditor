@@ -12,10 +12,10 @@ public class AddQuestion : Singleton<AddQuestion>
     void Start()
     {
         _root = gameObject.GetComponent<UIDocument>().rootVisualElement;
-        _addQuestionBar = _root.Q<TemplateContainer>("AddQuestionBar");
-        _questionSelection = _addQuestionBar.Q<TemplateContainer>("QuestionSelection");
+        _addQuestionBar = _root.Q<TemplateContainer>("add-question-bar");
+        _questionSelection = _addQuestionBar.Q<TemplateContainer>("question-selection");
 
-        _addQuestionBar.Q<Button>("AddQuestionButton").clicked += OpenModal;
+        _addQuestionBar.Q<Button>("add-question-button").clicked += OpenModal;
     }
 
     private void OnRootPointerDown(PointerDownEvent evt)
