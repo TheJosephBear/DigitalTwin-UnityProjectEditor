@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace SurveySystem {
     public class QuestionBase {
+        public int Id { get; protected set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public QuestionType QuestionType { get; protected set; }
@@ -11,6 +12,11 @@ namespace SurveySystem {
         public AnswerBase ActiveAnswer { get; protected set; }
 
         public IReadOnlyList<AnswerBase> Answers => _answers;
+
+        public QuestionBase(int ID) {
+            Id = ID;
+            AddNewAnswer();
+        }
 
         public virtual AnswerBase AddNewAnswer() {
             AnswerBase answer = new AnswerBase {

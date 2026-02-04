@@ -4,10 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static QuestionnaireToolkit.Scripts.QTQuestionPageManager;
+using System.Linq;
 
 namespace SurveySystem {
-    public class SurveyBuilder : MonoBehaviour {
+    public class SurveyBuilder : Singleton<SurveyBuilder> {
         private Survey _activeSurvey;
+        private int _nextId = 0;
 
         public Survey CreateNewSurvey() {
             _activeSurvey = new Survey();
@@ -22,14 +24,15 @@ namespace SurveySystem {
             _activeSurvey.Name = name;
         }
 
-        public void AddNewQuestion(QuestionType type) {
+        public QuestionBase AddNewQuestion(QuestionType type) {
             QuestionBase question = type switch {
-                QuestionType.MultipleChoiceSingle => new QuestionMultipleChoiceSingleAnswer(),
-         //       QuestionType.MultipleChoiceMultiple => new MultiChoiceMultiple(),
+                QuestionType.MultipleChoiceSingle => new QuestionMultipleChoiceSingleAnswer(_nextId++),
+                //       QuestionType.MultipleChoiceMultiple => new MultiChoiceMultiple(),
                 _ => null
             };
 
             _activeSurvey.AddNewQuestion(question);
+            return question;
         }
 
         public void RemoveQuestion(int idx) {
@@ -40,12 +43,39 @@ namespace SurveySystem {
             _activeSurvey.ActiveQuestion.Title = title;
         }
 
+        public void SetQuestionTitle(QuestionBase question, string text) {
+            question.Title = text;
+        }
+
+        public void SetQuestionTitle(int questionId, string text) {
+            QuestionBase question = _activeSurvey.GetQuestionById(questionId);
+            question.Title = text;
+        }
+
         public void SetQuestionDescription(string description) {
             _activeSurvey.ActiveQuestion.Description = description;
         }
 
+        public void SetQuestionDescription(QuestionBase question, string text) {
+            question.Description = text;
+        }
+
+        public void SetQuestionDescription(int questionId, string text) {
+            QuestionBase question = _activeSurvey.GetQuestionById(questionId);
+            question.Description = text;
+            DebugPrintSurvey();
+        }
+
         public void AddNewAnswerToQuestion() {
             _activeSurvey.ActiveQuestion.AddNewAnswer();
+        }
+        public void AddNewAnswerToQuestion(QuestionBase question) {
+            question.AddNewAnswer();
+        }
+
+        public void AddNewAnswerToQuestion(int questionId) {
+            QuestionBase question = _activeSurvey.GetQuestionById(questionId);
+            question.AddNewAnswer();
         }
 
         public void SetActiveAnswer(int idx) {
@@ -54,6 +84,10 @@ namespace SurveySystem {
 
         public void SetAnswerText(string text) {
             _activeSurvey.ActiveQuestion.ActiveAnswer.Text = text;
+        }
+
+        public void SetAnswerText(AnswerBase answer, string text) {
+            answer.Text = text;
         }
 
         public void RemoveAnswer(int idx) {
@@ -65,10 +99,37 @@ namespace SurveySystem {
 
             return jsonString;
         }
+
+
+
+        void DebugPrintSurvey() {
+            if (_activeSurvey == null) {
+                print("No active survey.");
+                return;
+            }
+
+            print($"Survey: {_activeSurvey.Name}");
+
+            foreach (var question in _activeSurvey.Questions) {
+                print($"Question [{question.Id}]");
+                print($"  Title: {question.Title}");
+                print($"  Description: {question.Description}");
+
+                if (question.Answers == null || question.Answers.Count == 0) {
+                    print("  Answers: <none>");
+                    continue;
+                }
+
+                for (int i = 0; i < question.Answers.Count; i++) {
+                    var answer = question.Answers[i];
+                    print($"  Answer {i}: {answer.Text}");
+                }
+            }
+        }
     }
 }
 
-
+/*
 // I want to avoid errors before i get rid of the old code so here it stays for now
 public class SurveyBuilder : MonoBehaviour {
 
@@ -242,3 +303,5 @@ public class SurveyBuilder : MonoBehaviour {
     #endregion
 
 }
+
+ */

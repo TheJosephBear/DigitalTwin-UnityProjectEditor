@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using System.Linq;
 
 namespace SurveySystem {
     public class Survey {
@@ -11,10 +12,9 @@ namespace SurveySystem {
 
         public IReadOnlyList<QuestionBase> Questions => _questions;
 
-        public QuestionBase AddNewQuestion(QuestionBase question) {
+        public void AddNewQuestion(QuestionBase question) {
             _questions.Add(question);
             ActiveQuestion = question;
-            return question;
         }
 
         public void RemoveQuestion(int idx) {
@@ -29,5 +29,8 @@ namespace SurveySystem {
 
         public QuestionBase GetActiveQuestion() => ActiveQuestion;
 
+        public QuestionBase GetQuestionById(int id) {
+            return _questions.Find(a => a.Id == id);
+        }
     }
 }
