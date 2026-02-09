@@ -8,16 +8,12 @@
             <ui:VisualElement name="edit-button" style="flex-grow: 0; width: 32px; height: 32px; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/pencil-outline.png?fileID=2800000&amp;guid=2b11358c908ae27429e1f940d2ac878e&amp;type=3#pencil-outline&quot;);" />
         </ui:VisualElement>
         <ui:Instance template="Question-description" name="question-description" />
-        <ui:VisualElement style="flex-grow: 0; flex-direction: row; align-self: flex-end;">
-            <ui:DropdownField label="Camera view" name="camera-view-dropdown" />
-            <ui:Button name="image-button" style="flex-direction: row; justify-content: center; flex-shrink: 1; width: 95px; padding-top: 4px; padding-bottom: 4px; padding-left: 6px; padding-right: 6px; align-self: flex-end; align-items: center;">
-                <ui:VisualElement name="icon" style="flex-grow: 0; width: 24px; height: 24px; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/image-outline.png?fileID=2800000&amp;guid=2a8b0a5a8db48ee46924cdb62930cde7&amp;type=3#image-outline&quot;); flex-shrink: 0;" />
-                <ui:Label text="Image" />
-            </ui:Button>
-        </ui:VisualElement>
-        <ui:RadioButtonGroup name="options">
-            <ui:Instance template="OptionRadio" />
+        <ui:RadioButtonGroup name="options-list">
             <ui:Instance template="OptionRadio" />
         </ui:RadioButtonGroup>
+        <ui:VisualElement name="add-buttons" style="flex-grow: 0; flex-direction: row; align-content: stretch; justify-content: space-evenly;">
+            <ui:Button text="Přidat odpověď" name="add-option" style="flex-grow: 1;" />
+            <ui:Button text="Přidat &quot;Jiná&quot; odpověď" name="add-other-option" style="flex-grow: 1;" />
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

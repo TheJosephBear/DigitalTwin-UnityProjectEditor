@@ -1,5 +1,12 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement style="flex-direction: row;">
-        <ui:TextField placeholder-text="Question description" style="flex-grow: 1; font-size: 12px;" />
+    <ui:VisualElement style="flex-direction: column;">
+        <ui:TextField placeholder-text="Popis otázky" name="question-description" style="flex-grow: 1; font-size: 12px;" />
+        <ui:VisualElement name="question-attachment" style="flex-grow: 0; flex-direction: row; align-self: flex-end;">
+            <ui:DropdownField label="Pohled kamery" name="camera-view-dropdown" />
+            <ui:Button name="image-button" style="flex-direction: row; justify-content: center; flex-shrink: 1; width: 95px; padding-top: 4px; padding-bottom: 4px; padding-left: 6px; padding-right: 6px; align-self: flex-end; align-items: center;">
+                <ui:VisualElement name="icon" style="flex-grow: 0; width: 24px; height: 24px; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/image-outline.png?fileID=2800000&amp;guid=2a8b0a5a8db48ee46924cdb62930cde7&amp;type=3#image-outline&quot;); flex-shrink: 0;" />
+                <ui:Label text="Obrázek" />
+            </ui:Button>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

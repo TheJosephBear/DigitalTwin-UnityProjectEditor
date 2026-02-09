@@ -10,9 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2782288776587203412}
   - component: {fileID: 2055559956147543245}
-  - component: {fileID: 7712817474860684135}
+  - component: {fileID: 239266749815568652}
   - component: {fileID: 6893570137208101842}
-  - component: {fileID: 4342661508429769181}
   m_Layer: 5
   m_Name: SurveyUI
   m_TagString: Untagged
@@ -54,7 +53,7 @@ MonoBehaviour:
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
   m_WorldSpaceHeight: 1080
---- !u!114 &7712817474860684135
+--- !u!114 &239266749815568652
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -80,15 +79,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questionTemplates:
   - {fileID: 9197481963319205126, guid: 77bf64030fcdcf548afb02c5bd968d56, type: 3}
---- !u!114 &4342661508429769181
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5615929895124257890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca4f8919b430ff244b1e3412140a2317, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

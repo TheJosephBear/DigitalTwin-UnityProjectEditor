@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -5,8 +6,10 @@ using UnityEngine.UIElements;
 public class AddQuestion : Singleton<AddQuestion>
 {
     private VisualElement _root;
-    private VisualElement _addQuestionBar;
+    private TemplateContainer _addQuestionBar;
     private TemplateContainer _questionSelection;
+
+    public bool IsOpen { get => _questionSelection.style.display == DisplayStyle.Flex; }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -21,7 +24,7 @@ public class AddQuestion : Singleton<AddQuestion>
     private void OnRootPointerDown(PointerDownEvent evt)
     {
         // Only proceed if QuestionSelection is visible
-        if (_questionSelection.style.display == DisplayStyle.Flex)
+        if (IsOpen)
         {
             // Check if the click target is outside the QuestionSelection container
             if (!_questionSelection.ContainsPoint(_questionSelection.WorldToLocal(evt.position)))
@@ -69,7 +72,7 @@ public class AddQuestion : Singleton<AddQuestion>
     private void OnEnable()
     {
         // Re-register the callback when the object is enabled
-        if (_root != null)
+        if (_root != null && IsOpen)
         {
             // Register callback on the global root to detect clicks anywhere in the document
             _root.RegisterCallback<PointerDownEvent>(OnRootPointerDown, TrickleDown.TrickleDown);
