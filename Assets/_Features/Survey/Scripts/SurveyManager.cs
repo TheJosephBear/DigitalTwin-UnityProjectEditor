@@ -8,7 +8,7 @@ using TMPro;
 using System;
 
 public class SurveyManager : MonoBehaviour {
-
+    /*
     public SurveyBuilder SurveyBuilderPrefab;
     
    
@@ -31,6 +31,6 @@ public class SurveyManager : MonoBehaviour {
     public void CreateNewQuestionnare() {
        
     }
-
+    */
   
 }

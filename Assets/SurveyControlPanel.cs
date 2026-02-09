@@ -7,7 +7,7 @@ using UnityEngine;
 using static QuestionnaireToolkit.Scripts.QTQuestionPageManager;
 
 public class SurveyControlPanel : MonoBehaviour {
-
+    /*
     public Transform AddedOptionListParentReff;
     public SurveyAddedOption AddedOptionUIPrefab;
     public SurveyBuilder surveyBuilder;
@@ -26,7 +26,7 @@ public class SurveyControlPanel : MonoBehaviour {
         }
     }
     */
-
+    /*
     private void Start() {
         UIClickableManager.Instance.OnUIClicked += HandleUIClick;
         EditorManager.Instance.ViewManager.OnViewPointAddedEvent.AddListener(HandleViewPointCreated);
@@ -185,4 +185,5 @@ public class SurveyControlPanel : MonoBehaviour {
     void ClearQuestionOptionList() {
         Utilities.KillAllChildren(AddedOptionListParentReff);
     }
+    */
 }

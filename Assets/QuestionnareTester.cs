@@ -21,6 +21,6 @@ public class QuestionnareTester : MonoBehaviour {
         EditorManager.Instance.ViewManager.CreateNewViewPoint();
         EditorManager.Instance.ViewManager.CreateNewViewPoint();
 
-        EditorManager.Instance.SurveyManager.EnterSurveyBuilding();
+  //      EditorManager.Instance.SurveyManager.EnterSurveyBuilding();
     }
 }

@@ -1,12 +1,12 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:Template name="MultipleChoice" src="project://database/Assets/_Features/Survey/UI/MultipleChoice.uxml?fileID=9197481963319205126&amp;guid=77bf64030fcdcf548afb02c5bd968d56&amp;type=3#MultipleChoice" />
     <ui:Template name="AddQuestionBar" src="project://database/Assets/_Features/Survey/UI/AddQuestionBar.uxml?fileID=9197481963319205126&amp;guid=c099ff1d780c64e4193d328bc2f6bc01&amp;type=3#AddQuestionBar" />
+    <ui:Template name="MultipleChoice" src="project://database/Assets/_Features/Survey/UI/QuestionTypes/MultipleChoice.uxml?fileID=9197481963319205126&amp;guid=77bf64030fcdcf548afb02c5bd968d56&amp;type=3#MultipleChoice" />
     <ui:VisualElement name="page-container" style="flex-grow: 1; background-color: rgb(255, 255, 255);">
         <ui:Label text="Stránka průzkumu" name="title" style="font-size: 18px; -unity-text-align: middle-center; background-color: rgb(255, 255, 255); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
         <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" name="survey-scroll-view" style="flex-grow: 1;">
-            <ui:Instance template="MultipleChoice" />
-            <ui:Instance template="MultipleChoice" />
             <ui:Instance template="AddQuestionBar" name="add-question-bar" />
+            <ui:Instance template="MultipleChoice" style="display: flex; visibility: hidden;" />
+            <ui:Instance template="MultipleChoice" style="display: none;" />
         </ui:ScrollView>
         <ui:VisualElement name="bottom-bar" style="flex-grow: 1; position: absolute; bottom: 0; left: 0; right: 0; flex-direction: row-reverse; justify-content: flex-start; padding-right: 30px;">
             <ui:Button text="Save" style="flex-shrink: 1;" />

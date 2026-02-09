@@ -1,16 +1,18 @@
 using UnityEngine;
+using SurveySystem;
 
 public class SurveyTester : MonoBehaviour {
-    SurveyBuilder builder;
+
+    SurveySystem.SurveyBuilder _builder;
 
     private void Start() {
-        builder = FindAnyObjectByType<SurveyBuilder>();
+        _builder = FindAnyObjectByType<SurveySystem.SurveyBuilder>();
         
         Test();
     }
 
     void Test() {
-
+        _builder.CreateNewSurvey();
     }
 
 

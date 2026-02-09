@@ -10,7 +10,7 @@ public class SurveyAddedOption : MonoBehaviour {
     public TMP_InputField InputFieldReff;
 
     public void RemoveOption() {
-        _rootUIReff.RemoveOption(_optionIndex);
+ //       _rootUIReff.RemoveOption(_optionIndex);
     }
 
     public void Initialize(string name, int index, SurveyControlPanel rootUIReff) {
@@ -20,7 +20,7 @@ public class SurveyAddedOption : MonoBehaviour {
     }
 
     public void ChangeOptionName() {
-        _rootUIReff.SetOptionText(_optionIndex, InputFieldReff.text);
+   //     _rootUIReff.SetOptionText(_optionIndex, InputFieldReff.text);
     }
 
 
