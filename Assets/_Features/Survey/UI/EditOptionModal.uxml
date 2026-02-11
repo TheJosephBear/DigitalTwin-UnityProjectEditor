@@ -1,0 +1,7 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="edit-option-container" style="flex-grow: 0; position: relative; display: flex; align-items: stretch; align-self: flex-start; background-color: rgb(255, 255, 255);">
+        <ui:Button text="Posunout nahoru" name="move-up-button" />
+        <ui:Button text="Posunout dolů" name="move-down-button" />
+        <ui:Button text="Odstranit" name="delete-option-button" />
+    </ui:VisualElement>
+</ui:UXML>

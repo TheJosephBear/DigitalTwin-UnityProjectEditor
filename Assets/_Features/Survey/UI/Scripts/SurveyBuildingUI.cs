@@ -52,7 +52,8 @@ public class SurveyBuildingUI : MonoBehaviour {
             new SurveyQuestionUI(
                 questionInstance, 
                 addedQuestion.Id,
-                this
+                this,
+                questionTypeEnum
             )
         );
     }
@@ -72,6 +73,10 @@ public class SurveyBuildingUI : MonoBehaviour {
 
     public void HandleAnswerTextChanged(AnswerBase answer, string newText) {
         SurveyBuilder.Instance.SetAnswerText(answer, newText);
+    }
+
+    public void HandleAnswerRemoved(AnswerBase answer) {
+        SurveyBuilder.Instance.RemoveAnswer(answer.Idx);
     }
 
     #endregion

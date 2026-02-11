@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 2782288776587203412}
   - component: {fileID: 2055559956147543245}
   - component: {fileID: 7712817474860684135}
-  - component: {fileID: 6893570137208101842}
-  - component: {fileID: 4342661508429769181}
+  - component: {fileID: 7693837786528472852}
+  - component: {fileID: 1216325272625297880}
   m_Layer: 5
   m_Name: SurveyBuildingUI
   m_TagString: Untagged
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c9b8572de84b014bb6e586b897696b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6893570137208101842
+--- !u!114 &7693837786528472852
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -75,12 +75,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 5615929895124257890}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1814954e734349b4ea5c15b41a664cb5, type: 3}
+  m_Script: {fileID: 11500000, guid: 0196b0c1d50c89e4b916c04d1bccccb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  QuestionTypeEnumToStringList:
+  - EnumValue: 0
+    StringValue: MultipleChoice
   questionTemplates:
   - {fileID: 9197481963319205126, guid: 77bf64030fcdcf548afb02c5bd968d56, type: 3}
---- !u!114 &4342661508429769181
+--- !u!114 &1216325272625297880
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -89,6 +92,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5615929895124257890}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca4f8919b430ff244b1e3412140a2317, type: 3}
+  m_Script: {fileID: 11500000, guid: bcaed16031e546b4aa4e9c4aea8acd82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  questionAnswerMappings:
+  - questionType: 0
+    answerUITemplate: {fileID: 9197481963319205126, guid: 43a53068268e3614a92867fec2dc97e3, type: 3}

@@ -21,6 +21,10 @@ public class AddQuestion : Singleton<AddQuestion> {
         _surveyBuildingUI = GetComponent<SurveyBuildingUI>();
         _root = gameObject.GetComponent<UIDocument>().rootVisualElement;
         _addQuestionBar = _root.Q<TemplateContainer>("add-question-bar");
+        if (_addQuestionBar == null) {
+            Debug.LogError("AddQuestionBar template not found in the UI document.");
+            return;
+        }
         _questionSelection = _addQuestionBar.Q<TemplateContainer>("question-selection");
 
         _addQuestionBar.Q<Button>("add-question-button").clicked += OpenModal;

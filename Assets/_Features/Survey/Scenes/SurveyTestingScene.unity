@@ -163,28 +163,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c00cd32a7e758684a99b59407ec75a37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &573892296 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5615929895124257890, guid: 5b8434e4858d4f048a4533e11f7ec378, type: 3}
-  m_PrefabInstance: {fileID: 2053907320}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &573892297
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 573892296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0196b0c1d50c89e4b916c04d1bccccb6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  QuestionTypeEnumToStringList:
-  - EnumValue: 0
-    StringValue: MultipleChoice
-  questionTemplates:
-  - {fileID: 9197481963319205126, guid: 77bf64030fcdcf548afb02c5bd968d56, type: 3}
 --- !u!1 &773992332
 GameObject:
   m_ObjectHideFlags: 0
@@ -502,15 +480,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SurveyBuildingUI
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6893570137208101842, guid: 5b8434e4858d4f048a4533e11f7ec378, type: 3}
-    - {fileID: 4342661508429769181, guid: 5b8434e4858d4f048a4533e11f7ec378, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5615929895124257890, guid: 5b8434e4858d4f048a4533e11f7ec378, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 573892297}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b8434e4858d4f048a4533e11f7ec378, type: 3}
 --- !u!1 &2070504205
 GameObject:
