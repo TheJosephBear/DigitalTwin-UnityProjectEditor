@@ -139,9 +139,14 @@ public class SurveyAnswerUI
         {
             answerTextField.RegisterValueChangedCallback(evt =>
             {
+                // (!) this didnt work -> works with the created answerbase instance instead of the expected one in the survey
+
                 // Create a minimal AnswerBase object for the callback
-                var answer = new AnswerBase { Idx = _answerIndex, Text = evt.newValue };
-                _surveyBuildingUIRef.HandleAnswerTextChanged(answer, evt.newValue);
+                //    var answer = new AnswerBase { Idx = _answerIndex, Text = evt.newValue };
+                //    _surveyBuildingUIRef.HandleAnswerTextChanged(answer, evt.newValue);
+                
+                // (!) this works for any added answer via (add answer)button but not the one that is there once the question is added
+                _surveyBuildingUIRef.HandleAnswerTextChanged(_questionUIRef._questionID, _answerIndex, evt.newValue);
             });
         }
     }

@@ -90,6 +90,10 @@ namespace SurveySystem {
             answer.Text = text;
         }
 
+        public void SetAnswerText(int questionId, int answerId, string text) {
+            _activeSurvey.GetQuestionById(questionId).GetAnswerByIdx(answerId).Text = text;
+        }
+
         public void RemoveAnswer(int idx) {
             _activeSurvey.ActiveQuestion.RemoveAnswer(idx);
         }

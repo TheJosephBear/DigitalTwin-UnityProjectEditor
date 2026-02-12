@@ -75,6 +75,10 @@ public class SurveyBuildingUI : MonoBehaviour {
         SurveyBuilder.Instance.SetAnswerText(answer, newText);
     }
 
+    public void HandleAnswerTextChanged(int questionId, int answerId, string newText) {
+        SurveyBuilder.Instance.SetAnswerText(questionId, answerId, newText);
+    }
+
     public void HandleAnswerRemoved(AnswerBase answer) {
         SurveyBuilder.Instance.RemoveAnswer(answer.Idx);
     }

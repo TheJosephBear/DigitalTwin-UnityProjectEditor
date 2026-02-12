@@ -36,6 +36,10 @@ namespace SurveySystem {
         public void SetActiveAnswer(int idx) {
             ActiveAnswer = _answers.Find(a => a.Idx == idx);
         }
+
+        public AnswerBase GetAnswerByIdx(int idx) {
+            return _answers.Find(a => a.Idx == idx);
+        }
     }
 
     public enum QuestionType {
