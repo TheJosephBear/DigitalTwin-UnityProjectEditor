@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Initializer : MonoBehaviour {
     /// <summary>
-    /// This is the first script ever called. 
+    /// This is the first script ever called.
     /// Sets up utilities and loads the first scene
     /// </summary>
 
@@ -35,7 +35,9 @@ public class Initializer : MonoBehaviour {
             print("entering viewer mode");
             EnterViewerMode();
         } else {
-            Debug.LogError("Viewing parameter invalid or empty: "+viewing);
+            Debug.LogWarning("Viewing parameter invalid or empty: "+viewing);
+            print("entering editor mode");
+            EnterEditorMode();
         }
 
         string projectName = GetUrlParameter("projectName");
