@@ -5,10 +5,42 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
+#if UNITY_WEBGL && !UNITY_EDITOR
+using System.Runtime.InteropServices;
+#endif
 
 public class ServerCommunicationManager : Singleton<ServerCommunicationManager> {
 
+    [Tooltip("Base URL of the server. For WebGL builds, this will be overridden by the hosting page URL.")]
     public string serverUrl = "http://127.0.0.1:5000";
+
+    // In WebGL builds, we need to get the server URL dynamically from the hosting page
+    // The function comes from the JavaScript plugin defined in Assets/Plugins/WebGL/GetCurrentURL.jslib
+#if UNITY_WEBGL && !UNITY_EDITOR
+    [DllImport("__Internal")]
+    private static extern string GetCurrentURL();
+#endif
+
+    private void Awake() {
+        base.Awake();
+#if UNITY_WEBGL && !UNITY_EDITOR
+        string currentUrl = GetCurrentURL();
+        if (!string.IsNullOrEmpty(currentUrl)) {
+            Uri uri = new Uri(currentUrl);
+            serverUrl = $"{uri.Scheme}://{uri.Host}:{uri.Port}";
+            Debug.Log($"Server URL set to: {serverUrl}");
+        }
+#endif
+        Debug.Log($"Using server URL: {serverUrl}");
+    }
+
+    public string GetWebGLURL() {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        return GetCurrentURL();
+#else
+        return Application.absoluteURL;
+#endif
+    }
 
     #region Login and Register
 
