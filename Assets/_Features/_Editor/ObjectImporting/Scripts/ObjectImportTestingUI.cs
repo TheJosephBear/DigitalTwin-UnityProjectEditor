@@ -14,7 +14,7 @@ public class ObjectImportTestingUI : MonoBehaviour {
     }
 
     void OpenProject(string projectName) {
-        StartCoroutine(ProjectManager.Instance.DownloadProjectData(projectName, (list) => {
+        StartCoroutine(ProjectManager.Instance.DownloadProjectData(projectName, (list, success) => {
             
         }));
     }
