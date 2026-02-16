@@ -33,15 +33,15 @@ public class ProjectManager : Singleton<ProjectManager> {
     /// Download selected projects whole data
     /// </summary>
     /// 
-    public IEnumerator DownloadProjectData(ProjectMetadata projectMetadata, System.Action<string> onFinished) {
+    public IEnumerator DownloadProjectData(ProjectMetadata projectMetadata, System.Action<string, bool> onFinished) {
         yield return DownloadProjectDataCoroutine(projectMetadata.projectName, onFinished);
     }
 
-    public IEnumerator DownloadProjectData(string projectName, System.Action<string> onFinished) {
+    public IEnumerator DownloadProjectData(string projectName, System.Action<string, bool> onFinished) {
         yield return DownloadProjectDataCoroutine(projectName, onFinished);
     }
 
-    private IEnumerator DownloadProjectDataCoroutine(string projectName, System.Action<string> onFinished) {
+    private IEnumerator DownloadProjectDataCoroutine(string projectName, System.Action<string, bool> onFinished) {
         bool finished = false;
         bool success = false;
         string downloadedData = "";
@@ -49,31 +49,29 @@ public class ProjectManager : Singleton<ProjectManager> {
         ServerCommunicationManager.Instance.StartDataDownload(
             projectName,
             async (successful, data) => {
-                success = false;
+          //      print("data is: " + data);
 
-                print("data is: " + data);
+                success = successful && !string.IsNullOrEmpty(data);
 
-                if (data != null) {
+                if (success) {
                     downloadedData = data;
-                    success = successful;
-                    finished = true;
 
                     SelectedProject = new Project();
                     SelectedProject.CreateSerializedProjectFromJson(data);
-                } else {
-                    finished = true;
                 }
+
+                finished = true;
             });
 
         yield return new WaitUntil(() => finished);
 
         if (!success) {
             PopUp.Instance.ShowPopUpWindow("Naèítání projektù selhalo.");
-            onFinished(null);
+            onFinished?.Invoke(null, false);
             yield break;
         }
 
-        onFinished(downloadedData);
+        onFinished?.Invoke(downloadedData, true);
     }
 
 
@@ -142,16 +140,20 @@ public class ProjectManager : Singleton<ProjectManager> {
         PopUp.Instance.ShowPopUpWindow("Toto zatím nic nedìlá!");
     }
 
-    public void GetProjectIframeExport(ProjectMetadata projectMedata) {
-        ServerCommunicationManager.Instance.GenerateViewerIframe(projectMedata.projectName, (success, data) => {
-            if (data == null) {
+    public void GetProjectIframeExport(ProjectMetadata projectMetadata, System.Action<string> onFinished) {
+        ServerCommunicationManager.Instance.GenerateViewerIframe(
+        projectMetadata.projectName,
+        (success, data) => {
+            if (!success || string.IsNullOrEmpty(data)) {
                 PopUp.Instance.ShowPopUpWindow("Failed to generate iframe.");
+                onFinished?.Invoke(null);
                 return;
             }
 
-            PopUp.Instance.ShowCopyableText("Zkopírujte toto do vaší stránky.", data);
+            onFinished?.Invoke(data);
         });
     }
+
 
     #endregion
 

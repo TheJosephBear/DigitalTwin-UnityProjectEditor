@@ -5,26 +5,42 @@ using UnityEngine.SceneManagement;
 
 public class ViewingInitializer : MonoBehaviour {
 
+    public string _projectName;
+
     private void Awake() {
-        string projectName = GetUrlParameter("projectName");
-        StartCoroutine(InitializeViewer(projectName));
+            _projectName = GetUrlParameter("projectName");    
+            InitializeViewer();     
     }
 
-    IEnumerator InitializeViewer(string projectName) {
+    public void InitializeViewer() {
+        StartCoroutine(InitializeViewerCoroutine(_projectName));
+    }
+
+    IEnumerator InitializeViewerCoroutine(string projectName) {
         bool downloadFinished = false;
+        bool downloadSuccess = false;
 
         UIManager.Instance.ShowUI(UIType.LoadingScreen);
-        StartCoroutine(ProjectManager.Instance.DownloadProjectData(projectName, (list) => {
+
+        StartCoroutine(ProjectManager.Instance.DownloadProjectData(projectName, (list, success) => {
+            downloadSuccess = success;
             downloadFinished = true;
         }));
 
         while (!downloadFinished)
             yield return null;
 
+        if (!downloadSuccess) {
+            MessageDisplayManager.Instance.ShowMessage("Project download failed!");
+            UIManager.Instance.HideUI(UIType.LoadingScreen);
+            yield break; // Stops coroutine safely
+        }
+
         DeserializeProject(ProjectManager.Instance.SelectedProject);
 
         UIManager.Instance.HideUI(UIType.LoadingScreen);
     }
+
 
     public void DeserializeProject(Project project) {
         StartCoroutine(DeserializeCoroutine(project));

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+using System.Text.RegularExpressions;
 
 public class ProjectListManager : Singleton<ProjectListManager> {
 
+    public GameObject ProjectExportUIReff;
     ProjectListUI _ui;
 
     void Awake() {
@@ -39,7 +41,7 @@ public class ProjectListManager : Singleton<ProjectListManager> {
 
         UIManager.Instance.ShowUI(UIType.LoadingScreen);
         print("started project download");
-        StartCoroutine(ProjectManager.Instance.DownloadProjectData(projectMetadata, (list) => {
+        StartCoroutine(ProjectManager.Instance.DownloadProjectData(projectMetadata, (list, success) => {
             downloadFinished = true;
         }));
 
@@ -84,7 +86,22 @@ public class ProjectListManager : Singleton<ProjectListManager> {
     }
 
     public void ExportProject(ProjectMetadata projectMetadata) {
-        ProjectManager.Instance.GetProjectIframeExport(projectMetadata);
+        ProjectManager.Instance.GetProjectIframeExport(projectMetadata, (iframeString) =>
+        {
+            if (string.IsNullOrEmpty(iframeString))
+                return;
+
+            ProjectExportUI exportUI =
+                SceneLoadingManager.Instance
+                .InstantiateObjectInScene(ProjectExportUIReff)
+                .GetComponent<ProjectExportUI>();
+
+            string url = GetUrlFromIframe(iframeString);
+
+            print($"trying to fill {exportUI.name} with {iframeString} and {url}");
+
+            exportUI.FillTextFields(iframeString, url);
+        });
     }
 
     public void ShowFeedBack(ProjectMetadata projectMetadata) {
@@ -93,4 +110,16 @@ public class ProjectListManager : Singleton<ProjectListManager> {
 
     #endregion
 
+    string GetUrlFromIframe(string iframe) {
+        if (string.IsNullOrEmpty(iframe))
+            return null;
+
+        Match match = Regex.Match(iframe, "src\\s*=\\s*\"([^\"]+)\"");
+
+        if (match.Success)
+            return match.Groups[1].Value;
+
+        Debug.LogError("Failed to extract URL from iframe.");
+        return null;
+    }
 }

@@ -38,7 +38,7 @@ public class Initializer : MonoBehaviour {
             Debug.LogError("Viewing parameter invalid or empty: "+viewing);
         }
 
-        string projectName = GetUrlParameter("projectName");
+        string projectName = GetUrlParameter("_projectName");
     }
 
     void EnterEditorMode() {
