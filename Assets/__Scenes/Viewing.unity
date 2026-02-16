@@ -135,7 +135,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &31528300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -334,14 +334,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 7044977111450090819, guid: f829c45f4f85eb7418c0cd45082ebb70, type: 3}
-      propertyPath: viewPointSpawnPosition.y
-      value: 120
-      objectReference: {fileID: 0}
-    - target: {fileID: 7044977111450090819, guid: f829c45f4f85eb7418c0cd45082ebb70, type: 3}
-      propertyPath: viewPointSpawnPosition.z
-      value: -200
-      objectReference: {fileID: 0}
     - target: {fileID: 8794994671491001252, guid: f829c45f4f85eb7418c0cd45082ebb70, type: 3}
       propertyPath: m_RootOrder
       value: 9
@@ -720,7 +712,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &399284762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1806,7 +1798,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1375345351
 MonoBehaviour:
   m_ObjectHideFlags: 0

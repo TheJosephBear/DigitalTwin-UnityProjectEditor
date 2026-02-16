@@ -27,15 +27,16 @@ public class Initializer : MonoBehaviour {
 
     void InitializeCorrectAppMode() {
         string viewing = GetUrlParameter("viewing");
-        print(viewing);
-        if(viewing == "False" || viewing == "false") {
+        string cleanViewing = viewing.Replace("'", "").Trim().ToLower();
+
+        if (cleanViewing == "false") {
             print("entering editor mode");
             EnterEditorMode();
-        } else if (viewing == "True" || viewing == "true") {
+        } else if (cleanViewing == "true") {
             print("entering viewer mode");
             EnterViewerMode();
         } else {
-            Debug.LogError("Viewing parameter invalid or empty: "+viewing);
+            Debug.LogError($"Viewing parameter invalid: [{viewing}]");
         }
 
         string projectName = GetUrlParameter("_projectName");
