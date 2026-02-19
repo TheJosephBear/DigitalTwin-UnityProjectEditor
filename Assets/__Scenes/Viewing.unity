@@ -693,9 +693,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01f295f624ee8cf4390a61c22b7409bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ProjectSerializer: {fileID: 0}
+  EditorCameraManager: {fileID: 0}
   MapManager: {fileID: 2073378332}
-  ViewManager: {fileID: 238905432}
   GeoMapManager: {fileID: 399284762}
+  ViewManager: {fileID: 238905432}
+  MultiViewManager: {fileID: 0}
+  SurveyManager: {fileID: 0}
+  StateParent: {fileID: 0}
 --- !u!1 &399284761
 GameObject:
   m_ObjectHideFlags: 0
@@ -1390,7 +1395,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1430a010ebbcaa4fbc9ce7579363919, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _projectName: 
+  _projectName: aa
+  InEditorDebugging: 1
 --- !u!1 &934842358
 GameObject:
   m_ObjectHideFlags: 0

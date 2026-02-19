@@ -16,11 +16,11 @@ public class EditorHUDui : UIBehaviour {
     }
 
     public void OnGeoMap() {
-        EditorManager.Instance.ChangeEditorMode(EditorState.GeoLocalization);
+        EditorManager.Instance.ChangeState(ProjectState.GeoLocalization);
     }
 
     public void OnTwoMapView() {
-        EditorManager.Instance.ChangeEditorMode(EditorState.MultiView);
+        EditorManager.Instance.ChangeState(ProjectState.MultiView);
 
         /*
         //Togle zobrazeniMapy
@@ -33,16 +33,20 @@ public class EditorHUDui : UIBehaviour {
     }
 
     public void OnSurvey() {
-        EditorManager.Instance.ChangeEditorMode(EditorState.SurveyCreation);
+        EditorManager.Instance.ChangeState(ProjectState.SurveyCreation);
 
     }
 
     public void OnSave() {
-        EditorManager.Instance.SaveProject();
+        if (MainManagerBase.Instance is EditorManager editorMgr) {
+            editorMgr.SaveProject();
+        }
     }
 
     public void OnLeave() {
-        EditorManager.Instance.ExitEditor();
+        if (MainManagerBase.Instance is EditorManager editorMgr) {
+            editorMgr.ExitEditor();
+        }
     }
 
     #endregion

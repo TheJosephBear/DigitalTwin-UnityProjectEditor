@@ -4,17 +4,16 @@ using UnityEngine;
 
 public class ViewHUDButton : MonoBehaviour {
 
+    public ViewPointUI UIreff;
     public ViewPoint ViewPointRefference;
 
-    public void OnClick() {
-        EditorManager.Instance.ViewManager.SetActiveViewPoint(ViewPointRefference);
+    public void Initialize(ViewPointUI ui, ViewPoint vp) {
+        UIreff = ui;
+        ViewPointRefference = vp;
+    }
 
-        // Toggle state
-        if (EditorManager.Instance.ActiveState == EditorState.Freecam) {
-            EditorManager.Instance.ChangeEditorMode(EditorState.ViewActive);
-        } else if (EditorManager.Instance.ActiveState == EditorState.ViewActive) {
-            EditorManager.Instance.ChangeEditorMode(EditorState.Freecam);
-        }
+    public void OnClick() {
+        UIreff.OnHUDButtonClick(ViewPointRefference);
     }
 
 }

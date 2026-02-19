@@ -39,7 +39,7 @@ public class SurveyBuilder : MonoBehaviour {
         _obstructorInstance.SetActive(false);
         _controlPanelInstance.SetActive(false);
         // Volat level editor je špatný, ale to se opraví po refaktorizaci editor managera
-        EditorManager.Instance.ChangeEditorMode(EditorState.Freecam);
+   //     EditorManager.Instance.ChangeEditorMode(ProjectState.Freecam);
     }
 
     void InstantiateQuestionnare() {

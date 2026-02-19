@@ -3,13 +3,26 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ViewingInitializer : MonoBehaviour {
+public class ViewingInitializer : MonoBehaviour, Iinitializer {
 
     public string _projectName;
+    public bool InEditorDebugging = false;
 
-    private void Awake() {
-            _projectName = GetUrlParameter("projectName");    
-            InitializeViewer();     
+    public void Initialize() {
+        if (!InEditorDebugging) {
+            _projectName = GetUrlParameter("projectName");
+        }
+
+        SceneLoadingManager.Instance.SetActiveScene(SceneType.Viewing);
+        InitializeViewer();
+    }
+
+    public void StartRunning() {
+
+    }
+
+    public void Unload() {
+
     }
 
     public void InitializeViewer() {
@@ -35,7 +48,8 @@ public class ViewingInitializer : MonoBehaviour {
             UIManager.Instance.HideUI(UIType.LoadingScreen);
             yield break; // Stops coroutine safely
         }
-
+            
+        UIManager.Instance.ShowUI(UIType.ViewerHUD);
         DeserializeProject(ProjectManager.Instance.SelectedProject);
 
         UIManager.Instance.HideUI(UIType.LoadingScreen);
@@ -59,9 +73,9 @@ public class ViewingInitializer : MonoBehaviour {
         yield return new WaitUntil(() => isAssetDeserializationComplete);
 
         // Deserialize everything else
-        EditorManager.Instance.MapManager.Deserialize(serializedProject.serializedMap);
-        EditorManager.Instance.ViewManager.Deserialize(serializedProject.serializedViewPointManager);
-        EditorManager.Instance.GeoMapManager.DeserializeManager(serializedProject.serializedGeoMap);
+        ViewingManager.Instance.MapManager.Deserialize(serializedProject.serializedMap);
+        ViewingManager.Instance.ViewManager.Deserialize(serializedProject.serializedViewPointManager);
+        ViewingManager.Instance.GeoMapManager.DeserializeManager(serializedProject.serializedGeoMap);
 
         UIManager.Instance.HideUI(UIType.LoadingScreen);
     }

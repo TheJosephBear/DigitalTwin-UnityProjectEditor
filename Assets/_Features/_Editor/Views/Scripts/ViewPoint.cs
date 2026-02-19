@@ -13,7 +13,7 @@ public class ViewPoint : EditorObjectBase, IClickable {
         if (EditorManager.Instance.EditorModeCurrent != EditorMode.View) {
             GizmoManager.Instance.SetTargetGameObject(gameObject);
             GizmoManager.Instance.ShowGizmo(GizmoType.Universal, UniversalGizmoScaleDisabled: true);
-            ViewManager.Instance.SetActiveViewPoint(this);
+            _viewManager.Instance.SetActiveViewPoint(this);
         }
         */
     }

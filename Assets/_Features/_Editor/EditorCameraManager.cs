@@ -9,13 +9,13 @@ public class EditorCameraManager : MonoBehaviour {
     public CinemachineBrain CinemachineBrainRefference;
 
     Transform FreeCamCameraTransform;
-    EditorManager editorManager;
+    MainManagerBase editorManager;
 
     private void Update() {
         if (editorManager == null) {
-            editorManager = EditorManager.Instance;
+            editorManager = MainManagerBase.Instance;
         }
-        if (editorManager.ActiveState == EditorState.Freecam) {
+        if (editorManager.ActiveState == ProjectState.Freecam) {
             UpdateFreeCamTransform();
         }
     }

@@ -32,9 +32,9 @@ public class EditorInitializer : MonoBehaviour, Iinitializer {
             ProjectManager.Instance.SelectedProject));
 
         if (!EditorManager.Instance.MapManager.IsBaseMapUploaded()) {
-            EditorManager.Instance.ChangeEditorMode(EditorState.GeoLocalization);
+            EditorManager.Instance.ChangeState(ProjectState.GeoLocalization);
         } else {
-            EditorManager.Instance.ChangeEditorMode(EditorState.Freecam);
+            EditorManager.Instance.ChangeState(ProjectState.Freecam);
         }
     }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GeolocalizationState : EditorStateBase {
+public class GeolocalizationState : StateBase {
     public override void Enter() {
         UIManager.Instance.HideUI(UIType.EditorInitUI);
         UIManager.Instance.HideUI(UIType.EditorHUD);
