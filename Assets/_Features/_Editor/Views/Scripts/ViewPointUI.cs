@@ -2,20 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ViewPointUI : UIBehaviour {
+public class ViewPointUI : MonoBehaviour {
 
     public GameObject ViewPointButtonPrefab;
     public GameObject ScrollViewContentRefference;
+    public GameObject AddViewButtonRefference;
 
     ViewManager _viewManager;
 
-    public override void Show() {
-        base.Show();
-    }
 
-    public void Initialize(ViewManager viewManager) {
+    public void Initialize(ViewManager viewManager, bool showAddViewButton) {
+        print("Initialized");
         _viewManager = viewManager;
-        print("INITIALIZED: "+_viewManager.name);
+        AddViewButtonRefference.SetActive(showAddViewButton);
     }
 
     public void OnAddView() {
@@ -37,13 +36,9 @@ public class ViewPointUI : UIBehaviour {
     public void UpdateViewButtonList() {
         ClearViewButtonList();
 
-        print("viewpoints count: " + _viewManager.name);
-        print("viewpoints count: " + _viewManager.GetViewPoints().Count);
-        print("viewpoints count: " + _viewManager.GetViewPoints().Count);
         foreach (ViewPoint vp in _viewManager.GetViewPoints()) {
             ViewHUDButton buttonScript = Instantiate(ViewPointButtonPrefab, ScrollViewContentRefference.transform).GetComponent<ViewHUDButton>();
             buttonScript.Initialize(this, vp);
-            print("added butt script" + buttonScript.name);
         }
     }
 

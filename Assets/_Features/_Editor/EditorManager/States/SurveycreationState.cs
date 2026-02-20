@@ -7,6 +7,7 @@ public class SurveycreationState : StateBase {
         EditorManager.Instance.SurveyManager.EnterSurveyBuilding();
         UIManager.Instance.HideUI(UIType.EditorHUD);
         EditorManager.Instance.ViewManager.ToggleCameraPreview(false);
+        EditorManager.Instance.ViewManager.ToggleViewPointUI(false);
     }
 
     public override void Exit() {

@@ -10,6 +10,7 @@ public class GeolocalizationState : StateBase {
         EditorManager.Instance.EditorCameraManager.ToggleCinemachineBrain(true);
         EditorManager.Instance.MapManager.ToggleMapVisibility();
         EditorManager.Instance.GeoMapManager.ActivateGeoLocalization();
+        EditorManager.Instance.ViewManager.ToggleViewPointUI(false);
     }
 
     public override void Exit() {

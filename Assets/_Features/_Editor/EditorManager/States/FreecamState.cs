@@ -6,6 +6,7 @@ public class FreecamState : StateBase {
     public override void Enter() {
         UIManager.Instance.HideUI(UIType.EditorInitUI);
         UIManager.Instance.ShowUI(UIType.EditorHUD);
+        EditorManager.Instance.ViewManager.ToggleViewPointUI(true);
         //      if (TwoCameraInstantiated != null) Destroy(TwoCameraInstantiated);
         EditorManager.Instance.EditorCameraManager.DisableCinemachineAfterTransition();
     }

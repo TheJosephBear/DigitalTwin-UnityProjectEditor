@@ -7,6 +7,7 @@ using UnityEngine.Events;
 public class ViewManager : MonoBehaviour {
 
     public SceneType SceneToInstantiate = SceneType.Editing;
+    public bool ShowAddViewButton = false;
     public GameObject ViewPointPrefab;
     public GameObject ViewPointUIPrefab;
     List<ViewPoint> viewPoints = new List<ViewPoint>();
@@ -31,7 +32,7 @@ public class ViewManager : MonoBehaviour {
     void OnEnable() {
         ToggleCameraPreview(false);
         _viewPointUIInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(ViewPointUIPrefab, SceneToInstantiate).GetComponent<ViewPointUI>();
-        _viewPointUIInstance.Initialize(this);
+        _viewPointUIInstance.Initialize(this, ShowAddViewButton);
     }
 
     public void ToggleViewPointUI(bool show) {

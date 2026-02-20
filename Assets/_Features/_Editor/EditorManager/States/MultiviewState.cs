@@ -14,6 +14,7 @@ public class MultiviewState : StateBase {
         UIManager.Instance.HideUI(UIType.EditorHUD);
         EditorManager.Instance.EditorCameraManager.ToggleCinemachineBrain(true);
         EditorManager.Instance.MultiViewManager.EnterMultiView();
+        EditorManager.Instance.ViewManager.ToggleViewPointUI(false);
     }
 
     public override void Exit() {

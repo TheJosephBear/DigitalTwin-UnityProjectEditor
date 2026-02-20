@@ -9,9 +9,12 @@ using UnityEngine;
 /// </summary>
 public abstract class MainManagerBase : Singleton<MainManagerBase> {
 
+    [Header("SceneType of this managers scene")]
+    public SceneType SceneType;
+
     [Header("Service refferences")]
     public EditorProjectSerializer ProjectSerializer;
-    public EditorCameraManager EditorCameraManager;
+    public CameraManager EditorCameraManager;
     public MapManager MapManager;
     public GeoMapManager GeoMapManager;
     public ViewManager ViewManager;
