@@ -18,7 +18,7 @@ public class CameraManager : MonoBehaviour {
 
         vCamFreeCamRefference = SceneLoadingManager.Instance.InstantiateObjectInScene(VcamFreeCamPrefab, InitialCameraPosition.position, MainManagerBase.Instance.SceneType);
         vCamFreeCamRefference.transform.rotation = InitialCameraPosition.rotation;
-        DisableCinemachineAfterTransition();
+    //    DisableCinemachineAfterTransition();
     }
 
     private void Update() {

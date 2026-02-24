@@ -160,7 +160,7 @@ public class ViewManager : MonoBehaviour {
 
     public void Deserialize(SerializableViewPointManager serializedManager) {
         if (serializedManager == null || serializedManager.ViewPoints == null) {
-            Debug.LogError("Interest point manager deserialization failed: Source data is null");
+            Debug.Log("Interest point manager deserialization failed: Source data is null");
             return;
         }
 

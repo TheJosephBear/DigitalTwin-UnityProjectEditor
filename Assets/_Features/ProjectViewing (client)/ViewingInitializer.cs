@@ -51,6 +51,7 @@ public class ViewingInitializer : MonoBehaviour, Iinitializer {
             
         UIManager.Instance.ShowUI(UIType.ViewerHUD);
         DeserializeProject(ProjectManager.Instance.SelectedProject);
+        MainManagerBase.Instance.ChangeState(ProjectState.Freecam);
 
         UIManager.Instance.HideUI(UIType.LoadingScreen);
     }
