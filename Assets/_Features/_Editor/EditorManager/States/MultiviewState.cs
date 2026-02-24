@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MultiviewState : EditorStateBase {
+public class MultiviewState : StateBase {
     public override void Enter() {
         print("Entering multi state");
         if (!EditorManager.Instance.MapManager.hasVariant()) {
@@ -14,6 +14,7 @@ public class MultiviewState : EditorStateBase {
         UIManager.Instance.HideUI(UIType.EditorHUD);
         EditorManager.Instance.EditorCameraManager.ToggleCinemachineBrain(true);
         EditorManager.Instance.MultiViewManager.EnterMultiView();
+        EditorManager.Instance.ViewManager.ToggleViewPointUI(false);
     }
 
     public override void Exit() {

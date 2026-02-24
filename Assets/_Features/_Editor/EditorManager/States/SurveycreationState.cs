@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SurveycreationState : EditorStateBase {
+public class SurveycreationState : StateBase {
     public override void Enter() {
         EditorManager.Instance.SurveyManager.EnterSurveyBuilding();
         UIManager.Instance.HideUI(UIType.EditorHUD);
         EditorManager.Instance.ViewManager.ToggleCameraPreview(false);
+        EditorManager.Instance.ViewManager.ToggleViewPointUI(false);
     }
 
     public override void Exit() {

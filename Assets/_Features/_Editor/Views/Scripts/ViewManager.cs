@@ -7,13 +7,16 @@ using UnityEngine.Events;
 public class ViewManager : MonoBehaviour {
 
     public SceneType SceneToInstantiate = SceneType.Editing;
+    public bool ShowAddViewButton = false;
     public GameObject ViewPointPrefab;
+    public GameObject ViewPointUIPrefab;
     List<ViewPoint> viewPoints = new List<ViewPoint>();
     //   List<EditorObjectBase> interestPoints = new List<EditorObjectBase>();
     public Vector3 viewPointSpawnPosition;
     public GameObject cameraViewUI;
     public Camera previewCam;
 
+    ViewPointUI _viewPointUIInstance;
     ViewPoint currentViewPoint;
     CustomMovement _movementScript;
     public bool isActivelyShowingCam = false;
@@ -24,16 +27,16 @@ public class ViewManager : MonoBehaviour {
 
     void Awake() {
         _movementScript = GetComponent<CustomMovement>();
-
-        print("AWAKE - IS PREFAB NULL? " + ViewPointPrefab == null);
-        if (ViewPointPrefab == null) {
-            ViewPointPrefab = Resources.Load<GameObject>("ViewCamGameObject");
-            print("AWAKE - IS PREFAB still null after resources? " + ViewPointPrefab == null);
-        }
     }
 
     void OnEnable() {
         ToggleCameraPreview(false);
+        _viewPointUIInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(ViewPointUIPrefab, SceneToInstantiate).GetComponent<ViewPointUI>();
+        _viewPointUIInstance.Initialize(this, ShowAddViewButton);
+    }
+
+    public void ToggleViewPointUI(bool show) {
+        _viewPointUIInstance.gameObject.SetActive(show);
     }
 
     public void StartViewMoving() {
@@ -56,7 +59,6 @@ public class ViewManager : MonoBehaviour {
 
         // 2. Check Prefab Assignment
         if (ViewPointPrefab == null) {
-            Debug.LogError("DEBUG: ViewPointPrefab is NOT ASSIGNED in the inspector!");
             return null;
         }
 
@@ -71,18 +73,13 @@ public class ViewManager : MonoBehaviour {
             }
         }
 
-        print($"DEBUG: Instantiating {ViewPointPrefab.name} at {spawnPos}");
-
         GameObject spawnedObj = SceneLoadingManager.Instance.InstantiateObjectInScene(ViewPointPrefab, spawnPos, SceneToInstantiate);
-
         if (spawnedObj == null) {
-            Debug.LogError("DEBUG: SceneLoadingManager failed to instantiate object!");
             return null;
         }
 
         ViewPoint newInterestPoint = spawnedObj.GetComponent<ViewPoint>();
         if (newInterestPoint == null) {
-            Debug.LogError("DEBUG: Spawned object is missing ViewPoint script!");
             return spawnedObj; // Return anyway so we don't crash, but error is logged
         }
 
@@ -91,14 +88,20 @@ public class ViewManager : MonoBehaviour {
         newInterestPoint.Deactivate();
 
         viewPoints.Add(newInterestPoint);
+        _viewPointUIInstance.UpdateViewButtonList();
 
         if (OnViewPointAddedEvent != null) {
             OnViewPointAddedEvent.Invoke(newInterestPoint);
         } else {
-            Debug.LogWarning("DEBUG: OnViewPointAddedEvent is null");
+            Debug.LogWarning("OnViewPointAddedEvent is null");
         }
 
         return newInterestPoint.gameObject;
+    }
+
+    // Clicking the specific view button
+    public void OnViewHUDButton(ViewPoint viewPoint) {
+
     }
 
     public void SetActiveViewPoint(ViewPoint ip) {
@@ -124,7 +127,7 @@ public class ViewManager : MonoBehaviour {
         ExitViewMoving();
         SetActiveViewPoint(null);
         Utilities.DestroyAllGameObjects(viewPoints);
-        FindAnyObjectByType<ViewPointUI>().ClearViewButtonList();
+        _viewPointUIInstance.ClearViewButtonList();
     }
 
     public void ToggleCameraPreview(bool toggleOn) {
@@ -157,7 +160,7 @@ public class ViewManager : MonoBehaviour {
 
     public void Deserialize(SerializableViewPointManager serializedManager) {
         if (serializedManager == null || serializedManager.ViewPoints == null) {
-            Debug.LogError("Interest point manager deserialization failed: Source data is null");
+            Debug.Log("Interest point manager deserialization failed: Source data is null");
             return;
         }
 
@@ -179,14 +182,6 @@ public class ViewManager : MonoBehaviour {
 
             print("DEBUG: Calling iPoint.Deserialize now...");
             iPoint.Deserialize(serializedInterestPoint);
-        }
-
-        print("TRYING TO DESERIALIZE THE VIEWS");
-        var ui = FindAnyObjectByType<ViewPointUI>();
-        if (ui != null) {
-            ui.UpdateViewButtonList();
-        } else {
-            Debug.LogWarning("DEBUG: ViewPointUI not found in scene.");
         }
     }
 

@@ -137,6 +137,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SceneToInstantiate: 5
   ViewPointPrefab: {fileID: 4159745496729114929, guid: 70ca2b64b92f43844adf2a73f8ef5565, type: 3}
+  ViewPointUIPrefab: {fileID: 4228714253713323084, guid: eb57ad5ba8f8d98439865de866529ce1, type: 3}
   viewPointSpawnPosition: {x: 0, y: 120, z: -200}
   cameraViewUI: {fileID: 8794994671842005292}
   previewCam: {fileID: 8794994672007692011}

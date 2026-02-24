@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InitializationState : EditorStateBase {
+public class InitializationState : StateBase {
     public override void Enter() {
 
     }

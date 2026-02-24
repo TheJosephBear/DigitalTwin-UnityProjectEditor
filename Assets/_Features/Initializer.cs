@@ -27,7 +27,9 @@ public class Initializer : MonoBehaviour {
 
     void InitializeCorrectAppMode() {
         string viewing = GetUrlParameter("viewing");
+        print("url parameter: " + viewing);
         string cleanViewing = viewing.Replace("'", "").Trim().ToLower();
+        print("url parameter clean: " + cleanViewing);
 
         if (cleanViewing == "false") {
             print("entering editor mode");

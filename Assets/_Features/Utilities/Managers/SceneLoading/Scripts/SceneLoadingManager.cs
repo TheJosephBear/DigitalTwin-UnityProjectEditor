@@ -31,6 +31,17 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
         }
     }
 
+    public void SetActiveScene(SceneField sceneField) {
+        // Gets the actual UnityEngine.Scene object by its name
+        Scene scene = SceneManager.GetSceneByName(sceneField.SceneName);
+
+        if (scene.isLoaded) {
+            SceneManager.SetActiveScene(scene);
+        } else {
+            Debug.LogWarning($"Scene {scene.name} is not loaded and cannot be set as active.");
+        }
+    }
+
     /// <summary>
     /// Retrieves the SceneType enumeration value that corresponds to the current active scene in Unity.
     /// </summary>
@@ -51,6 +62,7 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
 
     /// <summary>
     /// Asynchronously loads a scene additively, waits for completion, runs the Iinitializer, and waits for an optional delay to call the StartRunning function of the IInitializer.
+    /// Also sets the loaded scene as active scene.
     /// </summary>
     /// <param name="sceneType">The SceneType of the scene to load.</param>
     /// <param name="loadingScreenLength">The minimum time (in seconds) to wait after the scene is initialized before calling IInitializers StartRunning function and returning (e.g., to keep a loading screen visible).</param>
@@ -145,6 +157,7 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
             yield return null;
         }
         loadedScenes.Add(scene);
+        SetActiveScene(scene);
         yield return CallSceneInitializerC(scene, loadingScreenLength);
         tcs.SetResult(true);
     }
