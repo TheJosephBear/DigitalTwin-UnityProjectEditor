@@ -1,0 +1,11 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="Question-title" src="project://database/Assets/_Features/Survey/UI/Question-title.uxml?fileID=9197481963319205126&amp;guid=7bfed0fc9c8eb204088a09cb69fa7762&amp;type=3#Question-title" />
+    <ui:Template name="EditOptionModal" src="project://database/Assets/_Features/Survey/UI/EditOptionModal.uxml?fileID=9197481963319205126&amp;guid=76703d756520966448429ac694633d27&amp;type=3#EditOptionModal" />
+    <ui:Template name="Question-description" src="project://database/Assets/_Features/Survey/UI/Question-description.uxml?fileID=9197481963319205126&amp;guid=f5d967f3e76b1a54ea2fffb453a25d93&amp;type=3#Question-description" />
+    <ui:VisualElement name="question-title-bar" style="flex-grow: 0; flex-direction: row; align-items: center;">
+        <ui:Instance template="Question-title" name="Question-title" style="flex-grow: 1;" />
+        <ui:VisualElement name="edit-question-button" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/pencil-outline.png?fileID=2800000&amp;guid=2b11358c908ae27429e1f940d2ac878e&amp;type=3#pencil-outline&quot;); width: 32px; height: 32px;" />
+        <ui:Instance template="EditOptionModal" name="edit-question-modal" style="display: none;" />
+    </ui:VisualElement>
+    <ui:Instance template="Question-description" name="question-description" />
+</ui:UXML>

@@ -21,7 +21,20 @@ namespace SurveySystem {
         public virtual AnswerBase AddNewAnswer() {
             AnswerBase answer = new AnswerBase {
                 Idx = _answers.Count,
-                Text = string.Empty
+                Text = string.Empty,
+                IsOther = false
+            };
+
+            _answers.Add(answer);
+            ActiveAnswer = answer;
+            return answer;
+        }
+
+        public virtual AnswerBase AddNewAnswer(bool isOther) {
+            AnswerBase answer = new AnswerBase {
+                Idx = _answers.Count,
+                Text = string.Empty,
+                IsOther = isOther
             };
 
             _answers.Add(answer);

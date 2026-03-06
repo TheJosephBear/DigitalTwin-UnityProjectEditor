@@ -10,40 +10,64 @@ using UnityEngine.UIElements;
 public class AddQuestion : Singleton<AddQuestion> {
 
     private VisualElement _root;
-    private TemplateContainer _addQuestionBar;
-    private TemplateContainer _questionSelection;
     private SurveyBuildingUI _surveyBuildingUI;
 
-    public bool IsOpen { get => _questionSelection.style.display == DisplayStyle.Flex; }
+    [SerializeField]
+    private VisualTreeAsset _questionTypeSelectionTemplate;
+    private TemplateContainer _questionTypeSelectionInstance;
+
+    // Tracks which index to insert at when modal was opened from a specific bar (-1 = append)
+    private int _pendingInsertIndex = -1;
+    private SurveyBuildingUI _pendingBuildingUI;
+    private VisualElement _pendingBar;
+
+    public bool IsOpen { get => _questionTypeSelectionInstance != null && _questionTypeSelectionInstance.style.display == DisplayStyle.Flex; }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() {
         _surveyBuildingUI = GetComponent<SurveyBuildingUI>();
         _root = gameObject.GetComponent<UIDocument>().rootVisualElement;
-        _addQuestionBar = _root.Q<TemplateContainer>("add-question-bar");
-        if (_addQuestionBar == null) {
-            Debug.LogError("AddQuestionBar template not found in the UI document.");
-            return;
-        }
-        _questionSelection = _addQuestionBar.Q<TemplateContainer>("question-selection");
 
-        _addQuestionBar.Q<Button>("add-question-button").clicked += OpenModal;
+        _questionTypeSelectionInstance = _questionTypeSelectionTemplate.Instantiate();
+        _questionTypeSelectionInstance.style.display = DisplayStyle.None;
     }
 
     private void OnRootPointerDown(PointerDownEvent evt) {
         // Only proceed if QuestionSelection is visible
-        if (IsOpen)
-        {
+        if (IsOpen) {
             // Check if the click target is outside the QuestionSelection container
-            if (!_questionSelection.ContainsPoint(_questionSelection.WorldToLocal(evt.position))) {
+            if (!_questionTypeSelectionInstance.ContainsPoint(_questionTypeSelectionInstance.WorldToLocal(evt.position))) {
                 HideModal();
             }
         }
     }
 
-    private void OpenModal() {
-        _questionSelection.style.display = DisplayStyle.Flex;
-        List<Button> buttons = _questionSelection.Query<Button>().ToList();
+    /// <summary>
+    /// Opens the question-type selection modal. When a type is chosen, the question will be
+    /// inserted at <paramref name="insertIndex"/> in <paramref name="buildingUI"/>.
+    /// The modal is reparented into <paramref name="bar"/> while open.
+    /// </summary>
+    public void OpenModalAtIndex(int insertIndex, SurveyBuildingUI buildingUI, VisualElement bar) {
+        _pendingInsertIndex = insertIndex;
+        _pendingBuildingUI = buildingUI;
+        _pendingBar = bar;
+        ShowModal();
+    }
+
+    private void ShowModal() {
+        // Move the modal into the triggering bar so it appears anchored to it
+        _questionTypeSelectionInstance.RemoveFromHierarchy();
+        _root.Add(_questionTypeSelectionInstance);
+
+        _questionTypeSelectionInstance.style.display = DisplayStyle.Flex;
+        _questionTypeSelectionInstance.style.position = Position.Absolute;
+        Vector2 pendingBarButtonPos = _pendingBar.Q<Button>().worldBound.center;
+        Vector2 buttonCenter = new Vector2(pendingBarButtonPos.x, pendingBarButtonPos.y);
+        _questionTypeSelectionInstance.style.left = Mathf.Ceil(buttonCenter.x);
+        _questionTypeSelectionInstance.style.top = Mathf.Ceil(buttonCenter.y);
+        _questionTypeSelectionInstance.BringToFront();
+
+        List<Button> buttons = _questionTypeSelectionInstance.Query<Button>().ToList();
         buttons.ForEach(button => {
             button.clicked += () => {
                 Debug.Log($"Add question of type: {button.name}");
@@ -51,30 +75,37 @@ public class AddQuestion : Singleton<AddQuestion> {
                 HideModal();
             };
         });
-        _questionSelection.BringToFront();
+
         // Register callback on the global root to detect clicks anywhere in the document
         _root.RegisterCallback<PointerDownEvent>(OnRootPointerDown, TrickleDown.TrickleDown);
     }
 
     private void AddQuestionByName(string name) {
-        _surveyBuildingUI.HandleQuestionAdded(name);
-        // Placeholder for adding question logic
+        SurveyBuildingUI target = _pendingBuildingUI ?? _surveyBuildingUI;
+        target.HandleQuestionAdded(name, _pendingInsertIndex);
         Debug.Log("Question added.");
     }
 
     private void HideModal() {
-        _questionSelection.style.display = DisplayStyle.None;
-        List<Button> buttons = _questionSelection.Query<Button>().ToList();
+        _questionTypeSelectionInstance.style.display = DisplayStyle.None;
+
+        List<Button> buttons = _questionTypeSelectionInstance.Query<Button>().ToList();
         buttons.ForEach(button => {
             button.clickable = null;
         });
+
+        // Move the modal back to root so it is not destroyed when bars are rebuilt
+        _questionTypeSelectionInstance.RemoveFromHierarchy();
+
         _root.UnregisterCallback<PointerDownEvent>(OnRootPointerDown, TrickleDown.TrickleDown);
+        _pendingInsertIndex = -1;
+        _pendingBuildingUI = null;
+        _pendingBar = null;
     }
 
     private void OnEnable() {
         // Re-register the callback when the object is enabled
-        if (_root != null && IsOpen)
-        {
+        if (_root != null && IsOpen) {
             // Register callback on the global root to detect clicks anywhere in the document
             _root.RegisterCallback<PointerDownEvent>(OnRootPointerDown, TrickleDown.TrickleDown);
         }

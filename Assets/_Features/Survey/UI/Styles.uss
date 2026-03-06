@@ -1,0 +1,16 @@
+#survey-scroll-view #unity-content-container {
+    padding-top: 20px;
+    padding-right: 40px;
+    padding-bottom: 20px;
+    padding-left: 40px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+
+.question-type-selection {
+    position: absolute;
+    left: 50%;
+    top: 25px;
+}

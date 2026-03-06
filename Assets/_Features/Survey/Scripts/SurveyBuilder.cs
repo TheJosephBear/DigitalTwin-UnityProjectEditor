@@ -78,6 +78,11 @@ namespace SurveySystem {
             question.AddNewAnswer();
         }
 
+        public void AddNewAnswerToQuestion(int questionId, bool isOther) {
+            QuestionBase question = _activeSurvey.GetQuestionById(questionId);
+            question.AddNewAnswer(isOther);
+        }
+
         public void SetActiveAnswer(int idx) {
             _activeSurvey.ActiveQuestion.SetActiveAnswer(idx);
         }

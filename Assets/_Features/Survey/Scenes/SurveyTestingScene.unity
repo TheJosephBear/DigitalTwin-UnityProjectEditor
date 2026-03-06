@@ -480,6 +480,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SurveyBuildingUI
       objectReference: {fileID: 0}
+    - target: {fileID: 7693837786528472852, guid: 5b8434e4858d4f048a4533e11f7ec378, type: 3}
+      propertyPath: addQuestionBarTemplate
+      value: 
+      objectReference: {fileID: 9197481963319205126, guid: c099ff1d780c64e4193d328bc2f6bc01, type: 3}
+    - target: {fileID: 7712817474860684135, guid: 5b8434e4858d4f048a4533e11f7ec378, type: 3}
+      propertyPath: questionTypeSelectionTemplate
+      value: 
+      objectReference: {fileID: 9197481963319205126, guid: 5fc280527885572498dd8152cbd24b60, type: 3}
+    - target: {fileID: 7712817474860684135, guid: 5b8434e4858d4f048a4533e11f7ec378, type: 3}
+      propertyPath: _questionTypeSelectionTemplate
+      value: 
+      objectReference: {fileID: 9197481963319205126, guid: 5fc280527885572498dd8152cbd24b60, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
