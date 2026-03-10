@@ -31,11 +31,16 @@ public class ViewManager : MonoBehaviour {
 
     void OnEnable() {
         ToggleCameraPreview(false);
+    }
+
+    void InitializeUI() {
         _viewPointUIInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(ViewPointUIPrefab, SceneToInstantiate).GetComponent<ViewPointUI>();
         _viewPointUIInstance.Initialize(this, ShowAddViewButton);
     }
 
     public void ToggleViewPointUI(bool show) {
+        if (_viewPointUIInstance == null) InitializeUI();
+
         _viewPointUIInstance.gameObject.SetActive(show);
     }
 
@@ -50,14 +55,12 @@ public class ViewManager : MonoBehaviour {
         _movementScript.SetTarget(null);
     }
 
-    public GameObject CreateNewViewPoint() {
-        // 1. Check Manager Instance
+    public GameObject CreateNewViewPoint(bool updateUI = true) {
         if (SceneLoadingManager.Instance == null) {
             Debug.LogError("DEBUG: SceneLoadingManager.Instance is NULL!");
             return null;
         }
 
-        // 2. Check Prefab Assignment
         if (ViewPointPrefab == null) {
             return null;
         }
@@ -83,12 +86,12 @@ public class ViewManager : MonoBehaviour {
             return spawnedObj; // Return anyway so we don't crash, but error is logged
         }
 
-        newInterestPoint.SetName("Default view point name" + new System.Random().Next(0, 100));
+        newInterestPoint.SetName("Default view point name " + newInterestPoint.ID);
         newInterestPoint.transform.rotation = spawnRot;
         newInterestPoint.Deactivate();
 
         viewPoints.Add(newInterestPoint);
-        _viewPointUIInstance.UpdateViewButtonList();
+        if (updateUI) _viewPointUIInstance.UpdateViewButtonList();
 
         if (OnViewPointAddedEvent != null) {
             OnViewPointAddedEvent.Invoke(newInterestPoint);

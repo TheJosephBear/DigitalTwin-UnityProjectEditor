@@ -12,7 +12,6 @@ public class ViewPointUI : MonoBehaviour {
 
 
     public void Initialize(ViewManager viewManager, bool showAddViewButton) {
-        print("Initialized");
         _viewManager = viewManager;
         AddViewButtonRefference.SetActive(showAddViewButton);
     }

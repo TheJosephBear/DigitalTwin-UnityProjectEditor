@@ -58,7 +58,8 @@ public class SurveyBuildingUI : MonoBehaviour {
             questionInstance,
             addedQuestion.Id,
             this,
-            questionTypeEnum
+            questionTypeEnum,
+            FindAnyObjectByType<ViewManager>() // Do budoucna hledat líp (reference v mainManager)
         );
 
         if (insertAtIndex < 0 || insertAtIndex >= _addedQuestions.Count) {

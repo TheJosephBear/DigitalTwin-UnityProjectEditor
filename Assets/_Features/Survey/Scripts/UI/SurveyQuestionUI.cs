@@ -8,6 +8,7 @@ public class SurveyQuestionUI {
     private SurveyBuildingUI _surveyBuildingUIReff;
     private VisualElement _root;
     private QuestionType _questionType;
+    private ViewManager _viewManager;
 
     // Track added answers - regular answers and "Other" answer are tracked separately
     private List<SurveyAnswerUI> _addedAnswers = new List<SurveyAnswerUI>();
@@ -25,11 +26,12 @@ public class SurveyQuestionUI {
     /// <summary>The root visual element for this question (may be null if template was missing).</summary>
     public VisualElement QuestionElement => _root;
 
-    public SurveyQuestionUI(VisualElement root, int questionId, SurveyBuildingUI surveyBuildingUI, QuestionType questionType) {
+    public SurveyQuestionUI(VisualElement root, int questionId, SurveyBuildingUI surveyBuildingUI, QuestionType questionType, ViewManager viewManager) {
         _root = root;
         _questionID = questionId;
         _surveyBuildingUIReff = surveyBuildingUI;
         _questionType = questionType;
+        _viewManager = viewManager;
 
         // Get the answer template from QuestionUIMapping
         QuestionUIMapping mapping = Object.FindFirstObjectByType<QuestionUIMapping>();
@@ -55,6 +57,7 @@ public class SurveyQuestionUI {
         AddAnswerUI(); // Add the first answer UI element by default
 
         RegisterInputs();
+        _viewManager = viewManager;
     }
 
     private void RegisterInputs() {
@@ -168,13 +171,14 @@ public class SurveyQuestionUI {
     private void PopulateCameraViewDropdown(DropdownField dropdown) {
         if (dropdown == null) return;
 
-        dropdown.choices = new List<string> {
-            "Camera View Alpha",
-            "Camera View Beta",
-            "Camera View Gamma",
-            "Camera View Delta",
-            "Camera View Epsilon"
-        };
+        List<ViewPoint> viewPoints =_viewManager.GetViewPoints();
+        List<string> choiceLabels = new List<string>();
+
+        foreach(ViewPoint viewPoint in viewPoints) {
+            choiceLabels.Add(viewPoint.Name);
+        }
+
+        dropdown.choices = choiceLabels;
 
         if (dropdown.choices.Count > 0) {
             dropdown.value = dropdown.choices[0];
