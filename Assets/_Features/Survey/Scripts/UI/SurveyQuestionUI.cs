@@ -95,6 +95,13 @@ public class SurveyQuestionUI {
             editQuestionButton.RegisterCallback<ClickEvent>(OnEditQuestionButtonClicked);
         }
 
+        if (cameraViewDropdown != null) {
+            cameraViewDropdown.RegisterValueChangedCallback(evt => {
+                // Handle camera view change based on selected value
+                string selectedView = evt.newValue;
+            });
+        }
+
         PopulateCameraViewDropdown(cameraViewDropdown);
     }
 
@@ -205,7 +212,7 @@ public class SurveyQuestionUI {
             answerIndex = _addedAnswers.Count;
             _optionsList.Add(answerElement);
 
-            answerElement.Q<CustomRadioButton>().Placeholder = "Jiné"; // Set label to "Other"
+            answerElement.Q<CustomRadioButton>().Placeholder = "Jinï¿½"; // Set label to "Other"
             SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, _surveyBuildingUIReff, this);
             _otherAnswerUI = answerUI;
         } else {
