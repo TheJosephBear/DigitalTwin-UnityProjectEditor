@@ -7,13 +7,16 @@ using UnityEngine.Events;
 public class ViewManager : MonoBehaviour {
 
     public SceneType SceneToInstantiate = SceneType.Editing;
+    public bool ShowAddViewButton = false;
     public GameObject ViewPointPrefab;
+    public GameObject ViewPointUIPrefab;
     List<ViewPoint> viewPoints = new List<ViewPoint>();
- //   List<EditorObjectBase> interestPoints = new List<EditorObjectBase>();
+    //   List<EditorObjectBase> interestPoints = new List<EditorObjectBase>();
     public Vector3 viewPointSpawnPosition;
     public GameObject cameraViewUI;
     public Camera previewCam;
 
+    ViewPointUI _viewPointUIInstance;
     ViewPoint currentViewPoint;
     CustomMovement _movementScript;
     public bool isActivelyShowingCam = false;
@@ -28,6 +31,12 @@ public class ViewManager : MonoBehaviour {
 
     void OnEnable() {
         ToggleCameraPreview(false);
+        _viewPointUIInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(ViewPointUIPrefab, SceneToInstantiate).GetComponent<ViewPointUI>();
+        _viewPointUIInstance.Initialize(this, ShowAddViewButton);
+    }
+
+    public void ToggleViewPointUI(bool show) {
+        _viewPointUIInstance.gameObject.SetActive(show);
     }
 
     public void StartViewMoving() {
@@ -42,19 +51,57 @@ public class ViewManager : MonoBehaviour {
     }
 
     public GameObject CreateNewViewPoint() {
-        Transform freecamTrans = EditorManager.Instance.EditorCameraManager?.GetFreeCamTransform(); // Dependability..
-        if(freecamTrans != null)
-            viewPointSpawnPosition = freecamTrans.position;
+        // 1. Check Manager Instance
+        if (SceneLoadingManager.Instance == null) {
+            Debug.LogError("DEBUG: SceneLoadingManager.Instance is NULL!");
+            return null;
+        }
 
-        ViewPoint newInterestPoint = SceneLoadingManager.Instance.InstantiateObjectInScene(ViewPointPrefab, viewPointSpawnPosition, SceneToInstantiate).GetComponent<ViewPoint>();
-        newInterestPoint.SetName("Default view point name" + new System.Random().Next(0,100) );
-        viewPoints.Add(newInterestPoint);
-        if (freecamTrans != null)
-            newInterestPoint.transform.rotation = freecamTrans.rotation;
+        // 2. Check Prefab Assignment
+        if (ViewPointPrefab == null) {
+            return null;
+        }
+
+        Vector3 spawnPos = Vector3.zero;
+        Quaternion spawnRot = Quaternion.identity;
+
+        if (EditorManager.Instance?.EditorCameraManager != null) {
+            var freecam = EditorManager.Instance.EditorCameraManager.GetFreeCamTransform();
+            if (freecam != null) {
+                spawnPos = freecam.position;
+                spawnRot = freecam.rotation;
+            }
+        }
+
+        GameObject spawnedObj = SceneLoadingManager.Instance.InstantiateObjectInScene(ViewPointPrefab, spawnPos, SceneToInstantiate);
+        if (spawnedObj == null) {
+            return null;
+        }
+
+        ViewPoint newInterestPoint = spawnedObj.GetComponent<ViewPoint>();
+        if (newInterestPoint == null) {
+            return spawnedObj; // Return anyway so we don't crash, but error is logged
+        }
+
+        newInterestPoint.SetName("Default view point name" + new System.Random().Next(0, 100));
+        newInterestPoint.transform.rotation = spawnRot;
         newInterestPoint.Deactivate();
 
-        OnViewPointAddedEvent.Invoke(newInterestPoint);
+        viewPoints.Add(newInterestPoint);
+        _viewPointUIInstance.UpdateViewButtonList();
+
+        if (OnViewPointAddedEvent != null) {
+            OnViewPointAddedEvent.Invoke(newInterestPoint);
+        } else {
+            Debug.LogWarning("OnViewPointAddedEvent is null");
+        }
+
         return newInterestPoint.gameObject;
+    }
+
+    // Clicking the specific view button
+    public void OnViewHUDButton(ViewPoint viewPoint) {
+
     }
 
     public void SetActiveViewPoint(ViewPoint ip) {
@@ -80,11 +127,11 @@ public class ViewManager : MonoBehaviour {
         ExitViewMoving();
         SetActiveViewPoint(null);
         Utilities.DestroyAllGameObjects(viewPoints);
-        FindAnyObjectByType<ViewPointUI>().ClearViewButtonList();
+        _viewPointUIInstance.ClearViewButtonList();
     }
 
     public void ToggleCameraPreview(bool toggleOn) {
-        if(cameraViewUI == null || previewCam == null) return;
+        if (cameraViewUI == null || previewCam == null) return;
 
         if (toggleOn) {
             if (currentViewPoint == null) return;
@@ -98,7 +145,7 @@ public class ViewManager : MonoBehaviour {
         previewCam.gameObject.SetActive(toggleOn);
     }
 
-    public SerializableViewPointManager Serialize() { 
+    public SerializableViewPointManager Serialize() {
         List<SerializableViewPoint> serializablePoints = new List<SerializableViewPoint>();
         foreach (var interestPoint in viewPoints) {
             SerializableViewPoint instantiated = interestPoint.Serialize();
@@ -113,16 +160,29 @@ public class ViewManager : MonoBehaviour {
 
     public void Deserialize(SerializableViewPointManager serializedManager) {
         if (serializedManager == null || serializedManager.ViewPoints == null) {
-            print("Interest point manager deserialization failed");
+            Debug.Log("Interest point manager deserialization failed: Source data is null");
             return;
         }
 
         foreach (var serializedInterestPoint in serializedManager.ViewPoints) {
-            ViewPoint iPoint = CreateNewViewPoint().GetComponent<ViewPoint>();
+            print("DEBUG: Starting loop for a ViewPoint");
+
+            GameObject vpObject = CreateNewViewPoint();
+
+            if (vpObject == null) {
+                Debug.LogError("DEBUG: CreateNewViewPoint returned NULL!");
+                continue;
+            }
+
+            ViewPoint iPoint = vpObject.GetComponent<ViewPoint>();
+            if (iPoint == null) {
+                Debug.LogError("DEBUG: ViewPoint component missing on the instantiated object!");
+                continue;
+            }
+
+            print("DEBUG: Calling iPoint.Deserialize now...");
             iPoint.Deserialize(serializedInterestPoint);
         }
-        
-        FindAnyObjectByType<ViewPointUI>().UpdateViewButtonList(); // Handle differently in the future pls
     }
 
 }

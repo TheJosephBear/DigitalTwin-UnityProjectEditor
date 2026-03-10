@@ -36,7 +36,7 @@ public class MultiViewManager : MonoBehaviour {
         _secondaryMapInstance.gameObject.SetActive(false);
         _multivewCamerasRefference.SetActive(false);
         UIManager.Instance.HideUI(UIType.TwoMapsCameraView);
-        EditorManager.Instance.ChangeEditorMode(EditorState.Freecam);
+        EditorManager.Instance.ChangeState(ProjectState.Freecam);
     }
 
 

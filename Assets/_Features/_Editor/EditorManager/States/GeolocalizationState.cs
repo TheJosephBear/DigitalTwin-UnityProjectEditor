@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GeolocalizationState : EditorStateBase {
+public class GeolocalizationState : StateBase {
     public override void Enter() {
         UIManager.Instance.HideUI(UIType.EditorInitUI);
         UIManager.Instance.HideUI(UIType.EditorHUD);
@@ -10,6 +10,7 @@ public class GeolocalizationState : EditorStateBase {
         EditorManager.Instance.EditorCameraManager.ToggleCinemachineBrain(true);
         EditorManager.Instance.MapManager.ToggleMapVisibility();
         EditorManager.Instance.GeoMapManager.ActivateGeoLocalization();
+        EditorManager.Instance.ViewManager.ToggleViewPointUI(false);
     }
 
     public override void Exit() {

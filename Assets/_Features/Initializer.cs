@@ -27,11 +27,14 @@ public class Initializer : MonoBehaviour {
 
     void InitializeCorrectAppMode() {
         string viewing = GetUrlParameter("viewing");
-        print(viewing);
-        if(viewing == "False" || viewing == "false") {
+        print("url parameter: " + viewing);
+        string cleanViewing = viewing.Replace("'", "").Trim().ToLower();
+        print("url parameter clean: " + cleanViewing);
+
+        if (cleanViewing == "false") {
             print("entering editor mode");
             EnterEditorMode();
-        } else if (viewing == "True" || viewing == "true") {
+        } else if (cleanViewing == "true") {
             print("entering viewer mode");
             EnterViewerMode();
         } else {
@@ -40,7 +43,7 @@ public class Initializer : MonoBehaviour {
             EnterEditorMode();
         }
 
-        string projectName = GetUrlParameter("projectName");
+        string projectName = GetUrlParameter("_projectName");
     }
 
     void EnterEditorMode() {

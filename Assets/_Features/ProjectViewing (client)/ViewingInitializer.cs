@@ -3,28 +3,59 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ViewingInitializer : MonoBehaviour {
+public class ViewingInitializer : MonoBehaviour, Iinitializer {
 
-    private void Awake() {
-        string projectName = GetUrlParameter("projectName");
-        StartCoroutine(InitializeViewer(projectName));
+    public string _projectName;
+    public bool InEditorDebugging = false;
+
+    public void Initialize() {
+        if (!InEditorDebugging) {
+            _projectName = GetUrlParameter("projectName");
+        }
+
+        SceneLoadingManager.Instance.SetActiveScene(SceneType.Viewing);
+        InitializeViewer();
     }
 
-    IEnumerator InitializeViewer(string projectName) {
+    public void StartRunning() {
+
+    }
+
+    public void Unload() {
+
+    }
+
+    public void InitializeViewer() {
+        StartCoroutine(InitializeViewerCoroutine(_projectName));
+    }
+
+    IEnumerator InitializeViewerCoroutine(string projectName) {
         bool downloadFinished = false;
+        bool downloadSuccess = false;
 
         UIManager.Instance.ShowUI(UIType.LoadingScreen);
-        StartCoroutine(ProjectManager.Instance.DownloadProjectData(projectName, (list) => {
+
+        StartCoroutine(ProjectManager.Instance.DownloadProjectData(projectName, (list, success) => {
+            downloadSuccess = success;
             downloadFinished = true;
         }));
 
         while (!downloadFinished)
             yield return null;
 
+        if (!downloadSuccess) {
+            MessageDisplayManager.Instance.ShowMessage("Project download failed!");
+            UIManager.Instance.HideUI(UIType.LoadingScreen);
+            yield break; // Stops coroutine safely
+        }
+            
+        UIManager.Instance.ShowUI(UIType.ViewerHUD);
         DeserializeProject(ProjectManager.Instance.SelectedProject);
+        MainManagerBase.Instance.ChangeState(ProjectState.Freecam);
 
         UIManager.Instance.HideUI(UIType.LoadingScreen);
     }
+
 
     public void DeserializeProject(Project project) {
         StartCoroutine(DeserializeCoroutine(project));
@@ -43,9 +74,9 @@ public class ViewingInitializer : MonoBehaviour {
         yield return new WaitUntil(() => isAssetDeserializationComplete);
 
         // Deserialize everything else
-        EditorManager.Instance.MapManager.Deserialize(serializedProject.serializedMap);
-        EditorManager.Instance.ViewManager.Deserialize(serializedProject.serializedViewPointManager);
-        EditorManager.Instance.GeoMapManager.DeserializeManager(serializedProject.serializedGeoMap);
+        ViewingManager.Instance.MapManager.Deserialize(serializedProject.serializedMap);
+        ViewingManager.Instance.ViewManager.Deserialize(serializedProject.serializedViewPointManager);
+        ViewingManager.Instance.GeoMapManager.DeserializeManager(serializedProject.serializedGeoMap);
 
         UIManager.Instance.HideUI(UIType.LoadingScreen);
     }
