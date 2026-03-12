@@ -148,6 +148,20 @@ public class ViewManager : MonoBehaviour {
         previewCam.gameObject.SetActive(toggleOn);
     }
 
+    public ViewPoint GetViewPointByID(string id) {
+        return viewPoints.Find(vp => vp.ID == id);
+    }
+
+    public List<SerializableViewPoint> GetSerializedViewPointsList() {
+        List<SerializableViewPoint> list = new List<SerializableViewPoint>();
+
+        foreach (ViewPoint vp in viewPoints) {
+            list.Add(vp.Serialize());
+        }
+
+        return list;
+    }
+
     public SerializableViewPointManager Serialize() {
         List<SerializableViewPoint> serializablePoints = new List<SerializableViewPoint>();
         foreach (var interestPoint in viewPoints) {

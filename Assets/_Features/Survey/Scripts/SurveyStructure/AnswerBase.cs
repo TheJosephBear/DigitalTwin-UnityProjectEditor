@@ -1,9 +1,10 @@
 using UnityEngine;
 
 namespace SurveySystem {
+    [System.Serializable]
     public class AnswerBase {
-        public int Idx { get; set; }
-        public string Text { get; set; }
-        public bool IsOther { get; set; }
+        public int Idx;
+        public string Text;
+        public bool IsOther;
     }
 }

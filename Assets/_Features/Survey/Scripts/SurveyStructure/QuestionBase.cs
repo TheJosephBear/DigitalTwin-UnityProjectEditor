@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,12 +7,13 @@ namespace SurveySystem {
         public int Id { get; protected set; }
         public string Title { get; set; }
         public string Description { get; set; }
+        public string ViewPointId { get; protected set; }
         public QuestionType QuestionType { get; protected set; }
 
         protected List<AnswerBase> _answers = new();
         public AnswerBase ActiveAnswer { get; protected set; }
-
         public IReadOnlyList<AnswerBase> Answers => _answers;
+
 
         public QuestionBase(int ID) {
             Id = ID;
@@ -53,6 +55,31 @@ namespace SurveySystem {
         public AnswerBase GetAnswerByIdx(int idx) {
             return _answers.Find(a => a.Idx == idx);
         }
+
+        public void SetViewPointID(string vpID) {
+            ViewPointId = vpID;
+        }
+
+        public SerializableQuestion Serialize() {
+            return new SerializableQuestion {
+                Id = Id,
+                Title = Title,
+                Description = Description,
+                ViewPointId = ViewPointId,
+                QuestionType = QuestionType,
+                Answers = _answers
+            };
+        }
+    }
+
+    [Serializable]
+    public class SerializableQuestion{
+        public int Id;
+        public string Title;
+        public string Description;
+        public string ViewPointId;
+        public QuestionType QuestionType;
+        public List<AnswerBase> Answers;
     }
 
     public enum QuestionType {

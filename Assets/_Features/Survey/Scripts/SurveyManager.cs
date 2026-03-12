@@ -3,24 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using QuestionnaireToolkit;
-using TMPro;
+using SurveySystem;
 using System;
 
-public class SurveyManager : MonoBehaviour {
-    /*
-    public SurveyBuilder SurveyBuilderPrefab;
+public class SurveyManager : Singleton<SurveyManager> {
     
-   
+    public GameObject SurveyBuildingManagerPrefab;
+
+    SurveyBuildingManager _buildingManagerInstance;
+
     void Start() {
-       
+
+        _buildingManagerInstance = SceneLoadingManager.Instance
+            .InstantiateObjectInScene(SurveyBuildingManagerPrefab)
+            .GetComponent<SurveyBuildingManager>();
     }
 
     public void EnterSurveyBuilding() {
-        SurveyBuilder builder = SceneLoadingManager.Instance
-            .InstantiateObjectInScene(SurveyBuilderPrefab.gameObject)
-            .GetComponent<SurveyBuilder>();
-        builder.Initialize();
+        _buildingManagerInstance.EnterSurveyBuilding();
     }
 
     public void StartSurveyRuntime() {
@@ -31,6 +31,6 @@ public class SurveyManager : MonoBehaviour {
     public void CreateNewQuestionnare() {
        
     }
-    */
+    
   
 }

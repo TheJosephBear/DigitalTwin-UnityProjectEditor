@@ -27,10 +27,26 @@ namespace SurveySystem {
                 ActiveQuestion = _questions[idx];
         }
 
-        public QuestionBase GetActiveQuestion() => ActiveQuestion;
-
         public QuestionBase GetQuestionById(int id) {
             return _questions.Find(a => a.Id == id);
         }
+
+        public SerializableSurvey Serialize() {
+            List<SerializableQuestion> questionsSerialized = new List<SerializableQuestion>();
+            foreach (QuestionBase question in _questions) {
+                questionsSerialized.Add(question.Serialize());
+            }
+
+            return new SerializableSurvey {
+                Name = Name,
+                Questions = questionsSerialized
+            };
+        }
+    }
+
+    [Serializable]
+    public class SerializableSurvey {
+        public string Name;
+        public List<SerializableQuestion> Questions;
     }
 }

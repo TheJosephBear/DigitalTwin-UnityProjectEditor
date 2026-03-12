@@ -1,19 +1,24 @@
-﻿using QuestionnaireToolkit.Scripts;
-using QuestionnaireToolkit;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static QuestionnaireToolkit.Scripts.QTQuestionPageManager;
 using System.Linq;
+using System;
 
 namespace SurveySystem {
-    public class SurveyBuilder : Singleton<SurveyBuilder> {
+    /// <summary>
+    /// Manages survey creation. Provides interface for creation and editing of a survey data model.
+    /// </summary>
+    public class SurveyBuilder {
         private Survey _activeSurvey;
         private int _nextId = 0;
 
         public Survey CreateNewSurvey() {
             _activeSurvey = new Survey();
             return _activeSurvey;
+        }
+
+        public bool HasActiveSurvey() {
+            return _activeSurvey != null;   
         }
 
         public void SetActiveSurvey(Survey survey) {
@@ -63,7 +68,12 @@ namespace SurveySystem {
         public void SetQuestionDescription(int questionId, string text) {
             QuestionBase question = _activeSurvey.GetQuestionById(questionId);
             question.Description = text;
-            DebugPrintSurvey();
+            ExportSurveyAsJson();
+        }
+
+        public void SetQuestionViewPoint(int questionId, string viewPointID) {
+            QuestionBase question = _activeSurvey.GetQuestionById(questionId);
+            question.SetViewPointID(viewPointID);
         }
 
         public void AddNewAnswerToQuestion() {
@@ -104,36 +114,9 @@ namespace SurveySystem {
         }
 
         public string ExportSurveyAsJson() {
-            string jsonString = "";
+            string jsonString = JsonUtility.ToJson(_activeSurvey.Serialize());
 
             return jsonString;
-        }
-
-
-
-        void DebugPrintSurvey() {
-            if (_activeSurvey == null) {
-                print("No active survey.");
-                return;
-            }
-
-            print($"Survey: {_activeSurvey.Name}");
-
-            foreach (var question in _activeSurvey.Questions) {
-                print($"Question [{question.Id}]");
-                print($"  Title: {question.Title}");
-                print($"  Description: {question.Description}");
-
-                if (question.Answers == null || question.Answers.Count == 0) {
-                    print("  Answers: <none>");
-                    continue;
-                }
-
-                for (int i = 0; i < question.Answers.Count; i++) {
-                    var answer = question.Answers[i];
-                    print($"  Answer {i}: {answer.Text}");
-                }
-            }
         }
     }
 }

@@ -5,11 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class SurveyTester : MonoBehaviour {
 
-    SurveySystem.SurveyBuilder _builder;
     ViewManager _viewManager;
 
     private void Start() {
-        _builder = FindAnyObjectByType<SurveySystem.SurveyBuilder>();
         _viewManager = FindAnyObjectByType<ViewManager>();
 
         StartCoroutine(LoadUitlitiesAndStartTest());
@@ -25,7 +23,7 @@ public class SurveyTester : MonoBehaviour {
         _viewManager.CreateNewViewPoint(updateUI: false);
 
 
-        _builder.CreateNewSurvey();
+        SurveyManager.Instance.EnterSurveyBuilding();
     }
 
     IEnumerator LoadUitlitiesAndStartTest() {

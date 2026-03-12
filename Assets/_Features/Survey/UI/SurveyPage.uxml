@@ -4,7 +4,7 @@
         <ui:Label text="Stránka průzkumu" name="title" style="font-size: 30px; -unity-text-align: middle-center; background-color: rgb(228, 228, 228); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 8px; padding-bottom: 8px;" />
         <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" name="survey-scroll-view" style="flex-grow: 1;" />
         <ui:VisualElement name="bottom-bar" style="flex-grow: 1; position: absolute; bottom: 0; left: 0; right: 0; flex-direction: row-reverse; justify-content: flex-start; padding-right: 30px;">
-            <ui:Button text="Save" style="flex-shrink: 1;" />
+            <ui:Button text="Save" name="save-btn" style="flex-shrink: 1;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

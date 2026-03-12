@@ -15,6 +15,7 @@ public class SurveyBuildingUI : MonoBehaviour {
 
     public List<QuestionTypeEnumStringCombination> QuestionTypeEnumToStringList = new List<QuestionTypeEnumStringCombination>();
 
+    private SurveyBuilder _surveyBuilder;
     private VisualElement _root;
     private VisualElement _scrollViewContent;
     [SerializeField]
@@ -34,8 +35,18 @@ public class SurveyBuildingUI : MonoBehaviour {
         _root = gameObject.GetComponent<UIDocument>().rootVisualElement;
         _scrollViewContent = _root.Q<ScrollView>("survey-scroll-view").contentContainer;
 
+        // Save button
+        var saveButton = _root.Q<Button>("save-btn");
+        saveButton.clicked += HandleSavePressed;
+
+
         // Add the initial bar at the start (before any questions)
         RefreshAddQuestionBars();
+    }
+
+    public void Initialize(SurveyBuilder surveyBuilder) {
+        _surveyBuilder = surveyBuilder;
+        // This will also add all of the UI components according to the survey structure
     }
 
     #region Input handling
@@ -52,14 +63,14 @@ public class SurveyBuildingUI : MonoBehaviour {
         }
 
         QuestionType questionTypeEnum = QuestionTypeEnumToStringList.Find(a => a.StringValue == questionType).EnumValue;
-        QuestionBase addedQuestion = SurveyBuilder.Instance.AddNewQuestion(questionTypeEnum);
+        QuestionBase addedQuestion = _surveyBuilder.AddNewQuestion(questionTypeEnum);
 
         var questionUI = new SurveyQuestionUI(
             questionInstance,
             addedQuestion.Id,
             this,
             questionTypeEnum,
-            FindAnyObjectByType<ViewManager>() // Do budoucna hledat líp (reference v mainManager)
+            FindAnyObjectByType<ViewManager>().GetSerializedViewPointsList() // Do budoucna hledat líp (reference v mainManager)
         );
 
         if (insertAtIndex < 0 || insertAtIndex >= _addedQuestions.Count) {
@@ -79,7 +90,7 @@ public class SurveyBuildingUI : MonoBehaviour {
     public void HandleQuestionDeleted(int questionIndex) {
         if (questionIndex < 0 || questionIndex >= _addedQuestions.Count) return;
 
-        SurveyBuilder.Instance.RemoveQuestion(questionIndex);
+        _surveyBuilder.RemoveQuestion(questionIndex);
 
         _addedQuestions[questionIndex].QuestionElement?.RemoveFromHierarchy();
         _addedQuestions.RemoveAt(questionIndex);
@@ -142,31 +153,40 @@ public class SurveyBuildingUI : MonoBehaviour {
     }
 
     public void HandleQuestionTitleChanged(int questionId, string newText) {
-        SurveyBuilder.Instance.SetQuestionTitle(questionId, newText);
+        _surveyBuilder.SetQuestionTitle(questionId, newText);
     }
 
     public void HandleQuestionDescriptionChanged(int questionId, string newText) {
-        SurveyBuilder.Instance.SetQuestionDescription(questionId, newText);
+        _surveyBuilder.SetQuestionDescription(questionId, newText);
+    }
+
+    public void HandleQuestionViewPointSelected(int questionID, string viewPointID) {
+        print("View point selected: " + viewPointID);
+        _surveyBuilder.SetQuestionViewPoint(questionID, viewPointID);
     }
 
     public void HandleAnswerAdded(int questionId) {
-        SurveyBuilder.Instance.AddNewAnswerToQuestion(questionId);
+        _surveyBuilder.AddNewAnswerToQuestion(questionId);
     }
 
     public void HandleAnswerOtherAdded(int questionId) {
-        SurveyBuilder.Instance.AddNewAnswerToQuestion(questionId, true);
+        _surveyBuilder.AddNewAnswerToQuestion(questionId, true);
     }
 
     public void HandleAnswerTextChanged(AnswerBase answer, string newText) {
-        SurveyBuilder.Instance.SetAnswerText(answer, newText);
+        _surveyBuilder.SetAnswerText(answer, newText);
     }
 
     public void HandleAnswerTextChanged(int questionId, int answerId, string newText) {
-        SurveyBuilder.Instance.SetAnswerText(questionId, answerId, newText);
+        _surveyBuilder.SetAnswerText(questionId, answerId, newText);
     }
 
     public void HandleAnswerRemoved(AnswerBase answer) {
-        SurveyBuilder.Instance.RemoveAnswer(answer.Idx);
+        _surveyBuilder.RemoveAnswer(answer.Idx);
+    }
+
+    public void HandleSavePressed() {
+        print("saving");
     }
 
     #endregion

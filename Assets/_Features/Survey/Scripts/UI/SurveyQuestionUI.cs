@@ -2,13 +2,15 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using SurveySystem;
 using System.Collections.Generic;
+using UnityEditor;
+using System;
 
 public class SurveyQuestionUI {
     public int _questionID;
     private SurveyBuildingUI _surveyBuildingUIReff;
     private VisualElement _root;
     private QuestionType _questionType;
-    private ViewManager _viewManager;
+    private List<SerializableViewPoint> _viewPoints;
 
     // Track added answers - regular answers and "Other" answer are tracked separately
     private List<SurveyAnswerUI> _addedAnswers = new List<SurveyAnswerUI>();
@@ -26,15 +28,15 @@ public class SurveyQuestionUI {
     /// <summary>The root visual element for this question (may be null if template was missing).</summary>
     public VisualElement QuestionElement => _root;
 
-    public SurveyQuestionUI(VisualElement root, int questionId, SurveyBuildingUI surveyBuildingUI, QuestionType questionType, ViewManager viewManager) {
+    public SurveyQuestionUI(VisualElement root, int questionId, SurveyBuildingUI surveyBuildingUI, QuestionType questionType, List<SerializableViewPoint> viewPoints) {
         _root = root;
         _questionID = questionId;
         _surveyBuildingUIReff = surveyBuildingUI;
         _questionType = questionType;
-        _viewManager = viewManager;
+        _viewPoints = viewPoints;
 
         // Get the answer template from QuestionUIMapping
-        QuestionUIMapping mapping = Object.FindFirstObjectByType<QuestionUIMapping>();
+        QuestionUIMapping mapping = UnityEngine.Object.FindFirstObjectByType<QuestionUIMapping>();
         if (mapping != null) {
             _answerTemplate = mapping.GetAnswerUITemplate(_questionType);
             if (_answerTemplate == null) {
@@ -57,11 +59,10 @@ public class SurveyQuestionUI {
         AddAnswerUI(); // Add the first answer UI element by default
 
         RegisterInputs();
-        _viewManager = viewManager;
     }
 
     private void RegisterInputs() {
-        var questionTitleField = _root.Q<TextField>("question-title-field");
+        var questionTitleField = _root.Q<TextField>("question-title");
         var questionDescriptionField = _root.Q<TextField>("question-description");
         var addOptionButton = _root.Q<Button>("add-option-button");
         var addOptionOtherButton = _root.Q<Button>("add-other-option-button");
@@ -98,7 +99,11 @@ public class SurveyQuestionUI {
         if (cameraViewDropdown != null) {
             cameraViewDropdown.RegisterValueChangedCallback(evt => {
                 // Handle camera view change based on selected value
-                string selectedView = evt.newValue;
+                int index = cameraViewDropdown.index;
+
+                if (index >= 0 && index < _viewPoints.Count) {
+                    _surveyBuildingUIReff.HandleQuestionViewPointSelected(_questionID, _viewPoints[index].ID);
+                }
             });
         }
 
@@ -178,10 +183,9 @@ public class SurveyQuestionUI {
     private void PopulateCameraViewDropdown(DropdownField dropdown) {
         if (dropdown == null) return;
 
-        List<ViewPoint> viewPoints =_viewManager.GetViewPoints();
         List<string> choiceLabels = new List<string>();
 
-        foreach(ViewPoint viewPoint in viewPoints) {
+        foreach (SerializableViewPoint viewPoint in _viewPoints) {
             choiceLabels.Add(viewPoint.Name);
         }
 
@@ -189,6 +193,7 @@ public class SurveyQuestionUI {
 
         if (dropdown.choices.Count > 0) {
             dropdown.value = dropdown.choices[0];
+            _surveyBuildingUIReff.HandleQuestionViewPointSelected(_questionID, _viewPoints[0].ID);
         }
     }
 

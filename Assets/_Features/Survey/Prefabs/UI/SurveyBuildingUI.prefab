@@ -66,6 +66,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c9b8572de84b014bb6e586b897696b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _questionTypeSelectionTemplate: {fileID: 9197481963319205126, guid: 5fc280527885572498dd8152cbd24b60, type: 3}
 --- !u!114 &7693837786528472852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83,6 +84,7 @@ MonoBehaviour:
     StringValue: MultipleChoice
   questionTemplates:
   - {fileID: 9197481963319205126, guid: 77bf64030fcdcf548afb02c5bd968d56, type: 3}
+  addQuestionBarTemplate: {fileID: 9197481963319205126, guid: c099ff1d780c64e4193d328bc2f6bc01, type: 3}
 --- !u!114 &1216325272625297880
 MonoBehaviour:
   m_ObjectHideFlags: 0

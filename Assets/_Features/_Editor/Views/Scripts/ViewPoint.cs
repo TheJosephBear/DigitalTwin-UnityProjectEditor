@@ -29,6 +29,8 @@ public class ViewPoint : EditorObjectBase, IClickable {
 
     public SerializableViewPoint Serialize() {
         return new SerializableViewPoint {
+            ID = ID,
+            Name = Name,
             position = transform.position,
             eulerRotation = transform.eulerAngles 
         };
@@ -58,6 +60,8 @@ public class ViewPoint : EditorObjectBase, IClickable {
 
 [Serializable]
 public class SerializableViewPoint {
+    public string ID;
+    public string Name;
     public Vector3 position;
     public Vector3 eulerRotation;
 }
