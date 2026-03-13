@@ -13,11 +13,15 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
     SurveyBuildingManager _buildingManagerInstance;
 
     void Start() {
-
+        if(_buildingManagerInstance == null)
+             _buildingManagerInstance = SceneLoadingManager.Instance
+            .InstantiateObjectInScene(SurveyBuildingManagerPrefab)
+            .GetComponent<SurveyBuildingManager>();
     }
 
     public void OnSceneInitialized() {
-        _buildingManagerInstance = SceneLoadingManager.Instance
+        if (_buildingManagerInstance == null)
+            _buildingManagerInstance = SceneLoadingManager.Instance
             .InstantiateObjectInScene(SurveyBuildingManagerPrefab)
             .GetComponent<SurveyBuildingManager>();
     }
@@ -30,6 +34,9 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
 
     }
 
+    public void ExitSurveyBuilding() {
+        MainManagerBase.Instance.ChangeState(ProjectState.Freecam);
+    }
 
     public void CreateNewQuestionnare() {
        

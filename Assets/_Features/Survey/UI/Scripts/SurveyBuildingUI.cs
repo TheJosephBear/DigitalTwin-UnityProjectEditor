@@ -15,6 +15,7 @@ public class SurveyBuildingUI : MonoBehaviour {
 
     public List<QuestionTypeEnumStringCombination> QuestionTypeEnumToStringList = new List<QuestionTypeEnumStringCombination>();
 
+    private SurveyBuildingManager _surveyBuildingManager;
     private SurveyBuilder _surveyBuilder;
     private VisualElement _root;
     private VisualElement _scrollViewContent;
@@ -38,14 +39,19 @@ public class SurveyBuildingUI : MonoBehaviour {
         // Save button
         var saveButton = _root.Q<Button>("save-btn");
         saveButton.clicked += HandleSavePressed;
+        // Exit button
+        var exitButton = _root.Q<Button>("exit-btn");
+        exitButton.clicked += HandleExitPressed;
+
 
 
         // Add the initial bar at the start (before any questions)
         RefreshAddQuestionBars();
     }
 
-    public void Initialize(SurveyBuilder surveyBuilder) {
+    public void Initialize(SurveyBuilder surveyBuilder, SurveyBuildingManager manager) {
         _surveyBuilder = surveyBuilder;
+        _surveyBuildingManager = manager;
         // This will also add all of the UI components according to the survey structure
     }
 
@@ -161,7 +167,6 @@ public class SurveyBuildingUI : MonoBehaviour {
     }
 
     public void HandleQuestionViewPointSelected(int questionID, string viewPointID) {
-        print("View point selected: " + viewPointID);
         _surveyBuilder.SetQuestionViewPoint(questionID, viewPointID);
     }
 
@@ -186,7 +191,11 @@ public class SurveyBuildingUI : MonoBehaviour {
     }
 
     public void HandleSavePressed() {
-        print("saving");
+        _surveyBuildingManager.SaveSurvey();
+    }
+
+    public void HandleExitPressed() {
+        _surveyBuildingManager.ExitSurveyCreation();
     }
 
     #endregion

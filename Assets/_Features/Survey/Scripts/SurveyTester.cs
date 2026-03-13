@@ -21,7 +21,13 @@ public class SurveyTester : MonoBehaviour, IInitializationListener {
         _viewManager.CreateNewViewPoint(updateUI: false);
         _viewManager.CreateNewViewPoint(updateUI: false);
 
+        StartCoroutine(WaitForInit());
+    }
 
+    // Waiting for survey manager to instantiate his stuff
+    // In scenes used in the app this wait wont be needed
+    IEnumerator WaitForInit() {
+        yield return new WaitForSeconds(0.2f);
         SurveyManager.Instance.EnterSurveyBuilding();
     }
 
