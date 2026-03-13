@@ -6,7 +6,7 @@ using UnityEngine;
 using SurveySystem;
 using System;
 
-public class SurveyManager : Singleton<SurveyManager> {
+public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
     
     public GameObject SurveyBuildingManagerPrefab;
 
@@ -14,6 +14,9 @@ public class SurveyManager : Singleton<SurveyManager> {
 
     void Start() {
 
+    }
+
+    public void OnSceneInitialized() {
         _buildingManagerInstance = SceneLoadingManager.Instance
             .InstantiateObjectInScene(SurveyBuildingManagerPrefab)
             .GetComponent<SurveyBuildingManager>();
@@ -31,6 +34,4 @@ public class SurveyManager : Singleton<SurveyManager> {
     public void CreateNewQuestionnare() {
        
     }
-    
-  
 }

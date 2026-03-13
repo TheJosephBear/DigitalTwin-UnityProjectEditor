@@ -3,14 +3,13 @@ using SurveySystem;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class SurveyTester : MonoBehaviour {
+public class SurveyTester : MonoBehaviour, IInitializationListener {
 
     ViewManager _viewManager;
 
-    private void Start() {
+    public void OnSceneInitialized() {
         _viewManager = FindAnyObjectByType<ViewManager>();
-
-        StartCoroutine(LoadUitlitiesAndStartTest());
+        Test();
     }
 
     void Test() {
@@ -24,15 +23,6 @@ public class SurveyTester : MonoBehaviour {
 
 
         SurveyManager.Instance.EnterSurveyBuilding();
-    }
-
-    IEnumerator LoadUitlitiesAndStartTest() {
-        AsyncOperation loading = SceneManager.LoadSceneAsync("Utilities", LoadSceneMode.Additive);
-        while (!loading.isDone) {
-            yield return null;
-        }
-
-        Test();
     }
 
 
