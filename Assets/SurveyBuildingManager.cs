@@ -23,8 +23,9 @@ public class SurveyBuildingManager : MonoBehaviour {
     }
 
     public void SaveSurvey() {
-        // Send this to the server or something
-        _builderInstance.ExportSurveyAsJson();
+        // idk if i should call it like this... maybe bad design
+        SurveyManager.Instance.SetSurveyData(_builderInstance.ExportSurveyAsJson());
+        SurveyManager.Instance.UploadSurveyData();
     }
 
     // Disable UI and other related objects

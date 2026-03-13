@@ -118,7 +118,7 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
     #region Editor
 
     // Upload project data (no models)
-    public void StartUpload(string data, string projectName) {
+    public void StartProjectDataUpload(string data, string projectName) {
         string url = $"{serverUrl}/upload_editor_data";
         Dictionary<string, string> formData = new Dictionary<string, string>
         {
@@ -128,10 +128,29 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
         StartCoroutine(PostRequest(url, formData, null));
     }
 
+    // Upload survey data
+    public void StartSurveyUpload(string surveyJson, string projectName) {
+        string url = $"{serverUrl}/upload_survey_data";
+        Dictionary<string, string> formData = new Dictionary<string, string>
+        {
+            { "survey_data", surveyJson },
+            { "project_name", projectName }
+        };
+        StartCoroutine(PostRequest(url, formData, null));
+    }
+
     // Download project data (no models)
     public void StartDataDownload(string projectName, System.Action<bool, string> callback) {
         string url = $"{serverUrl}/download?project_name={UnityWebRequest.EscapeURL(projectName)}";
         //    StartCoroutine(GetRequest(url, callback));
+        StartCoroutine(GetRequest<string>(url, (success, data) => {
+            callback(success, data);
+        }, true));
+    }
+
+    // Download survey data
+    public void StartSurveyDownload(string projectName, System.Action<bool, string> callback) {
+        string url = $"{serverUrl}/download_survey_data?project_name={UnityWebRequest.EscapeURL(projectName)}";
         StartCoroutine(GetRequest<string>(url, (success, data) => {
             callback(success, data);
         }, true));

@@ -23,7 +23,7 @@ public class ProjectManager : Singleton<ProjectManager> {
     public void SaveProject(SerializableProject serializableProject) {
         AssetManager.Instance.UploadModelsToWeb(SelectedProject.ProjectName);
         string serializedProject = JsonUtility.ToJson(serializableProject);
-        ServerCommunicationManager.Instance.StartUpload(serializedProject, serializableProject.projectName);
+        ServerCommunicationManager.Instance.StartSurveyUpload(serializedProject, serializableProject.projectName);
     }
 
 
