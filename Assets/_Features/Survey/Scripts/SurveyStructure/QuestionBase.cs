@@ -14,13 +14,8 @@ namespace SurveySystem {
         public AnswerBase ActiveAnswer { get; protected set; }
         public IReadOnlyList<AnswerBase> Answers => _answers;
 
-        public QuestionBase() {
-
-        }
-
         public QuestionBase(int ID) {
             Id = ID;
-            AddNewAnswer();
         }
 
         public virtual AnswerBase AddNewAnswer() {

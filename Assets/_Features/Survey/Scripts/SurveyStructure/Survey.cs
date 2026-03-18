@@ -15,6 +15,7 @@ namespace SurveySystem {
         public void AddNewQuestion(QuestionBase question) {
             _questions.Add(question);
             ActiveQuestion = question;
+            question.AddNewAnswer();
         }
 
         public void RemoveQuestion(int idx) {
@@ -52,7 +53,7 @@ namespace SurveySystem {
         public void Deserialize(SurveySerializable serializable) {
             Name = serializable.Name;
             foreach (SerializableQuestion q in serializable.Questions) {
-                _questions.Add(new QuestionBase().Deserialize(q));
+                _questions.Add(new QuestionBase(q.Id).Deserialize(q));
             }
         }
 

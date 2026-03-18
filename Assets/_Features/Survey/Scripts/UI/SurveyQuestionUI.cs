@@ -28,7 +28,7 @@ public class SurveyQuestionUI {
     /// <summary>The root visual element for this question (may be null if template was missing).</summary>
     public VisualElement QuestionElement => _root;
 
-    public SurveyQuestionUI(VisualElement root, int questionId, SurveyBuildingUI surveyBuildingUI, QuestionType questionType, List<SerializableViewPoint> viewPoints) {
+    public SurveyQuestionUI(VisualElement root, int questionId, SurveyBuildingUI surveyBuildingUI, QuestionType questionType, List<SerializableViewPoint> viewPoints, bool isDeserialized = false) {
         _root = root;
         _questionID = questionId;
         _surveyBuildingUIReff = surveyBuildingUI;
@@ -56,9 +56,17 @@ public class SurveyQuestionUI {
         }
         
         _optionsList.Clear(); // Clear any existing options in the UI
-        AddAnswerUI(); // Add the first answer UI element by default
+        if(!isDeserialized) AddAnswerUI(); // Add the first answer UI element by default
 
         RegisterInputs();
+    }
+
+    public void SetTitle(string title) {
+        _root.Q<TextField>("question-title").value = title;
+    }
+
+    public void SetDescription(string desc) {
+        _root.Q<TextField>("question-description").value = desc;
     }
 
     public void AddAnswer(string answerText, bool isOther=false) {
