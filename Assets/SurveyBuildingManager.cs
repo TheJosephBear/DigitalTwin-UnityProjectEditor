@@ -28,6 +28,11 @@ public class SurveyBuildingManager : MonoBehaviour {
         SurveyManager.Instance.UploadSurveyData();
     }
 
+    public void DeserializeSurvey(string surveyJson) {
+        _builderInstance.DeserializeFromJson(surveyJson);
+        _uiInstance.DeserializeUI();
+    }
+
     // Disable UI and other related objects
     public void ExitSurveyCreation() {
         //   _uiInstance.gameObject.SetActive(false); // Buggy, dont know uitoolkit well enough to know why, lets just destroy it (not that expensive on one object hopefully)

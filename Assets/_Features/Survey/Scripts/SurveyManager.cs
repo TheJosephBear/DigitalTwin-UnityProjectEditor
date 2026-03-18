@@ -14,7 +14,7 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
     string _surveyJsonData;
 
     void Start() {
-        if(_buildingManagerInstance == null)
+        if(_buildingManagerInstance == null && SceneLoadingManager.Instance != null)
              _buildingManagerInstance = SceneLoadingManager.Instance
             .InstantiateObjectInScene(SurveyBuildingManagerPrefab)
             .GetComponent<SurveyBuildingManager>();
@@ -48,12 +48,29 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
         _surveyJsonData = jsonString;
     }
 
+    #region Serialization
+
+    public void SerializeSurvey() {
+
+    }
+
+    public void SerializeAnswers() {
+
+    }
+
+    public void DeserializeEditor(string SurveyJson) {
+        _buildingManagerInstance.DeserializeSurvey(SurveyJson);
+    }
+
+    public void DeserializeViewing(string SurveyJson) {
+
+    }
+
+    #endregion
 
     // Upload/Download to server, maybe should be handled elsewhere
 
     public void DownloadSurveyData() {
-        print(ServerCommunicationManager.Instance.name);
-        print(ProjectManager.Instance.SelectedProject.ProjectName);
         ServerCommunicationManager.Instance.StartSurveyDownload(ProjectManager.Instance.SelectedProject.ProjectName, (success, data) => {
             _surveyJsonData = data;
             print(_surveyJsonData);
@@ -61,8 +78,6 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
     }
 
     public void UploadSurveyData() {
-        print(ServerCommunicationManager.Instance.name);
-        print(ProjectManager.Instance.SelectedProject.ProjectName);
         ServerCommunicationManager.Instance.StartSurveyUpload(_surveyJsonData, ProjectManager.Instance.SelectedProject.ProjectName);
     }
 }

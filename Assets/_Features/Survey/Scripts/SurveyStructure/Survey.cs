@@ -31,21 +31,36 @@ namespace SurveySystem {
             return _questions.Find(a => a.Id == id);
         }
 
-        public SerializableSurvey Serialize() {
+        public List<QuestionBase> GetAllQuestions() {
+            return Questions.ToList();
+        }
+
+        #region Serialization
+
+        public SurveySerializable Serialize() {
             List<SerializableQuestion> questionsSerialized = new List<SerializableQuestion>();
             foreach (QuestionBase question in _questions) {
                 questionsSerialized.Add(question.Serialize());
             }
 
-            return new SerializableSurvey {
+            return new SurveySerializable {
                 Name = Name,
                 Questions = questionsSerialized
             };
         }
+
+        public void Deserialize(SurveySerializable serializable) {
+            Name = serializable.Name;
+            foreach (SerializableQuestion q in serializable.Questions) {
+                _questions.Add(new QuestionBase().Deserialize(q));
+            }
+        }
+
+        #endregion
     }
 
     [Serializable]
-    public class SerializableSurvey {
+    public class SurveySerializable {
         public string Name;
         public List<SerializableQuestion> Questions;
     }

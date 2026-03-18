@@ -54,11 +54,61 @@ public class SurveyQuestionUI {
             // Try alternate container names if RadioButtonGroup isn't found
             _optionsList = _root.Q<VisualElement>("options-list");
         }
-
+        
         _optionsList.Clear(); // Clear any existing options in the UI
         AddAnswerUI(); // Add the first answer UI element by default
 
         RegisterInputs();
+    }
+
+    public void AddAnswer(string answerText, bool isOther=false) {
+        if (_optionsList == null) {
+            Debug.LogWarning("Options list container not found!");
+            return;
+        }
+
+        if (_answerTemplate == null) {
+            Debug.LogWarning("Answer template not set!");
+            return;
+        }
+
+        // Instantiate the answer template
+        TemplateContainer answerElement = _answerTemplate.Instantiate();
+
+        int answerIndex;
+        if (isOther) {
+            // "Other" answer: add to the end and track separately
+            answerIndex = _addedAnswers.Count;
+            _optionsList.Add(answerElement);
+
+            answerElement.Q<CustomRadioButton>().Placeholder = "Jin�"; // Set label to "Other"
+            SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, _surveyBuildingUIReff, this);
+            _otherAnswerUI = answerUI;
+        } else {
+            // Regular answer: insert before "Other" answer if it exists, otherwise add to end
+            answerIndex = _addedAnswers.Count;
+
+            if (_otherAnswerUI != null) {
+                // Insert before the "Other" answer
+                int insertIndex = _optionsList.IndexOf(_otherAnswerUI.AnswerElement);
+                _optionsList.Insert(insertIndex, answerElement);
+            } else {
+                // No "Other" answer exists, add to end
+                _optionsList.Add(answerElement);
+            }
+
+            TextField textField = FindTextFieldRecursive(answerElement);
+
+            if (textField != null) {
+                textField.value = answerText;
+            } else {
+                Debug.LogWarning("No TextField found in answer template!");
+            }
+
+            SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, _surveyBuildingUIReff, this);
+            _addedAnswers.Add(answerUI);
+        }
+
     }
 
     private void RegisterInputs() {
@@ -410,5 +460,20 @@ public class SurveyQuestionUI {
         if (_otherAnswerUI != null) {
             _otherAnswerUI.UpdateIndex(_addedAnswers.Count);
         }
+    }
+
+    private TextField FindTextFieldRecursive(VisualElement root) {
+        if (root == null) return null;
+
+        if (root is TextField tf)
+            return tf;
+
+        foreach (var child in root.Children()) {
+            var result = FindTextFieldRecursive(child);
+            if (result != null)
+                return result;
+        }
+
+        return null;
     }
 }

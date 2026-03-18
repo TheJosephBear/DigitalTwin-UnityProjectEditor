@@ -113,10 +113,24 @@ namespace SurveySystem {
             _activeSurvey.ActiveQuestion.RemoveAnswer(idx);
         }
 
+        public Survey GetActiveSurvey() {
+            return _activeSurvey;
+        }
+
+        #region Serialization
+
         public string ExportSurveyAsJson() {
             string jsonString = JsonUtility.ToJson(_activeSurvey.Serialize());
 
             return jsonString;
         }
+
+        public void DeserializeFromJson(string json) {
+            CreateNewSurvey();
+            _activeSurvey.Deserialize(JsonUtility.FromJson<SurveySerializable>(json));
+        }
+
+        #endregion
+
     }
 }

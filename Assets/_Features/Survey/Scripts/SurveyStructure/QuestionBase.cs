@@ -14,6 +14,9 @@ namespace SurveySystem {
         public AnswerBase ActiveAnswer { get; protected set; }
         public IReadOnlyList<AnswerBase> Answers => _answers;
 
+        public QuestionBase() {
+
+        }
 
         public QuestionBase(int ID) {
             Id = ID;
@@ -44,6 +47,11 @@ namespace SurveySystem {
             return answer;
         }
 
+        public virtual void AddExistingAnswer(AnswerBase answer) {
+            _answers.Add(answer);
+            ActiveAnswer = answer;
+        }
+
         public void RemoveAnswer(int idx) {
             _answers.RemoveAll(a => a.Idx == idx);
         }
@@ -69,6 +77,31 @@ namespace SurveySystem {
                 QuestionType = QuestionType,
                 Answers = _answers
             };
+        }
+
+        public QuestionBase Deserialize(SerializableQuestion serializable) {
+            QuestionBase deserializedQuestion = null;
+
+            switch (serializable.QuestionType) {
+                case QuestionType.MultipleChoiceSingle:
+                    deserializedQuestion = new QuestionMultipleChoiceSingleAnswer(serializable.Id);
+                    break;
+                case QuestionType.MultipleChoiceMultiple:
+                    break;
+                case QuestionType.LinearScale:
+                    break;
+                case QuestionType.OpenEnded:
+                    break;
+            }
+
+           deserializedQuestion.Title = serializable.Title;
+           deserializedQuestion.Description = serializable.Description;
+           deserializedQuestion.ViewPointId = serializable.ViewPointId;
+           foreach(AnswerBase answer in serializable.Answers){ 
+             deserializedQuestion.AddExistingAnswer(answer);
+           }
+
+            return deserializedQuestion;
         }
     }
 
