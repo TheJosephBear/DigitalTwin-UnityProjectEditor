@@ -287,7 +287,7 @@ public class SurveyBuildingUI : MonoBehaviour {
             }
         }
 
-     //   RefreshAddQuestionBars();
+        RefreshAddQuestionBars();
     }
 }
 

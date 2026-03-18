@@ -73,7 +73,9 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
     public void DownloadSurveyData() {
         ServerCommunicationManager.Instance.StartSurveyDownload(ProjectManager.Instance.SelectedProject.ProjectName, (success, data) => {
             _surveyJsonData = data;
-            print(_surveyJsonData);
+            if (_surveyJsonData != null) {
+                DeserializeEditor(_surveyJsonData);
+            }
         });
     }
 
