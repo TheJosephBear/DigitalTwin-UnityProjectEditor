@@ -79,11 +79,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0196b0c1d50c89e4b916c04d1bccccb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  QuestionTypeEnumToStringList:
+  QuestionTypeMapping:
   - EnumValue: 0
     StringValue: Multiple Choice
-  questionTemplates:
-  - {fileID: 9197481963319205126, guid: 77bf64030fcdcf548afb02c5bd968d56, type: 3}
+    Template: {fileID: 9197481963319205126, guid: 77bf64030fcdcf548afb02c5bd968d56, type: 3}
+    AnswerTemplate: {fileID: 9197481963319205126, guid: 43a53068268e3614a92867fec2dc97e3, type: 3}
   addQuestionBarTemplate: {fileID: 9197481963319205126, guid: c099ff1d780c64e4193d328bc2f6bc01, type: 3}
 --- !u!114 &1216325272625297880
 MonoBehaviour:

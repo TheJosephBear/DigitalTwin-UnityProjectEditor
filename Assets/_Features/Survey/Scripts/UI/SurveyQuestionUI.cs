@@ -7,7 +7,7 @@ using System;
 
 public class SurveyQuestionUI {
     public int _questionID;
-    private SurveyBuildingUI _surveyBuildingUIReff;
+    private ISurveyUIHandler _surveyUIHandler;
     private VisualElement _root;
     private QuestionType _questionType;
     private List<SerializableViewPoint> _viewPoints;
@@ -28,10 +28,11 @@ public class SurveyQuestionUI {
     /// <summary>The root visual element for this question (may be null if template was missing).</summary>
     public VisualElement QuestionElement => _root;
 
-    public SurveyQuestionUI(VisualElement root, int questionId, SurveyBuildingUI surveyBuildingUI, QuestionType questionType, List<SerializableViewPoint> viewPoints) {
+    public SurveyQuestionUI(VisualElement root, int questionId, ISurveyUIHandler surveyUIHandler, QuestionType questionType, List<SerializableViewPoint> viewPoints) {
+        _surveyUIHandler = surveyUIHandler;
+
         _root = root;
         _questionID = questionId;
-        _surveyBuildingUIReff = surveyBuildingUI;
         _questionType = questionType;
         _viewPoints = viewPoints;
 
@@ -69,24 +70,30 @@ public class SurveyQuestionUI {
         var cameraViewDropdown = _root.Q<DropdownField>("camera-view-dropdown");
         var editQuestionButton = _root.Q<VisualElement>("edit-question-button");
 
-        questionTitleField.RegisterValueChangedCallback(evt => {
-            _surveyBuildingUIReff.HandleQuestionTitleChanged(_questionID, evt.newValue);
-        });
+        if (questionTitleField != null) {
+            questionTitleField.RegisterValueChangedCallback(evt => {
+                _surveyUIHandler.HandleQuestionTitleChanged(_questionID, evt.newValue);
+            });
+        }
 
-        questionDescriptionField.RegisterValueChangedCallback(evt => {
-            _surveyBuildingUIReff.HandleQuestionDescriptionChanged(_questionID, evt.newValue);
-        });
+        if (questionDescriptionField != null) {
+            questionDescriptionField.RegisterValueChangedCallback(evt => {
+                _surveyUIHandler.HandleQuestionDescriptionChanged(_questionID, evt.newValue);
+            });
+        }
 
-        addOptionButton.clicked += () => {
-            _surveyBuildingUIReff.HandleAnswerAdded(_questionID);
-            AddAnswerUI(false);
-        };
+        if (addOptionButton != null) {
+            addOptionButton.clicked += () => {
+                _surveyUIHandler.HandleAnswerAdded(_questionID);
+                AddAnswerUI(false);
+            };
+        }
 
         if (addOptionOtherButton != null) {
             addOptionOtherButton.clicked += () => {
                 // Only allow one "Other" answer per question
                 if (_otherAnswerUI == null) {
-                    _surveyBuildingUIReff.HandleAnswerOtherAdded(_questionID);
+                    _surveyUIHandler.HandleAnswerOtherAdded(_questionID);
                     AddAnswerUI(true);
                 }
             };
@@ -102,7 +109,7 @@ public class SurveyQuestionUI {
                 int index = cameraViewDropdown.index;
 
                 if (index >= 0 && index < _viewPoints.Count) {
-                    _surveyBuildingUIReff.HandleQuestionViewPointSelected(_questionID, _viewPoints[index].ID);
+                    _surveyUIHandler.HandleQuestionViewPointSelected(_questionID, _viewPoints[index].ID);
                 }
             });
         }
@@ -193,7 +200,7 @@ public class SurveyQuestionUI {
 
         if (dropdown.choices.Count > 0) {
             dropdown.value = dropdown.choices[0];
-            _surveyBuildingUIReff.HandleQuestionViewPointSelected(_questionID, _viewPoints[0].ID);
+            _surveyUIHandler.HandleQuestionViewPointSelected(_questionID, _viewPoints[0].ID);
         }
     }
 
@@ -217,8 +224,8 @@ public class SurveyQuestionUI {
             answerIndex = _addedAnswers.Count;
             _optionsList.Add(answerElement);
 
-            answerElement.Q<CustomRadioButton>().Placeholder = "Jin�"; // Set label to "Other"
-            SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, _surveyBuildingUIReff, this);
+            answerElement.Q<CustomRadioButton>().Placeholder = "Jin"; // Set label to "Other"
+            SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, _surveyUIHandler, this);
             _otherAnswerUI = answerUI;
         } else {
             // Regular answer: insert before "Other" answer if it exists, otherwise add to end
@@ -234,7 +241,7 @@ public class SurveyQuestionUI {
             }
 
             // Create SurveyAnswerUI instance to manage this answer
-            SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, _surveyBuildingUIReff, this);
+            SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, _surveyUIHandler, this);
             _addedAnswers.Add(answerUI);
         }
     }
@@ -302,19 +309,23 @@ public class SurveyQuestionUI {
 
         if (deleteButton != null) {
             deleteButton.clicked += () => {
-                int index = _surveyBuildingUIReff.GetQuestionIndex(this);
-                if (index >= 0) {
-                    HideQuestionModal();
-                    _surveyBuildingUIReff.HandleQuestionDeleted(index);
+                if (_surveyUIHandler != null) {
+                    int index = _surveyUIHandler.GetQuestionIndex(this);
+                    if (index >= 0) {
+                        HideQuestionModal();
+                        _surveyUIHandler.HandleQuestionDeleted(index);
+                    }
                 }
             };
         }
 
         if (moveUpButton != null) {
             moveUpButton.clicked += () => {
-                int index = _surveyBuildingUIReff.GetQuestionIndex(this);
-                if (index >= 0) {
-                    _surveyBuildingUIReff.HandleQuestionMoved(index, -1);
+                if (_surveyUIHandler != null) {
+                    int index = _surveyUIHandler.GetQuestionIndex(this);
+                    if (index >= 0) {
+                        _surveyUIHandler.HandleQuestionMoved(index, -1);
+                    }
                 }
                 HideQuestionModal();
             };
@@ -322,9 +333,11 @@ public class SurveyQuestionUI {
 
         if (moveDownButton != null) {
             moveDownButton.clicked += () => {
-                int index = _surveyBuildingUIReff.GetQuestionIndex(this);
-                if (index >= 0) {
-                    _surveyBuildingUIReff.HandleQuestionMoved(index, 1);
+                if (_surveyUIHandler != null) {
+                    int index = _surveyUIHandler.GetQuestionIndex(this);
+                    if (index >= 0) {
+                        _surveyUIHandler.HandleQuestionMoved(index, 1);
+                    }
                 }
                 HideQuestionModal();
             };
@@ -337,7 +350,7 @@ public class SurveyQuestionUI {
         // Check if deleting the "Other" answer
         if (_otherAnswerUI != null && answerIndex == _otherAnswerUI.AnswerIndex) {
             var answer = new AnswerBase { Idx = answerIndex };
-            _surveyBuildingUIReff.HandleAnswerRemoved(answer);
+            _surveyUIHandler.HandleAnswerRemoved(answer);
 
             // Remove "Other" answer from UI
             _optionsList.Remove(_otherAnswerUI.AnswerElement);
@@ -351,7 +364,7 @@ public class SurveyQuestionUI {
 
         // Create answer object for removal from data model
         var answerToRemove = new AnswerBase { Idx = answerIndex };
-        _surveyBuildingUIReff.HandleAnswerRemoved(answerToRemove);
+        _surveyUIHandler.HandleAnswerRemoved(answerToRemove);
 
         // Remove from UI
         _optionsList.Remove(answerUI.AnswerElement);

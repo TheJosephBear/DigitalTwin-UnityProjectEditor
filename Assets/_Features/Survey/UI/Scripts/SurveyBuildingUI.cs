@@ -11,16 +11,14 @@ using UnityEngine.UIElements;
 /// and relays the changes to the <see cref="SurveyBuilder"/> for updating the survey data model.
 /// (Tohle by možná mohl dìlat svùj vlastní script) -> Manages the instantiation of question UI elements based on templates and keeps track of added questions.
 /// </summary>
-public class SurveyBuildingUI : MonoBehaviour {
+public class SurveyBuildingUI : MonoBehaviour, ISurveyUIHandler {
 
-    public List<QuestionTypeEnumStringCombination> QuestionTypeEnumToStringList = new List<QuestionTypeEnumStringCombination>();
+    public List<QuestionTypeMapping> QuestionTypeMapping = new List<QuestionTypeMapping>();
 
     private SurveyBuildingManager _surveyBuildingManager;
     private SurveyBuilder _surveyBuilder;
     private VisualElement _root;
     private VisualElement _scrollViewContent;
-    [SerializeField]
-    private List<VisualTreeAsset> questionTemplates = new List<VisualTreeAsset>();
     [SerializeField]
     private VisualTreeAsset addQuestionBarTemplate;
 
@@ -43,8 +41,6 @@ public class SurveyBuildingUI : MonoBehaviour {
         var exitButton = _root.Q<Button>("exit-btn");
         exitButton.clicked += HandleExitPressed;
 
-
-
         // Add the initial bar at the start (before any questions)
         RefreshAddQuestionBars();
     }
@@ -58,7 +54,8 @@ public class SurveyBuildingUI : MonoBehaviour {
     #region Input handling
 
     public void HandleQuestionAdded(string questionType, int insertAtIndex = -1) {
-        VisualTreeAsset questionTemplate = questionTemplates.Find(b => b.name == questionType);
+        var mapping = QuestionTypeMapping.Find(a => a.StringValue == questionType);
+        VisualTreeAsset questionTemplate = mapping?.Template;
         TemplateContainer questionInstance = null;
 
         if (questionTemplate != null) {
@@ -68,7 +65,7 @@ public class SurveyBuildingUI : MonoBehaviour {
             questionInstance.Add(new Label($"Question template '{questionType}' is missing"));
         }
 
-        QuestionType questionTypeEnum = QuestionTypeEnumToStringList.Find(a => a.StringValue == questionType).EnumValue;
+        QuestionType questionTypeEnum = mapping.EnumValue;
         QuestionBase addedQuestion = _surveyBuilder.AddNewQuestion(questionTypeEnum);
 
         var questionUI = new SurveyQuestionUI(
@@ -199,10 +196,4 @@ public class SurveyBuildingUI : MonoBehaviour {
     }
 
     #endregion
-}
-
-[Serializable]
-public class QuestionTypeEnumStringCombination {
-    public QuestionType EnumValue;
-    public string StringValue;
 }
