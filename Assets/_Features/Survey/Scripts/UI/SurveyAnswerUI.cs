@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 public class SurveyAnswerUI {
     private VisualElement _answerElement;
     private int _answerIndex;
-    private SurveyBuildingUI _surveyBuildingUIRef;
+    private ISurveyUIHandler _surveyUIHandler;
     private SurveyQuestionUI _questionUIRef;
 
     // Track currently open modal
@@ -16,10 +16,10 @@ public class SurveyAnswerUI {
     public VisualElement AnswerElement => _answerElement;
     public int AnswerIndex => _answerIndex;
 
-    public SurveyAnswerUI(VisualElement answerElement, int answerIndex, SurveyBuildingUI surveyBuildingUI, SurveyQuestionUI questionUI) {
+    public SurveyAnswerUI(VisualElement answerElement, int answerIndex, ISurveyUIHandler surveyUIHandler, SurveyQuestionUI questionUI) {
         _answerElement = answerElement;
         _answerIndex = answerIndex;
-        _surveyBuildingUIRef = surveyBuildingUI;
+        _surveyUIHandler = surveyUIHandler;
         _questionUIRef = questionUI;
 
         RegisterAnswerEvents();
@@ -126,10 +126,10 @@ public class SurveyAnswerUI {
 
                 // Create a minimal AnswerBase object for the callback
                 //    var answer = new AnswerBase { Idx = _answerIndex, Text = evt.newValue };
-                //    _surveyBuildingUIRef.HandleAnswerTextChanged(answer, evt.newValue);
+                //    _surveyUIHandler.HandleAnswerTextChanged(answer, evt.newValue);
 
                 // (!) this works for any added answer via (add answer)button but not the one that is there once the question is added
-                _surveyBuildingUIRef.HandleAnswerTextChanged(_questionUIRef._questionID, _answerIndex, evt.newValue);
+                _surveyUIHandler.HandleAnswerTextChanged(_questionUIRef._questionID, _answerIndex, evt.newValue);
             });
         }
     }

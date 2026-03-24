@@ -14,3 +14,23 @@
     left: 50%;
     top: 25px;
 }
+
+RadioButton > Label {
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+RadioButton > VisualElement {
+    flex-shrink: 1;
+    max-width: 32px;
+}
+
+Toggle > Label {
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+Toggle > VisualElement {
+    flex-shrink: 1;
+    max-width: 32px;
+}
