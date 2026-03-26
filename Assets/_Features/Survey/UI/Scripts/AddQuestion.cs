@@ -5,12 +5,12 @@ using UnityEngine.UIElements;
 
 /// <summary>
 /// Handles question adding process. Showing the needed modal for question type selection and sending
-/// the information to <see cref="SurveyBuildingUI"/>.
+/// the information to <see cref="SurveyUIController"/>.
 /// </summary>
 public class AddQuestion : Singleton<AddQuestion> {
 
     private VisualElement _root;
-    private SurveyBuildingUI _surveyBuildingUI;
+    private SurveyUIController _surveyBuildingUI;
 
     [SerializeField]
     private VisualTreeAsset _questionTypeSelectionTemplate;
@@ -18,14 +18,14 @@ public class AddQuestion : Singleton<AddQuestion> {
 
     // Tracks which index to insert at when modal was opened from a specific bar (-1 = append)
     private int _pendingInsertIndex = -1;
-    private SurveyBuildingUI _pendingBuildingUI;
+    private SurveyUIController _pendingBuildingUI;
     private VisualElement _pendingBar;
 
     public bool IsOpen { get => _questionTypeSelectionInstance != null && _questionTypeSelectionInstance.style.display == DisplayStyle.Flex; }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() {
-        _surveyBuildingUI = GetComponent<SurveyBuildingUI>();
+        _surveyBuildingUI = GetComponent<SurveyUIController>();
         _root = gameObject.GetComponent<UIDocument>().rootVisualElement;
 
         _questionTypeSelectionInstance = _questionTypeSelectionTemplate.Instantiate();
@@ -47,7 +47,7 @@ public class AddQuestion : Singleton<AddQuestion> {
     /// inserted at <paramref name="insertIndex"/> in <paramref name="buildingUI"/>.
     /// The modal is reparented into <paramref name="bar"/> while open.
     /// </summary>
-    public void OpenModalAtIndex(int insertIndex, SurveyBuildingUI buildingUI, VisualElement bar) {
+    public void OpenModalAtIndex(int insertIndex, SurveyUIController buildingUI, VisualElement bar) {
         _pendingInsertIndex = insertIndex;
         _pendingBuildingUI = buildingUI;
         _pendingBar = bar;
@@ -81,7 +81,7 @@ public class AddQuestion : Singleton<AddQuestion> {
     }
 
     private void AddQuestionByName(string name) {
-        SurveyBuildingUI target = _pendingBuildingUI ?? _surveyBuildingUI;
+        SurveyUIController target = _pendingBuildingUI ?? _surveyBuildingUI;
         target.HandleQuestionAdded(name, _pendingInsertIndex);
         Debug.Log("Question added.");
     }

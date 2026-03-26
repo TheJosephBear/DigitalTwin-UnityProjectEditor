@@ -32,7 +32,7 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
         DownloadSurveyData();
     }
 
-    public void StartSurveyRuntime() {
+    public void StartSurveyViewing() {
 
     }
 

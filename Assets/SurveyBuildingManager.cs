@@ -6,7 +6,7 @@ public class SurveyBuildingManager : MonoBehaviour {
     public GameObject SurveyBuildingUIPrefab;
 
     SurveyBuilder _builderInstance;
-    SurveyBuildingUI _uiInstance;
+    SurveyUIController _uiInstance;
 
     void Start() {
 
@@ -14,7 +14,7 @@ public class SurveyBuildingManager : MonoBehaviour {
 
     public void EnterSurveyBuilding() {
         if(_builderInstance == null) _builderInstance = new SurveyBuilder();
-        if(_uiInstance == null) _uiInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(SurveyBuildingUIPrefab).GetComponent<SurveyBuildingUI>();
+        if(_uiInstance == null) _uiInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(SurveyBuildingUIPrefab).GetComponent<SurveyUIController>();
 
         if (!_builderInstance.HasActiveSurvey()) _builderInstance.CreateNewSurvey();
         _uiInstance.Initialize(_builderInstance, this);

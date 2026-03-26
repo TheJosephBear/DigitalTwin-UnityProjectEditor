@@ -81,7 +81,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   QuestionTypeMapping:
   - EnumValue: 0
-    StringValue: Multiple Choice
+    StringValue: MultipleChoice
     Template: {fileID: 9197481963319205126, guid: 77bf64030fcdcf548afb02c5bd968d56, type: 3}
     AnswerTemplate: {fileID: 9197481963319205126, guid: 43a53068268e3614a92867fec2dc97e3, type: 3}
   addQuestionBarTemplate: {fileID: 9197481963319205126, guid: c099ff1d780c64e4193d328bc2f6bc01, type: 3}

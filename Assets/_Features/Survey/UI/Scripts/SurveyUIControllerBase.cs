@@ -1,17 +1,9 @@
-using System;
+using UnityEngine;
 using System.Collections.Generic;
 using SurveySystem;
-using UnityEngine;
 using UnityEngine.UIElements;
 
-
-/// <summary>
-/// Handles the Survey Builder UI logic. 
-/// Receives input events from addedQuestion and answer fields, as well as buttons, 
-/// and relays the changes to the <see cref="SurveyBuilder"/> for updating the survey data model.
-/// (Tohle by mo�n� mohl d�lat sv�j vlastn� script) -> Manages the instantiation of addedQuestion UI elements based on templates and keeps track of added questions.
-/// </summary>
-public class SurveyBuildingUI : MonoBehaviour, ISurveyUIHandler {
+public abstract class SurveyUIControllerBase : MonoBehaviour {
 
     public List<QuestionTypeMapping> QuestionTypeMapping = new List<QuestionTypeMapping>();
 
@@ -22,14 +14,10 @@ public class SurveyBuildingUI : MonoBehaviour, ISurveyUIHandler {
     [SerializeField]
     private VisualTreeAsset addQuestionBarTemplate;
 
-
     // Question adding //
     private List<SurveyQuestionUI> _addedQuestions = new List<SurveyQuestionUI>();
     private List<TemplateContainer> _addQuestionBars = new List<TemplateContainer>();
 
-
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() {
         _root = gameObject.GetComponent<UIDocument>().rootVisualElement;
         _scrollViewContent = _root.Q<ScrollView>("survey-scroll-view").contentContainer;
@@ -48,7 +36,6 @@ public class SurveyBuildingUI : MonoBehaviour, ISurveyUIHandler {
     public void Initialize(SurveyBuilder surveyBuilder, SurveyBuildingManager manager) {
         _surveyBuilder = surveyBuilder;
         _surveyBuildingManager = manager;
-        // This will also add all of the UI components according to the survey structure
     }
 
     #region UI building
@@ -96,7 +83,7 @@ public class SurveyBuildingUI : MonoBehaviour, ISurveyUIHandler {
         }
     }
 
-    private void CreateAndInsertQuestion(VisualTreeAsset template, QuestionType questionType, int insertAtIndex) {
+    private void CreateAndInsertNewQuestion(VisualTreeAsset template, QuestionType questionType, int insertAtIndex) {
         TemplateContainer questionInstance;
 
         if (template != null) {
@@ -107,21 +94,6 @@ public class SurveyBuildingUI : MonoBehaviour, ISurveyUIHandler {
         }
 
         QuestionBase addedQuestion = _surveyBuilder.AddNewQuestion(questionType);
-    public void HandleQuestionAdded(string questionType, int insertAtIndex = -1) {
-        var mapping = QuestionTypeMapping.Find(a => a.StringValue == questionType);
-        VisualTreeAsset questionTemplate = mapping?.Template;
-        TemplateContainer questionInstance = null;
-
-        if (questionTemplate != null) {
-            questionInstance = questionTemplate.Instantiate();
-        } else {
-            questionInstance = new TemplateContainer();
-            questionInstance.Add(new Label($"Question template '{questionType}' is missing"));
-        }
-
-        QuestionType questionTypeEnum = mapping.EnumValue;
-        QuestionBase addedQuestion = _surveyBuilder.AddNewQuestion(questionTypeEnum);
-
         var questionUI = new SurveyQuestionUI(
             questionInstance,
             addedQuestion.Id,
@@ -139,35 +111,76 @@ public class SurveyBuildingUI : MonoBehaviour, ISurveyUIHandler {
         RefreshAddQuestionBars();
     }
 
+    private SurveyQuestionUI CreateAndInsertExistingQuestion(QuestionBase addedQuestion, int insertAtIndex = -1) {
+        QuestionType questionType = addedQuestion.QuestionType;
+        QuestionTypeMapping mapping = QuestionTypeMapping.Find(a => a.EnumValue == questionType);
+        VisualTreeAsset template = mapping.Template;
+
+        if (mapping == null) {
+            Debug.LogError($"No mapping found for enum: {questionType}");
+            return null;
+        }
+
+        TemplateContainer questionInstance;
+
+        if (template != null) {
+            questionInstance = template.Instantiate();
+        } else {
+            questionInstance = new TemplateContainer();
+            questionInstance.Add(new Label($"Question template for '{questionType}' is missing"));
+        }
+
+        var questionUI = new SurveyQuestionUI(
+            questionInstance,
+            addedQuestion.Id,
+            this,
+            questionType,
+            FindAnyObjectByType<ViewManager>().GetSerializedViewPointsList(),
+            isDeserialized: true
+        );
+
+        if (insertAtIndex < 0 || insertAtIndex >= _addedQuestions.Count) {
+            _addedQuestions.Add(questionUI);
+        } else {
+            _addedQuestions.Insert(insertAtIndex, questionUI);
+        }
+
+        return questionUI;
+    }
+
     #endregion
 
     #region Input handling
 
+    #region Survey Building
+
     public void HandleQuestionAdded(string questionTypeString, int insertAtIndex = -1) {
-        VisualTreeAsset template = questionTemplates.Find(b => b.name == questionTypeString);
+        QuestionTypeMapping mapping = QuestionTypeMapping.Find(a => a.StringValue == questionTypeString);
 
-        QuestionType questionTypeEnum = QuestionTypeEnumToStringList
-            .Find(a => a.StringValue == questionTypeString).EnumValue;
+        if (mapping == null) {
+            Debug.LogError($"No mapping found for string: {questionTypeString}");
+            return;
+        }
 
+        VisualTreeAsset template = mapping.Template;
+        QuestionType questionTypeEnum = mapping.EnumValue;
         HandleQuestionAdded(questionTypeEnum, insertAtIndex, template);
     }
 
     public void HandleQuestionAdded(QuestionType questionType, int insertAtIndex = -1, VisualTreeAsset template = null) {
-        if(template == null) {
+        if (template == null) {
             // Template not provided, look it up
-            var mappingEntry = QuestionTypeEnumToStringList
-            .Find(a => a.EnumValue == questionType);
+            QuestionTypeMapping mapping = QuestionTypeMapping.Find(a => a.EnumValue == questionType);
 
-            if (mappingEntry == null) {
+            if (mapping == null) {
                 Debug.LogError($"No mapping found for enum: {questionType}");
                 return;
             }
 
-            string templateName = mappingEntry.StringValue;
-            template = questionTemplates.Find(b => b.name == templateName);
+            template = mapping.Template;
         }
 
-        CreateAndInsertQuestion(template, questionType, insertAtIndex);
+        CreateAndInsertNewQuestion(template, questionType, insertAtIndex);
     }
 
     public void HandleQuestionDeleted(int questionIndex) {
@@ -225,6 +238,20 @@ public class SurveyBuildingUI : MonoBehaviour, ISurveyUIHandler {
         _surveyBuilder.RemoveAnswer(answer.Idx);
     }
 
+    #endregion
+
+    #region Survey Viewing
+
+    public void HandleAnswerSelected() {
+
+    }
+
+    public void HandleAnswerTextFilled(int questionId, int answerId, string newText) {
+
+    }
+
+    #endregion
+
     public void HandleSavePressed() {
         _surveyBuildingManager.SaveSurvey();
     }
@@ -241,55 +268,15 @@ public class SurveyBuildingUI : MonoBehaviour, ISurveyUIHandler {
         return _addedQuestions.IndexOf(questionUI);
     }
 
-    SurveyQuestionUI AddQuestionDeserialization(QuestionBase addedQuestion) {
-        QuestionType questionType = addedQuestion.QuestionType;
-        int insertAtIndex = -1;
-        var mappingEntry = QuestionTypeEnumToStringList
-            .Find(a => a.EnumValue == questionType);
-
-        if (mappingEntry == null) {
-            Debug.LogError($"No mapping found for enum: {questionType}");
-            return null;
-        }
-
-        string templateName = mappingEntry.StringValue;
-
-        VisualTreeAsset template = questionTemplates
-            .Find(b => b.name == templateName);
-
-        TemplateContainer questionInstance;
-
-        if (template != null) {
-            questionInstance = template.Instantiate();
-        } else {
-            questionInstance = new TemplateContainer();
-            questionInstance.Add(new Label($"Question template for '{questionType}' is missing"));
-        }
-
-        var questionUI = new SurveyQuestionUI(
-            questionInstance,
-            addedQuestion.Id,
-            this,
-            questionType,
-            FindAnyObjectByType<ViewManager>().GetSerializedViewPointsList(),
-            isDeserialized: true
-        );
-
-        if (insertAtIndex < 0 || insertAtIndex >= _addedQuestions.Count) {
-            _addedQuestions.Add(questionUI);
-        } else {
-            _addedQuestions.Insert(insertAtIndex, questionUI);
-        }
-
-        return questionUI;
-    }
-
+    /// <summary>
+    /// Builds the UI from data in the active survey
+    /// </summary>
     public void DeserializeUI() {
         Survey survey = _surveyBuilder.GetActiveSurvey();
         // set title once we have the field
 
         foreach (QuestionBase question in survey.GetAllQuestions()) {
-            SurveyQuestionUI questionUI =  AddQuestionDeserialization(question);
+            SurveyQuestionUI questionUI = CreateAndInsertExistingQuestion(question);
             questionUI.SetTitle(question.Title);
             questionUI.SetDescription(question.Description);
             foreach (AnswerBase answer in question.Answers) {
@@ -299,4 +286,6 @@ public class SurveyBuildingUI : MonoBehaviour, ISurveyUIHandler {
 
         RefreshAddQuestionBars();
     }
+
+
 }
