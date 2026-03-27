@@ -1,9 +1,13 @@
 using SurveySystem;
 using UnityEngine;
 
+/// <summary>
+/// Takes care of instantiating and connecting UI instance and data model 
+/// </summary>
 public class SurveyBuildingManager : MonoBehaviour {
 
     public GameObject SurveyBuildingUIPrefab;
+    public GameObject SurveyViewingUIPrefab;
 
     SurveyBuilder _builderInstance;
     SurveyUIController _uiInstance;
@@ -20,6 +24,24 @@ public class SurveyBuildingManager : MonoBehaviour {
         _uiInstance.Initialize(_builderInstance, this);
 
         _uiInstance.gameObject.SetActive(true);
+    }
+
+    public void EnterSurveyViewing(string surveyJson) {
+        if (_builderInstance == null) _builderInstance = new SurveyBuilder();
+        if (_uiInstance == null) {
+            print("It is null");
+            _uiInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(SurveyViewingUIPrefab).GetComponent<SurveyUIController>();
+            print(_uiInstance + "now its that");
+        }
+
+        if (!_builderInstance.HasActiveSurvey()) _builderInstance.CreateNewSurvey();
+
+        print(_uiInstance);
+        print(_builderInstance);    
+        _uiInstance.Initialize(_builderInstance, this);
+
+        _uiInstance.gameObject.SetActive(true);
+        DeserializeSurvey(surveyJson);
     }
 
     public void SaveSurvey() {

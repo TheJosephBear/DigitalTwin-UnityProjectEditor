@@ -1,11 +1,11 @@
 using SurveySystem;
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class SurveyAnswerUI {
     private VisualElement _answerElement;
     private int _answerIndex;
-    private ISurveyUIHandler _surveyUIHandler;
     private SurveyQuestionUI _questionUIRef;
 
     // Track currently open modal
@@ -16,10 +16,16 @@ public class SurveyAnswerUI {
     public VisualElement AnswerElement => _answerElement;
     public int AnswerIndex => _answerIndex;
 
-    public SurveyAnswerUI(VisualElement answerElement, int answerIndex, ISurveyUIHandler surveyUIHandler, SurveyQuestionUI questionUI) {
+    #region Events
+
+    public event Action<int, int, string> OnTextChanged;
+    public event Action<int, string> OnAnswerSelected;
+
+    #endregion
+
+    public SurveyAnswerUI(VisualElement answerElement, int answerIndex, SurveyQuestionUI questionUI) {
         _answerElement = answerElement;
         _answerIndex = answerIndex;
-        _surveyUIHandler = surveyUIHandler;
         _questionUIRef = questionUI;
 
         RegisterAnswerEvents();
@@ -129,7 +135,8 @@ public class SurveyAnswerUI {
                 //    _surveyUIHandler.HandleAnswerTextChanged(answer, evt.newValue);
 
                 // (!) this works for any added answer via (add answer)button but not the one that is there once the question is added
-                _surveyUIHandler.HandleAnswerTextChanged(_questionUIRef._questionID, _answerIndex, evt.newValue);
+                //    _surveyUIHandler.HandleAnswerTextChanged(_questionUIRef.QuestionID, _answerIndex, evt.newValue);
+                OnTextChanged.Invoke(_questionUIRef.QuestionID, _answerIndex, evt.newValue);
             });
         }
     }

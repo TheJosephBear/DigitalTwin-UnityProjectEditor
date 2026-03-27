@@ -63,7 +63,7 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
     }
 
     public void DeserializeViewing(string SurveyJson) {
-
+        _buildingManagerInstance.EnterSurveyViewing(SurveyJson);
     }
 
     #endregion

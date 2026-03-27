@@ -47,9 +47,9 @@ public class AddQuestion : Singleton<AddQuestion> {
     /// inserted at <paramref name="insertIndex"/> in <paramref name="buildingUI"/>.
     /// The modal is reparented into <paramref name="bar"/> while open.
     /// </summary>
-    public void OpenModalAtIndex(int insertIndex, SurveyUIController buildingUI, VisualElement bar) {
+    public void OpenModalAtIndex(int insertIndex, VisualElement bar) {
         _pendingInsertIndex = insertIndex;
-        _pendingBuildingUI = buildingUI;
+        _pendingBuildingUI = GetComponent<SurveyUIController>();
         _pendingBar = bar;
         ShowModal();
     }

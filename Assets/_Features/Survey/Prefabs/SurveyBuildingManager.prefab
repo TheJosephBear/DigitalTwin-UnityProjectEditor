@@ -45,3 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SurveyBuildingUIPrefab: {fileID: 5615929895124257890, guid: 5b8434e4858d4f048a4533e11f7ec378, type: 3}
+  SurveyViewingUIPrefab: {fileID: 4199356123922554441, guid: ed664b5491b09f544a4a0722bdcb5b50, type: 3}

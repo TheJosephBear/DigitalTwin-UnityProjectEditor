@@ -27,7 +27,8 @@ public partial class CustomRadioButton : VisualElement
 
     private readonly TextField _labelTextField;
     private readonly UnityEngine.UIElements.RadioButton _radioButton;
-    
+    public UnityEngine.UIElements.RadioButton Radio => _radioButton;
+
     public CustomRadioButton()
     {
         this.style.flexDirection = FlexDirection.Row;
