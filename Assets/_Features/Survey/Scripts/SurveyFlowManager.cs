@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// Takes care of instantiating and connecting UI instance and data model 
 /// </summary>
-public class SurveyBuildingManager : MonoBehaviour {
+public class SurveyFlowManager : MonoBehaviour {
 
     public GameObject SurveyBuildingUIPrefab;
     public GameObject SurveyViewingUIPrefab;
@@ -21,46 +21,36 @@ public class SurveyBuildingManager : MonoBehaviour {
         if(_uiInstance == null) _uiInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(SurveyBuildingUIPrefab).GetComponent<SurveyUIController>();
 
         if (!_builderInstance.HasActiveSurvey()) _builderInstance.CreateNewSurvey();
-        _uiInstance.Initialize(_builderInstance, this);
+        _uiInstance.Initialize(_builderInstance, SurveyManager.Instance);
 
         _uiInstance.gameObject.SetActive(true);
     }
 
-    public void EnterSurveyViewing(string surveyJson) {
+    public void EnterSurveyViewing() {
         if (_builderInstance == null) _builderInstance = new SurveyBuilder();
         if (_uiInstance == null) {
-            print("It is null");
             _uiInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(SurveyViewingUIPrefab).GetComponent<SurveyUIController>();
-            print(_uiInstance + "now its that");
         }
 
         if (!_builderInstance.HasActiveSurvey()) _builderInstance.CreateNewSurvey();
-
-        print(_uiInstance);
-        print(_builderInstance);    
-        _uiInstance.Initialize(_builderInstance, this);
+        _uiInstance.Initialize(_builderInstance, SurveyManager.Instance);
 
         _uiInstance.gameObject.SetActive(true);
-        DeserializeSurvey(surveyJson);
     }
 
-    public void SaveSurvey() {
-        // idk if i should call it like this... maybe bad design
-        SurveyManager.Instance.SetSurveyData(_builderInstance.ExportSurveyAsJson());
-        SurveyManager.Instance.UploadSurveyData();
+    public string GetSurveyJsonData() {
+        return _builderInstance.ExportSurveyAsJson();
     }
 
+    // Deserialize survey json into the data model, then build the UI
     public void DeserializeSurvey(string surveyJson) {
         _builderInstance.DeserializeFromJson(surveyJson);
         _uiInstance.DeserializeUI();
     }
 
     // Disable UI and other related objects
-    public void ExitSurveyCreation() {
+    public void ExitSurvey() {
         //   _uiInstance.gameObject.SetActive(false); // Buggy, dont know uitoolkit well enough to know why, lets just destroy it (not that expensive on one object hopefully)
         Destroy(_uiInstance.gameObject);
-
-        // Survey manager handles calling state change
-        SurveyManager.Instance.ExitSurveyBuilding();
     }
 }

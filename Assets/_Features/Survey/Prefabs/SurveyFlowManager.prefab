@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8377236189804464046}
   - component: {fileID: 234422425334889886}
   m_Layer: 0
-  m_Name: SurveyBuildingManager
+  m_Name: SurveyFlowManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

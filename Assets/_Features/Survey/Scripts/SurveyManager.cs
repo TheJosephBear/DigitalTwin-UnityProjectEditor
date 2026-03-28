@@ -5,81 +5,79 @@ using System.IO;
 using UnityEngine;
 using SurveySystem;
 using System;
+using QuestionnaireToolkit.Scripts.SimpleJSON;
 
 public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
     
     public GameObject SurveyBuildingManagerPrefab;
 
-    SurveyBuildingManager _buildingManagerInstance;
+    SurveyFlowManager _flowManager;
     string _surveyJsonData;
 
+    #region Init
+
     void Start() {
-        if(_buildingManagerInstance == null && SceneLoadingManager.Instance != null)
-             _buildingManagerInstance = SceneLoadingManager.Instance
-            .InstantiateObjectInScene(SurveyBuildingManagerPrefab)
-            .GetComponent<SurveyBuildingManager>();
+        if(_flowManager == null && SceneLoadingManager.Instance != null)
+            _flowManager = SceneLoadingManager.Instance.InstantiateObjectInScene(SurveyBuildingManagerPrefab).GetComponent<SurveyFlowManager>();
     }
 
     public void OnSceneInitialized() {
-        if (_buildingManagerInstance == null)
-            _buildingManagerInstance = SceneLoadingManager.Instance
-            .InstantiateObjectInScene(SurveyBuildingManagerPrefab)
-            .GetComponent<SurveyBuildingManager>();
-    }
-
-    public void EnterSurveyBuilding() {
-        _buildingManagerInstance.EnterSurveyBuilding();
-        DownloadSurveyData();
-    }
-
-    public void StartSurveyViewing() {
-
-    }
-
-    public void ExitSurveyBuilding() {
-        MainManagerBase.Instance.ChangeState(ProjectState.Freecam);
-    }
-
-    public void CreateNewQuestionnare() {
-       
-    }
-
-    public void SetSurveyData(string jsonString) {
-        _surveyJsonData = jsonString;
-    }
-
-    #region Serialization
-
-    public void SerializeSurvey() {
-
-    }
-
-    public void SerializeAnswers() {
-
-    }
-
-    public void DeserializeEditor(string SurveyJson) {
-        _buildingManagerInstance.DeserializeSurvey(SurveyJson);
-    }
-
-    public void DeserializeViewing(string SurveyJson) {
-        _buildingManagerInstance.EnterSurveyViewing(SurveyJson);
+        if (_flowManager == null)
+            _flowManager = SceneLoadingManager.Instance.InstantiateObjectInScene(SurveyBuildingManagerPrefab).GetComponent<SurveyFlowManager>();
     }
 
     #endregion
 
-    // Upload/Download to server, maybe should be handled elsewhere
+    #region Enter/Exit
 
-    public void DownloadSurveyData() {
+    public void EnterSurveyBuilding() {
+        _flowManager.EnterSurveyBuilding();
+        DeserializeSurvey();
+    }
+
+    public void EnterSurveyViewing() {
+        _flowManager.EnterSurveyViewing();
+        DeserializeSurvey();
+    }
+
+    public void ExitSurvey() {
+        // Save Builder/Viewer
+        SaveSurvey();
+        _flowManager.ExitSurvey();
+
+        // Change state
+        MainManagerBase.Instance.ChangeState(ProjectState.Freecam);
+    }
+
+    #endregion
+
+    #region Server comm
+
+    public void DeserializeSurvey() {
         ServerCommunicationManager.Instance.StartSurveyDownload(ProjectManager.Instance.SelectedProject.ProjectName, (success, data) => {
             _surveyJsonData = data;
             if (_surveyJsonData != null) {
-                DeserializeEditor(_surveyJsonData);
+                _flowManager.DeserializeSurvey(_surveyJsonData);
             }
         });
     }
 
     public void UploadSurveyData() {
         ServerCommunicationManager.Instance.StartSurveyUpload(_surveyJsonData, ProjectManager.Instance.SelectedProject.ProjectName);
+    }
+
+    public void UploadSurveyAnswers() {
+
+    }
+
+    #endregion
+
+    public void SaveSurvey() {
+        _surveyJsonData = _flowManager.GetSurveyJsonData();
+        UploadSurveyData();
+    }
+
+    public void SaveAnswers() {
+
     }
 }

@@ -15,7 +15,7 @@ public class SurveyUIController : MonoBehaviour {
     
     public bool IsViewerUI = false;
     private VisualElement _root;
-    private SurveyBuildingManager _surveyBuildingManager;
+    private SurveyManager _surveyManager;
     private SurveyBuilder _surveyBuilder; // Interface for data model
     private SurveyUIBuilder _surveyUIBuilder; // Script adding template instances to UI
 
@@ -31,9 +31,9 @@ public class SurveyUIController : MonoBehaviour {
         exitButton.clicked += HandleExitPressed;
     }
 
-    public void Initialize(SurveyBuilder surveyBuilder, SurveyBuildingManager manager) {
+    public void Initialize(SurveyBuilder surveyBuilder, SurveyManager manager) {
         _surveyBuilder = surveyBuilder;
-        _surveyBuildingManager = manager;
+        _surveyManager = manager;
     }
 
     #region Input handling
@@ -120,11 +120,11 @@ public class SurveyUIController : MonoBehaviour {
     #endregion
 
     public void HandleSavePressed() {
-        _surveyBuildingManager.SaveSurvey();
+        _surveyManager.SaveSurvey();
     }
 
     public void HandleExitPressed() {
-        _surveyBuildingManager.ExitSurveyCreation();
+        _surveyManager.ExitSurvey();
     }
 
     #endregion

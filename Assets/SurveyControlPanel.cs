@@ -38,7 +38,7 @@ public class SurveyControlPanel : MonoBehaviour {
     }
 
     public void OnExit() {
-        surveyBuilder.ExitSurveyBuilding();
+        surveyBuilder.ExitSurvey();
     }
 
     public void OnSave() {
