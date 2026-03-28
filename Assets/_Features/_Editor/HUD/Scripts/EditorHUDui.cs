@@ -33,7 +33,7 @@ public class EditorHUDui : UIBehaviour {
     }
 
     public void OnSurvey() {
-        EditorManager.Instance.ChangeState(ProjectState.SurveyCreation);
+        EditorManager.Instance.ChangeState(ProjectState.Survey);
 
     }
 

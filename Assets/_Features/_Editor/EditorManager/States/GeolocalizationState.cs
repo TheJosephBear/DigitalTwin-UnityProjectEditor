@@ -5,7 +5,7 @@ using UnityEngine;
 public class GeolocalizationState : StateBase {
     public override void Enter() {
         UIManager.Instance.HideUI(UIType.EditorInitUI);
-        UIManager.Instance.HideUI(UIType.EditorHUD);
+        MainManagerBase.Instance.ToggleHUD(false);
         EditorManager.Instance.EditorCameraManager.UpdateFreeCamVcamPosition();
         EditorManager.Instance.EditorCameraManager.ToggleCinemachineBrain(true);
         EditorManager.Instance.MapManager.ToggleMapVisibility();

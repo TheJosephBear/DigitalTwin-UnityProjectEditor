@@ -30,6 +30,7 @@ public class ViewManager : MonoBehaviour {
     }
 
     void OnEnable() {
+        if (_viewPointUIInstance == null) InitializeUI();
         ToggleCameraPreview(false);
     }
 
@@ -39,8 +40,6 @@ public class ViewManager : MonoBehaviour {
     }
 
     public void ToggleViewPointUI(bool show) {
-        if (_viewPointUIInstance == null) InitializeUI();
-
         _viewPointUIInstance.gameObject.SetActive(show);
     }
 

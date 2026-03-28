@@ -6,6 +6,7 @@ using UnityEngine;
 using SurveySystem;
 using System;
 using QuestionnaireToolkit.Scripts.SimpleJSON;
+using System.Diagnostics;
 
 public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
     
@@ -30,14 +31,22 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
 
     #region Enter/Exit
 
-    public void EnterSurveyBuilding() {
+    public void EnterSurveyBuilding(bool debug = false) {
         _flowManager.EnterSurveyBuilding();
-        DeserializeSurvey();
+        if (debug) {
+            _flowManager.DeserializeSurvey(_surveyJsonData);
+        } else {
+            DeserializeSurvey();
+        }
     }
 
-    public void EnterSurveyViewing() {
+    public void EnterSurveyViewing(bool debug = false) {
         _flowManager.EnterSurveyViewing();
-        DeserializeSurvey();
+        if (debug) {
+            _flowManager.DeserializeSurvey(_surveyJsonData);
+        } else {
+            DeserializeSurvey();
+        }
     }
 
     public void ExitSurvey() {
@@ -71,6 +80,10 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
     }
 
     #endregion
+
+    public void SetSurveyJson(string json) {
+        _surveyJsonData = json;
+    }
 
     public void SaveSurvey() {
         _surveyJsonData = _flowManager.GetSurveyJsonData();

@@ -12,6 +12,9 @@ public abstract class MainManagerBase : Singleton<MainManagerBase> {
     [Header("SceneType of this managers scene")]
     public SceneType SceneType;
 
+    [Header("HUD UI")]
+    public GameObject UIHUDRefference;
+
     [Header("Service refferences")]
     public EditorProjectSerializer ProjectSerializer;
     public CameraManager EditorCameraManager;
@@ -25,6 +28,7 @@ public abstract class MainManagerBase : Singleton<MainManagerBase> {
     public GameObject StateParent;
     List<StateBase> _stateScripts = new List<StateBase>();
 
+
     [HideInInspector]
     public ProjectState ActiveState { get; private set; }
     StateBase _activeStateScript;
@@ -33,6 +37,10 @@ public abstract class MainManagerBase : Singleton<MainManagerBase> {
         base.Awake();
 
         InitializeStateList();
+    }
+
+    public void ToggleHUD(bool toggleOn) {
+        UIHUDRefference.SetActive(toggleOn);
     }
 
     protected virtual void InitializeStateList() {

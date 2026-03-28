@@ -48,5 +48,5 @@ public enum ProjectState {
     GeoLocalization,
     MultiView,
     ViewActive,
-    SurveyCreation,
+    Survey,
 }
