@@ -126,6 +126,7 @@ namespace SurveySystem {
         }
 
         public void DeserializeFromJson(string json) {
+            Debug.Log("Desserializing survey");
             CreateNewSurvey();
             _activeSurvey.Deserialize(JsonUtility.FromJson<SurveySerializable>(json));
         }

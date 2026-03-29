@@ -1,6 +1,7 @@
 ﻿using SurveySystem;
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -66,12 +67,12 @@ public class SurveyQuestionUIViewer : ISurveyQuestionViewerUI {
     }
 
     public void SetTitle(string title) {
-        var field = _root.Q<Label>("question-title");
+        var field = _root.Q<UnityEngine.UIElements.Label>("question-title");
         if (field != null) field.text = title;
     }
 
     public void SetDescription(string desc) {
-        var field = _root.Q<Label>("question-description");
+        var field = _root.Q<UnityEngine.UIElements.Label>("question-description");
         if (field != null) field.text = desc;
     }
 
@@ -95,7 +96,7 @@ public class SurveyQuestionUIViewer : ISurveyQuestionViewerUI {
                 _optionsList.Add(answerElement);
             }
 
-            var textLabel = answerElement.Q<Label>();
+            var textLabel = answerElement.Q<UnityEngine.UIElements.Label>();
             if (textLabel != null) textLabel.text = answerText;
 
             SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, null);
@@ -107,21 +108,53 @@ public class SurveyQuestionUIViewer : ISurveyQuestionViewerUI {
 
     private void RegisterAnswerCallbacks(SurveyAnswerUI answerUI, int index) {
         var root = answerUI.AnswerElement;
+        if (root == null) {
+      //      Debug.LogError($"[Survey] AnswerElement for index {index} is null!");
+            return;
+        }
 
+        // 1. Check for the class directly
         var customRadio = root.Q<CustomRadioButton>();
+
+        // 2. If null, search deeper using a Query
+        if (customRadio == null) {
+       //     Debug.LogWarning($"[Survey] Q<CustomRadioButton> failed for index {index}. Searching via Query...");
+            customRadio = root.Query<CustomRadioButton>().First();
+        }
+
         if (customRadio != null) {
-            customRadio.Radio.RegisterValueChangedCallback(evt =>
-            {
+       //     Debug.Log($"[Survey] Successfully found CustomRadioButton for index {index}. Registering callback.");
+
+            customRadio.RegisterRadioCallback(evt => {
+         //       Debug.Log($"[Survey] Internal Radio Toggle detected for index {index}. New Value: {evt.newValue}");
                 if (evt.newValue) {
+         //           Debug.Log($"[Survey] Invoking OnAnswerSelected for Question {QuestionID}, Index {index}");
                     OnAnswerSelected?.Invoke(QuestionID, index);
                 }
             });
+        } else {
+            // 3. Last resort: Check if the element exists but just isn't being cast correctly
+            var anyElementNamedRadio = root.Q("my-radio-name"); // Replace with the name used in UXML if applicable
+         //   Debug.LogError($"[Survey] CRITICAL: Could not find CustomRadioButton for index {index}. " +
+        //                   $"Total children in root: {root.childCount}. " +
+        //                   $"Is root a TemplateContainer? {root is TemplateContainer}");
+
+            // Let's try to find the raw RadioButton inside the custom element
+            var rawRadio = root.Q<UnityEngine.UIElements.RadioButton>();
+            if (rawRadio != null) {
+           //     Debug.LogWarning($"[Survey] Found a raw RadioButton for index {index} even though CustomRadioButton lookup failed. Hooking directly to raw radio.");
+                rawRadio.RegisterValueChangedCallback(evt => {
+                    if (evt.newValue) OnAnswerSelected?.Invoke(QuestionID, index);
+                });
+            }
         }
 
+        // TextField Debugging
         var textField = root.Q<TextField>();
         if (textField != null) {
-            textField.RegisterValueChangedCallback(evt =>
-            {
+        //    Debug.Log($"[Survey] TextField found for index {index}.");
+            textField.RegisterValueChangedCallback(evt => {
+        //        Debug.Log($"[Survey] Text changed for index {index}: {evt.newValue}");
                 OnAnswerTextFilled?.Invoke(QuestionID, index, evt.newValue);
             });
         }

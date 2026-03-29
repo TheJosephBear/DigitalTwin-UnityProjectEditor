@@ -36,10 +36,14 @@ public partial class CustomRadioButton : VisualElement
         _radioButton = new UnityEngine.UIElements.RadioButton();
         _radioButton.text = string.Empty;
         Add(_radioButton);
-        
+
         _labelTextField = new TextField();
         _labelTextField.textEdition.placeholder = "Option text";
         _labelTextField.style.flexGrow = 1;
         Add(_labelTextField);
+    }
+
+    public void RegisterRadioCallback(EventCallback<ChangeEvent<bool>> callback) {
+        _radioButton.RegisterValueChangedCallback(callback);
     }
 }

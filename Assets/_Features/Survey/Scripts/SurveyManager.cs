@@ -14,6 +14,7 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
 
     SurveyFlowManager _flowManager;
     string _surveyJsonData;
+    string _responseJsonData;
 
     #region Init
 
@@ -91,6 +92,7 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
     }
 
     public void SaveAnswers() {
-
+        _responseJsonData = _flowManager.GetResponseJsonData();
+        print(_responseJsonData);
     }
 }

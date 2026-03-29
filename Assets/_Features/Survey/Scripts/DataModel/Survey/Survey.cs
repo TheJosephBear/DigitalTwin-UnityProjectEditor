@@ -15,7 +15,7 @@ namespace SurveySystem {
         public void AddNewQuestion(QuestionBase question) {
             _questions.Add(question);
             ActiveQuestion = question;
-            question.AddNewAnswer();
+        //    question.AddNewAnswer();
         }
 
         public void RemoveQuestion(int idx) {

@@ -17,6 +17,7 @@ public class SurveyUIController : MonoBehaviour {
     private VisualElement _root;
     private SurveyManager _surveyManager;
     private SurveyBuilder _surveyBuilder; // Interface for data model
+    private SurveyResponseManager _responseManager; // Handles response data model
     private SurveyUIBuilder _surveyUIBuilder; // Script adding template instances to UI
 
     void Awake() {
@@ -36,6 +37,12 @@ public class SurveyUIController : MonoBehaviour {
         _surveyManager = manager;
     }
 
+    public void Initialize(SurveyBuilder surveyBuilder, SurveyResponseManager responseManager, SurveyManager manager) {
+        _surveyBuilder = surveyBuilder;
+        _responseManager = responseManager;
+        _surveyManager = manager;
+    }
+
     #region Input handling
 
     #region Survey Building
@@ -51,9 +58,13 @@ public class SurveyUIController : MonoBehaviour {
         HandleQuestionAdded(questionTypeEnum, insertAtIndex);
     }
 
-    public void HandleQuestionAdded(QuestionType questionType, int insertAtIndex = -1) {
+    public ISurveyQuestionUI HandleQuestionAdded(QuestionType questionType, int insertAtIndex = -1) {
         QuestionBase newQuestion = _surveyBuilder.AddNewQuestion(questionType);
-        ISurveyQuestionUI addedQuestionUI = _surveyUIBuilder.AddQuestionToUI(newQuestion, insertAtIndex);
+        return HandleExistingQuestionAdded(newQuestion, insertAtIndex); ;
+    }
+
+    public ISurveyQuestionUI HandleExistingQuestionAdded(QuestionBase question, int insertAtIndex = -1) {
+        ISurveyQuestionUI addedQuestionUI = _surveyUIBuilder.AddQuestionToUI(question, insertAtIndex);
 
         if (addedQuestionUI is ISurveyQuestionBuilderUI builderUI) {
             builderUI.OnTitleChanged += HandleQuestionTitleChanged;
@@ -64,7 +75,12 @@ public class SurveyUIController : MonoBehaviour {
             builderUI.OnAnswerOtherAdded += HandleAnswerOtherAdded;
             builderUI.OnAnswerRemoved += HandleAnswerRemoved;
             builderUI.OnViewpointSelected += HandleQuestionViewPointSelected;
+        } else if (addedQuestionUI is ISurveyQuestionViewerUI viewerUI) {
+            viewerUI.OnAnswerSelected += HandleAnswerSelected;
+            viewerUI.OnAnswerTextFilled += HandleAnswerTextFilled;
         }
+
+        return addedQuestionUI;
     }
 
     public void HandleQuestionDeleted(int questionIndex) {
@@ -109,8 +125,8 @@ public class SurveyUIController : MonoBehaviour {
 
     #region Survey Viewing
 
-    public void HandleAnswerSelected() {
-
+    public void HandleAnswerSelected(int questionId, int answerId) {
+        _responseManager.RegisterAnswer(questionId, answerId);
     }
 
     public void HandleAnswerTextFilled(int questionId, int answerId, string newText) {
@@ -120,7 +136,11 @@ public class SurveyUIController : MonoBehaviour {
     #endregion
 
     public void HandleSavePressed() {
-        _surveyManager.SaveSurvey();
+        if (IsViewerUI) {
+            _surveyManager.SaveAnswers();
+        } else {
+            _surveyManager.SaveSurvey();
+        }
     }
 
     public void HandleExitPressed() {
@@ -139,7 +159,7 @@ public class SurveyUIController : MonoBehaviour {
         // set title once we have the field
 
         foreach (QuestionBase question in survey.GetAllQuestions()) {
-            ISurveyQuestionUI questionUI = _surveyUIBuilder.AddQuestionToUI(question);
+            ISurveyQuestionUI questionUI = HandleExistingQuestionAdded(question);
             questionUI.SetTitle(question.Title);
             questionUI.SetDescription(question.Description);
             foreach (AnswerBase answer in question.Answers) {
