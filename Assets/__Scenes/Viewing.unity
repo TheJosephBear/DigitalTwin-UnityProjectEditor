@@ -2360,7 +2360,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _projectName: idk
-  InEditorDebugging: 1
+  InEditorDebugging: 0
 --- !u!1 &888139661
 GameObject:
   m_ObjectHideFlags: 0

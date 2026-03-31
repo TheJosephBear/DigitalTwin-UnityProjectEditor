@@ -12,6 +12,7 @@ public class SurveyAnswerUI {
     private VisualElement _currentlyOpenModal = null;
     private VisualElement _originalParent = null;
     private int _originalIndex = -1;
+    private bool _isOther = false;
 
     public VisualElement AnswerElement => _answerElement;
     public int AnswerIndex => _answerIndex;
@@ -23,11 +24,15 @@ public class SurveyAnswerUI {
 
     #endregion
 
-    public SurveyAnswerUI(VisualElement answerElement, int answerIndex, SurveyQuestionUI questionUI) {
+    public SurveyAnswerUI(VisualElement answerElement, int answerIndex, SurveyQuestionUI questionUI, bool isOther) {
         _answerElement = answerElement;
         _answerIndex = answerIndex;
         _questionUIRef = questionUI;
+        _isOther = isOther;
 
+        if (_isOther) {
+            _answerElement.Q<TextField>().isReadOnly = true;
+        }
         RegisterAnswerEvents();
     }
 

@@ -86,7 +86,7 @@ public class SurveyQuestionUIViewer : ISurveyQuestionViewerUI {
         if (isOther) {
             _optionsList.Add(answerElement);
 
-            SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, null);
+            SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, null, isOther);
             _otherAnswerUI = answerUI;
         } else {
             if (_otherAnswerUI != null) {
@@ -99,7 +99,7 @@ public class SurveyQuestionUIViewer : ISurveyQuestionViewerUI {
             var textLabel = answerElement.Q<UnityEngine.UIElements.Label>();
             if (textLabel != null) textLabel.text = answerText;
 
-            SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, null);
+            SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, null, isOther);
             _addedAnswers.Add(answerUI);
 
             RegisterAnswerCallbacks(answerUI, answerIndex);

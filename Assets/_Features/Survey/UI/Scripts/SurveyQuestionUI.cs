@@ -159,7 +159,7 @@ public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
             _optionsList.Add(answerElement);
 
             answerElement.Q<CustomRadioButton>().Placeholder = "Jin�"; // Set label to "Other"
-            SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, this);
+            SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, this, isOther);
             _otherAnswerUI = answerUI;
         } else {
             // Regular answer: insert before "Other" answer if it exists, otherwise add to end
@@ -182,7 +182,7 @@ public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
                 Debug.LogWarning("No TextField found in answer template!");
             }
 
-            SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, this);
+            SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, this, isOther);
             _addedAnswers.Add(answerUI);
         }
 
@@ -296,7 +296,7 @@ public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
             _optionsList.Add(answerElement);
 
             answerElement.Q<CustomRadioButton>().Placeholder = "Jin"; // Set label to "Other"
-            SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, this);
+            SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, this, isOther);
             _otherAnswerUI = answerUI;
 
             return answerUI;
@@ -314,7 +314,7 @@ public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
             }
 
             // Create SurveyAnswerUI instance to manage this answer
-            SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, this);
+            SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, this, isOther);
             _addedAnswers.Add(answerUI);
 
             return answerUI;
