@@ -30,7 +30,7 @@ public class ViewManager : MonoBehaviour {
     }
 
     void OnEnable() {
-        if (_viewPointUIInstance == null) InitializeUI();
+        if (_viewPointUIInstance == null && SceneLoadingManager.Instance != null) InitializeUI();
         ToggleCameraPreview(false);
     }
 
