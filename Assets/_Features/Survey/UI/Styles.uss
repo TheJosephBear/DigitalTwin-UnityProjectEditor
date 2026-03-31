@@ -34,3 +34,12 @@ Toggle > VisualElement {
     flex-shrink: 1;
     max-width: 32px;
 }
+
+RadioButtonGroup #contentContainer {
+    flex-direction: row;
+}
+
+RadioButtonGroup VisualElement {
+    align-self: center;
+    justify-content: center;
+}
