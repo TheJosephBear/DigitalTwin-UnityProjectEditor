@@ -17,7 +17,7 @@ public class EditorInitUI : UIBehaviour {
         if (files != null && files.Length > 0) {
             EditorManager.Instance.MapManager.SetBaseMapModel(AssetManager.Instance.CreateNewAssetFromFile(files[0]));
             // Open Geo localization
-            EditorManager.Instance.ChangeState(ProjectState.GeoLocalization);
+            EditorManager.Instance.ChangeState(AppState.GeoLocalization);
         } else {
             PopUp.Instance.ShowPopUpWindow("Please select .obj file!");
         }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class StateBase : MonoBehaviour {
-    public ProjectState State;
+    public AppState State;
     public abstract void Enter();
     public abstract void Exit();
 }

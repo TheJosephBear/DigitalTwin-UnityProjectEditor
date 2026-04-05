@@ -56,7 +56,7 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
         _flowManager.ExitSurvey();
 
         // Change state
-        MainManagerBase.Instance.ChangeState(ProjectState.Freecam);
+        MainManagerBase.Instance.ChangeState(AppState.Freecam);
     }
 
     #endregion

@@ -2359,8 +2359,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1430a010ebbcaa4fbc9ce7579363919, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Serializer: {fileID: 1144165089}
   _projectName: idk
-  InEditorDebugging: 0
+  InEditorDebugging: 1
 --- !u!1 &888139661
 GameObject:
   m_ObjectHideFlags: 0

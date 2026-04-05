@@ -27,7 +27,7 @@ public class GeoMapManager : MonoBehaviour {
         UIManager.Instance.HideUI(UIType.GeoLocalizationUI);
         ToggleGeoMap(false);
         GeoMapLocalizationManager.Instance.Exit();
-        EditorManager.Instance.ChangeState(ProjectState.Freecam);
+        EditorManager.Instance.ChangeState(AppState.Freecam);
     }
 
     public void ZoomMap(float zoomValue) {
@@ -74,13 +74,13 @@ public class GeoMapManager : MonoBehaviour {
         }
     }
 
-    public SerializableGeoMap SerializeManager() {
-        return new SerializableGeoMap {
+    public SerializableGeoMapManager SerializeManager() {
+        return new SerializableGeoMapManager {
             geoData = GeoMapLocalizationManager.Instance.GetPlacementMapData()
         };
     }
 
-    public void DeserializeManager(SerializableGeoMap serializedData) {
+    public void DeserializeManager(SerializableGeoMapManager serializedData) {
         if (serializedData == null || serializedData.geoData == null)
             return;
 
@@ -89,6 +89,6 @@ public class GeoMapManager : MonoBehaviour {
 }
 
 [Serializable]
-public class SerializableGeoMap {
+public class SerializableGeoMapManager {
     public GeoLocalizationData geoData;
 }

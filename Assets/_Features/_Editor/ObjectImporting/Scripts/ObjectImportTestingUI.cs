@@ -58,7 +58,7 @@ public class ObjectImportTestingUI : MonoBehaviour {
         SerializableProject serializableProject = new SerializableProject {
             projectId = OpenedProject.ProjectID,
             projectName = OpenedProject.ProjectName,
-            serializedModelAssets = AssetManager.Instance.SerializeAssetList(),
+            serializableModelAssets = AssetManager.Instance.SerializeAssetList(),
         };
         return serializableProject;
     }
@@ -68,11 +68,11 @@ public class ObjectImportTestingUI : MonoBehaviour {
     }
 
     IEnumerator DeserializeCoroutine(Project project) {
-        SerializableProject serializedProject = project.SerializedProject;
+        SerializableProject serializedProject = project.SerializableProject;
 
         // Wait for asset manager
         bool isAssetDeserializationComplete = false;
-        AssetManager.Instance.DeserializeAssetList(serializedProject.serializedModelAssets, () => {
+        AssetManager.Instance.DeserializeAssetList(serializedProject.serializableModelAssets, () => {
             isAssetDeserializationComplete = true;
         });
         yield return new WaitUntil(() => isAssetDeserializationComplete);

@@ -4,15 +4,15 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class Project : MonoBehaviour {
+public class Project {
     public string ProjectID { get; private set; }
     public string ProjectName { get; private set; }
-    public SerializableProject SerializedProject { get; private set; }
+    public SerializableProject SerializableProject { get; private set; }
 
-    public void CreateSerializedProjectFromJson(string json) {
-        SerializedProject = JsonUtility.FromJson<SerializableProject>(json);
-        ProjectID = SerializedProject.projectId;
-        ProjectName = SerializedProject.projectName;
+    public void CreateSerializableProjectFromJson(string json) {
+        SerializableProject = JsonUtility.FromJson<SerializableProject>(json);
+        ProjectID = SerializableProject.projectId;
+        ProjectName = SerializableProject.projectName;
     }
 }
 
@@ -24,10 +24,10 @@ public class Project : MonoBehaviour {
 public class SerializableProject {
     public string projectId;
     public string projectName;
-    public SerializableMap serializedMap;
-    public List<SerializableModelAsset> serializedModelAssets;
-    public SerializableViewPointManager serializedViewPointManager;
-    public SerializableGeoMap serializedGeoMap;
+    public SerializableMapManager serializableMapManager;
+    public List<SerializableModelAsset> serializableModelAssets;
+    public SerializableViewPointManager serializableViewPointManager;
+    public SerializableGeoMapManager serializableGeoMapManager;
     //    public List<SerializableDecorationPreset> decorationPresets;
     //    public List<SerializableDecorationInstantiated> decorationsInstantiated;
 }

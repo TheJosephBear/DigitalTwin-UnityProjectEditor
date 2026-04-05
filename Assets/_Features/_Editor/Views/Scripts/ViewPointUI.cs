@@ -25,10 +25,10 @@ public class ViewPointUI : MonoBehaviour {
         _viewManager.SetActiveViewPoint(ViewPointRefference);
 
         // Toggle state
-        if (MainManagerBase.Instance.ActiveState == ProjectState.Freecam) {
-            MainManagerBase.Instance.ChangeState(ProjectState.ViewActive);
-        } else if (MainManagerBase.Instance.ActiveState == ProjectState.ViewActive) {
-            MainManagerBase.Instance.ChangeState(ProjectState.Freecam);
+        if (MainManagerBase.Instance.ActiveState == AppState.Freecam) {
+            MainManagerBase.Instance.ChangeState(AppState.ViewActive);
+        } else if (MainManagerBase.Instance.ActiveState == AppState.ViewActive) {
+            MainManagerBase.Instance.ChangeState(AppState.Freecam);
         }
     }
 

@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoadingManager : Singleton<SceneLoadingManager> {
 
-    private List<SceneField> loadedScenes = new List<SceneField>();
+    private List<SceneField> _loadedScenes = new List<SceneField>();
 
     protected override void Awake() {
         base.Awake();
@@ -84,7 +84,7 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
     public void LoadScene(SceneType sceneType) {
         SceneField scene = SceneList.Instance.GetScene(sceneType);
         SceneManager.LoadScene(scene, LoadSceneMode.Additive);
-        loadedScenes.Add(scene);
+        _loadedScenes.Add(scene);
     }
 
     /// <summary>
@@ -148,17 +148,17 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
         SceneManager.MoveGameObjectToScene(go, SceneManager.GetSceneByName(scene.ToString()));
         return go;
     }
-
-    // Coroutine implementations (Internal/Private)
+    
+    #region Coroutine implementations
 
     IEnumerator LoadSceneAsyncC(SceneField scene, TaskCompletionSource<bool> tcs, float loadingScreenLength) {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive);
         while (!asyncLoad.isDone) {
             yield return null;
         }
-        loadedScenes.Add(scene);
+        _loadedScenes.Add(scene);
         SetActiveScene(scene);
-        yield return CallSceneInitializerC(scene, loadingScreenLength);
+        CallSceneInitializerC(scene, loadingScreenLength);
         tcs.SetResult(true);
     }
 
@@ -169,19 +169,15 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
         while (!asyncUnload.isDone) {
             yield return null;
         }
-        if (loadedScenes.Contains(scene)) {
-            loadedScenes.Remove(scene);
+        if (_loadedScenes.Contains(scene)) {
+            _loadedScenes.Remove(scene);
         }
         tcs.SetResult(true);
     }
 
-    IEnumerator CallSceneInitializerC(SceneField scene, float waitAfterInitialization) {
+    void CallSceneInitializerC(SceneField scene, float waitAfterInitialization) {
         Iinitializer initializer = FindInitializerInScene(scene);
         initializer?.Initialize(); // Run initial setup tasks
-
-        yield return new WaitForSeconds(waitAfterInitialization);
-
-        initializer?.StartRunning(); // Signal the scene is fully ready
     }
 
     Iinitializer FindInitializerInScene(SceneField scene) {
@@ -196,6 +192,8 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
         }
         return null;
     }
+
+    #endregion
 }
 
 /**

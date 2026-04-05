@@ -42,7 +42,7 @@ public class EditorManager : MainManagerBase {
     }
 }
 
-public enum ProjectState {
+public enum AppState {
     Initialization,
     Freecam,
     GeoLocalization,

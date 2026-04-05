@@ -30,10 +30,10 @@ public abstract class MainManagerBase : Singleton<MainManagerBase> {
 
 
     [HideInInspector]
-    public ProjectState ActiveState { get; private set; }
+    public AppState ActiveState { get; private set; }
     StateBase _activeStateScript;
 
-    protected void Awake() {
+    protected virtual void Awake() {
         base.Awake();
 
         InitializeStateList();
@@ -47,7 +47,7 @@ public abstract class MainManagerBase : Singleton<MainManagerBase> {
         _stateScripts = StateParent.GetComponentsInChildren<StateBase>().ToList();
     }
 
-    public virtual void ChangeState(ProjectState newState) {
+    public virtual void ChangeState(AppState newState) {
         if (_activeStateScript != null) {
             // exit if trying to change to already selected state
             if (newState == _activeStateScript.State)

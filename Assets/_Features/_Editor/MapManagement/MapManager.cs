@@ -75,7 +75,7 @@ public class MapManager : MonoBehaviour {
 
     #region Serialization
 
-    public SerializableMap Serialize() {
+    public SerializableMapManager Serialize() {
         if (_baseMap == null) return null;
 
         List<SerializableMapVariant> variantListSerialized = new List<SerializableMapVariant>();
@@ -85,17 +85,17 @@ public class MapManager : MonoBehaviour {
             }
         }
 
-        return new SerializableMap {
+        return new SerializableMapManager {
             baseMap = _baseMap.Serialize(),
             variants = variantListSerialized
         };
     }
 
 
-    public void Deserialize(SerializableMap serializedMap) {
+    public void Deserialize(SerializableMapManager serializedMap) {
         if (serializedMap == null || serializedMap.baseMap == null) return;
 
-    //    var baseAsset = AssetManager.Instance.FindModelAssetByFileHash(serializedMap.baseModelID);
+    //    var baseAsset = AssetManager.Instance.FindModelAssetByFileHash(serializableMapManager.baseModelID);
         SetBaseMapModel(AssetManager.Instance.FindModelAssetByFileHash(serializedMap.baseMap.modelFileHash));
         SpawnMap();
 
@@ -111,7 +111,7 @@ public class MapManager : MonoBehaviour {
 
 
 [Serializable]
-public class SerializableMap {
+public class SerializableMapManager {
     public SerializableMapVariant baseMap;
     public List<SerializableMapVariant> variants;
 }

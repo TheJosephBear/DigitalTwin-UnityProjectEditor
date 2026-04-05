@@ -14,7 +14,7 @@ public class ProjectManager : Singleton<ProjectManager> {
 
     protected override void Awake() {
         base.Awake();
-        SelectedProject = GetComponent<Project>();
+        SelectedProject = new Project();
     }
 
     /// <summary>
@@ -57,7 +57,7 @@ public class ProjectManager : Singleton<ProjectManager> {
                     downloadedData = data;
 
                     SelectedProject = new Project();
-                    SelectedProject.CreateSerializedProjectFromJson(data);
+                    SelectedProject.CreateSerializableProjectFromJson(data);
                 }
 
                 finished = true;

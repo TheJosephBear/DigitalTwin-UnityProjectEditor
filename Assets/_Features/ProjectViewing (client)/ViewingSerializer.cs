@@ -4,8 +4,24 @@ using UnityEngine;
 
 public class ViewingSerializer : MonoBehaviour {
 
-    public void DeserializeProject(Project project) {
+    // Tato metoda spustí proces a vrátí IEnumerator, aby ji Initializer mohl "yieldnout"
+    public IEnumerator DeserializeProjectCoroutine(Project project) {
+        SerializableProject serializedProject = project.SerializableProject;
 
+        bool isAssetDeserializationComplete = false;
+        AssetManager.Instance.DeserializeAssetList(serializedProject.serializableModelAssets, () => {
+            isAssetDeserializationComplete = true;
+        });
+
+        yield return new WaitUntil(() => isAssetDeserializationComplete);
+
+        if (ViewingManager.Instance.MapManager != null)
+            ViewingManager.Instance.MapManager.Deserialize(serializedProject.serializableMapManager);
+
+        if (ViewingManager.Instance.ViewManager != null)
+            ViewingManager.Instance.ViewManager.Deserialize(serializedProject.serializableViewPointManager);
+
+        if (ViewingManager.Instance.GeoMapManager != null)
+            ViewingManager.Instance.GeoMapManager.DeserializeManager(serializedProject.serializableGeoMapManager);
     }
-
 }

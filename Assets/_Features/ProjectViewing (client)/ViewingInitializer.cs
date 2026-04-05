@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class ViewingInitializer : MonoBehaviour, Iinitializer {
 
+    public ViewingSerializer Serializer;
+
+    [Header("Debugging")]
     public string _projectName;
     public bool InEditorDebugging = false;
 
@@ -50,33 +53,8 @@ public class ViewingInitializer : MonoBehaviour, Iinitializer {
         }
             
         UIManager.Instance.ShowUI(UIType.ViewerHUD);
-        DeserializeProject(ProjectManager.Instance.SelectedProject);
-        MainManagerBase.Instance.ChangeState(ProjectState.Freecam);
-
-        UIManager.Instance.HideUI(UIType.LoadingScreen);
-    }
-
-
-    public void DeserializeProject(Project project) {
-        StartCoroutine(DeserializeCoroutine(project));
-    }
-
-    IEnumerator DeserializeCoroutine(Project project) {
-        UIManager.Instance.ShowUI(UIType.LoadingScreen);
-
-        SerializableProject serializedProject = project.SerializedProject;
-
-        // Wait for asset manager
-        bool isAssetDeserializationComplete = false;
-        AssetManager.Instance.DeserializeAssetList(serializedProject.serializedModelAssets, () => {
-            isAssetDeserializationComplete = true;
-        });
-        yield return new WaitUntil(() => isAssetDeserializationComplete);
-
-        // Deserialize everything else
-        ViewingManager.Instance.MapManager.Deserialize(serializedProject.serializedMap);
-        ViewingManager.Instance.ViewManager.Deserialize(serializedProject.serializedViewPointManager);
-        ViewingManager.Instance.GeoMapManager.DeserializeManager(serializedProject.serializedGeoMap);
+        yield return Serializer.DeserializeProjectCoroutine(ProjectManager.Instance.SelectedProject);
+        MainManagerBase.Instance.ChangeState(AppState.Freecam);
 
         UIManager.Instance.HideUI(UIType.LoadingScreen);
     }

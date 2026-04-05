@@ -25,7 +25,7 @@ public class CameraManager : MonoBehaviour {
         if (_editorManager == null) {
             _editorManager = MainManagerBase.Instance;
         }
-        if (_editorManager.ActiveState == ProjectState.Freecam) {
+        if (_editorManager.ActiveState == AppState.Freecam) {
             UpdateFreeCamTransform();
         }
     }

@@ -240,8 +240,6 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
     }
 
     IEnumerator UploadFileRequest(string url, string path, string fileName, string projectName, string assetHash) {
-        print("uploading");
-        print("project name: "+projectName);
         if (path == null) {
             Debug.LogError("Upload file request err: PATH IS NULL");
             yield break;
