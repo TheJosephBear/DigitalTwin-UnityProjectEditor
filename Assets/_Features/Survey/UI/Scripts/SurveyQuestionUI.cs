@@ -51,7 +51,7 @@ public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
         _viewPoints = viewPoints;
 
         // Get the answer template from QuestionUIMapping
-        QuestionUIMapping mapping = UnityEngine.Object.FindFirstObjectByType<QuestionUIMapping>();
+        QuestionUIMapping mapping = _surveyUIBuilder.questionUIMapping;
         if (mapping != null) {
             _answerTemplate = mapping.GetAnswerUITemplate(_questionType);
             if (_answerTemplate == null) {

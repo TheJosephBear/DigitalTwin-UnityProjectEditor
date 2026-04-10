@@ -1,12 +1,15 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Template name="QuestionTitleBar" src="project://database/Assets/_Features/Survey/UI/QuestionTitleBar.uxml?fileID=9197481963319205126&amp;guid=11e3902c3204be84fb4bb37a97e71bd8&amp;type=3#QuestionTitleBar" />
     <ui:Template name="GridOptionHeader" src="project://database/Assets/_Features/Survey/UI/GridOptionHeader.uxml?fileID=9197481963319205126&amp;guid=b491d5f8a0454314ebfa03b80715d056&amp;type=3#GridOptionHeader" />
-    <ui:Template name="GridOptionRadio" src="project://database/Assets/_Features/Survey/UI/GridOptionRadio.uxml?fileID=9197481963319205126&amp;guid=a8213fdb0c9024e489f7cfe714727e92&amp;type=3#GridOptionRadio" />
+    <ui:Template name="GridOptionRadio" src="project://database/Assets/_Features/Survey/UI/GridOptionRadio.uxml?fileID=9197481963319205126&amp;guid=60db233ce1327f84ab42c148dfcab8fc&amp;type=3#GridOptionRadio" />
     <ui:VisualElement name="question-container" style="flex-grow: 1;">
         <ui:Instance template="QuestionTitleBar" name="question-bar" />
         <ui:Instance template="GridOptionHeader" />
-        <ui:VisualElement name="options-container" style="flex-grow: 0;">
+        <ui:VisualElement name="options-list" style="flex-grow: 0;">
             <ui:Instance template="GridOptionRadio" />
+        </ui:VisualElement>
+        <ui:VisualElement name="add-buttons" style="flex-grow: 0; flex-direction: row; align-content: stretch; justify-content: space-evenly; width: 200px; align-self: center;">
+            <ui:Button text="Přidat řádek" name="add-option-button" style="flex-grow: 1;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

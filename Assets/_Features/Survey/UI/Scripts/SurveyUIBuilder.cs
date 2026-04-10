@@ -1,17 +1,19 @@
 using SurveySystem;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class SurveyUIBuilder : MonoBehaviour {
 
-    public List<QuestionTypeMapping> QuestionTypeMapping = new List<QuestionTypeMapping>();
+    public QuestionUIMapping questionUIMapping;
+
+    [SerializeField]
+    private VisualTreeAsset addQuestionBarTemplate;
 
     private VisualElement _root;
     private VisualElement _scrollViewContent;
-    [SerializeField]
-    private VisualTreeAsset addQuestionBarTemplate;
 
     // Question adding //
     private List<ISurveyQuestionUI> _addedQuestions = new List<ISurveyQuestionUI>();
@@ -85,15 +87,15 @@ public class SurveyUIBuilder : MonoBehaviour {
 
     public ISurveyQuestionUI AddQuestionToUI(QuestionBase addedQuestion, int insertAtIndex = -1, VisualTreeAsset template = null) {
         if (template == null) {
-            // Template not provided, look it up
-            QuestionTypeMapping mapping = QuestionTypeMapping.Find(a => a.EnumValue == addedQuestion.QuestionType);
+            //Template not provided, look it up
+            QuestionTypeMapping mapping = questionUIMapping.GetMappingByQuestionType(addedQuestion.QuestionType);
 
             if (mapping == null) {
                 Debug.LogError($"No mapping found for enum: {addedQuestion.QuestionType}");
                 return null;
             }
 
-            template = mapping.Template;
+            template = mapping.QuestionTemplate;
         }
 
         return CreateQuestion(addedQuestion, template, insertAtIndex);
@@ -138,14 +140,15 @@ public class SurveyUIBuilder : MonoBehaviour {
                 questionInstance,
                 addedQuestion.Id,
                 questionType,
-                FindAnyObjectByType<ViewManager>().GetSerializedViewPointsList() // This is disgusting
+                FindAnyObjectByType<ViewManager>()?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>(),
+                this
             );
         } else {
             questionUI = new SurveyQuestionUI(
                 questionInstance,
                 addedQuestion.Id,
                 questionType,
-                FindAnyObjectByType<ViewManager>().GetSerializedViewPointsList(), // This is disgusting
+                FindAnyObjectByType<ViewManager>()?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>(),
                 this,
                 isDeserialized: true
             );

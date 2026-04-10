@@ -4,8 +4,8 @@ using UnityEngine.UIElements;
 
 [Serializable]
 public class QuestionTypeMapping {
-    public QuestionType EnumValue;
-    public string StringValue;
-    public VisualTreeAsset Template;
+    public QuestionType QuestionType;
+    public string DisplayName;
+    public VisualTreeAsset QuestionTemplate;
     public VisualTreeAsset AnswerTemplate;
 }
