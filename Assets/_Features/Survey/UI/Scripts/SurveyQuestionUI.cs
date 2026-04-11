@@ -158,7 +158,7 @@ public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
             answerIndex = _addedAnswers.Count;
             _optionsList.Add(answerElement);
 
-            answerElement.Q<CustomRadioButton>().Placeholder = "Jin�"; // Set label to "Other"
+            answerElement.Q<CustomRadioButton>().Placeholder = "Jiné"; // Set label to "Other"
             SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, this);
             _otherAnswerUI = answerUI;
         } else {
@@ -295,7 +295,7 @@ public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
             answerIndex = _addedAnswers.Count;
             _optionsList.Add(answerElement);
 
-            answerElement.Q<CustomRadioButton>().Placeholder = "Jin"; // Set label to "Other"
+            answerElement.Q<CustomRadioButton>().Placeholder = "Jiné"; // Set label to "Other"
             SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, this);
             _otherAnswerUI = answerUI;
 
