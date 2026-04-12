@@ -22,7 +22,10 @@ RadioButton > Label {
 
 RadioButton > VisualElement {
     flex-shrink: 1;
-    max-width: 32px;
+    max-width: 24px;
+    min-width: 24px;
+    margin-right: 8px;
+    width: 24px;
 }
 
 Toggle > Label {
@@ -32,7 +35,10 @@ Toggle > Label {
 
 Toggle > VisualElement {
     flex-shrink: 1;
-    max-width: 32px;
+    max-width: 24px;
+    min-width: 24px;
+    width: 24px;
+    margin-right: 8px;
 }
 
 RadioButtonGroup VisualElement {

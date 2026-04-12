@@ -1,10 +1,13 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Template name="QuestionTitleBar" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/QuestionTitleBar.uxml?fileID=9197481963319205126&amp;guid=20b039c0b3e996c428d354dad76c4b40&amp;type=3#QuestionTitleBar" />
-    <ui:Template name="OptionRadio" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/OptionRadio.uxml?fileID=9197481963319205126&amp;guid=caa5a55d648c50846b46348f1b9709ac&amp;type=3#OptionRadio" />
+    <ui:Template name="ScaleRadio" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/ScaleRadio.uxml?fileID=9197481963319205126&amp;guid=e261264cf2c567a4c8f2c39faf34a078&amp;type=3#ScaleRadio" />
     <ui:VisualElement name="question-container" style="flex-grow: 1;">
         <ui:Instance template="QuestionTitleBar" name="question-bar" />
-        <ui:RadioButtonGroup name="options-list" style="align-self: flex-start; align-items: flex-start;">
-            <ui:Instance template="OptionRadio" />
-        </ui:RadioButtonGroup>
+        <ui:VisualElement style="flex-grow: 0; flex-direction: row;">
+            <ui:Label text="Popis řádku" style="flex-shrink: 1; align-self: center; width: 150px;" />
+            <ui:VisualElement name="scale-options" style="flex-grow: 1; flex-direction: row; justify-content: space-evenly;">
+                <ui:Instance template="ScaleRadio" />
+            </ui:VisualElement>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

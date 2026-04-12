@@ -1,10 +1,10 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Template name="QuestionTitleBar" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/QuestionTitleBar.uxml?fileID=9197481963319205126&amp;guid=20b039c0b3e996c428d354dad76c4b40&amp;type=3#QuestionTitleBar" />
-    <ui:Template name="OptionRadio" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/OptionRadio.uxml?fileID=9197481963319205126&amp;guid=caa5a55d648c50846b46348f1b9709ac&amp;type=3#OptionRadio" />
+    <ui:Template name="OptionToggle" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/OptionToggle.uxml?fileID=9197481963319205126&amp;guid=685aeb3da5b6a7446a7cb7f28ea345e9&amp;type=3#OptionToggle" />
     <ui:VisualElement name="question-container" style="flex-grow: 1;">
         <ui:Instance template="QuestionTitleBar" name="question-bar" />
-        <ui:RadioButtonGroup name="options-list" style="align-self: flex-start; align-items: flex-start;">
-            <ui:Instance template="OptionRadio" />
+        <ui:RadioButtonGroup name="options-list" style="align-items: flex-start; align-self: flex-start;">
+            <ui:Instance template="OptionToggle" />
         </ui:RadioButtonGroup>
     </ui:VisualElement>
 </ui:UXML>
