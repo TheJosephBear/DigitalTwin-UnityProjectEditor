@@ -39,6 +39,12 @@ public partial class CustomToggleButton : VisualElement
         _labelTextField = new TextField();
         _labelTextField.textEdition.placeholder = "Option text";
         _labelTextField.style.flexGrow = 1;
-        Add(_labelTextField);
+        _labelTextField.multiline = true;
+        _labelTextField.style.whiteSpace = WhiteSpace.Normal;
+
+        var textFieldWrapper = new VisualElement(); // Wrapper to allow the TextField to grow properly (fixes element overflow to other elements)
+        textFieldWrapper.style.flexGrow = 1;
+        textFieldWrapper.Add(_labelTextField);
+        Add(textFieldWrapper);
     }
 }

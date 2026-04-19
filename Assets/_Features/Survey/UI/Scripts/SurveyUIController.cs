@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using SurveySystem;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -48,19 +49,19 @@ public class SurveyUIController : MonoBehaviour {
     #region Survey Building
 
     public void HandleQuestionAdded(string questionTypeString, int insertAtIndex = -1) {
-        QuestionTypeMapping mapping = _surveyUIBuilder.QuestionTypeMapping.Find(a => a.StringValue == questionTypeString);
+        QuestionTypeMapping mapping = _surveyUIBuilder.questionUIMapping.GetMappingByQuestionType(questionTypeString);
         if (mapping == null) {
             Debug.LogError($"No mapping found for string: {questionTypeString}");
             return;
         }
 
-        QuestionType questionTypeEnum = mapping.EnumValue;
+        QuestionType questionTypeEnum = mapping.QuestionType;
         HandleQuestionAdded(questionTypeEnum, insertAtIndex);
     }
 
     public ISurveyQuestionUI HandleQuestionAdded(QuestionType questionType, int insertAtIndex = -1) {
         QuestionBase newQuestion = _surveyBuilder.AddNewQuestion(questionType);
-        return HandleExistingQuestionAdded(newQuestion, insertAtIndex); ;
+        return HandleExistingQuestionAdded(newQuestion, insertAtIndex);
     }
 
     public ISurveyQuestionUI HandleExistingQuestionAdded(QuestionBase question, int insertAtIndex = -1) {

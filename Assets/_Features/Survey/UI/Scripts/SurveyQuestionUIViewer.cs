@@ -17,6 +17,7 @@ public class SurveyQuestionUIViewer : ISurveyQuestionViewerUI {
     private VisualTreeAsset _answerTemplate;
 
     public VisualElement QuestionElement => _root;
+    private SurveyUIBuilder _surveyUIBuilder;
 
     #region Events
 
@@ -25,17 +26,14 @@ public class SurveyQuestionUIViewer : ISurveyQuestionViewerUI {
 
     #endregion
 
-    public SurveyQuestionUIViewer(
-        VisualElement root,
-        int questionId,
-        QuestionType questionType,
-        List<SerializableViewPoint> viewPoints) {
+    public SurveyQuestionUIViewer(VisualElement root, int questionId, QuestionType questionType, List<SerializableViewPoint> viewPoints, SurveyUIBuilder uiBuilder) {
         _root = root;
+        _surveyUIBuilder = uiBuilder;
         QuestionID = questionId;
         _questionType = questionType;
         _viewPoints = viewPoints;
 
-        QuestionUIMapping mapping = UnityEngine.Object.FindFirstObjectByType<QuestionUIMapping>();
+        QuestionUIMapping mapping = _surveyUIBuilder.questionUIMapping;
         if (mapping != null) {
             _answerTemplate = mapping.GetAnswerUITemplate(_questionType);
         }
@@ -108,7 +106,7 @@ public class SurveyQuestionUIViewer : ISurveyQuestionViewerUI {
     private void RegisterAnswerCallbacks(SurveyAnswerUI answerUI, int index) {
         var root = answerUI.AnswerElement;
         if (root == null) {
-      //      Debug.LogError($"[Survey] AnswerElement for index {index} is null!");
+            //      Debug.LogError($"[Survey] AnswerElement for index {index} is null!");
             return;
         }
 
@@ -117,31 +115,31 @@ public class SurveyQuestionUIViewer : ISurveyQuestionViewerUI {
 
         // 2. If null, search deeper using a Query
         if (customRadio == null) {
-       //     Debug.LogWarning($"[Survey] Q<CustomRadioButton> failed for index {index}. Searching via Query...");
+            //     Debug.LogWarning($"[Survey] Q<CustomRadioButton> failed for index {index}. Searching via Query...");
             customRadio = root.Query<CustomRadioButton>().First();
         }
 
         if (customRadio != null) {
-       //     Debug.Log($"[Survey] Successfully found CustomRadioButton for index {index}. Registering callback.");
+            //     Debug.Log($"[Survey] Successfully found CustomRadioButton for index {index}. Registering callback.");
 
             customRadio.RegisterRadioCallback(evt => {
-         //       Debug.Log($"[Survey] Internal Radio Toggle detected for index {index}. New Value: {evt.newValue}");
+                //       Debug.Log($"[Survey] Internal Radio Toggle detected for index {index}. New Value: {evt.newValue}");
                 if (evt.newValue) {
-         //           Debug.Log($"[Survey] Invoking OnAnswerSelected for Question {QuestionID}, Index {index}");
+                    //           Debug.Log($"[Survey] Invoking OnAnswerSelected for Question {QuestionID}, Index {index}");
                     OnAnswerSelected?.Invoke(QuestionID, index);
                 }
             });
         } else {
             // 3. Last resort: Check if the element exists but just isn't being cast correctly
             var anyElementNamedRadio = root.Q("my-radio-name"); // Replace with the name used in UXML if applicable
-         //   Debug.LogError($"[Survey] CRITICAL: Could not find CustomRadioButton for index {index}. " +
-        //                   $"Total children in root: {root.childCount}. " +
-        //                   $"Is root a TemplateContainer? {root is TemplateContainer}");
+                                                                //   Debug.LogError($"[Survey] CRITICAL: Could not find CustomRadioButton for index {index}. " +
+                                                                //                   $"Total children in root: {root.childCount}. " +
+                                                                //                   $"Is root a TemplateContainer? {root is TemplateContainer}");
 
             // Let's try to find the raw RadioButton inside the custom element
             var rawRadio = root.Q<UnityEngine.UIElements.RadioButton>();
             if (rawRadio != null) {
-           //     Debug.LogWarning($"[Survey] Found a raw RadioButton for index {index} even though CustomRadioButton lookup failed. Hooking directly to raw radio.");
+                //     Debug.LogWarning($"[Survey] Found a raw RadioButton for index {index} even though CustomRadioButton lookup failed. Hooking directly to raw radio.");
                 rawRadio.RegisterValueChangedCallback(evt => {
                     if (evt.newValue) OnAnswerSelected?.Invoke(QuestionID, index);
                 });
@@ -151,9 +149,9 @@ public class SurveyQuestionUIViewer : ISurveyQuestionViewerUI {
         // TextField Debugging
         var textField = root.Q<TextField>();
         if (textField != null) {
-        //    Debug.Log($"[Survey] TextField found for index {index}.");
+            //    Debug.Log($"[Survey] TextField found for index {index}.");
             textField.RegisterValueChangedCallback(evt => {
-        //        Debug.Log($"[Survey] Text changed for index {index}: {evt.newValue}");
+                //        Debug.Log($"[Survey] Text changed for index {index}: {evt.newValue}");
                 OnAnswerTextFilled?.Invoke(QuestionID, index, evt.newValue);
             });
         }

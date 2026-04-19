@@ -18,6 +18,11 @@ namespace SurveySystem {
             Id = ID;
         }
 
+        public QuestionBase(int ID, QuestionType type) {
+            Id = ID;
+            QuestionType = type;
+        }
+
         public virtual AnswerBase AddNewAnswer() {
             AnswerBase answer = new AnswerBase {
                 Idx = _answers.Count,
@@ -85,8 +90,6 @@ namespace SurveySystem {
                     break;
                 case QuestionType.LinearScale:
                     break;
-                case QuestionType.OpenEnded:
-                    break;
             }
 
            deserializedQuestion.Title = serializable.Title;
@@ -113,7 +116,12 @@ namespace SurveySystem {
     public enum QuestionType {
         MultipleChoiceSingle,
         MultipleChoiceMultiple,
+        ShortAnswer,
+        Paragraph,
+        Dropdown,
+        MultipleChoiceGrid,
+        CheckboxGrid,
+        ImageChoice,
         LinearScale,
-        OpenEnded,
     }
 }

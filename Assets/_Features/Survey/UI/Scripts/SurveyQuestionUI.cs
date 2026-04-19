@@ -52,7 +52,7 @@ public class SurveyQuestionUIaaa : ISurveyQuestionBuilderUI {
         _viewPoints = viewPoints;
 
         // Get the answer template from QuestionUIMapping
-        QuestionUIMapping mapping = UnityEngine.Object.FindFirstObjectByType<QuestionUIMapping>();
+        QuestionUIMapping mapping = _surveyUIBuilder.questionUIMapping;
         if (mapping != null) {
             _answerTemplate = mapping.GetAnswerUITemplate(_questionType);
             if (_answerTemplate == null) {
@@ -159,8 +159,8 @@ public class SurveyQuestionUIaaa : ISurveyQuestionBuilderUI {
             answerIndex = _addedAnswers.Count;
             _optionsList.Add(answerElement);
 
-            answerElement.Q<CustomRadioButton>().Placeholder = "Jin�"; // Set label to "Other"
-            SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, this, isOther);
+            answerElement.Q<CustomRadioButton>().Placeholder = "Jiné"; // Set label to "Other"
+            SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, this);
             _otherAnswerUI = answerUI;
         } else {
             // Regular answer: insert before "Other" answer if it exists, otherwise add to end
@@ -296,8 +296,8 @@ public class SurveyQuestionUIaaa : ISurveyQuestionBuilderUI {
             answerIndex = _addedAnswers.Count;
             _optionsList.Add(answerElement);
 
-            answerElement.Q<CustomRadioButton>().Placeholder = "Jin"; // Set label to "Other"
-            SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, this, isOther);
+            answerElement.Q<CustomRadioButton>().Placeholder = "Jiné"; // Set label to "Other"
+            SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, this);
             _otherAnswerUI = answerUI;
 
             return answerUI;

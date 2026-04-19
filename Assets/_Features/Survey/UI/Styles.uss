@@ -22,7 +22,10 @@ RadioButton > Label {
 
 RadioButton > VisualElement {
     flex-shrink: 1;
-    max-width: 32px;
+    max-width: 24px;
+    min-width: 24px;
+    margin-right: 8px;
+    width: 24px;
 }
 
 Toggle > Label {
@@ -32,5 +35,52 @@ Toggle > Label {
 
 Toggle > VisualElement {
     flex-shrink: 1;
-    max-width: 32px;
+    max-width: 24px;
+    min-width: 24px;
+    width: 24px;
+    margin-right: 8px;
+}
+
+RadioButtonGroup VisualElement {
+    align-self: center;
+    justify-content: center;
+}
+
+RadioButtonGroup #contentContainer {
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-grow: 0;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+#option-container {
+    flex-grow: 0;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+#edit-option-button {
+    flex-grow: 0;
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/dots-vertical.png?fileID=2800000&guid=2040f2cd9ea79384fa550b86e042f01b&type=3#dots-vertical");
+    width: 32px;
+    height: 32px;
+    -unity-background-scale-mode: scale-to-fit;
+    align-self: center;
+}
+
+#edit-col-button {
+    flex-grow: 0;
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/dots-horizontal.png?fileID=2800000&guid=e1ed4ee9247a04641bef93df4c77be7d&type=3#dots-horizontal");
+    width: 32px;
+    height: 26px;
+    -unity-background-scale-mode: scale-and-crop;
+    margin-right: 0;
+    align-self: center;
+    align-content: flex-end;
+    align-items: flex-end;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
 }

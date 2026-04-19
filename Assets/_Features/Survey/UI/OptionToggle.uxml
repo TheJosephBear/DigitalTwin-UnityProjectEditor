@@ -1,6 +1,9 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement style="flex-grow: 0; flex-direction: row; align-items: center;">
+    <ui:Template name="EditOptionModal" src="project://database/Assets/_Features/Survey/UI/EditOptionModal.uxml?fileID=9197481963319205126&amp;guid=76703d756520966448429ac694633d27&amp;type=3#EditOptionModal" />
+    <Style src="project://database/Assets/_Features/Survey/UI/Styles.uss?fileID=7433441132597879392&amp;guid=e2857671203a4094b98524b8aefbd78f&amp;type=3" />
+    <ui:VisualElement name="option-container" class="option-container">
         <CustomToggleButton placeholder="Text možnosti" style="flex-grow: 1;" />
-        <ui:VisualElement name="move-menu" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/dots-vertical.png?fileID=2800000&amp;guid=2040f2cd9ea79384fa550b86e042f01b&amp;type=3#dots-vertical&quot;); width: 32px; height: 32px;" />
+        <ui:VisualElement name="edit-option-button" />
     </ui:VisualElement>
+    <ui:Instance template="EditOptionModal" style="position: absolute; top: 15px; right: 12px; display: none;" />
 </ui:UXML>

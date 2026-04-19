@@ -14,7 +14,7 @@ public class InitializerBasic : MonoBehaviour, Iinitializer {
     }
 
     public void Initialize() {
-        StartCoroutine(LoadUitlities());
+        StartCoroutine(LoadUtilities());
     }
 
     public void StartRunning() {
@@ -34,7 +34,7 @@ public class InitializerBasic : MonoBehaviour, Iinitializer {
         }
     }
 
-    IEnumerator LoadUitlities() {
+    IEnumerator LoadUtilities() {
         AsyncOperation loading = SceneManager.LoadSceneAsync("Utilities", LoadSceneMode.Additive);
         while (!loading.isDone) {
             yield return null;

@@ -19,7 +19,11 @@ public class SurveyFlowManager : MonoBehaviour {
 
     public void EnterSurveyBuilding() {
         if(_builderInstance == null) _builderInstance = new SurveyBuilder();
-        if(_uiInstance == null) _uiInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(SurveyBuildingUIPrefab).GetComponent<SurveyUIController>();
+        if(_uiInstance == null) {
+            _uiInstance = SceneLoadingManager.Instance != null 
+                ? SceneLoadingManager.Instance.InstantiateObjectInScene(SurveyBuildingUIPrefab).GetComponent<SurveyUIController>()
+                : Instantiate(SurveyBuildingUIPrefab).GetComponent<SurveyUIController>();
+        }
 
         if (!_builderInstance.HasActiveSurvey()) _builderInstance.CreateNewSurvey();
         _uiInstance.Initialize(_builderInstance, SurveyManager.Instance);
@@ -31,7 +35,9 @@ public class SurveyFlowManager : MonoBehaviour {
         if (_builderInstance == null) _builderInstance = new SurveyBuilder();
         if (_responseManInstance == null) _responseManInstance = new SurveyResponseManager();
         if (_uiInstance == null) {
-            _uiInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(SurveyViewingUIPrefab).GetComponent<SurveyUIController>();
+            _uiInstance = SceneLoadingManager.Instance != null
+                ? SceneLoadingManager.Instance.InstantiateObjectInScene(SurveyViewingUIPrefab).GetComponent<SurveyUIController>()
+                : Instantiate(SurveyViewingUIPrefab).GetComponent<SurveyUIController>();
         }
 
         if (!_builderInstance.HasActiveSurvey()) _builderInstance.CreateNewSurvey();

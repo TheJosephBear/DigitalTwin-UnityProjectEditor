@@ -1,0 +1,13 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="EditOptionModal" src="project://database/Assets/_Features/Survey/UI/EditOptionModal.uxml?fileID=9197481963319205126&amp;guid=76703d756520966448429ac694633d27&amp;type=3#EditOptionModal" />
+    <Style src="project://database/Assets/_Features/Survey/UI/Styles.uss?fileID=7433441132597879392&amp;guid=e2857671203a4094b98524b8aefbd78f&amp;type=3" />
+    <ui:VisualElement name="option-container" style="flex-grow: 0; flex-direction: row; justify-content: space-between;">
+        <ui:TextField placeholder-text="Popis řádku" name="row-title" multiline="true" style="width: 150px; white-space: normal; color: rgb(0, 0, 0);" />
+        <ui:RadioButtonGroup style="flex-grow: 1; flex-shrink: 1;">
+            <ui:Toggle />
+        </ui:RadioButtonGroup>
+        <ui:VisualElement name="spacer" style="flex-grow: 0; width: 130px;" />
+        <ui:VisualElement name="edit-option-button" />
+    </ui:VisualElement>
+    <ui:Instance template="EditOptionModal" style="position: absolute; top: 15px; right: 12px; display: none;" />
+</ui:UXML>

@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcaed16031e546b4aa4e9c4aea8acd82, type: 3}
+  m_Name: UserQuestionUIMapping
+  m_EditorClassIdentifier: 
+  questionTypeMappings:
+  - QuestionType: 0
+    DisplayName: Multiple Choice
+    QuestionTemplate: {fileID: 9197481963319205126, guid: 25e0a0474ebacc340869ef00f6bd9627, type: 3}
+    AnswerTemplate: {fileID: 9197481963319205126, guid: caa5a55d648c50846b46348f1b9709ac, type: 3}
+  - QuestionType: 1
+    DisplayName: Checkboxes
+    QuestionTemplate: {fileID: 9197481963319205126, guid: 5105328aba5d15d4dbdc47e1bee98fea, type: 3}
+    AnswerTemplate: {fileID: 9197481963319205126, guid: 685aeb3da5b6a7446a7cb7f28ea345e9, type: 3}
+  - QuestionType: 5
+    DisplayName: Multiple Choice Grid
+    QuestionTemplate: {fileID: 9197481963319205126, guid: c27a58ec92e74384da6aeb38cd2f8e09, type: 3}
+    AnswerTemplate: {fileID: 9197481963319205126, guid: 78ab2473f88a1a64eb4126a8791b5824, type: 3}
+  - QuestionType: 6
+    DisplayName: Checkbox Grid
+    QuestionTemplate: {fileID: 9197481963319205126, guid: c5debe78eaaa2d54bb18a459c9e4a242, type: 3}
+    AnswerTemplate: {fileID: 9197481963319205126, guid: 6cb878319503b4b4d8cc65a505787145, type: 3}
+  - QuestionType: 3
+    DisplayName: Text Answer
+    QuestionTemplate: {fileID: 9197481963319205126, guid: 282d978ab46848a4f974d34b730e9983, type: 3}
+    AnswerTemplate: {fileID: 0}
+  - QuestionType: 8
+    DisplayName: Linear Scale
+    QuestionTemplate: {fileID: 9197481963319205126, guid: f52c51f898fd86942b37ec65459d6b18, type: 3}
+    AnswerTemplate: {fileID: 9197481963319205126, guid: e261264cf2c567a4c8f2c39faf34a078, type: 3}

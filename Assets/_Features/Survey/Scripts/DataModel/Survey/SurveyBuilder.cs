@@ -33,7 +33,7 @@ namespace SurveySystem {
             QuestionBase question = type switch {
                 QuestionType.MultipleChoiceSingle => new QuestionMultipleChoiceSingleAnswer(_nextId++),
                 //       QuestionType.MultipleChoiceMultiple => new MultiChoiceMultiple(),
-                _ => null
+                _ => new QuestionBase(_nextId++, type)
             };
 
             _activeSurvey.AddNewQuestion(question);

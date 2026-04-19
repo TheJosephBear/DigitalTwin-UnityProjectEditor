@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 2897362114246725028}
   - component: {fileID: 1424858818012207045}
   - component: {fileID: 3854545791191471903}
-  - component: {fileID: 3312583476571135514}
   - component: {fileID: 4910532214861355452}
   m_Layer: 5
   m_Name: SurveyViewingUI
@@ -20,7 +19,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4865206683662678078
 Transform:
   m_ObjectHideFlags: 0
@@ -81,21 +80,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsViewerUI: 1
---- !u!114 &3312583476571135514
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4199356123922554441}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bcaed16031e546b4aa4e9c4aea8acd82, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  questionAnswerMappings:
-  - questionType: 0
-    answerUITemplate: {fileID: 9197481963319205126, guid: caa5a55d648c50846b46348f1b9709ac, type: 3}
 --- !u!114 &4910532214861355452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,9 +92,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96975e29b58ed8848bb7ad653b52616e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  QuestionTypeMapping:
-  - EnumValue: 0
-    StringValue: MultipleChoice
-    Template: {fileID: 9197481963319205126, guid: 25e0a0474ebacc340869ef00f6bd9627, type: 3}
-    AnswerTemplate: {fileID: 9197481963319205126, guid: caa5a55d648c50846b46348f1b9709ac, type: 3}
+  questionUIMapping: {fileID: 11400000, guid: 92c7910e54e8a8845b877ccd6991e0bf, type: 2}
   addQuestionBarTemplate: {fileID: 9197481963319205126, guid: c099ff1d780c64e4193d328bc2f6bc01, type: 3}
