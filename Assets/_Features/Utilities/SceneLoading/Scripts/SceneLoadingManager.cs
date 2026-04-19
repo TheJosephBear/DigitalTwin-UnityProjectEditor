@@ -148,7 +148,12 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
         SceneManager.MoveGameObjectToScene(go, SceneManager.GetSceneByName(scene.ToString()));
         return go;
     }
-    
+
+    void CallSceneInitializer(SceneField scene) {
+        Iinitializer initializer = FindInitializerInScene(scene);
+        initializer?.Initialize(); // Run initial setup tasks
+    }
+
     #region Coroutine implementations
 
     IEnumerator LoadSceneAsyncC(SceneField scene, TaskCompletionSource<bool> tcs, float loadingScreenLength) {
@@ -158,7 +163,7 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
         }
         _loadedScenes.Add(scene);
         SetActiveScene(scene);
-        CallSceneInitializerC(scene, loadingScreenLength);
+        CallSceneInitializer(scene);
         tcs.SetResult(true);
     }
 
@@ -175,11 +180,6 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
         tcs.SetResult(true);
     }
 
-    void CallSceneInitializerC(SceneField scene, float waitAfterInitialization) {
-        Iinitializer initializer = FindInitializerInScene(scene);
-        initializer?.Initialize(); // Run initial setup tasks
-    }
-
     Iinitializer FindInitializerInScene(SceneField scene) {
         // Only searches root objects of the target scene
         GameObject[] rootObjects = SceneManager.GetSceneByName(scene.SceneName).GetRootGameObjects();
@@ -194,6 +194,7 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
     }
 
     #endregion
+
 }
 
 /**

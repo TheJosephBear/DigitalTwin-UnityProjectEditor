@@ -7,16 +7,16 @@ using UnityEngine;
 
 public class AssetManager : Singleton<AssetManager> {
     /// <summary>
-    /// Creates assets from uploaded models for easier upload and download
+    /// Creates _assets from uploaded models for easier upload and download
     /// </summary>
 
     public GameObject AssetContainer; // Parent gameobject for uploaded models
-    List<ModelAsset> assets = new List<ModelAsset>();
+    List<ModelAsset> _assets = new List<ModelAsset>();
 
     public ModelAsset CreateNewAssetFromFile(FrostweepGames.Plugins.WebGLFileBrowser.File file) {
         // Duplication check
         string fileHash = GetFileHash(file.data);
-        foreach (var asset in assets) {
+        foreach (var asset in _assets) {
             if (asset.FileHash == fileHash) {
                 Debug.Log("Model already uploaded.");
                 return asset;
@@ -30,7 +30,7 @@ public class AssetManager : Singleton<AssetManager> {
         modelAsset.FileName = file.fileInfo.fullName;
         modelAsset.FileHash = fileHash;
         modelAsset.SetModelGameObject(newAssetGo);
-        assets.Add(modelAsset);
+        _assets.Add(modelAsset);
         newAssetGo.SetActive(false);
         return modelAsset;
     }
@@ -59,7 +59,7 @@ public class AssetManager : Singleton<AssetManager> {
         string fileHash = GetFileHash(objFile.data);
 
         // 3. Duplication check
-        foreach (var asset in assets) {
+        foreach (var asset in _assets) {
             if (asset.FileHash == fileHash) {
                 Debug.Log("Model already uploaded.");
                 return asset;
@@ -81,14 +81,14 @@ public class AssetManager : Singleton<AssetManager> {
         modelAsset.FileHash = fileHash;
         modelAsset.SetModelGameObject(newAssetGo);
 
-        assets.Add(modelAsset);
+        _assets.Add(modelAsset);
         newAssetGo.SetActive(false);
 
         return modelAsset;
     }
 
     public ModelAsset FindModelAssetByFileHash(string fileHash) {
-        foreach (ModelAsset modelAsset in assets) {
+        foreach (ModelAsset modelAsset in _assets) {
             if (modelAsset.FileHash == fileHash) return modelAsset;
         }
         print("modelAsset with fileHash " + fileHash + " doesn't exist.");
@@ -96,10 +96,10 @@ public class AssetManager : Singleton<AssetManager> {
     }
 
     public void ClearManager() {
-        foreach (ModelAsset modelAsset in assets) {
+        foreach (ModelAsset modelAsset in _assets) {
             Destroy(modelAsset.gameObject);
         }
-        assets.Clear();
+        _assets.Clear();
     }
 
     #region Helper functions
@@ -122,7 +122,7 @@ public class AssetManager : Singleton<AssetManager> {
     public List<SerializableModelAsset> SerializeAssetList() {
         List<SerializableModelAsset> serializableAssets = new List<SerializableModelAsset>();
 
-        foreach (ModelAsset asset in assets) {
+        foreach (ModelAsset asset in _assets) {
             SerializableModelAsset serializableAsset = new SerializableModelAsset {
                 fileHash = asset.FileHash
             };
@@ -132,17 +132,16 @@ public class AssetManager : Singleton<AssetManager> {
         return serializableAssets;
     }
 
-    public void UploadModelsToWeb(string projectNameToUploadTo) {
-        foreach (ModelAsset modelAsset in assets) {
+    public void UploadModelsToWeb(string projectName) {
+        foreach (ModelAsset modelAsset in _assets) {
             List<string> pathsToFiles = FileLoadingManager.Instance.GetAllFilesForAsset(modelAsset.FileHash);
             print(pathsToFiles.Count);
             foreach (string path in pathsToFiles) {
-                print("saving path: " + path);
                 string fileName = Path.GetFileName(path);
                 ServerCommunicationManager.Instance.UploadFileToServer(
                     path,
                     fileName,
-                    projectNameToUploadTo,
+                    projectName,
                     modelAsset.FileHash
                 );
             }
@@ -181,7 +180,7 @@ public class AssetManager : Singleton<AssetManager> {
 
     ModelAsset DownloadAsset(string assetHash, string projectName, System.Action<ModelAsset> onComplete) {
         // already loaded?
-        foreach (var asset in assets) {
+        foreach (var asset in _assets) {
             if (asset.FileHash == assetHash) {
                 onComplete(asset);
                 return asset;
@@ -252,7 +251,7 @@ public class AssetManager : Singleton<AssetManager> {
         modelAsset.FileHash = assetHash;
         modelAsset.SetModelGameObject(go);
 
-        assets.Add(modelAsset);
+        _assets.Add(modelAsset);
         onComplete(modelAsset);
     }
 
@@ -282,7 +281,7 @@ public class AssetManager : Singleton<AssetManager> {
         ModelAsset modelAsset = newAssetGo.AddComponent<ModelAsset>();
         modelAsset.FileHash = fileHash;
         modelAsset.SetModelGameObject(newAssetGo);
-        assets.Add(modelAsset);
+        _assets.Add(modelAsset);
         newAssetGo.SetActive(false);
         onComplete(modelAsset);
         return modelAsset;

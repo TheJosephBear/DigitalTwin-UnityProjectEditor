@@ -18,16 +18,16 @@ public class FileBrowserManager : Singleton<FileBrowserManager> {
     /// </summary>
     protected override void Awake() {
         base.Awake();
-        WebGLFileBrowser.FilesWereOpenedEvent += FilesWereOpenedEventHandler;
-        WebGLFileBrowser.FileOpenFailedEvent += FileOpenFailedEventHandler;
+        WebGLFileBrowser.FilesWereOpenedEvent += FilesOpenedHandler;
+        WebGLFileBrowser.FileOpenFailedEvent += FileOpenFailedHandler;
     }
 
     /// <summary>
     /// Cleans up event subscriptions when the service is destroyed.
     /// </summary>
     void OnDestroy() {
-        WebGLFileBrowser.FilesWereOpenedEvent -= FilesWereOpenedEventHandler;
-        WebGLFileBrowser.FileOpenFailedEvent -= FileOpenFailedEventHandler;
+        WebGLFileBrowser.FilesWereOpenedEvent -= FilesOpenedHandler;
+        WebGLFileBrowser.FileOpenFailedEvent -= FileOpenFailedHandler;
     }
 
     /// <summary>
@@ -60,7 +60,7 @@ public class FileBrowserManager : Singleton<FileBrowserManager> {
     /// <param name="files">
     /// Files selected by the user.
     /// </param>
-    void FilesWereOpenedEventHandler(File[] files) {
+    void FilesOpenedHandler(File[] files) {
         onFilesSelectedCallback?.Invoke(files);
     }
 
@@ -70,7 +70,7 @@ public class FileBrowserManager : Singleton<FileBrowserManager> {
     /// <param name="error">
     /// Error message returned by the file browser.
     /// </param>
-    void FileOpenFailedEventHandler(string error) {
+    void FileOpenFailedHandler(string error) {
         Debug.LogError($"File open failed: {error}");
     }
 }

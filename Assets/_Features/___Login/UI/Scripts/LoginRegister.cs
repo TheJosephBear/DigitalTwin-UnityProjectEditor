@@ -24,14 +24,14 @@ public class LoginRegister : UIBehaviour {
         AudioManager.Instance.PlaySound(SoundType.click);
         string name = name_field.text;
         string password = password_field.text;
-        LoginManager.Instance.Login(name, password);
+        AuthorizationManager.Instance.Login(name, password);
     }
 
     public void Register() {
         AudioManager.Instance.PlaySound(SoundType.click);
         string name = name_field.text;
         string password = password_field.text;
-        LoginManager.Instance.Register(name, password);
+        AuthorizationManager.Instance.Register(name, password);
     }
 
 }

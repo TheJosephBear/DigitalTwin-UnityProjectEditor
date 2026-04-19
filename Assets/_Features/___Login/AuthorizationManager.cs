@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static SimpleFileBrowser.FileBrowser;
 
-public class LoginManager : Singleton<LoginManager> {
+public class AuthorizationManager : Singleton<AuthorizationManager> {
 
     public SceneType projectListScene;
 

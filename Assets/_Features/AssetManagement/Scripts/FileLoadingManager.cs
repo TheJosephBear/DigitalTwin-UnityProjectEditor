@@ -26,7 +26,10 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
     /// <param name="folderOrObjPath"></param>
     /// <param name="fileHash"></param>
     /// <returns></returns>
-    public GameObject UploadFromPC(string folderOrObjPath, string fileHash) {
+    public GameObject UploadFromPC(
+        string folderOrObjPath, 
+        string fileHash
+    ) {
         ResolveOriginalPaths(folderOrObjPath, out string objPath, out string folderPath);
 
         string copiedObjPath = CopyObjBundleToPersistent(objPath, folderPath, fileHash);
@@ -95,10 +98,6 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
 
         return BuildObjFromCopiedFiles(objPath);
     }
-
-
-
-
 
     #endregion
 
