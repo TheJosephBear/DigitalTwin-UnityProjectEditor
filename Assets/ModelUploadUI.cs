@@ -23,7 +23,7 @@ public class ModelUploadUI : UIBehaviour {
         );
 #else
         FileBrowserManager.Instance.ShowLoadDialog(
-            files => HandleFilesSelected(files+),
+            files => HandleFilesSelected(files),
             "obj, mtl, png, jpg",
             multipleSelection: true
         );

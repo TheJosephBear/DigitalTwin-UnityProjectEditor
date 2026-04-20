@@ -12,13 +12,11 @@ using UnityEngine.UIElements;
 /// and relays the changes to the <see cref="SurveyBuilder"/> for updating the survey data model.
 /// (Tohle by mo�n� mohl d�lat sv�j vlastn� script) -> Manages the instantiation of addedQuestion UI elements based on templates and keeps track of added questions.
 /// </summary>
-public class SurveyUIController : MonoBehaviour {
+public class SurveyUIControllerEditor : MonoBehaviour {
     
-    public bool IsViewerUI = false;
     private VisualElement _root;
     private SurveyManager _surveyManager;
     private SurveyBuilder _surveyBuilder; // Interface for data model
-    private SurveyResponseManager _responseManager; // Handles response data model
     private SurveyUIBuilder _surveyUIBuilder; // Script adding template instances to UI
 
     void Awake() {
@@ -35,12 +33,6 @@ public class SurveyUIController : MonoBehaviour {
 
     public void Initialize(SurveyBuilder surveyBuilder, SurveyManager manager) {
         _surveyBuilder = surveyBuilder;
-        _surveyManager = manager;
-    }
-
-    public void Initialize(SurveyBuilder surveyBuilder, SurveyResponseManager responseManager, SurveyManager manager) {
-        _surveyBuilder = surveyBuilder;
-        _responseManager = responseManager;
         _surveyManager = manager;
     }
 
@@ -76,9 +68,6 @@ public class SurveyUIController : MonoBehaviour {
             builderUI.OnAnswerOtherAdded += HandleAnswerOtherAdded;
             builderUI.OnAnswerRemoved += HandleAnswerRemoved;
             builderUI.OnViewpointSelected += HandleQuestionViewPointSelected;
-        } else if (addedQuestionUI is ISurveyQuestionViewerUI viewerUI) {
-            viewerUI.OnAnswerSelected += HandleAnswerSelected;
-            viewerUI.OnAnswerTextFilled += HandleAnswerTextFilled;
         }
 
         return addedQuestionUI;
@@ -124,24 +113,10 @@ public class SurveyUIController : MonoBehaviour {
 
     #endregion
 
-    #region Survey Viewing
 
-    public void HandleAnswerSelected(int questionId, int answerId) {
-        _responseManager.RegisterAnswer(questionId, answerId);
-    }
-
-    public void HandleAnswerTextFilled(int questionId, int answerId, string newText) {
-
-    }
-
-    #endregion
 
     public void HandleSavePressed() {
-        if (IsViewerUI) {
-            _surveyManager.SaveAnswers();
-        } else {
-            _surveyManager.SaveSurvey();
-        }
+        _surveyManager.SaveSurvey();
     }
 
     public void HandleExitPressed() {

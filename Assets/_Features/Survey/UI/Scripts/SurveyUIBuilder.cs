@@ -24,7 +24,6 @@ public class SurveyUIBuilder : MonoBehaviour {
     void Awake() {
         _root = gameObject.GetComponent<UIDocument>().rootVisualElement;
         _scrollViewContent = _root.Q<ScrollView>("survey-scroll-view").contentContainer;
-        _isViewerUI = GetComponent<SurveyUIController>().IsViewerUI;
 
         // Add the initial bar at the start (before any questions)
         RefreshAddQuestionBars();
@@ -169,4 +168,57 @@ public class SurveyUIBuilder : MonoBehaviour {
         return _addedQuestions.IndexOf(questionUI);
     }
 
+    public ISurveyQuestionUI AddQuestionViewer(QuestionBase questionBase, int insertAtIndex = -1) {
+        QuestionType questionType = questionBase.QuestionType;
+        TemplateContainer questionInstance;
+
+        QuestionTypeMapping mapping = questionUIMapping.GetMappingByQuestionType(questionType);
+
+        if (mapping == null) {
+            Debug.LogError($"No mapping found for enum: {questionType}");
+            return null;
+        }
+
+        VisualTreeAsset template = mapping.QuestionTemplate;
+
+        questionInstance = template != null
+            ? template.Instantiate()
+            : new TemplateContainer();
+
+        if (template == null) {
+            questionInstance.Add(new Label($"Missing template for '{questionType}'"));
+        }
+
+        ISurveyQuestionUI questionUI = new SurveyQuestionUIViewer(
+            questionInstance,
+            questionBase.Id,
+            questionType,
+            FindAnyObjectByType<ViewManager>()?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>(),
+            this
+        );
+
+        _scrollViewContent.Add(questionInstance);
+
+        foreach (var bar in _addQuestionBars) {
+            bar.RemoveFromHierarchy();
+        }
+        _addQuestionBars.Clear();
+
+
+        if (insertAtIndex < 0 || insertAtIndex >= _addedQuestions.Count) {
+            _addedQuestions.Add(questionUI);
+        } else {
+            _addedQuestions.Insert(insertAtIndex, questionUI);
+        }
+
+        return questionUI;
+    }
+
+    public void ClearScrollviewContent() {
+        foreach (var question in _addedQuestions) {
+            if (question.QuestionElement != null) {
+                question.QuestionElement.RemoveFromHierarchy();
+            }
+        }
+    }
 }

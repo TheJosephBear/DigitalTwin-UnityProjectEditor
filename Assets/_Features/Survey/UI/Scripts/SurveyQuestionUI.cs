@@ -600,7 +600,8 @@ public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
 
     /// <summary>Loads the correct answer template based on question type.</summary>
     private void LoadAnswerTemplate() {
-        var mapping = UnityEngine.Object.FindFirstObjectByType<QuestionUIMapping>();
+        // var mapping = UnityEngine.Object.FindFirstObjectByType<QuestionUIMapping>();
+        var mapping = _surveyUIBuilder.questionUIMapping;
 
         if (mapping == null) {
             Debug.LogError("QuestionUIMapping not found!");
@@ -692,18 +693,32 @@ public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
     }
 
     private void RegisterButtons() {
-        _root.Q<Button>("add-option-button").clicked += () =>
-            OnAnswerAdded?.Invoke(QuestionID, AddAnswerUI());
+        var addOptionButton = _root.Q<Button>("add-option-button");
+        if (addOptionButton != null) {
+            addOptionButton.clicked += () =>
+                OnAnswerAdded?.Invoke(QuestionID, AddAnswerUI());
+        } else {
+            Debug.LogWarning("[RegisterButtons] add-option-button not found");
+        }
 
-        _root.Q<Button>("add-other-option-button").clicked += () => {
-            if (_otherAnswerUI == null) {
-                OnAnswerOtherAdded?.Invoke(QuestionID);
-                AddAnswerUI(true);
-            }
-        };
+        var addOtherButton = _root.Q<Button>("add-other-option-button");
+        if (addOtherButton != null) {
+            addOtherButton.clicked += () => {
+                if (_otherAnswerUI == null) {
+                    OnAnswerOtherAdded?.Invoke(QuestionID);
+                    AddAnswerUI(true);
+                }
+            };
+        } else {
+            Debug.LogWarning("[RegisterButtons] add-other-option-button not found");
+        }
 
-        _root.Q<VisualElement>("edit-question-button")
-            ?.RegisterCallback<ClickEvent>(OnEditQuestionClicked);
+        var editButton = _root.Q<VisualElement>("edit-question-button");
+        if (editButton != null) {
+            editButton.RegisterCallback<ClickEvent>(OnEditQuestionClicked);
+        } else {
+            Debug.LogWarning("[RegisterButtons] edit-question-button not found");
+        }
     }
 
     private void RegisterDropdown() {
@@ -723,25 +738,56 @@ public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
 
     /// <summary>Adds an answer UI element.</summary>
     private SurveyAnswerUI AddAnswerUI(bool isOther = false) {
-        if (_optionsList == null || _answerTemplate == null)
+        Debug.Log($"[AddAnswerUI] START | isOther: {isOther}");
+
+        if (_optionsList == null) {
+            Debug.LogError("[AddAnswerUI] _optionsList is NULL");
             return null;
+        }
+
+        if (_answerTemplate == null) {
+            Debug.LogError("[AddAnswerUI] _answerTemplate is NULL");
+            return null;
+        }
 
         var element = _answerTemplate.Instantiate();
+        Debug.Log("[AddAnswerUI] Template instantiated");
+
         int index = _addedAnswers.Count;
+        Debug.Log($"[AddAnswerUI] Current index: {index}, existing answers count: {_addedAnswers.Count}");
 
         if (isOther) {
-            _optionsList.Add(element);
+            Debug.Log("[AddAnswerUI] Handling OTHER answer");
 
-            element.Q<CustomRadioButton>().Placeholder = "Other";
+            _optionsList.Add(element);
+            Debug.Log("[AddAnswerUI] Element added to _optionsList");
+
+            var radio = element.Q<CustomRadioButton>();
+            if (radio == null) {
+                Debug.LogError("[AddAnswerUI] CustomRadioButton NOT FOUND in template");
+            } else {
+                radio.Placeholder = "Other";
+                Debug.Log("[AddAnswerUI] Set placeholder to 'Other'");
+            }
 
             _otherAnswerUI = new SurveyAnswerUI(element, index, this, true);
+            Debug.Log("[AddAnswerUI] Created _otherAnswerUI");
+
             return _otherAnswerUI;
         }
 
+        Debug.Log("[AddAnswerUI] Handling NORMAL answer");
+
         InsertAnswerElement(element);
+        Debug.Log("[AddAnswerUI] Element inserted via InsertAnswerElement");
 
         var answerUI = new SurveyAnswerUI(element, index, this, false);
+        Debug.Log("[AddAnswerUI] SurveyAnswerUI created");
+
         _addedAnswers.Add(answerUI);
+        Debug.Log($"[AddAnswerUI] Added to _addedAnswers. New count: {_addedAnswers.Count}");
+
+        Debug.Log("[AddAnswerUI] END");
 
         return answerUI;
     }

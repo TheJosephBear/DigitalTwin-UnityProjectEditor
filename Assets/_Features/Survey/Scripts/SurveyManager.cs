@@ -42,11 +42,12 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
     }
 
     public void EnterSurveyViewing(bool debug = false) {
-        _flowManager.EnterSurveyViewing();
         if (debug) {
-            _flowManager.DeserializeSurvey(_surveyJsonData);
+            _flowManager.EnterSurveyViewing(_surveyJsonData);
         } else {
-            DeserializeSurvey();
+            StartCoroutine(DownloadSurveyData(data => {
+                _flowManager.EnterSurveyViewing(data);
+            }));
         }
     }
 
@@ -62,6 +63,23 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
     #endregion
 
     #region Server comm
+
+    IEnumerator DownloadSurveyData(System.Action<string> onCompleted) {
+        bool isDone = false;
+        string result = null;
+
+        ServerCommunicationManager.Instance.StartSurveyDownload(
+            ProjectManager.Instance.SelectedProject.ProjectName,
+            (success, data) => {
+                result = data;
+                isDone = true;
+            });
+
+        // Wait until callback fires
+        yield return new WaitUntil(() => isDone);
+
+        onCompleted?.Invoke(result);
+    }
 
     public void DeserializeSurvey() {
         ServerCommunicationManager.Instance.StartSurveyDownload(ProjectManager.Instance.SelectedProject.ProjectName, (success, data) => {
@@ -82,7 +100,7 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
 
     #endregion
 
-    public void SetSurveyJson(string json) {
+    public void SetSurveyJson(string json, bool debug = false) {
         _surveyJsonData = json;
     }
 

@@ -11,7 +11,8 @@ public class SurveyFlowManager : MonoBehaviour {
 
     SurveyBuilder _builderInstance;
     SurveyResponseManager _responseManInstance;
-    SurveyUIController _uiInstance;
+    SurveyUIControllerEditor _uiInstanceEditor;
+    SurveyUIControllerViewer _uiInstanceViewer;
 
     void Start() {
 
@@ -19,31 +20,33 @@ public class SurveyFlowManager : MonoBehaviour {
 
     public void EnterSurveyBuilding() {
         if(_builderInstance == null) _builderInstance = new SurveyBuilder();
-        if(_uiInstance == null) {
-            _uiInstance = SceneLoadingManager.Instance != null 
-                ? SceneLoadingManager.Instance.InstantiateObjectInScene(SurveyBuildingUIPrefab).GetComponent<SurveyUIController>()
-                : Instantiate(SurveyBuildingUIPrefab).GetComponent<SurveyUIController>();
+        if(_uiInstanceEditor == null) {
+            _uiInstanceEditor = SceneLoadingManager.Instance != null 
+                ? SceneLoadingManager.Instance.InstantiateObjectInScene(SurveyBuildingUIPrefab).GetComponent<SurveyUIControllerEditor>()
+                : Instantiate(SurveyBuildingUIPrefab).GetComponent<SurveyUIControllerEditor>();
         }
 
         if (!_builderInstance.HasActiveSurvey()) _builderInstance.CreateNewSurvey();
-        _uiInstance.Initialize(_builderInstance, SurveyManager.Instance);
+        _uiInstanceEditor.Initialize(_builderInstance, SurveyManager.Instance);
 
-        _uiInstance.gameObject.SetActive(true);
+        _uiInstanceEditor.gameObject.SetActive(true);
     }
 
-    public void EnterSurveyViewing() {
+    public void EnterSurveyViewing(string surveyJson) {
         if (_builderInstance == null) _builderInstance = new SurveyBuilder();
         if (_responseManInstance == null) _responseManInstance = new SurveyResponseManager();
-        if (_uiInstance == null) {
-            _uiInstance = SceneLoadingManager.Instance != null
-                ? SceneLoadingManager.Instance.InstantiateObjectInScene(SurveyViewingUIPrefab).GetComponent<SurveyUIController>()
-                : Instantiate(SurveyViewingUIPrefab).GetComponent<SurveyUIController>();
+        if (_uiInstanceViewer == null) {
+            _uiInstanceViewer = SceneLoadingManager.Instance != null
+                ? SceneLoadingManager.Instance.InstantiateObjectInScene(SurveyViewingUIPrefab).GetComponent<SurveyUIControllerViewer>()
+                : Instantiate(SurveyViewingUIPrefab).GetComponent<SurveyUIControllerViewer>();
         }
 
-        if (!_builderInstance.HasActiveSurvey()) _builderInstance.CreateNewSurvey();
-        _uiInstance.Initialize(_builderInstance, _responseManInstance, SurveyManager.Instance);
+        if (!_builderInstance.HasActiveSurvey()) _builderInstance.CreateNewSurvey(); 
+        _builderInstance.DeserializeFromJson(surveyJson);
+        _responseManInstance?.Initialize(_builderInstance.GetActiveSurvey());
 
-        _uiInstance.gameObject.SetActive(true);
+        _uiInstanceViewer.Initialize(_builderInstance, _responseManInstance, SurveyManager.Instance);
+        _uiInstanceViewer.gameObject.SetActive(true);
     }
 
     public string GetSurveyJsonData() {
@@ -58,12 +61,13 @@ public class SurveyFlowManager : MonoBehaviour {
     public void DeserializeSurvey(string surveyJson) {
         _builderInstance.DeserializeFromJson(surveyJson);
         _responseManInstance?.Initialize(_builderInstance.GetActiveSurvey());
-        _uiInstance.DeserializeUI();
+        _uiInstanceEditor.DeserializeUI();
     }
 
     // Disable UI and other related objects
     public void ExitSurvey() {
         //   _uiInstance.gameObject.SetActive(false); // Buggy, dont know uitoolkit well enough to know why, lets just destroy it (not that expensive on one object hopefully)
-        Destroy(_uiInstance.gameObject);
+        if (_uiInstanceEditor != null) Destroy(_uiInstanceEditor.gameObject);
+        if(_uiInstanceViewer != null) Destroy(_uiInstanceViewer.gameObject);
     }
 }

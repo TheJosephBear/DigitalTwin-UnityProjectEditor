@@ -98,15 +98,23 @@ namespace SurveySystem {
         }
 
         public void SetAnswerText(string text) {
-            _activeSurvey.ActiveQuestion.ActiveAnswer.Text = text;
+            SetAnswerText(_activeSurvey.ActiveQuestion.ActiveAnswer, text);
         }
 
         public void SetAnswerText(AnswerBase answer, string text) {
-            answer.Text = text;
+            if (answer == null) return;
+
+            // Bezpečné přetypování - zkusíme, jestli odpověď podporuje text
+            if (answer is AnswerChoice choice) {
+                choice.Text = text;
+            } else if (answer is AnswerString strAnswer) {
+                strAnswer.Text = text;
+            }
         }
 
         public void SetAnswerText(int questionId, int answerId, string text) {
-            _activeSurvey.GetQuestionById(questionId).GetAnswerByIdx(answerId).Text = text;
+            var answer = _activeSurvey.GetQuestionById(questionId)?.GetAnswerByIdx(answerId);
+            SetAnswerText(answer, text);
         }
 
         public void RemoveAnswer(int idx) {

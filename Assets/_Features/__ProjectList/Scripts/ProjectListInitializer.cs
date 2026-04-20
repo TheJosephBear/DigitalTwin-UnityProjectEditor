@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class ProjectListInitializer : MonoBehaviour, Iinitializer {
     public void Initialize() {
-
-    }
-
-    public void StartRunning() {
         UIManager.Instance.ShowUI(UIType.ProjectsList);
+
     }
+
 
     public void Unload() {
 
