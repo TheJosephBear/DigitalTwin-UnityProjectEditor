@@ -9,7 +9,7 @@ namespace SurveySystem {
         public string Description { get; set; }
         public string ViewPointId { get; protected set; }
         public QuestionType QuestionType { get; protected set; }
-
+        public bool MultipleAnswersAllowed { get; protected set; } // Allow selecting multiple answers
         protected List<AnswerBase> _answers = new();
         public AnswerBase ActiveAnswer { get; protected set; }
         public IReadOnlyList<AnswerBase> Answers => _answers;

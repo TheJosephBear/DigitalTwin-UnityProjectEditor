@@ -4,7 +4,7 @@
         <ui:Label text="Stránka průzkumu" name="title" style="font-size: 30px; -unity-text-align: middle-center; background-color: rgb(228, 228, 228); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 8px; padding-bottom: 8px;" />
         <ui:Button text="Toggle" name="toggle-btn" style="flex-shrink: 1; align-self: auto; transform-origin: center; position: absolute; top: 0; left: -16%; right: auto; bottom: auto;" />
         <ui:VisualElement name="bottom-bar" style="flex-grow: 1; position: absolute; bottom: 0; left: 0; right: 0; flex-direction: row-reverse; justify-content: flex-start; padding-right: 30px; height: 5%; width: 95%;">
-            <ui:Button text="Další" name="next-btn" double-click-selects-word="false" style="flex-shrink: 1; width: 20%; right: auto; position: absolute; top: -100%; left: 0;" />
+            <ui:Button text="Další" name="next-btn" double-click-selects-word="false" style="flex-shrink: 1; width: 20%; right: 0; position: absolute; top: auto; left: auto;" />
             <ui:Label text="999/999" name="page-count-label" style="position: absolute; top: auto; left: auto; bottom: auto; right: 45%; width: 15%; -unity-text-align: middle-center;" />
             <ui:Button text="Předchozí" name="previous-btn" style="flex-shrink: 1; width: 20%; position: absolute; right: auto; left: 0;" />
         </ui:VisualElement>
