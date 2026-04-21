@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+using System.Runtime.Serialization;
 
 namespace SurveySystem {
     /// <summary>
@@ -32,7 +33,14 @@ namespace SurveySystem {
         public QuestionBase AddNewQuestion(QuestionType type) {
             QuestionBase question = type switch {
                 QuestionType.MultipleChoiceSingle => new QuestionMultipleChoiceSingleAnswer(_nextId++),
-                //       QuestionType.MultipleChoiceMultiple => new MultiChoiceMultiple(),
+                QuestionType.MultipleChoiceMultiple => new QuestionMultipleChoiceMultipleAnswer(_nextId++),
+                QuestionType.ShortAnswer => new QuestionParagraph(_nextId++),
+                QuestionType.Paragraph => new QuestionParagraph(_nextId++),
+                QuestionType.Dropdown => new QuestionMultipleChoiceSingleAnswer(_nextId++),
+                QuestionType.MultipleChoiceGrid => new QuestionMultipleChoiceGrid(_nextId++),
+                QuestionType.CheckboxGrid => new QuestionCheckboxGrid(_nextId++),
+                QuestionType.ImageChoice => new QuestionMultipleChoiceSingleAnswer(_nextId++),
+                QuestionType.LinearScale => new QuestionLinearScale(_nextId++),
                 _ => new QuestionBase(_nextId++, type)
             };
 
@@ -130,12 +138,14 @@ namespace SurveySystem {
         public string ExportSurveyAsJson() {
             string jsonString = JsonUtility.ToJson(_activeSurvey.Serialize());
 
+            Debug.Log(jsonString);
+
             return jsonString;
         }
 
         public void DeserializeFromJson(string json) {
-            Debug.Log("Desserializing survey");
             CreateNewSurvey();
+
             _activeSurvey.Deserialize(JsonUtility.FromJson<SurveySerializable>(json));
         }
 

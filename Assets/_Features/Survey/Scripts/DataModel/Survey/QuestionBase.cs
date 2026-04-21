@@ -1,3 +1,4 @@
+using QuestionnaireToolkit.Scripts.SimpleJSON;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -80,18 +81,18 @@ namespace SurveySystem {
         }
 
         public QuestionBase Deserialize(SerializableQuestion serializable) {
-            QuestionBase deserializedQuestion = null;
-
-            switch (serializable.QuestionType) {
-                case QuestionType.MultipleChoiceSingle:
-                    deserializedQuestion = new QuestionMultipleChoiceSingleAnswer(serializable.Id);
-                    break;
-                case QuestionType.MultipleChoiceMultiple:
-                    break;
-                case QuestionType.LinearScale:
-                    break;
-            }
-
+            QuestionBase deserializedQuestion = serializable.QuestionType switch {
+                QuestionType.MultipleChoiceSingle => new QuestionMultipleChoiceSingleAnswer(serializable.Id),
+                QuestionType.MultipleChoiceMultiple => new QuestionMultipleChoiceMultipleAnswer(serializable.Id),
+                QuestionType.ShortAnswer => new QuestionParagraph(serializable.Id),
+                QuestionType.Paragraph => new QuestionParagraph(serializable.Id),
+                QuestionType.Dropdown => new QuestionMultipleChoiceSingleAnswer(serializable.Id),
+                QuestionType.MultipleChoiceGrid => new QuestionMultipleChoiceGrid(serializable.Id),
+                QuestionType.CheckboxGrid => new QuestionCheckboxGrid(serializable.Id),
+                QuestionType.ImageChoice => new QuestionMultipleChoiceSingleAnswer(serializable.Id),
+                QuestionType.LinearScale => new QuestionLinearScale(serializable.Id),
+            };
+            
            deserializedQuestion.Title = serializable.Title;
            deserializedQuestion.Description = serializable.Description;
            deserializedQuestion.ViewPointId = serializable.ViewPointId;
