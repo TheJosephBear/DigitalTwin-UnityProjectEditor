@@ -4,7 +4,9 @@ namespace SurveySystem {
         public int Max = 5;
 
         public QuestionLinearScale(int ID)
-            : base(ID, QuestionType.LinearScale) { }
+            : base(ID, QuestionType.LinearScale) {
+            MultipleAnswersAllowed = false;
+        }
 
    //     public override bool HasPredefinedAnswers() => false;
 
