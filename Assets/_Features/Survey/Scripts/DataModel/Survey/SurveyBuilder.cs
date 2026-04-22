@@ -109,6 +109,14 @@ namespace SurveySystem {
             SetAnswerText(_activeSurvey.ActiveQuestion.ActiveAnswer, text);
         }
 
+        public void AddRow(int questionId) {
+
+        }
+
+        public void AddColumn(int questionId) {
+
+        }
+
         public void SetAnswerText(AnswerBase answer, string text) {
             if (answer == null) return;
 

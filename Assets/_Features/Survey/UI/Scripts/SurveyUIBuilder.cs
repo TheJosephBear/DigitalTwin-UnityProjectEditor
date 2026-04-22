@@ -133,15 +133,25 @@ public class SurveyUIBuilder : MonoBehaviour {
         }
 
         ISurveyQuestionUI questionUI;
-        
-        questionUI = new SurveyQuestionUI(
-            questionInstance,
-            addedQuestion.Id,
-            questionType,
-            FindAnyObjectByType<ViewManager>()?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>(),
-            this,
-            isDeserialized: isDeserialized
-        );
+        if (addedQuestion.IsGrid) {
+            questionUI = new SurveyQuestionGridUI(
+                questionInstance,
+                addedQuestion.Id,
+                questionType,
+                FindAnyObjectByType<ViewManager>()?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>(),
+                this,
+                isDeserialized: isDeserialized
+            );
+        } else {
+            questionUI = new SurveyQuestionUI(
+                questionInstance,
+                addedQuestion.Id,
+                questionType,
+                FindAnyObjectByType<ViewManager>()?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>(),
+                this,
+                isDeserialized: isDeserialized
+            );
+        }
 
         if (insertAtIndex < 0 || insertAtIndex >= _addedQuestions.Count) {
             _addedQuestions.Add(questionUI);
@@ -154,7 +164,7 @@ public class SurveyUIBuilder : MonoBehaviour {
     }
 
     /// <summary>Returns the current index of the given addedQuestion in the list, or -1 if not found.</summary>
-    public int GetQuestionIndex(SurveyQuestionUI questionUI) {
+    public int GetQuestionIndex(ISurveyQuestionUI questionUI) {
         return _addedQuestions.IndexOf(questionUI);
     }
 

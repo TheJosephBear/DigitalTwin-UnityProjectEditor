@@ -1,10 +1,9 @@
-using UnityEngine;
-using UnityEngine.UIElements;
 using SurveySystem;
 using System.Collections.Generic;
 using System;
-
-public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
+using UnityEngine;
+using UnityEngine.UIElements;
+public class SurveyQuestionGridUI : ISurveyQuestionBuilderUIGrid {
 
     #region Fields & Properties
 
@@ -15,7 +14,7 @@ public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
     private QuestionType _questionType;
     private List<SerializableViewPoint> _viewPoints;
 
-    private List<SurveyAnswerUI> _addedAnswers = new();
+    private List<SurveyAnswerUIGrid> _addedAnswers = new();
     private SurveyAnswerUI _otherAnswerUI;
 
     private VisualElement _optionsList;
@@ -44,6 +43,9 @@ public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
     public event Action<int, string> OnViewpointSelected;
     public event Action<int, int, string> OnAnswerTextChanged;
 
+    public event Action<int> OnAddRow;
+    public event Action<int> OnAddColumn;
+
     #endregion
 
     #region Internal events
@@ -56,14 +58,13 @@ public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
 
     #endregion
 
-    public SurveyQuestionUI(
+    public SurveyQuestionGridUI(
         VisualElement root,
         int questionId,
         QuestionType questionType,
         List<SerializableViewPoint> viewPoints,
         SurveyUIBuilder uiBuilder,
         bool isDeserialized = false) {
-
         _root = root;
         QuestionID = questionId;
         _questionType = questionType;
@@ -144,14 +145,9 @@ public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
                 tf.value = answerText;
         }
 
-        var answerUI = new SurveyAnswerUI(element, index, this, isOther);
-
-        if (isOther) {
-            element.Q<CustomRadioButton>().Placeholder = "Other";
-            _otherAnswerUI = answerUI;
-        } else {
-            _addedAnswers.Add(answerUI);
-        }
+        var answerUI = new SurveyAnswerUIGrid(element, index, this, isOther);
+        _addedAnswers.Add(answerUI);
+        
     }
 
     #endregion
@@ -174,24 +170,17 @@ public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
     }
 
     private void RegisterButtons() {
-        var addOptionButton = _root.Q<Button>("add-option-button");
-        if (addOptionButton != null) {
-            addOptionButton.clicked += () =>
-                OnAnswerAdded?.Invoke(QuestionID, AddAnswerUI());
-        } else {
-            Debug.LogWarning("[RegisterButtons] add-option-button not found");
+        var addRowButton = _root.Q<Button>("add-row-button");
+        var addColumnButton = _root.Q<Button>("add-column-button");
+
+        if (addRowButton != null) {
+            addRowButton.clicked += () =>
+                OnAddRow?.Invoke(QuestionID);
         }
 
-        var addOtherButton = _root.Q<Button>("add-other-option-button");
-        if (addOtherButton != null) {
-            addOtherButton.clicked += () => {
-                if (_otherAnswerUI == null) {
-                    OnAnswerOtherAdded?.Invoke(QuestionID);
-                    AddAnswerUI(true);
-                }
-            };
-        } else {
-            Debug.LogWarning("[RegisterButtons] add-other-option-button not found");
+        if (addColumnButton != null) {
+            addColumnButton.clicked += () =>
+                OnAddColumn?.Invoke(QuestionID);
         }
 
         var editButton = _root.Q<VisualElement>("edit-question-button");
@@ -217,12 +206,8 @@ public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
 
     #region Answer Management
 
-    public void AddInitialAnswer() {
-        OnAnswerAdded?.Invoke(QuestionID, AddAnswerUI());
-    }
-
     /// <summary>Adds an answer UI element.</summary>
-    private SurveyAnswerUI AddAnswerUI(bool isOther = false) {
+    private SurveyAnswerUIGrid AddAnswerUI(bool isOther = false) {
         Debug.Log($"[AddAnswerUI] START | isOther: {isOther}");
 
         if (_optionsList == null) {
@@ -241,32 +226,14 @@ public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
         int index = _addedAnswers.Count;
         Debug.Log($"[AddAnswerUI] Current index: {index}, existing answers count: {_addedAnswers.Count}");
 
-        if (isOther) {
-            Debug.Log("[AddAnswerUI] Handling OTHER answer");
-
-            _optionsList.Add(element);
-            Debug.Log("[AddAnswerUI] Element added to _optionsList");
-
-            var radio = element.Q<CustomRadioButton>();
-            if (radio == null) {
-                Debug.LogError("[AddAnswerUI] CustomRadioButton NOT FOUND in template");
-            } else {
-                radio.Placeholder = "Other";
-                Debug.Log("[AddAnswerUI] Set placeholder to 'Other'");
-            }
-
-            _otherAnswerUI = new SurveyAnswerUI(element, index, this, true);
-            Debug.Log("[AddAnswerUI] Created _otherAnswerUI");
-
-            return _otherAnswerUI;
-        }
+        
 
         Debug.Log("[AddAnswerUI] Handling NORMAL answer");
 
         InsertAnswerElement(element);
         Debug.Log("[AddAnswerUI] Element inserted via InsertAnswerElement");
 
-        var answerUI = new SurveyAnswerUI(element, index, this, false);
+        var answerUI = new SurveyAnswerUIGrid(element, index, this, false);
         Debug.Log("[AddAnswerUI] SurveyAnswerUI created");
 
         _addedAnswers.Add(answerUI);
@@ -496,5 +463,10 @@ public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
         return null;
     }
 
+    public void AddInitialAnswer() {
+
+    }
+
     #endregion
+
 }

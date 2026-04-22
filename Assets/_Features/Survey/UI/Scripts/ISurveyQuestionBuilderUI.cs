@@ -12,3 +12,8 @@ public interface ISurveyQuestionBuilderUI : ISurveyQuestionUI {
     public event Action<int, int, string> OnAnswerTextChanged;
     public void AddInitialAnswer();
 }
+
+public interface ISurveyQuestionBuilderUIGrid : ISurveyQuestionBuilderUI {
+    public event Action<int> OnAddRow;
+    public event Action<int> OnAddColumn;
+}

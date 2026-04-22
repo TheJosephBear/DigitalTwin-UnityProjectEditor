@@ -83,7 +83,6 @@ public class AddQuestion : Singleton<AddQuestion> {
     private void AddQuestionByName(string name) {
         SurveyUIControllerEditor target = _pendingBuildingUI ?? _surveyBuildingUI;
         target.HandleQuestionAdded(name, _pendingInsertIndex);
-        Debug.Log("Question added.");
     }
 
     private void HideModal() {

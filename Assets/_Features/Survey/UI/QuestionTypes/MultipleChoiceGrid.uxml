@@ -9,7 +9,7 @@
             <ui:Instance template="GridOptionRadio" />
         </ui:VisualElement>
         <ui:VisualElement name="add-buttons" style="flex-grow: 0; flex-direction: row; align-content: stretch; justify-content: space-evenly; width: 200px; align-self: center;">
-            <ui:Button text="Přidat řádek" name="add-option-button" style="flex-grow: 1;" />
+            <ui:Button text="Přidat řádek" name="add-row-button" style="flex-grow: 1;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

@@ -6,5 +6,17 @@ namespace SurveySystem {
             MultipleAnswersAllowed = false;
             AddNewAnswer(true); // always one "other-like"
         }
+
+        public override AnswerBase AddNewAnswer(bool isOther) {
+            AnswerBase answer = new AnswerString {
+                Idx = _answers.Count,
+                Text = string.Empty,
+                IsOther = isOther
+            };
+
+            _answers.Add(answer);
+            ActiveAnswer = answer;
+            return answer;
+        }
     }
 }

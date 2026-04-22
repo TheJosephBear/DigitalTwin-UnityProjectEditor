@@ -59,7 +59,7 @@ namespace QuestionnaireToolkit.Scripts
                         _oldRows = 3;
                         _oldColumns = 5;
                         rowTexts = new List<string>() {"Row 1", "Row 2", "Row 3"};
-                        columnTexts = new List<string>() {"Column 1", "Column 2", "Column 3", "Column 4", "Column 5"};
+                        columnTexts = new List<string>() {"Collumn 1", "Collumn 2", "Collumn 3", "Collumn 4", "Collumn 5"};
                         #if UNITY_EDITOR
                         BuildGrid();
                         #endif
@@ -148,7 +148,7 @@ namespace QuestionnaireToolkit.Scripts
                     // add columns
                     foreach (var column in columnTexts)
                     {
-                        SpawnGridOption(gridText, inWorldSpace, contentParentTransform, column, "Column");
+                        SpawnGridOption(gridText, inWorldSpace, contentParentTransform, column, "Collumn");
                     }
 
                     // add rows
@@ -223,7 +223,7 @@ namespace QuestionnaireToolkit.Scripts
                     // add columns
                     foreach (var column in columnTexts)
                     {
-                        SpawnGridOption(gridText, inWorldSpace, contentParentTransform, column, "Column");
+                        SpawnGridOption(gridText, inWorldSpace, contentParentTransform, column, "Collumn");
                     }
 
                     // add rows
@@ -277,7 +277,7 @@ namespace QuestionnaireToolkit.Scripts
             {
                 g.GetComponent<Toggle>().group = contentParentTransform.GetChild(rowIndex).GetComponent<ToggleGroup>();
             }
-            else if(type.Equals("Column"))
+            else if(type.Equals("Collumn"))
             {
                 g.tag = "Untagged";
             }

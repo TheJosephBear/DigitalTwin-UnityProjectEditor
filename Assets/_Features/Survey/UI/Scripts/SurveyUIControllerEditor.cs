@@ -59,7 +59,10 @@ public class SurveyUIControllerEditor : MonoBehaviour {
     public ISurveyQuestionUI HandleExistingQuestionAdded(QuestionBase question, int insertAtIndex = -1, bool isDeserialized = false) {
         ISurveyQuestionUI addedQuestionUI = _surveyUIBuilder.AddQuestionToUI(question, insertAtIndex: insertAtIndex, isDeserialized: isDeserialized);
 
-        if (addedQuestionUI is ISurveyQuestionBuilderUI builderUI) {
+        if (addedQuestionUI is ISurveyQuestionBuilderUIGrid gridUI) {
+            gridUI.OnAddRow += AddRow;
+            gridUI.OnAddColumn += AddColumn;
+        } else if (addedQuestionUI is ISurveyQuestionBuilderUI builderUI) {
             builderUI.OnTitleChanged += HandleQuestionTitleChanged;
             builderUI.OnDescriptionChanged += HandleQuestionDescriptionChanged;
             builderUI.OnQuestionDeleted += HandleQuestionDeleted;
@@ -75,6 +78,14 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         }
 
         return addedQuestionUI;
+    }
+
+    void AddRow(int questionID) {
+        _surveyBuilder.AddRow(questionID);
+    }
+
+    void AddColumn(int questionID) {
+        _surveyBuilder.AddColumn(questionID);
     }
 
     public void HandleQuestionDeleted(int questionIndex) {

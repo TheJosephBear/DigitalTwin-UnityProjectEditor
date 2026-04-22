@@ -4,6 +4,7 @@ namespace SurveySystem {
         // Multiple answers
         public QuestionCheckboxGrid(int ID) : base(ID, QuestionType.CheckboxGrid) {
             MultipleAnswersAllowed = false;
+            IsGrid = true;
         }
 
     }
