@@ -589,9 +589,6 @@ public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
         LoadAnswerTemplate();
         InitializeOptionsList();
 
-        if (!isDeserialized)
-            AddAnswerUI();
-
         RegisterInputs();
     }
 
@@ -735,6 +732,10 @@ public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
     #endregion
 
     #region Answer Management
+
+    public void AddInitialAnswer() {
+        OnAnswerAdded?.Invoke(QuestionID, AddAnswerUI());
+    }
 
     /// <summary>Adds an answer UI element.</summary>
     private SurveyAnswerUI AddAnswerUI(bool isOther = false) {

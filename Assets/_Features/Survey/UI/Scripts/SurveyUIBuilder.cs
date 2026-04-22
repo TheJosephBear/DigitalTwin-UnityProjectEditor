@@ -84,7 +84,7 @@ public class SurveyUIBuilder : MonoBehaviour {
         }
     }
 
-    public ISurveyQuestionUI AddQuestionToUI(QuestionBase addedQuestion, int insertAtIndex = -1, VisualTreeAsset template = null) {
+    public ISurveyQuestionUI AddQuestionToUI(QuestionBase addedQuestion, bool isDeserialized, int insertAtIndex = -1, VisualTreeAsset template = null) {
         if (template == null) {
             //Template not provided, look it up
             QuestionTypeMapping mapping = questionUIMapping.GetMappingByQuestionType(addedQuestion.QuestionType);
@@ -97,7 +97,7 @@ public class SurveyUIBuilder : MonoBehaviour {
             template = mapping.QuestionTemplate;
         }
 
-        return CreateQuestion(addedQuestion, template, insertAtIndex);
+        return CreateQuestion(addedQuestion, template, insertAtIndex: insertAtIndex, isDeserialized: isDeserialized);
     }
 
     public void MoveQuestion(int questionIndex, int direction) {
@@ -121,7 +121,7 @@ public class SurveyUIBuilder : MonoBehaviour {
         return true;
     }
 
-    private ISurveyQuestionUI CreateQuestion(QuestionBase addedQuestion, VisualTreeAsset template, int insertAtIndex = -1) {
+    private ISurveyQuestionUI CreateQuestion(QuestionBase addedQuestion, VisualTreeAsset template, bool isDeserialized, int insertAtIndex = -1) {
         QuestionType questionType = addedQuestion.QuestionType;
         TemplateContainer questionInstance;
 
@@ -133,25 +133,15 @@ public class SurveyUIBuilder : MonoBehaviour {
         }
 
         ISurveyQuestionUI questionUI;
-
-        if (_isViewerUI) {
-            questionUI = new SurveyQuestionUIViewer(
-                questionInstance,
-                addedQuestion.Id,
-                questionType,
-                FindAnyObjectByType<ViewManager>()?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>(),
-                this
-            );
-        } else {
-            questionUI = new SurveyQuestionUI(
-                questionInstance,
-                addedQuestion.Id,
-                questionType,
-                FindAnyObjectByType<ViewManager>()?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>(),
-                this,
-                isDeserialized: true
-            );
-        }
+        
+        questionUI = new SurveyQuestionUI(
+            questionInstance,
+            addedQuestion.Id,
+            questionType,
+            FindAnyObjectByType<ViewManager>()?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>(),
+            this,
+            isDeserialized: isDeserialized
+        );
 
         if (insertAtIndex < 0 || insertAtIndex >= _addedQuestions.Count) {
             _addedQuestions.Add(questionUI);

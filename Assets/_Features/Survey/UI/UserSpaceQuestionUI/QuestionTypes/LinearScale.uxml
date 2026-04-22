@@ -5,7 +5,7 @@
         <ui:Instance template="QuestionTitleBar" name="question-bar" />
         <ui:VisualElement style="flex-grow: 0; flex-direction: row;">
             <ui:Label text="Popis řádku" style="flex-shrink: 1; align-self: center; width: 150px;" />
-            <ui:VisualElement name="scale-options" style="flex-grow: 1; flex-direction: row; justify-content: space-evenly;">
+            <ui:VisualElement name="options-list" style="flex-grow: 1; flex-direction: row; justify-content: space-evenly;">
                 <ui:Instance template="ScaleRadio" />
             </ui:VisualElement>
         </ui:VisualElement>

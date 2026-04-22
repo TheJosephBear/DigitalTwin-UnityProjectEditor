@@ -143,6 +143,8 @@ public class SurveyAnswerUI {
                 //    _surveyUIHandler.HandleAnswerTextChanged(_questionUIRef.QuestionID, _answerIndex, evt.newValue);
                 OnTextChanged.Invoke(_questionUIRef.QuestionID, _answerIndex, evt.newValue);
             });
+        } else {
+            Debug.Log("Text field not found somehow");
         }
     }
 

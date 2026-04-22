@@ -8,12 +8,5 @@ namespace SurveySystem {
             MultipleAnswersAllowed = false;
         }
 
-   //     public override bool HasPredefinedAnswers() => false;
-
-        public override AnswerBase AddNewAnswer() {
-         //    Debug.LogWarning("LinearScale does not support AddNewAnswer()");
-            return null;
-        }
-
     }
 }

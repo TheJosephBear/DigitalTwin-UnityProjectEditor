@@ -10,4 +10,5 @@ public interface ISurveyQuestionBuilderUI : ISurveyQuestionUI {
     public event Action<int> OnAnswerRemoved;
     public event Action<int, string> OnViewpointSelected;
     public event Action<int, int, string> OnAnswerTextChanged;
+    public void AddInitialAnswer();
 }

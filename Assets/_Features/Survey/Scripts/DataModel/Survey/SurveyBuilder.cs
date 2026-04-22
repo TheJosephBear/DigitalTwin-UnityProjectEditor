@@ -113,14 +113,20 @@ namespace SurveySystem {
             if (answer == null) return;
 
             // Bezpečné přetypování - zkusíme, jestli odpověď podporuje text
-            if (answer is AnswerChoice choice) {
-                choice.Text = text;
-            } else if (answer is AnswerString strAnswer) {
-                strAnswer.Text = text;
-            }
+            /*     if (answer is AnswerChoice choice) {
+                     choice.Text = text;
+                 } else if (answer is AnswerString strAnswer) {
+                     strAnswer.Text = text;
+                 }*/
+
+            answer.Text = text;
         }
 
         public void SetAnswerText(int questionId, int answerId, string text) {
+            Debug.Log("Builder");
+            Debug.Log("questionId: "+ questionId);
+            Debug.Log("answerId: "+ answerId);
+            Debug.Log("text: "+ text);
             var answer = _activeSurvey.GetQuestionById(questionId)?.GetAnswerByIdx(answerId);
             SetAnswerText(answer, text);
         }

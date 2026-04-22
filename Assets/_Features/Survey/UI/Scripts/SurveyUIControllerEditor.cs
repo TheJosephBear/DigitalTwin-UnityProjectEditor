@@ -56,8 +56,8 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         return HandleExistingQuestionAdded(newQuestion, insertAtIndex);
     }
 
-    public ISurveyQuestionUI HandleExistingQuestionAdded(QuestionBase question, int insertAtIndex = -1) {
-        ISurveyQuestionUI addedQuestionUI = _surveyUIBuilder.AddQuestionToUI(question, insertAtIndex);
+    public ISurveyQuestionUI HandleExistingQuestionAdded(QuestionBase question, int insertAtIndex = -1, bool isDeserialized = false) {
+        ISurveyQuestionUI addedQuestionUI = _surveyUIBuilder.AddQuestionToUI(question, insertAtIndex: insertAtIndex, isDeserialized: isDeserialized);
 
         if (addedQuestionUI is ISurveyQuestionBuilderUI builderUI) {
             builderUI.OnTitleChanged += HandleQuestionTitleChanged;
@@ -68,6 +68,10 @@ public class SurveyUIControllerEditor : MonoBehaviour {
             builderUI.OnAnswerOtherAdded += HandleAnswerOtherAdded;
             builderUI.OnAnswerRemoved += HandleAnswerRemoved;
             builderUI.OnViewpointSelected += HandleQuestionViewPointSelected;
+
+            if (!isDeserialized) {
+                builderUI.AddInitialAnswer();
+            }
         }
 
         return addedQuestionUI;
@@ -135,7 +139,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         // set title once we have the field
 
         foreach (QuestionBase question in survey.GetAllQuestions()) {
-            ISurveyQuestionUI questionUI = HandleExistingQuestionAdded(question);
+            ISurveyQuestionUI questionUI = HandleExistingQuestionAdded(question, isDeserialized: true);
             questionUI.SetTitle(question.Title);
             questionUI.SetDescription(question.Description);
             foreach (AnswerBase answer in question.Answers) {
