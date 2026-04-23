@@ -81,7 +81,6 @@ public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
 
     /// <summary>Loads the correct answer template based on question type.</summary>
     private void LoadAnswerTemplate() {
-        // var mapping = UnityEngine.Object.FindFirstObjectByType<QuestionUIMapping>();
         var mapping = _surveyUIBuilder.questionUIMapping;
 
         if (mapping == null) {
@@ -117,6 +116,7 @@ public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
         _root.Q<TextField>("question-description").value = desc;
     }
 
+    // Make it virtual or abstract - check the other add answer function and how different it is (this is for code calls, theo ther is for ui calls)
     public void AddAnswer(string answerText, bool isOther = false) {
         if (_optionsList == null || _answerTemplate == null) {
             Debug.LogWarning("Missing options list or template!");
@@ -310,14 +310,6 @@ public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
         OnAnswerRemoved?.Invoke(index);
     }
 
-    /// <summary>Recalculates indices after changes.</summary>
-    private void RecalculateAnswerIndices() {
-        for (int i = 0; i < _addedAnswers.Count; i++)
-            _addedAnswers[i].UpdateIndex(i);
-
-        _otherAnswerUI?.UpdateIndex(_addedAnswers.Count);
-    }
-
     #endregion
 
     #region Answer Reordering
@@ -347,6 +339,14 @@ public class SurveyQuestionUI : ISurveyQuestionBuilderUI {
 
         if (_otherAnswerUI != null)
             _optionsList.Add(_otherAnswerUI.AnswerElement);
+    }
+
+    /// <summary>Recalculates indices after changes.</summary>
+    private void RecalculateAnswerIndices() {
+        for (int i = 0; i < _addedAnswers.Count; i++)
+            _addedAnswers[i].UpdateIndex(i);
+
+        _otherAnswerUI?.UpdateIndex(_addedAnswers.Count);
     }
 
     #endregion
