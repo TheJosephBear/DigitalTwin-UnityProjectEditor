@@ -5,7 +5,7 @@ public interface ISurveyQuestionBuilderUI : ISurveyQuestionUI {
     public event Action<int, string> OnDescriptionChanged;
     public event Action<int> OnQuestionDeleted;
     public event Action<int, int> OnQuestionMoved;
-    public event Action<int, SurveyAnswerUI> OnAnswerAdded;
+    public event Action<int, SurveyAnswerUIEditorString> OnAnswerAdded;
     public event Action<int> OnAnswerOtherAdded;
     public event Action<int> OnAnswerRemoved;
     public event Action<int, string> OnViewpointSelected;

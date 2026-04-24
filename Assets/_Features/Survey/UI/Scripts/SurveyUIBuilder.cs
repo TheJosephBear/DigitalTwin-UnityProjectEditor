@@ -16,7 +16,7 @@ public class SurveyUIBuilder : MonoBehaviour {
     private VisualElement _scrollViewContent;
 
     // Question adding //
-    private List<ISurveyQuestionUI> _addedQuestions = new List<ISurveyQuestionUI>();
+    private List<SurveyQuestionUIBase> _addedQuestions = new List<SurveyQuestionUIBase>();
     private List<TemplateContainer> _addQuestionBars = new List<TemplateContainer>();
 
     private bool _isViewerUI = false;
@@ -84,7 +84,7 @@ public class SurveyUIBuilder : MonoBehaviour {
         }
     }
 
-    public ISurveyQuestionUI AddQuestionToUI(QuestionBase addedQuestion, bool isDeserialized, int insertAtIndex = -1, VisualTreeAsset template = null) {
+    public SurveyQuestionUIBase AddQuestionEditor(QuestionBase addedQuestion, bool isDeserialized, int insertAtIndex = -1, VisualTreeAsset template = null) {
         if (template == null) {
             //Template not provided, look it up
             QuestionTypeMapping mapping = questionUIMapping.GetMappingByQuestionType(addedQuestion.QuestionType);
@@ -100,28 +100,7 @@ public class SurveyUIBuilder : MonoBehaviour {
         return CreateQuestion(addedQuestion, template, insertAtIndex: insertAtIndex, isDeserialized: isDeserialized);
     }
 
-    public void MoveQuestion(int questionIndex, int direction) {
-        int targetIndex = questionIndex + direction;
-        if (targetIndex < 0 || targetIndex >= _addedQuestions.Count) return;
-
-        var temp = _addedQuestions[questionIndex];
-        _addedQuestions[questionIndex] = _addedQuestions[targetIndex];
-        _addedQuestions[targetIndex] = temp;
-
-        RefreshAddQuestionBars();
-    }
-
-    public bool DeleteQuestion(int questionIndex) {
-        if (questionIndex < 0 || questionIndex >= _addedQuestions.Count) return false;
-
-        _addedQuestions[questionIndex].QuestionElement?.RemoveFromHierarchy();
-        _addedQuestions.RemoveAt(questionIndex);
-
-        RefreshAddQuestionBars();
-        return true;
-    }
-
-    private ISurveyQuestionUI CreateQuestion(QuestionBase addedQuestion, VisualTreeAsset template, bool isDeserialized, int insertAtIndex = -1) {
+    private SurveyQuestionUIBase CreateQuestion(QuestionBase addedQuestion, VisualTreeAsset template, bool isDeserialized, int insertAtIndex = -1) {
         QuestionType questionType = addedQuestion.QuestionType;
         TemplateContainer questionInstance;
 
@@ -132,9 +111,12 @@ public class SurveyUIBuilder : MonoBehaviour {
             questionInstance.Add(new Label($"Question template for '{questionType}' is missing"));
         }
 
-        ISurveyQuestionUI questionUI;
+
+        // The decision logic needs to get better this is horrible
+        SurveyQuestionUIBase questionUI;
+
         if (addedQuestion.IsGrid) {
-            questionUI = new SurveyQuestionGridUI(
+            questionUI = new SurveyQuestionUIEditorGrid(
                 questionInstance,
                 addedQuestion.Id,
                 questionType,
@@ -143,7 +125,7 @@ public class SurveyUIBuilder : MonoBehaviour {
                 isDeserialized: isDeserialized
             );
         } else {
-            questionUI = new SurveyQuestionUI(
+            questionUI = new SurveyQuestionUIEditorString(
                 questionInstance,
                 addedQuestion.Id,
                 questionType,
@@ -162,12 +144,7 @@ public class SurveyUIBuilder : MonoBehaviour {
         RefreshAddQuestionBars();
         return questionUI;
     }
-
-    /// <summary>Returns the current index of the given addedQuestion in the list, or -1 if not found.</summary>
-    public int GetQuestionIndex(ISurveyQuestionUI questionUI) {
-        return _addedQuestions.IndexOf(questionUI);
-    }
-
+    /*
     public ISurveyQuestionUI AddQuestionViewer(QuestionBase questionBase, int insertAtIndex = -1) {
         QuestionType questionType = questionBase.QuestionType;
         TemplateContainer questionInstance;
@@ -212,6 +189,32 @@ public class SurveyUIBuilder : MonoBehaviour {
         }
 
         return questionUI;
+    }
+    */
+    public void MoveQuestion(int questionIndex, int direction) {
+        int targetIndex = questionIndex + direction;
+        if (targetIndex < 0 || targetIndex >= _addedQuestions.Count) return;
+
+        var temp = _addedQuestions[questionIndex];
+        _addedQuestions[questionIndex] = _addedQuestions[targetIndex];
+        _addedQuestions[targetIndex] = temp;
+
+        RefreshAddQuestionBars();
+    }
+
+    public bool DeleteQuestion(int questionIndex) {
+        if (questionIndex < 0 || questionIndex >= _addedQuestions.Count) return false;
+
+        _addedQuestions[questionIndex].QuestionElement?.RemoveFromHierarchy();
+        _addedQuestions.RemoveAt(questionIndex);
+
+        RefreshAddQuestionBars();
+        return true;
+    }
+
+    /// <summary>Returns the current index of the given addedQuestion in the list, or -1 if not found.</summary>
+    public int GetQuestionIndex(SurveyQuestionUIBase questionUI) {
+        return _addedQuestions.IndexOf(questionUI);
     }
 
     public void ClearScrollviewContent() {

@@ -10,8 +10,8 @@ public class SurveyQuestionUIViewer : ISurveyQuestionViewerUI {
     private QuestionType _questionType;
     private List<SerializableViewPoint> _viewPoints;
 
-    private List<SurveyAnswerUI> _addedAnswers = new List<SurveyAnswerUI>();
-    private SurveyAnswerUI _otherAnswerUI;
+    private List<SurveyAnswerUIEditorString> _addedAnswers = new List<SurveyAnswerUIEditorString>();
+    private SurveyAnswerUIEditorString _otherAnswerUI;
     private VisualElement _optionsList;
 
     private VisualTreeAsset _answerTemplate;
@@ -48,6 +48,7 @@ public class SurveyQuestionUIViewer : ISurveyQuestionViewerUI {
         RegisterInputs();
     }
 
+    // Should be removed
     private void RegisterInputs() {
         var cameraViewDropdown = _root.Q<DropdownField>("camera-view-dropdown");
 
@@ -83,7 +84,7 @@ public class SurveyQuestionUIViewer : ISurveyQuestionViewerUI {
         if (isOther) {
             _optionsList.Add(answerElement);
 
-            SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, null, isOther);
+            SurveyAnswerUIEditorString answerUI = new SurveyAnswerUIEditorString(answerElement, answerIndex, null, isOther);
             _otherAnswerUI = answerUI;
         } else {
             if (_otherAnswerUI != null) {
@@ -96,14 +97,14 @@ public class SurveyQuestionUIViewer : ISurveyQuestionViewerUI {
             var textLabel = answerElement.Q<UnityEngine.UIElements.Label>();
             if (textLabel != null) textLabel.text = answerText;
 
-            SurveyAnswerUI answerUI = new SurveyAnswerUI(answerElement, answerIndex, null, isOther);
+            SurveyAnswerUIEditorString answerUI = new SurveyAnswerUIEditorString(answerElement, answerIndex, null, isOther);
             _addedAnswers.Add(answerUI);
 
             RegisterAnswerCallbacks(answerUI, answerIndex);
         }
     }
 
-    private void RegisterAnswerCallbacks(SurveyAnswerUI answerUI, int index) {
+    private void RegisterAnswerCallbacks(SurveyAnswerUIEditorString answerUI, int index) {
         var root = answerUI.AnswerElement;
         if (root == null) {
             //      Debug.LogError($"[Survey] AnswerElement for index {index} is null!");
@@ -157,6 +158,7 @@ public class SurveyQuestionUIViewer : ISurveyQuestionViewerUI {
         }
     }
 
+    // Should be removed or abstracted or idk
     private void PopulateCameraViewDropdown(DropdownField dropdown) {
         if (dropdown == null) return;
 

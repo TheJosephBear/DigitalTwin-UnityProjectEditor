@@ -7,7 +7,7 @@ public class SurveyAnswerUIGrid {
 
     private VisualElement _answerElement;
     private int _answerIndex;
-    private SurveyQuestionUI _questionUIRef;
+    private SurveyQuestionUIEditor _questionUIRef;
 
     // Track currently open modal
     private VisualElement _currentlyOpenModal = null;
@@ -25,7 +25,7 @@ public class SurveyAnswerUIGrid {
 
     #endregion
 
-    public SurveyAnswerUIGrid(VisualElement answerElement, int answerIndex, SurveyQuestionGridUI questionUI, bool isOther) {
+    public SurveyAnswerUIGrid(VisualElement answerElement, int answerIndex, SurveyQuestionUIEditorGrid questionUI, bool isOther) {
     }
 
 

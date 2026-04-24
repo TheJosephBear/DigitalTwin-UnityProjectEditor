@@ -51,18 +51,18 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         HandleQuestionAdded(questionTypeEnum, insertAtIndex);
     }
 
-    public ISurveyQuestionUI HandleQuestionAdded(QuestionType questionType, int insertAtIndex = -1) {
+    public SurveyQuestionUIBase HandleQuestionAdded(QuestionType questionType, int insertAtIndex = -1) {
         QuestionBase newQuestion = _surveyBuilder.AddNewQuestion(questionType);
         return HandleExistingQuestionAdded(newQuestion, insertAtIndex);
     }
 
-    public ISurveyQuestionUI HandleExistingQuestionAdded(QuestionBase question, int insertAtIndex = -1, bool isDeserialized = false) {
-        ISurveyQuestionUI addedQuestionUI = _surveyUIBuilder.AddQuestionToUI(question, insertAtIndex: insertAtIndex, isDeserialized: isDeserialized);
+    public SurveyQuestionUIBase HandleExistingQuestionAdded(QuestionBase question, int insertAtIndex = -1, bool isDeserialized = false) {
+        SurveyQuestionUIBase addedQuestionUI = _surveyUIBuilder.AddQuestionEditor(question, insertAtIndex: insertAtIndex, isDeserialized: isDeserialized);
 
-        if (addedQuestionUI is ISurveyQuestionBuilderUIGrid gridUI) {
+        if (addedQuestionUI is SurveyQuestionUIEditorGrid gridUI) {
             gridUI.OnAddRow += AddRow;
             gridUI.OnAddColumn += AddColumn;
-        } else if (addedQuestionUI is ISurveyQuestionBuilderUI builderUI) {
+        } else if (addedQuestionUI is SurveyQuestionUIEditorString builderUI) {
             builderUI.OnTitleChanged += HandleQuestionTitleChanged;
             builderUI.OnDescriptionChanged += HandleQuestionDescriptionChanged;
             builderUI.OnQuestionDeleted += HandleQuestionDeleted;
@@ -109,7 +109,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         _surveyBuilder.SetQuestionViewPoint(questionID, viewPointID);
     }
 
-    public void HandleAnswerAdded(int questionId, SurveyAnswerUI answerUI) {
+    public void HandleAnswerAdded(int questionId, SurveyAnswerUIEditorString answerUI) {
         _surveyBuilder.AddNewAnswerToQuestion(questionId);
         answerUI.OnTextChanged += HandleAnswerTextChanged;
     }
@@ -150,7 +150,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         // set title once we have the field
 
         foreach (QuestionBase question in survey.GetAllQuestions()) {
-            ISurveyQuestionUI questionUI = HandleExistingQuestionAdded(question, isDeserialized: true);
+            SurveyQuestionUIBase questionUI = HandleExistingQuestionAdded(question, isDeserialized: true);
             questionUI.SetTitle(question.Title);
             questionUI.SetDescription(question.Description);
             foreach (AnswerBase answer in question.Answers) {

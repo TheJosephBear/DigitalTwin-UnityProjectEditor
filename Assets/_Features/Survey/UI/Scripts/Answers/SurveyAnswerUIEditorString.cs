@@ -3,10 +3,10 @@ using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class SurveyAnswerUI {
+public class SurveyAnswerUIEditorString {
     private VisualElement _answerElement;
     private int _answerIndex;
-    private SurveyQuestionUI _questionUIRef;
+    private SurveyQuestionUIEditor _questionUIRef;
 
     // Track currently open modal
     private VisualElement _currentlyOpenModal = null;
@@ -24,7 +24,7 @@ public class SurveyAnswerUI {
 
     #endregion
 
-    public SurveyAnswerUI(VisualElement answerElement, int answerIndex, SurveyQuestionUI questionUI, bool isOther) {
+    public SurveyAnswerUIEditorString(VisualElement answerElement, int answerIndex, SurveyQuestionUIEditor questionUI, bool isOther) {
         _answerElement = answerElement;
         _answerIndex = answerIndex;
         _questionUIRef = questionUI;

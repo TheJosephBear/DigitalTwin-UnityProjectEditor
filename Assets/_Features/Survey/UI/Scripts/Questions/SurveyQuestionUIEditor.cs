@@ -1,0 +1,289 @@
+using UnityEngine;
+using UnityEngine.UIElements;
+using SurveySystem;
+using System.Collections.Generic;
+using System;
+
+public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
+
+    #region Fields & Properties
+
+    // Modal tracking
+    protected VisualElement _currentlyOpenModal;
+    protected VisualElement _originalParent;
+    protected int _originalIndex = -1;
+
+    #endregion
+
+    #region Events
+
+    #region Public events
+
+    public event Action<int, string> OnTitleChanged;
+    public event Action<int, string> OnDescriptionChanged;
+    public event Action<int> OnQuestionDeleted;
+    public event Action<int, int> OnQuestionMoved;
+    public event Action<int, string> OnViewpointSelected;
+
+    #endregion
+
+    #region Internal events
+
+    protected Action _onMoveUp;
+    protected Action _onMoveDown;
+    protected Action _onDelete;
+
+    #endregion
+
+    #endregion
+
+    public SurveyQuestionUIEditor(
+        VisualElement root,
+        int questionId,
+        QuestionType questionType,
+        List<SerializableViewPoint> viewPoints,
+        SurveyUIBuilder uiBuilder) 
+        : base(root, questionId, questionType, viewPoints, uiBuilder) {
+
+    }
+
+
+    #region Interface for editing the question
+
+    // Make it virtual or abstract - check the other add answer function and how different it is (this is for code calls, theo ther is for ui calls)
+    public override void AddAnswer(string answerText, bool isOther = false) {
+        if (_optionsList == null || _answerTemplate == null) {
+            Debug.LogWarning("Missing options list or template!");
+            return;
+        }
+
+        TemplateContainer element = _answerTemplate.Instantiate();
+
+        int index = _addedAnswers.Count;
+
+        if (isOther) {
+            _optionsList.Add(element);
+        } else {
+            if (_otherAnswerUI != null) {
+                int insertIndex = _optionsList.IndexOf(_otherAnswerUI.AnswerElement);
+                _optionsList.Insert(insertIndex, element);
+            } else {
+                _optionsList.Add(element);
+            }
+        }
+
+        if (!isOther) {
+            TextField tf = FindTextFieldRecursive(element);
+            if (tf != null)
+                tf.value = answerText;
+        }
+
+        var answerUI = CreateAnswerUI(element, index, isOther);
+
+        if (isOther) {
+            element.Q<CustomRadioButton>().Placeholder = "Other";
+            _otherAnswerUI = answerUI;
+        } else {
+            _addedAnswers.Add(answerUI);
+        }
+    }
+
+    #endregion
+
+    #region UI Input Registration
+
+    /// <summary>Registers all UI callbacks.</summary>
+    protected override void RegisterTextInputs() {
+        _root.Q<TextField>("question-title")?.RegisterValueChangedCallback(
+            evt => OnTitleChanged?.Invoke(QuestionID, evt.newValue));
+
+        _root.Q<TextField>("question-description")?.RegisterValueChangedCallback(
+            evt => OnDescriptionChanged?.Invoke(QuestionID, evt.newValue));
+    }
+
+    protected override void RegisterDropdown() {
+        var dropdown = _root.Q<DropdownField>("camera-view-dropdown");
+        PopulateCameraViewDropdown(dropdown);
+
+        dropdown?.RegisterValueChangedCallback(evt => {
+            int index = dropdown.index;
+            if (index >= 0 && index < _viewPoints.Count)
+                OnViewpointSelected?.Invoke(QuestionID, _viewPoints[index].ID);
+        });
+    }
+
+    #endregion
+
+    #region Answer Reordering
+
+    public virtual void MoveAnswerUp(int index) {
+        if (index <= 0 || index >= _addedAnswers.Count) return;
+        SwapAnswers(index, index - 1);
+    }
+
+    public virtual void MoveAnswerDown(int index) {
+        if (index < 0 || index >= _addedAnswers.Count - 1) return;
+        SwapAnswers(index, index + 1);
+    }
+
+    protected virtual void SwapAnswers(int a, int b) {
+        (_addedAnswers[a], _addedAnswers[b]) = (_addedAnswers[b], _addedAnswers[a]);
+
+        RefreshAnswerOrder();
+        RecalculateAnswerIndices();
+    }
+
+    protected virtual void RefreshAnswerOrder() {
+        _optionsList.Clear();
+
+        foreach (var a in _addedAnswers)
+            _optionsList.Add(a.AnswerElement);
+
+        if (_otherAnswerUI != null)
+            _optionsList.Add(_otherAnswerUI.AnswerElement);
+    }
+
+    /// <summary>Recalculates indices after changes.</summary>
+    protected virtual void RecalculateAnswerIndices() {
+        for (int i = 0; i < _addedAnswers.Count; i++)
+            _addedAnswers[i].UpdateIndex(i);
+
+        _otherAnswerUI?.UpdateIndex(_addedAnswers.Count);
+    }
+
+    #endregion
+
+    #region Modal Handling
+
+    protected virtual void OnEditQuestionClicked(ClickEvent evt) {
+        var modal = _root.Q<VisualElement>("edit-question-modal");
+        if (modal == null) return;
+
+        bool open = modal.style.display != DisplayStyle.Flex;
+
+        CloseCurrentModal();
+
+        if (open)
+            ShowModal(modal);
+        else
+            HideQuestionModal();
+
+        evt.StopPropagation();
+    }
+
+    /// <summary>Displays modal near button.</summary>
+    protected virtual void ShowModal(VisualElement modal) {
+        modal.style.display = DisplayStyle.Flex;
+        _currentlyOpenModal = modal;
+
+        RegisterQuestionModalButtonEvents(modal);
+        RegisterOutsideClickHandler(modal);
+    }
+
+    public virtual void CloseCurrentModal() {
+        foreach (var a in _addedAnswers)
+            a.HideCurrentModal();
+
+        _otherAnswerUI?.HideCurrentModal();
+        HideQuestionModal();
+    }
+
+    protected virtual void HideQuestionModal() {
+        if (_currentlyOpenModal == null) return;
+
+        _currentlyOpenModal.style.display = DisplayStyle.None;
+        UnregisterOutsideClickHandler();
+
+        _currentlyOpenModal = null;
+    }
+
+    #region Modal Events
+
+    protected virtual void RegisterQuestionModalButtonEvents(VisualElement modal) {
+        var moveUpButton = modal.Q<Button>("move-up-button");
+        var moveDownButton = modal.Q<Button>("move-down-button");
+        var deleteButton = modal.Q<Button>("delete-option-button");
+
+        int index = _surveyUIBuilder.GetQuestionIndex(this);
+
+        // Remove old callbacks first
+        if (_onMoveUp != null) moveUpButton.clicked -= _onMoveUp;
+        if (_onMoveDown != null) moveDownButton.clicked -= _onMoveDown;
+        if (_onDelete != null) deleteButton.clicked -= _onDelete;
+
+        // Create new ones
+        _onMoveUp = () => {
+            OnQuestionMoved?.Invoke(index, -1);
+            HideQuestionModal();
+        };
+
+        _onMoveDown = () => {
+            OnQuestionMoved?.Invoke(index, 1);
+            HideQuestionModal();
+        };
+
+        _onDelete = () => {
+            OnQuestionDeleted?.Invoke(index);
+            HideQuestionModal();
+        };
+
+        // Register
+        moveUpButton.clicked += _onMoveUp;
+        moveDownButton.clicked += _onMoveDown;
+        deleteButton.clicked += _onDelete;
+    }
+
+    #endregion
+
+    #endregion
+
+    #region Outside Click Handling
+
+    protected virtual void RegisterOutsideClickHandler(VisualElement modal) {
+        GetRoot(modal).RegisterCallback<PointerDownEvent>(OnOutsideClick, TrickleDown.TrickleDown);
+    }
+
+    protected virtual void UnregisterOutsideClickHandler() {
+        if (_currentlyOpenModal == null) return;
+
+        GetRoot(_currentlyOpenModal)
+            .UnregisterCallback<PointerDownEvent>(OnOutsideClick, TrickleDown.TrickleDown);
+    }
+
+    protected virtual void OnOutsideClick(PointerDownEvent evt) {
+        if (_currentlyOpenModal == null) return;
+
+        if (!_currentlyOpenModal.ContainsPoint(_currentlyOpenModal.WorldToLocal(evt.position)))
+            HideQuestionModal();
+    }
+
+    protected virtual VisualElement GetRoot(VisualElement element) {
+        while (element.parent != null)
+            element = element.parent;
+
+        return element;
+    }
+
+    #endregion
+
+    #region Dropdown
+
+    protected virtual void PopulateCameraViewDropdown(DropdownField dropdown) {
+        if (dropdown == null) return;
+
+        var choices = new List<string>();
+        foreach (var vp in _viewPoints)
+            choices.Add(vp.Name);
+
+        dropdown.choices = choices;
+
+        if (choices.Count > 0) {
+            dropdown.value = choices[0];
+            OnViewpointSelected?.Invoke(QuestionID, _viewPoints[0].ID);
+        }
+    }
+
+    #endregion
+
+    
+}

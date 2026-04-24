@@ -6,7 +6,7 @@ public interface ISurveyUIHandler {
     void HandleQuestionViewPointSelected(int questionID, string viewPointID);
     void HandleAnswerAdded(int questionId);
     void HandleAnswerOtherAdded(int questionId);
-    int GetQuestionIndex(SurveyQuestionUI questionUI);
+    int GetQuestionIndex(SurveyQuestionUIEditor questionUI);
     void HandleQuestionDeleted(int questionIndex);
     void HandleQuestionMoved(int questionIndex, int direction);
     void HandleAnswerRemoved(AnswerBase answer);
