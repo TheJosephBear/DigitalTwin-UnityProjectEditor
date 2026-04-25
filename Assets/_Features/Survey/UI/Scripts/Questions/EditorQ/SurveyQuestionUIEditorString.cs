@@ -8,7 +8,7 @@ public class SurveyQuestionUIEditorString : SurveyQuestionUIEditor {
 
     #region Events
 
-    public event Action<int, SurveyAnswerUIEditorString> OnAnswerAdded;
+    public event Action<int, SurveyAnswerUIBase> OnAnswerAdded;
     public event Action<int> OnAnswerOtherAdded;
     public event Action<int> OnAnswerRemoved;
     public event Action<int, int, string> OnAnswerTextChanged;
@@ -26,7 +26,7 @@ public class SurveyQuestionUIEditorString : SurveyQuestionUIEditor {
 
     }
 
-    protected override SurveyAnswerUIEditorString CreateAnswerUI(VisualElement element, int index, bool isOther) {
+    protected override SurveyAnswerUIBase CreateAnswerUI(VisualElement element, int index, bool isOther) {
         return new SurveyAnswerUIEditorString(element, index, this, isOther);
     }
 
@@ -93,4 +93,5 @@ public class SurveyQuestionUIEditorString : SurveyQuestionUIEditor {
     }
 
     #endregion
+
 }

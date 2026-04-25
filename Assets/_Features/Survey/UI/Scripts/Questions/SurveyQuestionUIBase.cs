@@ -4,7 +4,7 @@ using SurveySystem;
 using System.Collections.Generic;
 using System;
 
-public abstract class SurveyQuestionUIBase : MonoBehaviour {
+public abstract class SurveyQuestionUIBase {
 
     #region Fields & Properties
 
@@ -15,8 +15,8 @@ public abstract class SurveyQuestionUIBase : MonoBehaviour {
     protected QuestionType _questionType;
     protected List<SerializableViewPoint> _viewPoints;
 
-    protected List<SurveyAnswerUIEditorString> _addedAnswers = new();
-    protected SurveyAnswerUIEditorString _otherAnswerUI;
+    protected List<SurveyAnswerUIBase> _addedAnswers = new();
+    protected SurveyAnswerUIBase _otherAnswerUI;
 
     protected VisualElement _optionsList;
     protected VisualTreeAsset _answerTemplate;
@@ -108,7 +108,7 @@ public abstract class SurveyQuestionUIBase : MonoBehaviour {
 
 
 
-    protected virtual SurveyAnswerUIEditorString AddAnswerUI(bool isOther = false) {
+    protected virtual SurveyAnswerUIBase AddAnswerUI(bool isOther = false) {
         if (_optionsList == null || _answerTemplate == null)
             return null;
 
@@ -146,7 +146,7 @@ public abstract class SurveyQuestionUIBase : MonoBehaviour {
         }
     }
 
-    protected abstract SurveyAnswerUIEditorString CreateAnswerUI(
+    protected abstract SurveyAnswerUIBase CreateAnswerUI(
         VisualElement element,
         int index,
         bool isOther

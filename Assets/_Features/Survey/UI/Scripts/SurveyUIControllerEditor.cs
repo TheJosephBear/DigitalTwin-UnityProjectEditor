@@ -80,12 +80,14 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         return addedQuestionUI;
     }
 
-    void AddRow(int questionID) {
+    void AddRow(int questionID, SurveyAnswerUIEditorGrid answerUI) {
         _surveyBuilder.AddRow(questionID);
+        answerUI.OnTextChanged += HandleAnswerTextChanged;
     }
 
-    void AddColumn(int questionID) {
+    void AddColumn(int questionID, SurveyAnswerUIEditorGrid answerUI) {
         _surveyBuilder.AddColumn(questionID);
+        answerUI.OnTextChanged += HandleAnswerTextChanged;
     }
 
     public void HandleQuestionDeleted(int questionIndex) {
@@ -109,9 +111,11 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         _surveyBuilder.SetQuestionViewPoint(questionID, viewPointID);
     }
 
-    public void HandleAnswerAdded(int questionId, SurveyAnswerUIEditorString answerUI) {
+    public void HandleAnswerAdded(int questionId, SurveyAnswerUIBase answerUI) {
         _surveyBuilder.AddNewAnswerToQuestion(questionId);
-        answerUI.OnTextChanged += HandleAnswerTextChanged;
+        if (answerUI is SurveyAnswerUIEditorString answerEditor) {
+            answerEditor.OnTextChanged += HandleAnswerTextChanged;
+        }
     }
 
     public void HandleAnswerOtherAdded(int questionId) {

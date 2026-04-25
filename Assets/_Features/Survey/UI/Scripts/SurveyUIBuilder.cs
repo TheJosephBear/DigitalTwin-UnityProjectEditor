@@ -19,7 +19,18 @@ public class SurveyUIBuilder : MonoBehaviour {
     private List<SurveyQuestionUIBase> _addedQuestions = new List<SurveyQuestionUIBase>();
     private List<TemplateContainer> _addQuestionBars = new List<TemplateContainer>();
 
-    private bool _isViewerUI = false;
+    private List<QuestionType> QuestionTypesUsingStringUI = new List<QuestionType>{
+        QuestionType.MultipleChoiceSingle,
+        QuestionType.MultipleChoiceMultiple,
+        QuestionType.Paragraph,
+        QuestionType.ShortAnswer,
+        QuestionType.LinearScale,
+    };
+
+    private List<QuestionType> QuestionTypesUsingGridUI = new List<QuestionType>{
+        QuestionType.MultipleChoiceGrid,
+        QuestionType.CheckboxGrid
+    };
 
     void Awake() {
         _root = gameObject.GetComponent<UIDocument>().rootVisualElement;
@@ -35,6 +46,7 @@ public class SurveyUIBuilder : MonoBehaviour {
     /// </summary>
     public void RefreshAddQuestionBars() {
         // Survey Viewing
+        /*
         if (_isViewerUI) {
             for (int i = 0; i <= _addedQuestions.Count; i++) {
                 if (i < _addedQuestions.Count && _addedQuestions[i].QuestionElement != null) {
@@ -43,6 +55,7 @@ public class SurveyUIBuilder : MonoBehaviour {
             }
             return;
         }
+        */
 
         // Survey Building
 
@@ -113,10 +126,10 @@ public class SurveyUIBuilder : MonoBehaviour {
 
 
         // The decision logic needs to get better this is horrible
-        SurveyQuestionUIBase questionUI;
+        SurveyQuestionUIBase questionUI = null;
 
-        if (addedQuestion.IsGrid) {
-            questionUI = new SurveyQuestionUIEditorGrid(
+        if(QuestionTypesUsingStringUI.Contains(questionType)) {
+            questionUI = new SurveyQuestionUIEditorString(
                 questionInstance,
                 addedQuestion.Id,
                 questionType,
@@ -124,8 +137,8 @@ public class SurveyUIBuilder : MonoBehaviour {
                 this,
                 isDeserialized: isDeserialized
             );
-        } else {
-            questionUI = new SurveyQuestionUIEditorString(
+        } else if(QuestionTypesUsingGridUI.Contains(questionType)) {
+            questionUI = new SurveyQuestionUIEditorGrid(
                 questionInstance,
                 addedQuestion.Id,
                 questionType,

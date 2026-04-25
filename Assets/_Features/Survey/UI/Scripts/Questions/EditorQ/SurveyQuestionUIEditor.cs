@@ -284,6 +284,5 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
     }
 
     #endregion
-
     
 }

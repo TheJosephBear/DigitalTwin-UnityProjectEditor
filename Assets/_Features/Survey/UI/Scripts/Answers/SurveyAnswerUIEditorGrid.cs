@@ -2,9 +2,32 @@ using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class SurveyAnswerUIGrid {
+public class SurveyAnswerUIEditorGrid : SurveyAnswerUIEditor{
     // Row/Column label
 
+    public event Action<int, int, string> OnTextChanged;
+
+
+    public SurveyAnswerUIEditorGrid(VisualElement answerElement, int answerIndex, SurveyQuestionUIEditorGrid questionUI, bool isOther)
+        : base(answerElement, answerIndex, questionUI, isOther) {
+
+    }
+
+    protected override void RegisterAnswerEvents() {
+        RegisterTextField();
+    }
+
+    private void RegisterTextField() {
+        var textField = _answerElement.Q<TextField>();
+        if (textField == null) return;
+
+        textField.RegisterValueChangedCallback(evt =>
+        {
+            OnTextChanged?.Invoke(_questionUIRef.QuestionID, _answerIndex, evt.newValue);
+        });
+    }
+
+    /*
     private VisualElement _answerElement;
     private int _answerIndex;
     private SurveyQuestionUIEditor _questionUIRef;
@@ -25,7 +48,7 @@ public class SurveyAnswerUIGrid {
 
     #endregion
 
-    public SurveyAnswerUIGrid(VisualElement answerElement, int answerIndex, SurveyQuestionUIEditorGrid questionUI, bool isOther) {
+    public SurveyAnswerUIEditorGrid(VisualElement answerElement, int answerIndex, SurveyQuestionUIEditorGrid questionUI, bool isOther) {
     }
 
 
@@ -71,4 +94,5 @@ public class SurveyAnswerUIGrid {
             }
         }
     }
+    */
 }

@@ -79,6 +79,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
     }
 
     void AddQuestionToUI(QuestionBase questionBase) {
+        /*
         ISurveyQuestionUI questionUI = _surveyUIBuilder.AddQuestionViewer(questionBase);
         questionUI.SetTitle(questionBase.Title);
         questionUI.SetDescription(questionBase.Description);
@@ -90,6 +91,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
             viewerUI.OnAnswerSelected += HandleAnswerSelected;
             viewerUI.OnAnswerTextFilled += HandleAnswerTextFilled;
         }
+        */
     }
 
     void ClearQuestionFromUI() {
