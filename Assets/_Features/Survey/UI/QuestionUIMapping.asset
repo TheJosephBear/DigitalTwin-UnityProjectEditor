@@ -37,3 +37,7 @@ MonoBehaviour:
     DisplayName: Linear Scale
     QuestionTemplate: {fileID: 9197481963319205126, guid: bdf0b7e5dbe82814a926744188447bb7, type: 3}
     AnswerTemplate: {fileID: 9197481963319205126, guid: 9eecbf158b612924b8c7681dc9533d9d, type: 3}
+  - QuestionType: 8
+    DisplayName: Linear Scale
+    QuestionTemplate: {fileID: 9197481963319205126, guid: bdf0b7e5dbe82814a926744188447bb7, type: 3}
+    AnswerTemplate: {fileID: 9197481963319205126, guid: 9eecbf158b612924b8c7681dc9533d9d, type: 3}

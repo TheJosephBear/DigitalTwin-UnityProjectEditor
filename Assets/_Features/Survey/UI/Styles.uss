@@ -91,3 +91,7 @@ RadioButtonGroup #contentContainer {
     margin-bottom: 0;
     margin-left: 0;
 }
+
+.radio-group_wrap #contentContainer {
+    flex-wrap: wrap;
+}
