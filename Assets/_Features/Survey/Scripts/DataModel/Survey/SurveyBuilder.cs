@@ -110,10 +110,8 @@ namespace SurveySystem {
         }
 
         public void AddRow(int questionId) {
-            Debug.Log("Add row is in");
             QuestionBase question = _activeSurvey.GetQuestionById(questionId);
             if (!question.IsGrid) return;
-            Debug.Log("is grid");
 
             if (question is QuestionGridBase grid) {
                 Debug.Log("Adding row actually");
@@ -193,6 +191,7 @@ namespace SurveySystem {
             CreateNewSurvey();
 
             _activeSurvey.Deserialize(JsonUtility.FromJson<SurveySerializable>(json));
+            _nextId = _activeSurvey.Questions.Count;
         }
 
         #endregion

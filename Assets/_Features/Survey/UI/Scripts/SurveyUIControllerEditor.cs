@@ -60,6 +60,17 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         SurveyQuestionUIBase addedQuestionUI = _surveyUIBuilder.AddQuestionEditor(question, insertAtIndex: insertAtIndex, isDeserialized: isDeserialized);
 
         if (addedQuestionUI is SurveyQuestionUIEditor editorUI) {
+            // Use a lambda to fetch the LATEST index from the UI list at the moment the event fires
+            editorUI.OnQuestionDeleted += (id) => {
+                int dynamicIdx = _surveyUIBuilder.GetQuestionIndex(addedQuestionUI);
+                HandleQuestionDeleted(dynamicIdx);
+            };
+
+            editorUI.OnQuestionMoved += (id, direction) => {
+                int dynamicIdx = _surveyUIBuilder.GetQuestionIndex(addedQuestionUI);
+                HandleQuestionMoved(dynamicIdx, direction);
+            };
+
             editorUI.OnTitleChanged += HandleQuestionTitleChanged;
             editorUI.OnDescriptionChanged += HandleQuestionDescriptionChanged;
             editorUI.OnQuestionDeleted += HandleQuestionDeleted;
@@ -164,8 +175,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         Survey survey = _surveyBuilder.GetActiveSurvey();
         // set title once we have the field
 
-        AddQuestion addQuestion = GetComponent<AddQuestion>();
-        addQuestion.SetInsertIndex(0);
+        _surveyUIBuilder.ClearScrollviewContent();
 
         foreach (QuestionBase question in survey.GetAllQuestions()) {
             QuestionType questionType = question.QuestionType;
@@ -186,8 +196,6 @@ public class SurveyUIControllerEditor : MonoBehaviour {
                     questionUI.AddAnswer(answer.Text, answer.IsOther);
                 }
             }
-
-            addQuestion.IncrementInsertIndex(1);
         }
 
         _surveyUIBuilder.RefreshAddQuestionBars();
