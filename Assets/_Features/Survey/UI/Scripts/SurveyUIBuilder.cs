@@ -125,8 +125,6 @@ public class SurveyUIBuilder : MonoBehaviour {
             questionInstance.Add(new Label($"Question template for '{questionType}' is missing"));
         }
 
-
-        // The decision logic needs to get better this is horrible
         SurveyQuestionUIBase questionUI = null;
 
         if(QuestionTypesUsingStringUI.Contains(questionType)) {
@@ -158,8 +156,8 @@ public class SurveyUIBuilder : MonoBehaviour {
         RefreshAddQuestionBars();
         return questionUI;
     }
-    /*
-    public ISurveyQuestionUI AddQuestionViewer(QuestionBase questionBase, int insertAtIndex = -1) {
+    
+    public SurveyQuestionUIViewer AddQuestionViewer(QuestionBase questionBase, int insertAtIndex = -1) {
         QuestionType questionType = questionBase.QuestionType;
         TemplateContainer questionInstance;
 
@@ -180,13 +178,25 @@ public class SurveyUIBuilder : MonoBehaviour {
             questionInstance.Add(new Label($"Missing template for '{questionType}'"));
         }
 
-        ISurveyQuestionUI questionUI = new SurveyQuestionUIViewer(
-            questionInstance,
-            questionBase.Id,
-            questionType,
-            FindAnyObjectByType<ViewManager>()?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>(),
-            this
-        );
+        SurveyQuestionUIViewer questionUI = null;
+
+        if (QuestionTypesUsingStringUI.Contains(questionType)) {
+            questionUI = new SurveyQuestionUIViewerString(
+                questionInstance,
+                questionBase.Id,
+                questionType,
+                FindAnyObjectByType<ViewManager>()?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>(),
+                this
+            );
+        } else if (QuestionTypesUsingGridUI.Contains(questionType)) {
+            questionUI = new SurveyQuestionUIViewerGrid(
+                questionInstance,
+                questionBase.Id,
+                questionType,
+                FindAnyObjectByType<ViewManager>()?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>(),
+                this
+            );
+        }
 
         _scrollViewContent.Add(questionInstance);
 
@@ -204,7 +214,7 @@ public class SurveyUIBuilder : MonoBehaviour {
 
         return questionUI;
     }
-    */
+
     public void MoveQuestion(int questionIndex, int direction) {
         int targetIndex = questionIndex + direction;
         if (targetIndex < 0 || targetIndex >= _addedQuestions.Count) return;

@@ -57,6 +57,34 @@ namespace SurveySystem {
             response.ResponseText = text;
         }
 
+        public void RegisterGridAnswer(int questionId, int rowIdx, int columnIdx, bool value = true) {
+            var response = _currentSubmission.Responses.Find(r => r.QuestionId == questionId);
+            if (response == null) return;
+
+            // Find the response entry for this specific row
+            var rowResponse = response.GridResponses.Find(gr => gr.RowIdx == rowIdx);
+            if (rowResponse == null) {
+                rowResponse = new GridRowResponse { RowIdx = rowIdx };
+                response.GridResponses.Add(rowResponse);
+            }
+
+            if (response.Type == QuestionType.MultipleChoiceGrid) {
+                // Radio button logic: only one column index per row
+                rowResponse.SelectedColumnIdx = columnIdx;
+            } else if (response.Type == QuestionType.CheckboxGrid) {
+                // Checkbox logic: list of toggled columns
+                if (rowResponse.SelectedColumnIndices == null)
+                    rowResponse.SelectedColumnIndices = new List<int>();
+
+                if (value) {
+                    if (!rowResponse.SelectedColumnIndices.Contains(columnIdx))
+                        rowResponse.SelectedColumnIndices.Add(columnIdx);
+                } else {
+                    rowResponse.SelectedColumnIndices.Remove(columnIdx);
+                }
+            }
+        }
+
         public string ExportResponseJson() {
             return JsonUtility.ToJson(_currentSubmission, true);
         }
@@ -69,6 +97,7 @@ namespace SurveySystem {
         public int SelectedIdx = -1;             // For SingleChoice/Range
         public List<int> SelectedIndices = null; // For MultipleChoice
         public string ResponseText = null;       // For OpenEnded or "Other" text
+        public List<GridRowResponse> GridResponses = new();
     }
 
     [Serializable]
@@ -76,5 +105,12 @@ namespace SurveySystem {
         public string SurveyName;
         public string Timestamp;
         public List<QuestionResponse> Responses = new();
+    }
+
+    [Serializable]
+    public class GridRowResponse {
+        public int RowIdx;
+        public int SelectedColumnIdx = -1;       // For MultipleChoiceGrid
+        public List<int> SelectedColumnIndices;  // For CheckboxGrid
     }
 }

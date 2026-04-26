@@ -50,10 +50,12 @@ public class SurveyUIControllerViewer : MonoBehaviour {
 
     void HandleNextPressed() {
         ChangeQuestion(next: true);
+        SurveyManager.Instance.SaveAnswers();
     }
 
     void HandlePreviousPressed() {
         ChangeQuestion(next: false);
+        SurveyManager.Instance.SaveAnswers();
     }
 
     public void HandleAnswerSelected(int questionId, int answerId) {
@@ -79,19 +81,29 @@ public class SurveyUIControllerViewer : MonoBehaviour {
     }
 
     void AddQuestionToUI(QuestionBase questionBase) {
-        /*
-        ISurveyQuestionUI questionUI = _surveyUIBuilder.AddQuestionViewer(questionBase);
+        SurveyQuestionUIBase questionUI = _surveyUIBuilder.AddQuestionViewer(questionBase);
         questionUI.SetTitle(questionBase.Title);
         questionUI.SetDescription(questionBase.Description);
-        foreach (AnswerBase answer in questionBase.Answers) {
-            questionUI.AddAnswer(answer.Text, answer.IsOther);
-        }
 
-        if (questionUI is ISurveyQuestionViewerUI viewerUI) {
-            viewerUI.OnAnswerSelected += HandleAnswerSelected;
-            viewerUI.OnAnswerTextFilled += HandleAnswerTextFilled;
+        if (questionBase is QuestionGridBase gridQuestion && questionUI is SurveyQuestionUIViewerGrid gridUI) {
+            for (int i = 0; i < gridQuestion.GetColumnCount(); i++) {
+                gridUI.AddColumn(gridQuestion.GetColumn(i));
+            }
+
+            for (int i = 0; i < gridQuestion.GetRowCount(); i++) {
+                gridUI.AddRow(gridQuestion.GetRow(i));
+            }
+
+            gridUI.OnGridAnswerSelected += (qId, row, col, val) => {
+                if (val) _responseManager.RegisterGridAnswer(qId, row, col);
+            };
+        } else if (questionUI is SurveyQuestionUIViewerString stringUI) {
+            stringUI.OnAnswerSelected += HandleAnswerSelected;
+            stringUI.OnAnswerTextFilled += HandleAnswerTextFilled;
+            foreach (AnswerBase answer in questionBase.Answers) {
+                questionUI.AddAnswer(answer.Text, answer.IsOther);
+            }
         }
-        */
     }
 
     void ClearQuestionFromUI() {
