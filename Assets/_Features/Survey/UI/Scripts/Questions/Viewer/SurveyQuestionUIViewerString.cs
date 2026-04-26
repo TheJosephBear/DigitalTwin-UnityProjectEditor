@@ -1,14 +1,14 @@
 using SurveySystem;
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class SurveyQuestionUIViewerString : SurveyQuestionUIViewer {
 
     #region Events
-
-    public event Action<int, int> OnAnswerSelected;
+    public event Action<int, int, bool> OnAnswerSelected;
     public event Action<int, int, string> OnAnswerTextFilled;
 
     #endregion
@@ -16,89 +16,58 @@ public class SurveyQuestionUIViewerString : SurveyQuestionUIViewer {
     public SurveyQuestionUIViewerString(VisualElement root, int questionId, QuestionType questionType, List<SerializableViewPoint> viewPoints, SurveyUIBuilder uiBuilder) 
         : base(root, questionId, questionType, viewPoints, uiBuilder) {
 
+        // Text only questions dont add answers, we have also have to assign here
+        var textField = root.Q<TextField>();
+
+        if (textField != null) {
+            textField.RegisterValueChangedCallback(evt => {
+                OnAnswerSelected?.Invoke(QuestionID, -1, true);
+                OnAnswerTextFilled?.Invoke(QuestionID, -1, evt.newValue);
+            });
+        }
     }
 
     public override void AddAnswer(string answerText, bool isOther = false) {
-        if (_optionsList == null || _answerTemplate == null) return;
+        if (_optionsList == null) return;
 
-        TemplateContainer answerElement = _answerTemplate.Instantiate();
-
+        VisualElement answerElement;
         int answerIndex = _addedAnswers.Count;
 
         if (isOther) {
-            _optionsList.Add(answerElement);
-
-            SurveyAnswerUIEditorString answerUI = new SurveyAnswerUIEditorString(answerElement, answerIndex, null, isOther);
-            _otherAnswerUI = answerUI;
+            // Create a TextField directly for "Other" instead of using the radio template
+            var otherField = new TextField();
+            answerElement = otherField;
         } else {
-            if (_otherAnswerUI != null) {
-                int insertIndex = _optionsList.IndexOf(_otherAnswerUI.AnswerElement);
-                _optionsList.Insert(insertIndex, answerElement);
-            } else {
-                _optionsList.Add(answerElement);
-            }
+            // Use the standard template for normal options
+            if (_answerTemplate == null) return;
+            answerElement = _answerTemplate.Instantiate();
 
-            var textLabel = answerElement.Q<UnityEngine.UIElements.Label>();
+            var textLabel = answerElement.Q<Label>();
             if (textLabel != null) textLabel.text = answerText;
 
-            SurveyAnswerUIEditorString answerUI = new SurveyAnswerUIEditorString(answerElement, answerIndex, null, isOther);
-            _addedAnswers.Add(answerUI);
-
-            RegisterAnswerCallbacks(answerUI, answerIndex);
-        }
-    }
-
-    private void RegisterAnswerCallbacks(SurveyAnswerUIEditorString answerUI, int index) {
-        var root = answerUI.AnswerElement;
-        if (root == null) {
-            //      Debug.LogError($"[Survey] AnswerElement for index {index} is null!");
-            return;
-        }
-
-        // 1. Check for the class directly
-        var customRadio = root.Q<CustomRadioButton>();
-
-        // 2. If null, search deeper using a Query
-        if (customRadio == null) {
-            //     Debug.LogWarning($"[Survey] Q<CustomRadioButton> failed for index {index}. Searching via Query...");
-            customRadio = root.Query<CustomRadioButton>().First();
-        }
-
-        if (customRadio != null) {
-            //     Debug.Log($"[Survey] Successfully found CustomRadioButton for index {index}. Registering callback.");
-
-            customRadio.RegisterRadioCallback(evt => {
-                //       Debug.Log($"[Survey] Internal Radio Toggle detected for index {index}. New Value: {evt.newValue}");
-                if (evt.newValue) {
-                    //           Debug.Log($"[Survey] Invoking OnAnswerSelected for Question {QuestionID}, Index {index}");
-                    OnAnswerSelected?.Invoke(QuestionID, index);
-                }
+            // RadioGroup event has to be assigned here
+            var radioGroup = _root.Q<RadioButtonGroup>("options-list");
+            radioGroup.RegisterValueChangedCallback(evt =>
+            {
+                int selectedIndex = evt.newValue;
+                OnAnswerSelected?.Invoke(QuestionID, selectedIndex, true);
             });
+        }
+
+        // Initialize the logic class
+        SurveyAnswerUIViewerString answerUI = new SurveyAnswerUIViewerString(answerElement, answerIndex, this, isOther);
+
+        // Bind Events
+        answerUI.OnSelected += (qId, aIdx, val) => OnAnswerSelected?.Invoke(qId, aIdx, val);
+        answerUI.OnTextChanged += (qId, aIdx, txt) => OnAnswerTextFilled?.Invoke(qId, aIdx, txt);
+
+        // Layout Handling
+        if (isOther) {
+            _optionsList.Add(answerElement);
+            _otherAnswerUI = answerUI;
         } else {
-            // 3. Last resort: Check if the element exists but just isn't being cast correctly
-            var anyElementNamedRadio = root.Q("my-radio-name"); // Replace with the name used in UXML if applicable
-                                                                //   Debug.LogError($"[Survey] CRITICAL: Could not find CustomRadioButton for index {index}. " +
-                                                                //                   $"Total children in root: {root.childCount}. " +
-                                                                //                   $"Is root a TemplateContainer? {root is TemplateContainer}");
-
-            // Let's try to find the raw RadioButton inside the custom element
-            var rawRadio = root.Q<UnityEngine.UIElements.RadioButton>();
-            if (rawRadio != null) {
-                //     Debug.LogWarning($"[Survey] Found a raw RadioButton for index {index} even though CustomRadioButton lookup failed. Hooking directly to raw radio.");
-                rawRadio.RegisterValueChangedCallback(evt => {
-                    if (evt.newValue) OnAnswerSelected?.Invoke(QuestionID, index);
-                });
-            }
-        }
-
-        // TextField Debugging
-        var textField = root.Q<TextField>();
-        if (textField != null) {
-            //    Debug.Log($"[Survey] TextField found for index {index}.");
-            textField.RegisterValueChangedCallback(evt => {
-                //        Debug.Log($"[Survey] Text changed for index {index}: {evt.newValue}");
-                OnAnswerTextFilled?.Invoke(QuestionID, index, evt.newValue);
-            });
+            InsertAnswerElement(answerElement);
+            _addedAnswers.Add(answerUI);
         }
     }
 

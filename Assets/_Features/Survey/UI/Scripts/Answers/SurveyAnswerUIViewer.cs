@@ -6,7 +6,7 @@ public abstract class SurveyAnswerUIViewer : SurveyAnswerUIBase {
 
     public event Action<int, string> OnAnswerSelected;
 
-    public SurveyAnswerUIViewer(VisualElement answerElement, int answerIndex, SurveyQuestionUIEditorString questionUI, bool isOther) 
+    public SurveyAnswerUIViewer(VisualElement answerElement, int answerIndex, SurveyQuestionUIViewer questionUI, bool isOther) 
         : base(answerElement, answerIndex, questionUI, isOther) {
 
     }

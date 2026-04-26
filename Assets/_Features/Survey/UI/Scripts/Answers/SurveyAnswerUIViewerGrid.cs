@@ -11,7 +11,7 @@ public class SurveyAnswerUIViewerGrid : SurveyAnswerUIBase {
         _radioContainer = element.Q<VisualElement>("radio-container") ?? element.Q<RadioButtonGroup>();
     }
 
-    protected override void RegisterAnswerEvents() { } // Static in viewer
+    protected override void RegisterAnswerEvents() { }
 
     public void SetRowText(string text) {
         var label = _answerElement.Q<Label>();

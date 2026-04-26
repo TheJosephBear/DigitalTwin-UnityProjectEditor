@@ -81,7 +81,10 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
         var answerUI = CreateAnswerUI(element, index, isOther);
 
         if (isOther) {
-            element.Q<CustomRadioButton>().Placeholder = "Other";
+            var button = element.Q<CustomRadioButton>();
+            if(button != null) {
+                element.Q<CustomRadioButton>().Placeholder = "Other";
+            }
             _otherAnswerUI = answerUI;
         } else {
             _addedAnswers.Add(answerUI);

@@ -5,7 +5,8 @@
         <ui:Instance template="QuestionTitleBar" name="question-bar" />
         <ui:VisualElement style="flex-grow: 0; flex-direction: row;">
             <ui:Label text="Popis řádku" style="flex-shrink: 1; align-self: center; width: 150px;" />
-            <ui:VisualElement name="options-list" style="flex-grow: 1; flex-direction: row; justify-content: space-evenly;">
+            <ui:RadioButtonGroup name="options-list" style="flex-shrink: 1; flex-grow: 1; justify-content: space-evenly; margin-top: 0; margin-right: 0; margin-left: 0; margin-bottom: 0;" />
+            <ui:VisualElement name="options-listt" enabled="false" picking-mode="Ignore" style="flex-grow: 1; flex-direction: row; justify-content: space-evenly; overflow: hidden; visibility: hidden; display: none;">
                 <ui:Instance template="ScaleRadio" />
             </ui:VisualElement>
         </ui:VisualElement>

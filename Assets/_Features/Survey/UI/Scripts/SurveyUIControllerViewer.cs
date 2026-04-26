@@ -10,7 +10,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
     private SurveyResponseManager _responseManager; // Handles response data model
     private SurveyUIBuilder _surveyUIBuilder; // Script adding template instances to UI
 
-
+    private Dictionary<int, SurveyQuestionUIBase> _questionUICache = new();
     private List<QuestionBase> _questions;
     private int _shownQuestionIndex = -1;
 
@@ -58,12 +58,14 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         SurveyManager.Instance.SaveAnswers();
     }
 
-    public void HandleAnswerSelected(int questionId, int answerId) {
-        _responseManager.RegisterAnswer(questionId, answerId);
+    public void HandleAnswerSelected(int questionId, int answerId, bool isSelected) {
+        print("ANSWER SELECTED");
+        _responseManager.RegisterAnswer(questionId, answerId, isSelected);
     }
 
     public void HandleAnswerTextFilled(int questionId, int answerId, string newText) {
-
+        print("TEXT FILLED");
+        _responseManager.RegisterAnswer(questionId, answerId, true, newText);
     }
 
     #endregion
@@ -81,6 +83,14 @@ public class SurveyUIControllerViewer : MonoBehaviour {
     }
 
     void AddQuestionToUI(QuestionBase questionBase) {
+        // Check if we already created this UI before
+        if (_questionUICache.TryGetValue(questionBase.Id, out SurveyQuestionUIBase existingUI)) {
+            // Show the existing one
+            existingUI.QuestionElement.style.display = DisplayStyle.Flex;
+            return;
+        }
+
+        // If not in cache, create it for the first time
         SurveyQuestionUIBase questionUI = _surveyUIBuilder.AddQuestionViewer(questionBase);
         questionUI.SetTitle(questionBase.Title);
         questionUI.SetDescription(questionBase.Description);
@@ -104,9 +114,17 @@ public class SurveyUIControllerViewer : MonoBehaviour {
                 questionUI.AddAnswer(answer.Text, answer.IsOther);
             }
         }
+
+        // Add to cache
+        _questionUICache.Add(questionBase.Id, questionUI);
     }
 
     void ClearQuestionFromUI() {
-        _surveyUIBuilder.ClearScrollviewContent();
+    //    _surveyUIBuilder.ClearScrollviewContent();
+
+        // Instead of destroying, we just hide all cached questions
+        foreach (var ui in _questionUICache.Values) {
+            ui.QuestionElement.style.display = DisplayStyle.None;
+        }
     }
 }

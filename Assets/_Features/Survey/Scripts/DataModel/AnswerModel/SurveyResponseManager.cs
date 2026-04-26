@@ -26,35 +26,38 @@ namespace SurveySystem {
             }
         }
 
-        /// <summary>
-        /// Registers a selection for Single Choice or Linear Scale
-        /// </summary>
-        public void RegisterAnswer(int questionID, int answerID, string otherText = null) {
+        public void RegisterAnswer(int questionID, int answerID, bool isSelected = true, string textValue = null) {
             var response = _currentSubmission.Responses.Find(r => r.QuestionId == questionID);
             if (response == null) return;
 
-            response.SelectedIdx = answerID;
-            response.ResponseText = otherText;
-        }
+            // 1. Handle Multiple Choice (Multiple Answers)
+            if (response.Type == QuestionType.MultipleChoiceMultiple) {
+                if (response.SelectedIndices == null) response.SelectedIndices = new List<int>();
 
-        /// <summary>
-        /// Registers a selection for Multiple Choice
-        /// </summary>
-        public void RegisterMultipleAnswers(int questionID, List<int> answerIndices) {
-            var response = _currentSubmission.Responses.Find(r => r.QuestionId == questionID);
-            if (response == null) return;
+                if (isSelected) {
+                    if (!response.SelectedIndices.Contains(answerID))
+                        response.SelectedIndices.Add(answerID);
+                } else {
+                    response.SelectedIndices.Remove(answerID);
+                }
+            }
+            // 2. Handle Text-Only Questions (Paragraph / Short Answer)
+            else if (response.Type == QuestionType.Paragraph || response.Type == QuestionType.ShortAnswer) {
+                response.ResponseText = textValue;
+                // Mark as "selected" (0) simply to indicate it has a response, 
+                // though ResponseText is the primary data here.
+                response.SelectedIdx = string.IsNullOrEmpty(textValue) ? -1 : 0;
+            }
+            // 3. Handle Single Choice / Linear Scale / Dropdown
+            else {
+                response.SelectedIdx = isSelected ? answerID : -1;
+            }
 
-            response.SelectedIndices = answerIndices;
-        }
-
-        /// <summary>
-        /// Registers text for Open Ended questions
-        /// </summary>
-        public void RegisterTextAnswer(int questionID, string text) {
-            var response = _currentSubmission.Responses.Find(r => r.QuestionId == questionID);
-            if (response == null) return;
-
-            response.ResponseText = text;
+            // 4. Handle "Other" text for Choice questions
+            // This allows a choice question to have both a SelectedIdx AND custom text
+            if (textValue != null && (response.Type != QuestionType.Paragraph && response.Type != QuestionType.ShortAnswer)) {
+                response.ResponseText = textValue;
+            }
         }
 
         public void RegisterGridAnswer(int questionId, int rowIdx, int columnIdx, bool value = true) {

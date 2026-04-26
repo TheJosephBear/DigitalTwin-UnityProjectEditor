@@ -20,10 +20,6 @@ public abstract class SurveyAnswerUIBase {
         _questionUIRef = questionUI;
         _isOther = isOther;
 
-        if (_isOther) {
-            _answerElement.Q<TextField>().isReadOnly = true;
-        }
-
         RegisterAnswerEvents(); 
     }
 
