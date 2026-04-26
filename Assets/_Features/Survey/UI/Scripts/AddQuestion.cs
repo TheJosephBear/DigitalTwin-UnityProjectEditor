@@ -62,10 +62,22 @@ public class AddQuestion : Singleton<AddQuestion> {
         _questionTypeSelectionInstance.style.display = DisplayStyle.Flex;
         _questionTypeSelectionInstance.style.position = Position.Absolute;
         Vector2 pendingBarButtonPos = _pendingBar.Q<Button>().worldBound.center;
-        Vector2 buttonCenter = new Vector2(pendingBarButtonPos.x, pendingBarButtonPos.y);
-        _questionTypeSelectionInstance.style.left = Mathf.Ceil(buttonCenter.x);
-        _questionTypeSelectionInstance.style.top = Mathf.Ceil(buttonCenter.y);
+
+        float targetX = Mathf.Ceil(pendingBarButtonPos.x);
+        float targetY = Mathf.Ceil(pendingBarButtonPos.y);
+
+        _questionTypeSelectionInstance.style.left = targetX;
+        _questionTypeSelectionInstance.style.top = targetY;
         _questionTypeSelectionInstance.BringToFront();
+
+        // Ensure the modal stays within the screen bounds after its layout resolves
+        _questionTypeSelectionInstance.schedule.Execute(() => {
+            float maxX = Mathf.Max(0, _root.layout.width - _questionTypeSelectionInstance.layout.width);
+            float maxY = Mathf.Max(0, _root.layout.height - _questionTypeSelectionInstance.layout.height);
+
+            _questionTypeSelectionInstance.style.left = Mathf.Clamp(targetX, 0, maxX);
+            _questionTypeSelectionInstance.style.top = Mathf.Clamp(targetY, 0, maxY);
+        });
 
         List<Button> buttons = _questionTypeSelectionInstance.Query<Button>().ToList();
         buttons.ForEach(button => {
