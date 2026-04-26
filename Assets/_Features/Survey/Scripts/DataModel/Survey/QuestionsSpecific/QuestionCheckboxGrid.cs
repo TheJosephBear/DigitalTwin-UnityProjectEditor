@@ -2,8 +2,8 @@ namespace SurveySystem {
     public class QuestionCheckboxGrid : QuestionGridBase {
 
         public QuestionCheckboxGrid(int id)
-            : base(id, QuestionType.MultipleChoiceGrid) {
-            MultipleAnswersAllowed = false;
+            : base(id, QuestionType.CheckboxGrid) {
+            MultipleAnswersAllowed = true;
         }
 
         protected override AnswerGrid CreateAnswer(int row, int column) {

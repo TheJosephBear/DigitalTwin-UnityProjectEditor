@@ -85,6 +85,7 @@ namespace SurveySystem {
 
         public override SerializableQuestion Serialize() {
             Debug.Log("Correct serialize");
+            Debug.Log(Rows.Count);
             return new SerializableGridQuestion {
                 Id = Id,
                 Title = Title,

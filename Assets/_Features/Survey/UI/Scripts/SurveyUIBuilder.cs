@@ -98,6 +98,7 @@ public class SurveyUIBuilder : MonoBehaviour {
     }
 
     public SurveyQuestionUIBase AddQuestionEditor(QuestionBase addedQuestion, bool isDeserialized, int insertAtIndex = -1, VisualTreeAsset template = null) {
+        print("Adding question in builder, type is: " + addedQuestion.QuestionType);
         if (template == null) {
             //Template not provided, look it up
             QuestionTypeMapping mapping = questionUIMapping.GetMappingByQuestionType(addedQuestion.QuestionType);
