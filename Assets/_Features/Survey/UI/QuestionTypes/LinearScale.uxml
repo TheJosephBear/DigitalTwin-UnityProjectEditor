@@ -5,9 +5,9 @@
         <ui:Instance template="QuestionTitleBar" name="question-bar" />
         <ui:VisualElement style="flex-grow: 0; flex-direction: row;">
             <ui:TextField placeholder-text="Text možnosti" multiline="true" style="white-space: normal; flex-shrink: 1; align-items: flex-start; align-self: center; width: 150px;" />
-            <ui:VisualElement name="scale-options" style="flex-grow: 1; flex-direction: row; justify-content: space-evenly;">
-                <ui:Instance template="ScaleRadio" name="options-list" style="flex-direction: row;" />
-            </ui:VisualElement>
+            <ui:RadioButtonGroup name="options-list" style="flex-grow: 1; justify-content: space-evenly;">
+                <ui:Instance template="ScaleRadio" style="flex-direction: row;" />
+            </ui:RadioButtonGroup>
             <ui:Button text="+ Přidat možnost" name="add-option-button" style="flex-shrink: 1; align-items: auto; align-self: center; white-space: normal; width: 100px;" />
         </ui:VisualElement>
     </ui:VisualElement>

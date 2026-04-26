@@ -84,3 +84,10 @@ RadioButtonGroup #contentContainer {
     margin-bottom: 0;
     margin-left: 0;
 }
+
+.radio_no-margin > VisualElement {
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+}
