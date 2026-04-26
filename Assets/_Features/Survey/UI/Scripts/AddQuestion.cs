@@ -102,6 +102,17 @@ public class AddQuestion : Singleton<AddQuestion> {
         _pendingBar = null;
     }
 
+    public void SetInsertIndex(int index) {
+        _pendingInsertIndex = index;
+    }
+
+    public void IncrementInsertIndex(int amount = 1) {
+        // Only increment if we aren't in "Append Mode" (-1)
+        if (_pendingInsertIndex != -1) {
+            _pendingInsertIndex += amount;
+        }
+    }
+
     private void OnEnable() {
         // Re-register the callback when the object is enabled
         if (_root != null && IsOpen) {

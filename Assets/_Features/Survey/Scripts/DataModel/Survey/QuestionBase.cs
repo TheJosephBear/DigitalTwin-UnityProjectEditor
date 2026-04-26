@@ -70,7 +70,7 @@ namespace SurveySystem {
             ViewPointId = vpID;
         }
 
-        public SerializableQuestion Serialize() {
+        public virtual SerializableQuestion Serialize() {
             return new SerializableQuestion {
                 Id = Id,
                 Title = Title,
@@ -81,7 +81,8 @@ namespace SurveySystem {
             };
         }
 
-        public QuestionBase Deserialize(SerializableQuestion serializable) {
+        public static QuestionBase CreateAndDeserialize(SerializableQuestion serializable) {
+            Debug.Log("ŠPATNNÝ DESERIALIZE");
             QuestionBase deserializedQuestion = serializable.QuestionType switch {
                 QuestionType.MultipleChoiceSingle => new QuestionMultipleChoiceSingleAnswer(serializable.Id),
                 QuestionType.MultipleChoiceMultiple => new QuestionMultipleChoiceMultipleAnswer(serializable.Id),
@@ -93,15 +94,19 @@ namespace SurveySystem {
                 QuestionType.ImageChoice => new QuestionMultipleChoiceSingleAnswer(serializable.Id),
                 QuestionType.LinearScale => new QuestionLinearScale(serializable.Id),
             };
-            
-           deserializedQuestion.Title = serializable.Title;
-           deserializedQuestion.Description = serializable.Description;
-           deserializedQuestion.ViewPointId = serializable.ViewPointId;
+
+            return deserializedQuestion.Deserialize(serializable);
+        }
+
+        public virtual QuestionBase Deserialize(SerializableQuestion serializable) {
+           Title = serializable.Title;
+           Description = serializable.Description;
+           ViewPointId = serializable.ViewPointId;
            foreach(AnswerBase answer in serializable.Answers){ 
-             deserializedQuestion.AddExistingAnswer(answer);
+             AddExistingAnswer(answer);
            }
 
-            return deserializedQuestion;
+            return this;
         }
     }
 

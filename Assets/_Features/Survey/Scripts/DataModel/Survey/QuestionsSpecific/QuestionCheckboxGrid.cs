@@ -1,11 +1,13 @@
 namespace SurveySystem {
-    public class QuestionCheckboxGrid : QuestionBase {
-        // Multiple collumns, each collumn has its own answers i guess..? Collumn has a description text, each row also has a description text
-        // Multiple answers
-        public QuestionCheckboxGrid(int ID) : base(ID, QuestionType.CheckboxGrid) {
+    public class QuestionCheckboxGrid : QuestionGridBase {
+
+        public QuestionCheckboxGrid(int id)
+            : base(id, QuestionType.MultipleChoiceGrid) {
             MultipleAnswersAllowed = false;
-            IsGrid = true;
         }
 
+        protected override AnswerGrid CreateAnswer(int row, int column) {
+            return new AnswerGrid(row, column);
+        }
     }
 }

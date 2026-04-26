@@ -51,11 +51,9 @@ namespace SurveySystem {
         }
 
         public void Deserialize(SurveySerializable serializable) {
-
-            Debug.Log("Survey: " + serializable);
             Name = serializable.Name;
             foreach (SerializableQuestion q in serializable.Questions) {
-                _questions.Add(new QuestionBase(q.Id).Deserialize(q));
+                _questions.Add(QuestionBase.CreateAndDeserialize(q));
             }
         }
 
@@ -65,6 +63,7 @@ namespace SurveySystem {
     [Serializable]
     public class SurveySerializable {
         public string Name;
+        [SerializeReference]
         public List<SerializableQuestion> Questions;
     }
 }

@@ -13,7 +13,7 @@ using UnityEngine.UIElements;
 /// (Tohle by mo�n� mohl d�lat sv�j vlastn� script) -> Manages the instantiation of addedQuestion UI elements based on templates and keeps track of added questions.
 /// </summary>
 public class SurveyUIControllerEditor : MonoBehaviour {
-    
+
     private VisualElement _root;
     private SurveyManager _surveyManager;
     private SurveyBuilder _surveyBuilder; // Interface for data model
@@ -59,18 +59,21 @@ public class SurveyUIControllerEditor : MonoBehaviour {
     public SurveyQuestionUIBase HandleExistingQuestionAdded(QuestionBase question, int insertAtIndex = -1, bool isDeserialized = false) {
         SurveyQuestionUIBase addedQuestionUI = _surveyUIBuilder.AddQuestionEditor(question, insertAtIndex: insertAtIndex, isDeserialized: isDeserialized);
 
+        if (addedQuestionUI is SurveyQuestionUIEditor editorUI) {
+            editorUI.OnTitleChanged += HandleQuestionTitleChanged;
+            editorUI.OnDescriptionChanged += HandleQuestionDescriptionChanged;
+            editorUI.OnQuestionDeleted += HandleQuestionDeleted;
+            editorUI.OnQuestionMoved += HandleQuestionMoved;
+            editorUI.OnViewpointSelected += HandleQuestionViewPointSelected;
+        }
+
         if (addedQuestionUI is SurveyQuestionUIEditorGrid gridUI) {
             gridUI.OnAddRow += AddRow;
             gridUI.OnAddColumn += AddColumn;
         } else if (addedQuestionUI is SurveyQuestionUIEditorString builderUI) {
-            builderUI.OnTitleChanged += HandleQuestionTitleChanged;
-            builderUI.OnDescriptionChanged += HandleQuestionDescriptionChanged;
-            builderUI.OnQuestionDeleted += HandleQuestionDeleted;
-            builderUI.OnQuestionMoved += HandleQuestionMoved;
             builderUI.OnAnswerAdded += HandleAnswerAdded;
             builderUI.OnAnswerOtherAdded += HandleAnswerOtherAdded;
             builderUI.OnAnswerRemoved += HandleAnswerRemoved;
-            builderUI.OnViewpointSelected += HandleQuestionViewPointSelected;
 
             if (!isDeserialized) {
                 builderUI.AddInitialAnswer();
@@ -82,12 +85,20 @@ public class SurveyUIControllerEditor : MonoBehaviour {
 
     void AddRow(int questionID, SurveyAnswerUIEditorGrid answerUI) {
         _surveyBuilder.AddRow(questionID);
-        answerUI.OnTextChanged += HandleAnswerTextChanged;
+        answerUI.OnTextChanged += OnRowTextChanged;
     }
 
     void AddColumn(int questionID, SurveyAnswerUIEditorGrid answerUI) {
         _surveyBuilder.AddColumn(questionID);
-        answerUI.OnTextChanged += HandleAnswerTextChanged;
+        answerUI.OnTextChanged += OnColumnTextChanged;
+    }
+
+    void OnRowTextChanged(int questionID, int rowIdx, string text) {
+        _surveyBuilder.SetRowText(questionID, rowIdx, text);
+    }
+
+    void OnColumnTextChanged(int questionID, int columnIdx, string text) {
+        _surveyBuilder.SetColumnText(questionID, columnIdx, text);
     }
 
     public void HandleQuestionDeleted(int questionIndex) {
@@ -148,18 +159,35 @@ public class SurveyUIControllerEditor : MonoBehaviour {
     /// Builds the UI from data in the active survey
     /// </summary>
     public void DeserializeUI() {
-        if(_surveyUIBuilder == null)  _surveyUIBuilder = GetComponent<SurveyUIBuilder>();
+        if (_surveyUIBuilder == null) _surveyUIBuilder = GetComponent<SurveyUIBuilder>();
 
         Survey survey = _surveyBuilder.GetActiveSurvey();
         // set title once we have the field
 
+        AddQuestion addQuestion = GetComponent<AddQuestion>();
+        addQuestion.SetInsertIndex(0);
+
         foreach (QuestionBase question in survey.GetAllQuestions()) {
+            QuestionType questionType = question.QuestionType;
             SurveyQuestionUIBase questionUI = HandleExistingQuestionAdded(question, isDeserialized: true);
             questionUI.SetTitle(question.Title);
             questionUI.SetDescription(question.Description);
-            foreach (AnswerBase answer in question.Answers) {
-                questionUI.AddAnswer(answer.Text, answer.IsOther);
+            if (question is QuestionGridBase gridQuestion) {
+                if (questionUI is SurveyQuestionUIEditorGrid gridUI) {
+                    for (int i = 0; i < gridQuestion.GetColumnCount(); i++) {
+                        gridUI.AddExistingColumn(gridQuestion.GetColumn(i));
+                    }
+                    for (int i = 0; i < gridQuestion.GetRowCount(); i++) {
+                        gridUI.AddExistingRow(gridQuestion.GetRow(i));
+                    }
+                }
+            } else {
+                foreach (AnswerBase answer in question.Answers) {
+                    questionUI.AddAnswer(answer.Text, answer.IsOther);
+                }
             }
+
+            addQuestion.IncrementInsertIndex(1);
         }
 
         _surveyUIBuilder.RefreshAddQuestionBars();

@@ -9,8 +9,7 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
     private List<SurveyAnswerUIEditorGrid> _columns = new();
 
     private VisualElement _rowContainer;
-    private VisualElement _columnContainer;
-    private VisualElement _gridContainer;
+    private VisualElement _columnContainer; 
 
     #region Events
 
@@ -27,7 +26,13 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
         SurveyUIBuilder uiBuilder,
         bool isDeserialized = false) 
         : base(root, questionId, questionType, viewPoints, uiBuilder){
-        
+
+        _rowContainer = _root.Q<VisualElement>("options-list");
+        _columnContainer = _root.Q<VisualElement>("col-headers");
+
+        _rowContainer.Clear();
+        _columnContainer.Clear();
+        RebuildGrid();
     }
 
 
@@ -36,9 +41,8 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
     }
 
     protected override void RegisterButtons() {
-        _rowContainer = _root.Q<VisualElement>("option-container");
+        _rowContainer = _root.Q<VisualElement>("options-list");
         _columnContainer = _root.Q<VisualElement>("col-headers");
-        _gridContainer = _root.Q<VisualElement>("grid-container");
 
         var addRowButton = _root.Q<Button>("add-row-button");
         if (addRowButton != null) {
@@ -61,7 +65,15 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
         return new SurveyAnswerUIEditorGrid(element, index, this, isOther);
     }
 
-    SurveyAnswerUIEditorGrid AddRow() {
+    public void AddExistingRow(string text) {
+        AddRow().SetText(text);
+    }
+
+    public void AddExistingColumn(string text) {
+        AddColumn().SetText(text);
+    }
+
+    public SurveyAnswerUIEditorGrid AddRow() {
         if (_answerTemplate == null) {
             Debug.LogError("Answer template is null!");
         }
@@ -75,11 +87,11 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
         return row;
     }
 
-    SurveyAnswerUIEditorGrid AddColumn() {
+    public SurveyAnswerUIEditorGrid AddColumn() {
         if (_answerTemplate == null) {
             Debug.LogError("Answer template is null!");
         }
-        var element = _answerTemplate.Instantiate(); ;
+        var element = CreateTextField();
         _columnContainer.Add(element);
 
         SurveyAnswerUIEditorGrid column = new SurveyAnswerUIEditorGrid(element, _columns.Count, this, false);
@@ -90,27 +102,39 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
     }
 
     private void RebuildGrid() {
-        _gridContainer.Clear();
-
-        int rowCount = _rows.Count;
-        int colCount = _columns.Count;
-
-        for (int r = 0; r < rowCount; r++) {
-            var rowElement = new VisualElement();
-            rowElement.style.flexDirection = FlexDirection.Row;
-
-            for (int c = 0; c < colCount; c++) {
-                var cell = new VisualElement();
-                cell.style.width = 20;
-                cell.style.height = 20;
-
-                // Placeholder (toggle, checkbox, radio, etc.)
-                cell.AddToClassList("grid-cell");
-
-                rowElement.Add(cell);
-            }
-
-            _gridContainer.Add(rowElement);
+        foreach (var row in _rows) {
+            Debug.Log(_questionType);
+            row.RebuildRadioButtons(_columns.Count, _questionType == QuestionType.CheckboxGrid);
         }
+    }
+
+    TextField CreateTextField() {
+        var textField = new TextField();
+        textField.value = "Sloupec";
+
+        float baseWidth = 100f; // minimum width
+
+        textField.style.width = baseWidth;
+
+        // Register change
+        textField.RegisterValueChangedCallback(evt =>
+        {
+            var textElement = textField.Q<TextElement>();
+
+            if (textElement == null) return;
+
+            var size = textElement.MeasureTextSize(
+                evt.newValue,
+                0,
+                VisualElement.MeasureMode.Undefined,
+                0,
+                VisualElement.MeasureMode.Undefined
+            );
+
+            float newWidth = Mathf.Max(baseWidth, size.x + 20f); // padding buffer
+
+            textField.style.width = newWidth;
+        });
+        return textField;
     }
 }

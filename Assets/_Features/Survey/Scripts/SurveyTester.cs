@@ -32,7 +32,7 @@ public class SurveyTester : MonoBehaviour, IInitializationListener {
 
     void LoadFromJson() {
         string json = "";
-        string kson = "{\"Name\":\"\",\"Questions\":[{\"Id\":0,\"Title\":\"aaaa\",\"Description\":\"\",\"ViewPointId\":\"\",\"QuestionType\":0,\"Answers\":[{\"Idx\":0,\"Text\":\"asdasd\",\"IsOther\":false},{\"Idx\":1,\"Text\":\"asdasd\",\"IsOther\":false}]},{\"Id\":1,\"Title\":\"fdgdgg\",\"Description\":\"\",\"ViewPointId\":\"\",\"QuestionType\":1,\"Answers\":[{\"Idx\":0,\"Text\":\"hfgjghj\",\"IsOther\":false},{\"Idx\":1,\"Text\":\"fghfgh\",\"IsOther\":false}]},{\"Id\":2,\"Title\":\"paragrap\",\"Description\":\"\",\"ViewPointId\":\"\",\"QuestionType\":3,\"Answers\":[{\"Idx\":0,\"Text\":\"\",\"IsOther\":true},{\"Idx\":1,\"Text\":\"\",\"IsOther\":false}]},{\"Id\":3,\"Title\":\"lin\",\"Description\":\"\",\"ViewPointId\":\"\",\"QuestionType\":8,\"Answers\":[{\"Idx\":0,\"Text\":\"aaa\",\"IsOther\":false},{\"Idx\":1,\"Text\":\"bbb\",\"IsOther\":false},{\"Idx\":2,\"Text\":\"ccc\",\"IsOther\":false}]}]}";
+        string kson = "{\"Name\":\"\",\"Questions\":[{\"rid\":1000}],\"references\":{\"version\":2,\"RefIds\":[{\"rid\":1000,\"type\":{\"class\":\"SerializableGridQuestion\",\"ns\":\"SurveySystem\",\"asm\":\"Assembly-CSharp\"},\"data\":{\"Id\":0,\"Title\":\"prosimte na kolenou delej co mas tak jak to chci\",\"Description\":\"fakt uz to ztracim prosimmmmmm\",\"ViewPointId\":\"\",\"QuestionType\":5,\"Answers\":[],\"Rows\":[\"aa\",\"bb\"],\"Columns\":[\"a\",\"b\",\"c\"]}}]}}";
         SurveyManager.Instance.SetSurveyJson(kson);
         if (EditorMode) {
             SurveyManager.Instance.EnterSurveyBuilding(debug: true);

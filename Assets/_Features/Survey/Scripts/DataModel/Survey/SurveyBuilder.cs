@@ -110,11 +110,42 @@ namespace SurveySystem {
         }
 
         public void AddRow(int questionId) {
+            Debug.Log("Add row is in");
+            QuestionBase question = _activeSurvey.GetQuestionById(questionId);
+            if (!question.IsGrid) return;
+            Debug.Log("is grid");
 
+            if (question is QuestionGridBase grid) {
+                Debug.Log("Adding row actually");
+                grid.AddRow();
+            }
         }
 
         public void AddColumn(int questionId) {
+            QuestionBase question = _activeSurvey.GetQuestionById(questionId);
+            if (!question.IsGrid) return;
 
+            if (question is QuestionGridBase grid) {
+                grid.AddColumn();
+            }
+        }
+
+        public void SetRowText(int questionId, int rowIdx, string text) {
+            QuestionBase question = _activeSurvey.GetQuestionById(questionId);
+            if (!question.IsGrid) return;
+
+            if (question is QuestionGridBase grid) {
+                grid.SetRowText(rowIdx, text);
+            }
+        }
+
+        public void SetColumnText(int questionId, int columnIdx, string text) {
+            QuestionBase question = _activeSurvey.GetQuestionById(questionId);
+            if (!question.IsGrid) return;
+
+            if (question is QuestionGridBase grid) {
+                grid.SetColumnText(columnIdx, text);
+            }
         }
 
         public void SetAnswerText(AnswerBase answer, string text) {
@@ -150,6 +181,7 @@ namespace SurveySystem {
         #region Serialization
 
         public string ExportSurveyAsJson() {
+         //   string jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(_activeSurvey.Serialize());
             string jsonString = JsonUtility.ToJson(_activeSurvey.Serialize());
 
             Debug.Log(jsonString);

@@ -49,3 +49,30 @@ public partial class CustomRadioButton : VisualElement {
         _radioButton.RegisterValueChangedCallback(callback);
     }
 }
+
+
+[UxmlElement]
+public partial class CustomRadioButtonNoText : VisualElement {
+
+    [UxmlAttribute]
+    public bool @Checked // with the @ symbol since checked is a C# keyword
+    {
+        get => _radioButton.value;
+        set => _radioButton.value = value;
+    }
+
+    private readonly UnityEngine.UIElements.RadioButton _radioButton;
+    public UnityEngine.UIElements.RadioButton Radio => _radioButton;
+
+    public CustomRadioButtonNoText() {
+        this.style.flexDirection = FlexDirection.Row;
+
+        _radioButton = new UnityEngine.UIElements.RadioButton();
+        _radioButton.text = string.Empty;
+        Add(_radioButton);
+    }
+
+    public void RegisterRadioCallback(EventCallback<ChangeEvent<bool>> callback) {
+        _radioButton.RegisterValueChangedCallback(callback);
+    }
+}
