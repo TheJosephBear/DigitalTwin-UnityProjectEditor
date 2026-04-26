@@ -106,8 +106,8 @@ public class ViewManager : MonoBehaviour {
 
     }
 
-    public void SetActiveViewPoint(ViewPoint ip) {
-        currentViewPoint = ip;
+    public void SetActiveViewPoint(ViewPoint vp) {
+        currentViewPoint = vp;
         ToggleCameraPreview(true);
     }
 
