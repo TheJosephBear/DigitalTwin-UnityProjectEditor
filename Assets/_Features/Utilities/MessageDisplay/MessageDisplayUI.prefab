@@ -78,7 +78,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1000, y: 8}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -115,8 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 640d48abb286e1a44ba69b9e2e81a815, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonPrefab: {fileID: 1012806616587893080, guid: 65c87dbf52509ed41965cecae3c6c562,
-    type: 3}
+  buttonPrefab: {fileID: 1012806616587893080, guid: 65c87dbf52509ed41965cecae3c6c562, type: 3}
   container: {fileID: 1574193830100441596}
 --- !u!1 &1574193830100441596
 GameObject:
