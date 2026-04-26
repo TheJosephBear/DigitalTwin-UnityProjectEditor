@@ -53,6 +53,11 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
         StartCoroutine(PostRequest(url, formData, callback));
     }
 
+    public void Logout(System.Action<bool, string> callback) {
+        string url = $"{serverUrl}/logout";
+        StartCoroutine(PostRequest(url, new Dictionary<string, string>(), callback));
+    }
+
     public void Register(string username, string password, System.Action<bool, string> callback) {
         string url = $"{serverUrl}/register";
         Dictionary<string, string> formData = new Dictionary<string, string> {

@@ -76,6 +76,10 @@ public class ProjectListUI : UIBehaviour {
         ProjectListManager.Instance.DeleteProject(projectMedata);
     }
 
+    public void OnLogout() {
+        AuthorizationManager.Instance.Logout();
+    }
+
     #endregion
 
 

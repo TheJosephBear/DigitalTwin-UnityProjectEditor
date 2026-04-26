@@ -9,6 +9,8 @@ public class AuthorizationManager : Singleton<AuthorizationManager> {
 
     protected override void Awake() {
         base.Awake();
+        // Try loggin in with saved session (if exists)
+        LoginWithSession(); // Empty credentials will trigger session login attempt on server side
     }
 
     public void Login(string username, string password) {
@@ -19,6 +21,30 @@ public class AuthorizationManager : Singleton<AuthorizationManager> {
                 UIManager.Instance.HideUI(UIType.Login);
             } else {
                 PopUp.Instance.ShowPopUpWindow("Jméno nebo heslo není správně.");
+            }
+        });
+    }
+
+    public void LoginWithSession() {
+        ServerCommunicationManager.Instance.Login("", "", (successBool, message) => {
+            if (successBool) {
+                Debug.Log("Valid session found, proceeding to project list.");
+                // Unload login scene and load project list
+                StartCoroutine(GoToProjectList());
+                UIManager.Instance.HideUI(UIType.Login);
+            } else {
+                Debug.Log("No valid session found, showing login screen.");
+            }
+        });
+    }
+
+    public void Logout() {
+        ServerCommunicationManager.Instance.Logout((successBool, message) => {
+            if (successBool) {
+                UIManager.Instance.ShowUI(UIType.Login);
+                var unloadTask = SceneLoadingManager.Instance.UnLoadSceneAsync(SceneType.ProjectList); // No need to wait for this
+            } else {
+                PopUp.Instance.ShowPopUpWindow("Odhlášení selhalo.");
             }
         });
     }
