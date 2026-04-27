@@ -6,6 +6,7 @@ public class SurveyViewingState : StateBase {
         MainManagerBase.Instance.ViewManager.ToggleCameraPreview(false);
         MainManagerBase.Instance.ViewManager.ToggleViewPointUI(false);
         MainManagerBase.Instance.SurveyManager.EnterSurveyViewing();
+        EditorManager.Instance.EditorCameraManager.ToggleCinemachineBrain(true);
     }
 
     public override void Exit() {

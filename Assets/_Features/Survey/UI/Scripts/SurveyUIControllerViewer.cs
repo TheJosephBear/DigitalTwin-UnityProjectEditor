@@ -1,3 +1,4 @@
+using Cinemachine;
 using SurveySystem;
 using System.Collections.Generic;
 using UnityEngine;
@@ -45,7 +46,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
     #region Input handling
 
     void HandleTogglePressed() {
-        // Hide/Show Survey UI
+        SurveyManager.Instance.ExitSurvey();
     }
 
     void HandleNextPressed() {
@@ -79,7 +80,16 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         ClearQuestionFromUI();
         AddQuestionToUI(_questions[_shownQuestionIndex]);
 
-    //    print(_responseManager.ExportResponseJson());
+        if (MainManagerBase.Instance == null) return;
+
+        ViewManager viewManager = MainManagerBase.Instance.ViewManager;
+        print(_questions[_shownQuestionIndex].ViewPointId);
+        print(viewManager.GetViewPointByID(_questions[_shownQuestionIndex].ViewPointId).ID);
+        viewManager.DeactivateViewPoint();
+        viewManager.SetActiveViewPoint(
+            viewManager.GetViewPointByID(_questions[_shownQuestionIndex].ViewPointId)
+         );
+        viewManager.ActivateViewPoint();
     }
 
     void AddQuestionToUI(QuestionBase questionBase) {

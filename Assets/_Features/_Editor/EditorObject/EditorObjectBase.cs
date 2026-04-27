@@ -6,9 +6,9 @@ public abstract class EditorObjectBase : MonoBehaviour {
     /// Attributes for similiar UI showcase
     /// </summary>
 
-    public string ID { get; private set; }
-    public string Name { get; private set; }
-    public string Description { get; private set; }
+    public string ID { get; protected set; }
+    public string Name { get; protected set; }
+    public string Description { get; protected set; }
   //  public EOManagerBase<T> managerRefference; // where T je něco, ale je to vždycky něco jiného
 
     public void SetName(string newName) { 

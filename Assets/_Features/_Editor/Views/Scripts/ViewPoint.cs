@@ -39,6 +39,8 @@ public class ViewPoint : EditorObjectBase, IClickable {
     public void Deserialize(SerializableViewPoint interestPoint) {
         transform.position = interestPoint.position;
         transform.eulerAngles = interestPoint.eulerRotation; 
+        ID = interestPoint.ID;
+        Name = interestPoint.Name;
     }
 
     public void OnClick() {

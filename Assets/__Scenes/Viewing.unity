@@ -2361,7 +2361,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Serializer: {fileID: 1144165089}
   _projectName: aa
-  InEditorDebugging: 0
+  InEditorDebugging: 1
 --- !u!1 &888139661
 GameObject:
   m_ObjectHideFlags: 0
