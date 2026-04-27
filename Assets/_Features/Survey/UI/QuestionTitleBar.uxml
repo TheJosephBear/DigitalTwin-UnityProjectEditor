@@ -4,8 +4,7 @@
     <ui:Template name="Question-description" src="project://database/Assets/_Features/Survey/UI/Question-description.uxml?fileID=9197481963319205126&amp;guid=f5d967f3e76b1a54ea2fffb453a25d93&amp;type=3#Question-description" />
     <ui:VisualElement name="question-title-bar" style="flex-grow: 0; flex-direction: row; align-items: center; flex-shrink: 0;">
         <ui:Instance template="Question-title" name="Question-title" style="flex-grow: 1;" />
-        <ui:VisualElement name="edit-question-button" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/pencil-outline.png?fileID=2800000&amp;guid=2b11358c908ae27429e1f940d2ac878e&amp;type=3#pencil-outline&quot;); width: 32px; height: 32px;" />
-        <ui:Instance template="EditOptionModal" name="edit-question-modal" style="display: none;" />
+        <ui:Instance template="EditOptionModal" name="edit-question-modal" style="margin-top: 6px; margin-right: 6px; margin-bottom: 6px; margin-left: 6px;" />
     </ui:VisualElement>
     <ui:Instance template="Question-description" name="question-description" />
 </ui:UXML>

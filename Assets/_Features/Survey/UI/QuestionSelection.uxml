@@ -3,31 +3,31 @@
     <ui:VisualElement name="container" style="width: 280px; padding-top: 6px; padding-right: 6px; padding-bottom: 6px; padding-left: 6px; background-color: rgb(236, 236, 236); border-top-left-radius: -120px; border-top-right-radius: -120px; border-bottom-right-radius: -120px; border-bottom-left-radius: -120px;">
         <ui:Button name="MultipleChoiceSingle" style="flex-direction: row; align-items: center;">
             <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/radiobox-marked.png?fileID=2800000&amp;guid=37e9f9f378ccfdc408c1f609b92c11ab&amp;type=3#radiobox-marked&quot;); -unity-background-scale-mode: scale-to-fit; width: 32px; height: 32px;" />
-            <ui:Label text="Multiple choice" style="font-size: 16px;" />
+            <ui:Label text="Výběr jedné možnosti" style="font-size: 16px;" />
         </ui:Button>
         <ui:Button name="MultipleChoiceMultiple" style="flex-direction: row; align-items: center;">
             <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/checkbox-outline.png?fileID=2800000&amp;guid=59ce6c32913445d4ea17176e8eaa821c&amp;type=3#checkbox-outline&quot;); -unity-background-scale-mode: scale-to-fit; width: 32px; height: 32px;" />
-            <ui:Label text="Checkboxes" style="font-size: 16px;" />
+            <ui:Label text="Výběr více možností" style="font-size: 16px;" />
         </ui:Button>
         <ui:Button name="Paragraph" style="flex-direction: row; align-items: center;">
             <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/text-long.png?fileID=2800000&amp;guid=109d9144e1e668e4e9421d69b95d1fed&amp;type=3#text-long&quot;); -unity-background-scale-mode: scale-to-fit; width: 32px; height: 32px;" />
-            <ui:Label text="Paragraph" style="font-size: 16px;" />
+            <ui:Label text="Textová odpověď" style="font-size: 16px;" />
         </ui:Button>
         <ui:Button name="MultipleChoiceGrid" style="flex-direction: row; align-items: center;">
             <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/dots-grid.png?fileID=2800000&amp;guid=e33b5d874beaea7449ae151cfc33622c&amp;type=3#dots-grid&quot;); -unity-background-scale-mode: scale-to-fit; width: 32px; height: 32px;" />
-            <ui:Label text="Multiple choice grid" style="font-size: 16px;" />
+            <ui:Label text="Matice jedné možnosti" style="font-size: 16px;" />
         </ui:Button>
         <ui:Button name="CheckboxGrid" style="flex-direction: row; align-items: center;">
             <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/grid.png?fileID=2800000&amp;guid=13bd22408d8dec548ae2c44a66a972ec&amp;type=3#grid&quot;); -unity-background-scale-mode: scale-to-fit; width: 32px; height: 32px;" />
-            <ui:Label text="Checkbox grid" style="font-size: 16px;" />
+            <ui:Label text="Matice více možností" style="font-size: 16px;" />
         </ui:Button>
         <ui:Button name="LinearScale" style="flex-direction: row; align-items: center;">
             <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/tune-variant.png?fileID=2800000&amp;guid=e3afdd3fd3406684aa08feaea540d51c&amp;type=3#tune-variant&quot;); -unity-background-scale-mode: scale-to-fit; width: 32px; height: 32px;" />
-            <ui:Label text="Linear scale" style="font-size: 16px;" />
+            <ui:Label text="Lineární škála" style="font-size: 16px;" />
         </ui:Button>
         <ui:Button name="ImageChoice" style="flex-direction: row; align-items: center;">
             <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/image-multiple-outline.png?fileID=2800000&amp;guid=ec7fb72a04c535948a0e19a96b81d5ee&amp;type=3#image-multiple-outline&quot;); -unity-background-scale-mode: scale-to-fit; width: 32px; height: 32px;" />
-            <ui:Label text="Image choice" style="font-size: 16px;" />
+            <ui:Label text="Výběr obrázku" style="font-size: 16px;" />
         </ui:Button>
     </ui:VisualElement>
 </ui:UXML>
