@@ -19,7 +19,8 @@ public class ViewPoint : EditorObjectBase, IClickable {
     }
 
     public void Activate() {
-        GizmoManager.Instance.HideGizmo();
+        if (GizmoManager.Instance != null)
+            GizmoManager.Instance.HideGizmo();
         vcam.SetActive(true);
     }
 

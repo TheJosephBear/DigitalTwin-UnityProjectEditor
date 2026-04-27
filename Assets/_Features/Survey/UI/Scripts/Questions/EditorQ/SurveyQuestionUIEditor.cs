@@ -110,8 +110,10 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
 
         dropdown?.RegisterValueChangedCallback(evt => {
             int index = dropdown.index;
-            if (index >= 0 && index < _viewPoints.Count)
+            if (index >= 0 && index < _viewPoints.Count) {
                 OnViewpointSelected?.Invoke(QuestionID, _viewPoints[index].ID);
+                SetViewPointRender(_viewPoints[index].ID);
+            }
         });
     }
 
@@ -286,6 +288,18 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
         }
     }
 
+    protected virtual void SetViewPointRender(string viewPointId) {
+        var cameraView = _root.Q<VisualElement>("camera-view");
+
+        var viewManager = GameObject.FindFirstObjectByType<ViewManager>();
+        var viewPoint = viewManager.GetViewPointByID(viewPointId);
+        viewPoint.Activate();
+        Camera unityCamera = Camera.main;
+        cameraView.style.backgroundImage = Background.FromRenderTexture(
+                unityCamera.targetTexture
+            );
+    }
+
     #endregion
-    
+
 }
