@@ -5,7 +5,7 @@
     <ui:VisualElement name="question-container" style="flex-grow: 1;">
         <ui:Instance template="QuestionTitleBar" name="question-bar" />
         <ui:RadioButtonGroup name="options-list">
-            <ui:Instance template="OptionRadio" style="flex-grow: 0;" />
+            <ui:Instance template="OptionRadio" name="TemplateContainer" />
         </ui:RadioButtonGroup>
         <ui:VisualElement name="add-buttons" style="flex-grow: 0; flex-direction: row; align-content: stretch; justify-content: space-evenly;">
             <ui:Button text="Přidat odpověď" name="add-option-button" style="flex-grow: 1;" />

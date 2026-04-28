@@ -1,15 +1,11 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:Template name="MultipleChoice" src="project://database/Assets/_Features/Survey/UI/QuestionTypes/MultipleChoice.uxml?fileID=9197481963319205126&amp;guid=cfed14590f393b34ca863f34788e273a&amp;type=3#MultipleChoice" />
     <Style src="project://database/Assets/_Features/Survey/UI/Styles.uss?fileID=7433441132597879392&amp;guid=e2857671203a4094b98524b8aefbd78f&amp;type=3#Styles" />
     <ui:VisualElement name="page-container" style="flex-grow: 1; background-color: rgb(255, 255, 255);">
         <ui:Label text="Stránka průzkumu" name="title" style="font-size: 30px; -unity-text-align: middle-center; background-color: rgb(228, 228, 228); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 8px; padding-bottom: 8px;" />
-        <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" name="survey-scroll-view" style="flex-grow: 1;">
-            <ui:Instance template="MultipleChoice" />
-            <ui:Instance template="MultipleChoice" />
-        </ui:ScrollView>
+        <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" name="survey-scroll-view" style="flex-grow: 1;" />
         <ui:VisualElement name="bottom-bar" style="flex-grow: 1; position: absolute; bottom: 0; left: 0; right: 0; flex-direction: row-reverse; justify-content: flex-start; padding-right: 30px;">
-            <ui:Button text="Uložit" name="save-btn" style="flex-shrink: 1;" />
-            <ui:Button text="Odejít" name="exit-btn" style="flex-shrink: 1;" />
+            <ui:Button name="save-btn" style="flex-shrink: 1; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/content-save.png?fileID=2800000&amp;guid=42b65eea87b5f604fbc3255670ad5b51&amp;type=3#content-save&quot;); padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; width: 32px; height: 32px; -unity-background-scale-mode: scale-to-fit; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; background-color: rgba(188, 188, 188, 0);" />
+            <ui:Button name="exit-btn" style="flex-shrink: 1; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/exit-to-app.png?fileID=2800000&amp;guid=268ab040285f4644aacd7fed523d06d8&amp;type=3#exit-to-app&quot;); width: 32px; height: 32px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-background-scale-mode: scale-to-fit; background-color: rgba(188, 188, 188, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

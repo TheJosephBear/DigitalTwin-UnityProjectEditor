@@ -30,6 +30,17 @@ public class GeoMapManager : MonoBehaviour {
         EditorManager.Instance.ChangeState(AppState.Freecam);
     }
 
+    public void LeaveToMenu() {
+        // TO IMPLEMENT PROPERLY
+
+        //UIManager.Instance.HideUI(UIType.GeoLocalizationUI);
+        //ToggleGeoMap(false);
+        //GeoMapLocalizationManager.Instance.Exit();
+        //if (MainManagerBase.Instance is EditorManager editorMgr) {
+        //    editorMgr.ExitEditor();
+        //}
+    }
+
     public void ZoomMap(float zoomValue) {
         float delta = zoomValue - _previousZoomValue;
         OnlineMapsReff.floatZoom += delta;
