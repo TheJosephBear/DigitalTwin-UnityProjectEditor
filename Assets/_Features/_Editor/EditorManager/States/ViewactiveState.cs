@@ -9,10 +9,11 @@ public class ViewactiveState : StateBase {
         EditorManager.Instance.EditorCameraManager.ToggleCinemachineBrain(true);
         CinemachineCore.Instance.GetActiveBrain(0).ManualUpdate();
         EditorManager.Instance.ViewManager.StartViewMoving();
+        MainManagerBase.Instance.ToggleHUD(false);
     }
 
     public override void Exit() {
         EditorManager.Instance.ViewManager.ExitViewMoving();
-
+        MainManagerBase.Instance.ToggleHUD(true);
     }
 }

@@ -10,6 +10,7 @@ public class ViewManager : MonoBehaviour {
     public bool ShowAddViewButton = false;
     public GameObject ViewPointPrefab;
     public GameObject ViewPointUIPrefab;
+    public GameObject ViewPointContextUIPrefab;
     List<ViewPoint> viewPoints = new List<ViewPoint>();
     //   List<EditorObjectBase> interestPoints = new List<EditorObjectBase>();
     public Vector3 viewPointSpawnPosition;
@@ -17,7 +18,8 @@ public class ViewManager : MonoBehaviour {
     public Camera previewCam;
 
     ViewPointUI _viewPointUIInstance;
-    ViewPoint currentViewPoint;
+    ViewPointContextUI _viewPointContextUIInstance;
+    ViewPoint _activeViewPoint;
     CustomMovement _movementScript;
     public bool isActivelyShowingCam = false;
 
@@ -39,19 +41,36 @@ public class ViewManager : MonoBehaviour {
         _viewPointUIInstance.Initialize(this, ShowAddViewButton);
     }
 
-    public void ToggleViewPointUI(bool show) {
-        _viewPointUIInstance.gameObject.SetActive(show);
-    }
-
     public void StartViewMoving() {
         ActivateViewPoint();
         // Start controlling it
-        _movementScript.SetTarget(currentViewPoint.gameObject);
+        _movementScript.SetTarget(_activeViewPoint.gameObject);
+        // Show context UI
+        if (_viewPointContextUIInstance == null) 
+            _viewPointContextUIInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(ViewPointContextUIPrefab, SceneToInstantiate).GetComponent<ViewPointContextUI>();
+        _viewPointContextUIInstance.Initialize(_activeViewPoint);
+        ToggleViewPointContextUI(true);
+
+        ToggleViewPointUI(false);
     }
 
     public void ExitViewMoving() {
         DeactivateViewPoint();
         _movementScript.SetTarget(null);
+        ToggleViewPointContextUI(false);
+        _viewPointUIInstance.UpdateViewButtonList();
+    }
+
+    public void ToggleMovementScript(bool active) {
+        _movementScript.enabled = active;
+    }
+
+    public void ToggleViewPointUI(bool show) {
+        _viewPointUIInstance.gameObject.SetActive(show);
+    }
+
+    public void ToggleViewPointContextUI(bool show) {
+        _viewPointContextUIInstance.gameObject.SetActive(show);
     }
 
     public GameObject CreateNewViewPoint(bool updateUI = true) {
@@ -85,8 +104,8 @@ public class ViewManager : MonoBehaviour {
             return spawnedObj; // Return anyway so we don't crash, but error is logged
         }
 
-    //    newInterestPoint.SetName("Default view point name " + newInterestPoint.ID);
-        newInterestPoint.SetName("Pohled " + (viewPoints.Count+1).ToString());
+        //    newInterestPoint.SetName("Default view point name " + newInterestPoint.ID);
+        newInterestPoint.SetName("Pohled " + (viewPoints.Count + 1).ToString());
         newInterestPoint.transform.rotation = spawnRot;
         newInterestPoint.Deactivate();
 
@@ -102,24 +121,29 @@ public class ViewManager : MonoBehaviour {
         return newInterestPoint.gameObject;
     }
 
+    public void DeleteViewPoint(ViewPoint viewPoint) {
+        viewPoints.Remove(viewPoint);
+        Destroy(viewPoint.gameObject);
+    }
+
     // Clicking the specific view button
     public void OnViewHUDButton(ViewPoint viewPoint) {
 
     }
 
     public void SetActiveViewPoint(ViewPoint vp) {
-        currentViewPoint = vp;
+        _activeViewPoint = vp;
         ToggleCameraPreview(true);
     }
 
     public void ActivateViewPoint() {
         isActivelyShowingCam = true;
-        currentViewPoint?.Activate();
+        _activeViewPoint?.Activate();
     }
 
     public void DeactivateViewPoint() {
         isActivelyShowingCam = false;
-        currentViewPoint?.Deactivate();
+        _activeViewPoint?.Deactivate();
     }
 
     public List<ViewPoint> GetViewPoints() {
@@ -137,11 +161,11 @@ public class ViewManager : MonoBehaviour {
         if (cameraViewUI == null || previewCam == null) return;
 
         if (toggleOn) {
-            if (currentViewPoint == null) return;
+            if (_activeViewPoint == null) return;
             // Move the camera to the current vcam - must be continous so child
-            previewCam.transform.SetParent(currentViewPoint.gameObject.transform);
+            previewCam.transform.SetParent(_activeViewPoint.gameObject.transform);
             previewCam.transform.localPosition = new Vector3(0, 0, 0);
-            previewCam.transform.rotation = currentViewPoint.transform.rotation;
+            previewCam.transform.rotation = _activeViewPoint.transform.rotation;
         }
         // Toggle UI and cam
         cameraViewUI.SetActive(toggleOn);

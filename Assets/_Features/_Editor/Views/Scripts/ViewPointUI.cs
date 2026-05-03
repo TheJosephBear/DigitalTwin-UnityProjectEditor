@@ -28,7 +28,7 @@ public class ViewPointUI : MonoBehaviour {
         if (MainManagerBase.Instance.ActiveState == AppState.Freecam) {
             MainManagerBase.Instance.ChangeState(AppState.ViewActive);
         } else if (MainManagerBase.Instance.ActiveState == AppState.ViewActive) {
-            MainManagerBase.Instance.ChangeState(AppState.Freecam);
+       //     MainManagerBase.Instance.ChangeState(AppState.Freecam);
         }
     }
 
