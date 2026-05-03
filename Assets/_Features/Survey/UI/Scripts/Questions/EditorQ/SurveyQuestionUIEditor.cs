@@ -110,7 +110,8 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
 
         dropdown?.RegisterValueChangedCallback(evt => {
             int index = dropdown.index;
-            if (index >= 0 && index < _viewPoints.Count) {
+
+            if (index > 0 && index < _viewPoints.Count) {
                 OnViewpointSelected?.Invoke(QuestionID, _viewPoints[index].ID);
                 SetViewPointRender(_viewPoints[index].ID);
             }
@@ -277,6 +278,9 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
         if (dropdown == null) return;
 
         var choices = new List<string>();
+
+        choices.Add("Žádný");
+
         foreach (var vp in _viewPoints)
             choices.Add(vp.Name);
 
@@ -284,7 +288,7 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
 
         if (choices.Count > 0) {
             dropdown.value = choices[0];
-            OnViewpointSelected?.Invoke(QuestionID, _viewPoints[0].ID);
+            OnViewpointSelected?.Invoke(QuestionID, "" /*_viewPoints[0].ID*/);
         }
     }
 

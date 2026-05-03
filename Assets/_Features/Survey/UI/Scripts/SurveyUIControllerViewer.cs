@@ -82,6 +82,8 @@ public class SurveyUIControllerViewer : MonoBehaviour {
 
         if (MainManagerBase.Instance == null) return;
 
+        if (_questions[_shownQuestionIndex].ViewPointId == "") return;
+
         ViewManager viewManager = MainManagerBase.Instance.ViewManager;
         print(_questions[_shownQuestionIndex].ViewPointId);
         print(viewManager.GetViewPointByID(_questions[_shownQuestionIndex].ViewPointId).ID);

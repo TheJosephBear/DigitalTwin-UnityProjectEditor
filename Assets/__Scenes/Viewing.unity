@@ -2360,7 +2360,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Serializer: {fileID: 1144165089}
-  _projectName: aa
+  _projectName: clean test
   InEditorDebugging: 1
 --- !u!1 &888139661
 GameObject:
