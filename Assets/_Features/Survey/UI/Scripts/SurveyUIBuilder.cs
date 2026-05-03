@@ -99,6 +99,10 @@ public class SurveyUIBuilder : MonoBehaviour {
         }
     }
 
+    void ScrollToAddedElement(TemplateContainer addedElement) {
+        
+    }
+
     public SurveyQuestionUIBase AddQuestionEditor(QuestionBase addedQuestion, bool isDeserialized, int insertAtIndex = -1, VisualTreeAsset template = null) {
         print("Adding question in builder, type is: " + addedQuestion.QuestionType);
         if (template == null) {
@@ -156,6 +160,7 @@ public class SurveyUIBuilder : MonoBehaviour {
         }
 
         RefreshAddQuestionBars();
+        ScrollToAddedElement(questionInstance);
         return questionUI;
     }
     
