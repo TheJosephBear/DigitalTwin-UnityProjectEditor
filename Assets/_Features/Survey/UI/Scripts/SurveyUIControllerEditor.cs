@@ -81,6 +81,11 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         if (addedQuestionUI is SurveyQuestionUIEditorGrid gridUI) {
             gridUI.OnAddRow += AddRow;
             gridUI.OnAddColumn += AddColumn;
+            // Temporary - initial answer adding
+            if (!isDeserialized) {
+                AddRow(gridUI.QuestionID, gridUI.AddRow());
+                AddColumn(gridUI.QuestionID, gridUI.AddColumn());
+            }
         } else if (addedQuestionUI is SurveyQuestionUIEditorString builderUI) {
             builderUI.OnAnswerAdded += HandleAnswerAdded;
             builderUI.OnAnswerOtherAdded += HandleAnswerOtherAdded;

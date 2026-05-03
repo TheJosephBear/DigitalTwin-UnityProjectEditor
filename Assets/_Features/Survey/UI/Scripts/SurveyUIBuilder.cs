@@ -59,6 +59,8 @@ public class SurveyUIBuilder : MonoBehaviour {
 
         // Survey Building
 
+        _scrollViewContent.Clear();
+
         if (addQuestionBarTemplate == null) {
             Debug.LogWarning("addQuestionBarTemplate is not assigned on SurveyBuildingUI.");
             return;

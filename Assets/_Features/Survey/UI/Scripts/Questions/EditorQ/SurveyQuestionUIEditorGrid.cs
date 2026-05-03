@@ -33,6 +33,7 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
         _rowContainer.Clear();
         _columnContainer.Clear();
         RebuildGrid();
+        AddInitialAnswer();
     }
 
 

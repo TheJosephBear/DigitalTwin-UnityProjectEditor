@@ -188,9 +188,13 @@ namespace SurveySystem {
         }
 
         public void DeserializeFromJson(string json) {
+            SurveySerializable deserializedSurvey = JsonUtility.FromJson<SurveySerializable>(json);
+            if(deserializedSurvey == null) 
+                return;
+
             CreateNewSurvey();
 
-            _activeSurvey.Deserialize(JsonUtility.FromJson<SurveySerializable>(json));
+            _activeSurvey.Deserialize(deserializedSurvey);
             _nextId = _activeSurvey.Questions.Count;
         }
 
