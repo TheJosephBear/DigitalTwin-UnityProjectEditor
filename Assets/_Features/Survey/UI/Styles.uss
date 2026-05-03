@@ -102,6 +102,10 @@ RadioButtonGroup TemplateContainer {
 .radio-group-grid #contentContainer {
     justify-content: space-around;
     align-items: center;
+    flex-direction: row;
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 100%;
 }
 
 Button:hover {
