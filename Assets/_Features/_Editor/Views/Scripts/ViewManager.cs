@@ -85,7 +85,8 @@ public class ViewManager : MonoBehaviour {
             return spawnedObj; // Return anyway so we don't crash, but error is logged
         }
 
-        newInterestPoint.SetName("Default view point name " + newInterestPoint.ID);
+    //    newInterestPoint.SetName("Default view point name " + newInterestPoint.ID);
+        newInterestPoint.SetName("Pohled " + (viewPoints.Count+1).ToString());
         newInterestPoint.transform.rotation = spawnRot;
         newInterestPoint.Deactivate();
 
