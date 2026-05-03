@@ -13,6 +13,7 @@ public class SurveyUIBuilder : MonoBehaviour {
     private VisualTreeAsset addQuestionBarTemplate;
 
     private VisualElement _root;
+    private ScrollView _scrollView;
     private VisualElement _scrollViewContent;
 
     // Question adding //
@@ -25,6 +26,7 @@ public class SurveyUIBuilder : MonoBehaviour {
         QuestionType.Paragraph,
         QuestionType.ShortAnswer,
         QuestionType.LinearScale,
+        QuestionType.ImageChoice,
     };
 
     private List<QuestionType> QuestionTypesUsingGridUI = new List<QuestionType>{
@@ -34,6 +36,7 @@ public class SurveyUIBuilder : MonoBehaviour {
 
     void Awake() {
         _root = gameObject.GetComponent<UIDocument>().rootVisualElement;
+        _scrollView = _root.Q<ScrollView>("survey-scroll-view");
         _scrollViewContent = _root.Q<ScrollView>("survey-scroll-view").contentContainer;
 
         // Add the initial bar at the start (before any questions)
@@ -100,7 +103,12 @@ public class SurveyUIBuilder : MonoBehaviour {
     }
 
     void ScrollToAddedElement(TemplateContainer addedElement) {
-        
+        if (addedElement == null) return;
+
+        _scrollView.schedule.Execute(() =>
+        {
+            _scrollView.ScrollTo(addedElement);
+        }).ExecuteLater(1);
     }
 
     public SurveyQuestionUIBase AddQuestionEditor(QuestionBase addedQuestion, bool isDeserialized, int insertAtIndex = -1, VisualTreeAsset template = null) {
@@ -239,7 +247,7 @@ public class SurveyUIBuilder : MonoBehaviour {
         _addedQuestions[questionIndex].QuestionElement?.RemoveFromHierarchy();
         _addedQuestions.RemoveAt(questionIndex);
 
-        RefreshAddQuestionBars();
+        RefreshAddQuestionBars();   
         return true;
     }
 

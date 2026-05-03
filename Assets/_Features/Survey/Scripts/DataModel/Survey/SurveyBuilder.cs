@@ -39,7 +39,7 @@ namespace SurveySystem {
                 QuestionType.Dropdown => new QuestionMultipleChoiceSingleAnswer(_nextId++),
                 QuestionType.MultipleChoiceGrid => new QuestionMultipleChoiceGrid(_nextId++),
                 QuestionType.CheckboxGrid => new QuestionCheckboxGrid(_nextId++),
-                QuestionType.ImageChoice => new QuestionMultipleChoiceSingleAnswer(_nextId++),
+                QuestionType.ImageChoice => new QuestionImageChoice(_nextId++),
                 QuestionType.LinearScale => new QuestionLinearScale(_nextId++),
                 _ => new QuestionBase(_nextId++, type)
             };

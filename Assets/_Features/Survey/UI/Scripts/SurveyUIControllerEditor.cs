@@ -50,6 +50,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         }
 
         QuestionType questionTypeEnum = mapping.QuestionType;
+        if (questionTypeEnum == QuestionType.ImageChoice) questionTypeEnum = QuestionType.MultipleChoiceSingle; // IMAGE CHOICE ZATÍM NEDÁVAT
         HandleQuestionAdded(questionTypeEnum, insertAtIndex);
     }
 
