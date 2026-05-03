@@ -53,12 +53,7 @@ public class SurveyQuestionUIEditorString : SurveyQuestionUIEditor {
             Debug.LogWarning("[RegisterButtons] add-other-option-button not found");
         }
 
-        var editButton = _root.Q<VisualElement>("edit-question-button");
-        if (editButton != null) {
-            editButton.RegisterCallback<ClickEvent>(OnEditQuestionClicked);
-        } else {
-            Debug.LogWarning("[RegisterButtons] edit-question-button not found");
-        }
+        RegisterQuestionModalButtonEvents();
     }
 
     #endregion
