@@ -32,6 +32,12 @@ public class AssetManager : Singleton<AssetManager> {
         modelAsset.SetModelGameObject(newAssetGo);
         _assets.Add(modelAsset);
         newAssetGo.SetActive(false);
+
+        // Save project state after model upload
+        if(MainManagerBase.Instance is EditorManager editorMan) {
+            editorMan.SaveProject();
+        }
+
         return modelAsset;
     }
 

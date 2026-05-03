@@ -42,6 +42,7 @@ public class AuthorizationManager : Singleton<AuthorizationManager> {
         ServerCommunicationManager.Instance.Logout((successBool, message) => {
             if (successBool) {
                 UIManager.Instance.ShowUI(UIType.Login);
+                SceneLoadingManager.Instance.LoadSceneAsync(SceneType.Login, 0f);
                 var unloadTask = SceneLoadingManager.Instance.UnLoadSceneAsync(SceneType.ProjectList); // No need to wait for this
             } else {
                 PopUp.Instance.ShowPopUpWindow("Odhlášení selhalo.");

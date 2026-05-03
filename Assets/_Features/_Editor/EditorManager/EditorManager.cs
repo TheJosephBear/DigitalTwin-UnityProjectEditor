@@ -12,17 +12,16 @@ public class EditorManager : MainManagerBase {
         ProjectManager.Instance.SaveProject(ProjectSerializer.SerializeProject());
     }
 
-    public void ExitEditor() {
-        StartCoroutine(ExitEditorCoroutine());
+    public void ExitEditor(bool save = true) {
+        StartCoroutine(ExitEditorCoroutine(save));
     }
 
-    IEnumerator ExitEditorCoroutine() {
+    IEnumerator ExitEditorCoroutine(bool save) {
         UIManager.Instance.ShowUI(UIType.LoadingScreen);
 
-        // Save project
-        SaveProject();
+        if(save)
+            SaveProject();
 
-        // Clear managers
         ClearManagers();
 
         // Change scenes

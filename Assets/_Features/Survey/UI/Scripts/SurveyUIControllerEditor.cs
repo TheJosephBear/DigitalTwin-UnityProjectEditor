@@ -34,6 +34,8 @@ public class SurveyUIControllerEditor : MonoBehaviour {
     public void Initialize(SurveyBuilder surveyBuilder, SurveyManager manager) {
         _surveyBuilder = surveyBuilder;
         _surveyManager = manager;
+
+
     }
 
     #region Input handling

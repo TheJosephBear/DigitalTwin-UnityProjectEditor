@@ -36,6 +36,10 @@ public class GeoLocalizationUI : UIBehaviour {
         EditorManager.Instance.GeoMapManager.ExitGeoLocalization();
     }
 
+    public void OnExitToMenu() {
+        EditorManager.Instance.GeoMapManager.LeaveToMenu();
+    }
+
     public void OnUploadMap() {
         ModelUploadManager.Instance.AskForModel((createdAsset) => {
             EditorManager.Instance.MapManager.SetBaseMapModel(createdAsset);
