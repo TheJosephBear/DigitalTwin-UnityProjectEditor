@@ -46,14 +46,13 @@ RadioButtonGroup > VisualElement {
 }
 
 RadioButtonGroup #contentContainer {
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: nowrap;
     width: 100%;
     justify-content: flex-start;
 }
 
 RadioButtonGroup TemplateContainer {
-    width: 100%;
 }
 
 #option-container {
@@ -94,6 +93,17 @@ RadioButtonGroup TemplateContainer {
     margin-left: 0;
 }
 
-.radio-group_wrap #contentContainer {
+.radio-group-vertical #contentContainer {
+    flex-direction: row;
     flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.radio-group-grid #contentContainer {
+    justify-content: space-around;
+    align-items: center;
+}
+
+Button:hover {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_64.png?fileID=2800000&guid=abfee731139a8cc46ab2e1aa8e8311dd&type=3#hand_64");
 }

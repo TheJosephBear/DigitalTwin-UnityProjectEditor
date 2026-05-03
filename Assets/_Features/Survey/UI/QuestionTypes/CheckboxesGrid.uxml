@@ -2,14 +2,16 @@
     <ui:Template name="QuestionTitleBar" src="project://database/Assets/_Features/Survey/UI/QuestionTitleBar.uxml?fileID=9197481963319205126&amp;guid=11e3902c3204be84fb4bb37a97e71bd8&amp;type=3#QuestionTitleBar" />
     <ui:Template name="GridOptionHeader" src="project://database/Assets/_Features/Survey/UI/GridOptionHeader.uxml?fileID=9197481963319205126&amp;guid=b491d5f8a0454314ebfa03b80715d056&amp;type=3#GridOptionHeader" />
     <ui:Template name="GridOptionToggle" src="project://database/Assets/_Features/Survey/UI/GridOptionToggle.uxml?fileID=9197481963319205126&amp;guid=a8213fdb0c9024e489f7cfe714727e92&amp;type=3#GridOptionToggle" />
+    <Style src="project://database/Assets/_Features/Survey/UI/Styles.uss?fileID=7433441132597879392&amp;guid=e2857671203a4094b98524b8aefbd78f&amp;type=3#Styles" />
     <ui:VisualElement name="question-container" style="flex-grow: 1;">
         <ui:Instance template="QuestionTitleBar" name="question-bar" />
         <ui:Instance template="GridOptionHeader" />
         <ui:VisualElement name="options-list" style="flex-grow: 0;">
             <ui:Instance template="GridOptionToggle" />
         </ui:VisualElement>
-        <ui:VisualElement name="add-buttons" style="flex-grow: 0; flex-direction: row; align-content: stretch; justify-content: space-evenly; width: 200px; align-self: center;">
-            <ui:Button text="Přidat řádek" name="add-row-button" style="flex-grow: 1;" />
+        <ui:VisualElement name="add-buttons" style="flex-grow: 0; flex-direction: row; align-content: stretch; justify-content: space-evenly; align-self: center;">
+            <ui:Button text="+ Přidat řádek" name="add-row-button" style="flex-grow: 1;" />
+            <ui:Button text="+ Přidat sloupec" name="add-column-button" style="width: 130px;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

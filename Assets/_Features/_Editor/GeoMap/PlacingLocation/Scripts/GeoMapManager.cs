@@ -34,6 +34,14 @@ public class GeoMapManager : MonoBehaviour {
         if(MainManagerBase.Instance is EditorManager editorMan) {
             editorMan.ExitEditor(save: false);
         }
+        // TO IMPLEMENT PROPERLY
+
+        //UIManager.Instance.HideUI(UIType.GeoLocalizationUI);
+        //ToggleGeoMap(false);
+        //GeoMapLocalizationManager.Instance.Exit();
+        //if (MainManagerBase.Instance is EditorManager editorMgr) {
+        //    editorMgr.ExitEditor();
+        //}
     }
 
     public void ZoomMap(float zoomValue) {

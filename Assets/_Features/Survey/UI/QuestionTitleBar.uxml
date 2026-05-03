@@ -2,6 +2,7 @@
     <ui:Template name="Question-title" src="project://database/Assets/_Features/Survey/UI/Question-title.uxml?fileID=9197481963319205126&amp;guid=7bfed0fc9c8eb204088a09cb69fa7762&amp;type=3#Question-title" />
     <ui:Template name="EditOptionModal" src="project://database/Assets/_Features/Survey/UI/EditOptionModal.uxml?fileID=9197481963319205126&amp;guid=76703d756520966448429ac694633d27&amp;type=3#EditOptionModal" />
     <ui:Template name="Question-description" src="project://database/Assets/_Features/Survey/UI/Question-description.uxml?fileID=9197481963319205126&amp;guid=f5d967f3e76b1a54ea2fffb453a25d93&amp;type=3#Question-description" />
+    <Style src="project://database/Assets/_Features/Survey/UI/Styles.uss?fileID=7433441132597879392&amp;guid=e2857671203a4094b98524b8aefbd78f&amp;type=3#Styles" />
     <ui:VisualElement name="question-title-bar" style="flex-grow: 0; flex-direction: row; align-items: center; flex-shrink: 0;">
         <ui:Instance template="Question-title" name="Question-title" style="flex-grow: 1;" />
         <ui:Instance template="EditOptionModal" name="edit-question-modal" style="margin-top: 6px; margin-right: 6px; margin-bottom: 6px; margin-left: 6px;" />
