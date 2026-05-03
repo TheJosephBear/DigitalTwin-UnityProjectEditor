@@ -13,7 +13,7 @@ public class SurveyAnswerUIEditorString : SurveyAnswerUIEditor {
     }
 
     protected override void RegisterAnswerEvents() {
-        RegisterEditButtonWithModal();
+        RegisterModalButtonEvents(_answerElement);
         RegisterTextFieldChanges();
     }
 

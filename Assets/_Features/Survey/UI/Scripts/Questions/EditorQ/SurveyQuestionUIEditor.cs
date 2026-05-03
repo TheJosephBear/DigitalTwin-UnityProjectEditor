@@ -161,54 +161,54 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
 
     #region Modal Handling
 
-    protected virtual void OnEditQuestionClicked(ClickEvent evt) {
-        var modal = _root.Q<VisualElement>("edit-question-modal");
-        if (modal == null) return;
+    //protected virtual void OnEditQuestionClicked(ClickEvent evt) {
+    //    var modal = _root.Q<VisualElement>("edit-question-modal");
+    //    if (modal == null) return;
 
-        bool open = modal.style.display != DisplayStyle.Flex;
+    //    bool open = modal.style.display != DisplayStyle.Flex;
 
-        CloseCurrentModal();
+    //    CloseCurrentModal();
 
-        if (open)
-            ShowModal(modal);
-        else
-            HideQuestionModal();
+    //    if (open)
+    //        ShowModal(modal);
+    //    else
+    //        HideQuestionModal();
 
-        evt.StopPropagation();
-    }
+    //    evt.StopPropagation();
+    //}
 
     /// <summary>Displays modal near button.</summary>
-    protected virtual void ShowModal(VisualElement modal) {
-        modal.style.display = DisplayStyle.Flex;
-        _currentlyOpenModal = modal;
+    //protected virtual void ShowModal(VisualElement modal) {
+    //    modal.style.display = DisplayStyle.Flex;
+    //    _currentlyOpenModal = modal;
 
-        RegisterQuestionModalButtonEvents(modal);
-        RegisterOutsideClickHandler(modal);
-    }
+    //    RegisterQuestionModalButtonEvents(modal);
+    //    RegisterOutsideClickHandler(modal);
+    //}
 
-    public virtual void CloseCurrentModal() {
-        foreach (var a in _addedAnswers)
-            a.HideCurrentModal();
+    //public virtual void CloseCurrentModal() {
+    //    foreach (var a in _addedAnswers)
+    //        a.HideCurrentModal();
 
-        _otherAnswerUI?.HideCurrentModal();
-        HideQuestionModal();
-    }
+    //    _otherAnswerUI?.HideCurrentModal();
+    //    HideQuestionModal();
+    //}
 
-    protected virtual void HideQuestionModal() {
-        if (_currentlyOpenModal == null) return;
+    //protected virtual void HideQuestionModal() {
+    //    if (_currentlyOpenModal == null) return;
 
-        _currentlyOpenModal.style.display = DisplayStyle.None;
-        UnregisterOutsideClickHandler();
+    //    _currentlyOpenModal.style.display = DisplayStyle.None;
+    //    UnregisterOutsideClickHandler();
 
-        _currentlyOpenModal = null;
-    }
+    //    _currentlyOpenModal = null;
+    //}
 
     #region Modal Events
 
-    protected virtual void RegisterQuestionModalButtonEvents(VisualElement modal) {
-        var moveUpButton = modal.Q<Button>("move-up-button");
-        var moveDownButton = modal.Q<Button>("move-down-button");
-        var deleteButton = modal.Q<Button>("delete-option-button");
+    protected virtual void RegisterQuestionModalButtonEvents() {
+        var moveUpButton = _root.Q<Button>("move-up-button");
+        var moveDownButton = _root.Q<Button>("move-down-button");
+        var deleteButton = _root.Q<Button>("delete-option-button");
 
         int index = _surveyUIBuilder.GetQuestionIndex(this);
 
@@ -220,17 +220,14 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
         // Create new ones
         _onMoveUp = () => {
             OnQuestionMoved?.Invoke(index, -1);
-            HideQuestionModal();
         };
 
         _onMoveDown = () => {
             OnQuestionMoved?.Invoke(index, 1);
-            HideQuestionModal();
         };
 
         _onDelete = () => {
             OnQuestionDeleted?.Invoke(index);
-            HideQuestionModal();
         };
 
         // Register
@@ -245,23 +242,23 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
 
     #region Outside Click Handling
 
-    protected virtual void RegisterOutsideClickHandler(VisualElement modal) {
-        GetRoot(modal).RegisterCallback<PointerDownEvent>(OnOutsideClick, TrickleDown.TrickleDown);
-    }
+    //protected virtual void RegisterOutsideClickHandler(VisualElement modal) {
+    //    GetRoot(modal).RegisterCallback<PointerDownEvent>(OnOutsideClick, TrickleDown.TrickleDown);
+    //}
 
-    protected virtual void UnregisterOutsideClickHandler() {
-        if (_currentlyOpenModal == null) return;
+    //protected virtual void UnregisterOutsideClickHandler() {
+    //    if (_currentlyOpenModal == null) return;
 
-        GetRoot(_currentlyOpenModal)
-            .UnregisterCallback<PointerDownEvent>(OnOutsideClick, TrickleDown.TrickleDown);
-    }
+    //    GetRoot(_currentlyOpenModal)
+    //        .UnregisterCallback<PointerDownEvent>(OnOutsideClick, TrickleDown.TrickleDown);
+    //}
 
-    protected virtual void OnOutsideClick(PointerDownEvent evt) {
-        if (_currentlyOpenModal == null) return;
+    //protected virtual void OnOutsideClick(PointerDownEvent evt) {
+    //    if (_currentlyOpenModal == null) return;
 
-        if (!_currentlyOpenModal.ContainsPoint(_currentlyOpenModal.WorldToLocal(evt.position)))
-            HideQuestionModal();
-    }
+    //    if (!_currentlyOpenModal.ContainsPoint(_currentlyOpenModal.WorldToLocal(evt.position)))
+    //        HideQuestionModal();
+    //}
 
     protected virtual VisualElement GetRoot(VisualElement element) {
         while (element.parent != null)
