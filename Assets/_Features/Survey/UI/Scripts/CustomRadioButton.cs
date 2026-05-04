@@ -16,10 +16,15 @@ public partial class CustomRadioButton : VisualElement {
     }
 
     [UxmlAttribute]
-    public bool @Checked // with the @ symbol since checked is a C# keyword
-    {
+    public bool @Checked { // with the @ symbol since checked is a C# keyword
         get => _radioButton.value;
         set => _radioButton.value = value;
+    }
+
+    [UxmlAttribute]
+    public bool Multiline {
+        get => _labelTextField.multiline;
+        set => _labelTextField.multiline = value;
     }
 
     private readonly TextField _labelTextField;

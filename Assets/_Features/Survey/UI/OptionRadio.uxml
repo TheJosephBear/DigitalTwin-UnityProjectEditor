@@ -2,7 +2,7 @@
     <ui:Template name="EditOptionModal" src="project://database/Assets/_Features/Survey/UI/EditOptionModal.uxml?fileID=9197481963319205126&amp;guid=76703d756520966448429ac694633d27&amp;type=3#EditOptionModal" />
     <Style src="project://database/Assets/_Features/Survey/UI/Styles.uss?fileID=7433441132597879392&amp;guid=e2857671203a4094b98524b8aefbd78f&amp;type=3#Styles" />
     <ui:VisualElement name="option-container">
-        <CustomRadioButton placeholder="Text možnosti" style="flex-grow: 1;" />
+        <CustomRadioButton placeholder="Text možnosti" multiline="true" style="flex-grow: 1;" />
         <ui:Instance template="EditOptionModal" />
     </ui:VisualElement>
 </ui:UXML>

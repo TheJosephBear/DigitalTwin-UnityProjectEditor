@@ -7,9 +7,9 @@
         <ui:RadioButtonGroup name="options-list">
             <ui:Instance template="OptionToggle" />
         </ui:RadioButtonGroup>
-        <ui:VisualElement name="add-buttons" style="flex-grow: 0; flex-direction: row; align-content: stretch; justify-content: space-evenly;">
-            <ui:Button text="Přidat odpověď" name="add-option-button" style="flex-grow: 1;" />
-            <ui:Button text="Přidat &quot;Jiná&quot; odpověď" name="add-other-option-button" style="flex-grow: 1;" />
+        <ui:VisualElement name="add-buttons" style="flex-grow: 0; flex-direction: row; justify-content: center; align-self: center; width: 55%;">
+            <ui:Button text="Přidat odpověď" name="add-option-button" style="flex-grow: 1; width: 50%;" />
+            <ui:Button text="Přidat &quot;Jiná&quot; odpověď" name="add-other-option-button" style="flex-grow: 1; width: 50%;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

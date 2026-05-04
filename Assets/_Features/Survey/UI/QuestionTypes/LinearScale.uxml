@@ -9,7 +9,7 @@
             <ui:RadioButtonGroup name="options-list" class="radio-group-grid" style="flex-grow: 1; justify-content: space-evenly;">
                 <ui:Instance template="ScaleRadio" style="flex-direction: row;" />
             </ui:RadioButtonGroup>
-            <ui:Button text="+ Přidat možnost" name="add-option-button" style="flex-shrink: 1; align-items: auto; align-self: center; white-space: normal; width: 100px;" />
+            <ui:Button text="+ Přidat možnost" name="add-option-button" style="flex-shrink: 1; align-items: auto; align-self: center; white-space: normal; width: 150px;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

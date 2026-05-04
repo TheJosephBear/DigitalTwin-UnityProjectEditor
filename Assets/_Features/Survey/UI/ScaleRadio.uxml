@@ -3,6 +3,7 @@
     <ui:VisualElement name="option-container" style="flex-direction: column;">
         <ui:Button name="delete-option-button" style="flex-direction: row; -unity-background-scale-mode: scale-to-fit; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/trash-can-outline.png?fileID=2800000&amp;guid=7ad15b4efd0e279438b167e4bed1c7e6&amp;type=3#trash-can-outline&quot;); width: 32px; height: 32px; background-color: rgba(188, 188, 188, 0); border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;" />
         <ui:RadioButton class="radio_no-margin" />
-        <ui:TextField placeholder-text="Text možnosti" multiline="true" style="white-space: normal;" />
+        <ui:TextField placeholder-text="Text možnosti" multiline="true" name="scale-text" style="white-space: normal;" />
+        <ui:TextField placeholder-text="Hodnota" multiline="false" keyboard-type="NumberPad" name="scale-value" style="white-space: normal;" />
     </ui:VisualElement>
 </ui:UXML>

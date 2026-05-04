@@ -3,9 +3,9 @@
     <ui:VisualElement name="page-container" style="flex-grow: 1; background-color: rgb(255, 255, 255);">
         <ui:Label text="Stránka průzkumu" name="title" style="font-size: 30px; -unity-text-align: middle-center; background-color: rgb(228, 228, 228); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 8px; padding-bottom: 8px;" />
         <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" name="survey-scroll-view" style="flex-grow: 1;" />
-        <ui:VisualElement name="bottom-bar" style="flex-grow: 1; position: absolute; bottom: 0; left: 0; right: 0; flex-direction: row-reverse; justify-content: flex-start; padding-right: 30px;">
-            <ui:Button text="Uložit" name="save-btn" style="flex-shrink: 1;" />
-            <ui:Button text="Odejít" name="exit-btn" style="flex-shrink: 1;" />
+        <ui:VisualElement name="bottom-bar" style="flex-grow: 0; position: relative; bottom: 0; left: 0; right: 0; flex-direction: row-reverse; justify-content: flex-start; padding-right: 40px; padding-bottom: 10px; border-top-width: 1px; border-left-color: rgb(108, 108, 108); border-right-color: rgb(108, 108, 108); border-top-color: rgb(108, 108, 108); border-bottom-color: rgb(108, 108, 108); padding-left: 10px; padding-top: 10px;">
+            <ui:Button name="save-btn" style="flex-shrink: 1; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/content-save.png?fileID=2800000&amp;guid=42b65eea87b5f604fbc3255670ad5b51&amp;type=3#content-save&quot;); padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; width: 32px; height: 32px; -unity-background-scale-mode: scale-to-fit; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; background-color: rgba(188, 188, 188, 0);" />
+            <ui:Button name="exit-btn" style="flex-shrink: 1; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/exit-to-app.png?fileID=2800000&amp;guid=268ab040285f4644aacd7fed523d06d8&amp;type=3#exit-to-app&quot;); width: 32px; height: 32px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-background-scale-mode: scale-to-fit; background-color: rgba(188, 188, 188, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
