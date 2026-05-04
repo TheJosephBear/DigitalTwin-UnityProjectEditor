@@ -38,6 +38,7 @@ public class GeoLocalizationUI : UIBehaviour {
 
     public void OnExitToMenu() {
         EditorManager.Instance.GeoMapManager.LeaveToMenu();
+        UIManager.Instance.HideUI(UIType.GeoLocalizationUI);
     }
 
     public void OnUploadMap() {

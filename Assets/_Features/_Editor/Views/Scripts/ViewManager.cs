@@ -70,6 +70,7 @@ public class ViewManager : MonoBehaviour {
     }
 
     public void ToggleViewPointContextUI(bool show) {
+        if (_viewPointContextUIInstance == null) return;
         _viewPointContextUIInstance.gameObject.SetActive(show);
     }
 
@@ -133,7 +134,7 @@ public class ViewManager : MonoBehaviour {
 
     public void SetActiveViewPoint(ViewPoint vp) {
         _activeViewPoint = vp;
-        ToggleCameraPreview(true);
+    //    ToggleCameraPreview(true);
     }
 
     public void ActivateViewPoint() {
