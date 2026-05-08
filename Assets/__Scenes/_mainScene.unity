@@ -211,7 +211,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firstSceneToLoadEditor: 2
   firstSceneToLoadViewer: 5
-  LoadEditorInUnityEditor: 1
+  LoadEditorInUnityEditor: 0
 --- !u!4 &210335055
 Transform:
   m_ObjectHideFlags: 0

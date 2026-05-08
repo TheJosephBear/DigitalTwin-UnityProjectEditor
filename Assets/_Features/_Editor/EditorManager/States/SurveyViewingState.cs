@@ -1,3 +1,4 @@
+using Cinemachine;
 using UnityEngine;
 
 public class SurveyViewingState : StateBase {
@@ -5,7 +6,11 @@ public class SurveyViewingState : StateBase {
         MainManagerBase.Instance.ToggleHUD(false);
         MainManagerBase.Instance.ViewManager.ToggleCameraPreview(false);
         MainManagerBase.Instance.ViewManager.ToggleViewPointUI(false);
-        MainManagerBase.Instance.SurveyManager.EnterSurveyViewing();
+        SurveyManager.Instance.EnterSurveyViewing(hasData => {
+            if (!hasData) {
+                MainManagerBase.Instance.ChangeState(AppState.Freecam);
+            }
+        });
         EditorManager.Instance.EditorCameraManager.ToggleCinemachineBrain(true);
     }
 

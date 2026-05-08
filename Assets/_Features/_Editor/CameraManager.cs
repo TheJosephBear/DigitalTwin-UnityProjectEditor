@@ -13,8 +13,11 @@ public class CameraManager : MonoBehaviour {
     Transform _freeCamCameraTransform;
     MainManagerBase _editorManager;
 
+    Coroutine _disableCoroutine;
+
     private void Awake() {
         _cinemachineBrainRefference = FindAnyObjectByType<CinemachineBrain>();
+        print(_cinemachineBrainRefference.name);
 
         vCamFreeCamRefference = SceneLoadingManager.Instance.InstantiateObjectInScene(VcamFreeCamPrefab, InitialCameraPosition.position, MainManagerBase.Instance.SceneType);
         vCamFreeCamRefference.transform.rotation = InitialCameraPosition.rotation;
@@ -47,19 +50,37 @@ public class CameraManager : MonoBehaviour {
     }
 
     public void ToggleCinemachineBrain(bool toggleOn) {
+        if(toggleOn) {
+            if (_disableCoroutine != null) {
+                StopCoroutine(_disableCoroutine);
+                _disableCoroutine = null;
+            }
+        }
         _cinemachineBrainRefference.enabled = toggleOn;
     }
 
     public void DisableCinemachineAfterTransition() {
-        StartCoroutine(DisableCinemachineAfterTransitionCoroutine());
+        if (_disableCoroutine != null) {
+            StopCoroutine(_disableCoroutine);
+        }
+        _disableCoroutine = StartCoroutine(DisableCinemachineAfterTransitionCoroutine());
     }
 
     IEnumerator DisableCinemachineAfterTransitionCoroutine() {
-        yield return new WaitForSeconds(0.01f); // Wait so the blend can start
+        yield return new WaitForSeconds(0.01f);
+
         while (_cinemachineBrainRefference.IsBlending) {
             yield return null;
         }
-        _cinemachineBrainRefference.enabled = (false);
+
+        _cinemachineBrainRefference.enabled = false;
+
+        // Clear the reference now that it's finished
+        _disableCoroutine = null;
+    }
+
+    public GameObject GetFreeCamVcam() {
+        return vCamFreeCamRefference;
     }
 
 }

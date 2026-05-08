@@ -24,11 +24,15 @@ public class ViewPointUI : MonoBehaviour {
     public void OnHUDButtonClick(ViewPoint ViewPointRefference) {
         _viewManager.SetActiveViewPoint(ViewPointRefference);
 
-        // Toggle state
-        if (MainManagerBase.Instance.ActiveState == AppState.Freecam) {
+        if (MainManagerBase.Instance is EditorManager manager) {
             MainManagerBase.Instance.ChangeState(AppState.ViewActive);
-        } else if (MainManagerBase.Instance.ActiveState == AppState.ViewActive) {
-       //     MainManagerBase.Instance.ChangeState(AppState.Freecam);
+        } else {
+            // Toggle state
+            if (MainManagerBase.Instance.ActiveState == AppState.Freecam) {
+                MainManagerBase.Instance.ChangeState(AppState.ViewActive);
+            } else if (MainManagerBase.Instance.ActiveState == AppState.ViewActive) {
+                MainManagerBase.Instance.ChangeState(AppState.Freecam);
+            }
         }
     }
 

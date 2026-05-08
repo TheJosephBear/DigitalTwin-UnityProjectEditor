@@ -242,6 +242,7 @@ public class SurveyUIBuilder : MonoBehaviour {
     }
 
     public bool DeleteQuestion(int questionIndex) {
+        print("trying to delete in ui builder");
         if (questionIndex < 0 || questionIndex >= _addedQuestions.Count) return false;
 
         _addedQuestions[questionIndex].QuestionElement?.RemoveFromHierarchy();

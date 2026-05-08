@@ -93,11 +93,6 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
 
     public void InitializeWithPlacementMapData(GeoLocalizationData geoData) {
         _geoData = geoData;
-        print("We got the geodata now!");
-        print(geoData);
-        print(geoData.longtitude);
-        print(geoData.latitude);
-        print(geoData.elevation);
     }
 
     void ToggleGeoMapZoom(bool toggleOn) {

@@ -98,7 +98,6 @@ namespace SurveySystem {
         }
 
         public override QuestionBase Deserialize(SerializableQuestion serializable) {
-            Debug.Log("SPRÁVNÝ DESERIALIZE");
             QuestionGridBase deserializedQuestion = serializable.QuestionType switch {
                 QuestionType.MultipleChoiceGrid => new QuestionMultipleChoiceGrid(serializable.Id),
                 QuestionType.CheckboxGrid => new QuestionCheckboxGrid(serializable.Id),
@@ -112,13 +111,7 @@ namespace SurveySystem {
                 deserializedQuestion.Columns = gridSerializable.Columns;
 
                 string jsonString = JsonUtility.ToJson(gridSerializable);
-                Debug.Log(jsonString);
-                Debug.Log(gridSerializable.Rows.Count);
-                Debug.Log(gridSerializable.Columns.Count);
             }
-
-            Debug.Log(deserializedQuestion.Rows.Count);
-            Debug.Log(deserializedQuestion.Columns.Count);
 
             return deserializedQuestion;
         }

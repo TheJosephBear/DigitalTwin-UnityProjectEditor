@@ -42,7 +42,7 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
         int questionId,
         QuestionType questionType,
         List<SerializableViewPoint> viewPoints,
-        SurveyUIBuilder uiBuilder) 
+        SurveyUIBuilder uiBuilder)
         : base(root, questionId, questionType, viewPoints, uiBuilder) {
 
     }
@@ -82,12 +82,22 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
 
         if (isOther) {
             var button = element.Q<CustomRadioButton>();
-            if(button != null) {
+            if (button != null) {
                 element.Q<CustomRadioButton>().Placeholder = "Other";
             }
             _otherAnswerUI = answerUI;
         } else {
             _addedAnswers.Add(answerUI);
+        }
+    }
+
+    public void SetSelectedView(ViewPoint viewPoint) {
+        var dropdown = _root.Q<DropdownField>("camera-view-dropdown");
+        foreach (string choice in dropdown.choices) {
+            if (choice == viewPoint.Name) {
+                dropdown.value = choice;
+                return;
+            }
         }
     }
 
@@ -109,9 +119,9 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
         PopulateCameraViewDropdown(dropdown);
 
         dropdown?.RegisterValueChangedCallback(evt => {
-            int index = dropdown.index;
+            int index = dropdown.index - 1;
 
-            if (index > 0 && index < _viewPoints.Count) {
+            if (index >= 0 && index < _viewPoints.Count) {
                 OnViewpointSelected?.Invoke(QuestionID, _viewPoints[index].ID);
                 SetViewPointRender(_viewPoints[index].ID);
             }
@@ -211,6 +221,11 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
         var deleteButton = _root.Q<Button>("delete-option-button");
 
         int index = _surveyUIBuilder.GetQuestionIndex(this);
+
+        if (moveUpButton == null || moveDownButton == null || deleteButton == null) {
+            Debug.LogError($"[{QuestionID}] Failed to register button events: One or more buttons not found in UIDocument.");
+            return;
+        }
 
         // Remove old callbacks first
         if (_onMoveUp != null) moveUpButton.clicked -= _onMoveUp;

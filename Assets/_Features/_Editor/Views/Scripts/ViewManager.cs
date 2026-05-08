@@ -54,6 +54,12 @@ public class ViewManager : MonoBehaviour {
         ToggleViewPointUI(false);
     }
 
+    public void MoveMainCamToActiveViewPoint() {
+        GameObject freeCam = MainManagerBase.Instance.EditorCameraManager.GetFreeCamVcam();
+        freeCam.transform.position = _activeViewPoint.transform.position;
+        freeCam.transform.rotation = _activeViewPoint.transform.rotation;
+    }
+
     public void ExitViewMoving() {
         DeactivateViewPoint();
         _movementScript.SetTarget(null);
@@ -207,22 +213,18 @@ public class ViewManager : MonoBehaviour {
         }
 
         foreach (var serializedInterestPoint in serializedManager.ViewPoints) {
-            print("DEBUG: Starting loop for a ViewPoint");
 
             GameObject vpObject = CreateNewViewPoint();
 
             if (vpObject == null) {
-                Debug.LogError("DEBUG: CreateNewViewPoint returned NULL!");
                 continue;
             }
 
             ViewPoint iPoint = vpObject.GetComponent<ViewPoint>();
             if (iPoint == null) {
-                Debug.LogError("DEBUG: ViewPoint component missing on the instantiated object!");
                 continue;
             }
 
-            print("DEBUG: Calling iPoint.Deserialize now...");
             iPoint.Deserialize(serializedInterestPoint);
         }
     }

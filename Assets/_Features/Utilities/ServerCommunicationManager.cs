@@ -212,17 +212,29 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
         yield return www.SendWebRequest();
 
         if (www.result == UnityWebRequest.Result.Success) {
+            string rawText = www.downloadHandler.text;
             try {
                 if (returnAsString) {
-                    object response = www.downloadHandler.text;
+
+                    object response = rawText;
                     callback(true, (T)response);
                 } else {
-                    print(www.downloadHandler.text);
-                    T response = JsonUtility.FromJson<T>(www.downloadHandler.text);
+                    if (string.IsNullOrEmpty(rawText)) {
+                        Debug.LogWarning("[Server] Raw text is null or empty. JsonUtility will return a null/default object.");
+                    }
+
+                    T response = JsonUtility.FromJson<T>(rawText);
                     callback(true, response);
                 }
+            } catch (System.InvalidCastException castEx) {
+                // Specifically catch casting errors (common when returnAsString is true but T is not string)
+                Debug.LogError($"[Server] Cast Exception: Cannot cast raw text to {typeof(T).Name}. " +
+                               $"Ensure you are calling this method with <string> when returnAsString is true. \nError: {castEx.Message}");
+                callback(false, default);
             } catch (System.Exception ex) {
-                Debug.LogError("Error parsing response: " + ex.Message);
+                Debug.LogError($"[Server] General Exception during parsing/callback: {ex.GetType().Name}");
+                Debug.LogError($"[Server] Stack Trace: {ex.StackTrace}");
+                Debug.LogError($"[Server] Raw data that caused failure: {rawText}");
                 callback(false, default);
             }
         } else {

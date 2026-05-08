@@ -8,12 +8,17 @@ public class ViewactiveState : StateBase {
         EditorManager.Instance.EditorCameraManager.UpdateFreeCamVcamPosition();
         EditorManager.Instance.EditorCameraManager.ToggleCinemachineBrain(true);
         CinemachineCore.Instance.GetActiveBrain(0).ManualUpdate();
-        EditorManager.Instance.ViewManager.StartViewMoving();
+        if(MainManagerBase.Instance is EditorManager em) {
+            em.ViewManager.StartViewMoving();
+        } else {
+            MainManagerBase.Instance.ViewManager.ActivateViewPoint();
+        }
         MainManagerBase.Instance.ToggleHUD(false);
     }
 
     public override void Exit() {
         EditorManager.Instance.ViewManager.ExitViewMoving();
+        MainManagerBase.Instance.ViewManager.DeactivateViewPoint();
         MainManagerBase.Instance.ToggleHUD(true);
     }
 }

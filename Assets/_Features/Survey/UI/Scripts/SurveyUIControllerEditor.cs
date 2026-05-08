@@ -190,6 +190,10 @@ public class SurveyUIControllerEditor : MonoBehaviour {
             SurveyQuestionUIBase questionUI = HandleExistingQuestionAdded(question, isDeserialized: true);
             questionUI.SetTitle(question.Title);
             questionUI.SetDescription(question.Description);
+            // Set selected viewpoint
+            ViewPoint vp = MainManagerBase.Instance.ViewManager.GetViewPointByID(question.ViewPointId);
+            if(vp != null) (questionUI as SurveyQuestionUIEditor).SetSelectedView(vp);
+            
             if (question is QuestionGridBase gridQuestion) {
                 if (questionUI is SurveyQuestionUIEditorGrid gridUI) {
                     for (int i = 0; i < gridQuestion.GetColumnCount(); i++) {

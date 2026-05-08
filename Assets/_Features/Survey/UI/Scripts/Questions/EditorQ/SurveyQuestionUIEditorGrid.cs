@@ -26,7 +26,7 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
         SurveyUIBuilder uiBuilder,
         bool isDeserialized = false) 
         : base(root, questionId, questionType, viewPoints, uiBuilder){
-
+        
         _rowContainer = _root.Q<VisualElement>("options-list");
         _columnContainer = _root.Q<VisualElement>("col-headers");
 
@@ -60,6 +60,8 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
                 OnAddColumn?.Invoke(QuestionID, AddColumn());
             };
         }
+
+        RegisterQuestionModalButtonEvents();
     }
 
     protected override SurveyAnswerUIBase CreateAnswerUI(VisualElement element, int index, bool isOther) {
@@ -104,7 +106,6 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
 
     private void RebuildGrid() {
         foreach (var row in _rows) {
-            Debug.Log(_questionType);
             row.RebuildRadioButtons(_columns.Count, _questionType == QuestionType.CheckboxGrid);
         }
     }

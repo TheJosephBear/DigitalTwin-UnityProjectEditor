@@ -82,7 +82,6 @@ namespace SurveySystem {
         }
 
         public static QuestionBase CreateAndDeserialize(SerializableQuestion serializable) {
-            Debug.Log("ŠPATNNÝ DESERIALIZE");
             QuestionBase deserializedQuestion = serializable.QuestionType switch {
                 QuestionType.MultipleChoiceSingle => new QuestionMultipleChoiceSingleAnswer(serializable.Id),
                 QuestionType.MultipleChoiceMultiple => new QuestionMultipleChoiceMultipleAnswer(serializable.Id),
@@ -99,19 +98,19 @@ namespace SurveySystem {
         }
 
         public virtual QuestionBase Deserialize(SerializableQuestion serializable) {
-           Title = serializable.Title;
-           Description = serializable.Description;
-           ViewPointId = serializable.ViewPointId;
-           foreach(AnswerBase answer in serializable.Answers){ 
-             AddExistingAnswer(answer);
-           }
+            Title = serializable.Title;
+            Description = serializable.Description;
+            ViewPointId = serializable.ViewPointId;
+            foreach (AnswerBase answer in serializable.Answers) {
+                AddExistingAnswer(answer);
+            }
 
             return this;
         }
     }
 
     [Serializable]
-    public class SerializableQuestion{
+    public class SerializableQuestion {
         public int Id;
         public string Title;
         public string Description;

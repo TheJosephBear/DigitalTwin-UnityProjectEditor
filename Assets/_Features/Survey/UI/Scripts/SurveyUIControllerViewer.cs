@@ -80,8 +80,8 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         ClearQuestionFromUI();
         AddQuestionToUI(_questions[_shownQuestionIndex]);
 
+        print("trying to show " + _questions[_shownQuestionIndex].ViewPointId);
         if (MainManagerBase.Instance == null) return;
-
         if (_questions[_shownQuestionIndex].ViewPointId == "") return;
 
         ViewManager viewManager = MainManagerBase.Instance.ViewManager;

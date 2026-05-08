@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8377236189804464046}
   - component: {fileID: 234422425334889886}
+  - component: {fileID: 1811297248920667383}
   m_Layer: 0
   m_Name: SurveyFlowManager
   m_TagString: Untagged
@@ -46,3 +47,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SurveyBuildingUIPrefab: {fileID: 5615929895124257890, guid: 5b8434e4858d4f048a4533e11f7ec378, type: 3}
   SurveyViewingUIPrefab: {fileID: 4199356123922554441, guid: ed664b5491b09f544a4a0722bdcb5b50, type: 3}
+--- !u!114 &1811297248920667383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4288712834212269804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70e8d80a58fd29f49bff08cede67c124, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _uiDocument: {fileID: 0}

@@ -1,5 +1,6 @@
 using SurveySystem;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 /// <summary>
 /// Takes care of instantiating and connecting UI instance and data model 
@@ -13,9 +14,10 @@ public class SurveyFlowManager : MonoBehaviour {
     SurveyResponseManager _responseManInstance;
     SurveyUIControllerEditor _uiInstanceEditor;
     SurveyUIControllerViewer _uiInstanceViewer;
+    UIToggleManager _toggleManager;
 
     void Start() {
-
+        _toggleManager = GetComponent<UIToggleManager>();
     }
 
     public void EnterSurveyBuilding() {
@@ -39,14 +41,17 @@ public class SurveyFlowManager : MonoBehaviour {
             _uiInstanceViewer = SceneLoadingManager.Instance != null
                 ? SceneLoadingManager.Instance.InstantiateObjectInScene(SurveyViewingUIPrefab).GetComponent<SurveyUIControllerViewer>()
                 : Instantiate(SurveyViewingUIPrefab).GetComponent<SurveyUIControllerViewer>();
+
+            if (!_builderInstance.HasActiveSurvey()) _builderInstance.CreateNewSurvey();
+            _builderInstance.DeserializeFromJson(surveyJson);
+            _responseManInstance?.Initialize(_builderInstance.GetActiveSurvey());
+
+            _uiInstanceViewer.Initialize(_builderInstance, _responseManInstance, SurveyManager.Instance);
+            _uiInstanceViewer.gameObject.SetActive(true);
+            _toggleManager.UIDocument = _uiInstanceViewer.GetComponent<UIDocument>();
+        } else {
+            _toggleManager.ToggleUIVisibility(true);
         }
-
-        if (!_builderInstance.HasActiveSurvey()) _builderInstance.CreateNewSurvey(); 
-        _builderInstance.DeserializeFromJson(surveyJson);
-        _responseManInstance?.Initialize(_builderInstance.GetActiveSurvey());
-
-        _uiInstanceViewer.Initialize(_builderInstance, _responseManInstance, SurveyManager.Instance);
-        _uiInstanceViewer.gameObject.SetActive(true);
     }
 
     public string GetSurveyJsonData() {
@@ -68,6 +73,6 @@ public class SurveyFlowManager : MonoBehaviour {
     public void ExitSurvey() {
         //   _uiInstance.gameObject.SetActive(false); // Buggy, dont know uitoolkit well enough to know why, lets just destroy it (not that expensive on one object hopefully)
         if (_uiInstanceEditor != null) Destroy(_uiInstanceEditor.gameObject);
-        if(_uiInstanceViewer != null) Destroy(_uiInstanceViewer.gameObject);
+        if(_uiInstanceViewer != null) _toggleManager.ToggleUIVisibility(false);
     }
 }

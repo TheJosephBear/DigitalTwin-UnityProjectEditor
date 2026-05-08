@@ -41,14 +41,39 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
         }
     }
 
-    public void EnterSurveyViewing(bool debug = false) {
+    /// <summary>
+    /// Enters viewing mode and reports via callback if data was found.
+    /// </summary>
+    /// <param name="onResult">Callback returning true if survey has content, false if empty/failed.</param>
+    public void EnterSurveyViewing(Action<bool> onResult = null, bool debug = false) {
         if (debug) {
+            bool hasData = ValidateJsonContent(_surveyJsonData);
             _flowManager.EnterSurveyViewing(_surveyJsonData);
+            onResult?.Invoke(hasData);
         } else {
-            StartCoroutine(DownloadSurveyData(data => {
-                _flowManager.EnterSurveyViewing(data);
-            }));
+            // We use a Coroutine so the calling thread isn't blocked
+            StartCoroutine(DownloadAndEnterViewingRoutine(onResult));
         }
+    }
+
+    private IEnumerator DownloadAndEnterViewingRoutine(Action<bool> onResult) {
+        string downloadedData = null;
+        bool isDone = false;
+
+        // Use your existing download logic
+        yield return StartCoroutine(DownloadSurveyData(data => {
+            downloadedData = data;
+            _surveyJsonData = data; // Cache it locally
+            isDone = true;
+        }));
+
+        bool hasContent = ValidateJsonContent(downloadedData);
+
+        if (hasContent) {
+            _flowManager.EnterSurveyViewing(downloadedData);
+        }
+
+        onResult?.Invoke(hasContent);
     }
 
     public void ExitSurvey() {
@@ -83,6 +108,8 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
 
     public void DeserializeSurvey() {
         ServerCommunicationManager.Instance.StartSurveyDownload(ProjectManager.Instance.SelectedProject.ProjectName, (success, data) => {
+            print("We did the " + success);
+            print("We did the with the " + data);
             _surveyJsonData = data;
             if (_surveyJsonData != null) {
                 _flowManager.DeserializeSurvey(_surveyJsonData);
@@ -113,4 +140,37 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
         _responseJsonData = _flowManager.GetResponseJsonData();
         print(_responseJsonData);
     }
+
+    #region Helpers
+
+    /// <summary>
+    /// Internal check to see if the string contains actual survey questions.
+    /// </summary>
+    private bool ValidateJsonContent(string json) {
+        return json != "";
+        /*
+        if (string.IsNullOrWhiteSpace(json) || json == "{}" || json == "[]") {
+            return false;
+        }
+
+        try {
+            var node = JSON.Parse(json);
+            // Check if the questions array exists and has at least one entry
+            if (node["questions"] != null) {
+                return node["questions"].AsArray.Count > 0;
+            }
+
+            // If your JSON structure is just a top-level array
+            if (node.AsArray != null) {
+                return node.AsArray.Count > 0;
+            }
+        } catch {
+            return false;
+        }
+
+        return false;
+        */
+    }
+
+    #endregion
 }
