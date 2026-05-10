@@ -1,8 +1,9 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:Template name="Question-description" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/Question-description.uxml?fileID=9197481963319205126&amp;guid=d5a5318ac21e8db418dafe6648d1e3af&amp;type=3#Question-description" />
     <ui:Template name="Question-title" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/Question-title.uxml?fileID=9197481963319205126&amp;guid=2901efb5a1e69bd43a4d67869ab5bef9&amp;type=3#Question-title" />
+    <ui:Template name="Question-description" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/Question-description.uxml?fileID=9197481963319205126&amp;guid=d5a5318ac21e8db418dafe6648d1e3af&amp;type=3#Question-description" />
     <ui:VisualElement name="question-title-bar" style="flex-grow: 0; flex-direction: row; align-items: center;">
         <ui:Instance template="Question-title" />
     </ui:VisualElement>
     <ui:Instance template="Question-description" />
+    <ui:VisualElement name="camera-view" style="flex-grow: 1; max-height: 200px; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/image-outline.png?fileID=2800000&amp;guid=2a8b0a5a8db48ee46924cdb62930cde7&amp;type=3#image-outline&quot;); -unity-background-scale-mode: scale-to-fit; min-height: 100px;" />
 </ui:UXML>

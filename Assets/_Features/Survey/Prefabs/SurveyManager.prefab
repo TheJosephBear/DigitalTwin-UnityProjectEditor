@@ -45,3 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SurveyBuildingManagerPrefab: {fileID: 4288712834212269804, guid: 5e79352ccbc9ff545adbc473c8eabfa7, type: 3}
+  CamRenderTexture: {fileID: 8400000, guid: e74b058558aecbb40ba98881744e09af, type: 2}

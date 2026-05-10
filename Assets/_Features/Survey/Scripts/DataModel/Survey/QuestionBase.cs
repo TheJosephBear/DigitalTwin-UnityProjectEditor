@@ -9,6 +9,7 @@ namespace SurveySystem {
         public string Title { get; set; }
         public string Description { get; set; }
         public string ViewPointId { get; protected set; }
+        public string ImageID { get; protected set; }
         public QuestionType QuestionType { get; protected set; }
         public bool MultipleAnswersAllowed { get; protected set; } // Allow selecting multiple answers
         public bool IsGrid { get; protected set; }
@@ -70,12 +71,17 @@ namespace SurveySystem {
             ViewPointId = vpID;
         }
 
+        public void SetImageID(string imageId) {
+            ImageID = imageId;
+        }
+
         public virtual SerializableQuestion Serialize() {
             return new SerializableQuestion {
                 Id = Id,
                 Title = Title,
                 Description = Description,
                 ViewPointId = ViewPointId,
+                ImageId = ImageID,
                 QuestionType = QuestionType,
                 Answers = _answers
             };
@@ -101,6 +107,7 @@ namespace SurveySystem {
             Title = serializable.Title;
             Description = serializable.Description;
             ViewPointId = serializable.ViewPointId;
+            ImageID = serializable.ImageId;
             foreach (AnswerBase answer in serializable.Answers) {
                 AddExistingAnswer(answer);
             }
@@ -115,6 +122,7 @@ namespace SurveySystem {
         public string Title;
         public string Description;
         public string ViewPointId;
+        public string ImageId;
         public QuestionType QuestionType;
         public List<AnswerBase> Answers;
     }

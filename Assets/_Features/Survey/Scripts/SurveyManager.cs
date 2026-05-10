@@ -11,6 +11,7 @@ using System.Diagnostics;
 public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
     
     public GameObject SurveyBuildingManagerPrefab;
+    public RenderTexture CamRenderTexture; // Entering - set for camera, Exiting - unset
 
     SurveyFlowManager _flowManager;
     string _surveyJsonData;

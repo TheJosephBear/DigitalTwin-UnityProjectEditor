@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.IO;
 using UnityEngine;
 using System.Collections;
+using UnityEditor.VersionControl;
 
 public class ImageManager : Singleton<ImageManager> {
 
@@ -40,31 +41,45 @@ public class ImageManager : Singleton<ImageManager> {
     public TextureAsset CreateTextureAsset(FrostweepGames.Plugins.WebGLFileBrowser.File file) {
         if (file == null || file.data == null) return null;
 
-        // 1. Hash Check for Duplication
         string fileHash = GetFileHash(file.data);
+
+        // Check for duplicates in memory
         foreach (var existing in _loadedTextures) {
             if (existing.FileHash == fileHash) {
-                Debug.Log("Texture already exists.");
+                // Ensure ID is set even on the existing one just in case
+                if (string.IsNullOrEmpty(existing.ID)) existing.ID = fileHash;
                 return existing;
             }
         }
 
-        // 2. Create Texture2D
+        // --- NEW: Save to Persistent Data Path ---
+        string extension = Path.GetExtension(file.fileInfo.name);
+        // We use the hash as the name to ensure uniqueness on disk
+        string localPath = Path.Combine(Application.persistentDataPath, fileHash + extension);
+
+        try {
+            File.WriteAllBytes(localPath, file.data);
+        } catch (Exception e) {
+            Debug.LogError($"Failed to save file to persistent path: {e.Message}");
+        }
+
+        // Create Texture2D
         Texture2D tex = new Texture2D(2, 2);
         if (!tex.LoadImage(file.data)) return null;
 
-        // 3. Create Wrapper Object
+        // Create Wrapper
         GameObject go = new GameObject("Tex_" + file.fileInfo.name);
         if (ImageContainer != null) go.transform.parent = ImageContainer.transform;
 
         TextureAsset asset = go.AddComponent<TextureAsset>();
         asset.FileName = file.fileInfo.name;
         asset.FileHash = fileHash;
+        asset.ID = fileHash;
         asset.Texture = tex;
+        asset.LocalPersistentPath = localPath; // Store this for later!
 
         _loadedTextures.Add(asset);
 
-        // 4. Save State (similar to EditorManager logic)
         if (MainManagerBase.Instance is EditorManager editorMan) {
             editorMan.SaveProject();
         }
@@ -76,7 +91,7 @@ public class ImageManager : Singleton<ImageManager> {
 
     #region Serialization & Deserialization
 
-    public serializableImageManager SerializeTextureList() {
+    public List<serializableTextureAsset> SerializeTextureList() {
         List<serializableTextureAsset> list = new List<serializableTextureAsset>();
         foreach (var asset in _loadedTextures) {
             list.Add(new serializableTextureAsset {
@@ -85,13 +100,11 @@ public class ImageManager : Singleton<ImageManager> {
             });
         }
 
-        return new serializableImageManager {
-            SerializedTextureList = list
-        };
+        return list;
     }
 
-    public void Deserialize(serializableImageManager data, Action onComplete = null) {
-        StartCoroutine(DeserializeTexturesCoroutine(data.SerializedTextureList, onComplete));
+    public void Deserialize(List<serializableTextureAsset> data, Action onComplete = null) {
+        StartCoroutine(DeserializeTexturesCoroutine(data, onComplete));
     }
 
     private IEnumerator DeserializeTexturesCoroutine(List<serializableTextureAsset> data, Action onComplete) {
@@ -112,6 +125,24 @@ public class ImageManager : Singleton<ImageManager> {
         onComplete?.Invoke();
     }
 
+    public void UploadImagesToServer(string projectName) {
+        foreach (TextureAsset asset in _loadedTextures) {
+            // Ensure the file actually exists before trying to upload
+            if (!string.IsNullOrEmpty(asset.LocalPersistentPath) && File.Exists(asset.LocalPersistentPath)) {
+
+                ServerCommunicationManager.Instance.UploadImageToServer(
+                    asset.LocalPersistentPath, // Use the path we saved earlier
+                    asset.FileName,
+                    projectName,
+                    asset.FileHash
+                );
+
+            } else {
+                Debug.LogWarning($"Attempted to upload {asset.FileName} but local file was missing.");
+            }
+        }
+    }
+
     private void DownloadTextureAsset(string hash, string fileName, string projectName, Action<bool> onComplete) {
         // Kontrola, zda už není v pamìti
         foreach (var asset in _loadedTextures) {
@@ -121,7 +152,7 @@ public class ImageManager : Singleton<ImageManager> {
             }
         }
 
-        ServerCommunicationManager.Instance.DownloadFileFromServer(
+        ServerCommunicationManager.Instance.DownloadImageFromServer(
             projectName,
             hash,
             fileName,
@@ -148,8 +179,10 @@ public class ImageManager : Singleton<ImageManager> {
             TextureAsset asset = go.AddComponent<TextureAsset>();
             asset.FileName = fileName;
             asset.FileHash = hash;
+            asset.ID = hash;
             asset.Texture = tex;
 
+            print("Added image with iD: " + asset.ID);
             _loadedTextures.Add(asset);
         }
     }
@@ -162,6 +195,10 @@ public class ImageManager : Singleton<ImageManager> {
             Destroy(asset.gameObject);
         }
         _loadedTextures.Clear();
+    }
+
+    public TextureAsset GetTextureAssetByID(string ID) {
+        return _loadedTextures.Find(x => x.ID == ID); 
     }
 
     #region Helpers
@@ -177,19 +214,17 @@ public class ImageManager : Singleton<ImageManager> {
 }
 
 [System.Serializable]
-public class serializableImageManager : MonoBehaviour {
-    public List<serializableTextureAsset> SerializedTextureList;
-}
-
-[System.Serializable]
 public class TextureAsset : MonoBehaviour {
+    public string ID;
     public string FileName;
     public string FileHash;
     public Texture2D Texture;
+    public string LocalPersistentPath; // Add this
 }
 
 [System.Serializable]
 public class serializableTextureAsset {
+    public string id;
     public string fileName;
     public string fileHash;
 }

@@ -24,6 +24,7 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
     public event Action<int> OnQuestionDeleted;
     public event Action<int, int> OnQuestionMoved;
     public event Action<int, string> OnViewpointSelected;
+    public event Action<int> OnUploadImage;
 
     #endregion
 
@@ -32,6 +33,7 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
     protected Action _onMoveUp;
     protected Action _onMoveDown;
     protected Action _onDelete;
+    protected Action _onUpload;
 
     #endregion
 
@@ -93,12 +95,20 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
 
     public void SetSelectedView(ViewPoint viewPoint) {
         var dropdown = _root.Q<DropdownField>("camera-view-dropdown");
+        int index = -1; // choices zaèínají na "žádný", a to není vp
         foreach (string choice in dropdown.choices) {
             if (choice == viewPoint.Name) {
                 dropdown.value = choice;
+                SetViewPointRender(_viewPoints[index].ID); // this errors during deserialize - out of range
                 return;
             }
+            index++;
         }
+    }
+
+    public Tuple<int, string> GetSelectedViewName() {
+        var dropdown = _root.Q<DropdownField>("camera-view-dropdown");
+        return new Tuple<int, string>(dropdown.index, dropdown.value);
     }
 
     #endregion
@@ -120,6 +130,12 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
 
         dropdown?.RegisterValueChangedCallback(evt => {
             int index = dropdown.index - 1;
+
+            if (index == -1) {
+                OnViewpointSelected?.Invoke(QuestionID, "");
+                _root.Q<VisualElement>("camera-view").style.backgroundImage = null;
+                SetImageRender();
+            }
 
             if (index >= 0 && index < _viewPoints.Count) {
                 OnViewpointSelected?.Invoke(QuestionID, _viewPoints[index].ID);
@@ -219,10 +235,11 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
         var moveUpButton = _root.Q<Button>("move-up-button");
         var moveDownButton = _root.Q<Button>("move-down-button");
         var deleteButton = _root.Q<Button>("delete-option-button");
+        var imageButton = _root.Q<Button>("image-button");
 
         int index = _surveyUIBuilder.GetQuestionIndex(this);
 
-        if (moveUpButton == null || moveDownButton == null || deleteButton == null) {
+        if (moveUpButton == null || moveDownButton == null || deleteButton == null  || imageButton == null) {
             Debug.LogError($"[{QuestionID}] Failed to register button events: One or more buttons not found in UIDocument.");
             return;
         }
@@ -231,6 +248,7 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
         if (_onMoveUp != null) moveUpButton.clicked -= _onMoveUp;
         if (_onMoveDown != null) moveDownButton.clicked -= _onMoveDown;
         if (_onDelete != null) deleteButton.clicked -= _onDelete;
+        if (_onUpload != null) imageButton.clicked -= _onUpload;
 
         // Create new ones
         _onMoveUp = () => {
@@ -245,10 +263,16 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
             OnQuestionDeleted?.Invoke(index);
         };
 
+        _onUpload = () => {
+            OnUploadImage?.Invoke(index);
+        };
+
         // Register
         moveUpButton.clicked += _onMoveUp;
         moveDownButton.clicked += _onMoveDown;
         deleteButton.clicked += _onDelete;
+        imageButton.clicked += _onUpload;
+
     }
 
     #endregion
@@ -306,14 +330,9 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
 
     protected virtual void SetViewPointRender(string viewPointId) {
         var cameraView = _root.Q<VisualElement>("camera-view");
-
-        var viewManager = GameObject.FindFirstObjectByType<ViewManager>();
-        var viewPoint = viewManager.GetViewPointByID(viewPointId);
-        viewPoint.Activate();
-        Camera unityCamera = Camera.main;
         cameraView.style.backgroundImage = Background.FromRenderTexture(
-                unityCamera.targetTexture
-            );
+            _surveyUIBuilder.CreateRenderTexture(viewPointId)
+        );
     }
 
     #endregion

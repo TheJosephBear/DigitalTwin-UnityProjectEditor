@@ -76,13 +76,18 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         if (indexToAdd + _shownQuestionIndex >= _questions.Count || indexToAdd + _shownQuestionIndex < 0) return;
         _shownQuestionIndex += indexToAdd;
 
-        _root.Q<Label>("page-count-label").text = (_shownQuestionIndex+1).ToString() + "/" + _questions.Count;
+        _root.Q<Label>("page-count-label").text = (_shownQuestionIndex + 1).ToString() + "/" + _questions.Count;
         ClearQuestionFromUI();
-        AddQuestionToUI(_questions[_shownQuestionIndex]);
+        SurveyQuestionUIBase addedQuestionUI = AddQuestionToUI(_questions[_shownQuestionIndex]);
+
+        addedQuestionUI.SetImageRender();
 
         print("trying to show " + _questions[_shownQuestionIndex].ViewPointId);
         if (MainManagerBase.Instance == null) return;
-        if (_questions[_shownQuestionIndex].ViewPointId == "") return;
+        if (_questions[_shownQuestionIndex].ViewPointId == "") {
+        //    addedQuestionUI.SetImageRender();
+            return;
+        } 
 
         ViewManager viewManager = MainManagerBase.Instance.ViewManager;
         print(_questions[_shownQuestionIndex].ViewPointId);
@@ -94,18 +99,19 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         viewManager.ActivateViewPoint();
     }
 
-    void AddQuestionToUI(QuestionBase questionBase) {
+    SurveyQuestionUIBase AddQuestionToUI(QuestionBase questionBase) {
         // Check if we already created this UI before
         if (_questionUICache.TryGetValue(questionBase.Id, out SurveyQuestionUIBase existingUI)) {
             // Show the existing one
             existingUI.QuestionElement.style.display = DisplayStyle.Flex;
-            return;
+            return existingUI;
         }
 
         // If not in cache, create it for the first time
         SurveyQuestionUIBase questionUI = _surveyUIBuilder.AddQuestionViewer(questionBase);
         questionUI.SetTitle(questionBase.Title);
         questionUI.SetDescription(questionBase.Description);
+        questionUI.ImageID = questionBase.ImageID;
 
         if (questionBase is QuestionGridBase gridQuestion && questionUI is SurveyQuestionUIViewerGrid gridUI) {
             for (int i = 0; i < gridQuestion.GetColumnCount(); i++) {
@@ -129,6 +135,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
 
         // Add to cache
         _questionUICache.Add(questionBase.Id, questionUI);
+        return questionUI;
     }
 
     void ClearQuestionFromUI() {

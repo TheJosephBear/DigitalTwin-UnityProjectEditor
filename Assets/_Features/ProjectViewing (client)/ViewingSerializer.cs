@@ -15,6 +15,8 @@ public class ViewingSerializer : MonoBehaviour {
 
         yield return new WaitUntil(() => isAssetDeserializationComplete);
 
+        ImageManager.Instance.Deserialize(serializedProject.serializableTextureAssets);
+
         if (ViewingManager.Instance.MapManager != null)
             ViewingManager.Instance.MapManager.Deserialize(serializedProject.serializableMapManager);
 

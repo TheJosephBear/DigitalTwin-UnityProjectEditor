@@ -9,6 +9,7 @@ public abstract class SurveyQuestionUIBase {
     #region Fields & Properties
 
     public int QuestionID { get; }
+    public string ImageID { get; set; }
 
     protected VisualElement _root;
     protected SurveyUIBuilder _surveyUIBuilder;
@@ -42,7 +43,7 @@ public abstract class SurveyQuestionUIBase {
         LoadAnswerTemplate();
         InitializeOptionsList();
 
-        RegisterInputs();
+     //   RegisterInputs(); // Called by ui builder instead after being added to the list
     }
 
     #region Initialization
@@ -85,12 +86,26 @@ public abstract class SurveyQuestionUIBase {
         _root.Q<TextField>("question-description").value = desc;
     }
 
+    public void SetRenderedImage(Texture texture) {
+        _root.Q<VisualElement>("camera-view").style.backgroundImage = Background.FromTexture2D((Texture2D)texture);
+    }
+
+    public virtual void SetImageRender() {
+        Debug.Log("Set image callled "+ImageID);
+        if (ImageID == "" || ImageID == null) return;
+
+        TextureAsset textureAsset = ImageManager.Instance.GetTextureAssetByID(ImageID);
+        if(textureAsset == null) return;
+
+        SetRenderedImage(textureAsset.Texture);
+    }
+
     #endregion
 
     #region UI Input Registration
 
     /// <summary>Registers all UI callbacks.</summary>
-    protected virtual void RegisterInputs() {
+    public virtual void RegisterInputs() {
         RegisterTextInputs();
         RegisterButtons();
         RegisterDropdown();

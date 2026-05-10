@@ -26,6 +26,7 @@ public class SerializableProject {
     public string projectName;
     public SerializableMapManager serializableMapManager;
     public List<SerializableModelAsset> serializableModelAssets;
+    public List<serializableTextureAsset> serializableTextureAssets;
     public SerializableViewPointManager serializableViewPointManager;
     public SerializableGeoMapManager serializableGeoMapManager;
     //    public List<SerializableDecorationPreset> decorationPresets;

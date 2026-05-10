@@ -79,9 +79,14 @@ namespace SurveySystem {
             ExportSurveyAsJson();
         }
 
-        public void SetQuestionViewPoint(int questionId, string viewPointID) {
+        public void SetQuestionViewPointID(int questionId, string viewPointID) {
             QuestionBase question = _activeSurvey.GetQuestionById(questionId);
             question.SetViewPointID(viewPointID);
+        }
+
+        public void SetQuestionImageID(int questionId, string imageID) {
+            QuestionBase question = _activeSurvey.GetQuestionById(questionId);
+            question.SetImageID(imageID);
         }
 
         public void AddNewAnswerToQuestion() {

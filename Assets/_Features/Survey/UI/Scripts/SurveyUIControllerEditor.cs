@@ -78,6 +78,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
             editorUI.OnDescriptionChanged += HandleQuestionDescriptionChanged;
             editorUI.OnQuestionDeleted += HandleQuestionDeleted;
             editorUI.OnQuestionMoved += HandleQuestionMoved;
+            editorUI.OnUploadImage += HandleImageUpload;
             editorUI.OnViewpointSelected += HandleQuestionViewPointSelected;
         }
 
@@ -138,7 +139,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
     }
 
     public void HandleQuestionViewPointSelected(int questionID, string viewPointID) {
-        _surveyBuilder.SetQuestionViewPoint(questionID, viewPointID);
+        _surveyBuilder.SetQuestionViewPointID(questionID, viewPointID);
     }
 
     public void HandleAnswerAdded(int questionId, SurveyAnswerUIBase answerUI) {
@@ -160,20 +161,22 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         _surveyBuilder.RemoveAnswer(answerId);
     }
 
-    void HandleImageUpload() {
-        FileBrowserManager.Instance.ShowLoadDialog(OnImageFileSelected, filterExtensions: "png, jpg, jpeg", multipleSelection: false);
-    }
+    void HandleImageUpload(int questionIndex) {
+        ImageManager.Instance.AskForImageDialog((textureAsset) => {
+            // Validation: Ensure the asset and ID actually exist
+            if (textureAsset == null || string.IsNullOrEmpty(textureAsset.ID)) {
+                Debug.LogError("Upload failed: TextureAsset or ID is null");
+                return;
+            }
 
-    void OnImageFileSelected(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
-        if (files != null && files.Length > 0) {
-            EditorManager.Instance.MapManager.SetBaseMapModel(AssetManager.Instance.CreateNewAssetFromFile(files[0]));
-            // Open Geo localization
-            EditorManager.Instance.ChangeState(AppState.GeoLocalization);
-        } else {
-            PopUp.Instance.ShowPopUpWindow("Please select .obj file!");
-        }
+            Debug.Log($"Assigning ImageID: {textureAsset.ID} to question: {questionIndex}");
 
+            // Update the Data Model
+            _surveyBuilder.SetQuestionImageID(questionIndex, textureAsset.ID);
 
+            // Update the UI
+            _surveyUIBuilder.SetQuestionImage(questionIndex, textureAsset.ID);
+        });
     }
 
     #endregion
@@ -206,9 +209,14 @@ public class SurveyUIControllerEditor : MonoBehaviour {
             SurveyQuestionUIBase questionUI = HandleExistingQuestionAdded(question, isDeserialized: true);
             questionUI.SetTitle(question.Title);
             questionUI.SetDescription(question.Description);
+            questionUI.ImageID = question.ImageID;
             // Set selected viewpoint
             ViewPoint vp = MainManagerBase.Instance.ViewManager.GetViewPointByID(question.ViewPointId);
-            if (vp != null) (questionUI as SurveyQuestionUIEditor).SetSelectedView(vp);
+            if (vp != null) {
+                (questionUI as SurveyQuestionUIEditor).SetSelectedView(vp);
+            } else {
+                questionUI.SetImageRender();
+            }
 
             if (question is QuestionGridBase gridQuestion) {
                 if (questionUI is SurveyQuestionUIEditorGrid gridUI) {

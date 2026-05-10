@@ -12,6 +12,7 @@ public class EditorProjectSerializer : MonoBehaviour {
             projectId = OpenedProject.ProjectID,
             projectName = OpenedProject.ProjectName,
             serializableModelAssets = AssetManager.Instance.SerializeAssetList(),
+            serializableTextureAssets = ImageManager.Instance.SerializeTextureList(),
             serializableMapManager = EditorManager.Instance.MapManager.Serialize(),
             serializableViewPointManager = EditorManager.Instance.ViewManager.Serialize(),
             serializableGeoMapManager = EditorManager.Instance.GeoMapManager.SerializeManager()
@@ -40,6 +41,7 @@ public class EditorProjectSerializer : MonoBehaviour {
         yield return new WaitUntil(() => isAssetDeserializationComplete);
 
         // Deserialize everything else
+        ImageManager.Instance.Deserialize(serializedProject.serializableTextureAssets);
         EditorManager.Instance.MapManager.Deserialize(serializedProject.serializableMapManager);
         EditorManager.Instance.ViewManager.Deserialize(serializedProject.serializableViewPointManager);
         EditorManager.Instance.GeoMapManager.DeserializeManager(serializedProject.serializableGeoMapManager);

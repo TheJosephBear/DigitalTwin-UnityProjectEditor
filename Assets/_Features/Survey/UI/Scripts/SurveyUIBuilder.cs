@@ -1,9 +1,12 @@
+using Cinemachine;
 using SurveySystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using System.Collections;
 
 public class SurveyUIBuilder : MonoBehaviour {
 
@@ -102,6 +105,21 @@ public class SurveyUIBuilder : MonoBehaviour {
         }
     }
 
+    public void SetQuestionImage(int questionIndex, string textureAssetID) {
+        if (questionIndex < 0 || questionIndex >= _addedQuestions.Count) {
+            Debug.LogError("Question index out of bounds!");
+            return;
+        }
+
+        Debug.Log($"Setting and activating image in builder. Index: {questionIndex}, ID: {textureAssetID}");
+
+        // Explicitly set the ID first
+        _addedQuestions[questionIndex].ImageID = textureAssetID;
+
+        // Now call the render
+        _addedQuestions[questionIndex].SetImageRender();
+    }
+
     void ScrollToAddedElement(TemplateContainer addedElement) {
         if (addedElement == null) return;
 
@@ -168,7 +186,9 @@ public class SurveyUIBuilder : MonoBehaviour {
         }
 
         RefreshAddQuestionBars();
+        questionUI.RegisterInputs();
         ScrollToAddedElement(questionInstance);
+
         return questionUI;
     }
     
@@ -242,7 +262,6 @@ public class SurveyUIBuilder : MonoBehaviour {
     }
 
     public bool DeleteQuestion(int questionIndex) {
-        print("trying to delete in ui builder");
         if (questionIndex < 0 || questionIndex >= _addedQuestions.Count) return false;
 
         _addedQuestions[questionIndex].QuestionElement?.RemoveFromHierarchy();
@@ -264,4 +283,64 @@ public class SurveyUIBuilder : MonoBehaviour {
             }
         }
     }
+
+    #region View rendering
+
+    private Dictionary<string, RenderTexture> _createdTextures = new Dictionary<string, RenderTexture>();
+
+    public RenderTexture CreateRenderTexture(string viewPointId) {
+        var viewManager = GameObject.FindFirstObjectByType<ViewManager>();
+        var viewPoint = viewManager.GetViewPointByID(viewPointId);
+
+        viewPoint.Activate(); // Position the camera at the viewpoint
+
+        Camera unityCamera = Camera.main;
+        CinemachineBrain brain = unityCamera.GetComponent<CinemachineBrain>();
+        brain.ManualUpdate();
+        float originalBlendSpeed = brain.m_DefaultBlend.m_Time;
+        brain.m_DefaultBlend.m_Time = 0f;
+
+
+        // 1. Create a new texture for this specific question
+        // Note: We use a Depth of 24 for a standard 3D render
+        RenderTexture questionRT = new RenderTexture(1024, 1024, 24);
+        questionRT.name = "Question_Capture_" + viewPointId;
+        questionRT.Create();
+
+        // 2. "Hijack" the camera for exactly one frame
+        RenderTexture previousRT = unityCamera.targetTexture; // Save existing state
+        unityCamera.targetTexture = questionRT;
+
+        // Manually force the camera to render RIGHT NOW
+        unityCamera.Render();
+
+        // 3. Release the camera immediately
+        unityCamera.targetTexture = previousRT;
+
+        // 5. Track this texture 
+        if(_createdTextures.ContainsKey(viewPointId)) _createdTextures.Remove(viewPointId);
+        _createdTextures.Add(viewPointId, questionRT);
+
+        StartCoroutine(ClearRenderTextureStuffNextFrame(viewPoint, brain, originalBlendSpeed));
+
+        return questionRT;
+    }
+
+    IEnumerator ClearRenderTextureStuffNextFrame(ViewPoint vp, CinemachineBrain brain, float ogSpeed) {
+        yield return new WaitForEndOfFrame();
+        vp.Deactivate();
+        brain.m_DefaultBlend.m_Time = ogSpeed;
+    }
+
+    public void ClearAllQuestionTextures() {
+        foreach (var item in _createdTextures.Values) {
+            if (item != null) {
+                item.Release();
+                Destroy(item); // Important to prevent memory leaks in the editor
+            }
+        }
+        _createdTextures.Clear(); // Clear everything at once after the loop
+    }
+
+    #endregion
 }

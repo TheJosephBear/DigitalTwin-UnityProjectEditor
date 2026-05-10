@@ -183,6 +183,26 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
         StartCoroutine(DownloadFileRequest(url, callback));
     }
 
+    public void DownloadImageFromServer(
+    string projectName,
+    string assetHash,
+    string fileName,
+    System.Action<byte[]> callback) {
+
+        string url =
+            $"{serverUrl}/download_image_files" +
+            $"?project_name={UnityWebRequest.EscapeURL(projectName)}" +
+            $"&asset_hash={UnityWebRequest.EscapeURL(assetHash)}" +
+            $"&file_name={UnityWebRequest.EscapeURL(fileName)}";
+
+        StartCoroutine(DownloadFileRequest(url, callback));
+    }
+
+    public void UploadImageToServer(string path, string fileName, string projectName, string assetHash) {
+        string url = $"{serverUrl}/upload_image_files";
+        StartCoroutine(UploadFileRequest(url, path, fileName, projectName, assetHash));
+    }
+
     public void ListFilesForAsset(string projectName, string assetHash, System.Action<List<string>> callback) {
         string url =
             $"{serverUrl}/list_model_files" +

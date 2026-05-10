@@ -91,6 +91,7 @@ namespace SurveySystem {
                 Title = Title,
                 Description = Description,
                 ViewPointId = ViewPointId,
+                ImageId = ImageID,
                 QuestionType = QuestionType,
                 Rows = Rows,
                 Columns = Columns,
@@ -107,6 +108,7 @@ namespace SurveySystem {
                 deserializedQuestion.Title = gridSerializable.Title;
                 deserializedQuestion.Description = gridSerializable.Description;
                 deserializedQuestion.ViewPointId = gridSerializable.ViewPointId;
+                deserializedQuestion.ImageID = gridSerializable.ImageId;
                 deserializedQuestion.Rows = gridSerializable.Rows;
                 deserializedQuestion.Columns = gridSerializable.Columns;
 
