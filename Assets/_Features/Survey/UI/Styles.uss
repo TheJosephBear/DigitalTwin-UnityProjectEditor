@@ -1,6 +1,8 @@
 :root {
     --primary-color: rgb(103, 80, 164);
+    --secondary-color: rgb(73, 62, 105);
     --primary-background-color: rgb(247, 242, 250);
+    --secondary-background-color: rgb(246, 230, 255);
 }
 
 #survey-scroll-view #unity-content-container {
@@ -113,7 +115,17 @@ RadioButtonGroup TemplateContainer {
     width: 100%;
 }
 
+Button {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-left-radius: 8px;
+    background-color: var(--primary-background-color);
+    color: var(--primary-color);
+}
+
 Button:hover {
+    background-color: var(--secondary-background-color);
     cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_64.png?fileID=2800000&guid=abfee731139a8cc46ab2e1aa8e8311dd&type=3#hand_64");
 }
 
@@ -123,6 +135,17 @@ Button VisualElement:hover {
 
 Button Label:hover {
     cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_64.png?fileID=2800000&guid=abfee731139a8cc46ab2e1aa8e8311dd&type=3#hand_64");
+}
+
+Button.icon {
+    width: 32px;
+    height: 32px;
+    -unity-background-scale-mode: scale-to-fit;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+Button.icon:hover {
+    background-color: rgb(247, 242, 250);
 }
 
 TextField TextElement:hover {
@@ -155,18 +178,49 @@ TextField TextInput:hover {
     padding-left: 24px;
 }
 
-Button {
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    border-bottom-left-radius: 8px;
-    background-color: var(--primary-background-color);
-    border-top-left-radius: 8px;
-    color: var(--primary-color);
-}
-
 TextField TextInput {
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
     border-bottom-left-radius: 8px;
+}
+
+DropdownField > Label {
+    color: var(--primary-color);
+}
+
+DropdownField > VisualElement {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-left-radius: 8px;
+    background-color: var(--primary-background-color);
+    color: var(--primary-color);
+}
+
+DropdownField:hover {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_64.png?fileID=2800000&guid=abfee731139a8cc46ab2e1aa8e8311dd&type=3#hand_64");
+}
+
+DropdownField:hover > VisualElement {
+    background-color: var(--secondary-background-color);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_64.png?fileID=2800000&guid=abfee731139a8cc46ab2e1aa8e8311dd&type=3#hand_64");
+}
+
+VisualElement.unity-base-dropdown > VisualElement.unity-base-dropdown__container-outer {
+    border-top-right-radius: 8px !important;
+    border-bottom-right-radius: 8px !important;
+    border-bottom-left-radius: 8px !important;
+    border-top-left-radius: 8px !important;
+    background-color: var(--primary-background-color);
+    color: var(--primary-color);
+}
+
+ScrollView.unity-base-dropdown__container-inner {
+    border-top-right-radius: 8px !important;
+    border-bottom-right-radius: 8px !important;
+    border-bottom-left-radius: 8px !important;
+    border-top-left-radius: 8px !important;
+    background-color: var(--primary-background-color);
+    color: var(--primary-color);
 }
