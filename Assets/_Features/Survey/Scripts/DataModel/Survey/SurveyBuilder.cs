@@ -114,6 +114,13 @@ namespace SurveySystem {
             SetAnswerText(_activeSurvey.ActiveQuestion.ActiveAnswer, text);
         }
 
+        public void SetAnswerImage(int questionID, int answerID, string imageID) {
+            QuestionBase question = _activeSurvey.GetQuestionById(questionID);
+            if (question is QuestionImageChoice imageQuestion) {
+                imageQuestion.SetAnswerImageID(answerID, imageID);
+            }
+        }
+
         public void AddRow(int questionId) {
             QuestionBase question = _activeSurvey.GetQuestionById(questionId);
             if (!question.IsGrid) return;

@@ -131,6 +131,13 @@ public class SurveyUIControllerViewer : MonoBehaviour {
             foreach (AnswerBase answer in questionBase.Answers) {
                 questionUI.AddAnswer(answer.Text, answer.IsOther);
             }
+        } else if (questionUI is SurveyQuestionUIViewerImage imageUI) {
+            imageUI.OnAnswerSelected += HandleAnswerSelected;
+            foreach (AnswerBase answer in questionBase.Answers) {
+                if (answer is AnswerImage imageAnswer) {
+                    imageUI.AddAnswer(imageAnswer.ImageID);
+                }
+            }
         }
 
         // Add to cache

@@ -50,7 +50,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         }
 
         QuestionType questionTypeEnum = mapping.QuestionType;
-        if (questionTypeEnum == QuestionType.ImageChoice) questionTypeEnum = QuestionType.MultipleChoiceSingle; // IMAGE CHOICE ZATÍM NEDÁVAT
+        //    if (questionTypeEnum == QuestionType.ImageChoice) questionTypeEnum = QuestionType.MultipleChoiceSingle; // IMAGE CHOICE ZATÍM NEDÁVAT
         HandleQuestionAdded(questionTypeEnum, insertAtIndex);
     }
 
@@ -98,6 +98,9 @@ public class SurveyUIControllerEditor : MonoBehaviour {
             if (!isDeserialized) {
                 builderUI.AddInitialAnswer();
             }
+        } else if (addedQuestionUI is SurveyQuestionUIEditorImage imageUI) {
+            imageUI.OnAnswerImageChanged += HandleImageQuestionAnswerImageUpload;
+            imageUI.OnAnswerAdded += HandleAddAnswerImage;
         }
 
         return addedQuestionUI;
@@ -179,6 +182,14 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         });
     }
 
+    void HandleImageQuestionAnswerImageUpload(int questionID, int answerID, string imageID) {
+        _surveyBuilder.SetAnswerImage(questionID, answerID, imageID);
+    }
+
+    void HandleAddAnswerImage(int questionID) {
+        _surveyBuilder.AddNewAnswerToQuestion(questionID);
+    }
+
     #endregion
 
 
@@ -211,11 +222,13 @@ public class SurveyUIControllerEditor : MonoBehaviour {
             questionUI.SetDescription(question.Description);
             questionUI.ImageID = question.ImageID;
             // Set selected viewpoint
-            ViewPoint vp = MainManagerBase.Instance.ViewManager.GetViewPointByID(question.ViewPointId);
-            if (vp != null) {
-                (questionUI as SurveyQuestionUIEditor).SetSelectedView(vp);
-            } else {
-                questionUI.SetImageRender();
+            if (MainManagerBase.Instance != null) {
+                ViewPoint vp = MainManagerBase.Instance.ViewManager.GetViewPointByID(question.ViewPointId);
+                if (vp != null) {
+                    (questionUI as SurveyQuestionUIEditor).SetSelectedView(vp);
+                } else {
+                    questionUI.SetImageRender();
+                }
             }
 
             if (question is QuestionGridBase gridQuestion) {
@@ -225,6 +238,12 @@ public class SurveyUIControllerEditor : MonoBehaviour {
                     }
                     for (int i = 0; i < gridQuestion.GetRowCount(); i++) {
                         gridUI.AddExistingRow(gridQuestion.GetRow(i));
+                    }
+                }
+            } else if (question is QuestionImageChoice imageQuestion) {
+                if (questionUI is SurveyQuestionUIEditorImage imageUI) {
+                    foreach (AnswerImage answer in imageQuestion.Answers) {
+                        imageUI.AddAnswerWithImage(answer.ImageID);
                     }
                 }
             } else {

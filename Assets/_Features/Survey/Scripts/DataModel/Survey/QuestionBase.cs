@@ -96,7 +96,7 @@ namespace SurveySystem {
                 QuestionType.Dropdown => new QuestionMultipleChoiceSingleAnswer(serializable.Id),
                 QuestionType.MultipleChoiceGrid => new QuestionMultipleChoiceGrid(serializable.Id),
                 QuestionType.CheckboxGrid => new QuestionCheckboxGrid(serializable.Id),
-                QuestionType.ImageChoice => new QuestionMultipleChoiceSingleAnswer(serializable.Id),
+                QuestionType.ImageChoice => new QuestionImageChoice(serializable.Id),
                 QuestionType.LinearScale => new QuestionLinearScale(serializable.Id),
             };
 
@@ -123,7 +123,8 @@ namespace SurveySystem {
         public string Description;
         public string ViewPointId;
         public string ImageId;
-        public QuestionType QuestionType;
+        public QuestionType QuestionType; 
+        [SerializeReference]
         public List<AnswerBase> Answers;
     }
 
