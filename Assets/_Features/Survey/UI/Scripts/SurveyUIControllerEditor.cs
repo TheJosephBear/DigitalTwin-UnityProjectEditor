@@ -160,6 +160,22 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         _surveyBuilder.RemoveAnswer(answerId);
     }
 
+    void HandleImageUpload() {
+        FileBrowserManager.Instance.ShowLoadDialog(OnImageFileSelected, filterExtensions: "png, jpg, jpeg", multipleSelection: false);
+    }
+
+    void OnImageFileSelected(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
+        if (files != null && files.Length > 0) {
+            EditorManager.Instance.MapManager.SetBaseMapModel(AssetManager.Instance.CreateNewAssetFromFile(files[0]));
+            // Open Geo localization
+            EditorManager.Instance.ChangeState(AppState.GeoLocalization);
+        } else {
+            PopUp.Instance.ShowPopUpWindow("Please select .obj file!");
+        }
+
+
+    }
+
     #endregion
 
 
@@ -192,8 +208,8 @@ public class SurveyUIControllerEditor : MonoBehaviour {
             questionUI.SetDescription(question.Description);
             // Set selected viewpoint
             ViewPoint vp = MainManagerBase.Instance.ViewManager.GetViewPointByID(question.ViewPointId);
-            if(vp != null) (questionUI as SurveyQuestionUIEditor).SetSelectedView(vp);
-            
+            if (vp != null) (questionUI as SurveyQuestionUIEditor).SetSelectedView(vp);
+
             if (question is QuestionGridBase gridQuestion) {
                 if (questionUI is SurveyQuestionUIEditorGrid gridUI) {
                     for (int i = 0; i < gridQuestion.GetColumnCount(); i++) {

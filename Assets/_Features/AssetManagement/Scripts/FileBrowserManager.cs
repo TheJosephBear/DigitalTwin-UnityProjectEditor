@@ -54,6 +54,7 @@ public class FileBrowserManager : Singleton<FileBrowserManager> {
         );
     }
 
+
     /// <summary>
     /// Handles successful file selection events from the WebGL file browser.
     /// </summary>
