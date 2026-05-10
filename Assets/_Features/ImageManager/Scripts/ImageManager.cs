@@ -4,7 +4,6 @@ using System.Security.Cryptography;
 using System.IO;
 using UnityEngine;
 using System.Collections;
-using UnityEditor.VersionControl;
 
 public class ImageManager : Singleton<ImageManager> {
 
