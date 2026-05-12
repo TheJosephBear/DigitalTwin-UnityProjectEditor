@@ -1,0 +1,13 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="Question-title" src="project://database/Assets/_Features/Survey/UI/Question-title.uxml?fileID=9197481963319205126&amp;guid=7bfed0fc9c8eb204088a09cb69fa7762&amp;type=3#Question-title" />
+    <ui:Template name="Question-description" src="project://database/Assets/_Features/Survey/UI/Question-description.uxml?fileID=9197481963319205126&amp;guid=f5d967f3e76b1a54ea2fffb453a25d93&amp;type=3#Question-description" />
+    <Style src="project://database/Assets/_Features/Survey/UI/Styles.uss?fileID=7433441132597879392&amp;guid=e2857671203a4094b98524b8aefbd78f&amp;type=3" />
+    <ui:VisualElement name="survey-title-bar" style="flex-grow: 0; flex-direction: row; align-items: center; flex-shrink: 0;">
+        <ui:Instance template="Question-title" name="Question-title" style="flex-grow: 1;">
+            <AttributeOverrides element-name="question-title" placeholder-text="Název dotazníku" />
+        </ui:Instance>
+    </ui:VisualElement>
+    <ui:Instance template="Question-description" name="question-description">
+        <AttributeOverrides element-name="question-description" placeholder-text="Popis dotazníku" />
+    </ui:Instance>
+</ui:UXML>

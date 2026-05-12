@@ -1,6 +1,6 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement style="flex-direction: row;">
-        <ui:VisualElement name="RequiredSymbol" style="flex-grow: 0; width: 10px;">
+        <ui:VisualElement name="required-symbol" style="flex-grow: 0; width: 10px;">
             <ui:Label text="*" style="color: rgb(205, 0, 0);" />
         </ui:VisualElement>
         <ui:Label text="Název otázky" name="question-title" style="font-size: 16px; -unity-font-style: bold; flex-grow: 1; -unity-text-align: middle-left;" />

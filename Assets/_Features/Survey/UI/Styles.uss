@@ -224,3 +224,27 @@ ScrollView.unity-base-dropdown__container-inner {
     background-color: var(--primary-background-color);
     color: var(--primary-color);
 }
+
+.required-toggle {
+    border-top-left-radius: 100px;
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+    border-bottom-left-radius: 100px;
+    width: 32px;
+    height: 32px;
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/asterisk.png?fileID=2800000&guid=7ff93a71ce7cf10439fdd8ba5dd4d774&type=3#asterisk");
+    -unity-background-scale-mode: scale-to-fit;
+    background-size: 70% 70%;
+    background-color: rgba(255, 255, 255, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+}
+
+.required-toggle__required {
+}
+
+.required-toggle__optional {
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/asterisk-crossed.png?fileID=2800000&guid=092533b3b39958b4184c2346388f42f5&type=3#asterisk-crossed");
+}

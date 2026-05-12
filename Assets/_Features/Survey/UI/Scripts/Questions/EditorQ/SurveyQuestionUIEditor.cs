@@ -330,6 +330,7 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
 
     protected virtual void SetViewPointRender(string viewPointId) {
         var cameraView = _root.Q<VisualElement>("camera-view");
+        cameraView.style.display = DisplayStyle.Flex;
         cameraView.style.backgroundImage = Background.FromRenderTexture(
             _surveyUIBuilder.CreateRenderTexture(viewPointId)
         );
