@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 using System;
 using System.Runtime.Serialization;
+using System.Windows.Forms;
 
 namespace SurveySystem {
     /// <summary>
@@ -50,6 +51,14 @@ namespace SurveySystem {
 
         public void RemoveQuestion(int idx) {
             _activeSurvey.RemoveQuestion(idx);
+        }
+
+        public void MoveQuestion(int index, int direction) {
+            _activeSurvey.MoveQuestion(index, direction);
+        }
+
+        public void MoveAnswer(int questionIndex, int answerIndex, int direction) {
+            _activeSurvey.MoveAnswer(questionIndex, answerIndex, direction);
         }
 
         public void SetQuestionTitle(string title) {
@@ -180,8 +189,14 @@ namespace SurveySystem {
             SetAnswerText(answer, text);
         }
 
-        public void RemoveAnswer(int idx) {
-            _activeSurvey.ActiveQuestion.RemoveAnswer(idx);
+        public void RemoveAnswer(int questionId, int answerIdx) {
+            Debug.Log("------REMOVE ANSWER--------");
+            Debug.Log("GetQuestionById: " + _activeSurvey.GetQuestionById(questionId));
+            Debug.Log("answer idx: " + answerIdx);
+            Debug.Log("answer count: " + _activeSurvey.GetQuestionById(questionId).Answers.Count);
+            Debug.Log("answer with idx: " + _activeSurvey.GetQuestionById(questionId).Answers[answerIdx]);
+            Debug.Log("---------------------------");
+            _activeSurvey.GetQuestionById(questionId).RemoveAnswer(answerIdx);
         }
 
         public Survey GetActiveSurvey() {
@@ -207,7 +222,11 @@ namespace SurveySystem {
             CreateNewSurvey();
 
             _activeSurvey.Deserialize(deserializedSurvey);
-            _nextId = _activeSurvey.Questions.Count;
+            if (_activeSurvey.Questions.Count > 0) {
+                _nextId = _activeSurvey.Questions.Max(q => q.Id) + 1;
+            } else {
+                _nextId = 0;
+            }
         }
 
         #endregion

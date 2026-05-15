@@ -55,8 +55,22 @@ namespace SurveySystem {
             ActiveAnswer = answer;
         }
 
+        public virtual void MoveAnswer(int index, int direction) {
+            int targetIndex = index + direction;
+            if (targetIndex < 0 || targetIndex >= _answers.Count) return;
+
+            var answer = _answers[index];
+            _answers.RemoveAt(index);
+            _answers.Insert(targetIndex, answer);
+
+            // Update Idx properties if you rely on them for persistence
+            for (int i = 0; i < _answers.Count; i++) {
+                _answers[i].Idx = i;
+            }
+        }
+
         public void RemoveAnswer(int idx) {
-            _answers.RemoveAll(a => a.Idx == idx);
+            _answers.RemoveAt(idx);
         }
 
         public void SetActiveAnswer(int idx) {

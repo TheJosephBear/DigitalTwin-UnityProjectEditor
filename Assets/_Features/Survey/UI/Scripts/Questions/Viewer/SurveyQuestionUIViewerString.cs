@@ -27,8 +27,8 @@ public class SurveyQuestionUIViewerString : SurveyQuestionUIViewer {
         }
     }
 
-    public override void AddAnswer(string answerText, bool isOther = false) {
-        if (_optionsList == null) return;
+    public override SurveyAnswerUIBase AddAnswer(string answerText, bool isOther = false) {
+        if (_optionsList == null) return null;
 
         VisualElement answerElement;
         int answerIndex = _addedAnswers.Count;
@@ -39,7 +39,7 @@ public class SurveyQuestionUIViewerString : SurveyQuestionUIViewer {
             answerElement = otherField;
         } else {
             // Use the standard template for normal options
-            if (_answerTemplate == null) return;
+            if (_answerTemplate == null) return null;
             answerElement = _answerTemplate.Instantiate();
 
             var textLabel = answerElement.Q<Label>();
@@ -69,6 +69,8 @@ public class SurveyQuestionUIViewerString : SurveyQuestionUIViewer {
             InsertAnswerElement(answerElement);
             _addedAnswers.Add(answerUI);
         }
+
+        return answerUI;
     }
 
     protected override SurveyAnswerUIBase CreateAnswerUI(VisualElement element, int index, bool isOther) {

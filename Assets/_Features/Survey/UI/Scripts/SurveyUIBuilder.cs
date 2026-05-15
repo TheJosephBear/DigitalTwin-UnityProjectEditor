@@ -50,20 +50,6 @@ public class SurveyUIBuilder : MonoBehaviour {
     /// and one trailing bar after the last addedQuestion: [bar, q0, bar, q1, bar, ..., barN].
     /// </summary>
     public void RefreshAddQuestionBars() {
-        // Survey Viewing
-        /*
-        if (_isViewerUI) {
-            for (int i = 0; i <= _addedQuestions.Count; i++) {
-                if (i < _addedQuestions.Count && _addedQuestions[i].QuestionElement != null) {
-                    _scrollViewContent.Add(_addedQuestions[i].QuestionElement);
-                }
-            }
-            return;
-        }
-        */
-
-        // Survey Building
-
         _scrollViewContent.Clear();
 
         if (addQuestionBarTemplate == null) {
@@ -266,12 +252,18 @@ public class SurveyUIBuilder : MonoBehaviour {
     }
 
     public void MoveQuestion(int questionIndex, int direction) {
+
+        print($"(Builder UI) Moving index {questionIndex}");
         int targetIndex = questionIndex + direction;
+        print($"(Builder UI) Target index {targetIndex}");
+        print($"(Builder UI) return check? {(targetIndex < 0 || targetIndex >= _addedQuestions.Count)}");
         if (targetIndex < 0 || targetIndex >= _addedQuestions.Count) return;
 
         var temp = _addedQuestions[questionIndex];
         _addedQuestions[questionIndex] = _addedQuestions[targetIndex];
         _addedQuestions[targetIndex] = temp;
+
+        print($"(Builder UI) Swapped in list and refreshing UI!");
 
         RefreshAddQuestionBars();
     }

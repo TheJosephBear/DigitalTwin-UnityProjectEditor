@@ -23,6 +23,34 @@ namespace SurveySystem {
                 _questions.RemoveAt(idx);
         }
 
+        public void InsertQuestion(int index, QuestionBase question) {
+            if (index < 0 || index >= _questions.Count) {
+                _questions.Add(question);
+            } else {
+                _questions.Insert(index, question);
+            }
+            ActiveQuestion = question;
+        }
+
+        public void MoveQuestion(int index, int direction) {
+            Debug.Log($"(Builder) moving question index {index} in direction {direction}");
+            int targetIndex = index + direction;
+            if (targetIndex < 0 || targetIndex >= _questions.Count) return;
+
+            var question = _questions[index];
+            _questions.RemoveAt(index);
+            _questions.Insert(targetIndex, question);
+            Debug.Log($"(Builder) Swapped");
+        }
+
+        public void MoveAnswer(int questionIndex, int answerIndex, int direction) {
+            // Validate question index
+            if (questionIndex < 0 || questionIndex >= _questions.Count) return;
+
+            // Delegate the movement to the specific question
+            _questions[questionIndex].MoveAnswer(answerIndex, direction);
+        }
+
         public void SetActiveQuestion(int idx) {
             if (idx >= 0 && idx < _questions.Count)
                 ActiveQuestion = _questions[idx];

@@ -13,8 +13,8 @@ public class SurveyQuestionUIViewerImage : SurveyQuestionUIViewer {
     }
 
     // This is called by the UI Builder when iterating through the question's answers
-    public override void AddAnswer(string imageId, bool isOther = false) {
-        if (_optionsList == null || _answerTemplate == null) return;
+    public override SurveyAnswerUIBase AddAnswer(string imageId, bool isOther = false) {
+        if (_optionsList == null || _answerTemplate == null) return null;
 
         // 1. Instantiate the Template
         VisualElement answerElement = _answerTemplate.Instantiate();
@@ -35,6 +35,8 @@ public class SurveyQuestionUIViewerImage : SurveyQuestionUIViewer {
         // 5. Add to UI Layout
         _optionsList.Add(answerElement);
         _addedAnswers.Add(answerUI);
+
+        return answerUI;
     }
 
     private void HandleSingleSelection(int selectedIndex) {

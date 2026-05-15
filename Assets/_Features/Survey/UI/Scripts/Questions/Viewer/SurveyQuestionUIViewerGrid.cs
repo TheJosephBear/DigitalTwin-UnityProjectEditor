@@ -64,7 +64,7 @@ public class SurveyQuestionUIViewerGrid : SurveyQuestionUIViewer {
     protected override void RegisterDropdown() { }
     protected override void RegisterTextInputs() { }
 
-    public override void AddAnswer(string answerText, bool isOther = false) {
-        
+    public override SurveyAnswerUIBase AddAnswer(string answerText, bool isOther = false) {
+        return null;
     }
 }

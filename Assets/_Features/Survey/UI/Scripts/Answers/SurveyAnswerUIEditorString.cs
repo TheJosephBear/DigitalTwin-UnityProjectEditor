@@ -23,7 +23,11 @@ public class SurveyAnswerUIEditorString : SurveyAnswerUIEditor {
         if (textField == null) return;
 
         textField.RegisterValueChangedCallback(evt => {
-            OnTextChanged.Invoke(_questionUIRef.QuestionID, _answerIndex, evt.newValue);
+            Debug.Log(_questionUIRef);
+            Debug.Log(_questionUIRef.QuestionID);
+            Debug.Log(_answerIndex);
+            Debug.Log(OnTextChanged);
+            OnTextChanged?.Invoke(_questionUIRef.QuestionID, _answerIndex, evt.newValue);
         });
     }
 

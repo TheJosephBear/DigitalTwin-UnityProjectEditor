@@ -25,6 +25,7 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
     public event Action<int, int> OnQuestionMoved;
     public event Action<int, string> OnViewpointSelected;
     public event Action<int> OnUploadImage;
+    public event Action<int, int, int> OnMoveAnswer;
 
     #endregion
 
@@ -53,10 +54,10 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
     #region Interface for editing the question
 
     // Make it virtual or abstract - check the other add answer function and how different it is (this is for code calls, theo ther is for ui calls)
-    public override void AddAnswer(string answerText, bool isOther = false) {
+    public override SurveyAnswerUIBase AddAnswer(string answerText, bool isOther = false) {
         if (_optionsList == null || _answerTemplate == null) {
             Debug.LogWarning("Missing options list or template!");
-            return;
+            return null;
         }
 
         TemplateContainer element = _answerTemplate.Instantiate();
@@ -80,7 +81,7 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
                 tf.value = answerText;
         }
 
-        var answerUI = CreateAnswerUI(element, index, isOther);
+        SurveyAnswerUIBase answerUI = CreateAnswerUI(element, index, isOther);
 
         if (isOther) {
             var button = element.Q<CustomRadioButton>();
@@ -91,6 +92,8 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
         } else {
             _addedAnswers.Add(answerUI);
         }
+
+        return answerUI;
     }
 
     public void SetSelectedView(ViewPoint viewPoint) {
@@ -151,11 +154,17 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
     public virtual void MoveAnswerUp(int index) {
         if (index <= 0 || index >= _addedAnswers.Count) return;
         SwapAnswers(index, index - 1);
+
+        int questionIndex = _surveyUIBuilder.GetQuestionIndex(this);
+        OnMoveAnswer?.Invoke(questionIndex, index, -1);
     }
 
     public virtual void MoveAnswerDown(int index) {
         if (index < 0 || index >= _addedAnswers.Count - 1) return;
         SwapAnswers(index, index + 1);
+
+        int questionIndex = _surveyUIBuilder.GetQuestionIndex(this);
+        OnMoveAnswer?.Invoke(questionIndex, index, 1);
     }
 
     protected virtual void SwapAnswers(int a, int b) {

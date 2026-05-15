@@ -76,10 +76,11 @@ public class SurveyUIControllerEditor : MonoBehaviour {
 
             editorUI.OnTitleChanged += HandleQuestionTitleChanged;
             editorUI.OnDescriptionChanged += HandleQuestionDescriptionChanged;
-            editorUI.OnQuestionDeleted += HandleQuestionDeleted;
-            editorUI.OnQuestionMoved += HandleQuestionMoved;
+       //     editorUI.OnQuestionDeleted += HandleQuestionDeleted;
+      //      editorUI.OnQuestionMoved += HandleQuestionMoved;
             editorUI.OnUploadImage += HandleImageUpload;
             editorUI.OnViewpointSelected += HandleQuestionViewPointSelected;
+            editorUI.OnMoveAnswer += HandleAnswerMoved;
         }
 
         if (addedQuestionUI is SurveyQuestionUIEditorGrid gridUI) {
@@ -125,12 +126,19 @@ public class SurveyUIControllerEditor : MonoBehaviour {
     }
 
     public void HandleQuestionDeleted(int questionIndex) {
+        print($"(Controller) Deleting index {questionIndex}");
         if (!_surveyUIBuilder.DeleteQuestion(questionIndex)) return;
         _surveyBuilder.RemoveQuestion(questionIndex);
     }
 
     public void HandleQuestionMoved(int questionIndex, int direction) {
-        _surveyUIBuilder.MoveQuestion(questionIndex, direction);
+        print($"(Controller) Moving index {questionIndex} in direction: {direction}");
+        _surveyUIBuilder.MoveQuestion(questionIndex, direction); 
+        _surveyBuilder.MoveQuestion(questionIndex, direction);
+    }
+
+    void HandleAnswerMoved(int questionIndex, int answerIndex, int direction) {
+        _surveyBuilder.MoveAnswer(questionIndex, answerIndex, direction);
     }
 
     public void HandleQuestionTitleChanged(int questionId, string newText) {
@@ -160,8 +168,8 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         _surveyBuilder.SetAnswerText(questionId, answerId, newText);
     }
 
-    public void HandleAnswerRemoved(int answerId) {
-        _surveyBuilder.RemoveAnswer(answerId);
+    public void HandleAnswerRemoved(int questionId, int answerId) {
+        _surveyBuilder.RemoveAnswer(questionId, answerId);
     }
 
     void HandleImageUpload(int questionIndex) {
@@ -246,9 +254,11 @@ public class SurveyUIControllerEditor : MonoBehaviour {
                         imageUI.AddAnswerWithImage(answer.ImageID);
                     }
                 }
-            } else {
+            } else if (questionUI is SurveyQuestionUIEditorString stringQuestion) {
                 foreach (AnswerBase answer in question.Answers) {
-                    questionUI.AddAnswer(answer.Text, answer.IsOther);
+                    SurveyAnswerUIBase answerUIBase = questionUI.AddAnswer(answer.Text, answer.IsOther);
+                    if(answerUIBase is SurveyAnswerUIEditorString answerEditorString)
+                        answerEditorString.OnTextChanged += HandleAnswerTextChanged;
                 }
             }
         }

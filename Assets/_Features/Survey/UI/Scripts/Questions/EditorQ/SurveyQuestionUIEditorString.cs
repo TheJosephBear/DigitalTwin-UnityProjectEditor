@@ -10,7 +10,7 @@ public class SurveyQuestionUIEditorString : SurveyQuestionUIEditor {
 
     public event Action<int, SurveyAnswerUIBase> OnAnswerAdded;
     public event Action<int> OnAnswerOtherAdded;
-    public event Action<int> OnAnswerRemoved;
+    public event Action<int, int> OnAnswerRemoved;
     public event Action<int, int, string> OnAnswerTextChanged;
 
     #endregion
@@ -71,7 +71,7 @@ public class SurveyQuestionUIEditorString : SurveyQuestionUIEditor {
         if (_otherAnswerUI != null && index == _otherAnswerUI.AnswerIndex) {
             _optionsList.Remove(_otherAnswerUI.AnswerElement);
             _otherAnswerUI = null;
-            OnAnswerRemoved?.Invoke(index);
+            OnAnswerRemoved?.Invoke(QuestionID, index);
             return;
         }
 
@@ -84,7 +84,7 @@ public class SurveyQuestionUIEditorString : SurveyQuestionUIEditor {
 
         RecalculateAnswerIndices();
 
-        OnAnswerRemoved?.Invoke(index);
+        OnAnswerRemoved?.Invoke(QuestionID, index);
     }
 
     #endregion

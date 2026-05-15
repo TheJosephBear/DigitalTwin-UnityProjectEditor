@@ -77,7 +77,7 @@ public abstract class SurveyQuestionUIBase {
 
     #region Interface for editing the question
 
-    public abstract void AddAnswer(string answerText, bool isOther = false);
+    public abstract SurveyAnswerUIBase AddAnswer(string answerText, bool isOther = false);
     public virtual void SetTitle(string title) {
         _root.Q<TextField>("question-title").value = title;
     }
