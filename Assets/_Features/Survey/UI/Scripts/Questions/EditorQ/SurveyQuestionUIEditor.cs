@@ -3,6 +3,7 @@ using UnityEngine.UIElements;
 using SurveySystem;
 using System.Collections.Generic;
 using System;
+using UnityEditor.VersionControl;
 
 public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
 
@@ -12,6 +13,7 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
     protected VisualElement _currentlyOpenModal;
     protected VisualElement _originalParent;
     protected int _originalIndex = -1;
+    protected bool _isRequired = false;
 
     #endregion
 
@@ -25,6 +27,7 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
     public event Action<int, int> OnQuestionMoved;
     public event Action<int, string> OnViewpointSelected;
     public event Action<int> OnUploadImage;
+    public event Action<int, bool> OnToggleRequired;
     public event Action<int, int, int> OnMoveAnswer;
 
     #endregion
@@ -114,9 +117,49 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
         return new Tuple<int, string>(dropdown.index, dropdown.value);
     }
 
+    public void ToggleRequired() {
+        SetRequired(!_isRequired);
+    }
+
+    public void SetRequired(bool required) {
+        // Inner flag
+        _isRequired = required;
+
+        // Set texture
+        Texture textureToUse = null;
+        
+        if (_isRequired) {
+            textureToUse = _surveyUIBuilder.AsteriskTexture;
+        } else {
+            textureToUse = _surveyUIBuilder.AsteriskCrossedTexture;
+        }
+
+        Texture2D texture2D = textureToUse as Texture2D;
+
+        if (texture2D != null) {
+            _root.Q<Button>("required-toggle").style.backgroundImage = new StyleBackground(texture2D);
+        } else {
+            Debug.LogError("textureToUse is not a valid Texture2D!");
+        }
+
+        // Event
+        OnToggleRequired?.Invoke(QuestionID, _isRequired);
+    }
+
     #endregion
 
     #region UI Input Registration
+
+    protected override void RegisterButtons() {
+        // required toggle
+        var requiredButton = _root.Q<Button>("required-toggle");
+        Debug.Log(requiredButton==null);
+        if (requiredButton != null) {
+            requiredButton.clicked += () => {
+                ToggleRequired();
+            };
+        }
+    }
 
     /// <summary>Registers all UI callbacks.</summary>
     protected override void RegisterTextInputs() {

@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 public class SurveyAnswerUIEditorImage : SurveyAnswerUIEditor {
 
     public event Action<int, string> OnAnswerImageChanged;
+    public event Action<int> OnRemoveClicked;
     private VisualElement _imageDisplay;
 
     public SurveyAnswerUIEditorImage(VisualElement answerElement, int answerIndex, SurveyQuestionUIEditor questionUI, bool isOther)
@@ -19,7 +20,7 @@ public class SurveyAnswerUIEditorImage : SurveyAnswerUIEditor {
         // Register buttons for Move Up/Down/Delete (inherited logic)
         RegisterModalButtonEvents(_answerElement);
 
-        var clickable = _answerElement.Q<VisualElement>("option-container");
+        var clickable = _answerElement.Q<VisualElement>("image");
 
         clickable?.RegisterCallback<ClickEvent>(evt => {
             ImageManager.Instance.AskForImageDialog((textureAsset) => {
@@ -28,6 +29,12 @@ public class SurveyAnswerUIEditorImage : SurveyAnswerUIEditor {
                     OnAnswerImageChanged?.Invoke(_answerIndex, textureAsset.ID);
                 }
             });
+        });
+
+        var deleteButton = _answerElement.Q<Button>("delete-option-button");
+
+        deleteButton?.RegisterCallback<ClickEvent>(evt => {
+            OnRemoveClicked?.Invoke(AnswerIndex);
         });
     }
 

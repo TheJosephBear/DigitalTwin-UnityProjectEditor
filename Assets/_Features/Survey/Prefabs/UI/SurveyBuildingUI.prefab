@@ -80,6 +80,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   questionUIMapping: {fileID: 11400000, guid: 92c7910e54e8a8845b877ccd6991e0bf, type: 2}
+  GridCollumnTemplate: {fileID: 9197481963319205126, guid: 37fa22e10338113439fdadafc6c92eba, type: 3}
+  AsteriskTexture: {fileID: 2800000, guid: 7ff93a71ce7cf10439fdd8ba5dd4d774, type: 3}
+  AsteriskCrossedTexture: {fileID: 2800000, guid: 092533b3b39958b4184c2346388f42f5, type: 3}
   addQuestionBarTemplate: {fileID: 9197481963319205126, guid: c099ff1d780c64e4193d328bc2f6bc01, type: 3}
 --- !u!114 &5822816329706134409
 MonoBehaviour:
@@ -93,4 +96,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f111a50dbd62ff488411797261e1fe8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsViewerUI: 0

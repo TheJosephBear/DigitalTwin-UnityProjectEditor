@@ -8,7 +8,7 @@ public class SurveyQuestionUIEditorImage : SurveyQuestionUIEditor {
 
     public event Action<int, int, string> OnAnswerImageChanged;
     public event Action<int> OnAnswerAdded;
-    public event Action<int> OnAnswerRemoved; // Nejde na to tlaèítko kliknou tak zatím nemusíme implementit
+    public event Action<int, int> OnAnswerRemoved; // Nejde na to tlaèítko kliknou tak zatím nemusíme implementit
 
     public SurveyQuestionUIEditorImage(VisualElement root, int questionId, QuestionType questionType, List<SerializableViewPoint> viewPoints, SurveyUIBuilder uiBuilder)
         : base(root, questionId, questionType, viewPoints, uiBuilder) {
@@ -22,10 +22,13 @@ public class SurveyQuestionUIEditorImage : SurveyQuestionUIEditor {
             OnAnswerImageChanged?.Invoke(QuestionID, idx, imageId);
         };
 
+        answerUI.OnRemoveClicked += (idx) => DeleteAnswer(idx);
+
         return answerUI;
     }
 
     protected override void RegisterButtons() {
+        base.RegisterButtons();
         // Find the "add option" button (ensure this ID matches your UXML)
         var addOptionButton = _root.Q<Button>("add-option-button");
         if (addOptionButton != null) {
@@ -60,4 +63,27 @@ public class SurveyQuestionUIEditorImage : SurveyQuestionUIEditor {
         //    OnAnswerImageChanged?.Invoke(QuestionID, imageAnswer.AnswerIndex, imageId);
         }
     }
+
+    public void DeleteAnswer(int index) {
+        if (index < 0) return;
+
+        if (_otherAnswerUI != null && index == _otherAnswerUI.AnswerIndex) {
+            _optionsList.Remove(_otherAnswerUI.AnswerElement);
+            _otherAnswerUI = null;
+            OnAnswerRemoved?.Invoke(QuestionID, index);
+            return;
+        }
+
+        if (index >= _addedAnswers.Count) return;
+
+        var answer = _addedAnswers[index];
+
+        _optionsList.Remove(answer.AnswerElement);
+        _addedAnswers.RemoveAt(index);
+
+        RecalculateAnswerIndices();
+
+        OnAnswerRemoved?.Invoke(QuestionID, index);
+    }
+
 }

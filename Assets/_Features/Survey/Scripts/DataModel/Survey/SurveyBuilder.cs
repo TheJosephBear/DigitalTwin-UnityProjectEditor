@@ -5,6 +5,8 @@ using System.Linq;
 using System;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
+using static OnlineMapsHereRoutingAPIResult;
+using Unity.VisualScripting;
 
 namespace SurveySystem {
     /// <summary>
@@ -29,6 +31,10 @@ namespace SurveySystem {
 
         public void SetSurveyName(string name) {
             _activeSurvey.Name = name;
+        }
+
+        public void SetSurveyDescription(string text) {
+            _activeSurvey.Description = text;
         }
 
         public QuestionBase AddNewQuestion(QuestionType type) {
@@ -72,6 +78,11 @@ namespace SurveySystem {
         public void SetQuestionTitle(int questionId, string text) {
             QuestionBase question = _activeSurvey.GetQuestionById(questionId);
             question.Title = text;
+        }
+
+        public void SetQuestionRequired(int questionID, bool isRequired) {
+            QuestionBase question = _activeSurvey.GetQuestionById(questionID);
+            question.IsRequired = isRequired;
         }
 
         public void SetQuestionDescription(string description) {

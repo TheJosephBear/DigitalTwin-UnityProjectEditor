@@ -11,6 +11,10 @@ using System.Collections;
 public class SurveyUIBuilder : MonoBehaviour {
 
     public QuestionUIMapping questionUIMapping;
+    [SerializeField]
+    public VisualTreeAsset GridCollumnTemplate;
+    public Texture AsteriskTexture;
+    public Texture AsteriskCrossedTexture;
 
     [SerializeField]
     private VisualTreeAsset addQuestionBarTemplate;
@@ -50,7 +54,11 @@ public class SurveyUIBuilder : MonoBehaviour {
     /// and one trailing bar after the last addedQuestion: [bar, q0, bar, q1, bar, ..., barN].
     /// </summary>
     public void RefreshAddQuestionBars() {
-        _scrollViewContent.Clear();
+        // _scrollViewContent.Clear();
+        // Clear scroll view content except for the first item (the title item)
+        for (int i = _scrollViewContent.childCount - 1; i > 0; i--) {
+            _scrollViewContent.RemoveAt(i);
+        }
 
         if (addQuestionBarTemplate == null) {
             Debug.LogWarning("addQuestionBarTemplate is not assigned on SurveyBuildingUI.");

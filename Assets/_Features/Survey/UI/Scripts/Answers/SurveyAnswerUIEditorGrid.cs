@@ -18,7 +18,7 @@ public class SurveyAnswerUIEditorGrid : SurveyAnswerUIEditor{
     }
 
     private void RegisterTextField() {
-        var textField = _answerElement.Q<TextField>();
+        var textField = _answerElement.Q<TextField>("column-title");
         if (textField == null) return;
 
         textField.RegisterValueChangedCallback(evt =>

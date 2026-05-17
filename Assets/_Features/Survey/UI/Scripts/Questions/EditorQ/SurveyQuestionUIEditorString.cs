@@ -33,6 +33,7 @@ public class SurveyQuestionUIEditorString : SurveyQuestionUIEditor {
     #region Init
 
     protected override void RegisterButtons() {
+        base.RegisterButtons();
         var addOptionButton = _root.Q<Button>("add-option-button");
         if (addOptionButton != null) {
             addOptionButton.clicked += () =>

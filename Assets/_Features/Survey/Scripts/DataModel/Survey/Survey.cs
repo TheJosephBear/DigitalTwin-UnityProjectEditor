@@ -6,6 +6,7 @@ using System.Linq;
 namespace SurveySystem {
     public class Survey {
         public string Name { get; set; }
+        public string Description { get; set; }
 
         private List<QuestionBase> _questions = new();
         public QuestionBase ActiveQuestion { get; private set; }
@@ -74,12 +75,14 @@ namespace SurveySystem {
 
             return new SurveySerializable {
                 Name = Name,
+                Description = Description,
                 Questions = questionsSerialized
             };
         }
 
         public void Deserialize(SurveySerializable serializable) {
             Name = serializable.Name;
+            Description = serializable.Description;
             foreach (SerializableQuestion q in serializable.Questions) {
                 _questions.Add(QuestionBase.CreateAndDeserialize(q));
             }
@@ -91,6 +94,7 @@ namespace SurveySystem {
     [Serializable]
     public class SurveySerializable {
         public string Name;
+        public string Description;
         [SerializeReference]
         public List<SerializableQuestion> Questions;
     }

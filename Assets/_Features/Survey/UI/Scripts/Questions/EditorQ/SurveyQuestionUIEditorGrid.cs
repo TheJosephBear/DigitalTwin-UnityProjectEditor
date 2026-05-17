@@ -42,6 +42,8 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
     }
 
     protected override void RegisterButtons() {
+        base.RegisterButtons();
+
         _rowContainer = _root.Q<VisualElement>("options-list");
         _columnContainer = _root.Q<VisualElement>("col-headers");
 
@@ -94,7 +96,7 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
         if (_answerTemplate == null) {
             Debug.LogError("Answer template is null!");
         }
-        var element = CreateTextField();
+        var element = _surveyUIBuilder.GridCollumnTemplate.CloneTree(); // CreateTextField();
         _columnContainer.Add(element);
 
         SurveyAnswerUIEditorGrid column = new SurveyAnswerUIEditorGrid(element, _columns.Count, this, false);

@@ -8,6 +8,7 @@ namespace SurveySystem {
         public int Id { get; protected set; }
         public string Title { get; set; }
         public string Description { get; set; }
+        public bool IsRequired { get; set; }
         public string ViewPointId { get; protected set; }
         public string ImageID { get; protected set; }
         public QuestionType QuestionType { get; protected set; }
@@ -24,6 +25,7 @@ namespace SurveySystem {
         public QuestionBase(int ID, QuestionType type) {
             Id = ID;
             QuestionType = type;
+            IsRequired = false;
         }
 
         public virtual AnswerBase AddNewAnswer() {
@@ -94,6 +96,7 @@ namespace SurveySystem {
                 Id = Id,
                 Title = Title,
                 Description = Description,
+                IsRequired = IsRequired,
                 ViewPointId = ViewPointId,
                 ImageId = ImageID,
                 QuestionType = QuestionType,
@@ -120,6 +123,7 @@ namespace SurveySystem {
         public virtual QuestionBase Deserialize(SerializableQuestion serializable) {
             Title = serializable.Title;
             Description = serializable.Description;
+            IsRequired = IsRequired;
             ViewPointId = serializable.ViewPointId;
             ImageID = serializable.ImageId;
             foreach (AnswerBase answer in serializable.Answers) {
@@ -135,6 +139,7 @@ namespace SurveySystem {
         public int Id;
         public string Title;
         public string Description;
+        public bool IsRequired;
         public string ViewPointId;
         public string ImageId;
         public QuestionType QuestionType; 

@@ -35,7 +35,25 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         _surveyBuilder = surveyBuilder;
         _surveyManager = manager;
 
+        RegisterBaseSurveyInputs();
+    }
 
+    void RegisterBaseSurveyInputs() {
+        var titleField = _root.Q<TextField>("question-title");
+        var descField = _root.Q<TextField>("question-description");
+
+        if (titleField == null || descField == null) {
+            print("Title or description field not found.");
+            return;
+        }
+
+        titleField.RegisterValueChangedCallback(evt => {
+            _surveyBuilder.SetSurveyName(evt.newValue);
+        });
+
+        descField.RegisterValueChangedCallback(evt => {
+            _surveyBuilder.SetSurveyDescription(evt.newValue);
+        });
     }
 
     #region Input handling
@@ -81,6 +99,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
             editorUI.OnUploadImage += HandleImageUpload;
             editorUI.OnViewpointSelected += HandleQuestionViewPointSelected;
             editorUI.OnMoveAnswer += HandleAnswerMoved;
+            editorUI.OnToggleRequired += HandleRequiredChange;
         }
 
         if (addedQuestionUI is SurveyQuestionUIEditorGrid gridUI) {
@@ -102,9 +121,14 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         } else if (addedQuestionUI is SurveyQuestionUIEditorImage imageUI) {
             imageUI.OnAnswerImageChanged += HandleImageQuestionAnswerImageUpload;
             imageUI.OnAnswerAdded += HandleAddAnswerImage;
+            imageUI.OnAnswerRemoved += HandleAnswerRemoved;
         }
 
         return addedQuestionUI;
+    }
+
+    void HandleRequiredChange(int questionID, bool isRequired) {
+        _surveyBuilder.SetQuestionRequired(questionID, isRequired);
     }
 
     void AddRow(int questionID, SurveyAnswerUIEditorGrid answerUI) {
