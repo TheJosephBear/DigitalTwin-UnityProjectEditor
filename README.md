@@ -9,5 +9,4 @@ For the runtime to work you need to have the Digital twin server running.
 
 ## Links to associated projects
 [Digital twin - server](https://github.com/TheJosephBear/DigitalTwin) <br>
-[Digital twin - client](https://github.com/TheJosephBear/DigitalTwin-Client) <br>
-[Digital twin - viewer](https://github.com/TheJosephBear/DigitalTwin-UnityProjectViewer) <br>
+[Digital twin - client](https://github.com/TheJosephBear/DigitalTwin-Client)
