@@ -243,7 +243,11 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         if (_surveyUIBuilder == null) _surveyUIBuilder = GetComponent<SurveyUIBuilder>();
 
         Survey survey = _surveyBuilder.GetActiveSurvey();
-        // set title once we have the field
+        // set title
+        var titleField = _root.Q<TextField>("question-title");
+        var descField = _root.Q<TextField>("question-description");
+        titleField.value = survey.Name;
+        descField.value = survey.Description;
 
         _surveyUIBuilder.ClearScrollviewContent();
 
@@ -253,6 +257,9 @@ public class SurveyUIControllerEditor : MonoBehaviour {
             questionUI.SetTitle(question.Title);
             questionUI.SetDescription(question.Description);
             questionUI.ImageID = question.ImageID;
+
+            print("Calling required: " + question.IsRequired);
+            (questionUI as SurveyQuestionUIEditor).SetRequired(question.IsRequired);
             // Set selected viewpoint
             if (MainManagerBase.Instance != null) {
                 ViewPoint vp = MainManagerBase.Instance.ViewManager.GetViewPointByID(question.ViewPointId);

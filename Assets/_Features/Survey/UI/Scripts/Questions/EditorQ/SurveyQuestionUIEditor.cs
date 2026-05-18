@@ -3,7 +3,6 @@ using UnityEngine.UIElements;
 using SurveySystem;
 using System.Collections.Generic;
 using System;
-using UnityEditor.VersionControl;
 
 public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
 
@@ -122,6 +121,7 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
     }
 
     public void SetRequired(bool required) {
+        Debug.Log("Setting required to " + required);
         // Inner flag
         _isRequired = required;
 

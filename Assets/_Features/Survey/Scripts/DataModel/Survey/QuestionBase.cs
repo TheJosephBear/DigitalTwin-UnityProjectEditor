@@ -25,7 +25,6 @@ namespace SurveySystem {
         public QuestionBase(int ID, QuestionType type) {
             Id = ID;
             QuestionType = type;
-            IsRequired = false;
         }
 
         public virtual AnswerBase AddNewAnswer() {
@@ -123,7 +122,7 @@ namespace SurveySystem {
         public virtual QuestionBase Deserialize(SerializableQuestion serializable) {
             Title = serializable.Title;
             Description = serializable.Description;
-            IsRequired = IsRequired;
+            IsRequired = serializable.IsRequired;
             ViewPointId = serializable.ViewPointId;
             ImageID = serializable.ImageId;
             foreach (AnswerBase answer in serializable.Answers) {

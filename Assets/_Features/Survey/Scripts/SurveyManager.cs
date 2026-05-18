@@ -108,8 +108,6 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
 
     public void DeserializeSurvey() {
         ServerCommunicationManager.Instance.StartSurveyDownload(ProjectManager.Instance.SelectedProject.ProjectName, (success, data) => {
-            print("We did the " + success);
-            print("We did the with the " + data);
             _surveyJsonData = data;
             if (_surveyJsonData != null) {
                 _flowManager.DeserializeSurvey(_surveyJsonData);
