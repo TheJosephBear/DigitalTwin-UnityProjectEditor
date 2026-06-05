@@ -6,6 +6,8 @@ using static SimpleFileBrowser.FileBrowser;
 public class AuthorizationManager : Singleton<AuthorizationManager> {
 
     public SceneType projectListScene;
+    public AuthorizationUI AuthorizationUI;
+
 
     protected override void Awake() {
         base.Awake();
@@ -18,9 +20,8 @@ public class AuthorizationManager : Singleton<AuthorizationManager> {
             if (successBool) {
                 // Unload login scene and load project list
                 StartCoroutine(GoToProjectList());
-                UIManager.Instance.HideUI(UIType.Login);
             } else {
-                PopUp.Instance.ShowPopUpWindow("Jméno nebo heslo není správně.");
+                MessageDisplayManager.Instance.ShowMessage("Jméno nebo heslo není správně.");
             }
         });
     }
@@ -31,7 +32,6 @@ public class AuthorizationManager : Singleton<AuthorizationManager> {
                 Debug.Log("Valid session found, proceeding to project list.");
                 // Unload login scene and load project list
                 StartCoroutine(GoToProjectList());
-                UIManager.Instance.HideUI(UIType.Login);
             } else {
                 Debug.Log("No valid session found, showing login screen.");
             }
@@ -41,7 +41,7 @@ public class AuthorizationManager : Singleton<AuthorizationManager> {
     public void Logout() {
         ServerCommunicationManager.Instance.Logout((successBool, message) => {
             if (successBool) {
-                UIManager.Instance.ShowUI(UIType.Login);
+           //     AuthorizationUI.GoToLogin();
                 SceneLoadingManager.Instance.LoadSceneAsync(SceneType.Login, 0f);
                 var unloadTask = SceneLoadingManager.Instance.UnLoadSceneAsync(SceneType.ProjectList); // No need to wait for this
             } else {
@@ -53,11 +53,10 @@ public class AuthorizationManager : Singleton<AuthorizationManager> {
     public void Register(string username, string password) {
         ServerCommunicationManager.Instance.Register(username, password, (successBool, message) => {
             if (successBool) {
-                UIManager.Instance.ShowUI(UIType.Login);
-                UIManager.Instance.HideUI(UIType.Register);
-                PopUp.Instance.ShowPopUpWindow("Registrace proběhla úspěšně.");
+                AuthorizationUI.GoToLogin();
+                MessageDisplayManager.Instance.ShowMessage("Registrace proběhla úspěšně.");
             } else {
-                PopUp.Instance.ShowPopUpWindow("Registrace selhala.");
+                MessageDisplayManager.Instance.ShowMessage("Registrace selhala.");
             }
         });
     }
@@ -66,7 +65,6 @@ public class AuthorizationManager : Singleton<AuthorizationManager> {
         var loadTask = SceneLoadingManager.Instance.LoadSceneAsync(projectListScene, 0f);
         yield return new WaitUntil(() => loadTask.IsCompleted);
         if (loadTask.Result) {
-            UIManager.Instance.HideUI(UIType.Login);
             var unloadTask = SceneLoadingManager.Instance.UnLoadSceneAsync(SceneType.Login); // No need to wait for this
         } else {
             Debug.LogError("Failed to load project list scene.");
