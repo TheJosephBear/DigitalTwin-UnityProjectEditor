@@ -77,6 +77,7 @@ public class ProjectListUI : UIBehaviour {
     }
 
     public void OnLogout() {
+        UIManager.Instance.HideUI(UIType.ProjectsList);
         AuthorizationManager.Instance.Logout();
     }
 
