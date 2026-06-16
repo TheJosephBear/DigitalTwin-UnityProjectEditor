@@ -8,7 +8,6 @@ public class AuthorizationManager : Singleton<AuthorizationManager> {
     public SceneType projectListScene;
     public AuthorizationUI AuthorizationUI;
 
-
     protected override void Awake() {
         base.Awake();
         // Try loggin in with saved session (if exists)

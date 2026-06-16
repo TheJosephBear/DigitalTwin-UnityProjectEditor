@@ -50,7 +50,7 @@ public class ProjectManager : Singleton<ProjectManager> {
         ServerCommunicationManager.Instance.StartDataDownload(
             projectName,
             async (successful, data) => {
-          //      print("data is: " + data);
+                //      print("data is: " + data);
 
                 success = successful && !string.IsNullOrEmpty(data);
 
@@ -115,10 +115,37 @@ public class ProjectManager : Singleton<ProjectManager> {
         });
     }
 
+    public void EditProject(string oldName, string newName, string description, string imageID, Action onCompleted) {
+        ServerCommunicationManager.Instance.EditProject(oldName, newName, description, imageID, (success, response) => {
+            if (!success) {
+                PopUp.Instance.ShowPopUpWindow("Failed " + response);
+            }
+
+            onCompleted?.Invoke();
+        });
+    }
+
+    public void RenameProject(ProjectMetadata projectMetadata, string userInput, Action onCompleted) {
+        if (string.IsNullOrEmpty(userInput)) {
+            PopUp.Instance.ShowPopUpWindow("Input was cancelled or empty.");
+            return;
+        }
+
+        ServerCommunicationManager.Instance.EditProjectName(projectMetadata.projectName, userInput, (success, response) => {
+            if (!success) {
+                PopUp.Instance.ShowPopUpWindow("Failed " + response);
+            }
+
+            onCompleted?.Invoke();
+        });
+    }
+
     public void DuplicateProject(ProjectMetadata projectMetadata, Action onCompleted) {
         ServerCommunicationManager.Instance.DuplicateProject(projectMetadata.projectName, (success, response) => {
             if (!success) {
-                PopUp.Instance.ShowPopUpWindow("Duplikování projektu selhalo: " + response);
+                MessageDisplayManager.Instance.ShowMessage("Duplikování projektu selhalo: " + response);
+            } else {
+                MessageDisplayManager.Instance.ShowMessage("Projekt duplikován!");
             }
 
             onCompleted?.Invoke();
@@ -128,9 +155,9 @@ public class ProjectManager : Singleton<ProjectManager> {
     public void DeleteProject(ProjectMetadata projectMetadata, Action onCompleted) {
         ServerCommunicationManager.Instance.DeleteProject(projectMetadata.projectName, (success, response) => {
             if (!success) {
-                PopUp.Instance.ShowPopUpWindow("Projekt se nepodařilo smazat! " + response);
+                MessageDisplayManager.Instance.ShowMessage("Projekt se nepodařilo smazat! " + response);
             } else {
-                PopUp.Instance.ShowPopUpWindow("Projekt smazán!");
+                MessageDisplayManager.Instance.ShowMessage("Projekt smazán!");
             }
 
             onCompleted?.Invoke();

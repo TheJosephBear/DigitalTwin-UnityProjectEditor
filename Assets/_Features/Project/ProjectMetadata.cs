@@ -12,5 +12,7 @@ public class ProjectMetadata {
 
     public string projectId;
     public string projectName;
+    public string projectDescription;
+    public string projectImageID;
 
 }

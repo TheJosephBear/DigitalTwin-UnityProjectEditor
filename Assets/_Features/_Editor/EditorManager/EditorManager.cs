@@ -38,6 +38,7 @@ public class EditorManager : MainManagerBase {
         AssetManager.Instance.ClearManager();
         MapManager.ClearEverything();
         ViewManager.ClearEverything();
+        ImageManager.Instance.ClearManager();
     }
 }
 

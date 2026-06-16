@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class ProjectListInitializer : MonoBehaviour, Iinitializer {
     public void Initialize() {
-        UIManager.Instance.ShowUI(UIType.ProjectsList);
-
+        FindAnyObjectByType<ProjectListUINew>().Initialize();
     }
 
 

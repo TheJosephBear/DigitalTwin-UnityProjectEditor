@@ -7,6 +7,8 @@ using UnityEngine;
 public class Project {
     public string ProjectID { get; private set; }
     public string ProjectName { get; private set; }
+    public string ProjectDescription { get; private set; }
+    public string ProjectImageID { get; private set; }
     public SerializableProject SerializableProject { get; private set; }
 
     public void CreateSerializableProjectFromJson(string json) {
@@ -16,14 +18,16 @@ public class Project {
     }
 }
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// SERIALIZABLES MUST HAVE LOWERCASE FIRST LETTER BECAUSE OF THE WAY JSON UTILITY HANDLES IT
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// SERIALIZABLES MUST HAVE LOWERCASE FIRST LETTER VARIABLES BECAUSE OF THE WAY JSON UTILITY HANDLES IT
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 [Serializable]
 public class SerializableProject {
     public string projectId;
     public string projectName;
+    public string projectDescription;
+    public string projectImageID;
     public SerializableMapManager serializableMapManager;
     public List<SerializableModelAsset> serializableModelAssets;
     public List<serializableTextureAsset> serializableTextureAssets;

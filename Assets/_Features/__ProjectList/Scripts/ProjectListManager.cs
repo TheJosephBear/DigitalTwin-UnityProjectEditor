@@ -8,16 +8,16 @@ using System.Text.RegularExpressions;
 public class ProjectListManager : Singleton<ProjectListManager> {
 
     public GameObject ProjectExportUIReff;
-    ProjectListUI _ui;
+    ProjectListUINew _ui;
 
     void Awake() {
         base.Awake();
 
-        _ui = FindAnyObjectByType<ProjectListUI>();
+        _ui = FindAnyObjectByType<ProjectListUINew>();
     }
 
     public void RefreshProjectList() {
-        _ui.RefreshProjectList();
+        _ui.RefreshProjectList(() => { });
     }
 
     public void GetProjectMetadataList(System.Action<List<ProjectMetadata>> onFinished) {
@@ -63,25 +63,37 @@ public class ProjectListManager : Singleton<ProjectListManager> {
 
     public void CreateNewProject() {
         ProjectManager.Instance.CreateNewProject(() => {
-            _ui.RefreshProjectList();
+            RefreshProjectList();
         });
     }
 
     public void RenameProject(ProjectMetadata projectMetadata) {
         ProjectManager.Instance.RenameProject(projectMetadata, () => {
-            _ui.RefreshProjectList();
+            RefreshProjectList();
+        });
+    }
+
+    public void EditProject(string oldName, string newName, string description, string imageID, System.Action onCompleted) {
+        ProjectManager.Instance.EditProject(oldName, newName, description, imageID, () => {
+            onCompleted();
+        });
+    }
+
+    public void RenameProject(ProjectMetadata projectMetadata, string text) {
+        ProjectManager.Instance.RenameProject(projectMetadata, text, () => {
+            _ui.RefreshProjectList(() => { });
         });
     }
 
     public void DuplicateProject(ProjectMetadata projectMetadata) {
         ProjectManager.Instance.DuplicateProject(projectMetadata, () => {
-            _ui.RefreshProjectList();
+            RefreshProjectList();
         });
     }
 
     public void DeleteProject(ProjectMetadata projectMetadata) {
         ProjectManager.Instance.DeleteProject(projectMetadata, () => {
-            _ui.RefreshProjectList();
+            RefreshProjectList();
         });
     }
 

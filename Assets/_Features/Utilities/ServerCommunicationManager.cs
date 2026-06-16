@@ -87,7 +87,19 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
         Dictionary<string, string> formData = new Dictionary<string, string>
         {
             { "oldProjectName", oldName },
-            { "newProjectName", newName }
+            { "newProjectName", newName },
+        };
+        StartCoroutine(PostRequest(url, formData, callback));
+    }
+
+    public void EditProject(string oldName, string newName, string description, string imageID, System.Action<bool, string> callback) {
+        string url = $"{serverUrl}/editProject";
+        Dictionary<string, string> formData = new Dictionary<string, string>
+        {
+            { "oldProjectName", oldName },
+            { "projectName", newName },
+            { "projectDescription", description },
+            { "projectImageID", imageID }
         };
         StartCoroutine(PostRequest(url, formData, callback));
     }
@@ -203,6 +215,20 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
         StartCoroutine(UploadFileRequest(url, path, fileName, projectName, assetHash));
     }
 
+    public void DownloadPreviewImageFromServer(string projectName, System.Action<byte[]> callback) {
+        string url = $"{serverUrl}/download_preview_image" +
+                     $"?project_name={UnityWebRequest.EscapeURL(projectName)}";
+        // print(url);
+        StartCoroutine(DownloadFileRequest(url, callback));
+    }
+
+    // Handled using your standard internal UploadFileRequest setup!
+    public void UploadPreviewImageToServer(string path, string fileName, string projectName, string assetHash) {
+        string url = $"{serverUrl}/upload_preview_image";
+        StartCoroutine(UploadFileRequest(url, path, fileName, projectName, assetHash));
+    }
+
+
     public void ListFilesForAsset(string projectName, string assetHash, System.Action<List<string>> callback) {
         string url =
             $"{serverUrl}/list_model_files" +
@@ -308,7 +334,7 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
         if (www.result == UnityWebRequest.Result.Success) {
             callback(www.downloadHandler.data);
         } else {
-            Debug.LogError("Error downloading file: " + www.error);
+            Debug.Log("Error downloading file: " + www.error);
             callback(null);
         }
     }
