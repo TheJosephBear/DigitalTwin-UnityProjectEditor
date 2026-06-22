@@ -3,15 +3,27 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class MapManager : MonoBehaviour {
+public class MapManager : Singleton<MapManager> {
 
+    public GameObject MapUIPrefab;
+    public Vector3 mapSpawnPosition;
     MapVariant _baseMap;
     List<MapVariant> _mapVariants = new List<MapVariant>();
-    public Vector3 mapSpawnPosition;
+    GameObject _mapUIInstance;
 
     // Do budoucna nastavovat spawn position po posunu v geo mapě
     private void Update() {
         if(_baseMap!=null) mapSpawnPosition = _baseMap.transform.position;
+    }
+
+    public void ToggleMapUI(bool toggleOn) {
+        if (_mapUIInstance == null && toggleOn == true) {
+            _mapUIInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(MapUIPrefab);
+            _mapUIInstance.GetComponent<MapUI>().Initialize();
+        } else {
+            _mapUIInstance.SetActive(toggleOn);
+            if (toggleOn)  _mapUIInstance.GetComponent<MapUI>().Initialize();
+        }
     }
 
     public void SetBaseMapModel(ModelAsset newMap) {
@@ -26,11 +38,33 @@ public class MapManager : MonoBehaviour {
         SpawnMap();
     }
 
+    public void SetMapName(MapVariant map, string name) {
+        map.Name = name;
+    }
+
+    public void SetMapOffset(MapVariant map, Vector3 positionOffset, Vector3 rotationOffset) {
+        map.PositionOffset = positionOffset;
+        map.RotationOffset = rotationOffset;
+    }
+
     public void UploadMapVariant(ModelAsset newMap) {
         MapVariant addedMap = newMap.InstantiateModel(mapSpawnPosition).AddComponent<MapVariant>();
         addedMap.ModelAsset = newMap;
         addedMap.Name = newMap.FileName;
         _mapVariants.Add(addedMap);
+    }
+
+    public void UploadMapVariantAgain(MapVariant oldMap, ModelAsset newModel) {
+       
+    }
+
+    public void RemoveMapVariant(MapVariant map) {
+        _mapVariants.Remove(map);
+        Destroy(map.gameObject);
+    }
+
+    public void EnterVariantAdjusting(MapVariant map) {
+        print("Entering adjusting thingie.");
     }
 
     public void SpawnMap() {

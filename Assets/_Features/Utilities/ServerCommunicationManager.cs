@@ -222,7 +222,6 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
         StartCoroutine(DownloadFileRequest(url, callback));
     }
 
-    // Handled using your standard internal UploadFileRequest setup!
     public void UploadPreviewImageToServer(string path, string fileName, string projectName, string assetHash) {
         string url = $"{serverUrl}/upload_preview_image";
         StartCoroutine(UploadFileRequest(url, path, fileName, projectName, assetHash));

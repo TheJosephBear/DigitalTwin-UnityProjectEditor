@@ -12,7 +12,8 @@ public class EditorHUDui : UIBehaviour {
     #region ButtonFunctions
 
     public void OnMapUpload() {
-        UIManager.Instance.ShowUI(UIType.MapUI);
+        // UIManager.Instance.ShowUI(UIType.MapUI);
+        MapManager.Instance.ToggleMapUI(true);
     }
 
     public void OnGeoMap() {

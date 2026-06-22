@@ -231,7 +231,11 @@ public class SurveyUIControllerEditor : MonoBehaviour {
     }
 
     public void HandleExitPressed() {
-        _surveyManager.ExitSurvey();
+        PopUp.Instance.AreYouSurePopUp((exit) => {
+            if (exit) {
+                _surveyManager.ExitSurvey();
+            }
+        });
     }
 
     #endregion

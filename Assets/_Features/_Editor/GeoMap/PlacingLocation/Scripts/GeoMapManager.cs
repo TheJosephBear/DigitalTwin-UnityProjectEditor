@@ -30,10 +30,14 @@ public class GeoMapManager : MonoBehaviour {
         EditorManager.Instance.ChangeState(AppState.Freecam);
     }
 
-    public void LeaveToMenu() {
+    public void LeaveToMenu(Action<bool> onComplete = null) {
         if(MainManagerBase.Instance is EditorManager editorMan) {
-            editorMan.ExitEditor(save: false);
+            editorMan.ExitEditor((exitSuccess) => {
+                onComplete.Invoke(true);
+            }, save: false);
         }
+
+        onComplete.Invoke(false);
         // TO IMPLEMENT PROPERLY
 
         //UIManager.Instance.HideUI(UIType.GeoLocalizationUI);

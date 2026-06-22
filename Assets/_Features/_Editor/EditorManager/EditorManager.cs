@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +13,14 @@ public class EditorManager : MainManagerBase {
         ProjectManager.Instance.SaveProject(ProjectSerializer.SerializeProject());
     }
 
-    public void ExitEditor(bool save = true) {
-        StartCoroutine(ExitEditorCoroutine(save));
+    public void ExitEditor(Action<bool> onComplete = null, bool save = true) {
+        PopUp.Instance.AreYouSurePopUp((exit) => {
+            if (exit) {
+                onComplete.Invoke(true);
+                StartCoroutine(ExitEditorCoroutine(save));
+            }
+        });
+        onComplete.Invoke(false);
     }
 
     IEnumerator ExitEditorCoroutine(bool save) {

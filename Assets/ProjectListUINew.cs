@@ -203,8 +203,6 @@ public class ProjectListUINew : MonoBehaviour {
 
         // Image
         TextureAsset textureAsset = ImageManager.Instance.GetPreviewAssetByID(_projectInModal.projectImageID);
-        print(textureAsset.name);
-        print(textureAsset.Texture);
         if (textureAsset != null) ClassicImage.texture = textureAsset.Texture;
     }
 
@@ -219,8 +217,6 @@ public class ProjectListUINew : MonoBehaviour {
 
         // Image
         TextureAsset textureAsset = ImageManager.Instance.GetPreviewAssetByID(_projectInModal.projectImageID);
-        print(textureAsset.name);
-        print(textureAsset.Texture);
         if (textureAsset != null) EditingImage.texture = textureAsset.Texture;
     }
 
