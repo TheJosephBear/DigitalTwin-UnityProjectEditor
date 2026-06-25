@@ -355,7 +355,7 @@ public class TextureAsset : MonoBehaviour {
     public string FileName;
     public string FileHash;
     public Texture2D Texture;
-    public string LocalPersistentPath; // Add this
+    public string LocalPersistentPath; 
 }
 
 [System.Serializable]

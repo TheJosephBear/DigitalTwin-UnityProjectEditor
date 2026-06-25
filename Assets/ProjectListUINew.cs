@@ -51,9 +51,10 @@ public class ProjectListUINew : MonoBehaviour {
         ProjectListManager.Instance.GetProjectMetadataList(list => {
             foreach (ProjectMetadata project in list) {
                 ImageManager.Instance.DownloadPreviewImage(project.projectName, success => {
+                    print($"Refresh called. Downloading preview image for: {project.projectName}, success: {success}");
                     TextureAsset previewAsset = null;
                     if (success) {
-                        previewAsset = ImageManager.Instance.GetPreviewAssetByID(project.projectImageID);
+                        previewAsset = ImageManager.Instance.GetPreviewAssetByProject(project.projectName);
                     }
                     AddProjectButtonToList().Initialize(project: project, UIScript: this, textureAsset: previewAsset);
                     onCompleted();
@@ -202,7 +203,7 @@ public class ProjectListUINew : MonoBehaviour {
         ClassicDescriptionRef.text = _projectInModal.projectDescription;
 
         // Image
-        TextureAsset textureAsset = ImageManager.Instance.GetPreviewAssetByID(_projectInModal.projectImageID);
+        TextureAsset textureAsset = ImageManager.Instance.GetPreviewAssetByProject(_projectInModal.projectName);
         if (textureAsset != null) ClassicImage.texture = textureAsset.Texture;
     }
 
@@ -216,7 +217,7 @@ public class ProjectListUINew : MonoBehaviour {
         EditingDescriptionInput.text = _projectInModal.projectDescription;
 
         // Image
-        TextureAsset textureAsset = ImageManager.Instance.GetPreviewAssetByID(_projectInModal.projectImageID);
+        TextureAsset textureAsset = ImageManager.Instance.GetPreviewAssetByProject(_projectInModal.projectName);
         if (textureAsset != null) EditingImage.texture = textureAsset.Texture;
     }
 

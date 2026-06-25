@@ -13,7 +13,7 @@ public class EditorManager : MainManagerBase {
         ProjectManager.Instance.SaveProject(ProjectSerializer.SerializeProject());
     }
 
-    public void ExitEditor(Action<bool> onComplete = null, bool save = true) {
+    public void ExitEditor(Action<bool> onComplete, bool save = true) {
         PopUp.Instance.AreYouSurePopUp((exit) => {
             if (exit) {
                 onComplete.Invoke(true);

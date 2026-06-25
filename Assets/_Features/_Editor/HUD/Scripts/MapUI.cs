@@ -38,7 +38,7 @@ public class MapUI : UIBehaviour {
         // Variants
         Utilities.DestroyAllGameObjects(_modelVariantItems);
         _modelVariantItems.Clear();
-        foreach(MapVariant variant in MapManager.Instance.GetVariants()) {
+        foreach(MapVariant variant in MapManager.Instance.GetVariantsWithoutBase()) {
             ModelItem variantModelItem = Instantiate(VariantMapItemPrefab, VariantItemParentRef.transform).GetComponent<ModelItem>();
             _modelVariantItems.Add(variantModelItem);
             variantModelItem.Initialize(this, variant);
