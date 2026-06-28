@@ -9,7 +9,7 @@ public class ModelAsset : MonoBehaviour {
     /// When serializing instantiated objects in scene they will refference only the ID of the model.
     /// </summary>
 
-    public string FileHash { get; set; }
+    public string FileHash;
     public GameObject ModelGameObject { get; private set; }
     public string FileName;
 

@@ -90,6 +90,9 @@ public class AssetManager : Singleton<AssetManager> {
         _assets.Add(modelAsset);
         newAssetGo.SetActive(false);
 
+        print("Created asset with: "+ modelAsset.FileName);
+        print("Created asset with: "+ modelAsset.FileHash);
+
         return modelAsset;
     }
 
@@ -99,6 +102,14 @@ public class AssetManager : Singleton<AssetManager> {
         }
         print("modelAsset with fileHash " + fileHash + " doesn't exist.");
         return null;
+    }
+
+    public void DestroyAsset(ModelAsset modelAsset) {
+        print("Trying to destroy model with hash: " + modelAsset.FileHash);
+        ModelAsset assetToRemove = FindModelAssetByFileHash(modelAsset.FileHash);
+        _assets.Remove(assetToRemove);
+        Destroy(assetToRemove.gameObject);
+        Destroy(modelAsset.gameObject);
     }
 
     public void ClearManager() {
@@ -198,8 +209,7 @@ public class AssetManager : Singleton<AssetManager> {
     }
 
     IEnumerator DownloadAssetCoroutine(string assetHash, string projectName, System.Action<ModelAsset> onComplete) {
-
-        // get file list
+        // 1. Get the list of files associated with this asset hash
         List<string> fileNames = null;
         bool listDone = false;
 
@@ -214,25 +224,29 @@ public class AssetManager : Singleton<AssetManager> {
         yield return new WaitUntil(() => listDone);
 
         if (fileNames == null || fileNames.Count == 0) {
+            Debug.LogError($"No files found on server for asset hash: {assetHash}");
             onComplete(null);
             yield break;
         }
 
-        // download each file
-        foreach (string fileName in fileNames) {
-            bool fileDone = false;
+        // 2. Track remaining file downloads in a counter
+        int remainingDownloads = fileNames.Count;
+        bool downloadFailed = false;
 
+        foreach (string fileName in fileNames) {
             ServerCommunicationManager.Instance.DownloadFileFromServer(
                 projectName,
                 assetHash,
                 fileName,
                 data => {
                     if (data == null) {
-                        fileDone = true;
+                        Debug.LogError($"Failed to download file payload: {fileName}");
+                        downloadFailed = true;
+                        remainingDownloads--;
                         return;
                     }
 
-                    // decide type by extension
+                    // Process and cache the raw bytes based on file type
                     string ext = Path.GetExtension(fileName).ToLower();
 
                     if (ext == ".obj")
@@ -242,19 +256,36 @@ public class AssetManager : Singleton<AssetManager> {
                     else
                         FileLoadingManager.Instance.CreateTextureFromBytes(assetHash, fileName, data);
 
-                    fileDone = true;
+                    // Decrement counter once caching is secure
+                    remainingDownloads--;
                 });
-
-            yield return new WaitUntil(() => fileDone);
         }
 
-        // build GameObject
+        // 3. Wait cleanly until ALL files are written safely to memory
+        yield return new WaitUntil(() => remainingDownloads == 0);
+
+        if (downloadFailed) {
+            Debug.LogError($"Asset bundle construction aborted due to download failures: {assetHash}");
+            onComplete(null);
+            yield break;
+        }
+
+        // 4. Safe Zone: Construct the GameObject now that all matching files exist locally
         GameObject go = FileLoadingManager.Instance.BuildFromDownloadedFiles(assetHash);
+        if (go == null) {
+            Debug.LogError($"FileLoadingManager failed to construct model geometry for hash: {assetHash}");
+            onComplete(null);
+            yield break;
+        }
+
         go.transform.parent = AssetContainer.transform;
         go.SetActive(false);
 
         ModelAsset modelAsset = go.AddComponent<ModelAsset>();
         modelAsset.FileHash = assetHash;
+        // Set filename to the OBJ name so your UI layers display it accurately
+        string objFileName = fileNames.Find(f => f.ToLower().EndsWith(".obj")) ?? "Unknown.obj";
+        modelAsset.FileName = objFileName;
         modelAsset.SetModelGameObject(go);
 
         _assets.Add(modelAsset);

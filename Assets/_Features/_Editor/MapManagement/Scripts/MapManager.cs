@@ -28,12 +28,22 @@ public class MapManager : Singleton<MapManager> {
 
     public void SetBaseMapModel(ModelAsset newMap) {
         print("Setting base map model");
+        Transform originalTransform = null;
+        if (_baseMap != null) {
+            originalTransform = _baseMap.gameObject.transform;
+            AssetManager.Instance.DestroyAsset(_baseMap.GetComponent<ModelAsset>());
+            _baseMap = null;
+        }
         MapVariant addedMap = newMap.InstantiateModel(mapSpawnPosition).AddComponent<MapVariant>();
         addedMap.ModelAsset = newMap;
         addedMap.gameObject.SetActive(true);
         addedMap.IsBaseMap = true;
         addedMap.Name = newMap.FileName;
         //   addedMap.AddComponent<Movable>();
+        if (originalTransform != null) {
+            addedMap.gameObject.transform.position = originalTransform.position;
+            addedMap.gameObject.transform.rotation = originalTransform.rotation;
+        }
         _baseMap = addedMap;
         SpawnMap();
     }
@@ -55,7 +65,45 @@ public class MapManager : Singleton<MapManager> {
     }
 
     public void UploadMapVariantAgain(MapVariant oldMap, ModelAsset newModel) {
-       
+        if (oldMap == null || newModel == null) {
+            Debug.LogError("UploadMapVariantAgain failed: oldMap or newModel is null.");
+            return;
+        }
+
+        // 1. Find the index of the old variant in your tracking list
+        int index = _mapVariants.IndexOf(oldMap);
+        if (index == -1) {
+            Debug.LogError("The map variant you are trying to replace is not tracked in _mapVariants!");
+            return;
+        }
+
+        // 2. Capture the exact transform metrics of the old map variant
+        Vector3 oldPosition = oldMap.gameObject.transform.position;
+        Quaternion oldRotation = oldMap.gameObject.transform.rotation;
+        string oldCustomName = oldMap.Name;
+
+        // 3. Clean up the old asset tracking and destroy its GameObject
+        if (oldMap.ModelAsset != null) {
+            AssetManager.Instance.DestroyAsset(oldMap.ModelAsset);
+            Destroy(oldMap.gameObject);
+        }
+
+        // 4. Instantiate the replacement model at the exact same location coordinates
+        GameObject newGo = newModel.InstantiateModel(oldPosition);
+        newGo.gameObject.transform.rotation = oldRotation;
+
+        // 5. Construct and attach the new MapVariant properties
+        MapVariant replacementMap = newGo.AddComponent<MapVariant>();
+        replacementMap.ModelAsset = newModel;
+        replacementMap.IsBaseMap = false;
+
+        // Retain its old name if it was customized, otherwise fall back to new file name
+        replacementMap.Name = string.IsNullOrEmpty(oldCustomName) ? newModel.FileName : oldCustomName;
+
+        // 6. Swap the old reference with our new instance at the identical list index position
+        _mapVariants[index] = replacementMap;
+
+        print($"Successfully swapped map variant model to: {newModel.FileName}");
     }
 
     public void RemoveMapVariant(MapVariant map) {
