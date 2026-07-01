@@ -99,6 +99,19 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
         return await tcs.Task;
     }
 
+    public GameObject InstantiateObjectInScene(GameObject gameObject, Vector3 position, Quaternion rotation) {
+        GameObject go = Instantiate(gameObject, position, rotation);
+        SceneType scene = GetActiveScene();
+        SceneManager.MoveGameObjectToScene(go, SceneManager.GetSceneByName(scene.ToString()));
+        return go;
+    }
+
+    public GameObject InstantiateObjectInScene(GameObject gameObject, Vector3 position, Quaternion rotation, SceneType scene) {
+        GameObject go = Instantiate(gameObject, position, rotation);
+        SceneManager.MoveGameObjectToScene(go, SceneManager.GetSceneByName(scene.ToString()));
+        return go;
+    }
+
     /// <summary>
     /// Instantiates a GameObject at a specific position and moves it into a specified scene.
     /// </summary>

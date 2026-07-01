@@ -56,4 +56,5 @@ public enum AppState {
     MultiView,
     ViewActive,
     Survey,
+    VariantAdjusting,
 }

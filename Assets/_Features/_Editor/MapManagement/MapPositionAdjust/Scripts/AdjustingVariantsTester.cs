@@ -20,8 +20,8 @@ public class AdjustingVariantsTester : MonoBehaviour {
     }
     void OnFileSelectedMap(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
         if (files != null && files.Length > 0) {
-            EditorManager.Instance.MapManager.SetBaseMapModel(AssetManager.Instance.CreateNewAssetFromFile(files[0]));
-            EditorManager.Instance.MapManager.SetBaseMapPositionAndRotation(new Vector3(1, 1, 1), Quaternion.Euler(0, 45, 0));
+            MapManager.Instance.SetBaseMapModel(AssetManager.Instance.CreateNewAssetFromFile(files[0]));
+            MapManager.Instance.SetBaseMapPositionAndRotation(new Vector3(1, 1, 1), Quaternion.Euler(0, 45, 0));
             // Ask for variant
             FileBrowserManager.Instance.ShowLoadDialog(OnFileSelectedVar);
         } else {
@@ -31,8 +31,8 @@ public class AdjustingVariantsTester : MonoBehaviour {
     }
     void OnFileSelectedVar(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
         if (files != null && files.Length > 0) {
-            EditorManager.Instance.MapManager.UploadMapVariant(AssetManager.Instance.CreateNewAssetFromFile(files[0]));
-            MapVariantAdjustManager.Instance.EnterAdjusting();
+            MapManager.Instance.UploadMapVariant(AssetManager.Instance.CreateNewAssetFromFile(files[0]));
+            MapVariantAdjustManager.Instance.EnterAdjusting(MapManager.Instance.GetVariants()[0]);
         } else {
             PopUp.Instance.ShowPopUpWindow("Please select .obj file!");
         }

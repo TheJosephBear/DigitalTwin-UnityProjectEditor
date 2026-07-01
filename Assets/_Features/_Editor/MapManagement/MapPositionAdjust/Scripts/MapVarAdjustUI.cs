@@ -4,49 +4,30 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MapVarAdjustUI : UIBehaviour {
-    public TMP_Dropdown DropdownRefference;
+public class MapVarAdjustUI : MonoBehaviour { // Or UIBehaviour depending on your base class
 
     public TMP_InputField posXInput, posYInput, posZInput;
     public TMP_InputField rotXInput, rotYInput, rotZInput;
 
-    private List<MapVariant> _variantList;
-
-    public void FillDropdown(List<MapVariant> variants) {
-        _variantList = variants;
-
-        DropdownRefference.ClearOptions();
-        List<string> names = new List<string>();
-
-        foreach (var variant in variants)
-            names.Add(variant.Name);
-
-        DropdownRefference.AddOptions(names);
-        DropdownRefference.onValueChanged.AddListener(OnDropdownSelected);
-
-        if (variants.Count > 0) {
-            DropdownRefference.value = 0;
-            SelectVariant(variants[0]);
-        }
-    }
+    // This flag stops the infinite event loop
+    private bool _isUpdatingUIFromCode = false;
 
     private void Update() {
         UpdateTransformValues();
     }
 
-    public void OnDropdownSelected(int index) {
-        if (index >= 0 && index < _variantList.Count)
-            SelectVariant(_variantList[index]);
-    }
-
-    private void SelectVariant(MapVariant variant) {
-        MapVariantAdjustManager.Instance.SelectVariant(variant);
-    }
     public void UpdateTransformValues() {
         var manager = MapVariantAdjustManager.Instance;
+        if (manager == null || manager.GetCopiedVariant() == null) return;
 
         Vector3 pos = manager.GetPosition();
         Vector3 rot = manager.GetRotationEuler();
+
+        // Safety check: If the manager already has NaN, don't let it touch the UI strings
+        if (float.IsNaN(pos.x) || float.IsNaN(rot.x)) return;
+
+        // Set the flag to true so our listeners know to ignore these changes
+        _isUpdatingUIFromCode = true;
 
         if (!posXInput.isFocused) posXInput.text = pos.x.ToString("F2");
         if (!posYInput.isFocused) posYInput.text = pos.y.ToString("F2");
@@ -55,30 +36,32 @@ public class MapVarAdjustUI : UIBehaviour {
         if (!rotXInput.isFocused) rotXInput.text = rot.x.ToString("F2");
         if (!rotYInput.isFocused) rotYInput.text = rot.y.ToString("F2");
         if (!rotZInput.isFocused) rotZInput.text = rot.z.ToString("F2");
+
+        // Done updating, allow user inputs to pass through again
+        _isUpdatingUIFromCode = false;
     }
 
+    public void OnFinished() {
+        MapVariantAdjustManager.Instance.ExitAdjusting(saveChanges: true);
+    }
 
-    public void ClearTexts() {
-        /*
-        posXInput.text = "";
-        posYInput.text = "";
-        posZInput.text = "";
-
-        rotXInput.text = "";
-        rotYInput.text = "";
-        rotZInput.text = "";
-        */
+    public void OnCancel() {
+        MapVariantAdjustManager.Instance.ExitAdjusting(saveChanges: false);
     }
 
     #region Position and Rotation Inputs
 
     private void ApplySafePosition() {
-        Vector3 current = MapVariantAdjustManager.Instance.GetPosition();
-        float x = TryParseOr(current.x, posXInput.text);
-        float y = TryParseOr(current.y, posYInput.text);
-        float z = TryParseOr(current.z, posZInput.text);
+        // IF WE GENERATED THIS CHANGE VIA CODE, STOP HERE!
+        if (_isUpdatingUIFromCode) return;
 
-        MapVariantAdjustManager.Instance.UpdatePosition(new Vector3(x, y, z));
+        bool isXValid = float.TryParse(posXInput.text, out float x);
+        bool isYValid = float.TryParse(posYInput.text, out float y);
+        bool isZValid = float.TryParse(posZInput.text, out float z);
+
+        if (isXValid && isYValid && isZValid) {
+            MapVariantAdjustManager.Instance.UpdatePosition(new Vector3(x, y, z));
+        }
     }
 
     public void OnTransformPositionChangedX(string _) => ApplySafePosition();
@@ -86,11 +69,19 @@ public class MapVarAdjustUI : UIBehaviour {
     public void OnTransformPositionChangedZ(string _) => ApplySafePosition();
 
     private float TryParseOr(float fallback, string input) {
+        if (string.IsNullOrEmpty(input)) return fallback;
         return float.TryParse(input, out float val) ? val : fallback;
     }
 
     private void ApplySafeRotation() {
+        // IF WE GENERATED THIS CHANGE VIA CODE, STOP HERE!
+        if (_isUpdatingUIFromCode) return;
+
         Vector3 current = MapVariantAdjustManager.Instance.GetRotationEuler();
+
+        // Extra check: if current rotation is already broken, default to 0
+        if (float.IsNaN(current.x)) current = Vector3.zero;
+
         float x = TryParseOr(current.x, rotXInput.text);
         float y = TryParseOr(current.y, rotYInput.text);
         float z = TryParseOr(current.z, rotZInput.text);
@@ -102,8 +93,5 @@ public class MapVarAdjustUI : UIBehaviour {
     public void OnTransformRotationChangedY(string _) => ApplySafeRotation();
     public void OnTransformRotationChangedZ(string _) => ApplySafeRotation();
 
-
     #endregion
-
-
 }

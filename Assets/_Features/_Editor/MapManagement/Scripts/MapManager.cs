@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class MapManager : Singleton<MapManager> {
@@ -52,9 +51,15 @@ public class MapManager : Singleton<MapManager> {
         map.Name = name;
     }
 
-    public void SetMapOffset(MapVariant map, Vector3 positionOffset, Vector3 rotationOffset) {
+    public void ApplyAndSaveMapOffset(MapVariant map, Vector3 positionOffset, Vector3 rotationOffset) {
+        print(map.transform.position + " " + map.transform.rotation);
         map.PositionOffset = positionOffset;
         map.RotationOffset = rotationOffset;
+
+        map.transform.position = _baseMap.transform.TransformPoint(map.PositionOffset);
+        Quaternion localRotation = Quaternion.Euler(map.RotationOffset);
+        map.transform.rotation = _baseMap.transform.rotation * localRotation;
+        print(map.transform.position + " " + map.transform.rotation);
     }
 
     public void UploadMapVariant(ModelAsset newMap) {
@@ -112,7 +117,9 @@ public class MapManager : Singleton<MapManager> {
     }
 
     public void EnterVariantAdjusting(MapVariant map) {
-        print("Entering adjusting thingie.");
+        ToggleMapUI(false);
+        EditorManager.Instance.ChangeState(AppState.VariantAdjusting);
+        MapVariantAdjustManager.Instance.EnterAdjusting(map);
     }
 
     public void SpawnMap() {
