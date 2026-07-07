@@ -158,23 +158,37 @@ public class GizmoManager : Singleton<GizmoManager> {
 
     #region Gizmo restriction functions
 
-    public void SetCustomRestrictions(ObjectTransformGizmo.ObjectRestrictions customRestrictions) {
+    public void SetCustomRestrictions(
+        bool MoveX = true, 
+        bool MoveY = true, 
+        bool MoveZ = true,
+        bool CamRotationXY = true,
+        bool CamRotationZ = true,
+        bool RotationX = true,
+        bool RotationY = true,
+        bool RotationZ = true,
+        bool Scale = true
+    ) {
         if (_targetObject == null || _activeGizmoObject == null) return;
-
         ObjectTransformGizmo.ObjectRestrictions restrictions = CreateNewRestrictionObject(_objectUniversalGizmo, _targetObject);
-        // I am too frustrated. doing it correctly via the custom restrictions doesnt seem to work, lets try to do it here
-        restrictions.SetCanMoveAlongAxis(0, true);
-        restrictions.SetCanMoveAlongAxis(1, false);
-        restrictions.SetCanMoveAlongAxis(2, true);
-        restrictions.SetIsAffectedByHandle(GizmoHandleId.CamZRotation, true);
-        restrictions.SetIsAffectedByHandle(GizmoHandleId.CamXYRotation, false);
-        restrictions.SetIsAffectedByHandle(GizmoHandleId.XRotationSlider, false);
-        restrictions.SetIsAffectedByHandle(GizmoHandleId.YRotationSlider, false);
-        restrictions.SetIsAffectedByHandle(GizmoHandleId.ZRotationSlider, false);
-        restrictions.SetCanScaleAlongAxis(0, false);
-        restrictions.SetCanScaleAlongAxis(1, false);
-        restrictions.SetCanScaleAlongAxis(2, false);
 
+        // 2. Map your arguments to the exact axes/handles used in the original
+        restrictions.SetCanMoveAlongAxis(0, MoveX);
+        restrictions.SetCanMoveAlongAxis(1, MoveY);
+        restrictions.SetCanMoveAlongAxis(2, MoveZ);
+
+        restrictions.SetIsAffectedByHandle(GizmoHandleId.CamZRotation, CamRotationZ);
+        restrictions.SetIsAffectedByHandle(GizmoHandleId.CamXYRotation, CamRotationXY);
+        restrictions.SetIsAffectedByHandle(GizmoHandleId.XRotationSlider, RotationX);
+        restrictions.SetIsAffectedByHandle(GizmoHandleId.YRotationSlider, RotationY);
+        restrictions.SetIsAffectedByHandle(GizmoHandleId.ZRotationSlider, RotationZ);
+
+        // 3. For scale, if 'Scale' is false, turn them all off like your original hardcoded version did
+        restrictions.SetCanScaleAlongAxis(0, Scale);
+        restrictions.SetCanScaleAlongAxis(1, Scale);
+        restrictions.SetCanScaleAlongAxis(2, Scale);
+
+        // 4. Register it back to the gizmo
         _objectUniversalGizmo.RegisterObjectRestrictions(_targetObject, restrictions);
     }
 
@@ -182,51 +196,74 @@ public class GizmoManager : Singleton<GizmoManager> {
         if (_targetObject == null) return;
 
         ObjectTransformGizmo gizmo = null;
-
         switch (type) {
-            case GizmoType.Position:
-                gizmo = _objectMoveGizmo;
-                break;
-            case GizmoType.Rotation:
-                gizmo = _objectRotationGizmo;
-                break;
-            case GizmoType.Scale:
-                gizmo = _objectScaleGizmo;
-                break;
-            case GizmoType.Universal:
-                gizmo = _objectUniversalGizmo;
-                break;
+            case GizmoType.Position: gizmo = _objectMoveGizmo; break;
+            case GizmoType.Rotation: gizmo = _objectRotationGizmo; break;
+            case GizmoType.Scale: gizmo = _objectScaleGizmo; break;
+            case GizmoType.Universal: gizmo = _objectUniversalGizmo; break;
         }
 
         if (gizmo == null) return;
 
         ObjectTransformGizmo.ObjectRestrictions restrictions = CreateNewRestrictionObject(gizmo, _targetObject);
-
-        // Helper for checking if an axis is enabled
         bool IsAxisEnabled(GizmoAxis axis) => enabledAxisList.Contains(axis) || enabledAxisList.Contains(GizmoAxis.All);
 
-        // Position and Scale: Disable movement/scale along each axis
+        bool x = IsAxisEnabled(GizmoAxis.X);
+        bool y = IsAxisEnabled(GizmoAxis.Y);
+        bool z = IsAxisEnabled(GizmoAxis.Z);
+
+        // Pozice
         if (type == GizmoType.Position || type == GizmoType.Universal) {
-            restrictions.SetCanMoveAlongAxis(0, IsAxisEnabled(GizmoAxis.X));
-            restrictions.SetCanMoveAlongAxis(1, IsAxisEnabled(GizmoAxis.Y));
-            restrictions.SetCanMoveAlongAxis(2, IsAxisEnabled(GizmoAxis.Z));
+            restrictions.SetCanMoveAlongAxis(0, x);
+            restrictions.SetCanMoveAlongAxis(1, y);
+            restrictions.SetCanMoveAlongAxis(2, z);
         }
 
-        if (type == GizmoType.Scale || type == GizmoType.Universal) {
-            restrictions.SetCanScaleAlongAxis(0, IsAxisEnabled(GizmoAxis.X));
-            restrictions.SetCanScaleAlongAxis(1, IsAxisEnabled(GizmoAxis.Y));
-            restrictions.SetCanScaleAlongAxis(2, IsAxisEnabled(GizmoAxis.Z));
-        }
-
+        // Rotace
         if (type == GizmoType.Rotation || type == GizmoType.Universal) {
-            restrictions.SetIsAffectedByHandle(GizmoHandleId.XRotationSlider, IsAxisEnabled(GizmoAxis.X));
-            restrictions.SetIsAffectedByHandle(GizmoHandleId.YRotationSlider, IsAxisEnabled(GizmoAxis.Y));
-            restrictions.SetIsAffectedByHandle(GizmoHandleId.ZRotationSlider, IsAxisEnabled(GizmoAxis.Z));
+            restrictions.SetIsAffectedByHandle(GizmoHandleId.XRotationSlider, x);
+            restrictions.SetIsAffectedByHandle(GizmoHandleId.YRotationSlider, y);
+            restrictions.SetIsAffectedByHandle(GizmoHandleId.ZRotationSlider, z);
+
+            // VypnutÌ "ball" rotace z vol·nÌ SetWorkGizmoId
+            restrictions.SetIsAffectedByHandle(GizmoHandleId.CamXYRotation, false);
+            restrictions.SetIsAffectedByHandle(GizmoHandleId.CamZRotation, false);
+        }
+
+        // äk·lov·nÌ
+        if (type == GizmoType.Scale || type == GizmoType.Universal) {
+            SetScaleAffected(restrictions, x, y, z);
         }
 
         gizmo.RegisterObjectRestrictions(_targetObject, restrictions);
     }
 
+    // Pomocn· metoda pro korektnÌ vypnutÌ scale handl˘ v RTG
+    private void SetScaleAffected(ObjectTransformGizmo.ObjectRestrictions restrictions, bool x, bool y, bool z) {
+        // 1. MatematickÈ omezenÌ os (st·le platnÈ)
+        restrictions.SetCanScaleAlongAxis(0, x);
+        restrictions.SetCanScaleAlongAxis(1, y);
+        restrictions.SetCanScaleAlongAxis(2, z);
+
+        // 2. VypÌn·nÌ konkrÈtnÌch vizu·lnÌch handl˘ z tvÈ t¯Ìdy GizmoHandleId
+        // KladnÈ osy (kostiËky na koncÌch os)
+        restrictions.SetIsAffectedByHandle(GizmoHandleId.PXSlider, x);
+        restrictions.SetIsAffectedByHandle(GizmoHandleId.PYSlider, y);
+        restrictions.SetIsAffectedByHandle(GizmoHandleId.PZSlider, z);
+
+        // Z·pornÈ osy (pokud je tvoje gizmo vykresluje do obou smÏr˘)
+        restrictions.SetIsAffectedByHandle(GizmoHandleId.NXSlider, x);
+        restrictions.SetIsAffectedByHandle(GizmoHandleId.NYSlider, y);
+        restrictions.SetIsAffectedByHandle(GizmoHandleId.NZSlider, z);
+
+        // 3. St¯edov· kostka pro uniformnÌ ök·lov·nÌ (vöechny osy najednou)
+        // Pokud je zak·zan· byù jen jedna osa, st¯edovÈ celkovÈ ök·lov·nÌ by mÏlo b˝t vypnutÈ
+        if (!x || !y || !z) {
+            restrictions.SetIsAffectedByHandle(GizmoHandleId.MidScaleCap, false);
+        } else {
+            restrictions.SetIsAffectedByHandle(GizmoHandleId.MidScaleCap, true);
+        }
+    }
 
     private void RestrictRotationBallHandle() {
         ObjectTransformGizmo.ObjectRestrictions restrictionsRot = CreateNewRestrictionObject(_objectRotationGizmo, _targetObject);

@@ -13,22 +13,19 @@ public class BaseMapCopyMovable : Movable {
 
             // Special restrictions
             
-            ObjectTransformGizmo.ObjectRestrictions restrictions = new ObjectTransformGizmo.ObjectRestrictions();
-            /*
-            restrictions.SetCanMoveAlongAxis(0, true);
-            restrictions.SetCanMoveAlongAxis(1, true);
-            restrictions.SetCanMoveAlongAxis(2, false);
-            restrictions.SetIsAffectedByHandle(GizmoHandleId.CamZRotation, true);
-            restrictions.SetIsAffectedByHandle(GizmoHandleId.CamXYRotation, false);
-            restrictions.SetIsAffectedByHandle(GizmoHandleId.CamZRotation, false);
-            restrictions.SetIsAffectedByHandle(GizmoHandleId.XRotationSlider, false);
-            restrictions.SetIsAffectedByHandle(GizmoHandleId.YRotationSlider, false);
-            restrictions.SetIsAffectedByHandle(GizmoHandleId.ZRotationSlider, false);
-            restrictions.SetCanScaleAlongAxis(0, false);
-            restrictions.SetCanScaleAlongAxis(1, false);
-            restrictions.SetCanScaleAlongAxis(2, false);
-            */
-            gizmoManager.SetCustomRestrictions(restrictions);
+         //   ObjectTransformGizmo.ObjectRestrictions restrictions = new ObjectTransformGizmo.ObjectRestrictions();
+
+            gizmoManager.SetCustomRestrictions(
+                MoveX: true,
+                MoveY: false,
+                MoveZ: true,
+                CamRotationZ: true,
+                CamRotationXY: false,
+                RotationX: false,
+                RotationY: false,
+                RotationZ: false,
+                Scale: false
+            /*restrictions*/);
         }
     }
 }

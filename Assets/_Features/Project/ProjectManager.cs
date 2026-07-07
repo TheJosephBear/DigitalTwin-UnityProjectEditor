@@ -25,6 +25,7 @@ public class ProjectManager : Singleton<ProjectManager> {
         ImageManager.Instance.UploadImagesToServer(SelectedProject.ProjectName);
         string serializedProject = JsonUtility.ToJson(serializableProject);
         ServerCommunicationManager.Instance.StartProjectDataUpload(serializedProject, serializableProject.projectName);
+        MessageDisplayManager.Instance.DisplayMessage("Projekt úspěšně uložen");
     }
 
 

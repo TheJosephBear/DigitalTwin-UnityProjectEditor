@@ -1,3 +1,4 @@
+using RTG;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -23,8 +24,22 @@ public class MapVariantAdjustManager : Singleton<MapVariantAdjustManager> {
         _variantCopy.gameObject.SetActive(true);
         // Make variant copies movable
         Movable movableReff = _variantCopy.AddComponent<Movable>();
-        movableReff.ShownAxis = new List<GizmoAxis>() { GizmoAxis.All };
+        movableReff.ShownAxis = new List<GizmoAxis>() { GizmoAxis.X, GizmoAxis.Y, GizmoAxis.Z };
         movableReff.MovableType = GizmoType.Universal;
+        GizmoManager.Instance.SetTargetGameObject(_variantCopy.gameObject);
+        GizmoManager.Instance.ShowGizmo(GizmoType.Universal, new List<GizmoAxis> { GizmoAxis.All }, UniversalGizmoScaleDisabled: true);
+        ObjectTransformGizmo.ObjectRestrictions restrictions = new ObjectTransformGizmo.ObjectRestrictions();
+        GizmoManager.Instance.SetCustomRestrictions(
+               MoveX: true,
+               MoveY: true,
+               MoveZ: true,
+               CamRotationZ: true,
+               CamRotationXY: true,
+               RotationX: true,
+               RotationY: true,
+               RotationZ: true,
+               Scale: false
+        );
         // Add a color and transparency to the variant copies
         ChangeObjectMaterials(_variantCopy.gameObject, 0.8f, Color.magenta);
         // Show base map solid
@@ -43,6 +58,8 @@ public class MapVariantAdjustManager : Singleton<MapVariantAdjustManager> {
 
             MapManager.Instance.ApplyAndSaveMapOffset(_variantReference, posOffset, rotOffsetEuler);
         }
+
+        GizmoManager.Instance.HideGizmo();
         // Destroy all copies
         Destroy(_variantCopy.gameObject);
         // Hide UI
