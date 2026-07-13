@@ -2360,7 +2360,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Serializer: {fileID: 1144165089}
-  _projectName: imagetest
+  _projectName: DEBUGGING PROJECT
   InEditorDebugging: 0
 --- !u!1 &888139661
 GameObject:
@@ -7030,6 +7030,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ead35f655033bb244939b2ed42be170f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MapUIPrefab: {fileID: 0}
   mapSpawnPosition: {x: 0, y: 0, z: 0}
 --- !u!4 &2073378333
 Transform:

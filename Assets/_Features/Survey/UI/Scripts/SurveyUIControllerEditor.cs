@@ -18,6 +18,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
     private SurveyManager _surveyManager;
     private SurveyBuilder _surveyBuilder; // Interface for data model
     private SurveyUIBuilder _surveyUIBuilder; // Script adding template instances to UI
+    private SurveyQuestionUIEditor _currentlySelectedQuestion;
 
     void Awake() {
         _surveyUIBuilder = GetComponent<SurveyUIBuilder>();
@@ -81,6 +82,11 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         SurveyQuestionUIBase addedQuestionUI = _surveyUIBuilder.AddQuestionEditor(question, insertAtIndex: insertAtIndex, isDeserialized: isDeserialized);
 
         if (addedQuestionUI is SurveyQuestionUIEditor editorUI) {
+            editorUI.OnQuestionSelected += HandleQuestionSelectionChanged;
+            if (!isDeserialized) {
+                HandleQuestionSelectionChanged(editorUI);
+            }
+
             // Use a lambda to fetch the LATEST index from the UI list at the moment the event fires
             editorUI.OnQuestionDeleted += (id) => {
                 int dynamicIdx = _surveyUIBuilder.GetQuestionIndex(addedQuestionUI);
@@ -151,6 +157,11 @@ public class SurveyUIControllerEditor : MonoBehaviour {
 
     public void HandleQuestionDeleted(int questionIndex) {
         print($"(Controller) Deleting index {questionIndex}");
+        var questionUI = _surveyUIBuilder.GetQuestionAtIndex(questionIndex) as SurveyQuestionUIEditor;
+        if (questionUI != null && _currentlySelectedQuestion == questionUI) {
+            _currentlySelectedQuestion = null;
+        }
+
         if (!_surveyUIBuilder.DeleteQuestion(questionIndex)) return;
         _surveyBuilder.RemoveQuestion(questionIndex);
     }
@@ -239,6 +250,23 @@ public class SurveyUIControllerEditor : MonoBehaviour {
     }
 
     #endregion
+
+    private void HandleQuestionSelectionChanged(SurveyQuestionUIEditor selectedQuestion) {
+        // 1. If the clicked question is already the active one, do nothing
+        if (_currentlySelectedQuestion == selectedQuestion) return;
+
+        // 2. Remove the USS class from the previously selected question
+        if (_currentlySelectedQuestion != null && _currentlySelectedQuestion.QuestionElement != null) {
+            _currentlySelectedQuestion.QuestionElement.RemoveFromClassList(".new-question");
+        }
+
+        // 3. Assign the new selection and apply the USS class
+        _currentlySelectedQuestion = selectedQuestion;
+
+        if (_currentlySelectedQuestion != null && _currentlySelectedQuestion.QuestionElement != null) {
+            _currentlySelectedQuestion.QuestionElement.AddToClassList(".new-question");
+        }
+    }
 
     /// <summary>
     /// Builds the UI from data in the active survey
