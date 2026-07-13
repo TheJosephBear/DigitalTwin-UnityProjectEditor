@@ -113,6 +113,12 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         questionUI.SetDescription(questionBase.Description);
         questionUI.ImageID = questionBase.ImageID;
 
+        questionUI.SetQuestionPosition(_shownQuestionIndex + 1);
+        var mapping = _surveyUIBuilder.questionUIMapping.GetMappingByQuestionType(questionBase.QuestionType);
+        if (mapping != null) {
+            questionUI.SetQuestionType(mapping.DisplayName);
+        }
+
         if (questionBase is QuestionGridBase gridQuestion && questionUI is SurveyQuestionUIViewerGrid gridUI) {
             for (int i = 0; i < gridQuestion.GetColumnCount(); i++) {
                 gridUI.AddColumn(gridQuestion.GetColumn(i));

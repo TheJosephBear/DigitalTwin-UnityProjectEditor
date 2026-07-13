@@ -10,6 +10,7 @@ public abstract class SurveyQuestionUIBase {
 
     public int QuestionID { get; }
     public string ImageID { get; set; }
+    public QuestionType QuestionType => _questionType;
 
     protected VisualElement _root;
     protected SurveyUIBuilder _surveyUIBuilder;
@@ -84,6 +85,20 @@ public abstract class SurveyQuestionUIBase {
 
     public virtual void SetDescription(string desc) {
         _root.Q<TextField>("question-description").value = desc;
+    }
+
+    public void SetQuestionPosition(int position) {
+        var label = _root.Q<Label>("question-position");
+        if (label != null) {
+            label.text = position.ToString();
+        }
+    }
+
+    public void SetQuestionType(string typeName) {
+        var label = _root.Q<Label>("question-type");
+        if (label != null) {
+            label.text = typeName;
+        }
     }
 
     public void SetRenderedImage(Texture texture) {

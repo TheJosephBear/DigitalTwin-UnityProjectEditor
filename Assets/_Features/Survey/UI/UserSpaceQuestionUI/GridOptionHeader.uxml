@@ -1,9 +1,9 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/_Features/Survey/UI/Styles.uss?fileID=7433441132597879392&amp;guid=e2857671203a4094b98524b8aefbd78f&amp;type=3" />
-    <ui:VisualElement name="col-header" style="flex-grow: 0; flex-direction: row; justify-content: space-between;">
-        <ui:VisualElement name="spacer" style="flex-grow: 0; width: 150px;" />
-        <ui:VisualElement name="col-headers" style="flex-grow: 1; flex-direction: row; justify-content: space-around;">
-            <ui:Label text="Label" name="column-title" />
+    <Style src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/UserStyles.uss" />
+    <ui:VisualElement name="col-header" class="grid-header">
+        <ui:VisualElement name="spacer" class="grid-header-spacer" />
+        <ui:VisualElement name="col-headers" class="grid-header-columns">
+            <ui:Label text="Label" name="column-title" class="grid-column-label" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

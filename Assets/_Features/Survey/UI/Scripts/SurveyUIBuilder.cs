@@ -94,6 +94,13 @@ public class SurveyUIBuilder : MonoBehaviour {
 
             if (i < _addedQuestions.Count && _addedQuestions[i].QuestionElement != null) {
                 _scrollViewContent.Add(_addedQuestions[i].QuestionElement);
+                
+                var questionUI = _addedQuestions[i];
+                questionUI.SetQuestionPosition(i + 1);
+                var mapping = questionUIMapping.GetMappingByQuestionType(questionUI.QuestionType);
+                if (mapping != null) {
+                    questionUI.SetQuestionType(mapping.DisplayName);
+                }
             }
         }
     }

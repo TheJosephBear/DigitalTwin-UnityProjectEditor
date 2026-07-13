@@ -1,0 +1,26 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="SurveyTitleBar" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/SurveyTitleBar.uxml?fileID=9197481963319205126&amp;guid=a6a65ecf5890a104cad2a0fa134a14d3&amp;type=3#SurveyTitleBar" />
+    <Style src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/UserStyles.uss" />
+    <ui:VisualElement name="page-container">
+        <!-- Premium Header with Title and Exit Button -->
+        <ui:VisualElement name="header-container">
+            <ui:VisualElement style="flex-direction: row; align-items: center;">
+                <ui:VisualElement name="header-icon" />
+                <ui:Label text="Stránka průzkumu" name="title" />
+            </ui:VisualElement>
+            <ui:Button name="toggle-btn" />
+        </ui:VisualElement>
+        
+        <!-- Content Scroll View -->
+        <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" name="survey-scroll-view" picking-mode="Ignore">
+            <ui:Instance template="SurveyTitleBar" />
+        </ui:ScrollView>
+        
+        <!-- Navigation Bottom Bar -->
+        <ui:VisualElement name="bottom-bar">
+            <ui:Button name="previous-btn" class="nav-btn" />
+            <ui:Label text="999/999" name="page-count-label" />
+            <ui:Button name="next-btn" class="nav-btn" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

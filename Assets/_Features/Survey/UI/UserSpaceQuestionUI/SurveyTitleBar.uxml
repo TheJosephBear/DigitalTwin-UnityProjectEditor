@@ -1,0 +1,10 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="Question-description" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/Question-description.uxml?fileID=9197481963319205126&amp;guid=d5a5318ac21e8db418dafe6648d1e3af&amp;type=3#Question-description" />
+    <Style src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/UserStyles.uss" />
+    <ui:VisualElement name="survey-first-page" style="flex-grow: 1; align-items: center; justify-content: center;">
+        <ui:VisualElement name="survey-title-bar" style="flex-grow: 0; flex-direction: row; align-items: center;">
+            <ui:Label text="Název dotazníku" name="survey-title" style="font-size: 18px; -unity-font-style: bold;" />
+        </ui:VisualElement>
+        <ui:Instance template="Question-description" />
+    </ui:VisualElement>
+</ui:UXML>

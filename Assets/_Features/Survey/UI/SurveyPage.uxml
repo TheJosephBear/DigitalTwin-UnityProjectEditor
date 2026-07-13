@@ -7,7 +7,7 @@
         <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" name="survey-scroll-view" style="flex-grow: 1;">
             <ui:Instance template="SurveyTitleBar" />
             <ui:Instance template="AddQuestionBar" />
-            <ui:Instance template="Checkboxes" class="new-question" />
+            <ui:Instance template="Checkboxes" name="TemplateContainer" class="active-question" />
             <ui:Instance template="AddQuestionBar" />
         </ui:ScrollView>
         <ui:VisualElement name="bottom-bar" style="flex-grow: 0; position: relative; bottom: 0; left: 0; right: 0; flex-direction: row-reverse; justify-content: flex-start; padding-right: 40px; padding-bottom: 10px; border-top-width: 1px; border-left-color: rgb(108, 108, 108); border-right-color: rgb(108, 108, 108); border-top-color: rgb(108, 108, 108); border-bottom-color: rgb(108, 108, 108); padding-left: 10px; padding-top: 10px;">

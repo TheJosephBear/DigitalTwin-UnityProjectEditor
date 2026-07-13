@@ -2,11 +2,15 @@
     <ui:Template name="QuestionTitleBar" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/QuestionTitleBar.uxml?fileID=9197481963319205126&amp;guid=20b039c0b3e996c428d354dad76c4b40&amp;type=3#QuestionTitleBar" />
     <ui:Template name="GridOptionHeader" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/GridOptionHeader.uxml?fileID=9197481963319205126&amp;guid=cc4566ddb3f564b4a9535b861e23c607&amp;type=3#GridOptionHeader" />
     <ui:Template name="GridOptionRadio" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/GridOptionRadio.uxml?fileID=9197481963319205126&amp;guid=78ab2473f88a1a64eb4126a8791b5824&amp;type=3#GridOptionRadio" />
-    <ui:VisualElement name="question-container" style="flex-grow: 1;">
-        <ui:Instance template="QuestionTitleBar" />
-        <ui:Instance template="GridOptionHeader" />
-        <ui:VisualElement name="options-list" style="flex-grow: 0;">
-            <ui:Instance template="GridOptionRadio" />
+    <Style src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/UserStyles.uss" />
+    <ui:VisualElement name="question-container" class="question-card" style="flex-grow: 1;">
+        <ui:Instance template="QuestionTitleBar" name="question-bar" />
+        <ui:VisualElement class="question-divider" />
+        <ui:VisualElement class="grid-container">
+            <ui:Instance template="GridOptionHeader" />
+            <ui:VisualElement name="options-list" style="flex-grow: 0;">
+                <ui:Instance template="GridOptionRadio" />
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

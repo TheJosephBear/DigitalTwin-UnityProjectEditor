@@ -1,12 +1,16 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:Template name="GridOptionHeader" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/GridOptionHeader.uxml?fileID=9197481963319205126&amp;guid=cc4566ddb3f564b4a9535b861e23c607&amp;type=3#GridOptionHeader" />
     <ui:Template name="QuestionTitleBar" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/QuestionTitleBar.uxml?fileID=9197481963319205126&amp;guid=20b039c0b3e996c428d354dad76c4b40&amp;type=3#QuestionTitleBar" />
+    <ui:Template name="GridOptionHeader" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/GridOptionHeader.uxml?fileID=9197481963319205126&amp;guid=cc4566ddb3f564b4a9535b861e23c607&amp;type=3#GridOptionHeader" />
     <ui:Template name="GridOptionToggle" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/GridOptionToggle.uxml?fileID=9197481963319205126&amp;guid=6cb878319503b4b4d8cc65a505787145&amp;type=3#GridOptionToggle" />
-    <ui:VisualElement name="question-container" style="flex-grow: 1;">
+    <Style src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/UserStyles.uss" />
+    <ui:VisualElement name="question-container" class="question-card" style="flex-grow: 1;">
         <ui:Instance template="QuestionTitleBar" name="question-bar" />
-        <ui:Instance template="GridOptionHeader" />
-        <ui:VisualElement name="options-list" style="flex-grow: 0;">
-            <ui:Instance template="GridOptionToggle" />
+        <ui:VisualElement class="question-divider" />
+        <ui:VisualElement class="grid-container">
+            <ui:Instance template="GridOptionHeader" />
+            <ui:VisualElement name="options-list" style="flex-grow: 0;">
+                <ui:Instance template="GridOptionToggle" />
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

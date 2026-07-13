@@ -340,7 +340,11 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
 
     void HandleResponse(UnityWebRequest www, System.Action<bool, string> callback) {
         if (www.result != UnityWebRequest.Result.Success) {
-            Debug.LogError("Request failed: " + www.error);
+            if (www.responseCode == 401) {
+                Debug.LogWarning("Unauthorized access. Please check your credentials.");
+            } else {
+                Debug.LogError("Request failed: " + www.error);
+            }
             callback?.Invoke(false, www.error);
         } else {
             Debug.Log("Request successful!");

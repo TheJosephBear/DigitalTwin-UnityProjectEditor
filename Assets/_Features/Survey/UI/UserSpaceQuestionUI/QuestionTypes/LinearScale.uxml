@@ -1,14 +1,16 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Template name="QuestionTitleBar" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/QuestionTitleBar.uxml?fileID=9197481963319205126&amp;guid=20b039c0b3e996c428d354dad76c4b40&amp;type=3#QuestionTitleBar" />
     <ui:Template name="ScaleRadio" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/ScaleRadio.uxml?fileID=9197481963319205126&amp;guid=e261264cf2c567a4c8f2c39faf34a078&amp;type=3#ScaleRadio" />
-    <Style src="project://database/Assets/_Features/Survey/UI/Styles.uss?fileID=7433441132597879392&amp;guid=e2857671203a4094b98524b8aefbd78f&amp;type=3#Styles" />
-    <ui:VisualElement name="question-container" style="flex-grow: 1;">
+    <Style src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/UserStyles.uss?fileID=7433441132597879392&amp;guid=74558b2425df4b44db13d07e45d34b9f&amp;type=3#UserStyles" />
+    <ui:VisualElement name="question-container" class="question-card" style="flex-grow: 1;">
         <ui:Instance template="QuestionTitleBar" name="question-bar" />
-        <ui:VisualElement style="flex-grow: 0; flex-direction: row;">
-            <ui:Label text="Popis řádku" style="flex-shrink: 1; align-self: center; width: 150px;" />
-            <ui:RadioButtonGroup name="options-list" class="radio-group-vertical" style="flex-shrink: 1; flex-grow: 1; justify-content: space-evenly; margin-top: 0; margin-right: 0; margin-left: 0; margin-bottom: 0;" />
-            <ui:VisualElement name="options-listt" enabled="false" picking-mode="Ignore" style="flex-grow: 1; flex-direction: row; justify-content: space-evenly; overflow: hidden; visibility: hidden; display: none;">
-                <ui:Instance template="ScaleRadio" />
+        <ui:VisualElement class="question-divider" />
+        <ui:VisualElement class="linear-scale-container">
+            <ui:VisualElement class="scale-row">
+                <ui:Label text="Popis řádku" class="scale-row-label" />
+                <ui:RadioButtonGroup name="options-list" class="radio-group-vertical scale-options-bar" style="flex-shrink: 1; flex-grow: 1; margin-top: 0; margin-right: 0; margin-left: 0; margin-bottom: 0;">
+                    <ui:Instance template="ScaleRadio" />
+                </ui:RadioButtonGroup>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
