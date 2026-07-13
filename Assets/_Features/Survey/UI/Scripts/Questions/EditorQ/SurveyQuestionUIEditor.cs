@@ -28,6 +28,7 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
     public event Action<int> OnUploadImage;
     public event Action<int, bool> OnToggleRequired;
     public event Action<int, int, int> OnMoveAnswer;
+    public event Action<SurveyQuestionUIEditor> OnQuestionSelected;
 
     #endregion
 
@@ -159,6 +160,11 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
                 ToggleRequired();
             };
         }
+
+        // Active question
+        _root.RegisterCallback<PointerDownEvent>(evt => {
+            OnQuestionSelected?.Invoke(this);
+        });
     }
 
     /// <summary>Registers all UI callbacks.</summary>

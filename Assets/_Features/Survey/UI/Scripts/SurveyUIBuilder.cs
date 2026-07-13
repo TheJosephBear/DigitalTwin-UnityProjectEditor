@@ -298,6 +298,10 @@ public class SurveyUIBuilder : MonoBehaviour {
         return _addedQuestions.IndexOf(questionUI);
     }
 
+    public SurveyQuestionUIBase GetQuestionAtIndex(int index) {
+        return _addedQuestions[index];
+    }
+
     public void ClearScrollviewContent() {
         foreach (var question in _addedQuestions) {
             if (question.QuestionElement != null) {
