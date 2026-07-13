@@ -257,14 +257,14 @@ public class SurveyUIControllerEditor : MonoBehaviour {
 
         // 2. Remove the USS class from the previously selected question
         if (_currentlySelectedQuestion != null && _currentlySelectedQuestion.QuestionElement != null) {
-            _currentlySelectedQuestion.QuestionElement.RemoveFromClassList(".new-question");
+            _currentlySelectedQuestion.QuestionElement.RemoveFromClassList("new-question");
         }
 
         // 3. Assign the new selection and apply the USS class
         _currentlySelectedQuestion = selectedQuestion;
 
         if (_currentlySelectedQuestion != null && _currentlySelectedQuestion.QuestionElement != null) {
-            _currentlySelectedQuestion.QuestionElement.AddToClassList(".new-question");
+            _currentlySelectedQuestion.QuestionElement.AddToClassList("new-question");
         }
     }
 
