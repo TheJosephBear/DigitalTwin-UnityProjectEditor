@@ -79,7 +79,7 @@ public class ProjectManager : Singleton<ProjectManager> {
 
     #region Project List actions
 
-    public void CreateNewProject(Action onCompleted) {
+    public void CreateNewProject(Action<string> onCompleted) {
         PopUp.Instance.AskForInput("Jméno projektu", (userInput) => {
             if (string.IsNullOrEmpty(userInput)) {
                 PopUp.Instance.ShowPopUpWindow("Input was cancelled or empty.");
@@ -94,7 +94,7 @@ public class ProjectManager : Singleton<ProjectManager> {
                     PopUp.Instance.ShowPopUpWindow("Vytvoření projektu selhalo: " + response);
                 }
 
-                onCompleted?.Invoke();
+                onCompleted?.Invoke(id);
             });
         });
     }
@@ -224,6 +224,10 @@ public class ProjectManager : Singleton<ProjectManager> {
 
     public List<ProjectMetadata> GetProjectMetadataList() {
         return _projectMetadataList;
+    }
+
+    public ProjectMetadata GetProjectMetadataByID(string ID) {
+        return _projectMetadataList.Find(x => x.projectId  == ID);
     }
 
     #endregion

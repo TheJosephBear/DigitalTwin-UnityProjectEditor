@@ -8,7 +8,7 @@ public class Initializer : MonoBehaviour {
     /// This is the first script ever called.
     /// Sets up utilities and loads the first scene
     /// </summary>
-
+    
     public SceneType firstSceneToLoadEditor;
     public SceneType firstSceneToLoadViewer;
     public bool LoadEditorInUnityEditor;

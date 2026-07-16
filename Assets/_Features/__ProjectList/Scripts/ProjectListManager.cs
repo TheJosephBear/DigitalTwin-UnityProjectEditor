@@ -62,8 +62,17 @@ public class ProjectListManager : Singleton<ProjectListManager> {
     }
 
     public void CreateNewProject() {
-        ProjectManager.Instance.CreateNewProject(() => {
-            RefreshProjectList();
+        ProjectManager.Instance.CreateNewProject((id) => {
+            GetProjectMetadataList((list) => {
+                ProjectMetadata createdProject = ProjectManager.Instance.GetProjectMetadataByID(id);
+                if(createdProject != null) {
+                    OpenProject(createdProject);
+                    return;
+                }
+
+                RefreshProjectList();
+            });
+            
         });
     }
 

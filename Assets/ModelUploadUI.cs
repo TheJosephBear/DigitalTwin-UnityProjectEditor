@@ -11,6 +11,10 @@ public class ModelUploadUI : UIBehaviour {
         OnFilesSubmitted = callback;
     }
 
+    public void OnCancel() {
+        ModelUploadManager.Instance.HideUI();
+    }
+
     /// <summary>
     /// Opens the file dialog and returns the created asset via callback
     /// </summary>

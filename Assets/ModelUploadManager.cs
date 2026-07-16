@@ -15,4 +15,8 @@ public class ModelUploadManager : Singleton<ModelUploadManager> {
         _instantiatedUI.Initialize(callback);
 
     }
+
+    public void HideUI() {
+        if(_instantiatedUI != null) _instantiatedUI.gameObject.SetActive(false);
+    }
 }
