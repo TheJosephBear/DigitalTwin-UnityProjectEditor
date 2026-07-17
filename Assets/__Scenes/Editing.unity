@@ -2867,8 +2867,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 701420022}
     - target: {fileID: 3335955894097104894, guid: eaba44dc969158a4ba48a57497f0783f, type: 3}
-      propertyPath: _moveSettings._moveSpeed
-      value: 8
+      propertyPath: _panSettings._invertX
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3335955894097104894, guid: eaba44dc969158a4ba48a57497f0783f, type: 3}
+      propertyPath: _panSettings._invertY
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3335955894146397789, guid: eaba44dc969158a4ba48a57497f0783f, type: 3}
       propertyPath: _mainToolbar._activeTabIndex

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ViewManager : MonoBehaviour {
+public class ViewManager : Singleton<ViewManager> {
 
     public SceneType SceneToInstantiate = SceneType.Editing;
     public bool ShowAddViewButton = false;
@@ -27,7 +27,8 @@ public class ViewManager : MonoBehaviour {
     public class OnViewAdded : UnityEvent<ViewPoint> { }
     public OnViewAdded OnViewPointAddedEvent;
 
-    void Awake() {
+    protected override void Awake() {
+        base.Awake();
         _movementScript = GetComponent<CustomMovement>();
     }
 
@@ -41,7 +42,12 @@ public class ViewManager : MonoBehaviour {
         _viewPointUIInstance.Initialize(this, ShowAddViewButton);
     }
 
+    #region View moving
+
+    Transform _originalTransform;
+
     public void StartViewMoving() {
+        _originalTransform = _activeViewPoint.transform;
         ActivateViewPoint();
         // Start controlling it
         _movementScript.SetTarget(_activeViewPoint.gameObject);
@@ -51,34 +57,29 @@ public class ViewManager : MonoBehaviour {
         _viewPointContextUIInstance.Initialize(_activeViewPoint);
         ToggleViewPointContextUI(true);
 
-        ToggleViewPointUI(false);
+        ToggleViewPointUI(true);
     }
 
-    public void MoveMainCamToActiveViewPoint() {
-        GameObject freeCam = MainManagerBase.Instance.EditorCameraManager.GetFreeCamVcam();
-        freeCam.transform.position = _activeViewPoint.transform.position;
-        freeCam.transform.rotation = _activeViewPoint.transform.rotation;
-    }
-
-    public void ExitViewMoving() {
+    public void ExitViewMoving(bool save) {
+        if (!save && _originalTransform != null) {
+            _activeViewPoint.transform.position = _originalTransform.position;
+            _activeViewPoint.transform.rotation = _originalTransform.rotation;
+        }
         DeactivateViewPoint();
         _movementScript.SetTarget(null);
         ToggleViewPointContextUI(false);
         _viewPointUIInstance.UpdateViewButtonList();
+        _viewPointUIInstance.ResetButtonsVisual();
+        MainManagerBase.Instance.ChangeState(AppState.Freecam);
     }
 
     public void ToggleMovementScript(bool active) {
         _movementScript.enabled = active;
     }
 
-    public void ToggleViewPointUI(bool show) {
-        _viewPointUIInstance.gameObject.SetActive(show);
-    }
+    #endregion
 
-    public void ToggleViewPointContextUI(bool show) {
-        if (_viewPointContextUIInstance == null) return;
-        _viewPointContextUIInstance.gameObject.SetActive(show);
-    }
+    #region View point management
 
     public GameObject CreateNewViewPoint(bool updateUI = true) {
         if (SceneLoadingManager.Instance == null) {
@@ -133,36 +134,27 @@ public class ViewManager : MonoBehaviour {
         Destroy(viewPoint.gameObject);
     }
 
-    // Clicking the specific view button
-    public void OnViewHUDButton(ViewPoint viewPoint) {
-
-    }
-
     public void SetActiveViewPoint(ViewPoint vp) {
+        DeactivateViewPoint();
         _activeViewPoint = vp;
-    //    ToggleCameraPreview(true);
+        //    ToggleCameraPreview(true);
     }
 
-    public void ActivateViewPoint() {
-        isActivelyShowingCam = true;
-        _activeViewPoint?.Activate();
-    }
-
-    public void DeactivateViewPoint() {
-        isActivelyShowingCam = false;
-        _activeViewPoint?.Deactivate();
+    public ViewPoint GetActiveViewPoint() {
+        return _activeViewPoint;
     }
 
     public List<ViewPoint> GetViewPoints() {
         return viewPoints;
     }
 
-    public void ClearEverything() {
-        ExitViewMoving();
-        SetActiveViewPoint(null);
-        Utilities.DestroyAllGameObjects(viewPoints);
-        _viewPointUIInstance.ClearViewButtonList();
+    public ViewPoint GetViewPointByID(string id) {
+        return viewPoints.Find(vp => vp.ID == id);
     }
+
+    #endregion
+
+    #region UI management
 
     public void ToggleCameraPreview(bool toggleOn) {
         if (cameraViewUI == null || previewCam == null) return;
@@ -179,9 +171,41 @@ public class ViewManager : MonoBehaviour {
         previewCam.gameObject.SetActive(toggleOn);
     }
 
-    public ViewPoint GetViewPointByID(string id) {
-        return viewPoints.Find(vp => vp.ID == id);
+    public void ToggleViewPointUI(bool show) {
+        _viewPointUIInstance.gameObject.SetActive(show);
     }
+
+    public void ToggleViewPointContextUI(bool show) {
+        if (_viewPointContextUIInstance == null) return;
+        _viewPointContextUIInstance.gameObject.SetActive(show);
+    }
+
+    #endregion
+
+    public void MoveMainCamToActiveViewPoint() {
+        GameObject freeCam = MainManagerBase.Instance.EditorCameraManager.GetFreeCamVcam();
+        freeCam.transform.position = _activeViewPoint.transform.position;
+        freeCam.transform.rotation = _activeViewPoint.transform.rotation;
+    }
+
+    public void ActivateViewPoint() {
+        isActivelyShowingCam = true;
+        _activeViewPoint?.Activate();
+    }
+
+    public void DeactivateViewPoint() {
+        isActivelyShowingCam = false;
+        _activeViewPoint?.Deactivate();
+    }
+
+    public void ClearEverything() {
+        ExitViewMoving(false);
+        SetActiveViewPoint(null);
+        Utilities.DestroyAllGameObjects(viewPoints);
+        _viewPointUIInstance.ClearViewButtonList();
+    }
+
+    #region Serialization
 
     public List<SerializableViewPoint> GetSerializedViewPointsList() {
         List<SerializableViewPoint> list = new List<SerializableViewPoint>();
@@ -228,6 +252,8 @@ public class ViewManager : MonoBehaviour {
             iPoint.Deserialize(serializedInterestPoint);
         }
     }
+
+    #endregion
 
 }
 

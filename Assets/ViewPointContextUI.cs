@@ -24,12 +24,19 @@ public class ViewPointContextUI : MonoBehaviour {
     }
 
     public void OnFinished() {
-        MainManagerBase.Instance.ChangeState(AppState.Freecam);
-        MainManagerBase.Instance.ViewManager.ExitViewMoving();
+     //   MainManagerBase.Instance.ViewManager.ExitViewMoving();
+    }
+
+    public void OnSave() {
+        MainManagerBase.Instance.ViewManager.ExitViewMoving(save: true);
     }
 
     public void OnDelete() {
         MainManagerBase.Instance.ViewManager.DeleteViewPoint(_vp);
-        OnFinished();
+        MainManagerBase.Instance.ViewManager.ExitViewMoving(save: true);
+    }
+
+    public void OnCancel() {
+        MainManagerBase.Instance.ViewManager.ExitViewMoving(save: false);
     }
 }

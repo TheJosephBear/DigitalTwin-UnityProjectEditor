@@ -8,6 +8,7 @@ public class ViewPointUI : MonoBehaviour {
     public GameObject ScrollViewContentRefference;
     public GameObject AddViewButtonRefference;
 
+    List<ViewHUDButton> _buttonList = new List<ViewHUDButton>();
     ViewManager _viewManager;
 
 
@@ -23,7 +24,15 @@ public class ViewPointUI : MonoBehaviour {
 
     public void OnHUDButtonClick(ViewPoint ViewPointRefference) {
         _viewManager.SetActiveViewPoint(ViewPointRefference);
+        UpdateViewButtonList();
 
+        if (MainManagerBase.Instance.ActiveState == AppState.ViewActive) {
+            ViewManager.Instance.StartViewMoving();
+        } else {
+            MainManagerBase.Instance.ChangeState(AppState.ViewActive);
+        }
+
+        /*
         if (MainManagerBase.Instance is EditorManager manager) {
             MainManagerBase.Instance.ChangeState(AppState.ViewActive);
         } else {
@@ -34,6 +43,7 @@ public class ViewPointUI : MonoBehaviour {
                 MainManagerBase.Instance.ChangeState(AppState.Freecam);
             }
         }
+        */
     }
 
     public void UpdateViewButtonList() {
@@ -42,14 +52,30 @@ public class ViewPointUI : MonoBehaviour {
         foreach (ViewPoint vp in _viewManager.GetViewPoints()) {
             ViewHUDButton buttonScript = Instantiate(ViewPointButtonPrefab, ScrollViewContentRefference.transform).GetComponent<ViewHUDButton>();
             buttonScript.Initialize(this, vp);
+            _buttonList.Add(buttonScript);
         }
     }
 
     public void ClearViewButtonList() {
+        /*
         foreach (Transform child in ScrollViewContentRefference.transform) {
             if (child.GetComponent<ScrolviewAlwaysLastItem>() == null) {
                 Destroy(child.gameObject);
             }
+        }
+        */
+        foreach (ViewHUDButton button in _buttonList) {
+            if (button != null) {
+                Destroy(button.gameObject);
+            }
+        }
+
+        _buttonList.Clear();
+    }
+
+    public void ResetButtonsVisual() {
+        foreach (ViewHUDButton button in _buttonList) {
+             button.ToggleVisual(false);
         }
     }
 }

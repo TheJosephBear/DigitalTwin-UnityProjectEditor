@@ -17,8 +17,6 @@ public class ViewactiveState : StateBase {
     }
 
     public override void Exit() {
-        EditorManager.Instance.ViewManager.ExitViewMoving();
-        MainManagerBase.Instance.ViewManager.DeactivateViewPoint();
         MainManagerBase.Instance.ToggleHUD(true);
     }
 }
