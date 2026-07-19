@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class GeoMapManager : MonoBehaviour {
+public class GeoMapManager : Singleton<GeoMapManager> {
 
     public OnlineMaps OnlineMapsReff;
     public GameObject vcam;
@@ -9,7 +9,8 @@ public class GeoMapManager : MonoBehaviour {
     int _equator = 40075000;
     float _previousZoomValue;
 
-    void Awake() {
+    protected override void Awake() {
+        base.Awake();
         _localizationManager = GeoMapLocalizationManager.Instance;
 
         OnlineMapsReff.gameObject.SetActive(false);
@@ -17,14 +18,14 @@ public class GeoMapManager : MonoBehaviour {
     }
 
 
-    public void ActivateGeoLocalization() {
-        UIManager.Instance.ShowUI(UIType.GeoLocalizationUI);
+    public void ActivateGeoLocalization(bool firstOpen = true) {
+    //    UIManager.Instance.ShowUI(UIType.GeoLocalizationUI);
         ToggleGeoMap(true);
-        GeoMapLocalizationManager.Instance.Setup();
+        GeoMapLocalizationManager.Instance.Setup(firstOpen);
     }
 
     public void ExitGeoLocalization() {
-        UIManager.Instance.HideUI(UIType.GeoLocalizationUI);
+    //    UIManager.Instance.HideUI(UIType.GeoLocalizationUI);
         ToggleGeoMap(false);
         GeoMapLocalizationManager.Instance.Exit();
         EditorManager.Instance.ChangeState(AppState.Freecam);
@@ -52,6 +53,10 @@ public class GeoMapManager : MonoBehaviour {
         float delta = zoomValue - _previousZoomValue;
         OnlineMapsReff.floatZoom += delta;
         _previousZoomValue = zoomValue;
+    }
+
+    public void ResetZoomBaseline(float defaultValue = 0.5f) {
+        _previousZoomValue = defaultValue;
     }
 
     public void ToggleGeoMap() {

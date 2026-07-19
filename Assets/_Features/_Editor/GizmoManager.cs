@@ -25,7 +25,11 @@ public class GizmoManager : Singleton<GizmoManager> {
     /// </summary>
     private GameObject _targetObject;
 
-    private void Start() {
+    protected override void Awake() {
+        base.Awake();
+    }
+
+        private void Start() {
         // Create the 4 gizmos
         _objectMoveGizmo = RTGizmosEngine.Get.CreateObjectMoveGizmo();
         _objectRotationGizmo = RTGizmosEngine.Get.CreateObjectRotationGizmo();

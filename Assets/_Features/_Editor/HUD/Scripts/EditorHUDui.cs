@@ -18,6 +18,7 @@ public class EditorHUDui : UIBehaviour {
 
     public void OnGeoMap() {
         EditorManager.Instance.ChangeState(AppState.GeoLocalization);
+        GeoMapManager.Instance.ActivateGeoLocalization(false);
     }
 
     public void OnTwoMapView() {

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,7 @@ public class GeoSearch : MonoBehaviour {
     [Header("UI References")]
     public GameObject resultButtonPrefab;
     public GameObject resultButtonContainerRefference;
+    public TMP_InputField SearchFieldReference;
 
     [Header("Search Settings")]
     public string preferredLanguage = "cs";
@@ -20,6 +22,11 @@ public class GeoSearch : MonoBehaviour {
     private string pendingQuery;
     private Coroutine debounceCoroutine;
     private GeoSearchResultButton lastTopResult;
+
+    public void OnResultClick(double longitude, double latitude) {
+        OnlineMaps.instance.SetPositionAndZoom(longitude, latitude, 16f);
+        ClearResults();
+    }
 
     public void OnSearch(string value) {
         pendingQuery = value;
@@ -62,7 +69,7 @@ public class GeoSearch : MonoBehaviour {
         for (int i = 0; i < Mathf.Min(resultLimit, results.Length); i++) {
             var result = results[i];
             GeoSearchResultButton resultButton = Instantiate(resultButtonPrefab, resultButtonContainerRefference.transform).GetComponent<GeoSearchResultButton>();
-            resultButton.SetupButton(result.latitude, result.longitude, result.display_name);
+            resultButton.SetupButton(result.latitude, result.longitude, result.display_name, this);
 
             if (i == 0)
                 lastTopResult = resultButton;

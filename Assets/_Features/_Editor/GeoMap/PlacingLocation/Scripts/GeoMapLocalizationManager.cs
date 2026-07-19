@@ -10,39 +10,73 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
     /// Keeps result data and settings
     /// </summary>
 
+    public GameObject GeoLocalizationUIPrefab;
     public Vector3 MapCenterPosition;
-    public SceneType ActiveSceneType = SceneType.Editing;
-    public float MapTransparency = 0.8f;
+    public float ModelTransparency = 0.8f;
 
     GameObject _baseMapCopy;
-    GizmoManager gizmoManager;
     GeoLocalizationData _geoData;
+    GeoLocalizationUI _UIInstance;
     bool _lastLockToggle = false;
 
 
     protected override void Awake() {
         base.Awake();
-        gizmoManager = GizmoManager.Instance;
     }
 
-    public void Setup() {
-        gizmoManager.HideGizmo();
+    public void Setup(bool firstOpen = true) {
+        ToggleUI(true);
+        _UIInstance.ToggleExitToMenuButtonVisibility(firstOpen);
+        GizmoManager.Instance.HideGizmo();
         ToggleGeoMapZoom(true);
-        EditorManager.Instance.GeoMapManager.ToggleGeoMapControl(true);
-        // Create base map copy
-        if (_baseMapCopy == null && EditorManager.Instance.MapManager.IsBaseMapUploaded()) {
-            MapVariant baseMapReff = EditorManager.Instance.MapManager.GetBaseMap();
+        GeoMapManager.Instance.ToggleGeoMapControl(true);
+
+        if (MapManager.Instance.IsBaseMapUploaded() && _baseMapCopy != null) {
+            _baseMapCopy.SetActive(true);
+        } else if (MapManager.Instance.IsBaseMapUploaded()) {
+            CreateBaseMapCopy();
+        }
+
+        if (_baseMapCopy != null) {
+            ToggleLock(true);
+        }
+    }
+
+    public void UploadMap(ModelAsset uploadedModel) {
+        if (_baseMapCopy != null) {
+            Destroy(_baseMapCopy.gameObject);
+        }
+
+        MapManager.Instance.SetBaseMapModel(uploadedModel);
+        CreateBaseMapCopy();
+        ToggleLock(true);
+    }
+
+    void ToggleUI(bool toggleOn) {
+        if(_UIInstance == null) {
+            _UIInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(GeoLocalizationUIPrefab).GetComponent<GeoLocalizationUI>();
+        }
+        _UIInstance.gameObject.SetActive(toggleOn);
+    }
+
+    void CreateBaseMapCopy() {
+        if (_baseMapCopy == null && MapManager.Instance.IsBaseMapUploaded()) {
+            MapVariant baseMapReff = MapManager.Instance.GetBaseMap();
             if (!baseMapReff.IsVisible) {
                 baseMapReff.ToggleMeshVisibility(true);
             }
-            _baseMapCopy = SceneLoadingManager.Instance.InstantiateObjectInScene(EditorManager.Instance.MapManager.GetBaseMap().ModelAsset.ModelGameObject, MapCenterPosition, ActiveSceneType);
+
+            _baseMapCopy = SceneLoadingManager.Instance.InstantiateObjectInScene(
+                MapManager.Instance.GetBaseMap().ModelAsset.ModelGameObject, 
+                MapCenterPosition
+            );
 
             // Add mesh collider
             foreach (Transform child in _baseMapCopy.GetComponentsInChildren<Transform>()) {
                 if (child.GetComponent<MeshRenderer>() != null || child.GetComponent<MeshFilter>() != null) {
                     child.AddComponent<MeshCollider>();
                     // Also make it transparent
-                    MakeMaterialsTransparent(child.gameObject, MapTransparency);
+                    MakeMaterialsTransparent(child.gameObject, ModelTransparency);
                 }
             }
 
@@ -57,19 +91,18 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
             // Disable the map at the beginning
             _baseMapCopy.SetActive(false);
             baseMapReff.ToggleMeshVisibility(false);
-
-            ToggleLock();
         }
     }
 
     public void ZoomMap(float value) {
-        EditorManager.Instance.GeoMapManager.ZoomMap(value);
+        GeoMapManager.Instance.ZoomMap(value);
     }
 
     public void Exit() {
-        gizmoManager.HideGizmo();
+        GizmoManager.Instance.HideGizmo();
         _baseMapCopy.SetActive(false);
-        EditorManager.Instance.MapManager.GetBaseMap().ToggleMeshVisibility(true);
+        MapManager.Instance.GetBaseMap().ToggleMeshVisibility(true);
+        ToggleUI(false);
     }
 
     public void ToggleLock() {
@@ -77,11 +110,17 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
         LockGeoMap(_lastLockToggle);
     }
 
+    public void ToggleLock(bool toggleOn) {
+        _lastLockToggle = toggleOn;
+        LockGeoMap(_lastLockToggle);
+        _UIInstance.ChangeLockVisual(toggleOn);
+    }
+
     void LockGeoMap(bool lockToggle) {
         ToggleGeoMapZoom(!lockToggle);
-        EditorManager.Instance.GeoMapManager.ToggleGeoMapControl(!lockToggle);
-        _baseMapCopy.SetActive(lockToggle);
-        gizmoManager.HideGizmo();
+        GeoMapManager.Instance.ToggleGeoMapControl(!lockToggle);
+        _baseMapCopy?.SetActive(lockToggle);
+        GizmoManager.Instance.HideGizmo();
     }
 
     public void PlaceMapModel() {
@@ -98,7 +137,7 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
     }
 
     void ToggleGeoMapZoom(bool toggleOn) {
-        EditorManager.Instance.GeoMapManager.OnlineMapsReff.GetComponent<OnlineMapsTileSetControl>().allowZoom = toggleOn;
+        GeoMapManager.Instance.OnlineMapsReff.GetComponent<OnlineMapsTileSetControl>().allowZoom = toggleOn;
     }
 
     void SaveGeoMapData() {
@@ -111,14 +150,14 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
                 latitude = (float)lat,
                 elevation = elevation,
             };
-            EditorManager.Instance.GeoMapManager.ExitGeoLocalization();
+            GeoMapManager.Instance.ExitGeoLocalization();
         }, error => {
             Debug.LogError(error);
         });
     }
 
     void ApplyTransformToBaseMap() {
-        EditorManager.Instance.MapManager.SetBaseMapPositionAndRotation(_baseMapCopy.transform.position, _baseMapCopy.transform.rotation);
+        MapManager.Instance.SetBaseMapPositionAndRotation(_baseMapCopy.transform.position, _baseMapCopy.transform.rotation);
     }
 
     void MakeMaterialsTransparent(GameObject targetObject, float transparency) {
