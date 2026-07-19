@@ -57,6 +57,8 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
             // Disable the map at the beginning
             _baseMapCopy.SetActive(false);
             baseMapReff.ToggleMeshVisibility(false);
+
+            ToggleLock();
         }
     }
 

@@ -40,6 +40,7 @@ public class ViewMovingManager : MonoBehaviour {
     }
 
     public void ExitViewMoving(bool save, Action<bool> success) {
+        if (_viewPointBeingMoved == null) return;
         if (_unsavedChanges) {
             PopUp.Instance.AreYouSurePopUp((sure) => {
                 if (sure) {
