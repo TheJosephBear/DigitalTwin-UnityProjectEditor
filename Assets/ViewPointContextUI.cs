@@ -4,6 +4,7 @@ using UnityEngine;
 public class ViewPointContextUI : MonoBehaviour {
 
     public TMP_InputField NameTextField;
+    public GameObject SaveButtonRef;
     ViewPoint _vp;
 
     public void Initialize(ViewPoint vp) {
@@ -15,12 +16,16 @@ public class ViewPointContextUI : MonoBehaviour {
         _vp.SetName(value);
     }
 
+    public void ToggleSaveButton(bool toggleOn) {
+        SaveButtonRef.SetActive(toggleOn);
+    }
+
     public void OnTextFieldFocused() {
-        MainManagerBase.Instance.ViewManager.ToggleMovementScript(false);
+        FindAnyObjectByType<ViewMovingManager>().ToggleMovementScript(false);
     }
 
     public void OnTextFieldUnFocused() {
-        MainManagerBase.Instance.ViewManager.ToggleMovementScript(true);
+        FindAnyObjectByType<ViewMovingManager>().ToggleMovementScript(true);
     }
 
     public void OnFinished() {

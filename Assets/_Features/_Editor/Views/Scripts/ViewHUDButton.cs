@@ -20,7 +20,7 @@ public class ViewHUDButton : MonoBehaviour {
     }
 
     public void ToggleVisual(bool toggleOn) {
-        print(toggleOn);
+    //    print(toggleOn);
         string color = "#FFFFFF";
         if (toggleOn) {
             color = "#FF92FE";

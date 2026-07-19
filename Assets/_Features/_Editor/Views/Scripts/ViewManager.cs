@@ -10,7 +10,6 @@ public class ViewManager : Singleton<ViewManager> {
     public bool ShowAddViewButton = false;
     public GameObject ViewPointPrefab;
     public GameObject ViewPointUIPrefab;
-    public GameObject ViewPointContextUIPrefab;
     List<ViewPoint> viewPoints = new List<ViewPoint>();
     //   List<EditorObjectBase> interestPoints = new List<EditorObjectBase>();
     public Vector3 viewPointSpawnPosition;
@@ -18,9 +17,8 @@ public class ViewManager : Singleton<ViewManager> {
     public Camera previewCam;
 
     ViewPointUI _viewPointUIInstance;
-    ViewPointContextUI _viewPointContextUIInstance;
     ViewPoint _activeViewPoint;
-    CustomMovement _movementScript;
+    ViewMovingManager _viewMovingScript;
     public bool isActivelyShowingCam = false;
 
     [System.Serializable]
@@ -29,7 +27,7 @@ public class ViewManager : Singleton<ViewManager> {
 
     protected override void Awake() {
         base.Awake();
-        _movementScript = GetComponent<CustomMovement>();
+        _viewMovingScript = GetComponent<ViewMovingManager>();
     }
 
     void OnEnable() {
@@ -44,37 +42,22 @@ public class ViewManager : Singleton<ViewManager> {
 
     #region View moving
 
-    Transform _originalTransform;
-
     public void StartViewMoving() {
-        _originalTransform = _activeViewPoint.transform;
         ActivateViewPoint();
-        // Start controlling it
-        _movementScript.SetTarget(_activeViewPoint.gameObject);
-        // Show context UI
-        if (_viewPointContextUIInstance == null) 
-            _viewPointContextUIInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(ViewPointContextUIPrefab, SceneToInstantiate).GetComponent<ViewPointContextUI>();
-        _viewPointContextUIInstance.Initialize(_activeViewPoint);
-        ToggleViewPointContextUI(true);
-
         ToggleViewPointUI(true);
+        _viewMovingScript.StartViewMoving(_activeViewPoint);
     }
 
     public void ExitViewMoving(bool save) {
-        if (!save && _originalTransform != null) {
-            _activeViewPoint.transform.position = _originalTransform.position;
-            _activeViewPoint.transform.rotation = _originalTransform.rotation;
-        }
-        DeactivateViewPoint();
-        _movementScript.SetTarget(null);
-        ToggleViewPointContextUI(false);
-        _viewPointUIInstance.UpdateViewButtonList();
-        _viewPointUIInstance.ResetButtonsVisual();
-        MainManagerBase.Instance.ChangeState(AppState.Freecam);
-    }
+        _viewMovingScript.ExitViewMoving(save, (success) => {
+            if (!success) return;
 
-    public void ToggleMovementScript(bool active) {
-        _movementScript.enabled = active;
+            MoveMainCamToActiveViewPoint();
+            DeactivateViewPoint();
+            _viewPointUIInstance.UpdateViewButtonList();
+            _viewPointUIInstance.ResetButtonsVisual();
+            MainManagerBase.Instance.ChangeState(AppState.Freecam);
+        });
     }
 
     #endregion
@@ -130,8 +113,12 @@ public class ViewManager : Singleton<ViewManager> {
     }
 
     public void DeleteViewPoint(ViewPoint viewPoint) {
-        viewPoints.Remove(viewPoint);
-        Destroy(viewPoint.gameObject);
+        PopUp.Instance.AreYouSurePopUp((sure) => {
+            if (sure) {
+                viewPoints.Remove(viewPoint);
+                Destroy(viewPoint.gameObject);
+            }
+        }, $"Chcete smazat pohled {viewPoint.Name}?");
     }
 
     public void SetActiveViewPoint(ViewPoint vp) {
@@ -173,11 +160,6 @@ public class ViewManager : Singleton<ViewManager> {
 
     public void ToggleViewPointUI(bool show) {
         _viewPointUIInstance.gameObject.SetActive(show);
-    }
-
-    public void ToggleViewPointContextUI(bool show) {
-        if (_viewPointContextUIInstance == null) return;
-        _viewPointContextUIInstance.gameObject.SetActive(show);
     }
 
     #endregion

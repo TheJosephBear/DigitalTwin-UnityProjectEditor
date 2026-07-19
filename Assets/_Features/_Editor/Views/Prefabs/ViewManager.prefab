@@ -98,6 +98,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8794994671491001252}
   - component: {fileID: 7044977111450090819}
+  - component: {fileID: 669566599642885611}
   - component: {fileID: 5649455849635722340}
   m_Layer: 0
   m_Name: ViewManager
@@ -139,7 +140,6 @@ MonoBehaviour:
   ShowAddViewButton: 0
   ViewPointPrefab: {fileID: 4159745496729114929, guid: 70ca2b64b92f43844adf2a73f8ef5565, type: 3}
   ViewPointUIPrefab: {fileID: 4228714253713323084, guid: eb57ad5ba8f8d98439865de866529ce1, type: 3}
-  ViewPointContextUIPrefab: {fileID: 1580405488713555687, guid: 90eb32d413a1e38498932eec4c79a784, type: 3}
   viewPointSpawnPosition: {x: 0, y: 120, z: -200}
   cameraViewUI: {fileID: 8794994671842005292}
   previewCam: {fileID: 8794994672007692011}
@@ -147,6 +147,19 @@ MonoBehaviour:
   OnViewPointAddedEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &669566599642885611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8794994671491001258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94e5662d102decf49a32558db2044236, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ViewPointContextUIPrefab: {fileID: 1580405488713555687, guid: 90eb32d413a1e38498932eec4c79a784, type: 3}
 --- !u!114 &5649455849635722340
 MonoBehaviour:
   m_ObjectHideFlags: 0

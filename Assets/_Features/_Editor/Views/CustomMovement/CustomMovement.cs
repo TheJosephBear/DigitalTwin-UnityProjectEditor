@@ -65,5 +65,11 @@ public class CustomMovement : MonoBehaviour {
 
     public void SetTarget(GameObject target) {
         _movedObject = target;
+        if (target == null) return;
+        Vector3 currentEuler = _movedObject.transform.rotation.eulerAngles;
+        // Smooth out the X rotation so it doesn't break the Mathf.Clamp bounds
+        _rotationX = currentEuler.x;
+        if (_rotationX > 180f) _rotationX -= 360f;
+        _rotationY = currentEuler.y;
     }
 }
