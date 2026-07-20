@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class MapVariant : MonoBehaviour {
 
@@ -7,8 +8,9 @@ public class MapVariant : MonoBehaviour {
     private bool _isBaseMap = false;
     private bool _isLocked = false;
     private bool _isVisible = false;
-    private Vector3 _positionOffset; // Offset to base map (only for variants)
-    private Vector3 _rotationOffset; // Offset to base map (only for variants)
+    // Absolute world position and rotation (Euler angles)
+    private Vector3 _position;
+    private Vector3 _rotation;
     private ModelAsset _modelAsset;
 
     public void ToggleMeshVisibility(bool toggleOn) {
@@ -47,14 +49,22 @@ public class MapVariant : MonoBehaviour {
 
     public SerializableMapVariant Serialize() {
         return new SerializableMapVariant {
-            modelFileHash = ModelAsset.FileHash,
+            name = Name,
+            modelFileHash = ModelAsset != null ? ModelAsset.FileHash : "",
             isBaseMap = IsBaseMap,
+            Position = Position, // Saves world position
+            Rotation = Rotation  // Saves world rotation (Euler)
         };
     }
 
     public void Deserialize(SerializableMapVariant serializedMap) {
         ModelAsset = AssetManager.Instance.FindModelAssetByFileHash(serializedMap.modelFileHash);
-        IsBaseMap = serializedMap.isBaseMap;
+        IsBaseMap = serializedMap.isBaseMap; 
+
+        Position = serializedMap.Position;
+        Rotation = serializedMap.Rotation;
+        transform.position = Position;
+        transform.rotation = Quaternion.Euler(Rotation);
     }
 
 
@@ -70,8 +80,8 @@ public class MapVariant : MonoBehaviour {
     public bool IsBaseMap { get => _isBaseMap; set => _isBaseMap = value; }
     public bool IsVisible { get => _isVisible; private set => _isVisible = value; }
     public string Name { get => _name; set => _name = value; }
-    public Vector3 PositionOffset { get => _positionOffset; set => _positionOffset = value; }
-    public Vector3 RotationOffset { get => _rotationOffset; set => _rotationOffset = value; }
+    public Vector3 Position { get => _position; set => _position = value; }
+    public Vector3 Rotation { get => _rotation; set => _rotation = value; }
 
     #endregion
 

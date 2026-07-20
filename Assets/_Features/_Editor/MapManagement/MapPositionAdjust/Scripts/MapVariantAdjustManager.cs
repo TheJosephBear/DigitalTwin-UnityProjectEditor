@@ -49,14 +49,14 @@ public class MapVariantAdjustManager : Singleton<MapVariantAdjustManager> {
     public void ExitAdjusting(bool saveChanges = false) {
         // Apply position and rotation to the variants
         if (saveChanges) {
-            Transform firstObj = MapManager.Instance.GetBaseMap().transform;
-            Transform secondObj = _variantCopy.transform;
+            Transform copyTransform = _variantCopy.transform;
 
-            Vector3 posOffset = firstObj.InverseTransformPoint(secondObj.position);
-            Quaternion relQuad = Quaternion.Inverse(firstObj.rotation) * secondObj.rotation;
-            Vector3 rotOffsetEuler = relQuad.eulerAngles;
-
-            MapManager.Instance.ApplyAndSaveMapOffset(_variantReference, posOffset, rotOffsetEuler);
+            // Pass direct world position and Euler rotation
+            MapManager.Instance.ApplyAndSaveMapTransform(
+                _variantReference,
+                copyTransform.position,
+                copyTransform.rotation.eulerAngles
+            );
         }
 
         GizmoManager.Instance.HideGizmo();

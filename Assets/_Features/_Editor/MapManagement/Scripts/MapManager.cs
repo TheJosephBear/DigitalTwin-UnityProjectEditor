@@ -12,7 +12,7 @@ public class MapManager : Singleton<MapManager> {
 
     // Do budoucna nastavovat spawn position po posunu v geo mapě
     private void Update() {
-        if(_baseMap!=null) mapSpawnPosition = _baseMap.transform.position;
+        if (_baseMap != null) mapSpawnPosition = _baseMap.transform.position;
     }
 
     public void ToggleMapUI(bool toggleOn) {
@@ -21,7 +21,7 @@ public class MapManager : Singleton<MapManager> {
             _mapUIInstance.GetComponent<MapUI>().Initialize();
         } else {
             _mapUIInstance.SetActive(toggleOn);
-            if (toggleOn)  _mapUIInstance.GetComponent<MapUI>().Initialize();
+            if (toggleOn) _mapUIInstance.GetComponent<MapUI>().Initialize();
         }
     }
 
@@ -51,22 +51,12 @@ public class MapManager : Singleton<MapManager> {
         map.Name = name;
     }
 
-    public void ApplyAndSaveMapOffset(MapVariant map, Vector3 positionOffset, Vector3 rotationOffset) {
-        print(map.transform.position + " " + map.transform.rotation);
-        map.PositionOffset = positionOffset;
-        map.RotationOffset = rotationOffset;
-
-        map.transform.position = _baseMap.transform.TransformPoint(map.PositionOffset);
-        Quaternion localRotation = Quaternion.Euler(map.RotationOffset);
-        map.transform.rotation = _baseMap.transform.rotation * localRotation;
-        print(map.transform.position + " " + map.transform.rotation);
-    }
-
-    public void UploadMapVariant(ModelAsset newMap) {
+    public MapVariant UploadMapVariant(ModelAsset newMap) {
         MapVariant addedMap = newMap.InstantiateModel(mapSpawnPosition).AddComponent<MapVariant>();
         addedMap.ModelAsset = newMap;
         addedMap.Name = newMap.FileName;
         _mapVariants.Add(addedMap);
+        return addedMap;
     }
 
     public void UploadMapVariantAgain(MapVariant oldMap, ModelAsset newModel) {
@@ -122,6 +112,8 @@ public class MapManager : Singleton<MapManager> {
         MapVariantAdjustManager.Instance.EnterAdjusting(map);
     }
 
+
+
     public void SpawnMap() {
         _baseMap?.ToggleMeshVisibility(true);
     }
@@ -157,10 +149,33 @@ public class MapManager : Singleton<MapManager> {
         return new List<MapVariant>(_mapVariants);
     }
 
-    public void SetBaseMapPositionAndRotation(Vector3 position, Quaternion rotation) {
-        _baseMap.gameObject.transform.position = position;
-        _baseMap.gameObject.transform.rotation = rotation;
+
+
+    #region Transform offsetting
+
+    /// <summary>
+    /// Sets the world position and rotation for any map (Base or Variant) and updates its transform.
+    /// </summary>
+    public void ApplyAndSaveMapTransform(MapVariant map, Vector3 position, Vector3 rotationEuler) {
+        print($"Original transform for ({map.Name}): {map.transform.position} | {map.transform.rotation.eulerAngles}");
+
+        // Save world position and rotation directly on the model
+        map.Position = position;
+        map.Rotation = rotationEuler;
+
+        // Apply directly to the transform
+        map.transform.position = position;
+        map.transform.rotation = Quaternion.Euler(rotationEuler);
+
+        print($"New transform for ({map.Name}): {map.transform.position} | {map.transform.rotation.eulerAngles}");
     }
+
+    // Deprecated or simplified: SetBaseMapPositionAndRotation can now just call ApplyAndSaveMapTransform
+    public void SetBaseMapPositionAndRotation(Vector3 position, Quaternion rotation) {
+        ApplyAndSaveMapTransform(_baseMap, position, rotation.eulerAngles);
+    }
+
+    #endregion
 
     #region Serialization
 
@@ -183,14 +198,36 @@ public class MapManager : Singleton<MapManager> {
 
     public void Deserialize(SerializableMapManager serializedMap) {
         if (serializedMap == null || serializedMap.baseMap == null) return;
-
-    //    var baseAsset = AssetManager.Instance.FindModelAssetByFileHash(serializableMapManager.baseModelID);
+        /*
+        //    var baseAsset = AssetManager.Instance.FindModelAssetByFileHash(serializableMapManager.baseModelID);
         SetBaseMapModel(AssetManager.Instance.FindModelAssetByFileHash(serializedMap.baseMap.modelFileHash));
         SpawnMap();
 
         foreach (var variant in serializedMap.variants) {
             var asset = AssetManager.Instance.FindModelAssetByFileHash(variant.modelFileHash);
             UploadMapVariant(asset);
+        }
+        */
+        var baseAsset = AssetManager.Instance.FindModelAssetByFileHash(serializedMap.baseMap.modelFileHash);
+        SetBaseMapModel(baseAsset);
+
+        // Spawn standard base map object
+        SpawnMap();
+
+        // Restore base map transform values and apply to scene
+        _baseMap.Deserialize(serializedMap.baseMap);
+
+        // 2. Spawn and apply transforms for all variant maps
+        foreach (var variantData in serializedMap.variants) {
+            var asset = AssetManager.Instance.FindModelAssetByFileHash(variantData.modelFileHash);
+
+            // Assuming UploadMapVariant instantiates and returns the created MapVariant reference
+            MapVariant spawnedVariant = UploadMapVariant(asset);
+
+            if (spawnedVariant != null) {
+                // Restore variant transform values and apply to scene
+                spawnedVariant.Deserialize(variantData);
+            }
         }
     }
 

@@ -59,7 +59,11 @@ public class MultiViewManager : MonoBehaviour {
                 break;
         }
 
-        GameObject cloneGO = SceneLoadingManager.Instance.InstantiateObjectInScene(originalVariant.gameObject, EditorManager.Instance.MapManager.mapSpawnPosition, SceneType.Editing);  
+        GameObject cloneGO = SceneLoadingManager.Instance.InstantiateObjectInScene(
+            originalVariant.gameObject,
+            originalVariant.gameObject.transform.position, 
+            SceneType.Editing);
+        cloneGO.transform.rotation = originalVariant.transform.rotation;
 
         MapVariant clone = cloneGO.AddComponent<MapVariant>();
         clone.ModelAsset = originalVariant.ModelAsset;
