@@ -19,7 +19,7 @@ public class MultiviewUI : UIBehaviour {
 
     public void Initialize() {
         UpdateDropDowns();
-        if (_mapVariants.Count > 0) {
+        if (_mapVariants != null && _mapVariants.Count > 0) {
             EditorManager.Instance.MultiViewManager.ShowVariant(_mapVariants[0], MapPriority.Secondary);
         }
     }
@@ -29,45 +29,21 @@ public class MultiviewUI : UIBehaviour {
     }
 
     public void UpdateDropDowns() {
-        List<MapVariant> mapVariants = EditorManager.Instance.MapManager.GetVariants();
+        // FIX 1: Assign to the class-level list instead of a local variable
+        _mapVariants = EditorManager.Instance.MapManager.GetVariants();
 
-        DropDownPrimary.SetupMultiview(mapVariants);
-        DropDownSecondary.SetupMultiview(mapVariants);
-    }
-
-    private IEnumerator SetupDropdownItemsAfterExpand(TMP_Dropdown dropdown) {
-        // Wait until dropdown is populated & visible
-        dropdown.Show();
-        yield return new WaitForEndOfFrame();
-
-        var scroll = dropdown.template.GetComponentInChildren<ScrollRect>();
-        if (scroll == null) yield break;
-
-        Transform content = scroll.content;
-
-        // Ensure dropdown options are visible before trying to access instantiated items
-        yield return new WaitForSeconds(0.05f); // ensures UI has caught up
-
-        for (int i = 0; i < content.childCount && i < _mapVariants.Count; i++) {
-            GameObject itemGO = content.GetChild(i).gameObject;
-            DropdownMultiviewItem itemScript = itemGO.GetComponent<DropdownMultiviewItem>();
-            if (itemScript != null) {
-          //      itemScript.Initialize(_mapVariants[i]);
-            }
-        }
-
-        // Close and reopen dropdown to reflect new visuals (optional)
-        EventSystem.current.SetSelectedGameObject(null);
-        dropdown.Hide(); // If accessible
+        if (DropDownPrimary != null) DropDownPrimary.SetupMultiview(_mapVariants);
+        if (DropDownSecondary != null) DropDownSecondary.SetupMultiview(_mapVariants);
     }
 
     public void OnMapLockToggle(MapVariant toggledVariant) {
+        if (toggledVariant == null) return;
         toggledVariant.IsLocked = !toggledVariant.IsLocked;
-        UpdateDropDowns(); // this will now preserve selection
+        UpdateDropDowns();
     }
 
     private void OnMapVariantSelectedPrimary(int index) {
-        if (index >= 0 && index < _mapVariants.Count) {
+        if (_mapVariants != null && index >= 0 && index < _mapVariants.Count) {
             EditorManager.Instance.MultiViewManager.ShowVariant(_mapVariants[index], MapPriority.Primary);
         } else {
             Debug.LogWarning("Primary index out of range.");
@@ -75,7 +51,7 @@ public class MultiviewUI : UIBehaviour {
     }
 
     private void OnMapVariantSelectedSecondary(int index) {
-        if (index >= 0 && index < _mapVariants.Count) {
+        if (_mapVariants != null && index >= 0 && index < _mapVariants.Count) {
             EditorManager.Instance.MultiViewManager.ShowVariant(_mapVariants[index], MapPriority.Secondary);
         } else {
             Debug.LogWarning("Secondary index out of range.");

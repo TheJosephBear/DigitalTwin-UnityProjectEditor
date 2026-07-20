@@ -32,11 +32,22 @@ public class MultiViewManager : MonoBehaviour {
     }
 
     public void Exit() {
+        ClearDisplayedMaps();
+
+        if (_multivewCamerasRefference != null) {
+            _multivewCamerasRefference.SetActive(false);
+        }
+
+        UIManager.Instance.HideUI(UIType.TwoMapsCameraView);
+        EditorManager.Instance.ChangeState(AppState.Freecam);
+
+        /*
         _primaryMapInstance.gameObject.SetActive(false);
         _secondaryMapInstance.gameObject.SetActive(false);
         _multivewCamerasRefference.SetActive(false);
         UIManager.Instance.HideUI(UIType.TwoMapsCameraView);
         EditorManager.Instance.ChangeState(AppState.Freecam);
+        */
     }
 
 

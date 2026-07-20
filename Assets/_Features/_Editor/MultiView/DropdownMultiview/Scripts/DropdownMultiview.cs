@@ -18,6 +18,8 @@ public class DropdownMultiview : MonoBehaviour {
     }
 
     public void SetupMultiview(List<MapVariant> variants) {
+        if (variants == null || variants.Count == 0) return;
+
         _mapVariants = variants;
         List<string> labels = variants.ConvertAll(v => v.Name);
 
@@ -25,8 +27,14 @@ public class DropdownMultiview : MonoBehaviour {
 
         multiviewItems.Clear();
 
-        for (int i = 0; i < dropdown.itemParent.transform.childCount; i++) {
-            DropdownMultiviewItem item = dropdown.itemParent.transform.GetChild(i).GetComponent<DropdownMultiviewItem>();
+        // Guard against index mismatch between spawned UI items and data variants
+        int childCount = dropdown.itemParent.transform.childCount;
+        int itemCount = Mathf.Min(childCount, variants.Count);
+
+        for (int i = 0; i < itemCount; i++) {
+            Transform child = dropdown.itemParent.transform.GetChild(i);
+            DropdownMultiviewItem item = child.GetComponent<DropdownMultiviewItem>();
+
             if (item != null) {
                 item.Setup(variants[i], this);
                 StartCoroutine(ConnectItemCoroutine(item, item.GetComponent<DropdownOriginalItem>()));
@@ -34,13 +42,15 @@ public class DropdownMultiview : MonoBehaviour {
             }
         }
 
-        var first = multiviewItems[0];
-        if (first.mapVariant.IsLocked) {
-            currentlyLocked = first.mapVariant;
-        }
+        if (multiviewItems.Count > 0) {
+            var first = multiviewItems[0];
+            if (first.mapVariant != null && first.mapVariant.IsLocked) {
+                currentlyLocked = first.mapVariant;
+            }
 
-        foreach (var item in multiviewItems) {
-            item.UpdateLockVisual();
+            foreach (var item in multiviewItems) {
+                item.UpdateLockVisual();
+            }
         }
     }
 
