@@ -1029,7 +1029,7 @@ MonoBehaviour:
   _settings:
     _canBeDisplayed: 1
     _isExpanded: 1
-    _isVisible: 1
+    _isVisible: 0
     _cellSizeX: 1
     _cellSizeZ: 1
     _yOffset: 0
@@ -1118,6 +1118,7 @@ GameObject:
   m_Component:
   - component: {fileID: 543418432}
   - component: {fileID: 543418433}
+  - component: {fileID: 543418434}
   m_Layer: 0
   m_Name: RTFocusCamera
   m_TagString: Untagged
@@ -1161,13 +1162,13 @@ MonoBehaviour:
   _moveSettings:
     _canBeDisplayed: 1
     _isExpanded: 1
-    _moveSpeed: 8
-    _accelerationRate: 5
+    _moveSpeed: 17
+    _accelerationRate: 0
   _panSettings:
     _canBeDisplayed: 1
     _isExpanded: 1
     _panMode: 0
-    _standardPanSensitivity: 0.1
+    _standardPanSensitivity: 0.008
     _smoothPanSensitivity: 0.7
     _smoothValue: 4
     _invertX: 0
@@ -1197,8 +1198,8 @@ MonoBehaviour:
     _canBeDisplayed: 1
     _isExpanded: 1
     _zoomMode: 0
-    _orthoStandardZoomSensitivity: 0.15
-    _perspStandardZoomSensitivity: 0.15
+    _orthoStandardZoomSensitivity: 0.1
+    _perspStandardZoomSensitivity: 0.9
     _orthoSmoothZoomSensitivity: 5
     _perspSmoothZoomSensitivity: 5
     _orthoZoomSmoothValue: 5
@@ -1362,6 +1363,24 @@ MonoBehaviour:
       _name: Orbit
       _staticData:
         CanHaveMouseButtons: 1
+--- !u!114 &543418434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 543418431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d95eddfd8f42d44988e0b67d6ce6326, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collisionLayers:
+    serializedVersion: 2
+    m_Bits: 2047
+  cameraRadius: 0.5
+  maxDepenetrationSteps: 3
+  preventObstaclesInView: 0
 --- !u!1 &575334058
 GameObject:
   m_ObjectHideFlags: 0
@@ -2004,7 +2023,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Serializer: {fileID: 1144165089}
   _projectName: DEBUGGING PROJECT
-  InEditorDebugging: 0
+  InEditorDebugging: 1
 --- !u!1 &888139661
 GameObject:
   m_ObjectHideFlags: 0
@@ -5894,9 +5913,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88055d12f80ca97468863d8db11170bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GeoLocalizationUIPrefab: {fileID: 0}
   MapCenterPosition: {x: 0, y: 0, z: 0}
-  ActiveSceneType: 1
-  MapTransparency: 0.8
+  ModelTransparency: 0.8
 --- !u!4 &1375345352
 Transform:
   m_ObjectHideFlags: 0

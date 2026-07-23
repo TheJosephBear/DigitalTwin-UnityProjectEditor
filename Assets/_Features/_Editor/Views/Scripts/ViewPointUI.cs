@@ -23,13 +23,30 @@ public class ViewPointUI : MonoBehaviour {
     }
 
     public void OnHUDButtonClick(ViewPoint ViewPointRefference) {
+        bool clickedSameViewTwice = ViewPointRefference == _viewManager.GetActiveViewPoint();
+
         _viewManager.SetActiveViewPoint(ViewPointRefference);
         UpdateViewButtonList();
 
-        if (MainManagerBase.Instance.ActiveState == AppState.ViewActive) {
-            ViewManager.Instance.StartViewMoving();
+        if (SceneLoadingManager.Instance.GetActiveScene() == SceneType.Viewing) {
+            if (MainManagerBase.Instance.ActiveState != AppState.ViewActive) {
+                MainManagerBase.Instance.ChangeState(AppState.ViewActive);
+            }
+
+            if (clickedSameViewTwice) {
+                // exit
+                MainManagerBase.Instance.ChangeState(AppState.Freecam);
+                ResetButtonsVisual();
+            } else {
+                // activate
+                ViewManager.Instance.ActivateViewPoint();
+            }
         } else {
-            MainManagerBase.Instance.ChangeState(AppState.ViewActive);
+            if (MainManagerBase.Instance.ActiveState == AppState.ViewActive) {
+                ViewManager.Instance.StartViewMoving();
+            } else {
+                MainManagerBase.Instance.ChangeState(AppState.ViewActive);
+            }
         }
 
         /*

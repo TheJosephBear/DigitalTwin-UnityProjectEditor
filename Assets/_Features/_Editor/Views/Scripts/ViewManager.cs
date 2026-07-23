@@ -55,7 +55,7 @@ public class ViewManager : Singleton<ViewManager> {
             MoveMainCamToActiveViewPoint();
             DeactivateViewPoint();
             _viewPointUIInstance.UpdateViewButtonList();
-            _viewPointUIInstance.ResetButtonsVisual();
+            ResetHUDHighlight();
             MainManagerBase.Instance.ChangeState(AppState.Freecam);
         });
     }
@@ -164,6 +164,10 @@ public class ViewManager : Singleton<ViewManager> {
 
     public void ToggleViewPointUI(bool show) {
         _viewPointUIInstance.gameObject.SetActive(show);
+    }
+
+    public void ResetHUDHighlight() {
+        _viewPointUIInstance.ResetButtonsVisual();
     }
 
     #endregion
