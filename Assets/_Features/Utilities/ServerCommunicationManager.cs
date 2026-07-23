@@ -244,7 +244,7 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
     IEnumerator PostRequest(string url, Dictionary<string, string> formData, System.Action<bool, string> callback) {
         WWWForm form = new WWWForm();
         foreach (var field in formData) {
-            form.AddField(field.Key, field.Value);
+            form.AddField(field.Key, field.Value, System.Text.Encoding.UTF8);
         }
         UnityWebRequest www = UnityWebRequest.Post(url, form);
         yield return www.SendWebRequest();
@@ -291,7 +291,7 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
     IEnumerator DeleteRequest(string url, Dictionary<string, string> formData, System.Action<bool, string> callback) {
         WWWForm form = new WWWForm();
         foreach (var field in formData) {
-            form.AddField(field.Key, field.Value);
+            form.AddField(field.Key, field.Value, System.Text.Encoding.UTF8);
         }
 
         UnityWebRequest www = UnityWebRequest.Post(url, form);
@@ -313,8 +313,8 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
         // Use actual file extension from the path
         string extension = Path.GetExtension(fileName);
         form.AddBinaryData("file", fileData, fileName, "application/octet-stream");
-        form.AddField("project_name", projectName);
-        form.AddField("asset_hash", assetHash); // send assetHash so server knows which asset this file belongs to
+        form.AddField("project_name", projectName, System.Text.Encoding.UTF8);
+        form.AddField("asset_hash", assetHash, System.Text.Encoding.UTF8); // send assetHash so server knows which asset this file belongs to
 
         UnityWebRequest www = UnityWebRequest.Post(url, form);
         yield return www.SendWebRequest();

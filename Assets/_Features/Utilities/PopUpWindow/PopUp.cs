@@ -17,7 +17,7 @@ public class PopUp : Singleton<PopUp> {
 
     // Only shows message
     public void ShowPopUpWindow(string text) {
-        UIManager.Instance.ShowUI(UIType.PopUpMessageUI);   
+        UIManager.Instance.ShowUI(UIType.PopUpMessageUI);
         UIManager.Instance.GetActiveUIscript().GetComponent<PopUpMessageUI>().SetText(text);
     }
 
@@ -31,7 +31,7 @@ public class PopUp : Singleton<PopUp> {
         UIManager.Instance.GetActiveUIscript().GetComponent<PopUpInputUI>().ShowCopyableText(message, text);
     }
 
-    public void AreYouSurePopUp(Action<bool> callback, string text = "Máte neuložené zmìny. Opravdu chcete odejít?") {
+    public void AreYouSurePopUp(Action<bool> callback, string text = "MÃ¡te neuloÅ¾enÃ© zmÄ›ny. Opravdu chcete odejÃ­t?") {
         SceneLoadingManager.Instance.InstantiateObjectInScene(AreYouSureUIPrefab).GetComponent<PopUpAreYouSureUI>().AskForInput(text, callback);
     }
 }

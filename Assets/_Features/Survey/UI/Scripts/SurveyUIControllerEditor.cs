@@ -7,10 +7,10 @@ using UnityEngine.UIElements;
 
 
 /// <summary>
-/// Handles the Survey Builder UI logic. 
-/// Receives input events from addedQuestion and answer fields, as well as buttons, 
+/// Handles the Survey Builder UI logic.
+/// Receives input events from addedQuestion and answer fields, as well as buttons,
 /// and relays the changes to the <see cref="SurveyBuilder"/> for updating the survey data model.
-/// (Tohle by mo�n� mohl d�lat sv�j vlastn� script) -> Manages the instantiation of addedQuestion UI elements based on templates and keeps track of added questions.
+/// (Tohle by možná mohl dělat svůj vlastní script) -> Manages the instantiation of addedQuestion UI elements based on templates and keeps track of added questions.
 /// </summary>
 public class SurveyUIControllerEditor : MonoBehaviour {
 
@@ -168,7 +168,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
 
     public void HandleQuestionMoved(int questionIndex, int direction) {
         print($"(Controller) Moving index {questionIndex} in direction: {direction}");
-        _surveyUIBuilder.MoveQuestion(questionIndex, direction); 
+        _surveyUIBuilder.MoveQuestion(questionIndex, direction);
         _surveyBuilder.MoveQuestion(questionIndex, direction);
     }
 
