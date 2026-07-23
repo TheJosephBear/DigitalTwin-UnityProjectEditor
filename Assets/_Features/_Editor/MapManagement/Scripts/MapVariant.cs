@@ -1,5 +1,7 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 public class MapVariant : MonoBehaviour {
@@ -12,6 +14,14 @@ public class MapVariant : MonoBehaviour {
     private Vector3 _position;
     private Vector3 _rotation;
     private ModelAsset _modelAsset;
+
+    public void AddCollider() {
+        foreach (Transform child in GetComponentsInChildren<Transform>()) {
+            if (child.GetComponent<MeshCollider>() == null) {
+                child.AddComponent<MeshCollider>();
+            }
+        }
+    }
 
     public void ToggleMeshVisibility(bool toggleOn) {
         gameObject.SetActive(true);

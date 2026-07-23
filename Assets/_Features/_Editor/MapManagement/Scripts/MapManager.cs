@@ -55,6 +55,7 @@ public class MapManager : Singleton<MapManager> {
         MapVariant addedMap = newMap.InstantiateModel(mapSpawnPosition).AddComponent<MapVariant>();
         addedMap.ModelAsset = newMap;
         addedMap.Name = newMap.FileName;
+        addedMap.AddCollider();
         _mapVariants.Add(addedMap);
         return addedMap;
     }
@@ -91,6 +92,7 @@ public class MapManager : Singleton<MapManager> {
         MapVariant replacementMap = newGo.AddComponent<MapVariant>();
         replacementMap.ModelAsset = newModel;
         replacementMap.IsBaseMap = false;
+        replacementMap.AddCollider();
 
         // Retain its old name if it was customized, otherwise fall back to new file name
         replacementMap.Name = string.IsNullOrEmpty(oldCustomName) ? newModel.FileName : oldCustomName;
@@ -116,6 +118,7 @@ public class MapManager : Singleton<MapManager> {
 
     public void SpawnMap() {
         _baseMap?.ToggleMeshVisibility(true);
+        _baseMap?.AddCollider();
     }
 
     public void ToggleMapVisibility() {
