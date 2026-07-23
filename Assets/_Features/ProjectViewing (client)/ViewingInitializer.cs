@@ -52,7 +52,7 @@ public class ViewingInitializer : MonoBehaviour, Iinitializer {
             yield break; // Stops coroutine safely
         }
             
-        UIManager.Instance.ShowUI(UIType.ViewerHUD);
+        // UIManager.Instance.ShowUI(UIType.ViewerHUD);
         yield return Serializer.DeserializeProjectCoroutine(ProjectManager.Instance.SelectedProject);
         MainManagerBase.Instance.ChangeState(AppState.Freecam);
         MainManagerBase.Instance.ChangeState(AppState.Survey);
