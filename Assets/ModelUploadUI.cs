@@ -1,18 +1,35 @@
 using System;
+using System.Collections.Generic;
+using NUnit.Framework;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ModelUploadUI : UIBehaviour {
 
-    // Callback to return the created ModelAsset
-    public Action<ModelAsset> OnFilesSubmitted;
+    public GameObject FileTextPrefab;
+    public Transform ScrollviewContentTransformRef;
 
-    public void Initialize(Action<ModelAsset> callback) {
-        OnFilesSubmitted = callback;
+    public void Initialize() {
+        ClearFileList();
+    }
+
+    public void OnFinished() {
+        ModelUploadManager.Instance.FinishUploading();
     }
 
     public void OnCancel() {
-        ModelUploadManager.Instance.HideUI();
+        //    ModelUploadManager.Instance.HideUI();
+        ModelUploadManager.Instance.ExitUploading();
+    }
+
+    public void AddFileNameToList(string fileName) {
+        GameObject go = Instantiate(FileTextPrefab, ScrollviewContentTransformRef);
+        go.GetComponent<TextMeshProUGUI>().text = fileName;
+    }
+
+    public void ClearFileList() {
+         Utilities.KillAllChildren(ScrollviewContentTransformRef);
     }
 
     /// <summary>
@@ -36,16 +53,20 @@ public class ModelUploadUI : UIBehaviour {
 
     private void HandleFilesSelected(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
         if (files == null || files.Length == 0) {
-            OnFilesSubmitted?.Invoke(null);
+       //     OnFilesSubmitted?.Invoke(null);
             return;
         }
 
+        ModelUploadManager.Instance.AddFiles(files);
+
+        /*
         // Create the asset from selected files
         ModelAsset asset = AssetManager.Instance.CreateNewAssetFromFiles(files);
 
         // Invoke callback
         OnFilesSubmitted?.Invoke(asset);
         this.gameObject.SetActive(false);
+        */
     }
 
 }

@@ -7,6 +7,7 @@ public class FreecamState : StateBase {
         UIManager.Instance.HideUI(UIType.EditorInitUI);
         MainManagerBase.Instance.ToggleHUD(true);
         MainManagerBase.Instance.ViewManager.ToggleViewPointUI(true);
+        CameraManager.Instance.InitializeFreeCamBounds();
         //      if (TwoCameraInstantiated != null) Destroy(TwoCameraInstantiated);
         MainManagerBase.Instance.EditorCameraManager.DisableCinemachineAfterTransition();
     }

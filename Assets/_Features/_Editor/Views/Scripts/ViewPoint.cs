@@ -25,7 +25,7 @@ public class ViewPoint : EditorObjectBase, IClickable {
     }
 
     public void Deactivate() {
-        vcam.SetActive(false);
+        vcam?.SetActive(false);
     }
 
     public SerializableViewPoint Serialize() {

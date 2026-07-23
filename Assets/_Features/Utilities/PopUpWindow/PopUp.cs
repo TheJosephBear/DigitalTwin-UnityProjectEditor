@@ -31,7 +31,7 @@ public class PopUp : Singleton<PopUp> {
         UIManager.Instance.GetActiveUIscript().GetComponent<PopUpInputUI>().ShowCopyableText(message, text);
     }
 
-    public void AreYouSurePopUp(Action<bool> callback, string text = "Jste si jistý?") {
+    public void AreYouSurePopUp(Action<bool> callback, string text = "Máte neuložené zmìny. Opravdu chcete odejít?") {
         SceneLoadingManager.Instance.InstantiateObjectInScene(AreYouSureUIPrefab).GetComponent<PopUpAreYouSureUI>().AskForInput(text, callback);
     }
 }

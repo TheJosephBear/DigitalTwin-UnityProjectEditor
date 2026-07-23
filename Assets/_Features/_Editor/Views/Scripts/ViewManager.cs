@@ -115,8 +115,12 @@ public class ViewManager : Singleton<ViewManager> {
     public void DeleteViewPoint(ViewPoint viewPoint) {
         PopUp.Instance.AreYouSurePopUp((sure) => {
             if (sure) {
+                if(viewPoint == _activeViewPoint) {
+                    _activeViewPoint = null;
+                }
                 viewPoints.Remove(viewPoint);
                 Destroy(viewPoint.gameObject);
+                _viewPointUIInstance.UpdateViewButtonList();
             }
         }, $"Chcete smazat pohled {viewPoint.Name}?");
     }
@@ -171,11 +175,13 @@ public class ViewManager : Singleton<ViewManager> {
     }
 
     public void ActivateViewPoint() {
+        if (_activeViewPoint == null) return;
         isActivelyShowingCam = true;
         _activeViewPoint?.Activate();
     }
 
     public void DeactivateViewPoint() {
+        if (_activeViewPoint == null) return;
         isActivelyShowingCam = false;
         _activeViewPoint?.Deactivate();
     }

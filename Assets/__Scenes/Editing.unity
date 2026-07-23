@@ -3238,6 +3238,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
+      propertyPath: boundsPadding.x
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
+      propertyPath: boundsPadding.y
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
+      propertyPath: boundsPadding.z
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: InitialCameraPosition
       value: 
       objectReference: {fileID: 1632604755}
