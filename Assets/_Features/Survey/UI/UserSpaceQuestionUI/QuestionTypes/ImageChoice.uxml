@@ -1,7 +1,7 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Template name="QuestionTitleBar" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/QuestionTitleBar.uxml?fileID=9197481963319205126&amp;guid=20b039c0b3e996c428d354dad76c4b40&amp;type=3#QuestionTitleBar" />
     <ui:Template name="ImageOption" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/ImageOption.uxml?fileID=9197481963319205126&amp;guid=d03576ac3b9248c48940a10519deeb7e&amp;type=3#ImageOption" />
-    <Style src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/UserStyles.uss" />
+    <Style src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/UserStyles.uss?fileID=7433441132597879392&amp;guid=74558b2425df4b44db13d07e45d34b9f&amp;type=3#UserStyles" />
     <ui:VisualElement name="question-container" class="question-card" style="flex-grow: 1;">
         <ui:Instance template="QuestionTitleBar" name="question-bar" />
         <ui:VisualElement class="question-divider" />

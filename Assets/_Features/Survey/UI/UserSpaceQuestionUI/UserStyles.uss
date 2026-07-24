@@ -249,6 +249,23 @@ Button {
 
 Button:hover {
     background-color: var(--secondary-background-color);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+Button VisualElement:hover {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+Button Label:hover {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+TextField TextElement:hover {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
+}
+
+TextField TextInput:hover {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
 }
 
 TextField TextInput {
@@ -531,6 +548,10 @@ TextField TextInput {
     border-color: var(--primary-color);
     border-width: 3px;
     background-color: var(--secondary-background-color);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
 }
 
 .image-option-preview {

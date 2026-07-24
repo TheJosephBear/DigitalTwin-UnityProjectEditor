@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -37,9 +38,9 @@ public class SurveyAnswerUIViewerImage : SurveyAnswerUIViewer {
 
     public void SetSelected(bool selected) {
         if (selected) {
-            _answerElement.AddToClassList("answer-selected"); // Use USS to show selection
+            _answerElement.Children().First().AddToClassList("image-option-card--selected"); // Use USS to show selection
         } else {
-            _answerElement.RemoveFromClassList("answer-selected");
+            _answerElement.Children().First().RemoveFromClassList("image-option-card--selected");
         }
     }
 }
