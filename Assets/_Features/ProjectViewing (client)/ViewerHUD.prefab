@@ -9852,8 +9852,29 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2170569204919837884, guid: 393b80a1e9bbb6848ae0af8fdb2ac486, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6871210251335890546}
   m_SourcePrefab: {fileID: 100100000, guid: 393b80a1e9bbb6848ae0af8fdb2ac486, type: 3}
+--- !u!1 &4001991819892093800 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2170569204919837884, guid: 393b80a1e9bbb6848ae0af8fdb2ac486, type: 3}
+  m_PrefabInstance: {fileID: 2996731492489091028}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6871210251335890546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4001991819892093800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f90593d609b577c48a1c50ad287c8b28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipContent: Porovnat modely
 --- !u!224 &4616301040929457280 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7604013772110566228, guid: 393b80a1e9bbb6848ae0af8fdb2ac486, type: 3}
@@ -10215,10 +10236,31 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2170569204919837884, guid: 393b80a1e9bbb6848ae0af8fdb2ac486, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1098156348671056987}
   m_SourcePrefab: {fileID: 100100000, guid: 393b80a1e9bbb6848ae0af8fdb2ac486, type: 3}
 --- !u!224 &2923842608178052658 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7604013772110566228, guid: 393b80a1e9bbb6848ae0af8fdb2ac486, type: 3}
   m_PrefabInstance: {fileID: 4689779246494559590}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6848312922190940634 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2170569204919837884, guid: 393b80a1e9bbb6848ae0af8fdb2ac486, type: 3}
+  m_PrefabInstance: {fileID: 4689779246494559590}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1098156348671056987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6848312922190940634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f90593d609b577c48a1c50ad287c8b28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipContent: "Vyplnit dotazn\xEDk"

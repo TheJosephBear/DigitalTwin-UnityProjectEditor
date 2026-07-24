@@ -290,13 +290,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: ProjectListUI
       objectReference: {fileID: 0}
+    - target: {fileID: 5353908323875024204, guid: 02a23fb298d48d84d88e65c5ba3c6923, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5353908323875024204, guid: 02a23fb298d48d84d88e65c5ba3c6923, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5353908323875024204, guid: 02a23fb298d48d84d88e65c5ba3c6923, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5353908324316475799, guid: 02a23fb298d48d84d88e65c5ba3c6923, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5353908324316475799, guid: 02a23fb298d48d84d88e65c5ba3c6923, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.45410156
+      value: -0.00091552734
       objectReference: {fileID: 0}
     - target: {fileID: 5353908324969688869, guid: 02a23fb298d48d84d88e65c5ba3c6923, type: 3}
       propertyPath: m_Value

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5700122084006904986}
   - component: {fileID: 2479641876666790456}
   - component: {fileID: 3772984315691689147}
+  - component: {fileID: 1301505282902733060}
   m_Layer: 5
   m_Name: X
   m_TagString: Untagged
@@ -133,6 +134,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1301505282902733060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9853128362438780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f90593d609b577c48a1c50ad287c8b28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipContent: "Zav\u0159\xEDt"
 --- !u!1 &105128464437264404
 GameObject:
   m_ObjectHideFlags: 0
@@ -1088,6 +1102,7 @@ GameObject:
   - component: {fileID: 1900320699030375802}
   - component: {fileID: 8513819590241300580}
   - component: {fileID: 5078834080606199239}
+  - component: {fileID: 4368933422575849268}
   m_Layer: 5
   m_Name: LogOutButton
   m_TagString: Untagged
@@ -1208,6 +1223,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &4368933422575849268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1131373806908536508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f90593d609b577c48a1c50ad287c8b28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipContent: "Odhl\xE1sit se"
 --- !u!1 &1447000171943879209
 GameObject:
   m_ObjectHideFlags: 0
@@ -1357,6 +1385,7 @@ GameObject:
   - component: {fileID: 4198994504708346407}
   - component: {fileID: 5145599846775857176}
   - component: {fileID: 8011546824223497607}
+  - component: {fileID: 3569581836782483253}
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -1489,6 +1518,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &3569581836782483253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1464538205436048920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f90593d609b577c48a1c50ad287c8b28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipContent: "Nahr\xE1t obr\xE1zek"
 --- !u!1 &1477470104857838405
 GameObject:
   m_ObjectHideFlags: 0
@@ -2076,6 +2118,7 @@ GameObject:
   - component: {fileID: 5156231383899138144}
   - component: {fileID: 6719110218376623595}
   - component: {fileID: 6799357022930345203}
+  - component: {fileID: 8836757423893197182}
   m_Layer: 5
   m_Name: CancelButton
   m_TagString: Untagged
@@ -2196,6 +2239,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8836757423893197182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2442777062892479052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f90593d609b577c48a1c50ad287c8b28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipContent: "Zru\u0161it"
 --- !u!1 &2557675414563769209
 GameObject:
   m_ObjectHideFlags: 0
@@ -2209,6 +2265,7 @@ GameObject:
   - component: {fileID: 2076978722054731131}
   - component: {fileID: 564390557994711482}
   - component: {fileID: 7515301805784576371}
+  - component: {fileID: 1127032521233436001}
   m_Layer: 5
   m_Name: AddButton
   m_TagString: Untagged
@@ -2345,6 +2402,19 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.16862746}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
+--- !u!114 &1127032521233436001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2557675414563769209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f90593d609b577c48a1c50ad287c8b28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipContent: "Vytvo\u0159it projekt"
 --- !u!1 &2650855835208694523
 GameObject:
   m_ObjectHideFlags: 0
@@ -2437,6 +2507,7 @@ GameObject:
   - component: {fileID: 4062979167527826848}
   - component: {fileID: 1495497841037239330}
   - component: {fileID: 5043294506285494088}
+  - component: {fileID: 492519616137008033}
   m_Layer: 5
   m_Name: X
   m_TagString: Untagged
@@ -2558,6 +2629,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &492519616137008033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2670997664553608812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f90593d609b577c48a1c50ad287c8b28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipContent: "Zav\u0159\xEDt"
 --- !u!1 &3248006127225199977
 GameObject:
   m_ObjectHideFlags: 0
@@ -2610,6 +2694,7 @@ GameObject:
   - component: {fileID: 1498009153406550055}
   - component: {fileID: 4062219091119277292}
   - component: {fileID: 9119866036139636698}
+  - component: {fileID: 7620334490122627337}
   m_Layer: 5
   m_Name: DeleteButton
   m_TagString: Untagged
@@ -2730,6 +2815,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &7620334490122627337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3269597901706282826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f90593d609b577c48a1c50ad287c8b28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipContent: Odstranit projekt
 --- !u!1 &3342264831652789083
 GameObject:
   m_ObjectHideFlags: 0
@@ -2879,6 +2977,7 @@ GameObject:
   - component: {fileID: 3662232068641423189}
   - component: {fileID: 388614770736105292}
   - component: {fileID: 1162389362779023217}
+  - component: {fileID: 8865237606337440889}
   m_Layer: 5
   m_Name: UserButton
   m_TagString: Untagged
@@ -2999,6 +3098,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8865237606337440889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3461080827657762777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f90593d609b577c48a1c50ad287c8b28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipContent: "Nastaven\xED \xFA\u010Dtu"
 --- !u!1 &4366833414744455779
 GameObject:
   m_ObjectHideFlags: 0
@@ -3400,6 +3512,7 @@ GameObject:
   - component: {fileID: 497227421254361010}
   - component: {fileID: 5444448868843472715}
   - component: {fileID: 5469765750639463096}
+  - component: {fileID: 6434852855838084763}
   m_Layer: 5
   m_Name: ExportIcon
   m_TagString: Untagged
@@ -3520,6 +3633,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6434852855838084763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5851731617633107295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f90593d609b577c48a1c50ad287c8b28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipContent: Exportovat projekt
 --- !u!1 &6339056126861610066
 GameObject:
   m_ObjectHideFlags: 0
@@ -3986,6 +4112,7 @@ GameObject:
   - component: {fileID: 981497781021517192}
   - component: {fileID: 4296182995223284079}
   - component: {fileID: 8279716006536199526}
+  - component: {fileID: 6822818195105878537}
   m_Layer: 5
   m_Name: EditButton
   m_TagString: Untagged
@@ -4106,6 +4233,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6822818195105878537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7082597153608172281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f90593d609b577c48a1c50ad287c8b28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipContent: Upravit projekt
 --- !u!1 &7263221054375734748
 GameObject:
   m_ObjectHideFlags: 0
@@ -4118,6 +4258,7 @@ GameObject:
   - component: {fileID: 8244313246933530219}
   - component: {fileID: 8712755440814034998}
   - component: {fileID: 8628226203719223542}
+  - component: {fileID: 9034644890479710099}
   m_Layer: 5
   m_Name: DuplicateIcon
   m_TagString: Untagged
@@ -4238,6 +4379,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &9034644890479710099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7263221054375734748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f90593d609b577c48a1c50ad287c8b28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipContent: Duplikovat projekt
 --- !u!1 &7486745704238857613
 GameObject:
   m_ObjectHideFlags: 0
@@ -4250,6 +4404,7 @@ GameObject:
   - component: {fileID: 390519678064433249}
   - component: {fileID: 8970508753739571318}
   - component: {fileID: 6315296824225164293}
+  - component: {fileID: 2402737122105702052}
   m_Layer: 5
   m_Name: OpenButton
   m_TagString: Untagged
@@ -4370,6 +4525,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2402737122105702052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7486745704238857613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f90593d609b577c48a1c50ad287c8b28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipContent: "Otev\u0159\xEDt projekt"
 --- !u!1 &7737707701187974671
 GameObject:
   m_ObjectHideFlags: 0
@@ -4456,6 +4624,7 @@ GameObject:
   - component: {fileID: 587283226780259581}
   - component: {fileID: 5910761218576972736}
   - component: {fileID: 4243904587833717921}
+  - component: {fileID: 8583690119776928939}
   m_Layer: 5
   m_Name: FinishedButton
   m_TagString: Untagged
@@ -4576,6 +4745,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8583690119776928939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8410806318445624177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f90593d609b577c48a1c50ad287c8b28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipContent: Potvrdit
 --- !u!1 &8923888186478664989
 GameObject:
   m_ObjectHideFlags: 0
@@ -4588,6 +4770,7 @@ GameObject:
   - component: {fileID: 1177736518469151612}
   - component: {fileID: 4729072067923464590}
   - component: {fileID: 2597766618573701391}
+  - component: {fileID: 4486691774354393767}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -4708,6 +4891,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &4486691774354393767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8923888186478664989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f90593d609b577c48a1c50ad287c8b28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipContent: "Nahr\xE1t obr\xE1zek"
 --- !u!1 &9002084333449310612
 GameObject:
   m_ObjectHideFlags: 0
