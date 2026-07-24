@@ -12,7 +12,7 @@ public class ViewingInitializer : MonoBehaviour, Iinitializer {
     public bool InEditorDebugging = false;
 
     public void Initialize() {
-        if (!InEditorDebugging) {
+        if (!InEditorDebugging || !Application.isEditor) {
             _projectName = GetUrlParameter("projectName");
         }
 
@@ -51,7 +51,7 @@ public class ViewingInitializer : MonoBehaviour, Iinitializer {
             UIManager.Instance.HideUI(UIType.LoadingScreen);
             yield break; // Stops coroutine safely
         }
-            
+
         // UIManager.Instance.ShowUI(UIType.ViewerHUD);
         yield return Serializer.DeserializeProjectCoroutine(ProjectManager.Instance.SelectedProject);
         MainManagerBase.Instance.ChangeState(AppState.Freecam);
