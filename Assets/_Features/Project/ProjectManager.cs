@@ -34,7 +34,7 @@ public class ProjectManager : Singleton<ProjectManager> {
     /// <summary>
     /// Download selected projects whole data
     /// </summary>
-    /// 
+    ///
     public IEnumerator DownloadProjectData(ProjectMetadata projectMetadata, System.Action<string, bool> onFinished) {
         yield return DownloadProjectDataCoroutine(projectMetadata.projectName, onFinished);
     }
@@ -81,12 +81,13 @@ public class ProjectManager : Singleton<ProjectManager> {
 
     public void CreateNewProject(Action<string> onCompleted) {
         PopUp.Instance.AskForInput("Jméno projektu", (userInput) => {
-            if (string.IsNullOrEmpty(userInput)) {
+            if (string.IsNullOrWhiteSpace(userInput)) {
                 PopUp.Instance.ShowPopUpWindow("Input was cancelled or empty.");
                 return;
             }
 
-            string newProjectName = UniqueNameEnsure(userInput);
+            string trimmedInput = userInput.Trim();
+            string newProjectName = UniqueNameEnsure(trimmedInput);
             string id = Guid.NewGuid().ToString();
 
             ServerCommunicationManager.Instance.CreateProject(newProjectName, id, (success, response) => {
@@ -101,12 +102,14 @@ public class ProjectManager : Singleton<ProjectManager> {
 
     public void RenameProject(ProjectMetadata projectMetadata, Action onCompleted) {
         PopUp.Instance.AskForInput("Přejmenovat projekt", (userInput) => {
-            if (string.IsNullOrEmpty(userInput)) {
+            if (string.IsNullOrWhiteSpace(userInput)) {
                 PopUp.Instance.ShowPopUpWindow("Input was cancelled or empty.");
                 return;
             }
 
-            ServerCommunicationManager.Instance.EditProjectName(projectMetadata.projectName, userInput, (success, response) => {
+            string trimmedInput = userInput.Trim();
+
+            ServerCommunicationManager.Instance.EditProjectName(projectMetadata.projectName, trimmedInput, (success, response) => {
                 if (!success) {
                     PopUp.Instance.ShowPopUpWindow("Failed " + response);
                 }
@@ -117,6 +120,10 @@ public class ProjectManager : Singleton<ProjectManager> {
     }
 
     public void EditProject(string oldName, string newName, string description, string imageID, Action onCompleted) {
+        oldName = oldName?.Trim();
+        newName = newName?.Trim();
+        description = description?.Trim();
+
         ServerCommunicationManager.Instance.EditProject(oldName, newName, description, imageID, (success, response) => {
             if (!success) {
                 PopUp.Instance.ShowPopUpWindow("Failed " + response);
@@ -127,12 +134,14 @@ public class ProjectManager : Singleton<ProjectManager> {
     }
 
     public void RenameProject(ProjectMetadata projectMetadata, string userInput, Action onCompleted) {
-        if (string.IsNullOrEmpty(userInput)) {
+        if (string.IsNullOrWhiteSpace(userInput)) {
             PopUp.Instance.ShowPopUpWindow("Input was cancelled or empty.");
             return;
         }
 
-        ServerCommunicationManager.Instance.EditProjectName(projectMetadata.projectName, userInput, (success, response) => {
+        string trimmedInput = userInput.Trim();
+
+        ServerCommunicationManager.Instance.EditProjectName(projectMetadata.projectName, trimmedInput, (success, response) => {
             if (!success) {
                 PopUp.Instance.ShowPopUpWindow("Failed " + response);
             }
@@ -233,7 +242,7 @@ public class ProjectManager : Singleton<ProjectManager> {
     #endregion
 
     string UniqueNameEnsure(string name) {
-        string baseName = name;
+        string baseName = name?.Trim() ?? string.Empty;
         string uniqueName = baseName;
         int copyNumber = 1;
 
