@@ -4,6 +4,12 @@ using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+public class RadioCallbacks {
+    public EventCallback<PointerDownEvent> PointerCb;
+    public EventCallback<ClickEvent> ClickCb;
+    public EventCallback<ChangeEvent<bool>> ChangeCb;
+}
+
 public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
 
     private List<SurveyAnswerUIEditorGrid> _rows = new();
@@ -13,6 +19,13 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
     private Dictionary<int, int> _selectedColPerRow = new(); // rowIdx -> colIdx
 
     private MultiColumnListView _table;
+
+    private void RefreshAllRowRadioButtons() {
+        if (_table == null) return;
+        for (int i = 0; i < _rows.Count; i++) {
+            _table.RefreshItem(i);
+        }
+    }
 
     #region Events
 
@@ -43,6 +56,7 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
         _table.fixedItemHeight = 44f;
         _table.reorderable = false;
         _table.showAddRemoveFooter = false;
+        _table.selectionType = SelectionType.None;
         _table.itemsSource = _rowIndices;
 
         RebuildTableColumns();
@@ -164,6 +178,7 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
             tf.style.flexGrow = 1;
             tf.style.width = Length.Percent(100);
             tf.style.alignSelf = Align.Stretch;
+            tf.style.unityTextAlign = TextAnchor.MiddleCenter;
 
             header.Add(deleteBtn);
             header.Add(tf);
@@ -235,12 +250,39 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
                 if (radio != null) {
                     bool isSelected = _selectedColPerRow.TryGetValue(rowIndex, out int selCol) && selCol == currentColIdx;
                     radio.Radio.SetValueWithoutNotify(isSelected);
-                    radio.RegisterRadioCallback(evt => {
+
+                    if (radio.userData is RadioCallbacks oldCbs) {
+                        if (oldCbs.PointerCb != null) radio.UnregisterCallback(oldCbs.PointerCb, TrickleDown.TrickleDown);
+                        if (oldCbs.ClickCb != null) radio.UnregisterCallback(oldCbs.ClickCb, TrickleDown.TrickleDown);
+                        if (oldCbs.ChangeCb != null) radio.Radio.UnregisterValueChangedCallback(oldCbs.ChangeCb);
+                    }
+
+                    EventCallback<PointerDownEvent> pointerCb = evt => {
+                        _selectedColPerRow[rowIndex] = currentColIdx;
+                        RefreshAllRowRadioButtons();
+                        evt.StopPropagation();
+                    };
+                    EventCallback<ClickEvent> clickCb = evt => {
+                        _selectedColPerRow[rowIndex] = currentColIdx;
+                        RefreshAllRowRadioButtons();
+                        evt.StopPropagation();
+                    };
+                    EventCallback<ChangeEvent<bool>> changeCb = evt => {
                         if (evt.newValue) {
                             _selectedColPerRow[rowIndex] = currentColIdx;
-                            _table?.RefreshItem(rowIndex);
+                            RefreshAllRowRadioButtons();
                         }
-                    });
+                    };
+
+                    radio.userData = new RadioCallbacks {
+                        PointerCb = pointerCb,
+                        ClickCb = clickCb,
+                        ChangeCb = changeCb
+                    };
+
+                    radio.RegisterCallback(pointerCb, TrickleDown.TrickleDown);
+                    radio.RegisterCallback(clickCb, TrickleDown.TrickleDown);
+                    radio.Radio.RegisterValueChangedCallback(changeCb);
                 }
             }
         };
@@ -324,7 +366,12 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
         if (addRowButton != null) {
             addRowButton.clickable = new Clickable(() =>
             {
-                OnAddRow?.Invoke(QuestionID, AddRow());
+                if (_rows.Count < 20) {
+                    var newRow = AddRow();
+                    if (newRow != null) {
+                        OnAddRow?.Invoke(QuestionID, newRow);
+                    }
+                }
             });
         }
 
@@ -332,7 +379,12 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
         if (addColumnButton != null) {
             addColumnButton.clickable = new Clickable(() =>
             {
-                OnAddColumn?.Invoke(QuestionID, AddColumn());
+                if (_columns.Count < 8) {
+                    var newCol = AddColumn();
+                    if (newCol != null) {
+                        OnAddColumn?.Invoke(QuestionID, newCol);
+                    }
+                }
             });
         }
 
@@ -352,6 +404,8 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
     }
 
     public SurveyAnswerUIEditorGrid AddRow(string initialText = "") {
+        if (_rows.Count >= 20) return null;
+
         var element = _answerTemplate != null ? _answerTemplate.Instantiate() : new VisualElement();
         SurveyAnswerUIEditorGrid row = new SurveyAnswerUIEditorGrid(element, _rows.Count, this, false);
         if (!string.IsNullOrEmpty(initialText)) {
@@ -366,6 +420,8 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
     }
 
     public SurveyAnswerUIEditorGrid AddColumn(string initialText = "") {
+        if (_columns.Count >= 8) return null;
+
         var element = _surveyUIBuilder.GridCollumnTemplate != null ? _surveyUIBuilder.GridCollumnTemplate.CloneTree() : new VisualElement();
         int colIdx = _columns.Count;
 
@@ -382,6 +438,7 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
     }
 
     public void RemoveColumn(int colIdx) {
+        if (_columns.Count <= 1) return;
         if (colIdx < 0 || colIdx >= _columns.Count) return;
         _columns.RemoveAt(colIdx);
         RebuildTableColumns();
@@ -390,6 +447,7 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
     }
 
     public void RemoveRow(int rowIdx) {
+        if (_rows.Count <= 1) return;
         if (rowIdx < 0 || rowIdx >= _rows.Count) return;
         _rows.RemoveAt(rowIdx);
         _rowIndices.Clear();

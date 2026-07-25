@@ -30,6 +30,7 @@ public class SurveyQuestionUIViewerGrid : SurveyQuestionUIViewer {
         _table.fixedItemHeight = 40f;
         _table.reorderable = false;
         _table.showAddRemoveFooter = false;
+        _table.selectionType = SelectionType.None;
         _table.columns.Clear();
         _table.itemsSource = _rowIndices;
 
@@ -67,6 +68,13 @@ public class SurveyQuestionUIViewerGrid : SurveyQuestionUIViewer {
         };
 
         _table.columns.Add(rowTitleCol);
+    }
+
+    private void RefreshAllRowRadioButtons() {
+        if (_table == null) return;
+        for (int i = 0; i < _rowIndices.Count; i++) {
+            _table.RefreshItem(i);
+        }
     }
 
     public void AddColumn(string text) {
@@ -109,27 +117,61 @@ public class SurveyQuestionUIViewerGrid : SurveyQuestionUIViewer {
                     if (toggle != null) {
                         bool isChecked = _checkedCells.Contains((rowIndex, colIdx));
                         toggle.SetValueWithoutNotify(isChecked);
-                        toggle.RegisterValueChangedCallback(evt => {
+                        if (toggle.userData is EventCallback<ChangeEvent<bool>> oldCb) {
+                            toggle.UnregisterValueChangedCallback(oldCb);
+                        }
+                        EventCallback<ChangeEvent<bool>> newCb = evt => {
                             if (evt.newValue) {
                                 _checkedCells.Add((rowIndex, colIdx));
                             } else {
                                 _checkedCells.Remove((rowIndex, colIdx));
                             }
                             InvokeAnswerSelected(rowIndex, colIdx, evt.newValue);
-                        });
+                        };
+                        toggle.userData = newCb;
+                        toggle.RegisterValueChangedCallback(newCb);
                     }
                 } else {
                     var radio = cell.Q<CustomRadioButtonNoText>("grid-cell-radio");
                     if (radio != null) {
                         bool isSelected = _selectedColPerRow.TryGetValue(rowIndex, out int selCol) && selCol == colIdx;
                         radio.Radio.SetValueWithoutNotify(isSelected);
-                        radio.RegisterRadioCallback(evt => {
+
+                        if (radio.userData is RadioCallbacks oldCbs) {
+                            if (oldCbs.PointerCb != null) radio.UnregisterCallback(oldCbs.PointerCb, TrickleDown.TrickleDown);
+                            if (oldCbs.ClickCb != null) radio.UnregisterCallback(oldCbs.ClickCb, TrickleDown.TrickleDown);
+                            if (oldCbs.ChangeCb != null) radio.Radio.UnregisterValueChangedCallback(oldCbs.ChangeCb);
+                        }
+
+                        EventCallback<PointerDownEvent> pointerCb = evt => {
+                            _selectedColPerRow[rowIndex] = colIdx;
+                            InvokeAnswerSelected(rowIndex, colIdx, true);
+                            RefreshAllRowRadioButtons();
+                            evt.StopPropagation();
+                        };
+                        EventCallback<ClickEvent> clickCb = evt => {
+                            _selectedColPerRow[rowIndex] = colIdx;
+                            InvokeAnswerSelected(rowIndex, colIdx, true);
+                            RefreshAllRowRadioButtons();
+                            evt.StopPropagation();
+                        };
+                        EventCallback<ChangeEvent<bool>> changeCb = evt => {
                             if (evt.newValue) {
                                 _selectedColPerRow[rowIndex] = colIdx;
                                 InvokeAnswerSelected(rowIndex, colIdx, true);
-                                _table?.RefreshItem(rowIndex);
+                                RefreshAllRowRadioButtons();
                             }
-                        });
+                        };
+
+                        radio.userData = new RadioCallbacks {
+                            PointerCb = pointerCb,
+                            ClickCb = clickCb,
+                            ChangeCb = changeCb
+                        };
+
+                        radio.RegisterCallback(pointerCb, TrickleDown.TrickleDown);
+                        radio.RegisterCallback(clickCb, TrickleDown.TrickleDown);
+                        radio.Radio.RegisterValueChangedCallback(changeCb);
                     }
                 }
             };

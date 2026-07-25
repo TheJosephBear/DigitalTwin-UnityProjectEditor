@@ -5,8 +5,8 @@
     <ui:VisualElement name="question-container" class="question-card" style="flex-grow: 1;">
         <ui:Instance template="QuestionTitleBar" name="question-bar" />
         <ui:VisualElement class="question-divider" />
-        <ui:RadioButtonGroup name="options-list" class="options-list-vertical" style="align-self: stretch; align-items: stretch;">
+        <ui:VisualElement name="options-list" class="options-list-vertical" style="align-self: stretch; align-items: stretch;">
             <ui:Instance template="OptionToggle" />
-        </ui:RadioButtonGroup>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

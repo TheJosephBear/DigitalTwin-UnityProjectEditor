@@ -452,6 +452,7 @@ ScrollView.unity-base-dropdown__container-inner {
     border-color: rgba(103, 80, 164, 0.25);
     color: rgb(29, 25, 43);
     font-size: 14px;
+    -unity-text-align: middle-center;
 }
 
 #grid-table .unity-multi-column-header__column TextField #unity-text-input {
@@ -466,6 +467,7 @@ ScrollView.unity-base-dropdown__container-inner {
     border-color: rgba(103, 80, 164, 0.25);
     color: rgb(29, 25, 43);
     font-size: 14px;
+    -unity-text-align: middle-center;
 }
 
 #grid-table .unity-multi-column-header__column TextField .unity-base-text-field__input {
@@ -480,6 +482,7 @@ ScrollView.unity-base-dropdown__container-inner {
     border-color: rgba(103, 80, 164, 0.25);
     color: rgb(29, 25, 43);
     font-size: 14px;
+    -unity-text-align: middle-center;
 }
 
 #grid-table .unity-multi-column-header__column TextField:focus #unity-text-input {
@@ -501,6 +504,15 @@ ScrollView.unity-base-dropdown__container-inner {
 
 #grid-table .unity-multi-column-view__row-container:hover {
     background-color: rgba(103, 80, 164, 0.08);
+}
+
+#grid-table .unity-collection-view__item--selected,
+#grid-table .unity-list-view__item--selected,
+#grid-table .unity-multi-column-view__row-container--selected,
+#grid-table .unity-collection-view__item:active,
+#grid-table .unity-list-view__item:active,
+#grid-table .unity-multi-column-view__row-container:active {
+    background-color: transparent;
 }
 
 #grid-table .unity-multi-column-list-view__cell {
@@ -571,6 +583,12 @@ ScrollView.unity-base-dropdown__container-inner {
     align-self: center;
     justify-content: center;
     margin: 0;
+}
+
+
+
+#grid-table .unity-multi-column-list-view__cell CustomRadioButtonNoText .unity-toggle__checkmark {
+    border-radius: 50%;
 }
 
 .icon-trash {

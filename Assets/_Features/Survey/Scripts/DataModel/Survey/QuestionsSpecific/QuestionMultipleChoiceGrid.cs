@@ -31,11 +31,13 @@ namespace SurveySystem {
         }
 
         public void AddRow(string rowText = "Row") {
+            if (Rows.Count >= 20) return;
             Rows.Add(rowText);
             SyncGridAnswers();
         }
 
         public void AddColumn(string columnText = "Column") {
+            if (Columns.Count >= 8) return;
             Columns.Add(columnText);
             SyncGridAnswers();
         }
@@ -82,6 +84,7 @@ namespace SurveySystem {
         }
 
         public void RemoveRow(int idx) {
+            if (Rows.Count <= 1) return;
             if (idx >= 0 && idx < Rows.Count) {
                 Rows.RemoveAt(idx);
                 _answers.RemoveAll(a => a is AnswerGrid grid && grid.Row == idx);
@@ -94,6 +97,7 @@ namespace SurveySystem {
         }
 
         public void RemoveColumn(int idx) {
+            if (Columns.Count <= 1) return;
             if (idx >= 0 && idx < Columns.Count) {
                 Columns.RemoveAt(idx);
                 _answers.RemoveAll(a => a is AnswerGrid grid && grid.Collumn == idx);

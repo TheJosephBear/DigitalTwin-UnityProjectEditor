@@ -29,6 +29,7 @@ public partial class CustomToggleButton : VisualElement {
 
     private readonly TextField _labelTextField;
     private readonly Toggle _toggleButton;
+    public Toggle Toggle => _toggleButton;
 
     public CustomToggleButton() {
         this.style.flexDirection = FlexDirection.Row;
@@ -47,5 +48,9 @@ public partial class CustomToggleButton : VisualElement {
         textFieldWrapper.style.flexGrow = 1;
         textFieldWrapper.Add(_labelTextField);
         Add(textFieldWrapper);
+    }
+
+    public void RegisterToggleCallback(EventCallback<ChangeEvent<bool>> callback) {
+        _toggleButton.RegisterValueChangedCallback(callback);
     }
 }
