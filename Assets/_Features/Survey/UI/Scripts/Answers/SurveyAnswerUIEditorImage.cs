@@ -23,12 +23,23 @@ public class SurveyAnswerUIEditorImage : SurveyAnswerUIEditor {
         var clickable = _answerElement.Q<VisualElement>("image");
 
         clickable?.RegisterCallback<ClickEvent>(evt => {
+            if (evt.target is Button btn && btn.name == "enhance-image") {
+                return;
+            }
             ImageManager.Instance.AskForImageDialog((textureAsset) => {
                 if (textureAsset != null) {
                     SetImage(textureAsset.ID);
                     OnAnswerImageChanged?.Invoke(_answerIndex, textureAsset.ID);
                 }
             });
+        });
+
+        var enhanceBtn = _answerElement.Q<Button>("enhance-image");
+        enhanceBtn?.RegisterCallback<ClickEvent>(evt => {
+            evt.StopPropagation();
+            if (_imageDisplay != null) {
+                _questionUIRef?.EnhanceImage(_imageDisplay);
+            }
         });
 
         var deleteButton = _answerElement.Q<Button>("delete-option-button");

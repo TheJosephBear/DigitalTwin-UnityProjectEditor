@@ -60,7 +60,9 @@ public class SurveyQuestionUIViewerGrid : SurveyQuestionUIViewer {
     }
 
     protected override SurveyAnswerUIBase CreateAnswerUI(VisualElement element, int index, bool isOther) => null;
-    protected override void RegisterButtons() { }
+    protected override void RegisterButtons() {
+        base.RegisterButtons();
+    }
     protected override void RegisterDropdown() { }
     protected override void RegisterTextInputs() { }
 

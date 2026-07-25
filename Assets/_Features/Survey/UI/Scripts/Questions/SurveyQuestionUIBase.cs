@@ -43,8 +43,23 @@ public abstract class SurveyQuestionUIBase {
 
         LoadAnswerTemplate();
         InitializeOptionsList();
+        HideViewContainers();
 
      //   RegisterInputs(); // Called by ui builder instead after being added to the list
+    }
+
+    protected void HideViewContainers() {
+        var cameraView = _root.Q<VisualElement>("camera-view");
+        if (cameraView != null) {
+            cameraView.style.display = DisplayStyle.None;
+            cameraView.style.backgroundImage = null;
+        }
+
+        var questionImage = _root.Q<VisualElement>("question-image");
+        if (questionImage != null) {
+            questionImage.style.display = DisplayStyle.None;
+            questionImage.style.backgroundImage = null;
+        }
     }
 
     #region Initialization
@@ -102,17 +117,105 @@ public abstract class SurveyQuestionUIBase {
     }
 
     public void SetRenderedImage(Texture texture) {
-        _root.Q<VisualElement>("camera-view").style.backgroundImage = Background.FromTexture2D((Texture2D)texture);
+        _root.Q<VisualElement>("question-image").style.backgroundImage = Background.FromTexture2D((Texture2D)texture);
+        _root.Q<VisualElement>("question-image").style.display = DisplayStyle.Flex;
     }
 
     public virtual void SetImageRender() {
-        Debug.Log("Set image callled "+ImageID);
-        if (ImageID == "" || ImageID == null) return;
+        Debug.Log("Set image callled " + ImageID);
+        var questionImage = _root.Q<VisualElement>("question-image");
+        if (questionImage == null) return;
+
+        if (string.IsNullOrEmpty(ImageID)) {
+            questionImage.style.backgroundImage = null;
+            questionImage.style.display = DisplayStyle.None;
+            return;
+        }
 
         TextureAsset textureAsset = ImageManager.Instance.GetTextureAssetByID(ImageID);
-        if(textureAsset == null) return;
+        if (textureAsset == null) {
+            questionImage.style.backgroundImage = null;
+            questionImage.style.display = DisplayStyle.None;
+            return;
+        }
 
         SetRenderedImage(textureAsset.Texture);
+    }
+
+    public void EnhanceImage(VisualElement sourceElement) {
+        if (sourceElement == null) return;
+
+        StyleBackground styleBg = sourceElement.style.backgroundImage;
+        Background bg = styleBg.value;
+        Background resolvedBg = sourceElement.resolvedStyle.backgroundImage;
+
+        Texture tex = bg.texture ?? resolvedBg.texture;
+        RenderTexture rt = bg.renderTexture ?? resolvedBg.renderTexture;
+        Sprite sp = bg.sprite ?? resolvedBg.sprite;
+        VectorImage vi = bg.vectorImage ?? resolvedBg.vectorImage;
+
+        bool hasImage = tex != null || rt != null || sp != null || vi != null;
+        if (!hasImage) {
+            Debug.LogWarning($"[EnhanceImage] No image to enhance on element '{sourceElement.name}'!");
+            return;
+        }
+
+        VisualTreeAsset template = _surveyUIBuilder?.FullscreenImageOverlayTemplate;
+#if UNITY_EDITOR
+        if (template == null) {
+            template = UnityEditor.AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/_Features/Survey/UI/FullscreenImageOverlay.uxml");
+        }
+#endif
+
+        if (template == null) {
+            Debug.LogError("FullscreenImageOverlayTemplate is missing from SurveyUIBuilder!");
+            return;
+        }
+
+        var root = sourceElement.panel?.visualTree;
+        if (root == null) return;
+
+        var overlayInstance = template.Instantiate();
+        overlayInstance.style.position = Position.Absolute;
+        overlayInstance.style.top = 0;
+        overlayInstance.style.bottom = 0;
+        overlayInstance.style.left = 0;
+        overlayInstance.style.right = 0;
+
+        var overlay = overlayInstance.Q<VisualElement>("fullscreen-overlay");
+        var preview = overlayInstance.Q<VisualElement>("enhanced-image-preview");
+        var closeBtn = overlayInstance.Q<Button>("close-overlay-btn");
+
+        if (preview != null) {
+            if (rt != null) {
+                preview.style.backgroundImage = Background.FromRenderTexture(rt);
+            } else if (tex != null) {
+                preview.style.backgroundImage = Background.FromTexture2D((Texture2D)tex);
+            } else if (sp != null) {
+                preview.style.backgroundImage = Background.FromSprite(sp);
+            } else if (vi != null) {
+                preview.style.backgroundImage = Background.FromVectorImage(vi);
+            } else {
+                preview.style.backgroundImage = sourceElement.style.backgroundImage;
+            }
+        }
+
+        if (closeBtn != null) {
+            closeBtn.clicked += () => {
+                overlayInstance.RemoveFromHierarchy();
+            };
+        }
+
+        if (overlay != null) {
+            overlay.RegisterCallback<PointerDownEvent>(evt => {
+                if (evt.target == overlay) {
+                    overlayInstance.RemoveFromHierarchy();
+                    evt.StopPropagation();
+                }
+            });
+        }
+
+        root.Add(overlayInstance);
     }
 
     #endregion

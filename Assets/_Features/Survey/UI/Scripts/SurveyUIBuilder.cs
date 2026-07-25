@@ -18,6 +18,17 @@ public class SurveyUIBuilder : MonoBehaviour {
 
     [SerializeField]
     private VisualTreeAsset addQuestionBarTemplate;
+    [SerializeField]
+    private VisualTreeAsset fullscreenImageOverlayTemplate;
+    public VisualTreeAsset FullscreenImageOverlayTemplate => fullscreenImageOverlayTemplate;
+
+#if UNITY_EDITOR
+    private void OnValidate() {
+        if (fullscreenImageOverlayTemplate == null) {
+            fullscreenImageOverlayTemplate = UnityEditor.AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/_Features/Survey/UI/FullscreenImageOverlay.uxml");
+        }
+    }
+#endif
 
     private VisualElement _root;
     private ScrollView _scrollView;

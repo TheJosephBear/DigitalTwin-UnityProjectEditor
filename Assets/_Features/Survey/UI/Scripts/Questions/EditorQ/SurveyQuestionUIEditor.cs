@@ -29,6 +29,7 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
     public event Action<int, bool> OnToggleRequired;
     public event Action<int, int, int> OnMoveAnswer;
     public event Action<SurveyQuestionUIEditor> OnQuestionSelected;
+    public event Action<int> OnRemoveImage;
 
     #endregion
 
@@ -101,7 +102,7 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
 
     public void SetSelectedView(ViewPoint viewPoint) {
         var dropdown = _root.Q<DropdownField>("camera-view-dropdown");
-        int index = -1; // choices zaËÌnajÌ na "û·dn˝", a to nenÌ vp
+        int index = -1; // choices zaƒç√≠naj√≠ na "≈æ√°dn√Ω", a to nen√≠ vp
         foreach (string choice in dropdown.choices) {
             if (choice == viewPoint.Name) {
                 dropdown.value = choice;
@@ -117,6 +118,13 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
         return new Tuple<int, string>(dropdown.index, dropdown.value);
     }
 
+    public void ClearSelectedView() {
+        var dropdown = _root.Q<DropdownField>("camera-view-dropdown");
+        if (dropdown != null && dropdown.choices != null && dropdown.choices.Count > 0) {
+            dropdown.value = dropdown.choices[0];
+        }
+    }
+
     public void ToggleRequired() {
         SetRequired(!_isRequired);
     }
@@ -128,7 +136,7 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
 
         // Set texture
         Texture textureToUse = null;
-        
+
         if (_isRequired) {
             textureToUse = _surveyUIBuilder.AsteriskTexture;
         } else {
@@ -165,6 +173,56 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
         _root.RegisterCallback<PointerDownEvent>(evt => {
             OnQuestionSelected?.Invoke(this);
         });
+
+        // Enhance / Remove image buttons
+        var cameraView = _root.Q<VisualElement>("camera-view");
+        if (cameraView != null) {
+            var enhanceCamBtn = cameraView.Q<Button>("enhance-image");
+            if (enhanceCamBtn != null) {
+                enhanceCamBtn.RegisterCallback<ClickEvent>(evt => {
+                    evt.StopPropagation();
+                    var currentCamView = _root.Q<VisualElement>("camera-view");
+                    EnhanceImage(currentCamView);
+                });
+            }
+
+            var removeViewBtn = cameraView.Q<Button>("remove-view");
+            if (removeViewBtn != null) {
+                removeViewBtn.RegisterCallback<ClickEvent>(evt => {
+                    evt.StopPropagation();
+                    ClearSelectedView();
+                });
+            }
+        }
+
+        var questionImage = _root.Q<VisualElement>("question-image");
+        if (questionImage != null) {
+            questionImage.RegisterCallback<ClickEvent>(evt => {
+                if (evt.target is Button btn && (btn.name == "enhance-image" || btn.name == "remove-image")) {
+                    return;
+                }
+                int index = _surveyUIBuilder.GetQuestionIndex(this);
+                OnUploadImage?.Invoke(index);
+            });
+
+            var enhanceImgBtn = questionImage.Q<Button>("enhance-image");
+            if (enhanceImgBtn != null) {
+                enhanceImgBtn.RegisterCallback<ClickEvent>(evt => {
+                    evt.StopPropagation();
+                    var currentQuestionImg = _root.Q<VisualElement>("question-image");
+                    EnhanceImage(currentQuestionImg);
+                });
+            }
+
+            var removeImgBtn = questionImage.Q<Button>("remove-image");
+            if (removeImgBtn != null) {
+                removeImgBtn.RegisterCallback<ClickEvent>(evt => {
+                    evt.StopPropagation();
+                    int index = _surveyUIBuilder.GetQuestionIndex(this);
+                    OnRemoveImage?.Invoke(index);
+                });
+            }
+        }
     }
 
     /// <summary>Registers all UI callbacks.</summary>
@@ -185,7 +243,11 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
 
             if (index == -1) {
                 OnViewpointSelected?.Invoke(QuestionID, "");
-                _root.Q<VisualElement>("camera-view").style.backgroundImage = null;
+                var cameraView = _root.Q<VisualElement>("camera-view");
+                if (cameraView != null) {
+                    cameraView.style.backgroundImage = null;
+                    cameraView.style.display = DisplayStyle.None;
+                }
                 SetImageRender();
             }
 
@@ -373,7 +435,7 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
 
         var choices = new List<string>();
 
-        choices.Add("é·dn˝");
+        choices.Add("≈Ω√°dn√Ω");
 
         foreach (var vp in _viewPoints)
             choices.Add(vp.Name);

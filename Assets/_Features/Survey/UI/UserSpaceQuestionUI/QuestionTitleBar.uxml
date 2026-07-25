@@ -1,17 +1,15 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Template name="Question-title" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/Question-title.uxml?fileID=9197481963319205126&amp;guid=2901efb5a1e69bd43a4d67869ab5bef9&amp;type=3#Question-title" />
     <ui:Template name="Question-description" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/Question-description.uxml?fileID=9197481963319205126&amp;guid=d5a5318ac21e8db418dafe6648d1e3af&amp;type=3#Question-description" />
-    <Style src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/UserStyles.uss" />
-    
-    <!-- Question Position and Type Header Info -->
+    <Style src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/UserStyles.uss?fileID=7433441132597879392&amp;guid=74558b2425df4b44db13d07e45d34b9f&amp;type=3#UserStyles" />
     <ui:VisualElement name="question-header-info">
         <ui:Label text="1" name="question-position" />
-        <ui:Label text="Label" name="question-type" />
     </ui:VisualElement>
-
     <ui:VisualElement name="question-title-bar" style="flex-grow: 0; flex-direction: row; align-items: center;">
         <ui:Instance template="Question-title" />
     </ui:VisualElement>
     <ui:Instance template="Question-description" />
-    <ui:VisualElement name="camera-view" style="flex-grow: 1; max-height: 200px; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/image-outline.png?fileID=2800000&amp;guid=2a8b0a5a8db48ee46924cdb62930cde7&amp;type=3#image-outline&quot;); -unity-background-scale-mode: scale-to-fit; min-height: 100px;" />
+    <ui:VisualElement name="camera-view" style="flex-grow: 1; max-height: 200px; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/image-outline.png?fileID=2800000&amp;guid=2a8b0a5a8db48ee46924cdb62930cde7&amp;type=3#image-outline&quot;); -unity-background-scale-mode: scale-to-fit; min-height: 200px; min-width: 200px; max-width: 200px; align-self: center; display: none;">
+        <ui:Button name="enhance-image" class="icon" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/magnify-plus-outline.png?fileID=2800000&amp;guid=11b0b51f78ca2b648a63350ae0bd5145&amp;type=3#magnify-plus-outline&quot;); background-color: rgba(255, 255, 255, 0.49); position: absolute; bottom: 0; right: 0; width: 24px; height: 24px;" />
+    </ui:VisualElement>
 </ui:UXML>

@@ -1,7 +1,9 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/UserStyles.uss" />
     <ui:Button name="option-container" class="image-option-card">
-        <ui:VisualElement name="image" class="image-option-preview" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/image-outline.png?fileID=2800000&amp;guid=2a8b0a5a8db48ee46924cdb62930cde7&amp;type=3#image-outline&quot;);" />
+        <ui:VisualElement name="image" class="image-option-preview" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/image-outline.png?fileID=2800000&amp;guid=2a8b0a5a8db48ee46924cdb62930cde7&amp;type=3#image-outline&quot;); position: relative;">
+            <ui:Button name="enhance-image" class="icon" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/magnify-plus-outline.png?fileID=2800000&amp;guid=11b0b51f78ca2b648a63350ae0bd5145&amp;type=3#magnify-plus-outline&quot;); background-color: rgba(255, 255, 255, 0.49); position: absolute; bottom: 0; right: 0; width: 24px; height: 24px;" />
+        </ui:VisualElement>
         <ui:RadioButton style="flex-direction: column; visibility: hidden; display: flex; width: 0; height: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
     </ui:Button>
 </ui:UXML>

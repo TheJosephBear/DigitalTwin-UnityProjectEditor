@@ -150,7 +150,6 @@
     flex-grow: 0;
     flex-direction: row;
     align-items: center;
-    margin-bottom: 8px;
 }
 
 #question-position {

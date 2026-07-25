@@ -53,7 +53,7 @@ public class SurveyQuestionUIViewerImage : SurveyQuestionUIViewer {
     }
 
     protected override void RegisterButtons() {
-        // Viewer usually has no "Add Option" buttons
+        base.RegisterButtons();
     }
 
     protected override void RegisterTextInputs() {

@@ -102,8 +102,9 @@ public class SurveyUIControllerEditor : MonoBehaviour {
             editorUI.OnDescriptionChanged += HandleQuestionDescriptionChanged;
        //     editorUI.OnQuestionDeleted += HandleQuestionDeleted;
       //      editorUI.OnQuestionMoved += HandleQuestionMoved;
-            editorUI.OnUploadImage += HandleImageUpload;
-            editorUI.OnViewpointSelected += HandleQuestionViewPointSelected;
+             editorUI.OnUploadImage += HandleImageUpload;
+             editorUI.OnRemoveImage += HandleRemoveImage;
+             editorUI.OnViewpointSelected += HandleQuestionViewPointSelected;
             editorUI.OnMoveAnswer += HandleAnswerMoved;
             editorUI.OnToggleRequired += HandleRequiredChange;
         }
@@ -223,6 +224,12 @@ public class SurveyUIControllerEditor : MonoBehaviour {
             // Update the UI
             _surveyUIBuilder.SetQuestionImage(questionIndex, textureAsset.ID);
         });
+    }
+
+    void HandleRemoveImage(int questionIndex) {
+        Debug.Log($"Removing Image from question index: {questionIndex}");
+        _surveyBuilder.SetQuestionImageID(questionIndex, "");
+        _surveyUIBuilder.SetQuestionImage(questionIndex, "");
     }
 
     void HandleImageQuestionAnswerImageUpload(int questionID, int answerID, string imageID) {

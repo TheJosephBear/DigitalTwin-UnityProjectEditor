@@ -23,7 +23,18 @@ public class SurveyAnswerUIViewerImage : SurveyAnswerUIViewer {
         var clickable = _answerElement.Q<VisualElement>("option-container");
 
         clickable?.RegisterCallback<ClickEvent>(evt => {
+            if (evt.target is Button btn && btn.name == "enhance-image") {
+                return;
+            }
             OnSelected?.Invoke(_questionUIRef.QuestionID, AnswerIndex, true);
+        });
+
+        var enhanceBtn = _answerElement.Q<Button>("enhance-image");
+        enhanceBtn?.RegisterCallback<ClickEvent>(evt => {
+            evt.StopPropagation();
+            if (_imageDisplay != null) {
+                _questionUIRef?.EnhanceImage(_imageDisplay);
+            }
         });
     }
 

@@ -78,7 +78,7 @@ public class SurveyQuestionUIViewerString : SurveyQuestionUIViewer {
     }
 
     protected override void RegisterButtons() {
-       
+        base.RegisterButtons();
     }
 
     protected override void RegisterDropdown() {
