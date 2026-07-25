@@ -160,11 +160,12 @@ public class ProjectListUINew : MonoBehaviour {
     #endregion
 
     #region Editing Modal Buttons
-    
+
     public void OnImageUpload() {
         ImageManager.Instance.AskForImageDialog((texture) => {
             EditingImage.texture = texture.Texture;
             _temporaryUploadTexture = texture;
+            UpdateAspectRatio(EditingImage);
          //   _pendingImageID = texture.ID;
         });
     }
@@ -205,6 +206,7 @@ public class ProjectListUINew : MonoBehaviour {
         // Image
         TextureAsset textureAsset = ImageManager.Instance.GetPreviewAssetByProject(_projectInModal.projectName);
         if (textureAsset != null) ClassicImage.texture = textureAsset.Texture;
+        UpdateAspectRatio(ClassicImage);
     }
 
     void InitializeEditingPanel() {
@@ -219,6 +221,18 @@ public class ProjectListUINew : MonoBehaviour {
         // Image
         TextureAsset textureAsset = ImageManager.Instance.GetPreviewAssetByProject(_projectInModal.projectName);
         if (textureAsset != null) EditingImage.texture = textureAsset.Texture;
+        UpdateAspectRatio(EditingImage);
     }
 
+    private void UpdateAspectRatio(RawImage rawImage) {
+        if (rawImage == null || rawImage.texture == null || rawImage.texture.height == 0) return;
+
+        var fitter = rawImage.GetComponent<AspectRatioFitter>();
+        if (fitter == null) {
+            fitter = rawImage.gameObject.AddComponent<AspectRatioFitter>();
+            fitter.aspectMode = AspectRatioFitter.AspectMode.FitInParent;
+        }
+
+        fitter.aspectRatio = (float)rawImage.texture.width / rawImage.texture.height;
+    }
 }

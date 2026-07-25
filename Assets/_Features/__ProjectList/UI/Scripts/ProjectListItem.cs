@@ -15,12 +15,24 @@ public class ProjectListItem : MonoBehaviour {
         ProjectMetadata = project;
         ButtonText.text = ProjectMetadata.projectName;
         TextureAsset = textureAsset;
-        if (TextureAsset != null) EditingImage.texture = TextureAsset.Texture;
+        if (TextureAsset != null && TextureAsset.Texture != null) {
+            EditingImage.texture = TextureAsset.Texture;
+            UpdateAspectRatio(EditingImage);
+        }
     }
 
     public void OnClick() {
         string id = "";
         if (TextureAsset != null) id = TextureAsset.ID;
         _projectListUI.OnProjectClick(ProjectMetadata, id);
+    }
+
+    private void UpdateAspectRatio(RawImage rawImage) {
+        if (rawImage == null || rawImage.texture == null || rawImage.texture.height == 0) return;
+
+        var fitter = rawImage.GetComponent<AspectRatioFitter>();
+        if (fitter != null) {
+            fitter.aspectRatio = (float)rawImage.texture.width / rawImage.texture.height;
+        }
     }
 }

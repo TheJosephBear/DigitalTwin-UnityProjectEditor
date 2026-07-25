@@ -290,6 +290,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: ProjectListUI
       objectReference: {fileID: 0}
+    - target: {fileID: 646647645420611754, guid: 02a23fb298d48d84d88e65c5ba3c6923, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 646647645420611754, guid: 02a23fb298d48d84d88e65c5ba3c6923, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 646647645420611754, guid: 02a23fb298d48d84d88e65c5ba3c6923, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4129126425478749645, guid: 02a23fb298d48d84d88e65c5ba3c6923, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4129126425478749645, guid: 02a23fb298d48d84d88e65c5ba3c6923, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4129126425478749645, guid: 02a23fb298d48d84d88e65c5ba3c6923, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5353908323875024204, guid: 02a23fb298d48d84d88e65c5ba3c6923, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -308,11 +332,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5353908324316475799, guid: 02a23fb298d48d84d88e65c5ba3c6923, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.00091552734
-      objectReference: {fileID: 0}
-    - target: {fileID: 5353908324969688869, guid: 02a23fb298d48d84d88e65c5ba3c6923, type: 3}
-      propertyPath: m_Value
-      value: 1
+      value: -0.000061035156
       objectReference: {fileID: 0}
     - target: {fileID: 5353908325392770161, guid: 02a23fb298d48d84d88e65c5ba3c6923, type: 3}
       propertyPath: m_AnchorMax.x
