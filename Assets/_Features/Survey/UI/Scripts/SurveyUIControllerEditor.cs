@@ -112,6 +112,8 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         if (addedQuestionUI is SurveyQuestionUIEditorGrid gridUI) {
             gridUI.OnAddRow += AddRow;
             gridUI.OnAddColumn += AddColumn;
+            gridUI.OnRemoveRow += (qId, rowIdx) => _surveyBuilder.RemoveRow(qId, rowIdx);
+            gridUI.OnRemoveColumn += (qId, colIdx) => _surveyBuilder.RemoveColumn(qId, colIdx);
             // Temporary - initial answer adding
             if (!isDeserialized) {
                 AddRow(gridUI.QuestionID, gridUI.AddRow());
@@ -312,10 +314,12 @@ public class SurveyUIControllerEditor : MonoBehaviour {
             if (question is QuestionGridBase gridQuestion) {
                 if (questionUI is SurveyQuestionUIEditorGrid gridUI) {
                     for (int i = 0; i < gridQuestion.GetColumnCount(); i++) {
-                        gridUI.AddExistingColumn(gridQuestion.GetColumn(i));
+                        var colUI = gridUI.AddColumn(gridQuestion.GetColumn(i));
+                        colUI.OnTextChanged += OnColumnTextChanged;
                     }
                     for (int i = 0; i < gridQuestion.GetRowCount(); i++) {
-                        gridUI.AddExistingRow(gridQuestion.GetRow(i));
+                        var rowUI = gridUI.AddRow(gridQuestion.GetRow(i));
+                        rowUI.OnTextChanged += OnRowTextChanged;
                     }
                 }
             } else if (question is QuestionImageChoice imageQuestion) {

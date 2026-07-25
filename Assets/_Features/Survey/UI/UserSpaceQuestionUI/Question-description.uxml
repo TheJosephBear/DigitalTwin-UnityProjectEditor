@@ -1,6 +1,8 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement style="flex-direction: column;">
         <ui:Label text="Popis otázky" name="question-description" style="font-size: 14px; flex-grow: 1; flex-shrink: 1; white-space: normal;" />
-        <ui:VisualElement name="question-image" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/image-outline.png?fileID=2800000&amp;guid=2a8b0a5a8db48ee46924cdb62930cde7&amp;type=3#image-outline&quot;); height: 150px; -unity-background-scale-mode: scale-to-fit; display: none;" />
+        <ui:VisualElement name="question-image" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/image-outline.png?fileID=2800000&amp;guid=2a8b0a5a8db48ee46924cdb62930cde7&amp;type=3#image-outline&quot;); height: 200px; -unity-background-scale-mode: scale-to-fit; display: none; position: relative; align-self: center; width: 200px;">
+            <ui:Button name="enhance-image" class="icon enhance-button" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/magnify-plus-outline.png?fileID=2800000&amp;guid=11b0b51f78ca2b648a63350ae0bd5145&amp;type=3#magnify-plus-outline&quot;); position: absolute; bottom: 0; right: 0; width: 24px; height: 24px;" />
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

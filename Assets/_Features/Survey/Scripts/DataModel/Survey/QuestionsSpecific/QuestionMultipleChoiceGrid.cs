@@ -81,50 +81,60 @@ namespace SurveySystem {
             }
         }
 
+        public void RemoveRow(int idx) {
+            if (idx >= 0 && idx < Rows.Count) {
+                Rows.RemoveAt(idx);
+                _answers.RemoveAll(a => a is AnswerGrid grid && grid.Row == idx);
+                foreach (AnswerBase a in _answers) {
+                    if (a is AnswerGrid grid && grid.Row > idx) {
+                        grid.Row--;
+                    }
+                }
+            }
+        }
+
+        public void RemoveColumn(int idx) {
+            if (idx >= 0 && idx < Columns.Count) {
+                Columns.RemoveAt(idx);
+                _answers.RemoveAll(a => a is AnswerGrid grid && grid.Collumn == idx);
+                foreach (AnswerBase a in _answers) {
+                    if (a is AnswerGrid grid && grid.Collumn > idx) {
+                        grid.Collumn--;
+                    }
+                }
+            }
+        }
+
         protected abstract AnswerGrid CreateAnswer(int row, int column);
 
         public override SerializableQuestion Serialize() {
-            Debug.Log("Correct serialize");
-            Debug.Log(Rows.Count);
-            return new SerializableGridQuestion {
+            return new SerializableQuestion {
                 Id = Id,
                 Title = Title,
                 Description = Description,
+                IsRequired = IsRequired,
                 ViewPointId = ViewPointId,
                 ImageId = ImageID,
                 QuestionType = QuestionType,
-                Rows = Rows,
-                Columns = Columns,
+                Rows = new List<string>(Rows),
+                Columns = new List<string>(Columns),
+                Answers = new List<AnswerBase>(_answers)
             };
         }
 
         public override QuestionBase Deserialize(SerializableQuestion serializable) {
-            QuestionGridBase deserializedQuestion = serializable.QuestionType switch {
-                QuestionType.MultipleChoiceGrid => new QuestionMultipleChoiceGrid(serializable.Id),
-                QuestionType.CheckboxGrid => new QuestionCheckboxGrid(serializable.Id),
-            };
+            Title = serializable.Title;
+            Description = serializable.Description;
+            IsRequired = serializable.IsRequired;
+            ViewPointId = serializable.ViewPointId;
+            ImageID = serializable.ImageId;
+            Rows = serializable.Rows != null ? new List<string>(serializable.Rows) : new List<string>();
+            Columns = serializable.Columns != null ? new List<string>(serializable.Columns) : new List<string>();
+            SyncGridAnswers();
 
-            if(serializable is SerializableGridQuestion gridSerializable) {
-                deserializedQuestion.Title = gridSerializable.Title;
-                deserializedQuestion.Description = gridSerializable.Description;
-                deserializedQuestion.ViewPointId = gridSerializable.ViewPointId;
-                deserializedQuestion.ImageID = gridSerializable.ImageId;
-                deserializedQuestion.Rows = gridSerializable.Rows;
-                deserializedQuestion.Columns = gridSerializable.Columns;
-
-                string jsonString = JsonUtility.ToJson(gridSerializable);
-            }
-
-            return deserializedQuestion;
+            return this;
         }
 
     }
-
-    [Serializable]
-    public class SerializableGridQuestion : SerializableQuestion {
-        public List<string> Rows = new();
-        public List<string> Columns = new();
-    }
-
 
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -154,6 +154,20 @@ namespace SurveySystem {
 
             if (question is QuestionGridBase grid) {
                 grid.AddColumn();
+            }
+        }
+
+        public void RemoveRow(int questionId, int rowIdx) {
+            QuestionBase question = _activeSurvey.GetQuestionById(questionId);
+            if (question is QuestionGridBase grid) {
+                grid.RemoveRow(rowIdx);
+            }
+        }
+
+        public void RemoveColumn(int questionId, int colIdx) {
+            QuestionBase question = _activeSurvey.GetQuestionById(questionId);
+            if (question is QuestionGridBase grid) {
+                grid.RemoveColumn(colIdx);
             }
         }
 

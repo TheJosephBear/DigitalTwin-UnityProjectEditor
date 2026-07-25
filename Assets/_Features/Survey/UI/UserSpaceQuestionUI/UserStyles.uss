@@ -60,7 +60,14 @@
     background-color: rgb(255, 255, 255);
 }
 
-#survey-scroll-view #unity-content-container {
+#survey-scroll-view > #unity-content-container {
+    padding-top: 24px;
+    padding-bottom: 24px;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+#survey-scroll-view > .unity-scroll-view__content-container {
     padding-top: 24px;
     padding-bottom: 24px;
     padding-left: 24px;
@@ -502,14 +509,13 @@ TextField TextInput {
 .image-choice-grid #contentContainer {
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: flex-start;
+    justify-content: space-around;
 }
 
 .image-choice-grid TemplateContainer {
     flex-shrink: 0;
-    width: 140px;
-    height: 170px;
+    width: 190px;
+    height: 190px;
     margin-right: 12px;
     margin-bottom: 12px;
 }
@@ -555,12 +561,12 @@ TextField TextInput {
 
 .image-option-preview {
     flex-grow: 1;
-    min-height: 120px;
     -unity-background-scale-mode: scale-to-fit;
     background-image: url("project://database/Assets/_Features/Survey/UI/Icons/image-outline.png?fileID=2800000&guid=2a8b0a5a8db48ee46924cdb62930cde7&type=3#image-outline");
     background-color: rgb(245, 242, 250);
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    min-height: 100%;
 }
 
 .image-option-label {
@@ -607,4 +613,703 @@ TextField TextInput {
 
 .option-row Toggle > VisualElement {
     margin-right: 5px;
+}
+
+#grid-table {
+    flex-grow: 1;
+    min-height: 160px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.2);
+    overflow: hidden;
+}
+
+#grid-table #unity-content-container {
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+
+#grid-table .unity-scroll-view__content-container {
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+
+#grid-table #unity-content-viewport {
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+
+#grid-table .unity-scroll-view__content-viewport {
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+
+#grid-table .unity-scroll-view {
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+
+#grid-table .unity-list-view__scroll-view {
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+
+#grid-table .unity-multi-column-header {
+    min-height: 52px;
+    background-color: rgb(247, 242, 250);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(103, 80, 164, 0.18);
+    margin: 0;
+    padding: 0;
+}
+
+#grid-table .unity-multi-column-header__column {
+    justify-content: center;
+    align-items: center;
+    padding: 4px 6px;
+    margin: 0;
+    background-color: transparent;
+    border-right-width: 1px;
+    border-right-color: rgba(103, 80, 164, 0.1);
+}
+
+#grid-table .unity-multi-column-header__column > VisualElement {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    align-self: stretch;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+#grid-table .unity-multi-column-header__column-content {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    align-self: stretch;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+#grid-table .unity-multi-column-header__column-container {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    align-self: stretch;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+#grid-table .unity-multi-column-header__column-title {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    align-self: stretch;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+#grid-table #grid-column-header-container {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    align-self: stretch;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+#grid-table .unity-multi-column-header__column#row-title-col {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: rgb(73, 62, 105);
+}
+
+#grid-table .unity-multi-column-header__column:first-child {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: rgb(73, 62, 105);
+}
+
+#grid-table .unity-multi-column-header__column TextField {
+    flex-grow: 1;
+    width: 100%;
+    margin: 2px 0 0 0;
+    padding: 0;
+    align-self: stretch;
+}
+
+#grid-table .unity-multi-column-header__column TextField > VisualElement {
+    flex-grow: 1;
+    width: 100%;
+    margin: 0;
+    padding: 3px 6px;
+    align-self: stretch;
+    background-color: rgb(255, 255, 255);
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.25);
+    color: rgb(29, 25, 43);
+    font-size: 12px;
+}
+
+#grid-table .unity-multi-column-header__column TextField #unity-text-input {
+    flex-grow: 1;
+    width: 100%;
+    margin: 0;
+    padding: 3px 6px;
+    align-self: stretch;
+    background-color: rgb(255, 255, 255);
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.25);
+    color: rgb(29, 25, 43);
+    font-size: 12px;
+}
+
+#grid-table .unity-multi-column-header__column TextField .unity-base-text-field__input {
+    flex-grow: 1;
+    width: 100%;
+    margin: 0;
+    padding: 3px 6px;
+    align-self: stretch;
+    background-color: rgb(255, 255, 255);
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.25);
+    color: rgb(29, 25, 43);
+    font-size: 12px;
+}
+
+#grid-table .unity-multi-column-header__column TextField:focus #unity-text-input {
+    border-color: rgb(103, 80, 164);
+    background-color: rgb(255, 255, 255);
+}
+
+#grid-table .unity-multi-column-header__column TextField:focus .unity-base-text-field__input {
+    border-color: rgb(103, 80, 164);
+    background-color: rgb(255, 255, 255);
+}
+
+#grid-table .unity-multi-column-list-view__row {
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(0, 0, 0, 0.05);
+    transition-duration: 0.15s;
+}
+
+#grid-table .unity-multi-column-list-view__row:hover {
+    background-color: rgba(103, 80, 164, 0.04);
+}
+
+#grid-table .unity-multi-column-list-view__cell {
+    justify-content: center;
+    align-items: center;
+    padding: 4px 6px;
+    margin: 0;
+    border-right-width: 1px;
+    border-right-color: rgba(0, 0, 0, 0.04);
+}
+
+#grid-table .unity-multi-column-list-view__cell TextField {
+    width: 100%;
+    margin: 0;
+}
+
+#grid-table .unity-multi-column-list-view__cell TextField > VisualElement {
+    width: 100%;
+    margin: 0;
+    padding: 4px 8px;
+    background-color: rgb(247, 242, 250);
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: rgba(0, 0, 0, 0.1);
+    color: rgb(29, 25, 43);
+    font-size: 13px;
+}
+
+#grid-table .unity-multi-column-list-view__cell TextField #unity-text-input {
+    width: 100%;
+    margin: 0;
+    padding: 4px 8px;
+    background-color: rgb(247, 242, 250);
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: rgba(0, 0, 0, 0.1);
+    color: rgb(29, 25, 43);
+    font-size: 13px;
+}
+
+#grid-table .unity-multi-column-list-view__cell TextField .unity-base-text-field__input {
+    width: 100%;
+    margin: 0;
+    padding: 4px 8px;
+    background-color: rgb(247, 242, 250);
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: rgba(0, 0, 0, 0.1);
+    color: rgb(29, 25, 43);
+    font-size: 13px;
+}
+
+#grid-table .unity-multi-column-list-view__cell TextField:focus #unity-text-input {
+    border-color: rgb(103, 80, 164);
+    background-color: rgb(255, 255, 255);
+}
+
+#grid-table .unity-multi-column-list-view__cell TextField:focus .unity-base-text-field__input {
+    border-color: rgb(103, 80, 164);
+    background-color: rgb(255, 255, 255);
+}
+
+#grid-table .unity-multi-column-list-view__cell Label {
+    width: 100%;
+    margin: 0;
+}
+
+#grid-table .unity-multi-column-list-view__cell Toggle {
+    align-self: center;
+    justify-content: center;
+    margin: 0;
+}
+
+#grid-table .unity-multi-column-list-view__cell CustomRadioButtonNoText {
+    align-self: center;
+    justify-content: center;
+    margin: 0;
+}
+
+.icon-trash {
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/trash-can-outline.png?fileID=2800000&guid=7ad15b4efd0e279438b167e4bed1c7e6&type=3#trash-can-outline");
+    -unity-background-scale-mode: scale-to-fit;
+    width: 20px;
+    height: 20px;
+    background-color: transparent;
+    border-width: 0;
+    margin-left: 2px;
+    margin-right: 2px;
+    opacity: 0.55;
+    transition-duration: 0.15s;
+}
+
+.icon-trash:hover {
+    opacity: 1;
+    -unity-background-image-tint-color: rgb(229, 57, 53);
+}
+
+.icon-move-up {
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-up.png?fileID=2800000&guid=13e6e2a9f27e5874eab92e305adb3fa1&type=3#chevron-up");
+    -unity-background-scale-mode: scale-to-fit;
+    width: 20px;
+    height: 20px;
+    background-color: transparent;
+    border-width: 0;
+    margin-left: 2px;
+    margin-right: 2px;
+    opacity: 0.55;
+    transition-duration: 0.15s;
+}
+
+.icon-move-up:hover {
+    opacity: 1;
+    -unity-background-image-tint-color: rgb(103, 80, 164);
+}
+
+.icon-move-down {
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-down.png?fileID=2800000&guid=d1a74cec442a2284589bab0730540f72&type=3#chevron-down");
+    -unity-background-scale-mode: scale-to-fit;
+    width: 20px;
+    height: 20px;
+    background-color: transparent;
+    border-width: 0;
+    margin-left: 2px;
+    margin-right: 2px;
+    opacity: 0.55;
+    transition-duration: 0.15s;
+}
+
+.icon-move-down:hover {
+    opacity: 1;
+    -unity-background-image-tint-color: rgb(103, 80, 164);
+}
+
+#add-buttons {
+    margin-top: 8px;
+    flex-direction: row;
+    align-items: center;
+}
+
+#add-row-button {
+    height: 38px;
+    background-color: rgb(103, 80, 164);
+    color: rgb(255, 255, 255);
+    border-radius: 8px;
+    border-width: 0;
+    -unity-font-style: bold;
+    font-size: 13px;
+    transition-duration: 0.15s;
+}
+
+#add-row-button:hover {
+    background-color: rgb(83, 62, 133);
+}
+
+#add-column-button {
+    height: 38px;
+    background-color: rgb(232, 222, 248);
+    color: rgb(29, 25, 43);
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.2);
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    align-self: stretch;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+#grid-table .unity-multi-column-header__column#row-title-col {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: rgb(73, 62, 105);
+}
+
+#grid-table .unity-multi-column-header__column:first-child {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: rgb(73, 62, 105);
+}
+
+#grid-table .unity-multi-column-header__column TextField {
+    flex-grow: 1;
+    width: 100%;
+    margin: 2px 0 0 0;
+    padding: 0;
+    align-self: stretch;
+}
+
+#grid-table .unity-multi-column-header__column TextField > VisualElement {
+    flex-grow: 1;
+    width: 100%;
+    margin: 0;
+    padding: 3px 6px;
+    align-self: stretch;
+    background-color: rgb(255, 255, 255);
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.25);
+    color: rgb(29, 25, 43);
+    font-size: 12px;
+}
+
+#grid-table .unity-multi-column-header__column TextField #unity-text-input {
+    flex-grow: 1;
+    width: 100%;
+    margin: 0;
+    padding: 3px 6px;
+    align-self: stretch;
+    background-color: rgb(255, 255, 255);
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.25);
+    color: rgb(29, 25, 43);
+    font-size: 12px;
+}
+
+#grid-table .unity-multi-column-header__column TextField .unity-base-text-field__input {
+    flex-grow: 1;
+    width: 100%;
+    margin: 0;
+    padding: 3px 6px;
+    align-self: stretch;
+    background-color: rgb(255, 255, 255);
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.25);
+    color: rgb(29, 25, 43);
+    font-size: 12px;
+}
+
+#grid-table .unity-multi-column-header__column TextField:focus #unity-text-input {
+    border-color: rgb(103, 80, 164);
+    background-color: rgb(255, 255, 255);
+}
+
+#grid-table .unity-multi-column-header__column TextField:focus .unity-base-text-field__input {
+    border-color: rgb(103, 80, 164);
+    background-color: rgb(255, 255, 255);
+}
+
+#grid-table .unity-multi-column-list-view__row {
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(0, 0, 0, 0.05);
+    transition-duration: 0.15s;
+}
+
+#grid-table .unity-multi-column-list-view__row:hover {
+    background-color: rgba(103, 80, 164, 0.04);
+}
+
+#grid-table .unity-multi-column-list-view__cell {
+    justify-content: center;
+    align-items: center;
+    padding: 4px 6px;
+    margin: 0;
+    border-right-width: 1px;
+    border-right-color: rgba(0, 0, 0, 0.04);
+}
+
+#grid-table .unity-multi-column-list-view__cell TextField {
+    width: 100%;
+    margin: 0;
+}
+
+#grid-table .unity-multi-column-list-view__cell TextField > VisualElement {
+    width: 100%;
+    margin: 0;
+    padding: 4px 8px;
+    background-color: rgb(247, 242, 250);
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: rgba(0, 0, 0, 0.1);
+    color: rgb(29, 25, 43);
+    font-size: 13px;
+}
+
+#grid-table .unity-multi-column-list-view__cell TextField #unity-text-input {
+    width: 100%;
+    margin: 0;
+    padding: 4px 8px;
+    background-color: rgb(247, 242, 250);
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: rgba(0, 0, 0, 0.1);
+    color: rgb(29, 25, 43);
+    font-size: 13px;
+}
+
+#grid-table .unity-multi-column-list-view__cell TextField .unity-base-text-field__input {
+    width: 100%;
+    margin: 0;
+    padding: 4px 8px;
+    background-color: rgb(247, 242, 250);
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: rgba(0, 0, 0, 0.1);
+    color: rgb(29, 25, 43);
+    font-size: 13px;
+}
+
+#grid-table .unity-multi-column-list-view__cell TextField:focus #unity-text-input {
+    border-color: rgb(103, 80, 164);
+    background-color: rgb(255, 255, 255);
+}
+
+#grid-table .unity-multi-column-list-view__cell TextField:focus .unity-base-text-field__input {
+    border-color: rgb(103, 80, 164);
+    background-color: rgb(255, 255, 255);
+}
+
+#grid-table .unity-multi-column-list-view__cell Label {
+    width: 100%;
+    margin: 0;
+}
+
+#grid-table .unity-multi-column-list-view__cell Toggle {
+    align-self: center;
+    justify-content: center;
+    margin: 0;
+}
+
+#grid-table .unity-multi-column-list-view__cell CustomRadioButtonNoText {
+    align-self: center;
+    justify-content: center;
+    margin: 0;
+}
+
+.icon-trash {
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/trash-can-outline.png?fileID=2800000&guid=7ad15b4efd0e279438b167e4bed1c7e6&type=3#trash-can-outline");
+    -unity-background-scale-mode: scale-to-fit;
+    width: 20px;
+    height: 20px;
+    background-color: transparent;
+    border-width: 0;
+    margin-left: 2px;
+    margin-right: 2px;
+    opacity: 0.55;
+    transition-duration: 0.15s;
+}
+
+.icon-trash:hover {
+    opacity: 1;
+    -unity-background-image-tint-color: rgb(229, 57, 53);
+}
+
+.icon-move-up {
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-up.png?fileID=2800000&guid=13e6e2a9f27e5874eab92e305adb3fa1&type=3#chevron-up");
+    -unity-background-scale-mode: scale-to-fit;
+    width: 20px;
+    height: 20px;
+    background-color: transparent;
+    border-width: 0;
+    margin-left: 2px;
+    margin-right: 2px;
+    opacity: 0.55;
+    transition-duration: 0.15s;
+}
+
+.icon-move-up:hover {
+    opacity: 1;
+    -unity-background-image-tint-color: rgb(103, 80, 164);
+}
+
+.icon-move-down {
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-down.png?fileID=2800000&guid=d1a74cec442a2284589bab0730540f72&type=3#chevron-down");
+    -unity-background-scale-mode: scale-to-fit;
+    width: 20px;
+    height: 20px;
+    background-color: transparent;
+    border-width: 0;
+    margin-left: 2px;
+    margin-right: 2px;
+    opacity: 0.55;
+    transition-duration: 0.15s;
+}
+
+.icon-move-down:hover {
+    opacity: 1;
+    -unity-background-image-tint-color: rgb(103, 80, 164);
+}
+
+#add-buttons {
+    margin-top: 8px;
+    flex-direction: row;
+    align-items: center;
+}
+
+#add-row-button {
+    height: 38px;
+    background-color: rgb(103, 80, 164);
+    color: rgb(255, 255, 255);
+    border-radius: 8px;
+    border-width: 0;
+    -unity-font-style: bold;
+    font-size: 13px;
+    transition-duration: 0.15s;
+}
+
+#add-row-button:hover {
+    background-color: rgb(83, 62, 133);
+}
+
+#add-column-button {
+    height: 38px;
+    background-color: rgb(232, 222, 248);
+    color: rgb(29, 25, 43);
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.2);
+    -unity-font-style: bold;
+    font-size: 13px;
+    transition-duration: 0.15s;
+}
+
+#add-column-button:hover {
+    background-color: rgb(216, 206, 232);
+}
+
+.enhance-button {
+    background-color: rgba(255, 255, 255, 0.6);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    transition-duration: 0.15s;
+    transition-property: background-color, scale;
+}
+
+.remove-button {
+    background-color: rgba(255, 255, 255, 0.6);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    transition-duration: 0.15s;
+    transition-property: background-color, scale;
+}
+
+.enhance-button:hover {
+    background-color: rgba(255, 255, 255, 0.95);
+    scale: 1.05 1.05;
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.remove-button:hover {
+    background-color: rgba(255, 255, 255, 0.95);
+    scale: 1.05 1.05;
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.enhance-button:active {
+    background-color: rgb(220, 220, 220);
+    scale: 1 1;
+}
+
+.remove-button:active {
+    background-color: rgb(220, 220, 220);
+    scale: 1 1;
 }

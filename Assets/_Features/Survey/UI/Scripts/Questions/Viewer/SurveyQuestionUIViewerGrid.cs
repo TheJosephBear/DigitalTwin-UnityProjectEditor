@@ -6,52 +6,147 @@ using UnityEngine.UIElements;
 
 public class SurveyQuestionUIViewerGrid : SurveyQuestionUIViewer {
 
-    private List<SurveyAnswerUIViewerGrid> _rows = new();
+    private List<string> _rowTexts = new();
     private List<string> _columnTexts = new();
+    private List<int> _rowIndices = new();
 
-    private VisualElement _rowContainer;
-    private VisualElement _columnContainer;
+    private Dictionary<int, int> _selectedColPerRow = new(); // rowIdx -> colIdx
+    private HashSet<(int row, int col)> _checkedCells = new(); // (rowIdx, colIdx)
+
+    private MultiColumnListView _table;
 
     public event Action<int, int, int, bool> OnGridAnswerSelected; // qId, rowIdx, colIdx, value
 
     public SurveyQuestionUIViewerGrid(VisualElement root, int questionId, QuestionType questionType, List<SerializableViewPoint> viewPoints, SurveyUIBuilder uiBuilder)
         : base(root, questionId, questionType, viewPoints, uiBuilder) {
 
-        _rowContainer = _root.Q<VisualElement>("options-list");
-        _columnContainer = _root.Q<VisualElement>("col-headers");
+        InitializeTable();
+    }
 
-        _rowContainer?.Clear();
-        _columnContainer?.Clear();
+    private void InitializeTable() {
+        _table = _root.Q<MultiColumnListView>("grid-table") ?? _root.Q<MultiColumnListView>();
+        if (_table == null) return;
+
+        _table.fixedItemHeight = 40f;
+        _table.reorderable = false;
+        _table.showAddRemoveFooter = false;
+        _table.columns.Clear();
+        _table.itemsSource = _rowIndices;
+
+        var rowTitleCol = new Column {
+            name = "row-title-col",
+            title = "",
+            width = 160,
+            minWidth = 120,
+            stretchable = false
+        };
+
+        rowTitleCol.makeCell = () => {
+            var container = new VisualElement {
+                style = {
+                    flexDirection = FlexDirection.Row,
+                    alignItems = Align.Center,
+                    justifyContent = Justify.FlexStart,
+                    flexGrow = 1,
+                    width = Length.Percent(100)
+                }
+            };
+            var label = new Label { name = "row-label" };
+            label.style.flexGrow = 1;
+            label.style.whiteSpace = WhiteSpace.Normal;
+            container.Add(label);
+            return container;
+        };
+
+        rowTitleCol.bindCell = (VisualElement cell, int rowIndex) => {
+            if (rowIndex < 0 || rowIndex >= _rowTexts.Count) return;
+            var label = cell.Q<Label>("row-label");
+            if (label != null) {
+                label.text = _rowTexts[rowIndex];
+            }
+        };
+
+        _table.columns.Add(rowTitleCol);
     }
 
     public void AddColumn(string text) {
+        int colIdx = _columnTexts.Count;
         _columnTexts.Add(text);
 
-        var label = new Label(text);
-        label.style.width = 100f; // Match editor's base width
-        label.style.unityTextAlign = TextAnchor.MiddleCenter;
-        _columnContainer.Add(label);
+        if (_table != null) {
+            var col = new Column {
+                name = $"col-{colIdx}",
+                title = text,
+                width = 100,
+                minWidth = 80,
+                stretchable = true
+            };
 
-        // Whenever a column is added, rows must update their radio button counts
-        RefreshRows();
+            col.makeCell = () => {
+                var cellContainer = new VisualElement {
+                    style = {
+                        flexDirection = FlexDirection.Row,
+                        alignItems = Align.Center,
+                        justifyContent = Justify.Center,
+                        flexGrow = 1,
+                        width = Length.Percent(100)
+                    }
+                };
+                if (_questionType == QuestionType.CheckboxGrid) {
+                    var toggle = new Toggle { name = "grid-cell-toggle" };
+                    cellContainer.Add(toggle);
+                } else {
+                    var radio = new CustomRadioButtonNoText { name = "grid-cell-radio" };
+                    cellContainer.Add(radio);
+                }
+                return cellContainer;
+            };
+
+            col.bindCell = (VisualElement cell, int rowIndex) => {
+                if (rowIndex < 0 || rowIndex >= _rowIndices.Count) return;
+                if (_questionType == QuestionType.CheckboxGrid) {
+                    var toggle = cell.Q<Toggle>("grid-cell-toggle");
+                    if (toggle != null) {
+                        bool isChecked = _checkedCells.Contains((rowIndex, colIdx));
+                        toggle.SetValueWithoutNotify(isChecked);
+                        toggle.RegisterValueChangedCallback(evt => {
+                            if (evt.newValue) {
+                                _checkedCells.Add((rowIndex, colIdx));
+                            } else {
+                                _checkedCells.Remove((rowIndex, colIdx));
+                            }
+                            InvokeAnswerSelected(rowIndex, colIdx, evt.newValue);
+                        });
+                    }
+                } else {
+                    var radio = cell.Q<CustomRadioButtonNoText>("grid-cell-radio");
+                    if (radio != null) {
+                        bool isSelected = _selectedColPerRow.TryGetValue(rowIndex, out int selCol) && selCol == colIdx;
+                        radio.Radio.SetValueWithoutNotify(isSelected);
+                        radio.RegisterRadioCallback(evt => {
+                            if (evt.newValue) {
+                                _selectedColPerRow[rowIndex] = colIdx;
+                                InvokeAnswerSelected(rowIndex, colIdx, true);
+                                _table?.RefreshItem(rowIndex);
+                            }
+                        });
+                    }
+                }
+            };
+
+            _table.columns.Add(col);
+            _table.Rebuild();
+            _table.RefreshItems();
+        }
     }
 
     public void AddRow(string text) {
-        if (_answerTemplate == null) return;
-
-        var element = _answerTemplate.Instantiate();
-        var rowUI = new SurveyAnswerUIViewerGrid(element, _rows.Count, this);
-        rowUI.SetRowText(text);
-
-        _rows.Add(rowUI);
-        _rowContainer.Add(element);
-
-        rowUI.RebuildRadioButtons(_columnTexts.Count, _questionType == QuestionType.CheckboxGrid);
-    }
-
-    private void RefreshRows() {
-        foreach (var row in _rows) {
-            row.RebuildRadioButtons(_columnTexts.Count, _questionType == QuestionType.CheckboxGrid);
+        _rowTexts.Add(text);
+        _rowIndices.Add(_rowTexts.Count - 1);
+        if (_table != null) {
+            _table.itemsSource = _rowIndices;
+            _table.Rebuild();
+            _table.RefreshItems();
         }
     }
 

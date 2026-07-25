@@ -12,11 +12,11 @@ public abstract class SurveyQuestionUIViewer : SurveyQuestionUIBase {
     }
 
     public override void SetImageRender() {
-        Debug.Log("Set image callled " + ImageID);
-        var cameraView = _root.Q<VisualElement>("camera-view");
-        if (cameraView != null) {
-            cameraView.style.display = DisplayStyle.None;
-            cameraView.style.backgroundImage = null;
+        Debug.Log("Set image called " + ImageID);
+        var questionImage = _root.Q<VisualElement>("question-image");
+        if (questionImage != null) {
+            questionImage.style.display = DisplayStyle.None;
+            questionImage.style.backgroundImage = null;
         }
 
         if (string.IsNullOrEmpty(ImageID)) return;
@@ -24,9 +24,9 @@ public abstract class SurveyQuestionUIViewer : SurveyQuestionUIBase {
         TextureAsset textureAsset = ImageManager.Instance.GetTextureAssetByID(ImageID);
         if (textureAsset == null) return;
 
-        if (cameraView != null) {
-            cameraView.style.display = DisplayStyle.Flex;
-            cameraView.style.backgroundImage = Background.FromTexture2D((Texture2D)textureAsset.Texture);
+        if (questionImage != null) {
+            questionImage.style.display = DisplayStyle.Flex;
+            questionImage.style.backgroundImage = Background.FromTexture2D((Texture2D)textureAsset.Texture);
         }
     }
 

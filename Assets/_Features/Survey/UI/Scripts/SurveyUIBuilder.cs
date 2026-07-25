@@ -274,6 +274,8 @@ public class SurveyUIBuilder : MonoBehaviour {
             _addedQuestions.Insert(insertAtIndex, questionUI);
         }
 
+        questionUI?.RegisterInputs();
+
         return questionUI;
     }
 

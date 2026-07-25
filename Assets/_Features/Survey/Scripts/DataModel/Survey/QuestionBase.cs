@@ -144,6 +144,8 @@ namespace SurveySystem {
         public QuestionType QuestionType; 
         [SerializeReference]
         public List<AnswerBase> Answers;
+        public List<string> Rows = new();
+        public List<string> Columns = new();
     }
 
     public enum QuestionType {
