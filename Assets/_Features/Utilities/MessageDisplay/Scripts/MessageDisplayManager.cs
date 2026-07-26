@@ -6,7 +6,7 @@ public class MessageDisplayManager: Singleton<MessageDisplayManager> {
         uiScript.ShowMessage(message, duration);
     }
 
-    public void ShowMessage(string message) {
-        DisplayMessage(message);
+    public void ShowMessage(string message, float duration = 5f) {
+        DisplayMessage(message, duration);
     }
 }

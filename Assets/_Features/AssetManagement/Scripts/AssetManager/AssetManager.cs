@@ -35,6 +35,7 @@ public class AssetManager : Singleton<AssetManager> {
 
         // Save project state after model upload
         if(MainManagerBase.Instance is EditorManager editorMan) {
+            MessageDisplayManager.Instance.DisplayMessage("Aseet Manager save");
             editorMan.SaveProject();
         }
 
