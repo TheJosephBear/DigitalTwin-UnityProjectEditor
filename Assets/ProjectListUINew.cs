@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -45,7 +46,10 @@ public class ProjectListUINew : MonoBehaviour {
         }
         _projectButtons.Clear();
 
-        StartCoroutine(RefreshCoroutine(() => { onCompleted(); }));
+        StartCoroutine(RefreshCoroutine(() => {
+            ReorderUIButtonsAlphabetically();
+            onCompleted();
+        }));
     }
     private IEnumerator RefreshCoroutine(System.Action onCompleted) {
         ProjectListManager.Instance.GetProjectMetadataList(list => {
@@ -64,6 +68,16 @@ public class ProjectListUINew : MonoBehaviour {
             Debug.Log("All project dashboard preview downloads have completed processing!");
         });
         yield return null;
+    }
+
+    private void ReorderUIButtonsAlphabetically() {
+        var buttons = ProjectScrollViewContent.transform.Cast<Transform>()
+            .OrderBy(t => t.GetComponent<ProjectListItem>().ProjectMetadata.projectName) 
+            .ToList();
+
+        for (int i = 0; i < buttons.Count; i++) {
+            buttons[i].SetSiblingIndex(i);
+        }
     }
 
     /// <summary>

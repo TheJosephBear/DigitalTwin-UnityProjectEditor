@@ -12,9 +12,13 @@ public class ViewingInitializer : MonoBehaviour, Iinitializer {
     public bool InEditorDebugging = false;
 
     public void Initialize() {
+#if UNITY_EDITOR
         if (!InEditorDebugging) {
+#endif
             _projectName = GetUrlParameter("projectName");
+#if UNITY_EDITOR
         }
+#endif
 
         SceneLoadingManager.Instance.SetActiveScene(SceneType.Viewing);
         InitializeViewer();

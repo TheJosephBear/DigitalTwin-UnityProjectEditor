@@ -11,7 +11,7 @@ public class EditorManager : MainManagerBase {
 
     public void SaveProject() {
 
-        MessageDisplayManager.Instance.DisplayMessage("SaveProject()");
+    //    MessageDisplayManager.Instance.DisplayMessage("SaveProject()");
         ProjectManager.Instance.SaveProject(ProjectSerializer.SerializeProject());
     }
 
