@@ -1536,7 +1536,7 @@ MonoBehaviour:
       _text: Scale gizmo
     - _tooltip: Allows you to change universal gizmo settings.
       _text: Universal gizmo
-    _activeTabIndex: 0
+    _activeTabIndex: 1
   _settings:
     _canBeDisplayed: 1
     _isExpanded: 1
@@ -1555,10 +1555,10 @@ MonoBehaviour:
       _pyramidHeight: 1.65
       _pyramidWidth: 0.8
       _pyramidDepth: 0.8
-      _boxWidth: 1.01
-      _boxHeight: 1.01
-      _boxDepth: 1.01
-      _sphereRadius: 0.73
+      _boxWidth: 0.022444446
+      _boxHeight: 0.022444446
+      _boxDepth: 0.022444446
+      _sphereRadius: 0.016222224
       _trPrismWidth: 1
       _trPrismHeight: 1
       _trPrismDepth: 1
@@ -1573,8 +1573,8 @@ MonoBehaviour:
       _shadeMode: 0
       _scale: 1
       _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
+      _coneHeight: 0.036666665
+      _coneRadius: 0.011111111
       _pyramidHeight: 1.65
       _pyramidWidth: 0.8
       _pyramidDepth: 0.8
@@ -1595,8 +1595,8 @@ MonoBehaviour:
       _shadeMode: 0
       _scale: 1
       _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
+      _coneHeight: 0.036666665
+      _coneRadius: 0.011111111
       _pyramidHeight: 1.65
       _pyramidWidth: 0.8
       _pyramidDepth: 0.8
@@ -1617,8 +1617,8 @@ MonoBehaviour:
       _shadeMode: 0
       _scale: 1
       _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
+      _coneHeight: 0.036666665
+      _coneRadius: 0.011111111
       _pyramidHeight: 1.65
       _pyramidWidth: 0.8
       _pyramidDepth: 0.8
@@ -1639,8 +1639,8 @@ MonoBehaviour:
       _shadeMode: 0
       _scale: 1
       _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
+      _coneHeight: 0.036666665
+      _coneRadius: 0.011111111
       _pyramidHeight: 1.65
       _pyramidWidth: 0.8
       _pyramidDepth: 0.8
@@ -1661,8 +1661,8 @@ MonoBehaviour:
       _shadeMode: 0
       _scale: 1
       _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
+      _coneHeight: 0.036666665
+      _coneRadius: 0.011111111
       _pyramidHeight: 1.65
       _pyramidWidth: 0.8
       _pyramidDepth: 0.8
@@ -1683,8 +1683,8 @@ MonoBehaviour:
       _shadeMode: 0
       _scale: 1
       _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
+      _coneHeight: 0.036666665
+      _coneRadius: 0.011111111
       _pyramidHeight: 1.65
       _pyramidWidth: 0.8
       _pyramidDepth: 0.8
@@ -1701,11 +1701,11 @@ MonoBehaviour:
       _color: {r: 0.8000001, g: 0.8000001, b: 0.8000001, a: 1}
       _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
     _screenCorner: 1
-    _screenOffset: {x: 0, y: 0}
-    _screenSize: 90
+    _screenOffset: {x: -412.6, y: -91.79}
+    _screenSize: 2
     _axesLabelTint: {r: 1, g: 1, b: 1, a: 1}
     _camPrjSwitchLabelTint: {r: 1, g: 1, b: 1, a: 0.7}
-    _isCamPrjSwitchLabelVisible: 1
+    _isCamPrjSwitchLabelVisible: 0
   _moveGizmoSettings2D:
     _canBeDisplayed: 1
     _isExpanded: 0
@@ -5421,7 +5421,7 @@ MonoBehaviour:
   _settings:
     _canBeDisplayed: 1
     _isExpanded: 1
-    _isVisible: 1
+    _isVisible: 0
     _cellSizeX: 1
     _cellSizeZ: 1
     _yOffset: 0
