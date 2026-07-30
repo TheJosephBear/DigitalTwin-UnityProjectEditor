@@ -292,6 +292,7 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
                 Texture2D tex = new Texture2D(2, 2);
                 tex.LoadImage(data);
                 mat.mainTexture = tex;
+                mat.SetFloat("_Glossiness", 0.0f);
 
                 Debug.Log($"Applied texture {texPath} -> material {cleanName}");
             }
