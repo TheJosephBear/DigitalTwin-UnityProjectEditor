@@ -60,7 +60,7 @@ public class ProjectManager : Singleton<ProjectManager> {
 
                     SelectedProject = new Project();
                     SelectedProject.CreateSerializableProjectFromJson(data);
-                    MessageDisplayManager.Instance.DisplayMessage("Projekt úspěšně stažen");
+                 //   MessageDisplayManager.Instance.DisplayMessage("Projekt úspěšně stažen");
                 }
 
                 finished = true;
