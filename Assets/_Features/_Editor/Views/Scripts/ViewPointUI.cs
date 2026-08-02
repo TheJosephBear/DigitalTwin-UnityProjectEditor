@@ -40,6 +40,7 @@ public class ViewPointUI : MonoBehaviour {
             } else {
                 // activate
                 ViewManager.Instance.ActivateViewPoint();
+                OnHUDButtonClick(ViewPointRefference); // Simulate clicking it again
             }
         } else {
             if (MainManagerBase.Instance.ActiveState == AppState.ViewActive) {

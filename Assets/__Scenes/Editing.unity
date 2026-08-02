@@ -6709,6 +6709,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3335955894346089321, guid: eaba44dc969158a4ba48a57497f0783f, type: 3}
+      propertyPath: RTFocusCameraScript
+      value: 
+      objectReference: {fileID: 1642862918}
     - target: {fileID: 3335955894346089322, guid: eaba44dc969158a4ba48a57497f0783f, type: 3}
       propertyPath: m_Name
       value: GizmoManager
@@ -7024,6 +7028,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
+      propertyPath: MinScrollSpeed
+      value: 0.007
+      objectReference: {fileID: 0}
+    - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: boundsPadding.x
       value: 20
       objectReference: {fileID: 0}
@@ -7039,6 +7047,10 @@ PrefabInstance:
       propertyPath: InitialCameraPosition
       value: 
       objectReference: {fileID: 1632604755}
+    - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
+      propertyPath: GroundGeometryLayers.m_Bits
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5141712591725554919, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 136.93216

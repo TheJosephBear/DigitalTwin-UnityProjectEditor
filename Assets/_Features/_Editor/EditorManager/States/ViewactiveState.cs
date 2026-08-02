@@ -13,7 +13,7 @@ public class ViewactiveState : StateBase {
         } else {
             MainManagerBase.Instance.ViewManager.ActivateViewPoint();
         }
-        MainManagerBase.Instance.ToggleHUD(false);
+      //  MainManagerBase.Instance.ToggleHUD(false);
     }
 
     public override void Exit() {

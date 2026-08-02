@@ -186,6 +186,7 @@ public class ViewManager : Singleton<ViewManager> {
 
     public void DeactivateViewPoint() {
         if (_activeViewPoint == null) return;
+        MoveMainCamToActiveViewPoint();
         isActivelyShowingCam = false;
         _activeViewPoint?.Deactivate();
     }

@@ -4,7 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GizmoManager : Singleton<GizmoManager> {
+public class GizmoManager: Singleton<GizmoManager> {
+
+    [Header("References")]
+    public RTFocusCamera RTFocusCameraScript;
 
     private ObjectTransformGizmo _objectMoveGizmo;
     private ObjectTransformGizmo _objectRotationGizmo;
@@ -29,7 +32,7 @@ public class GizmoManager : Singleton<GizmoManager> {
         base.Awake();
     }
 
-        private void Start() {
+    private void Start() {
         // Create the 4 gizmos
         _objectMoveGizmo = RTGizmosEngine.Get.CreateObjectMoveGizmo();
         _objectRotationGizmo = RTGizmosEngine.Get.CreateObjectRotationGizmo();
@@ -55,6 +58,10 @@ public class GizmoManager : Singleton<GizmoManager> {
     }
 
     #region public functions
+
+    public void SetFreecamScrollSpeed(float value) {
+        RTFocusCameraScript.ZoomSettings.PerspStandardZoomSensitivity = value;
+    }
 
     public void SetTargetGameObject(GameObject go) {
         OnTargetObjectChanged(go);
@@ -163,8 +170,8 @@ public class GizmoManager : Singleton<GizmoManager> {
     #region Gizmo restriction functions
 
     public void SetCustomRestrictions(
-        bool MoveX = true, 
-        bool MoveY = true, 
+        bool MoveX = true,
+        bool MoveY = true,
         bool MoveZ = true,
         bool CamRotationXY = true,
         bool CamRotationZ = true,
@@ -229,12 +236,12 @@ public class GizmoManager : Singleton<GizmoManager> {
             restrictions.SetIsAffectedByHandle(GizmoHandleId.YRotationSlider, y);
             restrictions.SetIsAffectedByHandle(GizmoHandleId.ZRotationSlider, z);
 
-            // VypnutÌ "ball" rotace z vol·nÌ SetWorkGizmoId
+            // Vypnut√≠ "ball" rotace z vol√°n√≠ SetWorkGizmoId
             restrictions.SetIsAffectedByHandle(GizmoHandleId.CamXYRotation, false);
             restrictions.SetIsAffectedByHandle(GizmoHandleId.CamZRotation, false);
         }
 
-        // äk·lov·nÌ
+        // ≈†k√°lov√°n√≠
         if (type == GizmoType.Scale || type == GizmoType.Universal) {
             SetScaleAffected(restrictions, x, y, z);
         }
@@ -242,26 +249,26 @@ public class GizmoManager : Singleton<GizmoManager> {
         gizmo.RegisterObjectRestrictions(_targetObject, restrictions);
     }
 
-    // Pomocn· metoda pro korektnÌ vypnutÌ scale handl˘ v RTG
+    // Pomocn√° metoda pro korektn√≠ vypnut√≠ scale handl≈Ø v RTG
     private void SetScaleAffected(ObjectTransformGizmo.ObjectRestrictions restrictions, bool x, bool y, bool z) {
-        // 1. MatematickÈ omezenÌ os (st·le platnÈ)
+        // 1. Matematick√© omezen√≠ os (st√°le platn√©)
         restrictions.SetCanScaleAlongAxis(0, x);
         restrictions.SetCanScaleAlongAxis(1, y);
         restrictions.SetCanScaleAlongAxis(2, z);
 
-        // 2. VypÌn·nÌ konkrÈtnÌch vizu·lnÌch handl˘ z tvÈ t¯Ìdy GizmoHandleId
-        // KladnÈ osy (kostiËky na koncÌch os)
+        // 2. Vyp√≠n√°n√≠ konkr√©tn√≠ch vizu√°ln√≠ch handl≈Ø z tv√© t≈ô√≠dy GizmoHandleId
+        // Kladn√© osy (kostiƒçky na konc√≠ch os)
         restrictions.SetIsAffectedByHandle(GizmoHandleId.PXSlider, x);
         restrictions.SetIsAffectedByHandle(GizmoHandleId.PYSlider, y);
         restrictions.SetIsAffectedByHandle(GizmoHandleId.PZSlider, z);
 
-        // Z·pornÈ osy (pokud je tvoje gizmo vykresluje do obou smÏr˘)
+        // Z√°porn√© osy (pokud je tvoje gizmo vykresluje do obou smƒõr≈Ø)
         restrictions.SetIsAffectedByHandle(GizmoHandleId.NXSlider, x);
         restrictions.SetIsAffectedByHandle(GizmoHandleId.NYSlider, y);
         restrictions.SetIsAffectedByHandle(GizmoHandleId.NZSlider, z);
 
-        // 3. St¯edov· kostka pro uniformnÌ ök·lov·nÌ (vöechny osy najednou)
-        // Pokud je zak·zan· byù jen jedna osa, st¯edovÈ celkovÈ ök·lov·nÌ by mÏlo b˝t vypnutÈ
+        // 3. St≈ôedov√° kostka pro uniformn√≠ ≈°k√°lov√°n√≠ (v≈°echny osy najednou)
+        // Pokud je zak√°zan√° by≈• jen jedna osa, st≈ôedov√© celkov√© ≈°k√°lov√°n√≠ by mƒõlo b√Ωt vypnut√©
         if (!x || !y || !z) {
             restrictions.SetIsAffectedByHandle(GizmoHandleId.MidScaleCap, false);
         } else {

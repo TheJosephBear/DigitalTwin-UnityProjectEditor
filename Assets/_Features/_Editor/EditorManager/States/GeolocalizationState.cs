@@ -11,6 +11,7 @@ public class GeolocalizationState : StateBase {
         EditorManager.Instance.MapManager.ToggleMapVisibility();
         EditorManager.Instance.GeoMapManager.ActivateGeoLocalization();
         EditorManager.Instance.ViewManager.ToggleViewPointUI(false);
+        CameraManager.Instance.ToggleVcamVisbility(false);
     }
 
     public override void Exit() {

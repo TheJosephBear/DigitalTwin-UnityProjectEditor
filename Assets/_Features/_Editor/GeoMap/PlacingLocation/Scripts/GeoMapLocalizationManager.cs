@@ -67,6 +67,7 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
             MapVariant baseMapReff = MapManager.Instance.GetBaseMap();
             if (!baseMapReff.IsVisible) {
                 baseMapReff.ToggleMeshVisibility(true);
+                baseMapReff.gameObject.SetActive(true);
             }
 
             // Vector3 spawnPosition = MapCenterPosition;
@@ -99,6 +100,7 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
             // Disable the map at the beginning
             _baseMapCopy.SetActive(false);
             baseMapReff.ToggleMeshVisibility(false);
+            baseMapReff.gameObject.SetActive(false);
         }
     }
 
@@ -110,6 +112,7 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
         GizmoManager.Instance.HideGizmo();
         _baseMapCopy.SetActive(false);
         MapManager.Instance.GetBaseMap().ToggleMeshVisibility(true);
+        MapManager.Instance.GetBaseMap().gameObject.SetActive(true);
         ToggleUI(false);
     }
 

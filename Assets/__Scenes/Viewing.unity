@@ -347,7 +347,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &182448524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2074,7 +2074,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Serializer: {fileID: 1144165089}
   _projectName: DEBUGGING PROJECT
-  InEditorDebugging: 1
+  InEditorDebugging: 0
 --- !u!1 &888139661
 GameObject:
   m_ObjectHideFlags: 0
@@ -5570,6 +5570,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3335955894346089321, guid: eaba44dc969158a4ba48a57497f0783f, type: 3}
+      propertyPath: RTFocusCameraScript
+      value: 
+      objectReference: {fileID: 543418433}
     - target: {fileID: 3335955894346089322, guid: eaba44dc969158a4ba48a57497f0783f, type: 3}
       propertyPath: m_Name
       value: GizmoManager
@@ -5967,6 +5971,7 @@ MonoBehaviour:
   GeoLocalizationUIPrefab: {fileID: 0}
   MapCenterPosition: {x: 0, y: 0, z: 0}
   ModelTransparency: 0.8
+  InitialLocalization: 0
 --- !u!4 &1375345352
 Transform:
   m_ObjectHideFlags: 0
@@ -6380,9 +6385,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
+      propertyPath: MinScrollSpeed
+      value: 0.007
+      objectReference: {fileID: 0}
+    - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: InitialCameraPosition
       value: 
       objectReference: {fileID: 165115547}
+    - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
+      propertyPath: GroundGeometryLayers.m_Bits
+      value: 1025
+      objectReference: {fileID: 0}
     - target: {fileID: 5141712591725554919, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 136.93216
