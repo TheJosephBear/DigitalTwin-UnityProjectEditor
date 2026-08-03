@@ -6,6 +6,7 @@ using UnityEngine;
 public class EditorProjectSerializer : MonoBehaviour {
 
     public SerializableProject SerializeProject() {
+   //     MessageDisplayManager.Instance.DisplayMessage("Serializace projektu");
         Project OpenedProject = ProjectManager.Instance.SelectedProject;
 
         SerializableProject serializableProject = new SerializableProject {
@@ -29,6 +30,7 @@ public class EditorProjectSerializer : MonoBehaviour {
     }
 
     IEnumerator DeserializeCoroutine(Project project) {
+    //    MessageDisplayManager.Instance.DisplayMessage("Deserializace projektu");
         UIManager.Instance.ShowUI(UIType.LoadingScreen);
 
         SerializableProject serializedProject = project.SerializableProject;

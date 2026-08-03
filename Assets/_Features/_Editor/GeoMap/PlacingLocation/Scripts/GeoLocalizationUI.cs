@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.ProBuilder.MeshOperations;
 
 public class GeoLocalizationUI : UIBehaviour {
 
@@ -10,6 +11,8 @@ public class GeoLocalizationUI : UIBehaviour {
     public TMP_InputField ZoomScaleInputFieldReff;
     public Movable Basemapreff; 
     public UISwitcher.UISwitcher LockToggleRef;
+
+    bool _firstOpen = false;
 
 
     #region OnClick
@@ -35,14 +38,13 @@ public class GeoLocalizationUI : UIBehaviour {
     }
 
     public void OnExit() {
-        EditorManager.Instance.GeoMapManager.ExitGeoLocalization();
-    }
-
-    public void OnExitToMenu() {
-        
-        EditorManager.Instance.GeoMapManager.LeaveToMenu((exitSuccess) => {
-            if (exitSuccess) UIManager.Instance.HideUI(UIType.GeoLocalizationUI);
-        });
+        if (_firstOpen) {
+            EditorManager.Instance.GeoMapManager.LeaveToMenu((exitSuccess) => {
+                if (exitSuccess) UIManager.Instance.HideUI(UIType.GeoLocalizationUI);
+            });
+        } else {
+            EditorManager.Instance.GeoMapManager.ExitGeoLocalization();
+        }
     }
 
     public void OnLock(bool toggleValue) {
@@ -53,8 +55,16 @@ public class GeoLocalizationUI : UIBehaviour {
         GeoMapLocalizationManager.Instance.ZoomMap(value);
     }
 
+    public void OnOpacitySliderUpdate(float value) {
+        GeoMapLocalizationManager.Instance.UpdateCloneOpacity(value);
+    }
+
 
     #endregion
+
+    public void Initialize(bool firstOpen) {
+        _firstOpen = firstOpen;
+    }
 
     public void ToggleExitToMenuButtonVisibility(bool toggleOn) {
         ExitToMenuButton.SetActive(toggleOn);

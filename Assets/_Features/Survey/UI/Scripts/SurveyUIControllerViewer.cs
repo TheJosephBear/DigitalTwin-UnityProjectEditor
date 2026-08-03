@@ -1,5 +1,6 @@
 using Cinemachine;
 using SurveySystem;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -40,6 +41,9 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         nextButton.clicked += HandleNextPressed;
 
         #endregion
+
+        _root.Q<Label>("survey-title").text = surveyBuilder.GetActiveSurvey().Name;
+        _root.Q<Label>("question-description").text = surveyBuilder.GetActiveSurvey().Description;
 
         ChangeQuestion(true);
     }
@@ -88,17 +92,37 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         if (_questions[_shownQuestionIndex].ViewPointId == "") {
         //    addedQuestionUI.SetImageRender();
             return;
-        } 
+        }
+
+        StartCoroutine(ShowViewCoroutine());
+    }
+
+    IEnumerator ShowViewCoroutine() {
+        EditorManager.Instance.EditorCameraManager.ToggleCinemachineBrain(true);
 
         ViewManager viewManager = MainManagerBase.Instance.ViewManager;
-        print(_questions[_shownQuestionIndex].ViewPointId);
-        print(viewManager.GetViewPointByID(_questions[_shownQuestionIndex].ViewPointId).ID);
         viewManager.DeactivateViewPoint();
         viewManager.SetActiveViewPoint(
             viewManager.GetViewPointByID(_questions[_shownQuestionIndex].ViewPointId)
-         );
+        );
         viewManager.ActivateViewPoint();
+
+        yield return null;
+
+        CinemachineBrain brain = FindAnyObjectByType<CinemachineBrain>();
+
+        if (brain != null && brain.ActiveBlend != null) {
+            float blendTime = brain.ActiveBlend.Duration;
+
+            yield return new WaitForSeconds(blendTime + 0.05f);
+        } else {
+            yield return null;
+        }
+
+
+        EditorManager.Instance.EditorCameraManager.ToggleCinemachineBrain(false);
     }
+
 
     SurveyQuestionUIBase AddQuestionToUI(QuestionBase questionBase) {
         // Check if we already created this UI before

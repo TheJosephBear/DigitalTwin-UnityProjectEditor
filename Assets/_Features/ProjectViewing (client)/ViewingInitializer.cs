@@ -14,7 +14,9 @@ public class ViewingInitializer : MonoBehaviour, Iinitializer {
     public void Initialize() {
         if (!InEditorDebugging || !Application.isEditor) {
             _projectName = GetUrlParameter("projectName");
+#if UNITY_EDITOR
         }
+#endif
 
         SceneLoadingManager.Instance.SetActiveScene(SceneType.Viewing);
         InitializeViewer();

@@ -242,6 +242,8 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
     #region Private helper functions
 
     IEnumerator PostRequest(string url, Dictionary<string, string> formData, System.Action<bool, string> callback) {
+     //   MessageDisplayManager.Instance.DisplayMessage("Post request");
+
         WWWForm form = new WWWForm();
         foreach (var field in formData) {
             form.AddField(field.Key, field.Value, System.Text.Encoding.UTF8);
@@ -253,6 +255,8 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
     }
 
     public IEnumerator GetRequest<T>(string url, System.Action<bool, T> callback, bool returnAsString = false) where T : class {
+   //     MessageDisplayManager.Instance.DisplayMessage("GetRequest");
+
         UnityWebRequest www = UnityWebRequest.Get(url);
         yield return www.SendWebRequest();
 
@@ -289,6 +293,8 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
     }
 
     IEnumerator DeleteRequest(string url, Dictionary<string, string> formData, System.Action<bool, string> callback) {
+     //   MessageDisplayManager.Instance.DisplayMessage("DeleteRequest");
+
         WWWForm form = new WWWForm();
         foreach (var field in formData) {
             form.AddField(field.Key, field.Value, System.Text.Encoding.UTF8);
@@ -302,6 +308,8 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
     }
 
     IEnumerator UploadFileRequest(string url, string path, string fileName, string projectName, string assetHash) {
+    //    MessageDisplayManager.Instance.DisplayMessage("UploadFileRequest");
+
         if (path == null) {
             Debug.LogError("Upload file request err: PATH IS NULL");
             yield break;
@@ -327,6 +335,8 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
     }
 
     IEnumerator DownloadFileRequest(string url, System.Action<byte[]> callback) {
+  //      MessageDisplayManager.Instance.DisplayMessage("DownloadFileRequest");
+
         UnityWebRequest www = UnityWebRequest.Get(url);
         yield return www.SendWebRequest();
 

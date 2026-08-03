@@ -10,6 +10,8 @@ using UnityEngine.InputSystem.LowLevel;
 public class EditorManager : MainManagerBase {
 
     public void SaveProject() {
+
+    //    MessageDisplayManager.Instance.DisplayMessage("SaveProject()");
         ProjectManager.Instance.SaveProject(ProjectSerializer.SerializeProject());
     }
 

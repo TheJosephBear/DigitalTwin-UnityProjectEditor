@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -60,6 +60,7 @@ public class ProjectManager : Singleton<ProjectManager> {
 
                     SelectedProject = new Project();
                     SelectedProject.CreateSerializableProjectFromJson(data);
+                 //   MessageDisplayManager.Instance.DisplayMessage("Projekt úspěšně stažen");
                 }
 
                 finished = true;

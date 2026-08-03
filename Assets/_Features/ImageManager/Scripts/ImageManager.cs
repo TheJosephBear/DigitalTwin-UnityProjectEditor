@@ -37,7 +37,7 @@ public class ImageManager : Singleton<ImageManager> {
             _onTextureAssetLoadedCallback?.Invoke(asset);
         } else {
             if (MessageDisplayManager.Instance != null)
-                MessageDisplayManager.Instance.ShowMessage("Prosím vyberte soubor typu .png/.jpg");
+                MessageDisplayManager.Instance.ShowMessage("ProsÃ­m vyberte soubor typu .png/.jpg");
             _onTextureAssetLoadedCallback?.Invoke(null);
         }
 
@@ -113,7 +113,8 @@ public class ImageManager : Singleton<ImageManager> {
             print($"Added standard image asset with ID: {asset.ID}");
 
             if (MainManagerBase.Instance is EditorManager editorMan) {
-                editorMan.SaveProject();
+            //    MessageDisplayManager.Instance.DisplayMessage("Image Manager save");
+            //    editorMan.SaveProject();
             }
         }
 

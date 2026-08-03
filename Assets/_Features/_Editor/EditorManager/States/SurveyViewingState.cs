@@ -11,7 +11,7 @@ public class SurveyViewingState : StateBase {
                 MainManagerBase.Instance.ChangeState(AppState.Freecam);
             }
         });
-        EditorManager.Instance.EditorCameraManager.ToggleCinemachineBrain(true);
+        EditorManager.Instance.EditorCameraManager.ToggleCinemachineBrain(false); // So you can move the cam via RTG
     }
 
     public override void Exit() {

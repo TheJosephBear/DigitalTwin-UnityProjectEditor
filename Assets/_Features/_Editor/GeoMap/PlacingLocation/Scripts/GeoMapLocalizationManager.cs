@@ -13,6 +13,8 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
     public GameObject GeoLocalizationUIPrefab;
     public Vector3 MapCenterPosition;
     public float ModelTransparency = 0.8f;
+    [HideInInspector]
+    public bool InitialLocalization = false;
 
     GameObject _baseMapCopy;
     GeoLocalizationData _geoData;
@@ -26,7 +28,7 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
 
     public void Setup(bool firstOpen = true) {
         ToggleUI(true);
-        _UIInstance.ToggleExitToMenuButtonVisibility(firstOpen);
+        _UIInstance.Initialize(firstOpen);
         GizmoManager.Instance.HideGizmo();
         ToggleGeoMapZoom(true);
         GeoMapManager.Instance.ToggleGeoMapControl(true);
@@ -45,6 +47,7 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
     public void UploadMap(ModelAsset uploadedModel) {
         if (_baseMapCopy != null) {
             Destroy(_baseMapCopy.gameObject);
+            _baseMapCopy = null;
         }
 
         MapManager.Instance.SetBaseMapModel(uploadedModel);
@@ -64,12 +67,18 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
             MapVariant baseMapReff = MapManager.Instance.GetBaseMap();
             if (!baseMapReff.IsVisible) {
                 baseMapReff.ToggleMeshVisibility(true);
+                baseMapReff.gameObject.SetActive(true);
             }
 
+            // Vector3 spawnPosition = MapCenterPosition;
+            Vector3 spawnPosition = baseMapReff.transform.position;
+
             _baseMapCopy = SceneLoadingManager.Instance.InstantiateObjectInScene(
-                MapManager.Instance.GetBaseMap().ModelAsset.ModelGameObject, 
-                MapCenterPosition
+                MapManager.Instance.GetBaseMap().ModelAsset.ModelGameObject,
+                spawnPosition
             );
+
+            _baseMapCopy.transform.rotation = baseMapReff.transform.rotation;
 
             // Add mesh collider
             foreach (Transform child in _baseMapCopy.GetComponentsInChildren<Transform>()) {
@@ -91,6 +100,7 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
             // Disable the map at the beginning
             _baseMapCopy.SetActive(false);
             baseMapReff.ToggleMeshVisibility(false);
+            baseMapReff.gameObject.SetActive(false);
         }
     }
 
@@ -102,6 +112,7 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
         GizmoManager.Instance.HideGizmo();
         _baseMapCopy.SetActive(false);
         MapManager.Instance.GetBaseMap().ToggleMeshVisibility(true);
+        MapManager.Instance.GetBaseMap().gameObject.SetActive(true);
         ToggleUI(false);
     }
 
@@ -130,6 +141,14 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
 
     public GeoLocalizationData GetPlacementMapData() {
         return _geoData;
+    }
+
+    public void UpdateCloneOpacity(float opacityValue) {
+        foreach (Transform child in _baseMapCopy.GetComponentsInChildren<Transform>()) {
+            if (child.GetComponent<MeshRenderer>() != null || child.GetComponent<MeshFilter>() != null) {
+                MakeMaterialsTransparent(child.gameObject, opacityValue);
+            }
+        }
     }
 
     public void InitializeWithPlacementMapData(GeoLocalizationData geoData) {
