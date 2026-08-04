@@ -18,7 +18,12 @@ public class ViewPointUI : MonoBehaviour {
     }
 
     public void OnAddView() {
-        _viewManager.CreateNewViewPoint();
+        ViewPoint newViewpoint = _viewManager.CreateNewViewPoint().GetComponent<ViewPoint>();
+        // Activate!
+        _viewManager.SetActiveViewPoint(newViewpoint);
+        _viewManager.ActivateViewPoint();
+        MainManagerBase.Instance.ChangeState(AppState.ViewActive);
+        // _viewManager.StartViewMoving();
         UpdateViewButtonList();
     }
 

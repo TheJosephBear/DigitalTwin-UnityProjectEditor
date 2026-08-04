@@ -47,7 +47,7 @@ public class CameraManager : Singleton<CameraManager> {
             _editorManager = MainManagerBase.Instance;
         }
 
-        if (_editorManager != null && _editorManager.ActiveState == AppState.Freecam) {
+        if (_editorManager != null && _editorManager.ActiveState == AppState.Freecam || _editorManager.ActiveState == AppState.Survey) {
             UpdateFreeCamTransform();
         }
 
@@ -56,7 +56,7 @@ public class CameraManager : Singleton<CameraManager> {
 
     // LateUpdate guarantees we enforce bounds AFTER the external script moves the camera
     private void LateUpdate() {
-        if (_editorManager != null && _editorManager.ActiveState == AppState.Freecam) {
+        if (_editorManager != null && (_editorManager.ActiveState == AppState.Freecam || _editorManager.ActiveState == AppState.Survey)) {
             EnforceCameraBounds();
         }
     }

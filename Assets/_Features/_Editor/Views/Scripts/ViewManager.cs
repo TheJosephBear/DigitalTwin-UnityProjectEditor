@@ -48,8 +48,8 @@ public class ViewManager : Singleton<ViewManager> {
         _viewMovingScript.StartViewMoving(_activeViewPoint);
     }
 
-    public void ExitViewMoving(bool save) {
-        _viewMovingScript.ExitViewMoving(save, (success) => {
+    public void ExitViewMoving(bool save, string message = "Neuložené změny, chcete odejít?") {
+        _viewMovingScript.ExitViewMoving(save, message, (success) => {
             if (!success) return;
 
             MoveMainCamToActiveViewPoint();

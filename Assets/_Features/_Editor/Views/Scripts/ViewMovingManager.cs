@@ -34,14 +34,14 @@ public class ViewMovingManager : MonoBehaviour {
         // Show context UI
         if (_viewPointContextUIInstance == null)
             _viewPointContextUIInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(ViewPointContextUIPrefab).GetComponent<ViewPointContextUI>();
-        _viewPointContextUIInstance.Initialize(_viewPointBeingMoved);
+        _viewPointContextUIInstance.Initialize(_viewPointBeingMoved, this);
         ToggleUnsavedChanges(false);
         ToggleViewPointContextUI(true);
     }
 
-    public void ExitViewMoving(bool save, Action<bool> success) {
+    public void ExitViewMoving(bool save, string message, Action<bool> success) {
         if (_viewPointBeingMoved == null) return;
-        if (_unsavedChanges) {
+        if (_unsavedChanges && !save) {
             PopUp.Instance.AreYouSurePopUp((sure) => {
                 if (sure) {
                     _movingActive = false;
@@ -56,7 +56,7 @@ public class ViewMovingManager : MonoBehaviour {
                 } else {
                     success.Invoke(false);
                 }
-            }, "Neuložené zmìny, chcete odejít?");
+            }, message);
         } else {
             _movingActive = false;
             if (!save && _originalPos != null && _originalRot != null) {
@@ -83,5 +83,4 @@ public class ViewMovingManager : MonoBehaviour {
         if (_viewPointContextUIInstance == null) return;
         _viewPointContextUIInstance.gameObject.SetActive(show);
     }
-
 }

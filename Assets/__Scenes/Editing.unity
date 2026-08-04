@@ -4768,6 +4768,18 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4083655668628247864, guid: 75b9bd83da49ddc40b37759c12432941, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 6.0435
+      objectReference: {fileID: 0}
+    - target: {fileID: 4083655668628247864, guid: 75b9bd83da49ddc40b37759c12432941, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 313.4567
+      objectReference: {fileID: 0}
+    - target: {fileID: 4083655668628247864, guid: 75b9bd83da49ddc40b37759c12432941, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -6.043503
+      objectReference: {fileID: 0}
     - target: {fileID: 4909052501128452483, guid: 75b9bd83da49ddc40b37759c12432941, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -7122,6 +7134,18 @@ PrefabInstance:
     - target: {fileID: 5649455849635722340, guid: f829c45f4f85eb7418c0cd45082ebb70, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5649455849635722340, guid: f829c45f4f85eb7418c0cd45082ebb70, type: 3}
+      propertyPath: moveSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5649455849635722340, guid: f829c45f4f85eb7418c0cd45082ebb70, type: 3}
+      propertyPath: lookSensitivity
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5649455849635722340, guid: f829c45f4f85eb7418c0cd45082ebb70, type: 3}
+      propertyPath: GroundGeometryLayers.m_Bits
+      value: 1025
       objectReference: {fileID: 0}
     - target: {fileID: 7044977111450090819, guid: f829c45f4f85eb7418c0cd45082ebb70, type: 3}
       propertyPath: ShowAddViewButton

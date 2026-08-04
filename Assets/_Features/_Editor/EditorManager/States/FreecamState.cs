@@ -8,7 +8,9 @@ public class FreecamState : StateBase {
         MainManagerBase.Instance.ToggleHUD(true);
         MainManagerBase.Instance.ViewManager.ToggleViewPointUI(true);
         CameraManager.Instance.InitializeFreeCamBounds();
-        CameraManager.Instance.ToggleVcamVisbility(true);
+        if (MainManagerBase.Instance is EditorManager manager) {
+            CameraManager.Instance.ToggleVcamVisbility(true);
+        }
         //      if (TwoCameraInstantiated != null) Destroy(TwoCameraInstantiated);
         MainManagerBase.Instance.EditorCameraManager.DisableCinemachineAfterTransition();
     }
