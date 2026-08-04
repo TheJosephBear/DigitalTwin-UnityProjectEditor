@@ -52,6 +52,7 @@ public class ProjectListUINew : MonoBehaviour {
         }));
     }
     private IEnumerator RefreshCoroutine(System.Action onCompleted) {
+        UIManager.Instance.ShowUI(UIType.LoadingScreen);
         ProjectListManager.Instance.GetProjectMetadataList(list => {
             foreach (ProjectMetadata project in list) {
                 ImageManager.Instance.DownloadPreviewImage(project.projectName, success => {
@@ -65,6 +66,7 @@ public class ProjectListUINew : MonoBehaviour {
                 });
             }
 
+            UIManager.Instance.HideUI(UIType.LoadingScreen);
             Debug.Log("All project dashboard preview downloads have completed processing!");
         });
         yield return null;

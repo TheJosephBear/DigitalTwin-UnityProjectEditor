@@ -26,7 +26,7 @@ public class EditorManager : MainManagerBase {
     }
 
     IEnumerator ExitEditorCoroutine(bool save) {
-        UIManager.Instance.ShowUI(UIType.LoadingScreen);
+     //   UIManager.Instance.ShowUI(UIType.LoadingScreen);
 
         if(save)
             SaveProject();
@@ -39,7 +39,7 @@ public class EditorManager : MainManagerBase {
             yield return null;
         }
 
-        UIManager.Instance.HideUI(UIType.LoadingScreen);
+    //    UIManager.Instance.HideUI(UIType.LoadingScreen);
         var unloadTask = SceneLoadingManager.Instance.UnLoadSceneAsync(SceneType.Editing);
     }
 

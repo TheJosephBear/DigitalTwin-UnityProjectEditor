@@ -25,6 +25,7 @@ public class EditorInitializer : MonoBehaviour, Iinitializer {
     }
 
     public IEnumerator InitializeCoroutine() {
+        UIManager.Instance.ShowUI(UIType.LoadingScreen);
         SceneLoadingManager.Instance.SetActiveScene(SceneType.Editing);
 
         // Wait for project deserialization

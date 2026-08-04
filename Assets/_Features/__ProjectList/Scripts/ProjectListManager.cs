@@ -56,7 +56,7 @@ public class ProjectListManager : Singleton<ProjectListManager> {
 
         print("editor loaded");
 
-        UIManager.Instance.HideUI(UIType.LoadingScreen);
+      //  UIManager.Instance.HideUI(UIType.LoadingScreen);
         UIManager.Instance.HideUI(UIType.ProjectsList);
         SceneLoadingManager.Instance.UnLoadSceneAsync(SceneType.ProjectList);
     }
