@@ -7163,6 +7163,42 @@ PrefabInstance:
       propertyPath: viewPointSpawnPosition.z
       value: -200
       objectReference: {fileID: 0}
+    - target: {fileID: 8794994670614136854, guid: f829c45f4f85eb7418c0cd45082ebb70, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794994670614136854, guid: f829c45f4f85eb7418c0cd45082ebb70, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794994670614136854, guid: f829c45f4f85eb7418c0cd45082ebb70, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794994670614136854, guid: f829c45f4f85eb7418c0cd45082ebb70, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794994670614136854, guid: f829c45f4f85eb7418c0cd45082ebb70, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.04832513
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794994670614136854, guid: f829c45f4f85eb7418c0cd45082ebb70, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.04832513
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794994670614136854, guid: f829c45f4f85eb7418c0cd45082ebb70, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.04832513
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794994670614136854, guid: f829c45f4f85eb7418c0cd45082ebb70, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 129
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794994670614136854, guid: f829c45f4f85eb7418c0cd45082ebb70, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -84
+      objectReference: {fileID: 0}
     - target: {fileID: 8794994671491001252, guid: f829c45f4f85eb7418c0cd45082ebb70, type: 3}
       propertyPath: m_RootOrder
       value: 15

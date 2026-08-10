@@ -31,4 +31,13 @@ public class ViewHUDButton : MonoBehaviour {
         }
     }
 
+    public void OnHover() {
+        ViewManager.Instance.SetActiveViewPoint(ViewPointRefference);
+        ViewManager.Instance.ToggleCameraPreview(true);
+    }
+
+    public void OnUnhover() {
+        ViewManager.Instance.ToggleCameraPreview(false);
+    }
+
 }
