@@ -275,6 +275,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3dbf94da095df408bf10233efbeebf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RTFocusCameraScript: {fileID: 0}
 --- !u!4 &292430083
 Transform:
   m_ObjectHideFlags: 0

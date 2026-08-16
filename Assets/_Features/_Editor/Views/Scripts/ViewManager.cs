@@ -1,3 +1,4 @@
+using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ public class ViewManager : Singleton<ViewManager> {
     ViewPoint _activeViewPoint;
     ViewMovingManager _viewMovingScript;
     public bool isActivelyShowingCam = false;
+    public bool isViewMovingActive = false;
 
     [System.Serializable]
     public class OnViewAdded : UnityEvent<ViewPoint> { }
@@ -46,18 +48,30 @@ public class ViewManager : Singleton<ViewManager> {
         ActivateViewPoint();
         ToggleViewPointUI(true);
         _viewMovingScript.StartViewMoving(_activeViewPoint);
+        isViewMovingActive = true;
     }
 
     public void ExitViewMoving(bool save, string message = "Neuložené změny, chcete odejít?") {
         _viewMovingScript.ExitViewMoving(save, message, (success) => {
             if (!success) return;
 
+            StartCoroutine(WaitForCinemachineBlendCoroutine()); // TODO: please do this differently
             MoveMainCamToActiveViewPoint();
             DeactivateViewPoint();
-            _viewPointUIInstance.UpdateViewButtonList();
-            ResetHUDHighlight();
+            _viewPointUIInstance.OnExitMoving();
             MainManagerBase.Instance.ChangeState(AppState.Freecam);
         });
+    }
+
+    // The blending time glitches out certain functionalities
+    IEnumerator WaitForCinemachineBlendCoroutine() {
+        yield return new WaitForSeconds(0.01f);
+
+        while (FindAnyObjectByType<CinemachineBrain>().IsBlending) {
+            yield return null;
+        }
+
+        isViewMovingActive = false;
     }
 
     #endregion

@@ -9,10 +9,21 @@ public class ViewHUDButton : MonoBehaviour {
     public ViewPoint ViewPointRefference;
     public Image ButtonImageRef;
 
+    [SerializeField] float _inactiveHeight = 100f;
+    [SerializeField] float _activeHeight = 200f;
+    [SerializeField] GameObject ArrowsContainer;
+    [SerializeField] GameObject ArrowUpButton;
+    [SerializeField] GameObject ArrowDownButton;
+    ViewPoint _previousActiveViewPoint;
+    bool _isActiveViewpoint;
+
+
     public void Initialize(ViewPointUI ui, ViewPoint vp) {
         UIreff = ui;
         ViewPointRefference = vp;
-        ToggleVisual(ViewManager.Instance.GetActiveViewPoint() == ViewPointRefference);
+        _isActiveViewpoint = ViewManager.Instance.GetActiveViewPoint() == ViewPointRefference;
+        ToggleVisual(_isActiveViewpoint);
+        ToggleMovableVisual(_isActiveViewpoint);
     }
 
     public void OnClick() {
@@ -32,12 +43,33 @@ public class ViewHUDButton : MonoBehaviour {
     }
 
     public void OnHover() {
+        if (ViewManager.Instance.isViewMovingActive) return;
+
+        _previousActiveViewPoint = ViewManager.Instance.GetActiveViewPoint();
         ViewManager.Instance.SetActiveViewPoint(ViewPointRefference);
         ViewManager.Instance.ToggleCameraPreview(true);
+        if (_previousActiveViewPoint != null) ViewManager.Instance.SetActiveViewPoint(_previousActiveViewPoint);
     }
 
     public void OnUnhover() {
         ViewManager.Instance.ToggleCameraPreview(false);
     }
 
+    public void OnArrowUp() {
+        UIreff.OnMoveButton(transform.GetSiblingIndex(), moveUp: true);
+    }
+
+    public void OnArrowDown() {
+        UIreff.OnMoveButton(transform.GetSiblingIndex(), moveUp: false);
+    }
+    
+    public void ToggleMovableVisual(bool toggleOn) {
+        RectTransform rectTransform = GetComponent<RectTransform>();
+
+        Vector2 size = rectTransform.sizeDelta;
+        size.y = toggleOn ? _activeHeight : _inactiveHeight;
+        rectTransform.sizeDelta = size;
+
+        ArrowsContainer.SetActive(toggleOn);
+    }
 }

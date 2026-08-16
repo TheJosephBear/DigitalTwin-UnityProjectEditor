@@ -17,6 +17,14 @@ public class ViewPointUI : MonoBehaviour {
         AddViewButtonRefference.SetActive(showAddViewButton);
     }
 
+    public void OnExitMoving() {
+        ResetButtonsVisual();
+        UpdateViewButtonList();
+        foreach (ViewHUDButton button in _buttonList) {
+            button.ToggleMovableVisual(false);
+        }
+    }
+
     public void OnAddView() {
         ViewPoint newViewpoint = _viewManager.CreateNewViewPoint().GetComponent<ViewPoint>();
         // Activate!
@@ -67,6 +75,22 @@ public class ViewPointUI : MonoBehaviour {
             }
         }
         */
+    }
+
+    public void OnMoveButton(int index, bool moveUp) {
+        int newIndex = moveUp ? index - 1 : index + 1;
+        List<ViewPoint> list = _viewManager.GetViewPoints();
+
+        // Bounds check
+        if (newIndex < 0 || newIndex >= list.Count) return;
+
+        // 1. Swap elements in ViewManager's list
+        ViewPoint temp = list[index];
+        list[index] = list[newIndex];
+        list[newIndex] = temp;
+
+        // 2. Re-render UI buttons in the new list order
+        UpdateViewButtonList();
     }
 
     public void UpdateViewButtonList() {
