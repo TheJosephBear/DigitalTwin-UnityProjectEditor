@@ -97,6 +97,8 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
             _addedAnswers.Add(answerUI);
         }
 
+        RecalculateAnswerIndices();
+
         return answerUI;
     }
 
@@ -289,12 +291,30 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
             _optionsList.Add(_otherAnswerUI.AnswerElement);
     }
 
+    protected override SurveyAnswerUIBase AddAnswerUI(bool isOther = false) {
+        var answerUI = base.AddAnswerUI(isOther);
+        RecalculateAnswerIndices();
+        return answerUI;
+    }
+
     /// <summary>Recalculates indices after changes.</summary>
     protected virtual void RecalculateAnswerIndices() {
-        for (int i = 0; i < _addedAnswers.Count; i++)
+        int count = _addedAnswers.Count;
+        for (int i = 0; i < count; i++) {
             _addedAnswers[i].UpdateIndex(i);
+            if (_addedAnswers[i] is SurveyAnswerUIEditor answerEditor) {
+                bool canMoveUp = i > 0;
+                bool canMoveDown = i < count - 1;
+                answerEditor.SetMoveButtonsEnabled(canMoveUp, canMoveDown);
+            }
+        }
 
-        _otherAnswerUI?.UpdateIndex(_addedAnswers.Count);
+        if (_otherAnswerUI != null) {
+            _otherAnswerUI.UpdateIndex(_addedAnswers.Count);
+            if (_otherAnswerUI is SurveyAnswerUIEditor otherEditor) {
+                otherEditor.SetMoveButtonsEnabled(false, false);
+            }
+        }
     }
 
     #endregion
@@ -343,17 +363,25 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
     //    _currentlyOpenModal = null;
     //}
 
+    public virtual void SetQuestionMoveButtonsEnabled(bool canMoveUp, bool canMoveDown) {
+        var modal = _root.Q<VisualElement>("edit-question-modal");
+        var moveUpButton = modal?.Q<Button>("move-up-button") ?? _root.Q<Button>("move-up-button");
+        var moveDownButton = modal?.Q<Button>("move-down-button") ?? _root.Q<Button>("move-down-button");
+
+        moveUpButton?.SetEnabled(canMoveUp);
+        moveDownButton?.SetEnabled(canMoveDown);
+    }
+
     #region Modal Events
 
     protected virtual void RegisterQuestionModalButtonEvents() {
-        var moveUpButton = _root.Q<Button>("move-up-button");
-        var moveDownButton = _root.Q<Button>("move-down-button");
-        var deleteButton = _root.Q<Button>("delete-option-button");
+        var modal = _root.Q<VisualElement>("edit-question-modal");
+        var moveUpButton = modal?.Q<Button>("move-up-button") ?? _root.Q<Button>("move-up-button");
+        var moveDownButton = modal?.Q<Button>("move-down-button") ?? _root.Q<Button>("move-down-button");
+        var deleteButton = modal?.Q<Button>("delete-option-button") ?? _root.Q<Button>("delete-option-button");
         var imageButton = _root.Q<Button>("image-button");
 
-        int index = _surveyUIBuilder.GetQuestionIndex(this);
-
-        if (moveUpButton == null || moveDownButton == null || deleteButton == null  || imageButton == null) {
+        if (moveUpButton == null || moveDownButton == null || deleteButton == null || imageButton == null) {
             Debug.LogError($"[{QuestionID}] Failed to register button events: One or more buttons not found in UIDocument.");
             return;
         }
@@ -364,21 +392,25 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
         if (_onDelete != null) deleteButton.clicked -= _onDelete;
         if (_onUpload != null) imageButton.clicked -= _onUpload;
 
-        // Create new ones
+        // Create new ones with dynamic index calculation
         _onMoveUp = () => {
-            OnQuestionMoved?.Invoke(index, -1);
+            int dynamicIdx = _surveyUIBuilder.GetQuestionIndex(this);
+            OnQuestionMoved?.Invoke(dynamicIdx, -1);
         };
 
         _onMoveDown = () => {
-            OnQuestionMoved?.Invoke(index, 1);
+            int dynamicIdx = _surveyUIBuilder.GetQuestionIndex(this);
+            OnQuestionMoved?.Invoke(dynamicIdx, 1);
         };
 
         _onDelete = () => {
-            OnQuestionDeleted?.Invoke(index);
+            int dynamicIdx = _surveyUIBuilder.GetQuestionIndex(this);
+            OnQuestionDeleted?.Invoke(dynamicIdx);
         };
 
         _onUpload = () => {
-            OnUploadImage?.Invoke(index);
+            int dynamicIdx = _surveyUIBuilder.GetQuestionIndex(this);
+            OnUploadImage?.Invoke(dynamicIdx);
         };
 
         // Register
@@ -386,7 +418,6 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
         moveDownButton.clicked += _onMoveDown;
         deleteButton.clicked += _onDelete;
         imageButton.clicked += _onUpload;
-
     }
 
     #endregion

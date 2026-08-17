@@ -71,7 +71,11 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         if (titleLabel != null) titleLabel.text = survey.Name ?? "";
 
         var descLabel = _firstPageElement.Q<Label>("question-description");
-        if (descLabel != null) descLabel.text = survey.Description ?? "";
+        if (descLabel != null) {
+            string trimmed = survey.Description?.Trim() ?? string.Empty;
+            descLabel.text = trimmed;
+            descLabel.style.display = string.IsNullOrEmpty(trimmed) ? DisplayStyle.None : DisplayStyle.Flex;
+        }
 
         var questionImage = _firstPageElement.Q<VisualElement>("question-image");
         if (questionImage != null) {

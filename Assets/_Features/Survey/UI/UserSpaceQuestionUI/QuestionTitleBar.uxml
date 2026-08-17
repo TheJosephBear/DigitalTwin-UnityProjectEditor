@@ -4,6 +4,7 @@
     <Style src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/UserStyles.uss?fileID=7433441132597879392&amp;guid=74558b2425df4b44db13d07e45d34b9f&amp;type=3#UserStyles" />
     <ui:VisualElement name="question-header-info">
         <ui:Label text="1" name="question-position" />
+        <ui:Label text="" name="question-type" />
     </ui:VisualElement>
     <ui:VisualElement name="question-title-bar" style="flex-grow: 0; flex-direction: row; align-items: center;">
         <ui:Instance template="Question-title" />

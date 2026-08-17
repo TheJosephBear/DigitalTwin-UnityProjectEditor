@@ -61,7 +61,12 @@ public abstract class SurveyQuestionUIViewer : SurveyQuestionUIBase {
     }
 
     public override void SetDescription(string desc) {
-        _root.Q<Label>("question-description").text = desc;
+        var label = _root.Q<Label>("question-description");
+        if (label != null) {
+            string trimmed = desc?.Trim() ?? string.Empty;
+            label.text = trimmed;
+            label.style.display = string.IsNullOrEmpty(trimmed) ? DisplayStyle.None : DisplayStyle.Flex;
+        }
     }
 
 }

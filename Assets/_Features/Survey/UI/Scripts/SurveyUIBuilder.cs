@@ -137,6 +137,12 @@ public class SurveyUIBuilder : MonoBehaviour {
                 if (mapping != null) {
                     questionUI.SetQuestionType(mapping.DisplayName);
                 }
+
+                if (questionUI is SurveyQuestionUIEditor editorUI) {
+                    bool canMoveUp = i > 0;
+                    bool canMoveDown = i < _addedQuestions.Count - 1;
+                    editorUI.SetQuestionMoveButtonsEnabled(canMoveUp, canMoveDown);
+                }
             }
         }
     }

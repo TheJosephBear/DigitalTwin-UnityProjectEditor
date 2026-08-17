@@ -130,6 +130,7 @@ public class SurveyQuestionUIEditorLinearScale : SurveyQuestionUIEditor {
         }
 
         _addedAnswers.Add(answerUI);
+        RecalculateAnswerIndices();
         return answerUI;
     }
 

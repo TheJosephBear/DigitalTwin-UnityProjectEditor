@@ -92,33 +92,6 @@ public class SurveyAnswerUIEditorLinearScale : SurveyAnswerUIEditor {
                 }
             }, TrickleDown.TrickleDown);
         }
-
-        var deleteBtn = _answerElement.Q<Button>("delete-option-button");
-        if (deleteBtn != null) {
-            deleteBtn.clicked += () => {
-                if (_questionUIRef is SurveyQuestionUIEditorLinearScale linearScaleQ) {
-                    linearScaleQ.DeleteAnswer(AnswerIndex);
-                }
-            };
-        }
-
-        var moveUpBtn = _answerElement.Q<Button>("move-up-button");
-        if (moveUpBtn != null) {
-            moveUpBtn.clicked += () => {
-                if (_questionUIRef is SurveyQuestionUIEditorLinearScale linearScaleQ) {
-                    linearScaleQ.MoveAnswerUp(AnswerIndex);
-                }
-            };
-        }
-
-        var moveDownBtn = _answerElement.Q<Button>("move-down-button");
-        if (moveDownBtn != null) {
-            moveDownBtn.clicked += () => {
-                if (_questionUIRef is SurveyQuestionUIEditorLinearScale linearScaleQ) {
-                    linearScaleQ.MoveAnswerDown(AnswerIndex);
-                }
-            };
-        }
     }
 
     private void RegisterTextFieldChanges() {

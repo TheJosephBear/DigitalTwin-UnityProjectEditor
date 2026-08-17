@@ -143,6 +143,14 @@ public abstract class SurveyAnswerUIEditor : SurveyAnswerUIBase {
     //    }
     //}
 
+    public virtual void SetMoveButtonsEnabled(bool canMoveUp, bool canMoveDown) {
+        var moveUpButton = _answerElement.Q<Button>("move-up-button");
+        var moveDownButton = _answerElement.Q<Button>("move-down-button");
+
+        moveUpButton?.SetEnabled(canMoveUp);
+        moveDownButton?.SetEnabled(canMoveDown);
+    }
+
     protected void RegisterModalButtonEvents(VisualElement answerRoot) {
         var deleteAnswerButton = answerRoot.Q<Button>("delete-option-button");
         var moveUpButton = answerRoot.Q<Button>("move-up-button");
@@ -152,6 +160,10 @@ public abstract class SurveyAnswerUIEditor : SurveyAnswerUIBase {
             deleteAnswerButton.clicked += () => {
                 if (_questionUIRef is SurveyQuestionUIEditorString questionEditorString)
                     questionEditorString.DeleteAnswer(_answerIndex);
+                else if (_questionUIRef is SurveyQuestionUIEditorLinearScale questionEditorLinearScale)
+                    questionEditorLinearScale.DeleteAnswer(_answerIndex);
+                else if (_questionUIRef is SurveyQuestionUIEditorImage questionEditorImage)
+                    questionEditorImage.DeleteAnswer(_answerIndex);
             };
         }
 

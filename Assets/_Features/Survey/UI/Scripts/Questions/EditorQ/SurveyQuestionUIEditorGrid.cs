@@ -343,11 +343,13 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
             var moveUpBtn = cell.Q<Button>("row-move-up-button");
             if (moveUpBtn != null) {
                 moveUpBtn.clickable = new Clickable(() => MoveRowUp(currentIdx));
+                moveUpBtn.SetEnabled(currentIdx > 0);
             }
 
             var moveDownBtn = cell.Q<Button>("row-move-down-button");
             if (moveDownBtn != null) {
                 moveDownBtn.clickable = new Clickable(() => MoveRowDown(currentIdx));
+                moveDownBtn.SetEnabled(currentIdx < _rows.Count - 1);
             }
 
             var deleteBtn = cell.Q<Button>("row-delete-button");

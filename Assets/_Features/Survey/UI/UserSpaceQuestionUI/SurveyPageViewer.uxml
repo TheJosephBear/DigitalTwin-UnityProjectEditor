@@ -10,7 +10,7 @@
             <ui:Button name="toggle-btn" />
         </ui:VisualElement>
         <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Auto" name="survey-scroll-view" picking-mode="Ignore">
-            <ui:Instance template="SurveyTitleBar" />
+            <ui:Instance template="SurveyTitleBar" style="flex-grow: 1; width: 100%;" />
         </ui:ScrollView>
         <ui:VisualElement name="bottom-bar">
             <ui:Button name="previous-btn" class="nav-btn" />

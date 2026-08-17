@@ -14,30 +14,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questionTypeMappings:
   - QuestionType: 0
-    DisplayName: Multiple Choice
+    DisplayName: "V\xFDb\u011Br jedn\xE9 mo\u017Enosti"
     QuestionTemplate: {fileID: 9197481963319205126, guid: cfed14590f393b34ca863f34788e273a, type: 3}
     AnswerTemplate: {fileID: 9197481963319205126, guid: 43a53068268e3614a92867fec2dc97e3, type: 3}
   - QuestionType: 1
-    DisplayName: Checkboxes
+    DisplayName: "V\xFDb\u011Br v\xEDce mo\u017Enost\xED"
     QuestionTemplate: {fileID: 9197481963319205126, guid: e497a4432c94ffe4f913e5d17da72d2a, type: 3}
     AnswerTemplate: {fileID: 9197481963319205126, guid: 414cdd6843d6eda4db2380e5e87ed03f, type: 3}
   - QuestionType: 5
-    DisplayName: Multiple Choice Grid
+    DisplayName: "Matice jedn\xE9 mo\u017Enosti"
     QuestionTemplate: {fileID: 9197481963319205126, guid: 8e8691b79f3960e4496978493c5bbe9c, type: 3}
     AnswerTemplate: {fileID: 9197481963319205126, guid: 60db233ce1327f84ab42c148dfcab8fc, type: 3}
   - QuestionType: 6
-    DisplayName: Checkbox Grid
+    DisplayName: "Matice v\xEDce mo\u017Enost\xED"
     QuestionTemplate: {fileID: 9197481963319205126, guid: b231da0ba5a041e4d8f9341b9984c17d, type: 3}
     AnswerTemplate: {fileID: 9197481963319205126, guid: a8213fdb0c9024e489f7cfe714727e92, type: 3}
   - QuestionType: 3
-    DisplayName: Text Answer
+    DisplayName: "Textov\xE1 odpov\u011B\u010F"
     QuestionTemplate: {fileID: 9197481963319205126, guid: 77bf64030fcdcf548afb02c5bd968d56, type: 3}
     AnswerTemplate: {fileID: 0}
   - QuestionType: 8
-    DisplayName: Linear Scale
+    DisplayName: "Line\xE1rn\xED \u0161k\xE1la"
     QuestionTemplate: {fileID: 9197481963319205126, guid: bdf0b7e5dbe82814a926744188447bb7, type: 3}
     AnswerTemplate: {fileID: 9197481963319205126, guid: 9eecbf158b612924b8c7681dc9533d9d, type: 3}
   - QuestionType: 7
-    DisplayName: Image Choice
+    DisplayName: "V\xFDb\u011Br obr\xE1zku"
     QuestionTemplate: {fileID: 9197481963319205126, guid: c57b656840f0c44469c44b9057523226, type: 3}
     AnswerTemplate: {fileID: 9197481963319205126, guid: df67cab079ef42646a314d70083287c2, type: 3}

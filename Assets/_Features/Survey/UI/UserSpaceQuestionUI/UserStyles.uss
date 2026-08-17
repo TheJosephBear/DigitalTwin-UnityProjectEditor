@@ -60,18 +60,35 @@
     background-color: rgb(255, 255, 255);
 }
 
-#survey-scroll-view > #unity-content-container {
+#survey-scroll-view > #unity-content-container,
+#survey-scroll-view > .unity-scroll-view__content-container {
+    flex-grow: 1;
+    min-height: 100%;
     padding-top: 24px;
     padding-bottom: 24px;
     padding-left: 24px;
     padding-right: 24px;
 }
 
-#survey-scroll-view > .unity-scroll-view__content-container {
-    padding-top: 24px;
-    padding-bottom: 24px;
-    padding-left: 24px;
-    padding-right: 24px;
+#survey-first-page {
+    flex-grow: 1;
+    min-height: 100%;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    width: 100%;
+}
+
+#survey-first-page #survey-title {
+    -unity-text-align: middle-center;
+    font-size: 22px;
+    margin-bottom: 12px;
+}
+
+#survey-first-page #question-description {
+    -unity-text-align: middle-center;
+    font-size: 15px;
+    margin-bottom: 16px;
 }
 
 #bottom-bar {
