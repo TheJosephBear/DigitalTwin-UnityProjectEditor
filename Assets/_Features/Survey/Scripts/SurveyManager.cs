@@ -145,8 +145,6 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
     /// Internal check to see if the string contains actual survey questions.
     /// </summary>
     private bool ValidateJsonContent(string json) {
-        return json != "";
-        /*
         if (string.IsNullOrWhiteSpace(json) || json == "{}" || json == "[]") {
             return false;
         }
@@ -167,7 +165,53 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
         }
 
         return false;
-        */
+    }
+
+
+
+    #endregion
+
+    #region Survey Validation
+
+    /// <summary>
+    /// Synchronously checks if there is currently valid survey data cached locally in memory.
+    /// </summary>
+    public bool HasCachedSurvey() {
+        return ValidateJsonContent(_surveyJsonData);
+    }
+
+    /// <summary>
+    /// Asynchronously queries the server to check if a valid survey exists for the selected project.
+    /// </summary>
+    /// <param name="onResult">Callback returning true if a valid survey exists on the server, false otherwise.</param>
+    public void CheckHasValidSurvey(Action<bool> onResult) {
+        if (ProjectManager.Instance == null || ProjectManager.Instance.SelectedProject == null) {
+            onResult?.Invoke(false);
+            return;
+        }
+
+        StartCoroutine(CheckHasValidSurveyRoutine(onResult));
+    }
+
+    private IEnumerator CheckHasValidSurveyRoutine(Action<bool> onResult) {
+        string downloadedData = null;
+        bool isDone = false;
+
+        // Use your existing download routine to fetch data from the server
+        yield return StartCoroutine(DownloadSurveyData(data => {
+            downloadedData = data;
+            isDone = true;
+        }));
+
+        // Parse and validate the response
+        bool isValid = ValidateJsonContent(downloadedData);
+
+        // Cache data if it is valid
+        if (isValid) {
+            _surveyJsonData = downloadedData;
+        }
+
+        onResult?.Invoke(isValid);
     }
 
     #endregion

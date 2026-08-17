@@ -59,9 +59,14 @@ public class ViewingInitializer : MonoBehaviour, Iinitializer {
         // UIManager.Instance.ShowUI(UIType.ViewerHUD);
         yield return Serializer.DeserializeProjectCoroutine(ProjectManager.Instance.SelectedProject);
         MainManagerBase.Instance.ChangeState(AppState.Freecam);
-        MainManagerBase.Instance.ChangeState(AppState.Survey);
 
-        UIManager.Instance.HideUI(UIType.LoadingScreen);
+        SurveyManager.Instance.CheckHasValidSurvey((result) => {
+            if (result) {
+                MainManagerBase.Instance.ChangeState(AppState.Survey);
+            }
+
+            UIManager.Instance.HideUI(UIType.LoadingScreen);
+        });
     }
 
     public static string GetUrlParameter(string parameterName) {

@@ -10,6 +10,7 @@ public class Project {
     public string ProjectDescription { get; private set; }
     public string ProjectImageID { get; private set; }
     public SerializableProject SerializableProject { get; private set; }
+    public ProjectMetadata ProjectMetadata;
 
     public void CreateSerializableProjectFromJson(string json) {
         SerializableProject = JsonUtility.FromJson<SerializableProject>(json);

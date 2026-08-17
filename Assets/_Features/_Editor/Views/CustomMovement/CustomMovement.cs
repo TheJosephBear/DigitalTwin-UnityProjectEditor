@@ -12,7 +12,6 @@ public class CustomMovement : MonoBehaviour {
     public float panSensitivity = 0.5f;
 
     [Header("Zoom / Scroll Settings")]
-    public float zoomSensitivity = 10f;
     public float ScrollSlowDistance = 50f;
     public float MinScrollSpeed = 2f;
     public float MaxScrollSpeed = 20f;
@@ -24,6 +23,7 @@ public class CustomMovement : MonoBehaviour {
 
     private Vector2 _moveInput = Vector2.zero;
     private float _ascendInput = 0f;
+    private float _zoomSpeed = 0f;
 
     void Update() {
         if (_movedObject == null) return;
@@ -39,8 +39,8 @@ public class CustomMovement : MonoBehaviour {
         HandlePan();
 
         // Zoom / Scroll Controls
-        HandleZoom();
         UpdateCameraSpeed();
+        HandleZoom();
 
         // Standard Movement
         HandleWASDInput();
@@ -98,7 +98,7 @@ public class CustomMovement : MonoBehaviour {
         float scrollInput = Input.GetAxis("Mouse ScrollWheel");
         if (Mathf.Abs(scrollInput) > 0.01f) {
             // Move forward/backward along the target's forward view vector based on scroll direction
-            Vector3 zoomDirection = _movedObject.transform.forward * (scrollInput * zoomSensitivity);
+            Vector3 zoomDirection = _movedObject.transform.forward * (scrollInput * _zoomSpeed);
             _movedObject.transform.position += zoomDirection;
         }
     }
@@ -119,10 +119,7 @@ public class CustomMovement : MonoBehaviour {
         // Smoothly transition from MinScrollSpeed (close) to MaxScrollSpeed (far)
         float newScrollSpeed = Mathf.Lerp(MinScrollSpeed, MaxScrollSpeed, t);
 
-        // Apply dynamically calculated speed if GizmoManager exists
-        if (GizmoManager.Instance != null) {
-            GizmoManager.Instance.SetFreecamScrollSpeed(newScrollSpeed);
-        }
+        _zoomSpeed = newScrollSpeed;
     }
 
     public void SetTarget(GameObject target) {

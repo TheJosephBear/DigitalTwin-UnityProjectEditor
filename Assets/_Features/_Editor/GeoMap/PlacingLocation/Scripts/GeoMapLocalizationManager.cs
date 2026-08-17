@@ -172,6 +172,12 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
             GeoMapManager.Instance.ExitGeoLocalization();
         }, error => {
             Debug.LogError(error);
+            _geoData = new GeoLocalizationData {
+                longtitude = (float)lng,
+                latitude = (float)lat,
+                elevation = 0,
+            };
+            GeoMapManager.Instance.ExitGeoLocalization();
         });
     }
 
