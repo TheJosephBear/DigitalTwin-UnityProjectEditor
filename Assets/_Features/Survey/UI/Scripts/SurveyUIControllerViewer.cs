@@ -169,6 +169,14 @@ public class SurveyUIControllerViewer : MonoBehaviour {
                     imageUI.AddAnswer(imageAnswer.ImageID);
                 }
             }
+        } else if (questionBase is QuestionLinearScale linScaleQuestion && questionUI is SurveyQuestionUIViewerLinearScale scaleUI) {
+            scaleUI.SetScaleRange(linScaleQuestion.ScaleType, linScaleQuestion.Min, linScaleQuestion.Max);
+            scaleUI.OnScaleValueChanged += (qId, rowIdx, val) => {
+                _responseManager.RegisterScaleAnswer(qId, rowIdx, val);
+            };
+            foreach (AnswerBase answer in questionBase.Answers) {
+                scaleUI.AddAnswer(answer.Text);
+            }
         }
 
         // Add to cache

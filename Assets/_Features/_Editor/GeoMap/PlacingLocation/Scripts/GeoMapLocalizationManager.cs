@@ -117,7 +117,7 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
     }
 
     public void ToggleLock() {
-        _lastLockToggle = !_lastLockToggle; 
+        _lastLockToggle = !_lastLockToggle;
         LockGeoMap(_lastLockToggle);
     }
 
@@ -164,7 +164,7 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
         OnlineMapsTileSetControl.instance.GetCoordsByWorldPosition(_baseMapCopy.transform.position, out lng, out lat);
 
         ElevationFetcher.Instance.GetElevation(new Vector2((float)lng, (float)lat), elevation => {
-            _geoData = new GeoLocalizationData { 
+            _geoData = new GeoLocalizationData {
                 longtitude = (float)lng,
                 latitude = (float)lat,
                 elevation = elevation,
@@ -172,6 +172,12 @@ public class GeoMapLocalizationManager : Singleton<GeoMapLocalizationManager> {
             GeoMapManager.Instance.ExitGeoLocalization();
         }, error => {
             Debug.LogError(error);
+            _geoData = new GeoLocalizationData {
+                longtitude = (float)lng,
+                latitude = (float)lat,
+                elevation = 0,
+            };
+            GeoMapManager.Instance.ExitGeoLocalization();
         });
     }
 

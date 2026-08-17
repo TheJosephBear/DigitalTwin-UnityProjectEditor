@@ -43,7 +43,6 @@ public class SurveyUIBuilder : MonoBehaviour {
         QuestionType.MultipleChoiceMultiple,
         QuestionType.Paragraph,
         QuestionType.ShortAnswer,
-        QuestionType.LinearScale,
     };
 
     private List<QuestionType> QuestionTypesUsingGridUI = new List<QuestionType>{
@@ -196,6 +195,15 @@ public class SurveyUIBuilder : MonoBehaviour {
                 FindAnyObjectByType<ViewManager>()?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>(),
                 this
             );
+        } else if (questionType == QuestionType.LinearScale) {
+            questionUI = new SurveyQuestionUIEditorLinearScale(
+                questionInstance,
+                addedQuestion.Id,
+                questionType,
+                FindAnyObjectByType<ViewManager>()?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>(),
+                this,
+                isDeserialized: isDeserialized
+            );
         }
 
         if (insertAtIndex < 0 || insertAtIndex >= _addedQuestions.Count) {
@@ -252,6 +260,14 @@ public class SurveyUIBuilder : MonoBehaviour {
             );
         } else if (questionType == QuestionType.ImageChoice) {
             questionUI = new SurveyQuestionUIViewerImage(
+                questionInstance,
+                questionBase.Id,
+                questionType,
+                FindAnyObjectByType<ViewManager>()?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>(),
+                this
+            );
+        } else if (questionType == QuestionType.LinearScale) {
+            questionUI = new SurveyQuestionUIViewerLinearScale(
                 questionInstance,
                 questionBase.Id,
                 questionType,

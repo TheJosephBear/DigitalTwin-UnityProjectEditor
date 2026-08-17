@@ -138,6 +138,13 @@ namespace SurveySystem {
             }
         }
 
+        public void SetLinearScaleRange(int questionId, string scaleType, int min, int max) {
+            QuestionBase question = _activeSurvey.GetQuestionById(questionId);
+            if (question is QuestionLinearScale linearScale) {
+                linearScale.SetScaleRange(scaleType, min, max);
+            }
+        }
+
         public void AddRow(int questionId) {
             QuestionBase question = _activeSurvey.GetQuestionById(questionId);
             if (!question.IsGrid) return;

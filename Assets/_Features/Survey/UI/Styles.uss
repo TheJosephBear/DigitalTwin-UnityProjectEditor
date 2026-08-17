@@ -5,8 +5,8 @@
     --secondary-background-color: rgb(246, 230, 255);
 }
 
-#survey-scroll-view > #unity-content-container {
-    padding-top: 20px;
+#survey-scroll-view #unity-content-container {
+    padding-top: 30px;
     padding-right: 10%;
     padding-bottom: 20px;
     padding-left: 10%;
@@ -16,7 +16,7 @@
     margin-left: 0;
 }
 
-#survey-scroll-view > .unity-scroll-view__content-container {
+#survey-scroll-view .unity-scroll-view__content-container {
     padding-top: 20px;
     padding-right: 10%;
     padding-bottom: 20px;
@@ -506,11 +506,26 @@ ScrollView.unity-base-dropdown__container-inner {
     background-color: rgba(103, 80, 164, 0.08);
 }
 
-#grid-table .unity-collection-view__item--selected,
-#grid-table .unity-list-view__item--selected,
-#grid-table .unity-multi-column-view__row-container--selected,
-#grid-table .unity-collection-view__item:active,
-#grid-table .unity-list-view__item:active,
+#grid-table .unity-collection-view__item--selected {
+    background-color: transparent;
+}
+
+#grid-table .unity-list-view__item--selected {
+    background-color: transparent;
+}
+
+#grid-table .unity-multi-column-view__row-container--selected {
+    background-color: transparent;
+}
+
+#grid-table .unity-collection-view__item:active {
+    background-color: transparent;
+}
+
+#grid-table .unity-list-view__item:active {
+    background-color: transparent;
+}
+
 #grid-table .unity-multi-column-view__row-container:active {
     background-color: transparent;
 }
@@ -585,8 +600,6 @@ ScrollView.unity-base-dropdown__container-inner {
     margin: 0;
 }
 
-
-
 #grid-table .unity-multi-column-list-view__cell CustomRadioButtonNoText .unity-toggle__checkmark {
     border-radius: 50%;
 }
@@ -645,7 +658,7 @@ ScrollView.unity-base-dropdown__container-inner {
     align-items: center;
 }
 
-.enhance-button, .remove-button {
+.enhance-button {
     background-color: rgba(255, 255, 255, 0.6);
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
@@ -655,13 +668,309 @@ ScrollView.unity-base-dropdown__container-inner {
     transition-property: background-color, scale;
 }
 
-.enhance-button:hover, .remove-button:hover {
+.remove-button {
+    background-color: rgba(255, 255, 255, 0.6);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    transition-duration: 0.15s;
+    transition-property: background-color, scale;
+}
+
+.enhance-button:hover {
     background-color: rgba(255, 255, 255, 0.95);
     scale: 1.15 1.15;
     cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
-.enhance-button:active, .remove-button:active {
-    background-color: rgba(220, 220, 220, 1);
+.remove-button:hover {
+    background-color: rgba(255, 255, 255, 0.95);
+    scale: 1.15 1.15;
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.enhance-button:active {
+    background-color: rgb(220, 220, 220);
     scale: 0.95 0.95;
+}
+
+.remove-button:active {
+    background-color: rgb(220, 220, 220);
+    scale: 0.95 0.95;
+}
+
+.scale-config-bar {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+.scale-config-label {
+    font-size: 14px;
+    -unity-font-style: bold;
+    color: var(--secondary-color);
+    margin-right: 8px;
+}
+
+.scale-type-dropdown {
+    width: 140px;
+    height: 32px;
+}
+
+.scale-options-list {
+    flex-direction: column;
+    width: 100%;
+}
+
+.scale-row-container {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding: 4px 6px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(0, 0, 0, 0.06);
+}
+
+.scale-preview-container {
+    flex-direction: row;
+    align-items: center;
+    flex-grow: 1;
+    flex-shrink: 0;
+    min-width: 200px;
+    margin-right: 8px;
+}
+
+.scale-limit-label {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: var(--secondary-color);
+    min-width: 24px;
+    -unity-text-align: middle-center;
+}
+
+.scale-slider {
+    flex-grow: 1;
+    margin-left: 6px;
+    margin-right: 6px;
+}
+
+.scale-slider .unity-base-slider__dragger {
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    margin-top: -9px;
+}
+
+#unity-dragger {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+#unity-dragger:hover {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+#unity-dragger:active {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+#unity-dragger:focus {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.unity-base-slider__dragger {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.unity-base-slider__dragger:hover {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.unity-base-slider__dragger:active {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.unity-base-slider__dragger:focus {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.scale-slider {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.scale-slider:hover {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.scale-slider:active {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.scale-slider.is-dragging {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.scale-slider.is-dragging * {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.scale-slider #unity-dragger {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.scale-slider #unity-dragger:hover {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.scale-slider #unity-dragger:active {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.scale-slider #unity-dragger:focus {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.scale-slider .unity-base-slider__dragger {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.scale-slider .unity-base-slider__dragger:hover {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.scale-slider .unity-base-slider__dragger:active {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.scale-slider .unity-base-slider__dragger:focus {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.scale-slider .unity-base-slider__drag-container {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.scale-slider .unity-base-slider__tracker {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.scale-slider {
+    overflow: visible;
+}
+
+.scale-slider .unity-base-slider__dragger {
+    overflow: visible;
+}
+
+.scale-slider .unity-base-slider__drag-container {
+    overflow: visible;
+}
+
+.scale-slider .unity-base-slider__tracker {
+    overflow: visible;
+}
+
+.scale-dragger-tooltip {
+    position: absolute;
+    bottom: 22px;
+    left: 50%;
+    translate: -50% 0;
+    background-color: var(--primary-color);
+    color: rgb(255, 255, 255);
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-size: 13px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    opacity: 0;
+    transition-property: opacity, scale;
+    transition-duration: 0.12s;
+    scale: 0.8 0.8;
+    white-space: nowrap;
+}
+
+#unity-dragger:hover .scale-dragger-tooltip {
+    opacity: 1;
+    scale: 1 1;
+}
+
+#unity-dragger:active .scale-dragger-tooltip {
+    opacity: 1;
+    scale: 1 1;
+}
+
+#unity-dragger:focus .scale-dragger-tooltip {
+    opacity: 1;
+    scale: 1 1;
+}
+
+.unity-base-slider__dragger:hover .scale-dragger-tooltip {
+    opacity: 1;
+    scale: 1 1;
+}
+
+.unity-base-slider__dragger:active .scale-dragger-tooltip {
+    opacity: 1;
+    scale: 1 1;
+}
+
+.scale-slider.is-dragging .scale-dragger-tooltip {
+    opacity: 1;
+    scale: 1 1;
+}
+
+.scale-dragger-tooltip.is-dragging {
+    opacity: 1;
+    scale: 1 1;
+}
+
+.scale-slider .unity-base-slider__tracker {
+    background-color: rgba(103, 80, 164, 0.25);
+    height: 6px;
+    border-radius: 3px;
+}
+
+.add-scale-row-btn {
+    width: 150px;
+    height: 32px;
+    align-items: center;
+    justify-content: center;
+}
+
+.scale-viewer-row {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 8px;
+}
+
+.scale-viewer-row-label {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: rgb(40, 40, 40);
+    min-width: 160px;
+    max-width: 250px;
+    flex-shrink: 0;
+    white-space: normal;
+}
+
+.scale-value-badge {
+    min-width: 32px;
+    height: 28px;
+    background-color: var(--primary-color);
+    color: rgb(255, 255, 255);
+    border-radius: 14px;
+    -unity-text-align: middle-center;
+    font-size: 14px;
+    -unity-font-style: bold;
+    margin-left: 12px;
 }

@@ -88,6 +88,22 @@ namespace SurveySystem {
             }
         }
 
+        public void RegisterScaleAnswer(int questionId, int rowIdx, int value) {
+            var response = _currentSubmission.Responses.Find(r => r.QuestionId == questionId);
+            if (response == null) return;
+
+            var scaleResponse = response.ScaleResponses.Find(sr => sr.RowIdx == rowIdx);
+            if (scaleResponse == null) {
+                scaleResponse = new ScaleRowResponse { RowIdx = rowIdx, Value = value };
+                response.ScaleResponses.Add(scaleResponse);
+            } else {
+                scaleResponse.Value = value;
+            }
+
+            // Also keep SelectedIdx updated for single row cases
+            response.SelectedIdx = value;
+        }
+
         public string ExportResponseJson() {
             return JsonUtility.ToJson(_currentSubmission, true);
         }
@@ -101,6 +117,7 @@ namespace SurveySystem {
         public List<int> SelectedIndices = null; // For MultipleChoice
         public string ResponseText = null;       // For OpenEnded or "Other" text
         public List<GridRowResponse> GridResponses = new();
+        public List<ScaleRowResponse> ScaleResponses = new();
     }
 
     [Serializable]
@@ -115,5 +132,11 @@ namespace SurveySystem {
         public int RowIdx;
         public int SelectedColumnIdx = -1;       // For MultipleChoiceGrid
         public List<int> SelectedColumnIndices;  // For CheckboxGrid
+    }
+
+    [Serializable]
+    public class ScaleRowResponse {
+        public int RowIdx;
+        public int Value;
     }
 }

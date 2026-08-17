@@ -131,6 +131,20 @@ public class SurveyUIControllerEditor : MonoBehaviour {
             imageUI.OnAnswerImageChanged += HandleImageQuestionAnswerImageUpload;
             imageUI.OnAnswerAdded += HandleAddAnswerImage;
             imageUI.OnAnswerRemoved += HandleAnswerRemoved;
+        } else if (addedQuestionUI is SurveyQuestionUIEditorLinearScale scaleUI) {
+            scaleUI.OnAnswerAdded += HandleAnswerAdded;
+            scaleUI.OnAnswerRemoved += HandleAnswerRemoved;
+            scaleUI.OnScaleTypeChanged += (qId, scaleType, min, max) => {
+                _surveyBuilder.SetLinearScaleRange(qId, scaleType, min, max);
+            };
+
+            if (question is QuestionLinearScale linScale) {
+                scaleUI.SetScaleRange(linScale.ScaleType, linScale.Min, linScale.Max);
+            }
+
+            if (!isDeserialized) {
+                scaleUI.AddInitialAnswer();
+            }
         }
 
         return addedQuestionUI;
@@ -195,6 +209,8 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         _surveyBuilder.AddNewAnswerToQuestion(questionId);
         if (answerUI is SurveyAnswerUIEditorString answerEditor) {
             answerEditor.OnTextChanged += HandleAnswerTextChanged;
+        } else if (answerUI is SurveyAnswerUIEditorLinearScale answerEditorScale) {
+            answerEditorScale.OnTextChanged += HandleAnswerTextChanged;
         }
     }
 
@@ -333,6 +349,13 @@ public class SurveyUIControllerEditor : MonoBehaviour {
                     SurveyAnswerUIBase answerUIBase = questionUI.AddAnswer(answer.Text, answer.IsOther);
                     if(answerUIBase is SurveyAnswerUIEditorString answerEditorString)
                         answerEditorString.OnTextChanged += HandleAnswerTextChanged;
+                }
+            } else if (question is QuestionLinearScale linScaleQuestion && questionUI is SurveyQuestionUIEditorLinearScale scaleUI) {
+                scaleUI.SetScaleRange(linScaleQuestion.ScaleType, linScaleQuestion.Min, linScaleQuestion.Max);
+                foreach (AnswerBase answer in question.Answers) {
+                    SurveyAnswerUIBase answerUIBase = scaleUI.AddAnswer(answer.Text);
+                    if (answerUIBase is SurveyAnswerUIEditorLinearScale answerEditorScale)
+                        answerEditorScale.OnTextChanged += HandleAnswerTextChanged;
                 }
             }
         }

@@ -146,6 +146,9 @@ namespace SurveySystem {
         public List<AnswerBase> Answers;
         public List<string> Rows = new();
         public List<string> Columns = new();
+        public int Min;
+        public int Max;
+        public string ScaleType;
     }
 
     public enum QuestionType {
