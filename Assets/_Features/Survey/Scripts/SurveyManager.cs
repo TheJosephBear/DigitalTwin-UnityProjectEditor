@@ -139,7 +139,7 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
         print(_responseJsonData);
     }
 
-    #region Helpers
+    #region Survey Validation
 
     /// <summary>
     /// Internal check to see if the string contains actual survey questions.
@@ -151,12 +151,20 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
 
         try {
             var node = JSON.Parse(json);
-            // Check if the questions array exists and has at least one entry
-            if (node["questions"] != null) {
-                return node["questions"].AsArray.Count > 0;
+            if (node == null) return false;
+
+            // 1. Unwrap survey_data if this payload is wrapped inside a database document
+            if (node["survey_data"] != null) {
+                node = node["survey_data"];
             }
 
-            // If your JSON structure is just a top-level array
+            // 2. Check for Questions array in the current object
+            var questions = (node["Questions"] ?? node["questions"])?.AsArray;
+            if (questions != null && questions.Count > 0) {
+                return true;
+            }
+
+            // 3. Fallback check if the root itself is an array of questions
             if (node.AsArray != null) {
                 return node.AsArray.Count > 0;
             }
@@ -166,12 +174,6 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
 
         return false;
     }
-
-
-
-    #endregion
-
-    #region Survey Validation
 
     /// <summary>
     /// Synchronously checks if there is currently valid survey data cached locally in memory.
@@ -197,16 +199,19 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
         string downloadedData = null;
         bool isDone = false;
 
-        // Use your existing download routine to fetch data from the server
-        yield return StartCoroutine(DownloadSurveyData(data => {
+        // Start download routine and yield wait until completion flag is updated
+        StartCoroutine(DownloadSurveyData(data => {
             downloadedData = data;
             isDone = true;
         }));
 
-        // Parse and validate the response
+        // Wait until callback sets isDone to true
+        yield return new WaitUntil(() => isDone);
+
+        // Validate downloaded data
         bool isValid = ValidateJsonContent(downloadedData);
 
-        // Cache data if it is valid
+        // Cache when valid
         if (isValid) {
             _surveyJsonData = downloadedData;
         }

@@ -5,10 +5,6 @@ public class ViewerHUDUI : UIBehaviour {
     public GameObject SurveyButton;
     public GameObject MultiviewButton;
 
-    private void Start() {
-        DisableUnneededButtons();
-    }
-
     public void DisableUnneededButtons() {
         SurveyManager.Instance.CheckHasValidSurvey((result) => {
             if (!result) {

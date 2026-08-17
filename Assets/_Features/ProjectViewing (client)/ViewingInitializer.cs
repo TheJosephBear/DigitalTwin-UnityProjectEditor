@@ -61,10 +61,12 @@ public class ViewingInitializer : MonoBehaviour, Iinitializer {
         MainManagerBase.Instance.ChangeState(AppState.Freecam);
 
         SurveyManager.Instance.CheckHasValidSurvey((result) => {
+            print("VALID SURVEYX RESULT: " + result);
             if (result) {
                 MainManagerBase.Instance.ChangeState(AppState.Survey);
             }
 
+            FindAnyObjectByType<ViewerHUDUI>().DisableUnneededButtons();
             UIManager.Instance.HideUI(UIType.LoadingScreen);
         });
     }
