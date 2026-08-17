@@ -285,10 +285,12 @@ public class ImageManager : Singleton<ImageManager> {
 
     // UNIFIED LOOKUP: Automatically checks standard assets first, then fallback-searches previews by ID
     public TextureAsset GetTextureAssetByID(string ID) {
-        TextureAsset standardAsset = _loadedTextures.Find(x => x.ID == ID);
+        if (string.IsNullOrEmpty(ID)) return null;
+
+        TextureAsset standardAsset = _loadedTextures.Find(x => x != null && (x.ID == ID || x.FileHash == ID));
         if (standardAsset != null) return standardAsset;
 
-        return _previewTextures.Find(x => x.ID == ID);
+        return _previewTextures.Find(x => x != null && (x.ID == ID || x.FileHash == ID));
     }
 
     public TextureAsset GetPreviewAssetByProject(string projectName) {

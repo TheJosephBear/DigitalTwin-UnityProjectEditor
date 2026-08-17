@@ -97,7 +97,9 @@ namespace SurveySystem {
                 Description = Description,
                 IsRequired = IsRequired,
                 ViewPointId = ViewPointId,
+                ViewpointID = ViewPointId,
                 ImageId = ImageID,
+                ImageID = ImageID,
                 QuestionType = QuestionType,
                 Answers = _answers
             };
@@ -123,8 +125,8 @@ namespace SurveySystem {
             Title = serializable.Title;
             Description = serializable.Description;
             IsRequired = serializable.IsRequired;
-            ViewPointId = serializable.ViewPointId;
-            ImageID = serializable.ImageId;
+            ViewPointId = !string.IsNullOrEmpty(serializable.ViewPointId) ? serializable.ViewPointId : (!string.IsNullOrEmpty(serializable.ViewpointID) ? serializable.ViewpointID : "");
+            ImageID = !string.IsNullOrEmpty(serializable.ImageId) ? serializable.ImageId : (!string.IsNullOrEmpty(serializable.ImageID) ? serializable.ImageID : "");
             foreach (AnswerBase answer in serializable.Answers) {
                 AddExistingAnswer(answer);
             }
@@ -140,7 +142,9 @@ namespace SurveySystem {
         public string Description;
         public bool IsRequired;
         public string ViewPointId;
+        public string ViewpointID;
         public string ImageId;
+        public string ImageID;
         public QuestionType QuestionType; 
         [SerializeReference]
         public List<AnswerBase> Answers;

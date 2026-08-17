@@ -55,8 +55,30 @@ public class SurveyUIBuilder : MonoBehaviour {
         _scrollView = _root.Q<ScrollView>("survey-scroll-view");
         _scrollViewContent = _root.Q<ScrollView>("survey-scroll-view").contentContainer;
 
-        // Add the initial bar at the start (before any questions)
-        RefreshAddQuestionBars();
+        // Add the initial bar at the start (before any questions) ONLY in editor mode
+        if (GetComponent<SurveyUIControllerViewer>() == null) {
+            RefreshAddQuestionBars();
+        } else {
+            ClearAddQuestionBars();
+        }
+    }
+
+    public void ClearAddQuestionBars() {
+        foreach (var bar in _addQuestionBars) {
+            if (bar != null) bar.RemoveFromHierarchy();
+        }
+        _addQuestionBars.Clear();
+
+        if (_scrollViewContent != null) {
+            var staticBars = _scrollViewContent.Query<VisualElement>("add-question-bar").ToList();
+            foreach (var sb in staticBars) {
+                if (sb.parent != null && sb.parent != _scrollViewContent) {
+                    sb.parent.RemoveFromHierarchy();
+                } else {
+                    sb.RemoveFromHierarchy();
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -64,7 +86,11 @@ public class SurveyUIBuilder : MonoBehaviour {
     /// and one trailing bar after the last addedQuestion: [bar, q0, bar, q1, bar, ..., barN].
     /// </summary>
     public void RefreshAddQuestionBars() {
-        // _scrollViewContent.Clear();
+        if (GetComponent<SurveyUIControllerViewer>() != null) {
+            ClearAddQuestionBars();
+            return;
+        }
+
         // Clear scroll view content except for the first item (the title item)
         for (int i = _scrollViewContent.childCount - 1; i > 0; i--) {
             _scrollViewContent.RemoveAt(i);
@@ -337,6 +363,7 @@ public class SurveyUIBuilder : MonoBehaviour {
                 question.QuestionElement.RemoveFromHierarchy();
             }
         }
+        _addedQuestions.Clear();
     }
 
     #region View rendering
@@ -344,16 +371,27 @@ public class SurveyUIBuilder : MonoBehaviour {
     private Dictionary<string, RenderTexture> _createdTextures = new Dictionary<string, RenderTexture>();
 
     public RenderTexture CreateRenderTexture(string viewPointId) {
+        if (string.IsNullOrEmpty(viewPointId)) return null;
+
         var viewManager = GameObject.FindFirstObjectByType<ViewManager>();
+        if (viewManager == null) return null;
+
         var viewPoint = viewManager.GetViewPointByID(viewPointId);
+        if (viewPoint == null) return null;
 
         viewPoint.Activate(); // Position the camera at the viewpoint
 
         Camera unityCamera = Camera.main;
+        if (unityCamera == null) return null;
+
         CinemachineBrain brain = unityCamera.GetComponent<CinemachineBrain>();
-        brain.ManualUpdate();
-        float originalBlendSpeed = brain.m_DefaultBlend.m_Time;
-        brain.m_DefaultBlend.m_Time = 0f;
+        if (brain != null) {
+            brain.ManualUpdate();
+        }
+        float originalBlendSpeed = brain != null ? brain.m_DefaultBlend.m_Time : 0f;
+        if (brain != null) {
+            brain.m_DefaultBlend.m_Time = 0f;
+        }
 
 
         // 1. Create a new texture for this specific question

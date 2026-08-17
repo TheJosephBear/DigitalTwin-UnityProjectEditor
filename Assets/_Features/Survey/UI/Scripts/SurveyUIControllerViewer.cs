@@ -14,8 +14,9 @@ public class SurveyUIControllerViewer : MonoBehaviour {
     private SurveyUIBuilder _surveyUIBuilder; // Script adding template instances to UI
 
     private Dictionary<int, SurveyQuestionUIBase> _questionUICache = new();
-    private List<QuestionBase> _questions;
-    private int _shownQuestionIndex = -1;
+    private List<QuestionBase> _questions = new();
+    private int _currentPage = 0; // 0 = Intro Page, 1..N = Questions
+    private VisualElement _firstPageElement;
 
     public void Initialize(SurveyBuilder surveyBuilder, SurveyResponseManager responseManager, SurveyManager manager) {
         _surveyBuilder = surveyBuilder;
@@ -23,8 +24,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         _surveyManager = manager;
 
         Survey survey = _surveyBuilder.GetActiveSurvey();
-        _questions = survey.GetAllQuestions();
-
+        _questions = survey != null ? survey.GetAllQuestions() : new List<QuestionBase>();
 
         _surveyUIBuilder = GetComponent<SurveyUIBuilder>();
         _root = gameObject.GetComponent<UIDocument>().rootVisualElement;
@@ -32,20 +32,61 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         #region Button setup
 
         var toggleButton = _root.Q<Button>("toggle-btn");
-        toggleButton.clicked += HandleTogglePressed;
+        if (toggleButton != null) toggleButton.clicked += HandleTogglePressed;
 
         var prevButton = _root.Q<Button>("previous-btn");
-        prevButton.clicked += HandlePreviousPressed;
+        if (prevButton != null) prevButton.clicked += HandlePreviousPressed;
 
         var nextButton = _root.Q<Button>("next-btn");
-        nextButton.clicked += HandleNextPressed;
+        if (nextButton != null) nextButton.clicked += HandleNextPressed;
 
         #endregion
 
-        _root.Q<Label>("survey-title").text = surveyBuilder.GetActiveSurvey().Name;
-        _root.Q<Label>("question-description").text = surveyBuilder.GetActiveSurvey().Description;
+        _firstPageElement = _root.Q<VisualElement>("survey-first-page");
 
-        ChangeQuestion(true);
+        if (_surveyUIBuilder != null) {
+            _surveyUIBuilder.ClearAddQuestionBars();
+        }
+
+        var introQuestionImage = _firstPageElement?.Q<VisualElement>("question-image");
+        var enhanceImgBtn = introQuestionImage?.Q<Button>("enhance-image");
+        if (enhanceImgBtn != null) {
+            enhanceImgBtn.RegisterCallback<ClickEvent>(evt => {
+                evt.StopPropagation();
+                SurveyUIUtils.EnhanceImage(introQuestionImage, _surveyUIBuilder?.FullscreenImageOverlayTemplate);
+            });
+        }
+
+        if (survey != null) {
+            SetupIntroPage(survey);
+        }
+
+        DisplayPage(0);
+    }
+
+    void SetupIntroPage(Survey survey) {
+        if (_firstPageElement == null) return;
+
+        var titleLabel = _firstPageElement.Q<Label>("survey-title");
+        if (titleLabel != null) titleLabel.text = survey.Name ?? "";
+
+        var descLabel = _firstPageElement.Q<Label>("question-description");
+        if (descLabel != null) descLabel.text = survey.Description ?? "";
+
+        var questionImage = _firstPageElement.Q<VisualElement>("question-image");
+        if (questionImage != null) {
+            if (!string.IsNullOrEmpty(survey.ImageID)) {
+                TextureAsset textureAsset = ImageManager.Instance.GetTextureAssetByID(survey.ImageID);
+                if (textureAsset != null) {
+                    questionImage.style.display = DisplayStyle.Flex;
+                    questionImage.style.backgroundImage = Background.FromTexture2D((Texture2D)textureAsset.Texture);
+                } else {
+                    questionImage.style.display = DisplayStyle.None;
+                }
+            } else {
+                questionImage.style.display = DisplayStyle.None;
+            }
+        }
     }
 
     #region Input handling
@@ -55,13 +96,17 @@ public class SurveyUIControllerViewer : MonoBehaviour {
     }
 
     void HandleNextPressed() {
-        ChangeQuestion(next: true);
-        SurveyManager.Instance.SaveAnswers();
+        if (_currentPage < _questions.Count) {
+            DisplayPage(_currentPage + 1);
+            SurveyManager.Instance.SaveAnswers();
+        }
     }
 
     void HandlePreviousPressed() {
-        ChangeQuestion(next: false);
-        SurveyManager.Instance.SaveAnswers();
+        if (_currentPage > 0) {
+            DisplayPage(_currentPage - 1);
+            SurveyManager.Instance.SaveAnswers();
+        }
     }
 
     public void HandleAnswerSelected(int questionId, int answerId, bool isSelected) {
@@ -76,35 +121,62 @@ public class SurveyUIControllerViewer : MonoBehaviour {
 
     #endregion
 
-    void ChangeQuestion(bool next) {
-        int indexToAdd = next ? 1 : -1;
-        if (indexToAdd + _shownQuestionIndex >= _questions.Count || indexToAdd + _shownQuestionIndex < 0) return;
-        _shownQuestionIndex += indexToAdd;
+    void DisplayPage(int pageIndex) {
+        _currentPage = pageIndex;
+        int totalQuestions = _questions.Count;
 
-        _root.Q<Label>("page-count-label").text = (_shownQuestionIndex + 1).ToString() + "/" + _questions.Count;
-        ClearQuestionFromUI();
-        SurveyQuestionUIBase addedQuestionUI = AddQuestionToUI(_questions[_shownQuestionIndex]);
-
-        addedQuestionUI.SetImageRender();
-
-        print("trying to show " + _questions[_shownQuestionIndex].ViewPointId);
-        if (MainManagerBase.Instance == null) return;
-        if (_questions[_shownQuestionIndex].ViewPointId == "") {
-        //    addedQuestionUI.SetImageRender();
-            return;
+        var pageCountLabel = _root.Q<Label>("page-count-label");
+        if (pageCountLabel != null) {
+            pageCountLabel.text = $"{_currentPage}/{totalQuestions}";
         }
 
-        StartCoroutine(ShowViewCoroutine());
+        ClearQuestionFromUI();
+
+        if (_currentPage == 0) {
+            if (_firstPageElement != null) {
+                _firstPageElement.style.display = DisplayStyle.Flex;
+            }
+
+            Survey survey = _surveyBuilder.GetActiveSurvey();
+            if (survey != null) {
+                SetupIntroPage(survey);
+                if (!string.IsNullOrEmpty(survey.ViewPointId)) {
+                    StartCoroutine(ShowViewCoroutine(survey.ViewPointId));
+                }
+            }
+        } else {
+            if (_firstPageElement != null) {
+                _firstPageElement.style.display = DisplayStyle.None;
+            }
+
+            int questionIndex = _currentPage - 1;
+            if (questionIndex >= 0 && questionIndex < _questions.Count) {
+                QuestionBase currentQuestion = _questions[questionIndex];
+                SurveyQuestionUIBase addedQuestionUI = AddQuestionToUI(currentQuestion);
+                addedQuestionUI.SetImageRender();
+
+                if (!string.IsNullOrEmpty(currentQuestion.ViewPointId)) {
+                    StartCoroutine(ShowViewCoroutine(currentQuestion.ViewPointId));
+                }
+            }
+        }
     }
 
-    IEnumerator ShowViewCoroutine() {
-        EditorManager.Instance.EditorCameraManager.ToggleCinemachineBrain(true);
+    IEnumerator ShowViewCoroutine(string viewPointId) {
+        if (MainManagerBase.Instance == null || string.IsNullOrEmpty(viewPointId)) yield break;
 
         ViewManager viewManager = MainManagerBase.Instance.ViewManager;
+        if (viewManager == null) yield break;
+
+        ViewPoint vp = viewManager.GetViewPointByID(viewPointId);
+        if (vp == null) yield break;
+
+        if (EditorManager.Instance != null && EditorManager.Instance.EditorCameraManager != null) {
+            EditorManager.Instance.EditorCameraManager.ToggleCinemachineBrain(true);
+        }
+
         viewManager.DeactivateViewPoint();
-        viewManager.SetActiveViewPoint(
-            viewManager.GetViewPointByID(_questions[_shownQuestionIndex].ViewPointId)
-        );
+        viewManager.SetActiveViewPoint(vp);
         viewManager.ActivateViewPoint();
 
         yield return null;
@@ -113,21 +185,19 @@ public class SurveyUIControllerViewer : MonoBehaviour {
 
         if (brain != null && brain.ActiveBlend != null) {
             float blendTime = brain.ActiveBlend.Duration;
-
             yield return new WaitForSeconds(blendTime + 0.05f);
         } else {
             yield return null;
         }
 
-
-        EditorManager.Instance.EditorCameraManager.ToggleCinemachineBrain(false);
+        if (EditorManager.Instance != null && EditorManager.Instance.EditorCameraManager != null) {
+            EditorManager.Instance.EditorCameraManager.ToggleCinemachineBrain(false);
+        }
     }
-
 
     SurveyQuestionUIBase AddQuestionToUI(QuestionBase questionBase) {
         // Check if we already created this UI before
         if (_questionUICache.TryGetValue(questionBase.Id, out SurveyQuestionUIBase existingUI)) {
-            // Show the existing one
             existingUI.QuestionElement.style.display = DisplayStyle.Flex;
             return existingUI;
         }
@@ -138,7 +208,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         questionUI.SetDescription(questionBase.Description);
         questionUI.ImageID = questionBase.ImageID;
 
-        questionUI.SetQuestionPosition(_shownQuestionIndex + 1);
+        questionUI.SetQuestionPosition(_currentPage);
         var mapping = _surveyUIBuilder.questionUIMapping.GetMappingByQuestionType(questionBase.QuestionType);
         if (mapping != null) {
             questionUI.SetQuestionType(mapping.DisplayName);
@@ -166,7 +236,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
             imageUI.OnAnswerSelected += HandleAnswerSelected;
             foreach (AnswerBase answer in questionBase.Answers) {
                 if (answer is AnswerImage imageAnswer) {
-                    imageUI.AddAnswer(imageAnswer.ImageID);
+                    imageUI.AddAnswer(imageAnswer.GetImageId());
                 }
             }
         } else if (questionBase is QuestionLinearScale linScaleQuestion && questionUI is SurveyQuestionUIViewerLinearScale scaleUI) {
@@ -185,9 +255,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
     }
 
     void ClearQuestionFromUI() {
-    //    _surveyUIBuilder.ClearScrollviewContent();
-
-        // Instead of destroying, we just hide all cached questions
+        // Hide all cached questions
         foreach (var ui in _questionUICache.Values) {
             ui.QuestionElement.style.display = DisplayStyle.None;
         }

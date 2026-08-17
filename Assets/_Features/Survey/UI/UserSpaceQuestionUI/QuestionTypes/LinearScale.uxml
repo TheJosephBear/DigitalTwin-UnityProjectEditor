@@ -1,17 +1,9 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Template name="QuestionTitleBar" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/QuestionTitleBar.uxml?fileID=9197481963319205126&amp;guid=20b039c0b3e996c428d354dad76c4b40&amp;type=3#QuestionTitleBar" />
-    <ui:Template name="ScaleRadio" src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/ScaleRadio.uxml?fileID=9197481963319205126&amp;guid=e261264cf2c567a4c8f2c39faf34a078&amp;type=3#ScaleRadio" />
     <Style src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/UserStyles.uss?fileID=7433441132597879392&amp;guid=74558b2425df4b44db13d07e45d34b9f&amp;type=3#UserStyles" />
     <ui:VisualElement name="question-container" class="question-card" style="flex-grow: 1;">
         <ui:Instance template="QuestionTitleBar" name="question-bar" />
         <ui:VisualElement class="question-divider" />
-        <ui:VisualElement class="linear-scale-container">
-            <ui:VisualElement class="scale-row">
-                <ui:Label text="Popis řádku" class="scale-row-label" />
-                <ui:RadioButtonGroup name="options-list" class="radio-group-vertical scale-options-bar" style="flex-shrink: 1; flex-grow: 1; margin-top: 0; margin-right: 0; margin-left: 0; margin-bottom: 0;">
-                    <ui:Instance template="ScaleRadio" />
-                </ui:RadioButtonGroup>
-            </ui:VisualElement>
-        </ui:VisualElement>
+        <ui:VisualElement name="options-list" class="scale-options-list" style="flex-grow: 1;" />
     </ui:VisualElement>
 </ui:UXML>

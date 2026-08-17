@@ -34,6 +34,14 @@ namespace SurveySystem {
             _activeSurvey.Description = text;
         }
 
+        public void SetSurveyImageID(string imageId) {
+            _activeSurvey.ImageID = imageId;
+        }
+
+        public void SetSurveyViewPointID(string vpId) {
+            _activeSurvey.ViewPointId = vpId;
+        }
+
         public QuestionBase AddNewQuestion(QuestionType type) {
             QuestionBase question = type switch {
                 QuestionType.MultipleChoiceSingle => new QuestionMultipleChoiceSingleAnswer(_nextId++),

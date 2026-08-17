@@ -20,16 +20,22 @@ public class SurveyUIControllerEditor : MonoBehaviour {
     private SurveyUIBuilder _surveyUIBuilder; // Script adding template instances to UI
     private SurveyQuestionUIEditor _currentlySelectedQuestion;
 
+    private VisualElement _surveyHeaderContainer;
+    private DropdownField _surveyCameraDropdown;
+    private VisualElement _surveyCameraView;
+    private VisualElement _surveyImageView;
+    private List<SerializableViewPoint> _surveyViewPoints = new();
+
     void Awake() {
         _surveyUIBuilder = GetComponent<SurveyUIBuilder>();
         _root = gameObject.GetComponent<UIDocument>().rootVisualElement;
 
         // Save button
         var saveButton = _root.Q<Button>("save-btn");
-        saveButton.clicked += HandleSavePressed;
+        if (saveButton != null) saveButton.clicked += HandleSavePressed;
         // Exit button
         var exitButton = _root.Q<Button>("exit-btn");
-        exitButton.clicked += HandleExitPressed;
+        if (exitButton != null) exitButton.clicked += HandleExitPressed;
     }
 
     public void Initialize(SurveyBuilder surveyBuilder, SurveyManager manager) {
@@ -40,21 +46,168 @@ public class SurveyUIControllerEditor : MonoBehaviour {
     }
 
     void RegisterBaseSurveyInputs() {
-        var titleField = _root.Q<TextField>("question-title");
-        var descField = _root.Q<TextField>("question-description");
+        var titleBar = _root.Q("survey-title-bar");
+        _surveyHeaderContainer = titleBar?.parent ?? _root;
 
-        if (titleField == null || descField == null) {
-            print("Title or description field not found.");
+        var titleField = _surveyHeaderContainer.Q<TextField>("question-title");
+        var descField = _surveyHeaderContainer.Q<TextField>("question-description");
+
+        if (titleField != null) {
+            titleField.RegisterValueChangedCallback(evt => {
+                _surveyBuilder.SetSurveyName(evt.newValue);
+            });
+        }
+
+        if (descField != null) {
+            descField.RegisterValueChangedCallback(evt => {
+                _surveyBuilder.SetSurveyDescription(evt.newValue);
+            });
+        }
+
+        // Camera viewpoint dropdown & views
+        _surveyCameraDropdown = _surveyHeaderContainer.Q<DropdownField>("camera-view-dropdown");
+        _surveyCameraView = _surveyHeaderContainer.Q<VisualElement>("camera-view");
+        _surveyImageView = _surveyHeaderContainer.Q<VisualElement>("question-image");
+
+        if (_surveyCameraView != null) {
+            _surveyCameraView.style.display = DisplayStyle.None;
+            _surveyCameraView.style.backgroundImage = null;
+
+            var removeViewBtn = _surveyCameraView.Q<Button>("remove-view");
+            if (removeViewBtn != null) {
+                removeViewBtn.RegisterCallback<ClickEvent>(evt => {
+                    evt.StopPropagation();
+                    if (_surveyCameraDropdown != null && _surveyCameraDropdown.choices != null && _surveyCameraDropdown.choices.Count > 0) {
+                        _surveyCameraDropdown.value = _surveyCameraDropdown.choices[0];
+                    }
+                });
+            }
+
+            var enhanceCamBtn = _surveyCameraView.Q<Button>("enhance-image");
+            if (enhanceCamBtn != null) {
+                enhanceCamBtn.RegisterCallback<ClickEvent>(evt => {
+                    evt.StopPropagation();
+                    SurveyUIUtils.EnhanceImage(_surveyCameraView, _surveyUIBuilder?.FullscreenImageOverlayTemplate);
+                });
+            }
+        }
+
+        if (_surveyImageView != null) {
+            _surveyImageView.style.display = DisplayStyle.None;
+            _surveyImageView.style.backgroundImage = null;
+
+            _surveyImageView.RegisterCallback<ClickEvent>(evt => {
+                if (evt.target is Button btn && (btn.name == "enhance-image" || btn.name == "remove-image")) return;
+                HandleSurveyImageUpload();
+            });
+
+            var removeImgBtn = _surveyImageView.Q<Button>("remove-image");
+            if (removeImgBtn != null) {
+                removeImgBtn.RegisterCallback<ClickEvent>(evt => {
+                    evt.StopPropagation();
+                    _surveyBuilder.SetSurveyImageID("");
+                    SetSurveyImageRender();
+                });
+            }
+
+            var enhanceImgBtn = _surveyImageView.Q<Button>("enhance-image");
+            if (enhanceImgBtn != null) {
+                enhanceImgBtn.RegisterCallback<ClickEvent>(evt => {
+                    evt.StopPropagation();
+                    SurveyUIUtils.EnhanceImage(_surveyImageView, _surveyUIBuilder?.FullscreenImageOverlayTemplate);
+                });
+            }
+        }
+
+        var imageButton = _surveyHeaderContainer.Q<Button>("image-button");
+        if (imageButton != null) {
+            imageButton.clicked += HandleSurveyImageUpload;
+        }
+
+        PopulateSurveyCameraDropdown();
+    }
+
+    void PopulateSurveyCameraDropdown() {
+        if (_surveyCameraDropdown == null) return;
+
+        var viewManager = FindAnyObjectByType<ViewManager>();
+        _surveyViewPoints = viewManager?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>();
+
+        var choices = new List<string> { "Žádný" };
+        foreach (var vp in _surveyViewPoints) {
+            choices.Add(vp.Name);
+        }
+
+        _surveyCameraDropdown.choices = choices;
+        if (choices.Count > 0) {
+            _surveyCameraDropdown.value = choices[0];
+        }
+
+        _surveyCameraDropdown.RegisterValueChangedCallback(evt => {
+            int index = _surveyCameraDropdown.index - 1;
+
+            if (index == -1) {
+                _surveyBuilder.SetSurveyViewPointID("");
+                if (_surveyCameraView != null) {
+                    _surveyCameraView.style.backgroundImage = null;
+                    _surveyCameraView.style.display = DisplayStyle.None;
+                }
+                SetSurveyImageRender();
+            } else if (index >= 0 && index < _surveyViewPoints.Count) {
+                string vpId = _surveyViewPoints[index].ID;
+                _surveyBuilder.SetSurveyViewPointID(vpId);
+                SetSurveyViewPointRender(vpId);
+            }
+        });
+    }
+
+    void HandleSurveyImageUpload() {
+        ImageManager.Instance.AskForImageDialog((textureAsset) => {
+            if (textureAsset == null || string.IsNullOrEmpty(textureAsset.ID)) {
+                Debug.LogError("Upload failed: TextureAsset or ID is null");
+                return;
+            }
+
+            _surveyBuilder.SetSurveyImageID(textureAsset.ID);
+            SetSurveyImageRender();
+        });
+    }
+
+    void SetSurveyImageRender() {
+        if (_surveyImageView == null) return;
+
+        Survey survey = _surveyBuilder.GetActiveSurvey();
+        if (survey == null || string.IsNullOrEmpty(survey.ImageID)) {
+            _surveyImageView.style.backgroundImage = null;
+            _surveyImageView.style.display = DisplayStyle.None;
             return;
         }
 
-        titleField.RegisterValueChangedCallback(evt => {
-            _surveyBuilder.SetSurveyName(evt.newValue);
-        });
+        TextureAsset textureAsset = ImageManager.Instance.GetTextureAssetByID(survey.ImageID);
+        if (textureAsset == null) {
+            _surveyImageView.style.backgroundImage = null;
+            _surveyImageView.style.display = DisplayStyle.None;
+            return;
+        }
 
-        descField.RegisterValueChangedCallback(evt => {
-            _surveyBuilder.SetSurveyDescription(evt.newValue);
-        });
+        _surveyImageView.style.backgroundImage = Background.FromTexture2D((Texture2D)textureAsset.Texture);
+        _surveyImageView.style.display = DisplayStyle.Flex;
+    }
+
+    void SetSurveyViewPointRender(string viewPointId) {
+        if (_surveyCameraView == null) return;
+
+        if (string.IsNullOrEmpty(viewPointId)) {
+            _surveyCameraView.style.backgroundImage = null;
+            _surveyCameraView.style.display = DisplayStyle.None;
+            return;
+        }
+
+        RenderTexture rt = _surveyUIBuilder.CreateRenderTexture(viewPointId);
+        if (rt != null) {
+            _surveyCameraView.style.display = DisplayStyle.Flex;
+            _surveyCameraView.style.backgroundImage = Background.FromRenderTexture(rt);
+        }
     }
 
     #region Input handling
@@ -300,11 +453,27 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         if (_surveyUIBuilder == null) _surveyUIBuilder = GetComponent<SurveyUIBuilder>();
 
         Survey survey = _surveyBuilder.GetActiveSurvey();
-        // set title
-        var titleField = _root.Q<TextField>("question-title");
-        var descField = _root.Q<TextField>("question-description");
-        titleField.value = survey.Name;
-        descField.value = survey.Description;
+        // set title & description
+        var titleField = _surveyHeaderContainer?.Q<TextField>("question-title") ?? _root.Q<TextField>("question-title");
+        var descField = _surveyHeaderContainer?.Q<TextField>("question-description") ?? _root.Q<TextField>("question-description");
+        if (titleField != null) titleField.value = survey.Name ?? "";
+        if (descField != null) descField.value = survey.Description ?? "";
+
+        // Restore survey viewpoint
+        if (MainManagerBase.Instance != null && !string.IsNullOrEmpty(survey.ViewPointId)) {
+            ViewPoint vp = MainManagerBase.Instance.ViewManager.GetViewPointByID(survey.ViewPointId);
+            if (vp != null && _surveyCameraDropdown != null) {
+                _surveyCameraDropdown.value = vp.Name;
+                SetSurveyViewPointRender(survey.ViewPointId);
+            } else if (_surveyCameraDropdown != null && _surveyCameraDropdown.choices != null && _surveyCameraDropdown.choices.Count > 0) {
+                _surveyCameraDropdown.value = _surveyCameraDropdown.choices[0];
+            }
+        } else if (_surveyCameraDropdown != null && _surveyCameraDropdown.choices != null && _surveyCameraDropdown.choices.Count > 0) {
+            _surveyCameraDropdown.value = _surveyCameraDropdown.choices[0];
+        }
+
+        // Restore survey image unconditionally
+        SetSurveyImageRender();
 
         _surveyUIBuilder.ClearScrollviewContent();
 
@@ -317,15 +486,17 @@ public class SurveyUIControllerEditor : MonoBehaviour {
 
             print("Calling required: " + question.IsRequired);
             (questionUI as SurveyQuestionUIEditor).SetRequired(question.IsRequired);
+
             // Set selected viewpoint
-            if (MainManagerBase.Instance != null) {
+            if (MainManagerBase.Instance != null && !string.IsNullOrEmpty(question.ViewPointId)) {
                 ViewPoint vp = MainManagerBase.Instance.ViewManager.GetViewPointByID(question.ViewPointId);
                 if (vp != null) {
                     (questionUI as SurveyQuestionUIEditor).SetSelectedView(vp);
-                } else {
-                    questionUI.SetImageRender();
                 }
             }
+
+            // Always render question image unconditionally
+            questionUI.SetImageRender();
 
             if (question is QuestionGridBase gridQuestion) {
                 if (questionUI is SurveyQuestionUIEditorGrid gridUI) {
@@ -340,8 +511,10 @@ public class SurveyUIControllerEditor : MonoBehaviour {
                 }
             } else if (question is QuestionImageChoice imageQuestion) {
                 if (questionUI is SurveyQuestionUIEditorImage imageUI) {
-                    foreach (AnswerImage answer in imageQuestion.Answers) {
-                        imageUI.AddAnswerWithImage(answer.ImageID);
+                    foreach (AnswerBase answer in imageQuestion.Answers) {
+                        if (answer is AnswerImage imgAns) {
+                            imageUI.AddAnswerWithImage(imgAns.GetImageId());
+                        }
                     }
                 }
             } else if (questionUI is SurveyQuestionUIEditorString stringQuestion) {

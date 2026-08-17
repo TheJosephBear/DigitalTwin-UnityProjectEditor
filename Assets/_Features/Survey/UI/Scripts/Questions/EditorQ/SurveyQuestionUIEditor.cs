@@ -102,15 +102,9 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
 
     public void SetSelectedView(ViewPoint viewPoint) {
         var dropdown = _root.Q<DropdownField>("camera-view-dropdown");
-        int index = -1; // choices začínají na "žádný", a to není vp
-        foreach (string choice in dropdown.choices) {
-            if (choice == viewPoint.Name) {
-                dropdown.value = choice;
-                SetViewPointRender(_viewPoints[index].ID); // this errors during deserialize - out of range
-                return;
-            }
-            index++;
-        }
+        if (dropdown == null || viewPoint == null) return;
+        dropdown.value = viewPoint.Name;
+        SetViewPointRender(viewPoint.ID);
     }
 
     public Tuple<int, string> GetSelectedViewName() {
