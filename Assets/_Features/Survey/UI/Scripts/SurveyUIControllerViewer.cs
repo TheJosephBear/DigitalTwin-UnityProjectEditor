@@ -61,7 +61,18 @@ public class SurveyUIControllerViewer : MonoBehaviour {
             SetupIntroPage(survey);
         }
 
-        DisplayPage(0);
+        if (HasIntroPage(survey)) {
+            DisplayPage(0);
+        } else if (_questions.Count > 0) {
+            DisplayPage(1);
+        } else {
+            DisplayPage(0);
+        }
+    }
+
+    private bool HasIntroPage(Survey survey) {
+        if (survey == null) return false;
+        return !string.IsNullOrWhiteSpace(survey.Name) && !string.IsNullOrWhiteSpace(survey.Description);
     }
 
     void SetupIntroPage(Survey survey) {
@@ -107,7 +118,8 @@ public class SurveyUIControllerViewer : MonoBehaviour {
     }
 
     void HandlePreviousPressed() {
-        if (_currentPage > 0) {
+        int minPage = HasIntroPage(_surveyBuilder.GetActiveSurvey()) ? 0 : 1;
+        if (_currentPage > minPage) {
             DisplayPage(_currentPage - 1);
             SurveyManager.Instance.SaveAnswers();
         }
@@ -126,6 +138,13 @@ public class SurveyUIControllerViewer : MonoBehaviour {
     #endregion
 
     void DisplayPage(int pageIndex) {
+        Survey survey = _surveyBuilder.GetActiveSurvey();
+        bool hasIntro = HasIntroPage(survey);
+
+        if (!hasIntro && pageIndex == 0 && _questions.Count > 0) {
+            pageIndex = 1;
+        }
+
         _currentPage = pageIndex;
         int totalQuestions = _questions.Count;
 
@@ -141,7 +160,6 @@ public class SurveyUIControllerViewer : MonoBehaviour {
                 _firstPageElement.style.display = DisplayStyle.Flex;
             }
 
-            Survey survey = _surveyBuilder.GetActiveSurvey();
             if (survey != null) {
                 SetupIntroPage(survey);
                 if (!string.IsNullOrEmpty(survey.ViewPointId)) {

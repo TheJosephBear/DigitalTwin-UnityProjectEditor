@@ -79,18 +79,23 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
             }
         }
 
-        if (!isOther) {
-            TextField tf = FindTextFieldRecursive(element);
-            if (tf != null)
-                tf.value = answerText;
-        }
+        TextField tf = FindTextFieldRecursive(element);
+        if (tf != null)
+            tf.value = answerText;
 
         SurveyAnswerUIBase answerUI = CreateAnswerUI(element, index, isOther);
 
         if (isOther) {
-            var button = element.Q<CustomRadioButton>();
-            if (button != null) {
-                element.Q<CustomRadioButton>().Placeholder = "Other";
+            var optContainer = element.Q<VisualElement>("option-container") ?? element;
+            optContainer.AddToClassList("option-container--other");
+
+            var radioButton = element.Q<CustomRadioButton>();
+            if (radioButton != null) {
+                radioButton.Placeholder = "Jiná odpověď...";
+            }
+            var toggleButton = element.Q<CustomToggleButton>();
+            if (toggleButton != null) {
+                toggleButton.Placeholder = "Jiná odpověď...";
             }
             _otherAnswerUI = answerUI;
         } else {

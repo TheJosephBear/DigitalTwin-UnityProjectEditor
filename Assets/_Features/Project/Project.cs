@@ -12,6 +12,11 @@ public class Project {
     public SerializableProject SerializableProject { get; private set; }
     public ProjectMetadata ProjectMetadata;
 
+    public Project() { }
+    public Project(string projectName) {
+        ProjectName = projectName;
+    }
+
     public void CreateSerializableProjectFromJson(string json) {
         SerializableProject = JsonUtility.FromJson<SerializableProject>(json);
         ProjectID = SerializableProject.projectId;

@@ -11,9 +11,6 @@ public abstract class SurveyAnswerUIEditor : SurveyAnswerUIBase {
     public SurveyAnswerUIEditor(VisualElement answerElement, int answerIndex, SurveyQuestionUIEditor questionUI, bool isOther) 
         : base(answerElement, answerIndex, questionUI, isOther) {
 
-        if (_isOther) {
-            _answerElement.Q<TextField>().isReadOnly = true;
-        }
     }
 
     #region Modal Logic

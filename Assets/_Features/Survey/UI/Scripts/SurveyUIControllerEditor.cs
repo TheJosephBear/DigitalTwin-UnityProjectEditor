@@ -367,8 +367,11 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         }
     }
 
-    public void HandleAnswerOtherAdded(int questionId) {
+    public void HandleAnswerOtherAdded(int questionId, SurveyAnswerUIBase answerUI) {
         _surveyBuilder.AddNewAnswerToQuestion(questionId, true);
+        if (answerUI is SurveyAnswerUIEditorString answerEditor) {
+            answerEditor.OnTextChanged += HandleAnswerTextChanged;
+        }
     }
 
     public void HandleAnswerTextChanged(int questionId, int answerId, string newText) {

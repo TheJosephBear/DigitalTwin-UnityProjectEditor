@@ -9,7 +9,7 @@ public class SurveyQuestionUIEditorString : SurveyQuestionUIEditor {
     #region Events
 
     public event Action<int, SurveyAnswerUIBase> OnAnswerAdded;
-    public event Action<int> OnAnswerOtherAdded;
+    public event Action<int, SurveyAnswerUIBase> OnAnswerOtherAdded;
     public event Action<int, int> OnAnswerRemoved;
     public event Action<int, int, string> OnAnswerTextChanged;
 
@@ -46,8 +46,8 @@ public class SurveyQuestionUIEditorString : SurveyQuestionUIEditor {
         if (addOtherButton != null) {
             addOtherButton.clicked += () => {
                 if (_otherAnswerUI == null) {
-                    OnAnswerOtherAdded?.Invoke(QuestionID);
-                    AddAnswerUI(true);
+                    var otherUI = AddAnswerUI(true);
+                    OnAnswerOtherAdded?.Invoke(QuestionID, otherUI);
                 }
             };
         } else {
