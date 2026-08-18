@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using System.Linq;
 using QuestionnaireToolkit.Scripts.SimpleJSON;
+using System.Text.RegularExpressions;
 
 public class ProjectManager : Singleton<ProjectManager> {
 
@@ -25,7 +26,7 @@ public class ProjectManager : Singleton<ProjectManager> {
         ImageManager.Instance.UploadImagesToServer(SelectedProject.ProjectName);
         string serializedProject = JsonUtility.ToJson(serializableProject);
         ServerCommunicationManager.Instance.StartProjectDataUpload(serializedProject, serializableProject.projectName);
-        MessageDisplayManager.Instance.DisplayMessage("Projekt úspěšně uložen");
+    //    MessageDisplayManager.Instance.DisplayMessage("Projekt úspěšně uložen");
     }
 
 
@@ -60,7 +61,7 @@ public class ProjectManager : Singleton<ProjectManager> {
 
                     SelectedProject = new Project();
                     SelectedProject.CreateSerializableProjectFromJson(data);
-                 //   MessageDisplayManager.Instance.DisplayMessage("Projekt úspěšně stažen");
+                    //   MessageDisplayManager.Instance.DisplayMessage("Projekt úspěšně stažen");
                 }
 
                 finished = true;
@@ -193,6 +194,19 @@ public class ProjectManager : Singleton<ProjectManager> {
         });
     }
 
+    public void GetProjectIframeExport(string projectName, System.Action<string> onFinished) {
+        ServerCommunicationManager.Instance.GenerateViewerIframe(
+        projectName,
+        (success, data) => {
+            if (!success || string.IsNullOrEmpty(data)) {
+                PopUp.Instance.ShowPopUpWindow("Failed to generate iframe.");
+                onFinished?.Invoke(null);
+                return;
+            }
+
+            onFinished?.Invoke(data);
+        });
+    }
 
     #endregion
 
@@ -269,5 +283,29 @@ public class ProjectManager : Singleton<ProjectManager> {
             copyNumber++;
         }
         return uniqueName;
+    }
+
+    public void GetOpenedProjectExportURL(System.Action<string> onFinished) {
+        GetProjectIframeExport(SelectedProject.ProjectName, (iframeString) => {
+            if (string.IsNullOrEmpty(iframeString)) {
+                onFinished.Invoke(null);
+                return;
+            }
+
+            onFinished.Invoke(GetUrlFromIframe(iframeString));
+        });
+    }
+
+    string GetUrlFromIframe(string iframe) {
+        if (string.IsNullOrEmpty(iframe))
+            return null;
+
+        Match match = Regex.Match(iframe, "src\\s*=\\s*\"([^\"]+)\"");
+
+        if (match.Success)
+            return match.Groups[1].Value;
+
+        Debug.LogError("Failed to extract URL from iframe.");
+        return null;
     }
 }

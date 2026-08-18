@@ -3,9 +3,6 @@ using System.Collections.Generic;
 
 public class EditorHUDui : UIBehaviour {
 
-    // This is disgusting and will be changed once the UX design updates
-    public CameraCollisionEnforcer CameraColissionScriptRef;
-
     public override void Show() {
         base.Show();
     //    GetComponent<DecorationUI>().ToggleVariantUI(false);
@@ -42,6 +39,12 @@ public class EditorHUDui : UIBehaviour {
 
     }
 
+    public void OnOpenViewerTab() {
+        ProjectManager.Instance.GetOpenedProjectExportURL((url) => {
+            WebGLTabOpener.Instance.OpenLinkInNewTab(url);
+        });
+    }
+
     public void OnSave() {
         if (MainManagerBase.Instance is EditorManager editorMgr) {
             editorMgr.SaveProject();
@@ -55,7 +58,7 @@ public class EditorHUDui : UIBehaviour {
     }
 
     public void OnColissionToggle(bool toggleOn) {
-        CameraColissionScriptRef.enabled = toggleOn;
+        CameraManager.Instance.ToggleCameraCollision(toggleOn);
     }
 
     #endregion

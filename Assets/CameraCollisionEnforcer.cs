@@ -79,6 +79,13 @@ public class CameraCollisionEnforcer : MonoBehaviour {
         _previousValidPosition = targetPos;
     }
 
+    private void OnEnable() {
+        // Reset valid position to current location so SphereCast doesn't trace back to old pre-disabled data
+        if (_cameraTransform != null) {
+            _previousValidPosition = _cameraTransform.position;
+        }
+    }
+
     private void OnDrawGizmosSelected() {
         // Visualize the camera collision sphere in Scene view
         Gizmos.color = Color.yellow;

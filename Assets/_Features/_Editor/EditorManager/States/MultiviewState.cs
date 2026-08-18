@@ -5,7 +5,7 @@ using UnityEngine;
 public class MultiviewState : StateBase {
     public override void Enter() {
         print("Entering multi state");
-        if (!EditorManager.Instance.MapManager.hasVariant()) {
+        if (!EditorManager.Instance.MapManager.HasVariant()) {
             MessageDisplayManager.Instance.DisplayMessage("No variants added!");
             return;
         }

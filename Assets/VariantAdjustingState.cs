@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class VariantAdjustingState : StateBase {
     public override void Enter() {
-        if (!EditorManager.Instance.MapManager.hasVariant()) {
+        if (!EditorManager.Instance.MapManager.HasVariant()) {
             MessageDisplayManager.Instance.DisplayMessage("No variants added!");
             return;
         }

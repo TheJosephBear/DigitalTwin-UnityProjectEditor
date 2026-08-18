@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -130,7 +130,7 @@ public class MapManager : Singleton<MapManager> {
         _baseMap = null;
     }
 
-    public bool hasVariant() {
+    public bool HasVariant() {
         return _mapVariants.Count > 0;
     }
 

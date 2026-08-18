@@ -139,26 +139,32 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
         print(_responseJsonData);
     }
 
-    #region Helpers
+    #region Survey Validation
 
     /// <summary>
     /// Internal check to see if the string contains actual survey questions.
     /// </summary>
     private bool ValidateJsonContent(string json) {
-        return json != "";
-        /*
         if (string.IsNullOrWhiteSpace(json) || json == "{}" || json == "[]") {
             return false;
         }
 
         try {
             var node = JSON.Parse(json);
-            // Check if the questions array exists and has at least one entry
-            if (node["questions"] != null) {
-                return node["questions"].AsArray.Count > 0;
+            if (node == null) return false;
+
+            // 1. Unwrap survey_data if this payload is wrapped inside a database document
+            if (node["survey_data"] != null) {
+                node = node["survey_data"];
             }
 
-            // If your JSON structure is just a top-level array
+            // 2. Check for Questions array in the current object
+            var questions = (node["Questions"] ?? node["questions"])?.AsArray;
+            if (questions != null && questions.Count > 0) {
+                return true;
+            }
+
+            // 3. Fallback check if the root itself is an array of questions
             if (node.AsArray != null) {
                 return node.AsArray.Count > 0;
             }
@@ -167,7 +173,50 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
         }
 
         return false;
-        */
+    }
+
+    /// <summary>
+    /// Synchronously checks if there is currently valid survey data cached locally in memory.
+    /// </summary>
+    public bool HasCachedSurvey() {
+        return ValidateJsonContent(_surveyJsonData);
+    }
+
+    /// <summary>
+    /// Asynchronously queries the server to check if a valid survey exists for the selected project.
+    /// </summary>
+    /// <param name="onResult">Callback returning true if a valid survey exists on the server, false otherwise.</param>
+    public void CheckHasValidSurvey(Action<bool> onResult) {
+        if (ProjectManager.Instance == null || ProjectManager.Instance.SelectedProject == null) {
+            onResult?.Invoke(false);
+            return;
+        }
+
+        StartCoroutine(CheckHasValidSurveyRoutine(onResult));
+    }
+
+    private IEnumerator CheckHasValidSurveyRoutine(Action<bool> onResult) {
+        string downloadedData = null;
+        bool isDone = false;
+
+        // Start download routine and yield wait until completion flag is updated
+        StartCoroutine(DownloadSurveyData(data => {
+            downloadedData = data;
+            isDone = true;
+        }));
+
+        // Wait until callback sets isDone to true
+        yield return new WaitUntil(() => isDone);
+
+        // Validate downloaded data
+        bool isValid = ValidateJsonContent(downloadedData);
+
+        // Cache when valid
+        if (isValid) {
+            _surveyJsonData = downloadedData;
+        }
+
+        onResult?.Invoke(isValid);
     }
 
     #endregion

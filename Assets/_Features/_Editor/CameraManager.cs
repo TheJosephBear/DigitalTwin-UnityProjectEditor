@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class CameraManager : Singleton<CameraManager> {
 
+    public CameraCollisionEnforcer CameraColissionScriptRef;
     public GameObject VcamFreeCamPrefab;
     public Transform InitialCameraPosition;
 
@@ -13,7 +14,7 @@ public class CameraManager : Singleton<CameraManager> {
     public bool EnableBoundsClamping = true;
 
     [Header("Camera")]
-    [Range(0.1f, 2f)]
+    [Range(0.1f, 10f)]
     public float MaxScrollSpeed = 0.9f;
     [Range(0f, 0.5f)]
     public float MinScrollSpeed = 0.2f;
@@ -23,6 +24,11 @@ public class CameraManager : Singleton<CameraManager> {
     // Bounds tracking
     private Bounds _mapBounds;
     private bool _hasBounds = false;
+    private bool _isCollisionEnabled;
+    public bool IsCollisionEnabled {
+        get { return _isCollisionEnabled; }
+        private set { _isCollisionEnabled = value; }
+    }
 
     CinemachineBrain _cinemachineBrainRefference;
     GameObject vCamFreeCamRefference;
@@ -40,6 +46,8 @@ public class CameraManager : Singleton<CameraManager> {
         vCamFreeCamRefference = SceneLoadingManager.Instance.InstantiateObjectInScene(VcamFreeCamPrefab, InitialCameraPosition.position, MainManagerBase.Instance.SceneType);
         vCamFreeCamRefference.transform.rotation = InitialCameraPosition.rotation;
         //  DisableCinemachineAfterTransition();
+
+        ToggleCameraCollision(false); // TODO: global editor settings, load value from there
     }
 
     private void Update() {
@@ -59,6 +67,11 @@ public class CameraManager : Singleton<CameraManager> {
         if (_editorManager != null && (_editorManager.ActiveState == AppState.Freecam || _editorManager.ActiveState == AppState.Survey)) {
             EnforceCameraBounds();
         }
+    }
+
+    public void ToggleCameraCollision(bool toggleOn) {
+        CameraColissionScriptRef.enabled = toggleOn;
+        _isCollisionEnabled = CameraColissionScriptRef.enabled;
     }
 
     public void InitializeFreeCamBounds() {

@@ -18,11 +18,11 @@ public class ViewPointUI : MonoBehaviour {
     }
 
     public void OnExitMoving() {
-        ResetButtonsVisual();
         UpdateViewButtonList();
         foreach (ViewHUDButton button in _buttonList) {
             button.ToggleMovableVisual(false);
         }
+        ResetButtonsVisual();
     }
 
     public void OnAddView() {
@@ -30,8 +30,13 @@ public class ViewPointUI : MonoBehaviour {
         // Activate!
         _viewManager.SetActiveViewPoint(newViewpoint);
         _viewManager.ActivateViewPoint();
-        MainManagerBase.Instance.ChangeState(AppState.ViewActive);
-        // _viewManager.StartViewMoving();
+
+        if (MainManagerBase.Instance.ActiveState != AppState.ViewActive) {
+            MainManagerBase.Instance.ChangeState(AppState.ViewActive);
+        } else {
+            _viewManager.StartViewMoving();
+        }
+
         UpdateViewButtonList();
     }
 
