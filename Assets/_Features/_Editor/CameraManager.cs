@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
@@ -47,7 +48,13 @@ public class CameraManager : Singleton<CameraManager> {
         vCamFreeCamRefference.transform.rotation = InitialCameraPosition.rotation;
         //  DisableCinemachineAfterTransition();
 
-        ToggleCameraCollision(false); // TODO: global editor settings, load value from there
+        StartCoroutine(WaitForGlobalSettingsLoad());
+    }
+
+    IEnumerator WaitForGlobalSettingsLoad() {
+        yield return new WaitUntil(() => GlobalSettings.Instance != null && GlobalSettings.Instance.IsLoaded);
+
+        ToggleCameraCollision(GlobalSettings.Instance.Data.IsCameraCollisionOn);
     }
 
     private void Update() {
@@ -70,6 +77,7 @@ public class CameraManager : Singleton<CameraManager> {
     }
 
     public void ToggleCameraCollision(bool toggleOn) {
+        GlobalSettings.Instance.Set(a => a.IsCameraCollisionOn = toggleOn);
         CameraColissionScriptRef.enabled = toggleOn;
         _isCollisionEnabled = CameraColissionScriptRef.enabled;
     }

@@ -7098,7 +7098,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d9dc8a08f35a2438eda9e82b47b40b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CameraColissionScriptRef: {fileID: 0}
+  CameraCollisionToggleRef: {fileID: 2267422628713760995}
 --- !u!1 &6771719925112880749
 GameObject:
   m_ObjectHideFlags: 0
@@ -10242,6 +10242,17 @@ PrefabInstance:
       addedObject: {fileID: 7726810775122955205}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4bb7c15b807f45c43bd8b7d080fcf79e, type: 3}
+--- !u!114 &2267422628713760995 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 894641893860645208, guid: 4bb7c15b807f45c43bd8b7d080fcf79e, type: 3}
+  m_PrefabInstance: {fileID: 1377513049293164987}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50a84f1134d1a47469f7fb589a27a77c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &2267422628713761004 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 894641893860645207, guid: 4bb7c15b807f45c43bd8b7d080fcf79e, type: 3}

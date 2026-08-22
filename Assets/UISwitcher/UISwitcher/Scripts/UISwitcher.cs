@@ -48,5 +48,5 @@ namespace UISwitcher {
 			tipRect.anchorMax = anchor;
 			tipRect.pivot = anchor;
 		}
-	}
+    }
 }
