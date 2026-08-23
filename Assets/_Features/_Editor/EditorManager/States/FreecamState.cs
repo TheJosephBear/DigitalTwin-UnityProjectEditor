@@ -5,6 +5,7 @@ using UnityEngine;
 public class FreecamState : StateBase {
     public override void Enter() {
         UIManager.Instance.HideUI(UIType.EditorInitUI);
+        SunManager.Instance.ToggleUI(true);
         MainManagerBase.Instance.ToggleHUD(true);
         MainManagerBase.Instance.ViewManager.ToggleViewPointUI(true);
         CameraManager.Instance.InitializeFreeCamBounds();
@@ -16,6 +17,6 @@ public class FreecamState : StateBase {
     }
 
     public override void Exit() {
-
+        SunManager.Instance.ToggleUI(false);
     }
 }

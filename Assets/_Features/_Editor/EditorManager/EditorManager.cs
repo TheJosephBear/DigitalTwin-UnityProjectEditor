@@ -32,6 +32,7 @@ public class EditorManager : MainManagerBase {
             SaveProject();
 
         ClearManagers();
+        SunManager.Instance.ToggleUI(false);
 
         // Change scenes
         var loadTask = SceneLoadingManager.Instance.LoadSceneAsync(SceneType.ProjectList);
