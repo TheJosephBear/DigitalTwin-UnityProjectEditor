@@ -390,6 +390,9 @@ public class SurveyUIBuilder : MonoBehaviour {
         Camera unityCamera = Camera.main;
         if (unityCamera == null) return null;
 
+        Vector3 originalPosition = unityCamera.transform.position;
+        Quaternion originalRotation = unityCamera.transform.rotation;
+
         CinemachineBrain brain = unityCamera.GetComponent<CinemachineBrain>();
         if (brain != null) {
             brain.ManualUpdate();
@@ -420,15 +423,19 @@ public class SurveyUIBuilder : MonoBehaviour {
         if(_createdTextures.ContainsKey(viewPointId)) _createdTextures.Remove(viewPointId);
         _createdTextures.Add(viewPointId, questionRT);
 
-        StartCoroutine(ClearRenderTextureStuffNextFrame(viewPoint, brain, originalBlendSpeed));
+        StartCoroutine(ClearRenderTextureStuffNextFrame(viewPoint, brain, originalBlendSpeed, originalPosition, originalRotation));
 
         return questionRT;
     }
 
-    IEnumerator ClearRenderTextureStuffNextFrame(ViewPoint vp, CinemachineBrain brain, float ogSpeed) {
+    IEnumerator ClearRenderTextureStuffNextFrame(ViewPoint vp, CinemachineBrain brain,
+        float ogSpeed,
+        Vector3 ogPosition,
+        Quaternion ogRotation) {
         yield return new WaitForEndOfFrame();
         vp.Deactivate();
         brain.m_DefaultBlend.m_Time = ogSpeed;
+        Camera.main.transform.SetPositionAndRotation(ogPosition, ogRotation);
     }
 
     public void ClearAllQuestionTextures() {

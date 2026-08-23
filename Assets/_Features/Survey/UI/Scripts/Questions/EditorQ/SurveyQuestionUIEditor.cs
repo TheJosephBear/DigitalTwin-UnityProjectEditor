@@ -54,7 +54,6 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
 
     }
 
-
     #region Interface for editing the question
 
     // Make it virtual or abstract - check the other add answer function and how different it is (this is for code calls, theo ther is for ui calls)
