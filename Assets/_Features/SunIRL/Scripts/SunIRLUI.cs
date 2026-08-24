@@ -26,6 +26,11 @@ public class SunIRLUI: MonoBehaviour {
     [SerializeField] private TMP_InputField hourInput;
     [SerializeField] private TMP_InputField minuteInput;
 
+    [Header("GO References")]
+    [SerializeField] private GameObject ContainerGameObject;
+    [SerializeField] private GameObject ButtonGameObject;
+
+
     private SunManager sunManager;
     private bool isInitializing = false;
 
@@ -66,6 +71,18 @@ public class SunIRLUI: MonoBehaviour {
 
         // 3. Trigger updates on manager with initial values
         ApplyAllValuesToManager();
+
+        OnHideUI();
+    }
+
+    public void OnShowUI() {
+        ButtonGameObject.SetActive(false);
+        ContainerGameObject.SetActive(true);
+    }
+
+    public void OnHideUI() {
+        ButtonGameObject.SetActive(true);
+        ContainerGameObject.SetActive(false);
     }
 
     private void ApplyAllValuesToManager() {
