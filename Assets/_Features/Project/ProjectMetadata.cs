@@ -14,5 +14,6 @@ public class ProjectMetadata {
     public string projectName;
     public string projectDescription;
     public string projectImageID;
+    public string owner;
 
 }

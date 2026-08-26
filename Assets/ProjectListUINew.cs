@@ -74,7 +74,7 @@ public class ProjectListUINew : MonoBehaviour {
 
     private void ReorderUIButtonsAlphabetically() {
         var buttons = ProjectScrollViewContent.transform.Cast<Transform>()
-            .OrderBy(t => t.GetComponent<ProjectListItem>().ProjectMetadata.projectName) 
+            .OrderBy(t => t.GetComponent<ProjectListItem>().ProjectMetadata.projectName)
             .ToList();
 
         for (int i = 0; i < buttons.Count; i++) {

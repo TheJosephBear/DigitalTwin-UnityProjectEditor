@@ -9,6 +9,7 @@ public class Project {
     public string ProjectName { get; private set; }
     public string ProjectDescription { get; private set; }
     public string ProjectImageID { get; private set; }
+    public string Owner { get; private set; }
     public SerializableProject SerializableProject { get; private set; }
     public ProjectMetadata ProjectMetadata;
 
@@ -21,6 +22,9 @@ public class Project {
         SerializableProject = JsonUtility.FromJson<SerializableProject>(json);
         ProjectID = SerializableProject.projectId;
         ProjectName = SerializableProject.projectName;
+        ProjectDescription = SerializableProject.projectDescription;
+        ProjectImageID = SerializableProject.projectImageID;
+        Owner = SerializableProject.owner;
     }
 }
 
@@ -34,6 +38,7 @@ public class SerializableProject {
     public string projectName;
     public string projectDescription;
     public string projectImageID;
+    public string owner;
     public SerializableMapManager serializableMapManager;
     public List<SerializableModelAsset> serializableModelAssets;
     public List<serializableTextureAsset> serializableTextureAssets;

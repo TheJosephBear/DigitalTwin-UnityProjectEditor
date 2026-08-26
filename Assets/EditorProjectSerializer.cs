@@ -12,6 +12,9 @@ public class EditorProjectSerializer : MonoBehaviour {
         SerializableProject serializableProject = new SerializableProject {
             projectId = OpenedProject.ProjectID,
             projectName = OpenedProject.ProjectName,
+            projectDescription = OpenedProject.ProjectDescription,
+            projectImageID = OpenedProject.ProjectImageID,
+            owner = OpenedProject.Owner,
             serializableModelAssets = AssetManager.Instance.SerializeAssetList(),
             serializableTextureAssets = ImageManager.Instance.SerializeTextureList(),
             serializableMapManager = EditorManager.Instance.MapManager.Serialize(),

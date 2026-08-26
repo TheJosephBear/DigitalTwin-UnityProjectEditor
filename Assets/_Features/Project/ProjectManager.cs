@@ -186,7 +186,12 @@ public class ProjectManager : Singleton<ProjectManager> {
         string exportUrl = $"{ServerCommunicationManager.Instance.serverUrl}/export_survey_csv?project_name={UnityEngine.Networking.UnityWebRequest.EscapeURL(projectName)}";
 
         ServerCommunicationManager.Instance.StartSurveyResponsesDownload(projectName, (success, data) => {
-            if (!success || string.IsNullOrEmpty(data) || data.Trim() == "[]" || data.Trim() == "{}") {
+            if (!success) {
+                PopUp.Instance.ShowPopUpWindow("K exportu odpovědí tohoto projektu nemáte oprávnění nebo nastala chyba.");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(data) || data.Trim() == "[]" || data.Trim() == "{}") {
                 PopUp.Instance.ShowPopUpWindow("Pro tento projekt zatím nebyly odeslány žádné odpovědi.");
                 return;
             }
