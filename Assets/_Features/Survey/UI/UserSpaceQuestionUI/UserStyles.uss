@@ -1130,11 +1130,6 @@ TextField TextInput {
     color: rgb(73, 62, 105);
 }
 
-#grid-table .unity-multi-column-header__column:first-child {
-    font-size: 13px;
-    -unity-font-style: bold;
-    color: rgb(73, 62, 105);
-}
 
 #grid-table .unity-multi-column-header__column TextField {
     flex-grow: 1;
@@ -1404,11 +1399,6 @@ TextField TextInput {
     color: rgb(73, 62, 105);
 }
 
-#grid-table .unity-multi-column-header__column:first-child {
-    font-size: 13px;
-    -unity-font-style: bold;
-    color: rgb(73, 62, 105);
-}
 
 #grid-table .unity-multi-column-header__column TextField {
     flex-grow: 1;

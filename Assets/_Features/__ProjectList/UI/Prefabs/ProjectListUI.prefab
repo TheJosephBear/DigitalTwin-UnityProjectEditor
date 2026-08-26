@@ -269,6 +269,10 @@ MonoBehaviour:
   ClassicNameRef: {fileID: 4248507709385638089}
   ClassicDescriptionRef: {fileID: 2689941269831727901}
   ClassicImage: {fileID: 5542065764614818710}
+  ClassicSurveyStatusRef: {fileID: 0}
+  ClassicSurveyRespondentsRef: {fileID: 0}
+  ClassicSurveySection: {fileID: 0}
+  ClassicDownloadResponsesButton: {fileID: 0}
   EditingNameInput: {fileID: 7805292580515956225}
   EditingDescriptionInput: {fileID: 1404818969147026364}
   EditingImage: {fileID: 8347339747153389269}

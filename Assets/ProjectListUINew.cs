@@ -18,6 +18,12 @@ public class ProjectListUINew : MonoBehaviour {
     public TextMeshProUGUI ClassicDescriptionRef;
     public RawImage ClassicImage;
 
+    [Header("Classic Modal Survey References (Assign in Prefab)")]
+    public TextMeshProUGUI ClassicSurveyStatusRef;
+    public TextMeshProUGUI ClassicSurveyRespondentsRef;
+    public GameObject ClassicSurveySection;
+    public Button ClassicDownloadResponsesButton;
+
     // Editing modal references
     public TMP_InputField EditingNameInput;
     public TMP_InputField EditingDescriptionInput;
@@ -154,11 +160,29 @@ public class ProjectListUINew : MonoBehaviour {
 
     public void OnDownloadSurveyResponses() {
         if (_projectInModal != null) {
+            if (!_projectInModal.hasSurvey) {
+                PopUp.Instance.ShowPopUpWindow("K tomuto projektu není vytvořen žádný dotazník.");
+                return;
+            }
+            if (_projectInModal.respondentCount == 0) {
+                PopUp.Instance.ShowPopUpWindow("K tomuto projektu zatím nejsou k dispozici žádné odpovědi.");
+                return;
+            }
             ProjectListManager.Instance.DownloadSurveyResponses(_projectInModal);
         }
     }
 
     public void OnDownloadSurveyResponses(ProjectMetadata projectMetadata) {
+        if (projectMetadata != null) {
+            if (!projectMetadata.hasSurvey) {
+                PopUp.Instance.ShowPopUpWindow("K tomuto projektu není vytvořen žádný dotazník.");
+                return;
+            }
+            if (projectMetadata.respondentCount == 0) {
+                PopUp.Instance.ShowPopUpWindow("K tomuto projektu zatím nejsou k dispozici žádné odpovědi.");
+                return;
+            }
+        }
         ProjectListManager.Instance.DownloadSurveyResponses(projectMetadata);
     }
 
@@ -237,6 +261,63 @@ public class ProjectListUINew : MonoBehaviour {
         TextureAsset textureAsset = ImageManager.Instance.GetPreviewAssetByProject(_projectInModal.projectName);
         if (textureAsset != null) ClassicImage.texture = textureAsset.Texture;
         UpdateAspectRatio(ClassicImage);
+
+        // Survey Info & Download Responses Button
+        UpdateClassicSurveyPanel();
+    }
+
+    private void UpdateClassicSurveyPanel() {
+        if (_projectInModal == null) return;
+
+        bool hasSurvey = _projectInModal.hasSurvey;
+        int respCount = _projectInModal.respondentCount;
+
+        Color activeColor = new Color(0.298f, 0.686f, 0.314f); // #4CAF50
+        Color inactiveColor = new Color(0.62f, 0.62f, 0.62f);  // #9E9E9E
+
+        if (ClassicSurveySection != null) {
+            ClassicSurveySection.SetActive(true);
+        }
+
+        if (ClassicSurveyStatusRef != null) {
+            ClassicSurveyStatusRef.color = hasSurvey ? activeColor : inactiveColor;
+            ClassicSurveyStatusRef.text = ProjectMetadata.GetSurveyStatusCzechText(hasSurvey);
+        }
+
+        if (ClassicSurveyRespondentsRef != null) {
+            if (!hasSurvey) {
+                ClassicSurveyRespondentsRef.text = "-";
+            } else if (respCount == 0) {
+                ClassicSurveyRespondentsRef.text = "Zatím žádné odpovědi";
+            } else {
+                ClassicSurveyRespondentsRef.text = ProjectMetadata.GetRespondentCountCzechText(respCount);
+            }
+        }
+
+        // Visual styling for download button (dimmed if no responses available)
+        Button downloadBtn = ClassicDownloadResponsesButton;
+        if (downloadBtn == null && ModalClassic != null) {
+            var buttons = ModalClassic.GetComponentsInChildren<Button>(true);
+            foreach (var b in buttons) {
+                if (b.gameObject.name == "DownloadResponsesButton") {
+                    downloadBtn = b;
+                    break;
+                }
+            }
+        }
+
+        if (downloadBtn != null) {
+            bool canDownload = hasSurvey && respCount > 0;
+            if (downloadBtn.targetGraphic != null) {
+                Color c = downloadBtn.targetGraphic.color;
+                c.a = canDownload ? 1.0f : 0.4f;
+                downloadBtn.targetGraphic.color = c;
+            }
+            var canvasGroup = downloadBtn.GetComponent<CanvasGroup>();
+            if (canvasGroup != null) {
+                canvasGroup.alpha = canDownload ? 1.0f : 0.4f;
+            }
+        }
     }
 
     void InitializeEditingPanel() {
