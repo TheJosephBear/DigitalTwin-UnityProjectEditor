@@ -152,8 +152,22 @@ public class ProjectListUINew : MonoBehaviour {
         ProjectListManager.Instance.ExportProject(_projectInModal);
     }
 
+    public void OnDownloadSurveyResponses() {
+        if (_projectInModal != null) {
+            ProjectListManager.Instance.DownloadSurveyResponses(_projectInModal);
+        }
+    }
+
+    public void OnDownloadSurveyResponses(ProjectMetadata projectMetadata) {
+        ProjectListManager.Instance.DownloadSurveyResponses(projectMetadata);
+    }
+
+    public void OnShowFeedBack() {
+        OnDownloadSurveyResponses();
+    }
+
     public void OnShowFeedBack(ProjectMetadata projectMedata) {
-        ProjectListManager.Instance.ShowFeedBack(projectMedata);
+        OnDownloadSurveyResponses(projectMedata);
     }
 
     public void OnDeleteProject() {

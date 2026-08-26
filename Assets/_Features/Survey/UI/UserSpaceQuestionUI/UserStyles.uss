@@ -95,6 +95,64 @@
     margin-bottom: 20px;
 }
 
+#survey-thank-you-page {
+    flex-grow: 1;
+    min-height: 100%;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    width: 100%;
+    padding-left: 28px;
+    padding-right: 28px;
+    padding-top: 32px;
+    padding-bottom: 32px;
+}
+
+#thank-you-icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 20px;
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/icons8-survey-96.png?fileID=2800000&guid=e4cbf49ef86a87f4e8d7f185fd605cf8&type=3#icons8-survey-96");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: var(--primary-color);
+}
+
+#thank-you-title {
+    -unity-text-align: middle-center;
+    font-size: 22px;
+    -unity-font-style: bold;
+    color: var(--dark-text);
+    margin-bottom: 12px;
+    white-space: normal;
+}
+
+#thank-you-description {
+    -unity-text-align: middle-center;
+    font-size: 15px;
+    color: var(--muted-text);
+    margin-bottom: 28px;
+    white-space: normal;
+}
+
+.thank-you-btn {
+    height: 42px;
+    min-width: 160px;
+    padding-left: 24px;
+    padding-right: 24px;
+    border-radius: 21px;
+    background-color: var(--primary-color);
+    color: rgb(255, 255, 255);
+    font-size: 15px;
+    -unity-font-style: bold;
+    align-items: center;
+    justify-content: center;
+    border-width: 0;
+}
+
+.thank-you-btn:hover {
+    background-color: rgb(83, 62, 140);
+}
+
 #bottom-bar {
     height: 64px;
     flex-grow: 0;
@@ -143,6 +201,35 @@
 
 #next-btn:hover {
     background-color: rgb(83, 62, 140);
+}
+
+#next-btn.submit-btn {
+    width: auto;
+    min-width: 100px;
+    height: 40px;
+    padding-left: 18px;
+    padding-right: 18px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-image: none;
+    background-color: var(--primary-color);
+    color: rgb(255, 255, 255);
+    font-size: 14px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    border-width: 0;
+}
+
+#next-btn.submit-btn:hover {
+    background-color: rgb(83, 62, 140);
+    color: rgb(255, 255, 255);
+}
+
+#next-btn.submit-btn:active {
+    background-color: rgb(65, 45, 120);
+    color: rgb(255, 255, 255);
 }
 
 #page-count-label {

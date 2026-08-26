@@ -17,11 +17,17 @@ public class SurveyUIControllerViewer : MonoBehaviour {
     private List<QuestionBase> _questions = new();
     private int _currentPage = 0; // 0 = Intro Page, 1..N = Questions
     private VisualElement _firstPageElement;
+    private VisualElement _thankYouPageElement;
+    private Button _prevButton;
+    private Button _nextButton;
+    private Label _pageCountLabel;
+    private bool _isSubmitted = false;
 
     public void Initialize(SurveyBuilder surveyBuilder, SurveyResponseManager responseManager, SurveyManager manager) {
         _surveyBuilder = surveyBuilder;
         _responseManager = responseManager;
         _surveyManager = manager;
+        _isSubmitted = false;
 
         Survey survey = _surveyBuilder.GetActiveSurvey();
         _questions = survey != null ? survey.GetAllQuestions() : new List<QuestionBase>();
@@ -34,15 +40,25 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         var toggleButton = _root.Q<Button>("toggle-btn");
         if (toggleButton != null) toggleButton.clicked += HandleTogglePressed;
 
-        var prevButton = _root.Q<Button>("previous-btn");
-        if (prevButton != null) prevButton.clicked += HandlePreviousPressed;
+        _prevButton = _root.Q<Button>("previous-btn");
+        if (_prevButton != null) _prevButton.clicked += HandlePreviousPressed;
 
-        var nextButton = _root.Q<Button>("next-btn");
-        if (nextButton != null) nextButton.clicked += HandleNextPressed;
+        _nextButton = _root.Q<Button>("next-btn");
+        if (_nextButton != null) _nextButton.clicked += HandleNextPressed;
+
+        _pageCountLabel = _root.Q<Label>("page-count-label");
 
         #endregion
 
         _firstPageElement = _root.Q<VisualElement>("survey-first-page");
+        _thankYouPageElement = _root.Q<VisualElement>("survey-thank-you-page");
+
+        var thankYouCloseBtn = _thankYouPageElement?.Q<Button>("thank-you-close-btn");
+        if (thankYouCloseBtn != null) {
+            thankYouCloseBtn.clicked += () => {
+                SurveyManager.Instance.ExitSurvey();
+            };
+        }
 
         if (_surveyUIBuilder != null) {
             _surveyUIBuilder.ClearAddQuestionBars();
@@ -111,13 +127,36 @@ public class SurveyUIControllerViewer : MonoBehaviour {
     }
 
     void HandleNextPressed() {
+        if (_isSubmitted) return;
+
         if (_currentPage < _questions.Count) {
             DisplayPage(_currentPage + 1);
             SurveyManager.Instance.SaveAnswers();
+        } else if (_currentPage == _questions.Count && _questions.Count > 0) {
+            // Last question page reached: submit survey!
+            SubmitSurvey();
+        } else if (_currentPage == 0 && _questions.Count == 0) {
+            // 0 questions, intro page only
+            SubmitSurvey();
         }
     }
 
+    void SubmitSurvey() {
+        _isSubmitted = true;
+        SurveyManager.Instance.SaveAnswers();
+        SurveyManager.Instance.UploadSurveyAnswers(success => {
+            if (success) {
+                Debug.Log("[Viewer] Survey successfully submitted to server.");
+            } else {
+                Debug.LogWarning("[Viewer] Server submission completed with warning/error.");
+            }
+        });
+        DisplayThankYouPage();
+    }
+
     void HandlePreviousPressed() {
+        if (_isSubmitted) return;
+
         int minPage = HasIntroPage(_surveyBuilder.GetActiveSurvey()) ? 0 : 1;
         if (_currentPage > minPage) {
             DisplayPage(_currentPage - 1);
@@ -138,6 +177,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
     #endregion
 
     void DisplayPage(int pageIndex) {
+        _isSubmitted = false;
         Survey survey = _surveyBuilder.GetActiveSurvey();
         bool hasIntro = HasIntroPage(survey);
 
@@ -148,12 +188,14 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         _currentPage = pageIndex;
         int totalQuestions = _questions.Count;
 
-        var pageCountLabel = _root.Q<Label>("page-count-label");
-        if (pageCountLabel != null) {
-            pageCountLabel.text = $"{_currentPage}/{totalQuestions}";
+        ClearQuestionFromUI();
+
+        if (_thankYouPageElement != null) {
+            _thankYouPageElement.style.display = DisplayStyle.None;
         }
 
-        ClearQuestionFromUI();
+        // Update buttons and labels
+        UpdateNavigationUI(totalQuestions, hasIntro);
 
         if (_currentPage == 0) {
             if (_firstPageElement != null) {
@@ -181,6 +223,67 @@ public class SurveyUIControllerViewer : MonoBehaviour {
                     StartCoroutine(ShowViewCoroutine(currentQuestion.ViewPointId));
                 }
             }
+        }
+    }
+
+    void UpdateNavigationUI(int totalQuestions, bool hasIntro) {
+        if (_pageCountLabel != null) {
+            _pageCountLabel.style.display = DisplayStyle.Flex;
+            if (_currentPage == 0) {
+                _pageCountLabel.text = totalQuestions > 0 ? $"0/{totalQuestions}" : "Úvod";
+            } else {
+                _pageCountLabel.text = $"{_currentPage}/{totalQuestions}";
+            }
+        }
+
+        int minPage = hasIntro ? 0 : 1;
+        if (_prevButton != null) {
+            _prevButton.style.display = DisplayStyle.Flex;
+            _prevButton.style.visibility = _currentPage > minPage ? Visibility.Visible : Visibility.Hidden;
+        }
+
+        if (_nextButton != null) {
+            _nextButton.style.display = DisplayStyle.Flex;
+            _nextButton.style.backgroundColor = StyleKeyword.Null;
+            _nextButton.style.color = StyleKeyword.Null;
+            bool isLastQuestionPage = (totalQuestions > 0 && _currentPage == totalQuestions) || (totalQuestions == 0);
+
+            if (isLastQuestionPage) {
+                if (!_nextButton.ClassListContains("submit-btn")) {
+                    _nextButton.AddToClassList("submit-btn");
+                }
+                _nextButton.text = "Odeslat";
+            } else {
+                if (_nextButton.ClassListContains("submit-btn")) {
+                    _nextButton.RemoveFromClassList("submit-btn");
+                }
+                _nextButton.text = string.Empty;
+            }
+        }
+    }
+
+    void DisplayThankYouPage() {
+        _currentPage = _questions.Count + 1;
+        ClearQuestionFromUI();
+
+        if (_firstPageElement != null) {
+            _firstPageElement.style.display = DisplayStyle.None;
+        }
+
+        if (_thankYouPageElement != null) {
+            _thankYouPageElement.style.display = DisplayStyle.Flex;
+        }
+
+        if (_prevButton != null) {
+            _prevButton.style.display = DisplayStyle.None;
+        }
+
+        if (_nextButton != null) {
+            _nextButton.style.display = DisplayStyle.None;
+        }
+
+        if (_pageCountLabel != null) {
+            _pageCountLabel.text = "Dokončeno";
         }
     }
 

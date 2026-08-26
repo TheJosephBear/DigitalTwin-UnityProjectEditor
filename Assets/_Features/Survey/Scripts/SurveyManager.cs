@@ -9,7 +9,7 @@ using QuestionnaireToolkit.Scripts.SimpleJSON;
 using System.Diagnostics;
 
 public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
-    
+
     public GameObject SurveyBuildingManagerPrefab;
 
     SurveyFlowManager _flowManager;
@@ -119,8 +119,31 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
         ServerCommunicationManager.Instance.StartSurveyUpload(_surveyJsonData, ProjectManager.Instance.SelectedProject.ProjectName);
     }
 
-    public void UploadSurveyAnswers() {
+    public void UploadSurveyAnswers(Action<bool> onComplete = null) {
+        string projectName = ProjectManager.Instance?.SelectedProject?.ProjectName;
+        if (string.IsNullOrEmpty(projectName)) {
+            UnityEngine.Debug.LogWarning("[SurveyManager] Cannot upload answers: ProjectName is empty");
+            onComplete?.Invoke(false);
+            return;
+        }
 
+        _responseJsonData = _flowManager != null ? _flowManager.GetResponseJsonData() : null;
+        if (string.IsNullOrEmpty(_responseJsonData)) {
+            UnityEngine.Debug.LogWarning("[SurveyManager] Cannot upload answers: response data is empty");
+            onComplete?.Invoke(false);
+            return;
+        }
+
+        UnityEngine.Debug.Log($"[SurveyManager] Uploading survey answers for project '{projectName}'");
+
+        ServerCommunicationManager.Instance.StartSurveyResponseUpload(_responseJsonData, projectName, (success, response) => {
+            if (success) {
+                UnityEngine.Debug.Log("[SurveyManager] Survey answers uploaded successfully!");
+            } else {
+                UnityEngine.Debug.LogError($"[SurveyManager] Failed to upload survey answers: {response}");
+            }
+            onComplete?.Invoke(success);
+        });
     }
 
     #endregion
@@ -135,7 +158,7 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
     }
 
     public void SaveAnswers() {
-        _responseJsonData = _flowManager.GetResponseJsonData();
+        _responseJsonData = _flowManager != null ? _flowManager.GetResponseJsonData() : null;
         print(_responseJsonData);
     }
 

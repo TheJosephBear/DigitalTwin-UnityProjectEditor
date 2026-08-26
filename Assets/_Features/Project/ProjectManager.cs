@@ -176,8 +176,31 @@ public class ProjectManager : Singleton<ProjectManager> {
         });
     }
 
-    public void GetProjectSurveyResponseData(ProjectMetadata projectMedata) {
-        PopUp.Instance.ShowPopUpWindow("Toto zatím nic nedělá!");
+    public void DownloadSurveyResponses(ProjectMetadata projectMetadata) {
+        if (projectMetadata == null || string.IsNullOrEmpty(projectMetadata.projectName)) {
+            PopUp.Instance.ShowPopUpWindow("Projekt není vybrán.");
+            return;
+        }
+
+        string projectName = projectMetadata.projectName;
+        string exportUrl = $"{ServerCommunicationManager.Instance.serverUrl}/export_survey_csv?project_name={UnityEngine.Networking.UnityWebRequest.EscapeURL(projectName)}";
+
+        ServerCommunicationManager.Instance.StartSurveyResponsesDownload(projectName, (success, data) => {
+            if (!success || string.IsNullOrEmpty(data) || data.Trim() == "[]" || data.Trim() == "{}") {
+                PopUp.Instance.ShowPopUpWindow("Pro tento projekt zatím nebyly odeslány žádné odpovědi.");
+                return;
+            }
+
+            if (WebGLTabOpener.Instance != null) {
+                WebGLTabOpener.Instance.OpenLinkInNewTab(exportUrl);
+            } else {
+                Application.OpenURL(exportUrl);
+            }
+        });
+    }
+
+    public void GetProjectSurveyResponseData(ProjectMetadata projectMetadata) {
+        DownloadSurveyResponses(projectMetadata);
     }
 
     public void GetProjectIframeExport(ProjectMetadata projectMetadata, System.Action<string> onFinished) {

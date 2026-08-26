@@ -125,8 +125,12 @@ public class ProjectListManager : Singleton<ProjectListManager> {
         });
     }
 
+    public void DownloadSurveyResponses(ProjectMetadata projectMetadata) {
+        ProjectManager.Instance.DownloadSurveyResponses(projectMetadata);
+    }
+
     public void ShowFeedBack(ProjectMetadata projectMetadata) {
-        ProjectManager.Instance.GetProjectSurveyResponseData(projectMetadata);
+        DownloadSurveyResponses(projectMetadata);
     }
 
     #endregion
