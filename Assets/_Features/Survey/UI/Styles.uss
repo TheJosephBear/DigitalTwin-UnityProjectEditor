@@ -3,6 +3,7 @@
     --primary-hover: rgb(86, 61, 141);
     --primary-background-color: rgb(247, 242, 250);
     --secondary-background-color: rgb(246, 230, 255);
+    --page-bg: rgb(251, 248, 253);
     --card-border: rgb(232, 224, 236);
     --card-hover-border: rgb(200, 184, 219);
     --card-active-border: rgb(103, 80, 164);
@@ -11,6 +12,15 @@
     --input-bg: rgb(247, 245, 250);
     --input-hover-bg: rgb(242, 239, 247);
     --input-focus-bg: rgb(255, 255, 255);
+}
+
+#page-container,
+.page-container {
+    background-color: var(--page-bg);
+}
+
+#survey-scroll-view {
+    background-color: var(--page-bg);
 }
 
 #survey-scroll-view #unity-content-container {
@@ -668,11 +678,12 @@ TextField:focus TextInput {
     color: rgb(73, 69, 79);
     font-size: 11px;
     background-color: rgb(240, 238, 244);
+    border-width: 0;
+    border-radius: 12px;
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 3px;
     padding-bottom: 3px;
-    border-radius: 12px;
     -unity-font-style: bold;
 }
 
@@ -1474,18 +1485,21 @@ DropdownField > .unity-base-field__input > .unity-dropdown-field__arrow,
 #add-buttons,
 .add-buttons {
     margin-top: 12px;
+    margin-left: 56px;
+    margin-right: 386px;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 #add-buttons Button,
 .add-buttons Button {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
     height: 34px;
-    padding-left: 18px;
-    padding-right: 18px;
-    margin-left: 6px;
-    margin-right: 6px;
+    padding-left: 12px;
+    padding-right: 12px;
     border-radius: 12px;
     background-color: var(--primary-background-color);
     color: var(--primary-color);
@@ -1494,6 +1508,22 @@ DropdownField > .unity-base-field__input > .unity-dropdown-field__arrow,
     border-width: 0;
     transition-property: background-color;
     transition-duration: 0.15s;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+#add-buttons #add-option-button,
+.add-buttons #add-option-button {
+    margin-right: 8px;
+    margin-left: 0;
+}
+
+#add-buttons #add-other-option-button,
+.add-buttons #add-other-option-button {
+    margin-left: 8px;
+    margin-right: 0;
 }
 
 #add-buttons Button:hover,
@@ -1522,44 +1552,54 @@ DropdownField > .unity-base-field__input > .unity-dropdown-field__arrow,
     flex-grow: 0;
     flex-direction: row;
     align-items: center;
-    margin-top: 12px;
-    margin-bottom: 12px;
-    height: 32px;
+    margin-top: 14px;
+    margin-bottom: 14px;
+    height: 36px;
+    justify-content: center;
 }
 
 .add-question-divider-line {
     flex-grow: 1;
     height: 1px;
-    background-color: rgba(103, 80, 164, 0.18);
+    background-color: rgb(73, 69, 79);
     transition-property: background-color;
     transition-duration: 0.15s;
 }
 
 .add-question-bar:hover .add-question-divider-line {
-    background-color: rgba(103, 80, 164, 0.4);
+    background-color: var(--primary-color);
 }
 
 .add-question-button,
 #add-question-button {
     width: 32px;
     height: 32px;
-    border-radius: 10px;
+    min-width: 32px;
+    min-height: 32px;
+    max-width: 32px;
+    max-height: 32px;
+    border-radius: 6px;
     border-width: 1px;
-    border-color: rgba(103, 80, 164, 0.2);
+    border-color: rgb(73, 69, 79);
     background-color: rgb(255, 255, 255);
-    -unity-background-image-tint-color: rgb(150, 145, 160);
+    -unity-background-image-tint-color: rgb(29, 25, 43);
+    -unity-background-scale-mode: scale-to-fit;
     transition-property: background-color, border-color, -unity-background-image-tint-color, scale;
     transition-duration: 0.15s;
-    scale: 0.95 0.95;
-    margin: 0 8px;
-    padding: 0;
+    scale: 1 1;
+    margin-left: 0;
+    margin-right: 0;
+    padding-top: 6px;
+    padding-right: 6px;
+    padding-bottom: 6px;
+    padding-left: 6px;
 }
 
 .add-question-bar:hover .add-question-button,
 .add-question-bar:hover #add-question-button,
 .add-question-button:hover,
 #add-question-button:hover {
-    scale: 1.05 1.05;
+    scale: 1.08 1.08;
     background-color: var(--primary-background-color);
     border-color: var(--primary-color);
     -unity-background-image-tint-color: var(--primary-color);
