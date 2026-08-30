@@ -1,19 +1,48 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:Template name="Question-title" src="project://database/Assets/_Features/Survey/UI/Question-title.uxml?fileID=9197481963319205126&amp;guid=7bfed0fc9c8eb204088a09cb69fa7762&amp;type=3#Question-title" />
-    <ui:Template name="EditOptionModal" src="project://database/Assets/_Features/Survey/UI/EditOptionModal.uxml?fileID=9197481963319205126&amp;guid=76703d756520966448429ac694633d27&amp;type=3#EditOptionModal" />
-    <ui:Template name="Question-description" src="project://database/Assets/_Features/Survey/UI/Question-description.uxml?fileID=9197481963319205126&amp;guid=f5d967f3e76b1a54ea2fffb453a25d93&amp;type=3#Question-description" />
     <Style src="project://database/Assets/_Features/Survey/UI/Styles.uss?fileID=7433441132597879392&amp;guid=e2857671203a4094b98524b8aefbd78f&amp;type=3#Styles" />
     
     <!-- Question Position and Type Header Info -->
-    <ui:VisualElement style="flex-grow: 0; flex-direction: row; align-items: center; margin-bottom: 8px;">
+    <ui:VisualElement name="question-header-info" class="question-header-info" style="flex-grow: 0; flex-direction: row; align-items: center; margin-bottom: 8px;">
         <ui:Label text="1" name="question-position" style="flex-shrink: 1; -unity-font-style: bold; color: rgb(103, 80, 164); font-size: 14px; margin-right: 6px;" />
         <ui:Label text="Label" name="question-type" style="flex-shrink: 1; color: rgb(102, 102, 102); font-size: 11px; background-color: rgb(240, 240, 240); padding-left: 8px; padding-right: 8px; padding-top: 2px; padding-bottom: 2px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; -unity-font-style: bold;" />
     </ui:VisualElement>
 
-    <ui:VisualElement name="question-title-bar" style="flex-grow: 0; flex-direction: row; align-items: center; flex-shrink: 0;">
-        <ui:Instance template="Question-title" name="Question-title" style="flex-grow: 1;" />
-        <ui:Button name="required-toggle" class="required-toggle" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; align-items: center; justify-content: center; margin-right: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/asterisk-crossed.png?fileID=2800000&amp;guid=092533b3b39958b4184c2346388f42f5&amp;type=3#asterisk-crossed&quot;);" />
-        <ui:Instance template="EditOptionModal" name="edit-question-modal" style="margin-top: 6px; margin-right: 6px; margin-bottom: 6px; margin-left: 6px;" />
+    <!-- Row 1: Question Title (Left) + Required Switch Pill & Delete Button (Right) -->
+    <ui:VisualElement name="question-title-row" class="question-row" style="flex-grow: 0; flex-direction: row; align-items: center; flex-shrink: 0; margin-bottom: 8px;">
+        <ui:TextField placeholder-text="Název otázky" name="question-title" multiline="true" style="flex-grow: 1; -unity-font-style: bold; font-size: 16px; margin-right: 16px;" />
+        <ui:VisualElement name="question-title-actions" class="question-row-actions">
+            <ui:VisualElement name="required-container" class="required-container" style="flex-direction: row; align-items: center; margin-right: 12px;">
+                <ui:Label text="Povinná otázka" name="required-label" class="required-label" style="font-size: 13px; color: rgb(100, 100, 100); margin-right: 8px; white-space: nowrap; -unity-font-style: normal;" />
+                <ui:Toggle name="required-toggle" class="switch-pill" />
+            </ui:VisualElement>
+            <ui:Button name="delete-question-button" class="icon icon-trash" tooltip="Smazat otázku" />
+        </ui:VisualElement>
     </ui:VisualElement>
-    <ui:Instance template="Question-description" name="question-description" />
+
+    <!-- Row 2: Question Description (Left) + Camera View Dropdown & Add Image Button (Right) -->
+    <ui:VisualElement name="question-description-row" class="question-row" style="flex-grow: 0; flex-direction: row; align-items: center; flex-shrink: 0; margin-bottom: 8px;">
+        <ui:TextField placeholder-text="Popis otázky (volitelné)" name="question-description" multiline="true" style="flex-grow: 1; font-size: 14px; margin-right: 16px; color: rgb(0, 0, 0); white-space: normal;" />
+        <ui:VisualElement name="question-attachment" class="question-row-actions">
+            <ui:DropdownField label="Pohled kamery" name="camera-view-dropdown" style="width: 140px; margin-right: 8px; flex-shrink: 1;" />
+            <ui:Button name="image-button" class="add-image-button" style="flex-direction: row; justify-content: center; align-items: center; width: 130px; height: 32px; padding-top: 4px; padding-bottom: 4px; padding-left: 6px; padding-right: 6px; flex-shrink: 0;">
+                <ui:VisualElement name="icon" style="flex-grow: 0; width: 20px; height: 20px; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/image-outline.png?fileID=2800000&amp;guid=2a8b0a5a8db48ee46924cdb62930cde7&amp;type=3#image-outline&quot;); flex-shrink: 0; margin-right: 4px;" />
+                <ui:Label text="Přidat obrázek" style="font-size: 12px;" />
+            </ui:Button>
+        </ui:VisualElement>
+    </ui:VisualElement>
+
+    <!-- Views Container (Camera & Question Image Previews) -->
+    <ui:VisualElement name="views" style="flex-grow: 1; flex-direction: row; justify-content: flex-start; margin-bottom: 6px;">
+        <ui:VisualElement name="camera-view" style="flex-grow: 0; max-height: 120px; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/image-outline.png?fileID=2800000&amp;guid=2a8b0a5a8db48ee46924cdb62930cde7&amp;type=3#image-outline&quot;); -unity-background-scale-mode: scale-to-fit; min-height: 120px; display: none; min-width: 120px; width: 120px; max-width: 120px; margin-right: 12px; border-radius: 8px; overflow: hidden; border-width: 1px; border-color: rgba(0, 0, 0, 0.1);">
+            <ui:Button name="remove-view" class="icon remove-button" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/close.png?fileID=2800000&amp;guid=36073b272ed400e4fb5cef1e5e174a8d&amp;type=3#close&quot;); right: 2px; position: absolute; top: 2px; width: 20px; height: 20px;" />
+            <ui:Button name="enhance-image" class="icon enhance-button" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/magnify-plus-outline.png?fileID=2800000&amp;guid=11b0b51f78ca2b648a63350ae0bd5145&amp;type=3#magnify-plus-outline&quot;); position: absolute; bottom: 2px; right: 2px; width: 20px; height: 20px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="question-image" style="flex-grow: 0; min-height: 120px; max-height: 120px; -unity-background-scale-mode: scale-to-fit; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/image-outline.png?fileID=2800000&amp;guid=2a8b0a5a8db48ee46924cdb62930cde7&amp;type=3#image-outline&quot;); min-width: 120px; max-width: 120px; width: 120px; display: none; border-radius: 8px; overflow: hidden; border-width: 1px; border-color: rgba(0, 0, 0, 0.1);">
+            <ui:Button name="remove-image" class="icon remove-button" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/close.png?fileID=2800000&amp;guid=36073b272ed400e4fb5cef1e5e174a8d&amp;type=3#close&quot;); right: 2px; position: absolute; top: 2px; width: 20px; height: 20px;" />
+            <ui:Button name="enhance-image" class="icon enhance-button" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/magnify-plus-outline.png?fileID=2800000&amp;guid=11b0b51f78ca2b648a63350ae0bd5145&amp;type=3#magnify-plus-outline&quot;); position: absolute; bottom: 2px; right: 2px; width: 20px; height: 20px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+
+    <!-- Section Spacing between Question Description and Answers -->
+    <ui:VisualElement name="question-section-spacer" class="question-section-spacer" style="height: 14px; flex-shrink: 0;" />
 </ui:UXML>

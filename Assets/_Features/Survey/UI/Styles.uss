@@ -90,10 +90,10 @@ RadioButtonGroup TemplateContainer {
 }
 
 .option-container--other {
-    background-color: rgba(0, 0, 0, 0.04);
-    border-radius: 6px;
-    padding-left: 4px;
-    padding-right: 4px;
+    background-color: rgba(103, 80, 164, 0.04);
+    border-radius: 8px;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 #edit-option-button {
@@ -196,90 +196,258 @@ TextField TextInput:hover {
     cursor: url("project://database/Assets/_Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
 }
 
-.active-question {
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
-    border-left-color: var(--primary-color);
-    border-right-color: var(--primary-color);
-    border-top-color: var(--primary-color);
-    border-bottom-color: var(--primary-color);
-    border-top-left-radius: 21px;
-    border-top-right-radius: 21px;
-    border-bottom-right-radius: 21px;
-    border-bottom-left-radius: 21px;
+.question-wrapper {
+    flex-direction: row;
+    align-items: stretch;
+    width: 100%;
+    margin-top: 6px;
+    margin-bottom: 6px;
 }
 
+.question-move-controls {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    margin-right: 8px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    flex-shrink: 0;
+}
+
+.question-move-controls .icon-move-up,
+.question-move-controls .icon-move-down {
+    width: 28px;
+    height: 28px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.question-container,
 #question-container {
-    padding-top: 24px;
+    flex-grow: 1;
+    background-color: rgb(255, 255, 255);
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+    border-bottom-left-radius: 18px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: rgba(103, 80, 164, 0.15);
+    border-right-color: rgba(103, 80, 164, 0.15);
+    border-bottom-color: rgba(103, 80, 164, 0.15);
+    border-left-color: rgba(103, 80, 164, 0.15);
+    padding-top: 20px;
     padding-right: 24px;
-    padding-bottom: 24px;
+    padding-bottom: 20px;
     padding-left: 24px;
+    transition-property: border-color, background-color;
+    transition-duration: 0.15s;
 }
 
-DropdownField > Label {
-    color: var(--primary-color);
+.question-container:hover,
+#question-container:hover {
+    border-top-color: rgba(103, 80, 164, 0.45);
+    border-right-color: rgba(103, 80, 164, 0.45);
+    border-bottom-color: rgba(103, 80, 164, 0.45);
+    border-left-color: rgba(103, 80, 164, 0.45);
 }
 
-DropdownField > VisualElement {
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    border-bottom-left-radius: 8px;
-    border-top-left-radius: 8px;
-    background-color: var(--primary-background-color);
-    color: var(--primary-color);
+TemplateContainer.active-question,
+.question-wrapper.active-question,
+.active-question {
+    border-width: 0;
+    border-color: rgba(0, 0, 0, 0);
 }
 
-DropdownField:hover {
+.active-question > .question-wrapper > .question-container,
+.active-question > .question-container,
+.active-question .question-container,
+.active-question #question-container,
+.question-wrapper.active-question .question-container,
+.question-container.active-question {
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+}
+
+.survey-header-card {
+    background-color: rgb(255, 255, 255);
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+    border-bottom-left-radius: 18px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: rgba(103, 80, 164, 0.15);
+    border-right-color: rgba(103, 80, 164, 0.15);
+    border-bottom-color: rgba(103, 80, 164, 0.15);
+    border-left-color: rgba(103, 80, 164, 0.15);
+    padding-top: 20px;
+    padding-right: 24px;
+    padding-bottom: 20px;
+    padding-left: 24px;
+    margin-bottom: 8px;
+}
+
+.question-row {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.question-row-actions {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    width: 280px;
+    flex-shrink: 0;
+}
+
+.edit-option-container {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    width: 280px;
+    flex-shrink: 0;
+}
+
+.required-container {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    flex-shrink: 0;
+}
+
+.required-label {
+    font-size: 13px;
+    color: rgb(110, 110, 110);
+    margin-right: 8px;
+    white-space: nowrap;
+    -unity-font-style: normal;
+}
+
+.required-label:hover {
     cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
-DropdownField:hover > VisualElement {
-    background-color: var(--secondary-background-color);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+/* Switch Pill (Toggle) */
+.switch-pill {
+    width: 44px;
+    min-width: 44px;
+    max-width: 44px;
+    height: 24px;
+    min-height: 24px;
+    max-height: 24px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
 }
 
-VisualElement.unity-base-dropdown > VisualElement.unity-base-dropdown__container-outer {
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    border-bottom-left-radius: 8px;
-    border-top-left-radius: 8px;
-    background-color: var(--primary-background-color);
-    color: var(--primary-color);
+.switch-pill .unity-toggle__label {
+    display: none;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
 }
 
-ScrollView.unity-base-dropdown__container-inner {
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    border-bottom-left-radius: 8px;
-    border-top-left-radius: 8px;
-    background-color: var(--primary-background-color);
-    color: var(--primary-color);
-}
-
-.required-toggle {
-    border-top-left-radius: 100px;
-    border-top-right-radius: 100px;
-    border-bottom-right-radius: 100px;
-    border-bottom-left-radius: 100px;
-    width: 32px;
-    height: 32px;
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/asterisk.png?fileID=2800000&guid=7ff93a71ce7cf10439fdd8ba5dd4d774&type=3#asterisk");
-    -unity-background-scale-mode: scale-to-fit;
-    background-size: 70% 70%;
-    background-color: rgba(255, 255, 255, 0);
+.switch-pill .unity-toggle__input {
+    width: 44px;
+    min-width: 44px;
+    max-width: 44px;
+    height: 24px;
+    min-height: 24px;
+    max-height: 24px;
+    background-color: rgb(225, 220, 230);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
     border-top-width: 0;
     border-right-width: 0;
     border-bottom-width: 0;
     border-left-width: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    position: relative;
+    overflow: hidden;
+    transition-property: background-color;
+    transition-duration: 0.18s;
 }
 
-.required-toggle__required {
+.switch-pill .unity-toggle__checkmark {
+    width: 20px;
+    min-width: 20px;
+    max-width: 20px;
+    height: 20px;
+    min-height: 20px;
+    max-height: 20px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    background-color: rgb(255, 255, 255);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    background-image: none;
+    -unity-background-image-tint-color: rgba(0, 0, 0, 0);
+    transition-property: left, background-color;
+    transition-duration: 0.18s;
 }
 
-.required-toggle__optional {
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/asterisk-crossed.png?fileID=2800000&guid=092533b3b39958b4184c2346388f42f5&type=3#asterisk-crossed");
+.switch-pill:checked .unity-toggle__input {
+    background-color: var(--primary-color);
+}
+
+.switch-pill:checked .unity-toggle__checkmark,
+.switch-pill:checked > .unity-toggle__input > .unity-toggle__checkmark {
+    left: 22px;
+    background-color: rgb(255, 255, 255);
+    background-image: none;
+    -unity-background-image-tint-color: rgba(0, 0, 0, 0);
+}
+
+.switch-pill:hover,
+.switch-pill .unity-toggle__input:hover {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.question-section-spacer {
+    height: 14px;
+    flex-shrink: 0;
 }
 
 #grid-table {
