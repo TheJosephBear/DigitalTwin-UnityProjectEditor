@@ -45,6 +45,312 @@
     margin-left: 0;
 }
 
+/* ==========================================================================
+   SCROLLER & SCROLLBAR STYLING (ScrollView, Dragger, Tracker, Low/High Buttons)
+   ========================================================================== */
+
+.unity-scroller,
+#survey-scroll-view .unity-scroller {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-right: 12px;
+    margin-left: 0;
+    position: relative;
+}
+
+.unity-scroller--vertical,
+.unity-scroller.unity-scroller--vertical,
+#survey-scroll-view .unity-scroller--vertical {
+    width: 20px;
+    min-width: 20px;
+    max-width: 20px;
+    background-color: transparent;
+    border-width: 0;
+    margin-right: 12px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    position: relative;
+}
+
+.unity-scroller--horizontal,
+.unity-scroller.unity-scroller--horizontal {
+    height: 20px;
+    min-height: 20px;
+    max-height: 20px;
+    background-color: transparent;
+    border-width: 0;
+    margin-bottom: 12px;
+    margin-left: 8px;
+    margin-right: 8px;
+    position: relative;
+}
+
+/* Arrow Buttons (Low / High buttons) - Strictly Positioned at Extremes */
+.unity-scroller--vertical > .unity-scroller__low-button,
+.unity-scroller--vertical #unity-low-button,
+#survey-scroll-view .unity-scroller--vertical #unity-low-button {
+    position: absolute;
+    top: 0;
+    left: 1px;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    max-width: 18px;
+    max-height: 18px;
+    background-color: transparent;
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-up.png?fileID=2800000&guid=13e6e2a9f27e5874eab92e305adb3fa1&type=3#chevron-up");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    transition-property: -unity-background-image-tint-color;
+    transition-duration: 0.15s;
+}
+
+.unity-scroller--vertical > .unity-scroller__low-button:hover,
+.unity-scroller--vertical #unity-low-button:hover {
+    -unity-background-image-tint-color: var(--primary-color);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.unity-scroller--vertical > .unity-scroller__low-button:active,
+.unity-scroller--vertical #unity-low-button:active {
+    -unity-background-image-tint-color: var(--primary-hover);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.unity-scroller--vertical > .unity-scroller__low-button > VisualElement,
+.unity-scroller--vertical #unity-low-button > VisualElement {
+    display: none;
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+.unity-scroller--vertical > .unity-scroller__high-button,
+.unity-scroller--vertical #unity-high-button,
+#survey-scroll-view .unity-scroller--vertical #unity-high-button {
+    position: absolute;
+    bottom: 0;
+    left: 1px;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    max-width: 18px;
+    max-height: 18px;
+    background-color: transparent;
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-down.png?fileID=2800000&guid=d1a74cec442a2284589bab0730540f72&type=3#chevron-down");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    transition-property: -unity-background-image-tint-color;
+    transition-duration: 0.15s;
+}
+
+.unity-scroller--vertical > .unity-scroller__high-button:hover,
+.unity-scroller--vertical #unity-high-button:hover {
+    -unity-background-image-tint-color: var(--primary-color);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.unity-scroller--vertical > .unity-scroller__high-button:active,
+.unity-scroller--vertical #unity-high-button:active {
+    -unity-background-image-tint-color: var(--primary-hover);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.unity-scroller--vertical > .unity-scroller__high-button > VisualElement,
+.unity-scroller--vertical #unity-high-button > VisualElement {
+    display: none;
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+/* Horizontal Arrow Buttons */
+.unity-scroller--horizontal > .unity-scroller__low-button,
+.unity-scroller--horizontal #unity-low-button {
+    position: absolute;
+    left: 0;
+    top: 1px;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    background-color: transparent;
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-left.png?fileID=2800000&guid=4ab49af5e05cd304a88ca8241e489d55&type=3#chevron-left");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.unity-scroller--horizontal > .unity-scroller__high-button,
+.unity-scroller--horizontal #unity-high-button {
+    position: absolute;
+    right: 0;
+    top: 1px;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    background-color: transparent;
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-right.png?fileID=2800000&guid=05c0e935411a9e64383e2a9a89216d33&type=3#chevron-right");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.unity-scroller--horizontal > .unity-scroller__low-button > VisualElement,
+.unity-scroller--horizontal #unity-low-button > VisualElement,
+.unity-scroller--horizontal > .unity-scroller__high-button > VisualElement,
+.unity-scroller--horizontal #unity-high-button > VisualElement {
+    display: none;
+}
+
+/* Scroller Slider Container (Bounded strictly between the arrow buttons) */
+.unity-scroller--vertical .unity-slider,
+.unity-scroller--vertical .unity-scroller__slider,
+.unity-scroller--vertical #unity-slider,
+#survey-scroll-view .unity-scroller--vertical #unity-slider {
+    position: absolute;
+    top: 22px;
+    bottom: 22px;
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    border-width: 0;
+    width: 20px;
+    min-width: 20px;
+    max-width: 20px;
+}
+
+.unity-scroller--horizontal .unity-slider,
+.unity-scroller--horizontal .unity-scroller__slider,
+.unity-scroller--horizontal #unity-slider {
+    position: absolute;
+    left: 22px;
+    right: 22px;
+    top: 0;
+    bottom: 0;
+    height: 20px;
+    min-height: 20px;
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    border-width: 0;
+}
+
+.unity-scroller .unity-base-slider__drag-container,
+.unity-scroller #unity-drag-container {
+    background-color: transparent;
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/* Tracker / Track Background */
+.unity-scroller--vertical .unity-base-slider__tracker,
+.unity-scroller--vertical .unity-scroller__tracker,
+.unity-scroller--vertical #unity-tracker,
+#survey-scroll-view .unity-scroller--vertical #unity-tracker {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 3px;
+    right: 3px;
+    width: 14px;
+    min-width: 14px;
+    max-width: 14px;
+    background-color: rgba(103, 80, 164, 0.08);
+    border-width: 0;
+    border-radius: 7px;
+    margin: 0;
+    padding: 0;
+}
+
+.unity-scroller--horizontal .unity-base-slider__tracker,
+.unity-scroller--horizontal #unity-tracker {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 3px;
+    bottom: 3px;
+    height: 14px;
+    min-height: 14px;
+    background-color: rgba(103, 80, 164, 0.08);
+    border-width: 0;
+    border-radius: 7px;
+    margin: 0;
+    padding: 0;
+}
+
+/* Dragger / Thumb (Wide Rounded Pill) */
+.unity-scroller--vertical .unity-base-slider__dragger,
+.unity-scroller--vertical .unity-scroller__dragger,
+.unity-scroller--vertical #unity-dragger,
+#survey-scroll-view .unity-scroller--vertical #unity-dragger {
+    position: absolute;
+    left: 3px;
+    width: 14px;
+    min-width: 14px;
+    max-width: 14px;
+    min-height: 28px;
+    background-color: rgba(103, 80, 164, 0.42);
+    border-width: 0;
+    border-radius: 7px;
+    margin: 0;
+    padding: 0;
+    transition-property: background-color;
+    transition-duration: 0.15s;
+}
+
+.unity-scroller--vertical .unity-base-slider__dragger:hover,
+.unity-scroller--vertical #unity-dragger:hover {
+    background-color: rgba(103, 80, 164, 0.65);
+}
+
+.unity-scroller--vertical .unity-base-slider__dragger:active,
+.unity-scroller--vertical #unity-dragger:active {
+    background-color: var(--primary-color);
+}
+
+.unity-scroller--horizontal .unity-base-slider__dragger,
+.unity-scroller--horizontal #unity-dragger {
+    position: absolute;
+    top: 3px;
+    height: 14px;
+    min-height: 14px;
+    min-width: 28px;
+    background-color: rgba(103, 80, 164, 0.42);
+    border-width: 0;
+    border-radius: 7px;
+    margin: 0;
+    padding: 0;
+}
+
+.unity-scroller .unity-base-slider__dragger-border,
+.unity-scroller .unity-scroller__dragger-border,
+.unity-scroller #unity-dragger-border {
+    display: none;
+    border-width: 0;
+    background-color: transparent;
+}
+
 .question-type-selection {
     position: absolute;
     left: 50%;
@@ -537,6 +843,20 @@ TextField:focus TextInput {
     border-left-color: var(--primary-color);
 }
 
+#question-description,
+.question-description {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 100px;
+}
+
+#question-title,
+.question-title {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 100px;
+}
+
 /* Question Description Input */
 #question-description > .unity-base-text-field__input,
 #question-description > #unity-text-input,
@@ -774,10 +1094,15 @@ TemplateContainer.active-question,
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
-    width: 370px;
     min-width: 370px;
-    max-width: 370px;
     flex-shrink: 0;
+}
+
+#question-description-row .question-row-actions,
+#survey-description-row .question-row-actions {
+    width: auto;
+    min-width: 460px;
+    max-width: none;
 }
 
 .edit-option-container {
@@ -869,9 +1194,9 @@ DropdownField > .unity-base-field__input > .unity-dropdown-field__arrow,
     margin-right: 8px;
     margin-top: 0;
     margin-bottom: 0;
-    width: 230px;
-    min-width: 230px;
-    max-width: 230px;
+    width: 320px;
+    min-width: 260px;
+    max-width: 380px;
     flex-shrink: 0;
 }
 
@@ -928,6 +1253,162 @@ DropdownField > .unity-base-field__input > .unity-dropdown-field__arrow,
 
 .camera-view-dropdown .unity-dropdown-field__arrow {
     -unity-background-image-tint-color: var(--primary-color);
+}
+
+/* ==========================================================================
+   DROPDOWN MENU / POPUP STYLING (GenericDropdownMenu & BasePopupField)
+   ========================================================================== */
+
+/* Outer Popup Container */
+.unity-base-dropdown,
+.unity-base-dropdown-menu,
+GenericDropdownMenu,
+#unity-base-dropdown {
+    background-color: transparent;
+    border-width: 0;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+}
+
+.unity-base-dropdown__container-outer,
+.unity-base-dropdown-menu__container-outer {
+    background-color: rgb(255, 255, 255);
+    border-radius: 12px;
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.2);
+    padding: 4px;
+    margin-top: 4px;
+    overflow: hidden;
+}
+
+.unity-base-dropdown__container-inner,
+.unity-base-dropdown-menu__container-inner {
+    background-color: transparent;
+    border-width: 0;
+    padding: 0;
+}
+
+.unity-base-dropdown__scroll-view,
+.unity-base-dropdown-menu__scroll-view {
+    background-color: transparent;
+    max-height: 240px;
+}
+
+/* Individual Dropdown Item (Left-Aligned Clean Text) */
+.unity-base-dropdown__item,
+.unity-base-dropdown-menu__item {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 32px;
+    height: 32px;
+    padding-left: 14px;
+    padding-right: 14px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    border-radius: 8px;
+    background-color: transparent;
+    transition-property: background-color;
+    transition-duration: 0.12s;
+}
+
+.unity-base-dropdown__item:hover,
+.unity-base-dropdown-menu__item:hover {
+    background-color: rgb(246, 230, 255);
+}
+
+.unity-base-dropdown__item:checked,
+.unity-base-dropdown-menu__item:checked,
+.unity-base-dropdown__item--selected,
+.unity-base-dropdown-menu__item--selected {
+    background-color: rgb(247, 242, 250);
+}
+
+/* Hide Checkmarks Completely */
+.unity-base-dropdown__item-checkmark,
+.unity-base-dropdown-menu__item-checkmark,
+.unity-base-dropdown__checkmark,
+.unity-base-dropdown-menu__checkmark,
+.unity-base-dropdown .unity-base-dropdown__item-checkmark,
+.unity-base-dropdown-menu .unity-base-dropdown-menu__item-checkmark {
+    display: none;
+    width: 0;
+    height: 0;
+    min-width: 0;
+    min-height: 0;
+    max-width: 0;
+    max-height: 0;
+    margin-right: 0;
+    margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.unity-base-dropdown__item-content,
+.unity-base-dropdown-menu__item-content {
+    flex-grow: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 0;
+    padding: 0;
+}
+
+/* Item Text / Label (Left-aligned) */
+.unity-base-dropdown__item-text,
+.unity-base-dropdown-menu__item-text,
+.unity-base-dropdown__label,
+.unity-base-dropdown-menu__label,
+.unity-base-dropdown .unity-label,
+.unity-base-dropdown-menu .unity-label,
+.unity-base-dropdown TextElement,
+.unity-base-dropdown-menu TextElement {
+    color: rgb(29, 25, 43);
+    font-size: 13px;
+    -unity-font-style: normal;
+    -unity-text-align: middle-left;
+    text-align: left;
+    align-self: center;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.unity-base-dropdown__item:hover .unity-base-dropdown__item-text,
+.unity-base-dropdown__item:hover .unity-base-dropdown__label,
+.unity-base-dropdown__item:hover .unity-label,
+.unity-base-dropdown__item:hover TextElement,
+.unity-base-dropdown-menu__item:hover TextElement {
+    color: rgb(103, 80, 164);
+}
+
+.unity-base-dropdown__item:checked .unity-base-dropdown__item-text,
+.unity-base-dropdown__item:checked .unity-base-dropdown__label,
+.unity-base-dropdown__item:checked .unity-label,
+.unity-base-dropdown__item:checked TextElement,
+.unity-base-dropdown__item--selected .unity-base-dropdown__item-text,
+.unity-base-dropdown__item--selected .unity-base-dropdown__label,
+.unity-base-dropdown__item--selected .unity-label,
+.unity-base-dropdown__item--selected TextElement,
+.unity-base-dropdown-menu__item:checked TextElement,
+.unity-base-dropdown-menu__item--selected TextElement {
+    color: rgb(103, 80, 164);
+    -unity-font-style: bold;
+}
+
+/* Dropdown Separator */
+.unity-base-dropdown__separator,
+.unity-base-dropdown-menu__separator {
+    height: 1px;
+    background-color: rgba(103, 80, 164, 0.12);
+    margin-top: 4px;
+    margin-bottom: 4px;
 }
 
 #image-button,

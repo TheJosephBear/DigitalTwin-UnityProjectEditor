@@ -21,7 +21,7 @@
 
     <!-- Row 2: Question Description (Left) + Camera View Dropdown & Add Image Button (Right) -->
     <ui:VisualElement name="question-description-row" class="question-row" style="flex-grow: 0; flex-direction: row; align-items: center; flex-shrink: 0; margin-bottom: 8px;">
-        <ui:TextField placeholder-text="Popis otázky (volitelné)" name="question-description" multiline="true" style="flex-grow: 1; margin-right: 16px; white-space: normal;" />
+        <ui:TextField placeholder-text="Popis otázky (volitelné)" name="question-description" multiline="true" style="flex-grow: 1; flex-shrink: 1; min-width: 100px; margin-right: 16px; white-space: normal;" />
         <ui:VisualElement name="question-attachment" class="question-row-actions">
             <ui:DropdownField label="Pohled kamery" name="camera-view-dropdown" class="camera-view-dropdown" />
             <ui:Button name="image-button" class="add-image-button">
