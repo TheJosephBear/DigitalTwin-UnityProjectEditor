@@ -109,7 +109,7 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
     public void SetSelectedView(ViewPoint viewPoint) {
         var dropdown = _root.Q<DropdownField>("camera-view-dropdown");
         if (dropdown == null || viewPoint == null) return;
-        dropdown.value = viewPoint.Name;
+        dropdown.SetValueWithoutNotify(viewPoint.Name);
         SetViewPointRender(viewPoint.ID);
     }
 
@@ -121,7 +121,7 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
     public void ClearSelectedView() {
         var dropdown = _root.Q<DropdownField>("camera-view-dropdown");
         if (dropdown != null && dropdown.choices != null && dropdown.choices.Count > 0) {
-            dropdown.value = dropdown.choices[0];
+            dropdown.SetValueWithoutNotify(dropdown.choices[0]);
         }
     }
 

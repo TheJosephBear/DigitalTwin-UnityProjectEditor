@@ -6,6 +6,9 @@
     --dark-text: rgb(29, 27, 32);
     --muted-text: rgb(102, 102, 102);
     --border-color: rgba(0, 0, 0, 0.08);
+    --input-bg: rgb(247, 245, 250);
+    --input-hover-bg: rgb(242, 239, 247);
+    --input-focus-bg: rgb(255, 255, 255);
 }
 
 #page-container {
@@ -353,17 +356,34 @@ RadioButtonGroup #contentContainer {
 }
 
 Button {
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    border-bottom-left-radius: 8px;
-    border-top-left-radius: 8px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-left-radius: 12px;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
     background-color: var(--primary-background-color);
     color: var(--primary-color);
+    font-size: 13px;
+    -unity-font-style: bold;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
+    transition-property: background-color, scale;
+    transition-duration: 0.15s;
 }
 
 Button:hover {
     background-color: var(--secondary-background-color);
+    color: var(--primary-color);
     cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+Button:active {
+    background-color: rgb(235, 215, 250);
 }
 
 Button VisualElement:hover {
@@ -378,15 +398,70 @@ TextField TextElement:hover {
     cursor: url("project://database/Assets/_Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
 }
 
-TextField TextInput:hover {
+/* Default flat styling for all text inputs */
+TextField > .unity-base-text-field__input,
+TextField > #unity-text-input,
+TextField .unity-base-text-field__input,
+TextField #unity-text-input,
+TextField TextInput {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: rgba(103, 80, 164, 0.08);
+    border-right-color: rgba(103, 80, 164, 0.08);
+    border-bottom-color: rgba(103, 80, 164, 0.08);
+    border-left-color: rgba(103, 80, 164, 0.08);
+    background-color: var(--input-bg);
+    color: var(--dark-text);
+    font-size: 14px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
+    min-height: 34px;
+    transition-property: background-color, border-color;
+    transition-duration: 0.15s;
+}
+
+TextField:hover > .unity-base-text-field__input,
+TextField:hover > #unity-text-input,
+TextField:hover .unity-base-text-field__input,
+TextField:hover #unity-text-input,
+TextField:hover TextInput {
+    background-color: var(--input-hover-bg);
+    border-top-color: rgba(103, 80, 164, 0.22);
+    border-right-color: rgba(103, 80, 164, 0.22);
+    border-bottom-color: rgba(103, 80, 164, 0.22);
+    border-left-color: rgba(103, 80, 164, 0.22);
     cursor: url("project://database/Assets/_Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
 }
 
-TextField TextInput {
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    border-bottom-left-radius: 8px;
+TextField:focus > .unity-base-text-field__input,
+TextField:focus > #unity-text-input,
+TextField:focus .unity-base-text-field__input,
+TextField:focus #unity-text-input,
+TextField:focus TextInput {
+    background-color: var(--input-focus-bg);
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    color: var(--dark-text);
+}
+
+.unity-base-text-field__placeholder-label,
+.unity-base-text-field__input--placeholder,
+.unity-base-text-field__placeholder {
+    color: rgb(150, 145, 160);
 }
 
 #question-container {
@@ -398,17 +473,19 @@ TextField TextInput {
 
 .question-card {
     background-color: rgb(255, 255, 255);
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
-    border-width: 1px;
-    border-color: var(--border-color);
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+    border-bottom-left-radius: 18px;
+    border-width: 1.5px;
+    border-color: rgba(103, 80, 164, 0.15);
     padding-top: 20px;
     padding-right: 20px;
     padding-bottom: 20px;
     padding-left: 20px;
     margin-bottom: 16px;
+    transition-property: border-color;
+    transition-duration: 0.15s;
 }
 
 .question-card--required {
@@ -424,10 +501,10 @@ TextField TextInput {
     padding-left: 12px;
     padding-right: 12px;
     margin-bottom: 6px;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
     border-width: 1px;
     border-color: rgba(0, 0, 0, 0.06);
     background-color: rgb(252, 250, 255);
@@ -463,19 +540,19 @@ TextField TextInput {
 .other-text-input .unity-base-text-field__input,
 .other-text-input #unity-text-input,
 .other-text-input TextInput {
-    background-color: rgb(255, 255, 255);
-    border-width: 1px;
-    border-color: rgba(0, 0, 0, 0.25);
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-    border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px;
+    background-color: var(--input-bg);
+    border-width: 1.5px;
+    border-color: transparent;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
     padding-top: 6px;
     padding-bottom: 6px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 12px;
+    padding-right: 12px;
     font-size: 14px;
-    color: rgb(30, 30, 30);
+    color: var(--dark-text);
     transition-property: border-color, background-color;
     transition-duration: 150ms;
 }
@@ -485,8 +562,8 @@ TextField TextInput {
 .other-text-input:hover .unity-base-text-field__input,
 .other-text-input:hover #unity-text-input,
 .other-text-input:hover TextInput {
-    border-color: var(--primary-color);
-    background-color: rgb(255, 255, 255);
+    border-color: rgba(103, 80, 164, 0.15);
+    background-color: var(--input-hover-bg);
 }
 
 .other-text-input:focus > .unity-base-text-field__input,
@@ -496,7 +573,7 @@ TextField TextInput {
 .other-text-input:focus TextInput {
     border-color: var(--primary-color);
     border-width: 1.5px;
-    background-color: rgb(255, 255, 255);
+    background-color: var(--input-focus-bg);
 }
 
 .question-divider {

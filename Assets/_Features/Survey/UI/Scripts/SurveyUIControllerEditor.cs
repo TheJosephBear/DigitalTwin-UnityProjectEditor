@@ -460,20 +460,20 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         // set title & description
         var titleField = _surveyHeaderContainer?.Q<TextField>("question-title") ?? _root.Q<TextField>("question-title");
         var descField = _surveyHeaderContainer?.Q<TextField>("question-description") ?? _root.Q<TextField>("question-description");
-        if (titleField != null) titleField.value = survey.Name ?? "";
-        if (descField != null) descField.value = survey.Description ?? "";
+        if (titleField != null) titleField.SetValueWithoutNotify(survey.Name ?? "");
+        if (descField != null) descField.SetValueWithoutNotify(survey.Description ?? "");
 
         // Restore survey viewpoint
         if (MainManagerBase.Instance != null && !string.IsNullOrEmpty(survey.ViewPointId)) {
             ViewPoint vp = MainManagerBase.Instance.ViewManager.GetViewPointByID(survey.ViewPointId);
             if (vp != null && _surveyCameraDropdown != null) {
-                _surveyCameraDropdown.value = vp.Name;
+                _surveyCameraDropdown.SetValueWithoutNotify(vp.Name);
                 SetSurveyViewPointRender(survey.ViewPointId);
             } else if (_surveyCameraDropdown != null && _surveyCameraDropdown.choices != null && _surveyCameraDropdown.choices.Count > 0) {
-                _surveyCameraDropdown.value = _surveyCameraDropdown.choices[0];
+                _surveyCameraDropdown.SetValueWithoutNotify(_surveyCameraDropdown.choices[0]);
             }
         } else if (_surveyCameraDropdown != null && _surveyCameraDropdown.choices != null && _surveyCameraDropdown.choices.Count > 0) {
-            _surveyCameraDropdown.value = _surveyCameraDropdown.choices[0];
+            _surveyCameraDropdown.SetValueWithoutNotify(_surveyCameraDropdown.choices[0]);
         }
 
         // Restore survey image unconditionally

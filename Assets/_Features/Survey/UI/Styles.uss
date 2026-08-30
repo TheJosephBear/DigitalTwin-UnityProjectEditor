@@ -1,8 +1,16 @@
 :root {
     --primary-color: rgb(103, 80, 164);
-    --secondary-color: rgb(73, 62, 105);
+    --primary-hover: rgb(86, 61, 141);
     --primary-background-color: rgb(247, 242, 250);
     --secondary-background-color: rgb(246, 230, 255);
+    --card-border: rgb(232, 224, 236);
+    --card-hover-border: rgb(200, 184, 219);
+    --card-active-border: rgb(103, 80, 164);
+    --text-main: rgb(29, 25, 43);
+    --text-muted: rgb(98, 91, 113);
+    --input-bg: rgb(247, 245, 250);
+    --input-hover-bg: rgb(242, 239, 247);
+    --input-focus-bg: rgb(255, 255, 255);
 }
 
 #survey-scroll-view #unity-content-container {
@@ -33,65 +41,238 @@
     top: 25px;
 }
 
-RadioButton > Label {
+CustomRadioButton,
+CustomToggleButton {
+    flex-direction: row;
+    align-items: center;
     flex-grow: 1;
-    flex-shrink: 0;
-}
-
-RadioButton > VisualElement {
     flex-shrink: 1;
-    max-width: 24px;
-    min-width: 24px;
-    width: 24px;
 }
 
-Toggle > Label {
-    flex-grow: 1;
+CustomRadioButton > Toggle,
+CustomToggleButton > Toggle,
+CustomRadioButton > RadioButton,
+CustomToggleButton > RadioButton,
+CustomRadioButtonNoText > Toggle,
+CustomRadioButtonNoText > RadioButton {
+    flex-grow: 0;
     flex-shrink: 0;
-}
-
-Toggle > VisualElement {
-    flex-shrink: 1;
-    max-width: 24px;
-    min-width: 24px;
-    width: 24px;
-    margin-right: 8px;
-}
-
-RadioButtonGroup > VisualElement {
-    align-self: center;
+    width: 32px;
+    min-width: 32px;
+    max-width: 32px;
+    height: 32px;
+    min-height: 32px;
+    max-height: 32px;
+    margin-right: 20px;
+    margin-left: 4px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
     justify-content: center;
-    background-color: initial;
+    align-items: center;
+    align-self: center;
 }
 
-RadioButtonGroup > VisualElement:hover {
-    background-color: initial;
+CustomRadioButton > Toggle > Label,
+CustomToggleButton > Toggle > Label,
+CustomRadioButton > RadioButton > Label,
+CustomToggleButton > RadioButton > Label,
+CustomRadioButtonNoText > Toggle > Label,
+CustomRadioButtonNoText > RadioButton > Label {
+    display: none;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
 }
 
-RadioButtonGroup > VisualElement:focus {
-    background-color: initial;
+CustomRadioButton > Toggle > .unity-toggle__input,
+CustomRadioButton > Toggle > .unity-base-field__input,
+CustomRadioButton > Toggle > VisualElement,
+CustomToggleButton > Toggle > .unity-toggle__input,
+CustomToggleButton > Toggle > .unity-base-field__input,
+CustomToggleButton > Toggle > VisualElement,
+CustomRadioButtonNoText > Toggle > .unity-toggle__input,
+CustomRadioButtonNoText > Toggle > .unity-base-field__input,
+CustomRadioButtonNoText > Toggle > VisualElement {
+    flex-shrink: 0;
+    width: 32px;
+    min-width: 32px;
+    max-width: 32px;
+    height: 32px;
+    min-height: 32px;
+    max-height: 32px;
+    margin-right: 0;
+    margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-width: 0;
+    background-color: transparent;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
 }
 
-RadioButtonGroup #contentContainer {
+/* Radio Button Checkmark (Round/Circular with white Dot) */
+CustomRadioButton .unity-toggle__checkmark,
+CustomRadioButtonNoText .unity-toggle__checkmark,
+CustomRadioButton .unity-radio-button__checkmark,
+CustomRadioButtonNoText .unity-radio-button__checkmark {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    max-width: 28px;
+    max-height: 28px;
+    border-radius: 50%;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-width: 2px;
+    border-color: rgba(103, 80, 164, 0.4);
+    background-color: rgb(255, 255, 255);
+    background-image: none;
+    margin: 0;
+    padding: 0;
+    align-self: center;
+    transition-property: border-color, background-color;
+    transition-duration: 0.15s;
+}
+
+/* Toggle Checkmark (Rounded Square with white Checkmark) */
+CustomToggleButton .unity-toggle__checkmark,
+CustomToggleButton .unity-radio-button__checkmark {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    max-width: 28px;
+    max-height: 28px;
+    border-radius: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-width: 2px;
+    border-color: rgba(103, 80, 164, 0.4);
+    background-color: rgb(255, 255, 255);
+    background-image: none;
+    margin: 0;
+    padding: 0;
+    align-self: center;
+    transition-property: border-color, background-color;
+    transition-duration: 0.15s;
+}
+
+/* Hover States */
+CustomRadioButton:hover .unity-toggle__checkmark,
+CustomRadioButtonNoText:hover .unity-toggle__checkmark,
+CustomRadioButton:hover .unity-radio-button__checkmark,
+CustomRadioButtonNoText:hover .unity-radio-button__checkmark,
+CustomToggleButton:hover .unity-toggle__checkmark,
+CustomToggleButton:hover .unity-radio-button__checkmark {
+    border-color: var(--primary-color);
+    background-color: var(--primary-background-color);
+}
+
+/* Checked Radio (Filled purple with white dot) */
+CustomRadioButton Toggle:checked .unity-toggle__checkmark,
+CustomRadioButtonNoText Toggle:checked .unity-toggle__checkmark,
+CustomRadioButton RadioButton:checked .unity-radio-button__checkmark,
+CustomRadioButtonNoText RadioButton:checked .unity-radio-button__checkmark {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/dot-white.png?fileID=2800000&guid=a123529c3fb34d638d526d7deabd69f5&type=3#dot-white");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+/* Checked Toggle (Filled purple with white checkmark) */
+CustomToggleButton Toggle:checked .unity-toggle__checkmark,
+CustomToggleButton RadioButton:checked .unity-radio-button__checkmark {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/check-white.png?fileID=2800000&guid=631e4421e2e8456f9d8d1bb1e039336b&type=3#check-white");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+
+
+CustomRadioButton TextField,
+CustomToggleButton TextField {
+    flex-grow: 1;
+    flex-shrink: 1;
+    width: 100%;
+    margin-right: 0;
+    margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+CustomRadioButton TextField > .unity-base-text-field__input,
+CustomToggleButton TextField > .unity-base-text-field__input {
+    flex-grow: 1;
+    width: 100%;
+}
+
+RadioButtonGroup,
+.options-list {
+    flex-direction: column;
+    width: 100%;
+    align-self: stretch;
+    margin-top: 6px;
+    margin-bottom: 4px;
+}
+
+RadioButtonGroup > VisualElement,
+RadioButtonGroup > .unity-base-field__input,
+RadioButtonGroup .unity-radio-button-group__container,
+RadioButtonGroup #contentContainer,
+RadioButtonGroup #unity-content-container {
     flex-direction: column;
     flex-wrap: nowrap;
     width: 100%;
+    align-self: stretch;
+    flex-grow: 1;
     justify-content: flex-start;
+    align-items: stretch;
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
 }
 
-RadioButtonGroup TemplateContainer {
+RadioButtonGroup TemplateContainer,
+.options-list TemplateContainer,
+RadioButtonGroup > TemplateContainer,
+.options-list > TemplateContainer {
+    width: 100%;
+    align-self: stretch;
+    flex-grow: 1;
 }
 
-#option-container {
-    flex-grow: 0;
+#option-container,
+.option-container {
+    flex-grow: 1;
     flex-direction: row;
     align-items: center;
     width: 100%;
+    align-self: stretch;
+    margin-top: 4px;
+    margin-bottom: 4px;
 }
 
 .option-container--other {
-    background-color: rgba(103, 80, 164, 0.04);
-    border-radius: 8px;
+    background-color: transparent;
     padding-left: 0;
     padding-right: 0;
 }
@@ -143,17 +324,34 @@ RadioButtonGroup TemplateContainer {
 }
 
 Button {
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    border-bottom-left-radius: 8px;
-    border-top-left-radius: 8px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-left-radius: 12px;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
     background-color: var(--primary-background-color);
     color: var(--primary-color);
+    font-size: 13px;
+    -unity-font-style: bold;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
+    transition-property: background-color, scale;
+    transition-duration: 0.15s;
 }
 
 Button:hover {
     background-color: var(--secondary-background-color);
+    color: var(--primary-color);
     cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+Button:active {
+    background-color: rgb(235, 215, 250);
 }
 
 Button VisualElement:hover {
@@ -169,10 +367,30 @@ Button.icon {
     height: 32px;
     -unity-background-scale-mode: scale-to-fit;
     background-color: rgba(0, 0, 0, 0);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    -unity-background-image-tint-color: rgb(150, 145, 160);
+    transition-property: background-color, -unity-background-image-tint-color;
+    transition-duration: 0.15s;
 }
 
 Button.icon:hover {
-    background-color: rgb(247, 242, 250);
+    background-color: var(--primary-background-color);
+    -unity-background-image-tint-color: var(--primary-color);
+}
+
+Button.icon:active {
+    background-color: var(--secondary-background-color);
 }
 
 Button.icon:disabled {
@@ -184,16 +402,223 @@ TextField TextElement:hover {
     cursor: url("project://database/Assets/_Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
 }
 
-TextField TextInput {
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    border-bottom-left-radius: 8px;
-    background-color: rgb(255, 255, 255);
+/* Default flat styling for all text inputs */
+TextField {
+    flex-grow: 1;
 }
 
-TextField TextInput:hover {
+TextField > .unity-base-text-field__input,
+TextField > #unity-text-input,
+TextField .unity-base-text-field__input,
+TextField #unity-text-input,
+TextField TextInput {
+    flex-grow: 1;
+    width: 100%;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: rgba(103, 80, 164, 0.08);
+    border-right-color: rgba(103, 80, 164, 0.08);
+    border-bottom-color: rgba(103, 80, 164, 0.08);
+    border-left-color: rgba(103, 80, 164, 0.08);
+    background-color: var(--input-bg);
+    color: var(--text-main);
+    font-size: 14px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
+    min-height: 34px;
+    transition-property: background-color, border-color;
+    transition-duration: 0.15s;
+}
+
+TextField:hover > .unity-base-text-field__input,
+TextField:hover > #unity-text-input,
+TextField:hover .unity-base-text-field__input,
+TextField:hover #unity-text-input,
+TextField:hover TextInput {
+    background-color: var(--input-hover-bg);
+    border-top-color: rgba(103, 80, 164, 0.22);
+    border-right-color: rgba(103, 80, 164, 0.22);
+    border-bottom-color: rgba(103, 80, 164, 0.22);
+    border-left-color: rgba(103, 80, 164, 0.22);
     cursor: url("project://database/Assets/_Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
+}
+
+TextField:focus > .unity-base-text-field__input,
+TextField:focus > #unity-text-input,
+TextField:focus .unity-base-text-field__input,
+TextField:focus #unity-text-input,
+TextField:focus TextInput {
+    background-color: var(--input-focus-bg);
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    color: var(--text-main);
+}
+
+.unity-base-text-field__placeholder-label,
+.unity-base-text-field__input--placeholder,
+.unity-base-text-field__placeholder {
+    color: rgb(150, 145, 160);
+}
+
+/* Question Title Input */
+#question-title > .unity-base-text-field__input,
+#question-title > #unity-text-input,
+#question-title .unity-base-text-field__input,
+#question-title #unity-text-input,
+#question-title TextInput {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: var(--text-main);
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 14px;
+    padding-right: 14px;
+    min-height: 38px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: rgba(103, 80, 164, 0.08);
+    border-right-color: rgba(103, 80, 164, 0.08);
+    border-bottom-color: rgba(103, 80, 164, 0.08);
+    border-left-color: rgba(103, 80, 164, 0.08);
+    background-color: var(--input-bg);
+}
+
+#question-title:hover > .unity-base-text-field__input,
+#question-title:hover > #unity-text-input,
+#question-title:hover .unity-base-text-field__input,
+#question-title:hover #unity-text-input,
+#question-title:hover TextInput {
+    background-color: var(--input-hover-bg);
+    border-top-color: rgba(103, 80, 164, 0.22);
+    border-right-color: rgba(103, 80, 164, 0.22);
+    border-bottom-color: rgba(103, 80, 164, 0.22);
+    border-left-color: rgba(103, 80, 164, 0.22);
+}
+
+#question-title:focus > .unity-base-text-field__input,
+#question-title:focus > #unity-text-input,
+#question-title:focus .unity-base-text-field__input,
+#question-title:focus #unity-text-input,
+#question-title:focus TextInput {
+    background-color: var(--input-focus-bg);
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+}
+
+/* Question Description Input */
+#question-description > .unity-base-text-field__input,
+#question-description > #unity-text-input,
+#question-description .unity-base-text-field__input,
+#question-description #unity-text-input,
+#question-description TextInput {
+    font-size: 13px;
+    -unity-font-style: normal;
+    color: var(--text-muted);
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
+    min-height: 34px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: rgba(103, 80, 164, 0.08);
+    border-right-color: rgba(103, 80, 164, 0.08);
+    border-bottom-color: rgba(103, 80, 164, 0.08);
+    border-left-color: rgba(103, 80, 164, 0.08);
+    background-color: var(--input-bg);
+}
+
+#question-description:hover > .unity-base-text-field__input,
+#question-description:hover > #unity-text-input,
+#question-description:hover .unity-base-text-field__input,
+#question-description:hover #unity-text-input,
+#question-description:hover TextInput {
+    background-color: var(--input-hover-bg);
+    border-top-color: rgba(103, 80, 164, 0.22);
+    border-right-color: rgba(103, 80, 164, 0.22);
+    border-bottom-color: rgba(103, 80, 164, 0.22);
+    border-left-color: rgba(103, 80, 164, 0.22);
+}
+
+#question-description:focus > .unity-base-text-field__input,
+#question-description:focus > #unity-text-input,
+#question-description:focus .unity-base-text-field__input,
+#question-description:focus #unity-text-input,
+#question-description:focus TextInput {
+    background-color: var(--input-focus-bg);
+    color: var(--text-main);
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+}
+
+/* Survey Header Card TextInputs */
+.survey-header-card #question-title > .unity-base-text-field__input,
+.survey-header-card #question-title > #unity-text-input,
+.survey-header-card #question-title .unity-base-text-field__input,
+.survey-header-card #question-title #unity-text-input,
+.survey-header-card #question-title TextInput {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: var(--text-main);
+    background-color: var(--input-bg);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 14px;
+    padding-right: 14px;
+}
+
+.survey-header-card #question-title:focus > .unity-base-text-field__input,
+.survey-header-card #question-title:focus > #unity-text-input,
+.survey-header-card #question-title:focus .unity-base-text-field__input,
+.survey-header-card #question-title:focus #unity-text-input,
+.survey-header-card #question-title:focus TextInput {
+    background-color: var(--input-focus-bg);
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
 }
 
 .question-wrapper {
@@ -223,6 +648,34 @@ TextField TextInput:hover {
     margin-bottom: 2px;
 }
 
+.question-header-info {
+    flex-grow: 0;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+#question-position {
+    flex-shrink: 1;
+    -unity-font-style: bold;
+    color: var(--primary-color);
+    font-size: 14px;
+    margin-right: 8px;
+}
+
+#question-type {
+    flex-shrink: 1;
+    color: rgb(73, 69, 79);
+    font-size: 11px;
+    background-color: rgb(240, 238, 244);
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border-radius: 12px;
+    -unity-font-style: bold;
+}
+
 .question-container,
 #question-container {
     flex-grow: 1;
@@ -235,24 +688,24 @@ TextField TextInput:hover {
     border-right-width: 1.5px;
     border-bottom-width: 1.5px;
     border-left-width: 1.5px;
-    border-top-color: rgba(103, 80, 164, 0.15);
-    border-right-color: rgba(103, 80, 164, 0.15);
-    border-bottom-color: rgba(103, 80, 164, 0.15);
-    border-left-color: rgba(103, 80, 164, 0.15);
-    padding-top: 20px;
-    padding-right: 24px;
+    border-top-color: var(--card-border);
+    border-right-color: var(--card-border);
+    border-bottom-color: var(--card-border);
+    border-left-color: var(--card-border);
+    padding-top: 22px;
+    padding-right: 26px;
     padding-bottom: 20px;
-    padding-left: 24px;
+    padding-left: 26px;
     transition-property: border-color, background-color;
     transition-duration: 0.15s;
 }
 
 .question-container:hover,
 #question-container:hover {
-    border-top-color: rgba(103, 80, 164, 0.45);
-    border-right-color: rgba(103, 80, 164, 0.45);
-    border-bottom-color: rgba(103, 80, 164, 0.45);
-    border-left-color: rgba(103, 80, 164, 0.45);
+    border-top-color: var(--card-hover-border);
+    border-right-color: var(--card-hover-border);
+    border-bottom-color: var(--card-hover-border);
+    border-left-color: var(--card-hover-border);
 }
 
 TemplateContainer.active-question,
@@ -268,10 +721,10 @@ TemplateContainer.active-question,
 .active-question #question-container,
 .question-wrapper.active-question .question-container,
 .question-container.active-question {
-    border-top-color: var(--primary-color);
-    border-right-color: var(--primary-color);
-    border-bottom-color: var(--primary-color);
-    border-left-color: var(--primary-color);
+    border-top-color: var(--card-active-border);
+    border-right-color: var(--card-active-border);
+    border-bottom-color: var(--card-active-border);
+    border-left-color: var(--card-active-border);
     border-top-width: 2px;
     border-right-width: 2px;
     border-bottom-width: 2px;
@@ -288,28 +741,31 @@ TemplateContainer.active-question,
     border-right-width: 1.5px;
     border-bottom-width: 1.5px;
     border-left-width: 1.5px;
-    border-top-color: rgba(103, 80, 164, 0.15);
-    border-right-color: rgba(103, 80, 164, 0.15);
-    border-bottom-color: rgba(103, 80, 164, 0.15);
-    border-left-color: rgba(103, 80, 164, 0.15);
-    padding-top: 20px;
-    padding-right: 24px;
+    border-top-color: var(--card-border);
+    border-right-color: var(--card-border);
+    border-bottom-color: var(--card-border);
+    border-left-color: var(--card-border);
+    padding-top: 22px;
+    padding-right: 26px;
     padding-bottom: 20px;
-    padding-left: 24px;
+    padding-left: 26px;
     margin-bottom: 8px;
 }
 
 .question-row {
     flex-direction: row;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
+    width: 100%;
 }
 
 .question-row-actions {
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
-    width: 280px;
+    width: 370px;
+    min-width: 370px;
+    max-width: 370px;
     flex-shrink: 0;
 }
 
@@ -317,7 +773,9 @@ TemplateContainer.active-question,
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
-    width: 280px;
+    width: 370px;
+    min-width: 370px;
+    max-width: 370px;
     flex-shrink: 0;
 }
 
@@ -326,11 +784,12 @@ TemplateContainer.active-question,
     align-items: center;
     justify-content: flex-end;
     flex-shrink: 0;
+    margin-right: 8px;
 }
 
 .required-label {
-    font-size: 13px;
-    color: rgb(110, 110, 110);
+    font-size: 12.5px;
+    color: var(--text-muted);
     margin-right: 8px;
     white-space: nowrap;
     -unity-font-style: normal;
@@ -338,6 +797,168 @@ TemplateContainer.active-question,
 
 .required-label:hover {
     cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+/* Dropdown Field (Camera View, Scale Type, etc.) */
+DropdownField,
+.unity-dropdown-field {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+DropdownField > .unity-base-field__label,
+.unity-dropdown-field > .unity-base-field__label {
+    color: var(--text-muted);
+    font-size: 12px;
+    -unity-font-style: normal;
+    min-width: auto;
+    margin-right: 6px;
+}
+
+DropdownField > .unity-base-field__input,
+.unity-dropdown-field > .unity-base-field__input,
+DropdownField > .unity-dropdown-field__input,
+.unity-dropdown-field > .unity-dropdown-field__input {
+    background-color: var(--input-bg);
+    border-radius: 12px;
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.18);
+    height: 32px;
+    padding-left: 10px;
+    padding-right: 8px;
+    color: var(--primary-color);
+    font-size: 12px;
+    -unity-font-style: bold;
+    align-items: center;
+    transition-property: background-color, border-color;
+    transition-duration: 0.15s;
+}
+
+DropdownField:hover > .unity-base-field__input,
+.unity-dropdown-field:hover > .unity-base-field__input {
+    background-color: var(--input-hover-bg);
+    border-color: rgba(103, 80, 164, 0.35);
+}
+
+DropdownField > .unity-base-field__input > .unity-dropdown-field__text,
+.unity-dropdown-field > .unity-base-field__input > .unity-dropdown-field__text {
+    color: var(--primary-color);
+    font-size: 12px;
+    -unity-font-style: bold;
+}
+
+DropdownField > .unity-base-field__input > .unity-dropdown-field__arrow,
+.unity-dropdown-field > .unity-base-field__input > .unity-dropdown-field__arrow {
+    -unity-background-image-tint-color: var(--primary-color);
+}
+
+.camera-view-dropdown {
+    flex-direction: row;
+    align-items: center;
+    margin-right: 8px;
+    margin-top: 0;
+    margin-bottom: 0;
+    width: 230px;
+    min-width: 230px;
+    max-width: 230px;
+    flex-shrink: 0;
+}
+
+.camera-view-dropdown > .unity-base-field__label,
+.camera-view-dropdown > .unity-dropdown-field__label {
+    color: var(--text-muted);
+    font-size: 12px;
+    -unity-font-style: normal;
+    min-width: auto;
+    max-width: none;
+    width: auto;
+    margin-right: 6px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    -unity-text-align: middle-left;
+    white-space: nowrap;
+}
+
+.camera-view-dropdown > .unity-base-field__input,
+.camera-view-dropdown > .unity-dropdown-field__input {
+    flex-grow: 1;
+    height: 32px;
+    border-radius: 12px;
+    background-color: var(--input-bg);
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.18);
+    padding-left: 10px;
+    padding-right: 8px;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    color: var(--primary-color);
+    font-size: 12px;
+    -unity-font-style: bold;
+    align-items: center;
+    justify-content: space-between;
+    transition-property: background-color, border-color;
+    transition-duration: 0.15s;
+}
+
+.camera-view-dropdown:hover > .unity-base-field__input {
+    background-color: var(--input-hover-bg);
+    border-color: rgba(103, 80, 164, 0.35);
+}
+
+.camera-view-dropdown .unity-dropdown-field__text {
+    color: var(--primary-color);
+    font-size: 12px;
+    -unity-font-style: bold;
+}
+
+.camera-view-dropdown .unity-dropdown-field__arrow {
+    -unity-background-image-tint-color: var(--primary-color);
+}
+
+#image-button,
+.add-image-button {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 130px;
+    min-width: 130px;
+    max-width: 130px;
+    height: 32px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 12px;
+    background-color: var(--primary-background-color);
+    color: var(--primary-color);
+    font-size: 12px;
+    -unity-font-style: bold;
+    border-width: 0;
+    margin-left: 0;
+    margin-right: 0;
+    flex-shrink: 0;
+    transition-property: background-color;
+    transition-duration: 0.15s;
+}
+
+#image-button:hover,
+.add-image-button:hover {
+    background-color: var(--secondary-background-color);
+}
+
+#image-button #icon,
+.add-image-button #icon {
+    -unity-background-image-tint-color: var(--primary-color);
+    margin-right: 4px;
+}
+
+#image-button Label,
+.add-image-button Label {
+    color: var(--primary-color);
+    font-size: 12px;
+    -unity-font-style: bold;
 }
 
 /* Switch Pill (Toggle) */
@@ -782,104 +1403,210 @@ TemplateContainer.active-question,
 .icon-trash {
     background-image: url("project://database/Assets/_Features/Survey/UI/Icons/trash-can-outline.png?fileID=2800000&guid=7ad15b4efd0e279438b167e4bed1c7e6&type=3#trash-can-outline");
     -unity-background-scale-mode: scale-to-fit;
-    width: 20px;
-    height: 20px;
+    width: 28px;
+    height: 28px;
     background-color: transparent;
     border-width: 0;
+    border-radius: 8px;
     margin-left: 2px;
     margin-right: 2px;
+    -unity-background-image-tint-color: rgb(150, 145, 160);
+    transition-property: background-color, -unity-background-image-tint-color;
+    transition-duration: 0.15s;
 }
 
 .icon-trash:hover {
+    background-color: rgb(254, 242, 242);
+    -unity-background-image-tint-color: rgb(220, 38, 38);
     opacity: 1;
-    -unity-background-image-tint-color: rgb(229, 57, 53);
 }
 
 .icon-move-up {
     background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-up.png?fileID=2800000&guid=13e6e2a9f27e5874eab92e305adb3fa1&type=3#chevron-up");
     -unity-background-scale-mode: scale-to-fit;
-    width: 20px;
-    height: 20px;
+    width: 28px;
+    height: 28px;
     background-color: transparent;
     border-width: 0;
+    border-radius: 8px;
     margin-left: 2px;
     margin-right: 2px;
+    -unity-background-image-tint-color: rgb(150, 145, 160);
+    transition-property: background-color, -unity-background-image-tint-color;
+    transition-duration: 0.15s;
 }
 
 .icon-move-up:hover {
+    background-color: var(--primary-background-color);
+    -unity-background-image-tint-color: var(--primary-color);
     opacity: 1;
-    -unity-background-image-tint-color: rgb(103, 80, 164);
 }
 
 .icon-move-up:disabled {
-    opacity: 0.3;
+    opacity: 0.25;
 }
 
 .icon-move-down {
     background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-down.png?fileID=2800000&guid=d1a74cec442a2284589bab0730540f72&type=3#chevron-down");
     -unity-background-scale-mode: scale-to-fit;
-    width: 20px;
-    height: 20px;
+    width: 28px;
+    height: 28px;
     background-color: transparent;
     border-width: 0;
+    border-radius: 8px;
     margin-left: 2px;
     margin-right: 2px;
+    -unity-background-image-tint-color: rgb(150, 145, 160);
+    transition-property: background-color, -unity-background-image-tint-color;
+    transition-duration: 0.15s;
 }
 
 .icon-move-down:hover {
+    background-color: var(--primary-background-color);
+    -unity-background-image-tint-color: var(--primary-color);
     opacity: 1;
-    -unity-background-image-tint-color: rgb(103, 80, 164);
 }
 
 .icon-move-down:disabled {
-    opacity: 0.3;
+    opacity: 0.25;
 }
 
-#add-buttons {
-    margin-top: 8px;
+#add-buttons,
+.add-buttons {
+    margin-top: 12px;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
+}
+
+#add-buttons Button,
+.add-buttons Button {
+    height: 34px;
+    padding-left: 18px;
+    padding-right: 18px;
+    margin-left: 6px;
+    margin-right: 6px;
+    border-radius: 12px;
+    background-color: var(--primary-background-color);
+    color: var(--primary-color);
+    font-size: 13px;
+    -unity-font-style: bold;
+    border-width: 0;
+    transition-property: background-color;
+    transition-duration: 0.15s;
+}
+
+#add-buttons Button:hover,
+.add-buttons Button:hover,
+#add-row-button:hover,
+#add-column-button:hover {
+    background-color: var(--secondary-background-color);
+}
+
+#add-row-button,
+#add-column-button {
+    height: 34px;
+    padding-left: 14px;
+    padding-right: 14px;
+    border-radius: 12px;
+    background-color: var(--primary-background-color);
+    color: var(--primary-color);
+    font-size: 13px;
+    -unity-font-style: bold;
+    border-width: 0;
+    transition-property: background-color;
+    transition-duration: 0.15s;
+}
+
+.add-question-bar {
+    flex-grow: 0;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    height: 32px;
+}
+
+.add-question-divider-line {
+    flex-grow: 1;
+    height: 1px;
+    background-color: rgba(103, 80, 164, 0.18);
+    transition-property: background-color;
+    transition-duration: 0.15s;
+}
+
+.add-question-bar:hover .add-question-divider-line {
+    background-color: rgba(103, 80, 164, 0.4);
+}
+
+.add-question-button,
+#add-question-button {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.2);
+    background-color: rgb(255, 255, 255);
+    -unity-background-image-tint-color: rgb(150, 145, 160);
+    transition-property: background-color, border-color, -unity-background-image-tint-color, scale;
+    transition-duration: 0.15s;
+    scale: 0.95 0.95;
+    margin: 0 8px;
+    padding: 0;
+}
+
+.add-question-bar:hover .add-question-button,
+.add-question-bar:hover #add-question-button,
+.add-question-button:hover,
+#add-question-button:hover {
+    scale: 1.05 1.05;
+    background-color: var(--primary-background-color);
+    border-color: var(--primary-color);
+    -unity-background-image-tint-color: var(--primary-color);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .enhance-button {
-    background-color: rgba(255, 255, 255, 0.6);
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-    border-bottom-left-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-width: 0;
     transition-duration: 0.15s;
     transition-property: background-color, scale;
 }
 
 .remove-button {
-    background-color: rgba(255, 255, 255, 0.6);
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-    border-bottom-left-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-width: 0;
     transition-duration: 0.15s;
     transition-property: background-color, scale;
 }
 
 .enhance-button:hover {
-    background-color: rgba(255, 255, 255, 0.95);
-    scale: 1.15 1.15;
+    background-color: rgb(255, 255, 255);
+    scale: 1.1 1.1;
     cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .remove-button:hover {
-    background-color: rgba(255, 255, 255, 0.95);
-    scale: 1.15 1.15;
+    background-color: rgb(255, 255, 255);
+    scale: 1.1 1.1;
     cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .enhance-button:active {
-    background-color: rgb(220, 220, 220);
+    background-color: rgb(240, 240, 240);
     scale: 0.95 0.95;
 }
 
 .remove-button:active {
-    background-color: rgb(220, 220, 220);
+    background-color: rgb(240, 240, 240);
     scale: 0.95 0.95;
 }
 
@@ -1119,10 +1846,22 @@ TemplateContainer.active-question,
 }
 
 .add-scale-row-btn {
-    width: 150px;
-    height: 32px;
+    width: 160px;
+    height: 34px;
     align-items: center;
     justify-content: center;
+    border-radius: 12px;
+    background-color: var(--primary-background-color);
+    color: var(--primary-color);
+    font-size: 13px;
+    -unity-font-style: bold;
+    border-width: 0;
+    transition-property: background-color;
+    transition-duration: 0.15s;
+}
+
+.add-scale-row-btn:hover {
+    background-color: var(--secondary-background-color);
 }
 
 .scale-viewer-row {
@@ -1156,4 +1895,38 @@ TemplateContainer.active-question,
     font-size: 14px;
     -unity-font-style: bold;
     margin-left: 12px;
+}
+
+#bottom-bar {
+    flex-grow: 0;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    padding-right: 40px;
+    padding-bottom: 12px;
+    padding-left: 16px;
+    padding-top: 12px;
+    align-items: center;
+    min-height: 52px;
+    height: 52px;
+    background-color: rgb(255, 255, 255);
+    border-top-width: 1px;
+    border-top-color: rgba(103, 80, 164, 0.12);
+}
+
+#bottom-bar #save-btn,
+#bottom-bar #exit-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    margin-left: 8px;
+    background-color: transparent;
+    -unity-background-image-tint-color: rgb(150, 145, 160);
+    transition-property: background-color, -unity-background-image-tint-color;
+    transition-duration: 0.15s;
+}
+
+#bottom-bar #save-btn:hover,
+#bottom-bar #exit-btn:hover {
+    background-color: var(--primary-background-color);
+    -unity-background-image-tint-color: var(--primary-color);
 }

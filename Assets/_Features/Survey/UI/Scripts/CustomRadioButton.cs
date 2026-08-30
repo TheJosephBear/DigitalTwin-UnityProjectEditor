@@ -15,9 +15,9 @@ public partial class CustomRadioButton : VisualElement {
     }
 
     [UxmlAttribute]
-    public bool @Checked { // with the @ symbol since checked is a C# keyword
-        get => _radioButton.value;
-        set => _radioButton.value = value;
+    public bool @Checked {
+        get => _toggle.value;
+        set => _toggle.value = value;
     }
 
     [UxmlAttribute]
@@ -27,15 +27,15 @@ public partial class CustomRadioButton : VisualElement {
     }
 
     private readonly TextField _labelTextField;
-    private readonly UnityEngine.UIElements.RadioButton _radioButton;
-    public UnityEngine.UIElements.RadioButton Radio => _radioButton;
+    private readonly Toggle _toggle;
+    public Toggle Radio => _toggle;
 
     public CustomRadioButton() {
         this.style.flexDirection = FlexDirection.Row;
 
-        _radioButton = new UnityEngine.UIElements.RadioButton();
-        _radioButton.text = string.Empty;
-        Add(_radioButton);
+        _toggle = new Toggle();
+        _toggle.text = string.Empty;
+        Add(_toggle);
 
         _labelTextField = new TextField();
         _labelTextField.textEdition.placeholder = "Option text";
@@ -43,14 +43,14 @@ public partial class CustomRadioButton : VisualElement {
         _labelTextField.multiline = true;
         _labelTextField.style.whiteSpace = WhiteSpace.Normal;
 
-        var textFieldWrapper = new VisualElement(); // Wrapper to allow the TextField to grow properly (fixes element overflow to other elements)
+        var textFieldWrapper = new VisualElement();
         textFieldWrapper.style.flexGrow = 1;
         textFieldWrapper.Add(_labelTextField);
         Add(textFieldWrapper);
     }
 
     public void RegisterRadioCallback(EventCallback<ChangeEvent<bool>> callback) {
-        _radioButton.RegisterValueChangedCallback(callback);
+        _toggle.RegisterValueChangedCallback(callback);
     }
 }
 
@@ -59,24 +59,24 @@ public partial class CustomRadioButton : VisualElement {
 public partial class CustomRadioButtonNoText : VisualElement {
 
     [UxmlAttribute]
-    public bool @Checked // with the @ symbol since checked is a C# keyword
+    public bool @Checked
     {
-        get => _radioButton.value;
-        set => _radioButton.value = value;
+        get => _toggle.value;
+        set => _toggle.value = value;
     }
 
-    private readonly UnityEngine.UIElements.RadioButton _radioButton;
-    public UnityEngine.UIElements.RadioButton Radio => _radioButton;
+    private readonly Toggle _toggle;
+    public Toggle Radio => _toggle;
 
     public CustomRadioButtonNoText() {
         this.style.flexDirection = FlexDirection.Row;
 
-        _radioButton = new UnityEngine.UIElements.RadioButton();
-        _radioButton.text = string.Empty;
-        Add(_radioButton);
+        _toggle = new Toggle();
+        _toggle.text = string.Empty;
+        Add(_toggle);
     }
 
     public void RegisterRadioCallback(EventCallback<ChangeEvent<bool>> callback) {
-        _radioButton.RegisterValueChangedCallback(callback);
+        _toggle.RegisterValueChangedCallback(callback);
     }
 }
