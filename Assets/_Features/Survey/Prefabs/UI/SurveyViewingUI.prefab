@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1424858818012207045}
   - component: {fileID: 4910532214861355452}
   - component: {fileID: 3560142851680948612}
+  - component: {fileID: 8681494151350154611}
   m_Layer: 5
   m_Name: SurveyViewingUI
   m_TagString: Untagged
@@ -80,7 +81,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   questionUIMapping: {fileID: 11400000, guid: b944de3614da97e41a6c4d141f3d74fe, type: 2}
+  GridCollumnTemplate: {fileID: 0}
+  AsteriskTexture: {fileID: 0}
+  AsteriskCrossedTexture: {fileID: 0}
   addQuestionBarTemplate: {fileID: 9197481963319205126, guid: c099ff1d780c64e4193d328bc2f6bc01, type: 3}
+  fullscreenImageOverlayTemplate: {fileID: 9197481963319205126, guid: e04b33ebe8faedc4990a2f697ef2759c, type: 3}
 --- !u!114 &3560142851680948612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,3 +98,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2665fdc730d9ded4cbdfa240620630cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8681494151350154611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4199356123922554441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc8d243edc6caa54a80b9f398acf15e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tooltipDelay: 0.4

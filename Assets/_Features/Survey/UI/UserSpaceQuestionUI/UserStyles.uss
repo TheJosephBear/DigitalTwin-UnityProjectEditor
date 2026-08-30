@@ -2220,3 +2220,28 @@ TextField:focus TextInput {
     background-color: rgb(220, 220, 220);
     scale: 1 1;
 }
+
+/* ==========================================================================
+   RUNTIME TOOLTIP STYLING
+   ========================================================================== */
+
+#tooltipLabel,
+.custom-tooltip-label {
+    position: absolute;
+    background-color: rgb(32, 26, 44);
+    color: rgb(255, 255, 255);
+    border-radius: 7px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 12px;
+    -unity-font-style: normal;
+    white-space: normal;
+    max-width: 250px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.12);
+    display: none;
+    -unity-text-align: middle-left;
+}
+

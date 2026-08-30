@@ -10,9 +10,14 @@
             <ui:Instance template="Checkboxes" name="TemplateContainer" class="active-question" />
             <ui:Instance template="AddQuestionBar" />
         </ui:ScrollView>
-        <ui:VisualElement name="bottom-bar">
-            <ui:Button name="save-btn" class="icon" tooltip="Uložit dotazník" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/content-save.png?fileID=2800000&amp;guid=42b65eea87b5f604fbc3255670ad5b51&amp;type=3#content-save&quot;);" />
-            <ui:Button name="exit-btn" class="icon" tooltip="Ukončit" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/exit-to-app.png?fileID=2800000&amp;guid=268ab040285f4644aacd7fed523d06d8&amp;type=3#exit-to-app&quot;);" />
+        <ui:VisualElement name="bottom-bar" class="floating-bottom-bar">
+            <ui:Button name="exit-btn" class="floating-fab-secondary" tooltip="Ukončit dotazník">
+                <ui:VisualElement name="icon" class="floating-fab-exit-icon" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/exit-to-app.png?fileID=2800000&amp;guid=268ab040285f4644aacd7fed523d06d8&amp;type=3#exit-to-app&quot;);" />
+            </ui:Button>
+            <ui:Button name="save-btn" class="floating-fab-primary" tooltip="Uložit dotazník">
+                <ui:VisualElement name="icon" class="floating-fab-save-icon" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/content-save-outline.png?fileID=2800000&amp;guid=5650597150b473f4a9be8f98fce6a890&amp;type=3#content-save-outline&quot;); -unity-background-image-tint-color: rgb(255, 255, 255);" />
+                <ui:Label text="Uložit" class="floating-fab-save-label" />
+            </ui:Button>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

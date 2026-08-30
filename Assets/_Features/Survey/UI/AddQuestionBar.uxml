@@ -1,10 +1,8 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:Template name="QuestionSelection" src="project://database/Assets/_Features/Survey/UI/QuestionSelection.uxml?fileID=9197481963319205126&amp;guid=5fc280527885572498dd8152cbd24b60&amp;type=3#QuestionSelection" />
     <Style src="project://database/Assets/_Features/Survey/UI/Styles.uss?fileID=7433441132597879392&amp;guid=e2857671203a4094b98524b8aefbd78f&amp;type=3#Styles" />
     <ui:VisualElement name="container" class="add-question-bar">
         <ui:VisualElement class="add-question-divider-line" />
         <ui:Button name="add-question-button" tooltip="Přidat otázku" class="icon add-question-button" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/plus.png?fileID=2800000&amp;guid=8fb11e92d4dae594fb5daae145ecd6c0&amp;type=3#plus&quot;);" />
         <ui:VisualElement class="add-question-divider-line" />
     </ui:VisualElement>
-    <ui:Instance template="QuestionSelection" name="question-selection" style="left: 50%; right: auto; top: 25px; display: none; position: absolute;" />
 </ui:UXML>
