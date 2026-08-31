@@ -27,7 +27,8 @@ public class SurveyQuestionUIViewerGrid : SurveyQuestionUIViewer {
         _table = _root.Q<MultiColumnListView>("grid-table") ?? _root.Q<MultiColumnListView>();
         if (_table == null) return;
 
-        _table.fixedItemHeight = 40f;
+        _table.fixedItemHeight = 44f;
+        _table.horizontalScrollingEnabled = true;
         _table.reorderable = false;
         _table.showAddRemoveFooter = false;
         _table.selectionType = SelectionType.None;
@@ -37,8 +38,8 @@ public class SurveyQuestionUIViewerGrid : SurveyQuestionUIViewer {
         var rowTitleCol = new Column {
             name = "row-title-col",
             title = "",
-            width = 160,
-            minWidth = 120,
+            width = 130,
+            minWidth = 100,
             stretchable = false
         };
 
@@ -49,7 +50,8 @@ public class SurveyQuestionUIViewerGrid : SurveyQuestionUIViewer {
                     alignItems = Align.Center,
                     justifyContent = Justify.FlexStart,
                     flexGrow = 1,
-                    width = Length.Percent(100)
+                    width = Length.Percent(100),
+                    height = Length.Percent(100)
                 }
             };
             var label = new Label { name = "row-label" };
@@ -85,8 +87,8 @@ public class SurveyQuestionUIViewerGrid : SurveyQuestionUIViewer {
             var col = new Column {
                 name = $"col-{colIdx}",
                 title = text,
-                width = 100,
-                minWidth = 80,
+                width = 80,
+                minWidth = 70,
                 stretchable = true
             };
 
@@ -97,14 +99,21 @@ public class SurveyQuestionUIViewerGrid : SurveyQuestionUIViewer {
                         alignItems = Align.Center,
                         justifyContent = Justify.Center,
                         flexGrow = 1,
-                        width = Length.Percent(100)
+                        width = Length.Percent(100),
+                        height = Length.Percent(100)
                     }
                 };
                 if (_questionType == QuestionType.CheckboxGrid) {
                     var toggle = new Toggle { name = "grid-cell-toggle" };
+                    toggle.AddToClassList("grid-checkbox-toggle");
+                    toggle.text = string.Empty;
+                    toggle.label = string.Empty;
                     cellContainer.Add(toggle);
                 } else {
-                    var radio = new CustomRadioButtonNoText { name = "grid-cell-radio" };
+                    var radio = new Toggle { name = "grid-cell-radio" };
+                    radio.AddToClassList("grid-radio-toggle");
+                    radio.text = string.Empty;
+                    radio.label = string.Empty;
                     cellContainer.Add(radio);
                 }
                 return cellContainer;
@@ -132,46 +141,28 @@ public class SurveyQuestionUIViewerGrid : SurveyQuestionUIViewer {
                         toggle.RegisterValueChangedCallback(newCb);
                     }
                 } else {
-                    var radio = cell.Q<CustomRadioButtonNoText>("grid-cell-radio");
+                    var radio = cell.Q<Toggle>("grid-cell-radio");
                     if (radio != null) {
                         bool isSelected = _selectedColPerRow.TryGetValue(rowIndex, out int selCol) && selCol == colIdx;
-                        radio.Radio.SetValueWithoutNotify(isSelected);
+                        radio.SetValueWithoutNotify(isSelected);
 
-                        if (radio.userData is RadioCallbacks oldCbs) {
-                            if (oldCbs.PointerCb != null) radio.UnregisterCallback(oldCbs.PointerCb, TrickleDown.TrickleDown);
-                            if (oldCbs.ClickCb != null) radio.UnregisterCallback(oldCbs.ClickCb, TrickleDown.TrickleDown);
-                            if (oldCbs.ChangeCb != null) radio.Radio.UnregisterValueChangedCallback(oldCbs.ChangeCb);
+                        if (radio.userData is EventCallback<ChangeEvent<bool>> oldCb) {
+                            radio.UnregisterValueChangedCallback(oldCb);
                         }
 
-                        EventCallback<PointerDownEvent> pointerCb = evt => {
-                            _selectedColPerRow[rowIndex] = colIdx;
-                            InvokeAnswerSelected(rowIndex, colIdx, true);
-                            RefreshAllRowRadioButtons();
-                            evt.StopPropagation();
-                        };
-                        EventCallback<ClickEvent> clickCb = evt => {
-                            _selectedColPerRow[rowIndex] = colIdx;
-                            InvokeAnswerSelected(rowIndex, colIdx, true);
-                            RefreshAllRowRadioButtons();
-                            evt.StopPropagation();
-                        };
                         EventCallback<ChangeEvent<bool>> changeCb = evt => {
                             if (evt.newValue) {
                                 _selectedColPerRow[rowIndex] = colIdx;
                                 InvokeAnswerSelected(rowIndex, colIdx, true);
                                 RefreshAllRowRadioButtons();
+                            } else {
+                                // Keep true if user clicks the already selected radio button
+                                radio.SetValueWithoutNotify(true);
                             }
                         };
 
-                        radio.userData = new RadioCallbacks {
-                            PointerCb = pointerCb,
-                            ClickCb = clickCb,
-                            ChangeCb = changeCb
-                        };
-
-                        radio.RegisterCallback(pointerCb, TrickleDown.TrickleDown);
-                        radio.RegisterCallback(clickCb, TrickleDown.TrickleDown);
-                        radio.Radio.RegisterValueChangedCallback(changeCb);
+                        radio.userData = changeCb;
+                        radio.RegisterValueChangedCallback(changeCb);
                     }
                 }
             };

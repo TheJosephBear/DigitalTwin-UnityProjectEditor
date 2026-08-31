@@ -618,9 +618,17 @@ GenericDropdownMenu,
     background-color: rgb(83, 62, 140);
 }
 
-#bottom-bar {
+#bottom-bar,
+.viewer-bottom-bar {
+    position: relative;
+    bottom: auto;
+    right: auto;
+    left: auto;
+    top: auto;
+    width: 100%;
     height: 64px;
     flex-grow: 0;
+    flex-shrink: 0;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
@@ -647,6 +655,7 @@ GenericDropdownMenu,
     justify-content: center;
     -unity-background-scale-mode: scale-to-fit;
     background-size: 55% 55%;
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 #previous-btn {
@@ -755,29 +764,317 @@ GenericDropdownMenu,
     -unity-font-style: bold;
 }
 
-RadioButton > Label {
+/* ==========================================================================
+   RADIO BUTTON & TOGGLE / CHECKBOX STYLING (MATCHING EDITOR)
+   ========================================================================== */
+
+/* Hide any auto-generated Field labels */
+.option-row .unity-base-field__label,
+.user-option-radio .unity-base-field__label,
+.user-option-toggle .unity-base-field__label,
+.unity-radio-button > .unity-base-field__label,
+.unity-toggle > .unity-base-field__label {
+    display: none;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/* Input containers */
+.option-row .unity-base-field__input,
+.user-option-radio .unity-base-field__input,
+.user-option-toggle .unity-base-field__input,
+.unity-radio-button > .unity-base-field__input,
+.unity-toggle > .unity-base-field__input {
+    flex-direction: row;
+    align-items: center;
     flex-grow: 1;
+    flex-shrink: 1;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    background-color: transparent;
+}
+
+/* Base Option Row */
+.option-row {
+    flex-direction: row;
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 14px;
+    padding-right: 14px;
+    margin-bottom: 8px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-width: 1px;
+    border-color: rgba(0, 0, 0, 0.06);
+    background-color: rgb(252, 250, 255);
+    transition-property: background-color, border-color;
+    transition-duration: 150ms;
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.option-row:hover {
+    background-color: var(--secondary-background-color);
+    border-color: rgba(103, 80, 164, 0.25);
+}
+
+.option-row RadioButton,
+.option-row Toggle,
+.user-option-radio,
+.user-option-toggle {
+    flex-direction: row;
+    align-items: center;
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    background-color: transparent;
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+/* --------------------------------------------------------------------------
+   RADIO BUTTON CHECKMARK (28px Circle with Centered Dot)
+   -------------------------------------------------------------------------- */
+
+/* Outer Circle (checkmark-background) */
+.unity-radio-button__checkmark-background,
+.unity-radio-button .unity-radio-button__checkmark-background,
+.unity-radio-button .unity-radio-button__input > .unity-radio-button__checkmark-background,
+.user-option-radio .unity-radio-button__checkmark-background,
+.user-option-radio .unity-radio-button__input > .unity-radio-button__checkmark-background,
+.option-row .unity-radio-button .unity-radio-button__checkmark-background,
+.option-row .unity-radio-button .unity-radio-button__input > .unity-radio-button__checkmark-background {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    max-width: 28px;
+    max-height: 28px;
+    border-radius: 50%;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-width: 2px;
+    border-color: rgba(103, 80, 164, 0.4);
+    background-color: rgb(255, 255, 255);
+    background-image: none;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0);
+    margin: 0;
+    padding: 0;
+    align-self: center;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    transition-property: border-color, background-color;
+    transition-duration: 0.15s;
+}
+
+/* Radio Button Hover */
+.option-row:hover .unity-radio-button .unity-radio-button__checkmark-background,
+.option-row:hover .unity-radio-button .unity-radio-button__input > .unity-radio-button__checkmark-background,
+.user-option-radio:hover .unity-radio-button__checkmark-background,
+.user-option-radio:hover .unity-radio-button__input > .unity-radio-button__checkmark-background,
+.unity-radio-button:hover .unity-radio-button__checkmark-background,
+.unity-radio-button:hover .unity-radio-button__input > .unity-radio-button__checkmark-background {
+    border-color: var(--primary-color);
+    background-color: var(--primary-background-color);
+    background-image: none;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0);
+}
+
+/* Radio Button Checked (Outer circle turns solid primary purple) */
+.option-row .unity-radio-button:checked .unity-radio-button__checkmark-background,
+.option-row .unity-radio-button:checked .unity-radio-button__input > .unity-radio-button__checkmark-background,
+.user-option-radio:checked .unity-radio-button__checkmark-background,
+.user-option-radio:checked .unity-radio-button__input > .unity-radio-button__checkmark-background,
+.unity-radio-button:checked .unity-radio-button__checkmark-background,
+.unity-radio-button:checked .unity-radio-button__input > .unity-radio-button__checkmark-background {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Inner Dot (checkmark inside checkmark-background) */
+.unity-radio-button .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
+.user-option-radio .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
+.option-row .unity-radio-button .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
+.unity-radio-button__checkmark-background > .unity-radio-button__checkmark {
+    width: 10px;
+    height: 10px;
+    min-width: 10px;
+    min-height: 10px;
+    max-width: 10px;
+    max-height: 10px;
+    border-radius: 50%;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    background-color: transparent;
+    background-image: none;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0);
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+    align-self: center;
+}
+
+.unity-radio-button:checked .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
+.user-option-radio:checked .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
+.option-row .unity-radio-button:checked .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
+.unity-radio-button__checkmark-background:checked > .unity-radio-button__checkmark {
+    background-color: rgb(255, 255, 255);
+    background-image: none;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+/* Direct checkmark fallback (when Unity doesn't nest in checkmark-background) */
+.unity-radio-button .unity-radio-button__input > .unity-radio-button__checkmark,
+.user-option-radio .unity-radio-button__input > .unity-radio-button__checkmark,
+.option-row .unity-radio-button .unity-radio-button__checkmark,
+.unity-radio-button__checkmark {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    max-width: 28px;
+    max-height: 28px;
+    border-radius: 50%;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-width: 2px;
+    border-color: rgba(103, 80, 164, 0.4);
+    background-color: rgb(255, 255, 255);
+    background-image: none;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0);
+    margin: 0;
+    padding: 0;
+    align-self: center;
     flex-shrink: 0;
 }
 
-RadioButton > VisualElement {
-    flex-shrink: 1;
-    max-width: 24px;
-    min-width: 24px;
-    width: 24px;
+.unity-radio-button:hover .unity-radio-button__input > .unity-radio-button__checkmark,
+.user-option-radio:hover .unity-radio-button__checkmark,
+.option-row:hover .unity-radio-button .unity-radio-button__checkmark {
+    border-color: var(--primary-color);
+    background-color: var(--primary-background-color);
 }
 
-Toggle > Label {
+.unity-radio-button:checked .unity-radio-button__input > .unity-radio-button__checkmark,
+.user-option-radio:checked .unity-radio-button__checkmark,
+.option-row .unity-radio-button:checked .unity-radio-button__checkmark {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/dot-white.png?fileID=2800000&guid=a123529c3fb34d638d526d7deabd69f5&type=3#dot-white");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+/* Radio Button Text */
+.option-row .unity-radio-button .unity-radio-button__input > .unity-radio-button__text,
+.option-row .unity-radio-button .unity-radio-button__text,
+.user-option-radio .unity-radio-button__text,
+.unity-radio-button .unity-radio-button__input > .unity-radio-button__text,
+.unity-radio-button .unity-radio-button__text,
+.unity-radio-button__text {
+    margin: 0;
+    margin-left: 14px;
+    padding: 0;
+    color: var(--dark-text);
+    font-size: 14px;
+    -unity-font-style: normal;
+    -unity-text-align: middle-left;
+    white-space: normal;
     flex-grow: 1;
-    flex-shrink: 0;
+    flex-shrink: 1;
 }
 
-Toggle > VisualElement {
+/* --------------------------------------------------------------------------
+   TOGGLE / CHECKBOX CHECKMARK (26px Rounded Box)
+   -------------------------------------------------------------------------- */
+.option-row .unity-toggle .unity-toggle__input > .unity-toggle__checkmark,
+.option-row .unity-toggle .unity-toggle__checkmark,
+.user-option-toggle .unity-toggle__input > .unity-toggle__checkmark,
+.user-option-toggle .unity-toggle__checkmark,
+.unity-toggle .unity-toggle__input > .unity-toggle__checkmark,
+.unity-toggle .unity-toggle__checkmark,
+.unity-toggle__checkmark {
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    min-height: 26px;
+    max-width: 26px;
+    max-height: 26px;
+    border-radius: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-width: 2px;
+    border-color: rgba(103, 80, 164, 0.4);
+    background-color: rgb(255, 255, 255);
+    background-image: none;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0);
+    margin: 0;
+    padding: 0;
+    align-self: center;
+    flex-shrink: 0;
+    transition-property: border-color, background-color;
+    transition-duration: 0.15s;
+}
+
+/* Toggle Hover */
+.option-row:hover .unity-toggle .unity-toggle__checkmark,
+.option-row:hover .unity-toggle .unity-toggle__input > .unity-toggle__checkmark,
+.user-option-toggle:hover .unity-toggle__input > .unity-toggle__checkmark,
+.user-option-toggle:hover .unity-toggle__checkmark,
+.unity-toggle:hover .unity-toggle__input > .unity-toggle__checkmark,
+.unity-toggle:hover .unity-toggle__checkmark {
+    border-color: var(--primary-color);
+    background-color: var(--primary-background-color);
+    background-image: none;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0);
+}
+
+/* Toggle Checked */
+.option-row .unity-toggle:checked .unity-toggle__checkmark,
+.option-row .unity-toggle:checked .unity-toggle__input > .unity-toggle__checkmark,
+.user-option-toggle:checked .unity-toggle__input > .unity-toggle__checkmark,
+.user-option-toggle:checked .unity-toggle__checkmark,
+.unity-toggle:checked .unity-toggle__input > .unity-toggle__checkmark,
+.unity-toggle:checked .unity-toggle__checkmark {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/check-white.png?fileID=2800000&guid=631e4421e2e8456f9d8d1bb1e039336b&type=3#check-white");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+/* Toggle Text */
+.option-row .unity-toggle .unity-toggle__input > .unity-toggle__text,
+.option-row .unity-toggle .unity-toggle__text,
+.user-option-toggle .unity-toggle__text,
+.unity-toggle .unity-toggle__input > .unity-toggle__text,
+.unity-toggle .unity-toggle__text,
+.unity-toggle__text {
+    margin: 0;
+    margin-left: 14px;
+    padding: 0;
+    color: var(--dark-text);
+    font-size: 14px;
+    -unity-font-style: normal;
+    -unity-text-align: middle-left;
+    white-space: normal;
+    flex-grow: 1;
     flex-shrink: 1;
-    max-width: 24px;
-    min-width: 24px;
-    width: 24px;
-    margin-right: 8px;
 }
 
 RadioButtonGroup #contentContainer {
@@ -1273,35 +1570,47 @@ TextField:focus TextInput {
     flex-direction: row;
     align-items: center;
     width: 100%;
-    margin-top: 8px;
-    margin-bottom: 8px;
+    margin-top: 6px;
+    margin-bottom: 6px;
     padding: 8px 12px;
-    background-color: rgba(255, 255, 255, 0.7);
-    border-radius: 8px;
+    background-color: rgb(252, 250, 255);
+    border-radius: 12px;
     border-width: 1px;
-    border-color: var(--border-color);
+    border-color: rgba(0, 0, 0, 0.06);
+    transition-property: background-color, border-color;
+    transition-duration: 150ms;
+}
+
+.scale-viewer-row:hover {
+    background-color: var(--secondary-background-color);
+    border-color: rgba(103, 80, 164, 0.25);
 }
 
 .scale-viewer-row-label {
-    font-size: 15px;
+    font-size: 14px;
     -unity-font-style: bold;
-    color: rgb(40, 40, 40);
-    min-width: 160px;
-    max-width: 250px;
-    flex-shrink: 0;
+    color: var(--dark-text);
+    min-width: 40px;
+    max-width: 160px;
+    flex-grow: 1;
+    flex-shrink: 1;
     white-space: normal;
+    margin-right: 10px;
 }
 
 .scale-value-badge {
-    min-width: 32px;
-    height: 28px;
+    min-width: 28px;
+    height: 24px;
+    padding-left: 6px;
+    padding-right: 6px;
     background-color: var(--primary-color);
     color: rgb(255, 255, 255);
-    border-radius: 14px;
+    border-radius: 12px;
     -unity-text-align: middle-center;
-    font-size: 14px;
+    font-size: 12px;
     -unity-font-style: bold;
-    margin-left: 12px;
+    margin-left: 8px;
+    flex-shrink: 0;
 }
 
 .grid-container {
@@ -1468,29 +1777,7 @@ TextField:focus TextInput {
     align-self: stretch;
 }
 
-.option-row RadioButton {
-    flex-direction: row-reverse;
-    flex-grow: 1;
-    border-width: 0;
-    padding: 0;
-    margin: 0;
-}
 
-.option-row Toggle {
-    flex-direction: row-reverse;
-    flex-grow: 1;
-    border-width: 0;
-    padding: 0;
-    margin: 0;
-}
-
-.option-row RadioButton > VisualElement {
-    margin-right: 5px;
-}
-
-.option-row Toggle > VisualElement {
-    margin-right: 5px;
-}
 
 .option-row .other-text-input {
     flex-grow: 1;
@@ -1512,84 +1799,23 @@ TextField:focus TextInput {
     color: rgb(30, 30, 30);
 }
 
+/* ==========================================================================
+   GRID MATRIX QUESTION & TABLE STYLING
+   ========================================================================== */
+
 #grid-table {
     flex-grow: 1;
-    min-height: 160px;
+    min-height: 180px;
+    max-height: 350px;
     background-color: rgb(255, 255, 255);
-    border-radius: 10px;
+    border-radius: 12px;
     border-width: 1px;
     border-color: rgba(103, 80, 164, 0.2);
-    overflow: hidden;
-}
-
-#grid-table #unity-content-container {
-    padding-top: 0;
-    padding-right: 0;
-    padding-bottom: 0;
-    padding-left: 0;
-    margin-top: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: 0;
-}
-
-#grid-table .unity-scroll-view__content-container {
-    padding-top: 0;
-    padding-right: 0;
-    padding-bottom: 0;
-    padding-left: 0;
-    margin-top: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: 0;
-}
-
-#grid-table #unity-content-viewport {
-    padding-top: 0;
-    padding-right: 0;
-    padding-bottom: 0;
-    padding-left: 0;
-    margin-top: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: 0;
-}
-
-#grid-table .unity-scroll-view__content-viewport {
-    padding-top: 0;
-    padding-right: 0;
-    padding-bottom: 0;
-    padding-left: 0;
-    margin-top: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: 0;
-}
-
-#grid-table .unity-scroll-view {
-    padding-top: 0;
-    padding-right: 0;
-    padding-bottom: 0;
-    padding-left: 0;
-    margin-top: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: 0;
-}
-
-#grid-table .unity-list-view__scroll-view {
-    padding-top: 0;
-    padding-right: 0;
-    padding-bottom: 0;
-    padding-left: 0;
-    margin-top: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: 0;
 }
 
 #grid-table .unity-multi-column-header {
-    min-height: 52px;
+    min-height: 48px;
+    height: 48px;
     background-color: rgb(247, 242, 250);
     border-bottom-width: 1px;
     border-bottom-color: rgba(103, 80, 164, 0.18);
@@ -1607,132 +1833,17 @@ TextField:focus TextInput {
     border-right-color: rgba(103, 80, 164, 0.1);
 }
 
-#grid-table .unity-multi-column-header__column > VisualElement {
-    flex-grow: 1;
-    width: 100%;
-    height: 100%;
-    align-self: stretch;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-    padding: 0;
-}
-
-#grid-table .unity-multi-column-header__column-content {
-    flex-grow: 1;
-    width: 100%;
-    height: 100%;
-    align-self: stretch;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-    padding: 0;
-}
-
-#grid-table .unity-multi-column-header__column-container {
-    flex-grow: 1;
-    width: 100%;
-    height: 100%;
-    align-self: stretch;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-    padding: 0;
-}
-
 #grid-table .unity-multi-column-header__column-title {
-    flex-grow: 1;
-    width: 100%;
-    height: 100%;
-    align-self: stretch;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-    padding: 0;
-}
-
-#grid-table #grid-column-header-container {
-    flex-grow: 1;
-    width: 100%;
-    height: 100%;
-    align-self: stretch;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-    padding: 0;
-}
-
-#grid-table .unity-multi-column-header__column#row-title-col {
     font-size: 13px;
     -unity-font-style: bold;
     color: rgb(73, 62, 105);
-}
-
-
-#grid-table .unity-multi-column-header__column TextField {
-    flex-grow: 1;
-    width: 100%;
-    margin: 2px 0 0 0;
-    padding: 0;
-    align-self: stretch;
-}
-
-#grid-table .unity-multi-column-header__column TextField > VisualElement {
-    flex-grow: 1;
-    width: 100%;
-    margin: 0;
-    padding: 3px 6px;
-    align-self: stretch;
-    background-color: rgb(255, 255, 255);
-    border-radius: 6px;
-    border-width: 1px;
-    border-color: rgba(103, 80, 164, 0.25);
-    color: rgb(29, 25, 43);
-    font-size: 12px;
     -unity-text-align: middle-center;
-}
-
-#grid-table .unity-multi-column-header__column TextField #unity-text-input {
-    flex-grow: 1;
-    width: 100%;
-    margin: 0;
-    padding: 3px 6px;
-    align-self: stretch;
-    background-color: rgb(255, 255, 255);
-    border-radius: 6px;
-    border-width: 1px;
-    border-color: rgba(103, 80, 164, 0.25);
-    color: rgb(29, 25, 43);
-    font-size: 12px;
-    -unity-text-align: middle-center;
-}
-
-#grid-table .unity-multi-column-header__column TextField .unity-base-text-field__input {
-    flex-grow: 1;
-    width: 100%;
-    margin: 0;
-    padding: 3px 6px;
-    align-self: stretch;
-    background-color: rgb(255, 255, 255);
-    border-radius: 6px;
-    border-width: 1px;
-    border-color: rgba(103, 80, 164, 0.25);
-    color: rgb(29, 25, 43);
-    font-size: 12px;
-    -unity-text-align: middle-center;
-}
-
-#grid-table .unity-multi-column-header__column TextField:focus #unity-text-input {
-    border-color: rgb(103, 80, 164);
-    background-color: rgb(255, 255, 255);
-}
-
-#grid-table .unity-multi-column-header__column TextField:focus .unity-base-text-field__input {
-    border-color: rgb(103, 80, 164);
-    background-color: rgb(255, 255, 255);
 }
 
 #grid-table .unity-multi-column-list-view__row {
+    height: 44px;
+    min-height: 44px;
+    max-height: 44px;
     margin: 0;
     padding: 0;
     align-items: center;
@@ -1757,335 +1868,180 @@ TextField:focus TextInput {
 }
 
 #grid-table .unity-multi-column-list-view__cell {
+    height: 44px;
+    min-height: 44px;
+    max-height: 44px;
     justify-content: center;
     align-items: center;
-    padding: 4px 6px;
+    padding: 0;
     margin: 0;
     border-right-width: 1px;
     border-right-color: rgba(0, 0, 0, 0.04);
 }
 
-#grid-table .unity-multi-column-list-view__cell TextField {
-    width: 100%;
-    margin: 0;
-}
-
-#grid-table .unity-multi-column-list-view__cell TextField > VisualElement {
-    width: 100%;
-    margin: 0;
-    padding: 4px 8px;
-    background-color: rgb(247, 242, 250);
-    border-radius: 6px;
-    border-width: 1px;
-    border-color: rgba(0, 0, 0, 0.1);
-    color: rgb(29, 25, 43);
-    font-size: 13px;
-}
-
-#grid-table .unity-multi-column-list-view__cell TextField #unity-text-input {
-    width: 100%;
-    margin: 0;
-    padding: 4px 8px;
-    background-color: rgb(247, 242, 250);
-    border-radius: 6px;
-    border-width: 1px;
-    border-color: rgba(0, 0, 0, 0.1);
-    color: rgb(29, 25, 43);
-    font-size: 13px;
-}
-
-#grid-table .unity-multi-column-list-view__cell TextField .unity-base-text-field__input {
-    width: 100%;
-    margin: 0;
-    padding: 4px 8px;
-    background-color: rgb(247, 242, 250);
-    border-radius: 6px;
-    border-width: 1px;
-    border-color: rgba(0, 0, 0, 0.1);
-    color: rgb(29, 25, 43);
-    font-size: 13px;
-}
-
-#grid-table .unity-multi-column-list-view__cell TextField:focus #unity-text-input {
-    border-color: rgb(103, 80, 164);
-    background-color: rgb(255, 255, 255);
-}
-
-#grid-table .unity-multi-column-list-view__cell TextField:focus .unity-base-text-field__input {
-    border-color: rgb(103, 80, 164);
-    background-color: rgb(255, 255, 255);
-}
-
 #grid-table .unity-multi-column-list-view__cell Label {
-    width: 100%;
     margin: 0;
+    padding-left: 10px;
+    padding-right: 6px;
+    font-size: 13px;
+    color: var(--dark-text);
+    -unity-text-align: middle-left;
 }
 
-#grid-table .unity-multi-column-list-view__cell Toggle {
+/* Grid Cell Toggle / Radio Elements */
+#grid-table .unity-multi-column-list-view__cell Toggle,
+#grid-table .unity-multi-column-list-view__cell .grid-radio-toggle,
+#grid-table .unity-multi-column-list-view__cell .grid-checkbox-toggle {
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    min-height: 26px;
+    max-width: 26px;
+    max-height: 26px;
     align-self: center;
     justify-content: center;
+    align-items: center;
     margin: 0;
+    padding: 0;
+    border-width: 0;
+    background-color: transparent;
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
-#grid-table .unity-multi-column-list-view__cell CustomRadioButtonNoText {
-    align-self: center;
+#grid-table .unity-multi-column-list-view__cell .unity-base-field__label,
+#grid-table .unity-multi-column-list-view__cell .unity-toggle__text {
+    display: none;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+#grid-table .unity-multi-column-list-view__cell .unity-base-field__input,
+#grid-table .unity-multi-column-list-view__cell .unity-toggle__input {
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    min-height: 26px;
+    max-width: 26px;
+    max-height: 26px;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    background-color: transparent;
     justify-content: center;
-    margin: 0;
+    align-items: center;
 }
 
-
-
-#grid-table .unity-multi-column-list-view__cell CustomRadioButtonNoText .unity-toggle__checkmark {
+/* Radio button in grid (Circle) */
+#grid-table .grid-radio-toggle .unity-toggle__checkmark {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    min-height: 24px;
+    max-width: 24px;
+    max-height: 24px;
     border-radius: 50%;
-}
-
-.icon-trash {
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/trash-can-outline.png?fileID=2800000&guid=7ad15b4efd0e279438b167e4bed1c7e6&type=3#trash-can-outline");
-    -unity-background-scale-mode: scale-to-fit;
-    width: 20px;
-    height: 20px;
-    background-color: transparent;
-    border-width: 0;
-    margin-left: 2px;
-    margin-right: 2px;
-    opacity: 0.55;
-    transition-duration: 0.15s;
-}
-
-.icon-trash:hover {
-    opacity: 1;
-    -unity-background-image-tint-color: rgb(229, 57, 53);
-}
-
-.icon-move-up {
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-up.png?fileID=2800000&guid=13e6e2a9f27e5874eab92e305adb3fa1&type=3#chevron-up");
-    -unity-background-scale-mode: scale-to-fit;
-    width: 20px;
-    height: 20px;
-    background-color: transparent;
-    border-width: 0;
-    margin-left: 2px;
-    margin-right: 2px;
-    opacity: 0.55;
-    transition-duration: 0.15s;
-}
-
-.icon-move-up:hover {
-    opacity: 1;
-    -unity-background-image-tint-color: rgb(103, 80, 164);
-}
-
-.icon-move-down {
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-down.png?fileID=2800000&guid=d1a74cec442a2284589bab0730540f72&type=3#chevron-down");
-    -unity-background-scale-mode: scale-to-fit;
-    width: 20px;
-    height: 20px;
-    background-color: transparent;
-    border-width: 0;
-    margin-left: 2px;
-    margin-right: 2px;
-    opacity: 0.55;
-    transition-duration: 0.15s;
-}
-
-.icon-move-down:hover {
-    opacity: 1;
-    -unity-background-image-tint-color: rgb(103, 80, 164);
-}
-
-#add-buttons {
-    margin-top: 8px;
-    flex-direction: row;
-    align-items: center;
-}
-
-#add-row-button {
-    height: 38px;
-    background-color: rgb(103, 80, 164);
-    color: rgb(255, 255, 255);
-    border-radius: 8px;
-    border-width: 0;
-    -unity-font-style: bold;
-    font-size: 13px;
-    transition-duration: 0.15s;
-}
-
-#add-row-button:hover {
-    background-color: rgb(83, 62, 133);
-}
-
-#add-column-button {
-    height: 38px;
-    background-color: rgb(232, 222, 248);
-    color: rgb(29, 25, 43);
-    border-radius: 8px;
-    border-width: 1px;
-    border-color: rgba(103, 80, 164, 0.2);
-    flex-grow: 1;
-    width: 100%;
-    height: 100%;
-    align-self: stretch;
-    justify-content: center;
-    align-items: center;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-width: 2px;
+    border-color: rgba(103, 80, 164, 0.4);
+    background-color: rgb(255, 255, 255);
+    background-image: none;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0);
     margin: 0;
     padding: 0;
-}
-
-#grid-table .unity-multi-column-header__column#row-title-col {
-    font-size: 13px;
-    -unity-font-style: bold;
-    color: rgb(73, 62, 105);
-}
-
-
-#grid-table .unity-multi-column-header__column TextField {
-    flex-grow: 1;
-    width: 100%;
-    margin: 2px 0 0 0;
-    padding: 0;
-    align-self: stretch;
-}
-
-#grid-table .unity-multi-column-header__column TextField > VisualElement {
-    flex-grow: 1;
-    width: 100%;
-    margin: 0;
-    padding: 3px 6px;
-    align-self: stretch;
-    background-color: rgb(255, 255, 255);
-    border-radius: 6px;
-    border-width: 1px;
-    border-color: rgba(103, 80, 164, 0.25);
-    color: rgb(29, 25, 43);
-    font-size: 12px;
-}
-
-#grid-table .unity-multi-column-header__column TextField #unity-text-input {
-    flex-grow: 1;
-    width: 100%;
-    margin: 0;
-    padding: 3px 6px;
-    align-self: stretch;
-    background-color: rgb(255, 255, 255);
-    border-radius: 6px;
-    border-width: 1px;
-    border-color: rgba(103, 80, 164, 0.25);
-    color: rgb(29, 25, 43);
-    font-size: 12px;
-}
-
-#grid-table .unity-multi-column-header__column TextField .unity-base-text-field__input {
-    flex-grow: 1;
-    width: 100%;
-    margin: 0;
-    padding: 3px 6px;
-    align-self: stretch;
-    background-color: rgb(255, 255, 255);
-    border-radius: 6px;
-    border-width: 1px;
-    border-color: rgba(103, 80, 164, 0.25);
-    color: rgb(29, 25, 43);
-    font-size: 12px;
-}
-
-#grid-table .unity-multi-column-header__column TextField:focus #unity-text-input {
-    border-color: rgb(103, 80, 164);
-    background-color: rgb(255, 255, 255);
-}
-
-#grid-table .unity-multi-column-header__column TextField:focus .unity-base-text-field__input {
-    border-color: rgb(103, 80, 164);
-    background-color: rgb(255, 255, 255);
-}
-
-#grid-table .unity-multi-column-list-view__row {
-    margin: 0;
-    padding: 0;
-    align-items: center;
-    border-bottom-width: 1px;
-    border-bottom-color: rgba(0, 0, 0, 0.05);
-    transition-duration: 0.15s;
-}
-
-#grid-table .unity-multi-column-list-view__row:hover {
-    background-color: rgba(103, 80, 164, 0.04);
-}
-
-#grid-table .unity-multi-column-list-view__cell {
-    justify-content: center;
-    align-items: center;
-    padding: 4px 6px;
-    margin: 0;
-    border-right-width: 1px;
-    border-right-color: rgba(0, 0, 0, 0.04);
-}
-
-#grid-table .unity-multi-column-list-view__cell TextField {
-    width: 100%;
-    margin: 0;
-}
-
-#grid-table .unity-multi-column-list-view__cell TextField > VisualElement {
-    width: 100%;
-    margin: 0;
-    padding: 4px 8px;
-    background-color: rgb(247, 242, 250);
-    border-radius: 6px;
-    border-width: 1px;
-    border-color: rgba(0, 0, 0, 0.1);
-    color: rgb(29, 25, 43);
-    font-size: 13px;
-}
-
-#grid-table .unity-multi-column-list-view__cell TextField #unity-text-input {
-    width: 100%;
-    margin: 0;
-    padding: 4px 8px;
-    background-color: rgb(247, 242, 250);
-    border-radius: 6px;
-    border-width: 1px;
-    border-color: rgba(0, 0, 0, 0.1);
-    color: rgb(29, 25, 43);
-    font-size: 13px;
-}
-
-#grid-table .unity-multi-column-list-view__cell TextField .unity-base-text-field__input {
-    width: 100%;
-    margin: 0;
-    padding: 4px 8px;
-    background-color: rgb(247, 242, 250);
-    border-radius: 6px;
-    border-width: 1px;
-    border-color: rgba(0, 0, 0, 0.1);
-    color: rgb(29, 25, 43);
-    font-size: 13px;
-}
-
-#grid-table .unity-multi-column-list-view__cell TextField:focus #unity-text-input {
-    border-color: rgb(103, 80, 164);
-    background-color: rgb(255, 255, 255);
-}
-
-#grid-table .unity-multi-column-list-view__cell TextField:focus .unity-base-text-field__input {
-    border-color: rgb(103, 80, 164);
-    background-color: rgb(255, 255, 255);
-}
-
-#grid-table .unity-multi-column-list-view__cell Label {
-    width: 100%;
-    margin: 0;
-}
-
-#grid-table .unity-multi-column-list-view__cell Toggle {
     align-self: center;
-    justify-content: center;
-    margin: 0;
+    flex-shrink: 0;
+    transition-property: border-color, background-color;
+    transition-duration: 0.15s;
 }
 
-#grid-table .unity-multi-column-list-view__cell CustomRadioButtonNoText {
-    align-self: center;
-    justify-content: center;
+#grid-table .grid-radio-toggle:hover .unity-toggle__checkmark {
+    border-color: var(--primary-color);
+    background-color: var(--primary-background-color);
+}
+
+#grid-table .grid-radio-toggle:checked .unity-toggle__checkmark {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/dot-white.png?fileID=2800000&guid=a123529c3fb34d638d526d7deabd69f5&type=3#dot-white");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+/* Checkbox in grid (Square) */
+#grid-table .grid-checkbox-toggle .unity-toggle__checkmark {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    min-height: 24px;
+    max-width: 24px;
+    max-height: 24px;
+    border-radius: 6px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-width: 2px;
+    border-color: rgba(103, 80, 164, 0.4);
+    background-color: rgb(255, 255, 255);
+    background-image: none;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0);
     margin: 0;
+    padding: 0;
+    align-self: center;
+    flex-shrink: 0;
+    transition-property: border-color, background-color;
+    transition-duration: 0.15s;
+}
+
+#grid-table .grid-checkbox-toggle:hover .unity-toggle__checkmark {
+    border-color: var(--primary-color);
+    background-color: var(--primary-background-color);
+}
+
+#grid-table .grid-checkbox-toggle:checked .unity-toggle__checkmark {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/check-white.png?fileID=2800000&guid=631e4421e2e8456f9d8d1bb1e039336b&type=3#check-white");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+/* Scrollbars styling for Grid Table */
+#grid-table .unity-scroll-view__horizontal-scroller,
+#grid-table .unity-list-view__scroll-view .unity-scroll-view__horizontal-scroller {
+    height: 8px;
+    min-height: 8px;
+    background-color: rgba(0, 0, 0, 0.04);
+    border-radius: 4px;
+    margin: 2px;
+}
+
+#grid-table .unity-scroll-view__vertical-scroller,
+#grid-table .unity-list-view__scroll-view .unity-scroll-view__vertical-scroller {
+    width: 8px;
+    min-width: 8px;
+    background-color: rgba(0, 0, 0, 0.04);
+    border-radius: 4px;
+    margin: 2px;
+}
+
+#grid-table .unity-scroller__dragger,
+#grid-table .unity-base-slider__dragger {
+    background-color: rgba(103, 80, 164, 0.4);
+    border-radius: 4px;
+    border-width: 0;
+    min-width: 6px;
+    min-height: 6px;
+}
+
+#grid-table .unity-scroller__dragger:hover,
+#grid-table .unity-base-slider__dragger:hover {
+    background-color: var(--primary-color);
 }
 
 .icon-trash {

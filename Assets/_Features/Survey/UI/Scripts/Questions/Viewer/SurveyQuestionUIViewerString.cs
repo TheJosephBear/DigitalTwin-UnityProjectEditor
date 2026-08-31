@@ -114,12 +114,22 @@ public class SurveyQuestionUIViewerString : SurveyQuestionUIViewer {
             if (_answerTemplate == null) return null;
             answerElement = _answerTemplate.Instantiate();
 
-            var textLabel = answerElement.Q<Label>();
-            if (textLabel != null) textLabel.text = answerText;
             var radio = answerElement.Q<UIRadioButton>();
-            if (radio != null) radio.text = answerText;
+            if (radio != null) {
+                radio.label = string.Empty;
+                radio.text = answerText;
+            }
             var toggle = answerElement.Q<Toggle>();
-            if (toggle != null) toggle.text = answerText;
+            if (toggle != null) {
+                toggle.label = string.Empty;
+                toggle.text = answerText;
+            }
+            var textLabel = answerElement.Q<Label>();
+            if (textLabel != null && (object)textLabel != radio && (object)textLabel != toggle && 
+                !textLabel.ClassListContains("unity-radio-button__text") && !textLabel.ClassListContains("unity-toggle__text") &&
+                !textLabel.ClassListContains("unity-base-field__label")) {
+                textLabel.text = answerText;
+            }
         }
 
         // RadioGroup event

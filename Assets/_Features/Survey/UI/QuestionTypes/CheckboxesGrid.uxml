@@ -11,9 +11,9 @@
             <ui:MultiColumnListView name="grid-table" fixed-item-height="40" style="flex-grow: 1; min-height: 150px; margin-top: 8px;">
                 <ui:Columns />
             </ui:MultiColumnListView>
-            <ui:VisualElement name="add-buttons" style="flex-grow: 0; flex-direction: row; align-self: stretch; width: 100%; margin-top: 8px;">
-                <ui:Button text="+ Přidat řádek" name="add-row-button" style="width: 150px; flex-grow: 0; flex-shrink: 0; margin-right: 4px;" />
-                <ui:Button text="+ Přidat sloupec" name="add-column-button" style="flex-grow: 1; flex-shrink: 1; margin-left: 4px;" />
+            <ui:VisualElement name="grid-add-buttons" class="grid-add-buttons">
+                <ui:Button text="+ Přidat řádek" name="add-row-button" class="grid-add-row-button" />
+                <ui:Button text="+ Přidat sloupec" name="add-column-button" class="grid-add-col-button" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

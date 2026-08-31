@@ -9,13 +9,9 @@
         </ui:VisualElement>
         <ui:VisualElement name="question-container" class="question-container">
             <ui:Instance template="QuestionTitleBar" name="question-bar" class="hide-description-image" />
-            <ui:RadioButtonGroup name="options-list" class="radio-group-vertical">
-                <ui:Instance template="ImageOption" />
-                <ui:Instance template="ImageOption" />
-                <ui:Instance template="ImageOption" />
-            </ui:RadioButtonGroup>
-            <ui:VisualElement name="add-buttons" class="add-buttons" style="flex-grow: 0; flex-direction: row; justify-content: center; margin-top: 12px;">
-                <ui:Button text="Přidat odpověď" name="add-option-button" style="flex-grow: 0; width: 50%;" />
+            <ui:RadioButtonGroup name="options-list" class="radio-group-vertical" />
+            <ui:VisualElement name="image-choice-add-container" class="image-choice-add-container">
+                <ui:Button text="+ Přidat možnost" name="add-option-button" class="add-image-option-btn" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

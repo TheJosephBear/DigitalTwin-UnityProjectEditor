@@ -1199,7 +1199,11 @@ CustomRadioButtonNoText .unity-toggle__checkmark {
     transition-duration: 0.15s;
 }
 
-CustomRadioButton .unity-radio-button__checkmark {
+CustomRadioButton .unity-radio-button__checkmark,
+.unity-radio-button__checkmark-background,
+.unity-radio-button .unity-radio-button__checkmark-background,
+.user-option-radio .unity-radio-button__checkmark-background,
+.unity-radio-button .unity-radio-button__input > .unity-radio-button__checkmark-background {
     width: 28px;
     height: 28px;
     min-width: 28px;
@@ -1215,9 +1219,12 @@ CustomRadioButton .unity-radio-button__checkmark {
     border-color: rgba(103, 80, 164, 0.4);
     background-color: rgb(255, 255, 255);
     background-image: none;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0);
     margin: 0;
     padding: 0;
     align-self: center;
+    justify-content: center;
+    align-items: center;
     transition-property: border-color, background-color;
     transition-duration: 0.15s;
 }
@@ -1243,6 +1250,28 @@ CustomRadioButtonNoText .unity-radio-button__checkmark {
     align-self: center;
     transition-property: border-color, background-color;
     transition-duration: 0.15s;
+}
+
+.unity-radio-button .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
+.user-option-radio .unity-radio-button__checkmark-background > .unity-radio-button__checkmark {
+    width: 10px;
+    height: 10px;
+    min-width: 10px;
+    min-height: 10px;
+    max-width: 10px;
+    max-height: 10px;
+    border-radius: 50%;
+    background-color: transparent;
+    background-image: none;
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+    align-self: center;
+}
+
+.unity-radio-button:checked .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
+.user-option-radio:checked .unity-radio-button__checkmark-background > .unity-radio-button__checkmark {
+    background-color: rgb(255, 255, 255);
 }
 
 CustomToggleButton .unity-toggle__checkmark {
@@ -1301,7 +1330,10 @@ CustomRadioButtonNoText:hover .unity-toggle__checkmark {
     background-color: var(--primary-background-color);
 }
 
-CustomRadioButton:hover .unity-radio-button__checkmark {
+CustomRadioButton:hover .unity-radio-button__checkmark,
+.unity-radio-button:hover .unity-radio-button__checkmark-background,
+.user-option-radio:hover .unity-radio-button__checkmark-background,
+.option-row:hover .unity-radio-button .unity-radio-button__checkmark-background {
     border-color: var(--primary-color);
     background-color: var(--primary-background-color);
 }
@@ -1319,6 +1351,13 @@ CustomToggleButton:hover .unity-toggle__checkmark {
 CustomToggleButton:hover .unity-radio-button__checkmark {
     border-color: var(--primary-color);
     background-color: var(--primary-background-color);
+}
+
+.unity-radio-button:checked .unity-radio-button__checkmark-background,
+.user-option-radio:checked .unity-radio-button__checkmark-background,
+.option-row .unity-radio-button:checked .unity-radio-button__checkmark-background {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
 }
 
 CustomRadioButton Toggle:checked .unity-toggle__checkmark {
@@ -4130,40 +4169,108 @@ GenericDropdownMenu {
     background-color: var(--secondary-background-color);
 }
 
+.grid-add-buttons {
+    flex-grow: 0;
+    flex-direction: row;
+    align-self: stretch;
+    margin-top: 10px;
+    margin-left: 0;
+    margin-right: 0;
+    align-items: center;
+}
+
+.grid-add-row-button,
+#add-row-button {
+    width: 150px;
+    min-width: 150px;
+    max-width: 150px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+    height: 34px;
+    padding-left: 14px;
+    padding-right: 14px;
+    border-radius: 12px;
+    background-color: var(--primary-background-color);
+    color: var(--primary-color);
+    font-size: 13px;
+    -unity-font-style: bold;
+    border-width: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 8px;
+    transition-property: background-color;
+    transition-duration: 0.15s;
+}
+
+.grid-add-col-button,
+#add-column-button {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    height: 34px;
+    padding-left: 14px;
+    padding-right: 14px;
+    border-radius: 12px;
+    background-color: var(--primary-background-color);
+    color: var(--primary-color);
+    font-size: 13px;
+    -unity-font-style: bold;
+    border-width: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 110px;
+    transition-property: background-color;
+    transition-duration: 0.15s;
+}
+
+.grid-add-row-button:hover,
 #add-row-button:hover {
     background-color: var(--secondary-background-color);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
+.grid-add-col-button:hover,
 #add-column-button:hover {
     background-color: var(--secondary-background-color);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
-#add-row-button {
+.image-choice-add-container {
+    flex-grow: 0;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 14px;
+    margin-bottom: 4px;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.add-image-option-btn,
+.add-image-choice-btn {
     height: 34px;
-    padding-left: 14px;
-    padding-right: 14px;
+    padding-left: 18px;
+    padding-right: 18px;
     border-radius: 12px;
     background-color: var(--primary-background-color);
     color: var(--primary-color);
     font-size: 13px;
     -unity-font-style: bold;
     border-width: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
     transition-property: background-color;
     transition-duration: 0.15s;
 }
 
-#add-column-button {
-    height: 34px;
-    padding-left: 14px;
-    padding-right: 14px;
-    border-radius: 12px;
-    background-color: var(--primary-background-color);
-    color: var(--primary-color);
-    font-size: 13px;
-    -unity-font-style: bold;
-    border-width: 0;
-    transition-property: background-color;
-    transition-duration: 0.15s;
+.add-image-option-btn:hover,
+.add-image-choice-btn:hover {
+    background-color: var(--secondary-background-color);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .add-question-bar {
@@ -4310,6 +4417,47 @@ GenericDropdownMenu {
 .remove-button:active {
     background-color: rgb(240, 240, 240);
     scale: 0.95 0.95;
+}
+
+.media-views-container,
+#views {
+    flex-grow: 0;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 6px;
+    margin-bottom: 12px;
+}
+
+.media-preview-card,
+#camera-view,
+#question-image {
+    width: 285px;
+    min-width: 285px;
+    max-width: 285px;
+    height: 165px;
+    min-height: 165px;
+    max-height: 165px;
+    border-radius: 12px;
+    border-width: 1.5px;
+    border-color: var(--card-border);
+    background-color: var(--input-bg);
+    overflow: hidden;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    position: relative;
+    -unity-background-scale-mode: scale-to-fit;
+    transition-property: border-color;
+    transition-duration: 0.15s;
+}
+
+.media-preview-card:hover,
+#camera-view:hover,
+#question-image:hover {
+    border-color: var(--card-hover-border);
 }
 
 .scale-config-bar {
@@ -4599,19 +4747,6 @@ GenericDropdownMenu {
     margin-left: 12px;
 }
 
-#bottom-bar {
-    position: absolute;
-    bottom: 24px;
-    right: 42px;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
-    background-color: transparent;
-    border-width: 0;
-    padding: 0;
-    margin: 0;
-}
-
 .floating-bottom-bar {
     position: absolute;
     bottom: 24px;
@@ -4625,7 +4760,7 @@ GenericDropdownMenu {
     margin: 0;
 }
 
-#bottom-bar #exit-btn {
+.floating-bottom-bar #exit-btn {
     width: 42px;
     height: 42px;
     min-width: 42px;
@@ -4663,7 +4798,7 @@ GenericDropdownMenu {
     scale: 1 1;
 }
 
-#bottom-bar #exit-btn:hover {
+.floating-bottom-bar #exit-btn:hover {
     background-color: var(--primary-background-color);
     border-color: var(--primary-color);
     scale: 1.08 1.08;
@@ -4675,7 +4810,7 @@ GenericDropdownMenu {
     scale: 1.08 1.08;
 }
 
-#bottom-bar #exit-btn:active {
+.floating-bottom-bar #exit-btn:active {
     background-color: var(--secondary-background-color);
     scale: 0.95 0.95;
 }
@@ -4696,7 +4831,7 @@ GenericDropdownMenu {
     transition-duration: 0.15s;
 }
 
-#bottom-bar #exit-btn:hover .floating-fab-exit-icon {
+.floating-bottom-bar #exit-btn:hover .floating-fab-exit-icon {
     -unity-background-image-tint-color: var(--primary-color);
 }
 
@@ -4704,7 +4839,7 @@ GenericDropdownMenu {
     -unity-background-image-tint-color: var(--primary-color);
 }
 
-#bottom-bar #save-btn {
+.floating-bottom-bar #save-btn {
     height: 42px;
     min-height: 42px;
     padding-left: 18px;
@@ -4738,7 +4873,7 @@ GenericDropdownMenu {
     scale: 1 1;
 }
 
-#bottom-bar #save-btn:hover {
+.floating-bottom-bar #save-btn:hover {
     background-color: var(--primary-hover);
     scale: 1.06 1.06;
 }
@@ -4748,7 +4883,7 @@ GenericDropdownMenu {
     scale: 1.06 1.06;
 }
 
-#bottom-bar #save-btn:active {
+.floating-bottom-bar #save-btn:active {
     background-color: rgb(73, 50, 125);
     scale: 0.96 0.96;
 }
@@ -4769,7 +4904,7 @@ GenericDropdownMenu {
     flex-shrink: 0;
 }
 
-#bottom-bar #save-btn .floating-fab-save-icon {
+.floating-bottom-bar #save-btn .floating-fab-save-icon {
     width: 18px;
     height: 18px;
     min-width: 18px;
