@@ -161,6 +161,39 @@ public class SurveyQuestionUIViewerString : SurveyQuestionUIViewer {
         return answerUI;
     }
 
+    public void SelectAnswerRadio(int selectedIndex) {
+        if (_questionType != QuestionType.MultipleChoiceSingle) return;
+
+        for (int i = 0; i < _addedAnswers.Count; i++) {
+            if (_addedAnswers[i]?.AnswerElement != null) {
+                var radio = _addedAnswers[i].AnswerElement.Q<UIRadioButton>();
+                if (radio != null) {
+                    radio.SetValueWithoutNotify(i == selectedIndex);
+                }
+                var customRadio = _addedAnswers[i].AnswerElement.Q<CustomRadioButton>();
+                if (customRadio != null && customRadio.Radio != null) {
+                    customRadio.Radio.SetValueWithoutNotify(i == selectedIndex);
+                }
+            }
+        }
+
+        if (_otherAnswerUI?.AnswerElement != null) {
+            var radio = _otherAnswerUI.AnswerElement.Q<UIRadioButton>();
+            if (radio != null) {
+                radio.SetValueWithoutNotify(_otherAnswerUI.AnswerIndex == selectedIndex);
+            }
+            var customRadio = _otherAnswerUI.AnswerElement.Q<CustomRadioButton>();
+            if (customRadio != null && customRadio.Radio != null) {
+                customRadio.Radio.SetValueWithoutNotify(_otherAnswerUI.AnswerIndex == selectedIndex);
+            }
+        }
+
+        var radioGroup = _root.Q<RadioButtonGroup>("options-list");
+        if (radioGroup != null) {
+            radioGroup.SetValueWithoutNotify(selectedIndex);
+        }
+    }
+
     protected override SurveyAnswerUIBase CreateAnswerUI(VisualElement element, int index, bool isOther) {
         return null;
     }

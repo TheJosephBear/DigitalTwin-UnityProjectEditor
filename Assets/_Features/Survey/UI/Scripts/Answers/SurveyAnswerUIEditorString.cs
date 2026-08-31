@@ -2,6 +2,7 @@ using SurveySystem;
 using System;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UIRadioButton = UnityEngine.UIElements.RadioButton;
 
 public class SurveyAnswerUIEditorString : SurveyAnswerUIEditor {
 
@@ -15,6 +16,8 @@ public class SurveyAnswerUIEditorString : SurveyAnswerUIEditor {
     protected override void RegisterAnswerEvents() {
         RegisterModalButtonEvents(_answerElement);
         RegisterTextFieldChanges();
+        RegisterRadioChanges();
+        RegisterRowClick();
     }
 
     private void RegisterTextFieldChanges() {
@@ -28,6 +31,48 @@ public class SurveyAnswerUIEditorString : SurveyAnswerUIEditor {
             Debug.Log(_answerIndex);
             Debug.Log(OnTextChanged);
             OnTextChanged?.Invoke(_questionUIRef.QuestionID, _answerIndex, evt.newValue);
+        });
+    }
+
+    private void RegisterRadioChanges() {
+        var customRadio = _answerElement.Q<CustomRadioButton>();
+        if (customRadio != null && customRadio.Radio != null) {
+            customRadio.Radio.RegisterValueChangedCallback(evt => {
+                if (evt.newValue) {
+                    if (_questionUIRef is SurveyQuestionUIEditorString editorString) {
+                        editorString.SelectAnswerRadio(_answerIndex);
+                    }
+                }
+            });
+        }
+    }
+
+    private void RegisterRowClick() {
+        _answerElement.RegisterCallback<ClickEvent>(evt => {
+            if (evt.target is TextField || (evt.target as VisualElement)?.GetFirstAncestorOfType<TextField>() != null) {
+                return;
+            }
+            if (evt.target is Button || (evt.target as VisualElement)?.GetFirstAncestorOfType<Button>() != null) {
+                return;
+            }
+            var editContainer = _answerElement.Q<VisualElement>("edit-option-container");
+            if (editContainer != null && (evt.target == editContainer || (evt.target as VisualElement)?.GetFirstAncestorOfType<VisualElement>() == editContainer)) {
+                return;
+            }
+
+            var customRadio = _answerElement.Q<CustomRadioButton>();
+            if (customRadio != null && customRadio.Radio != null) {
+                if (!customRadio.Radio.value) {
+                    customRadio.Radio.value = true;
+                }
+            }
+
+            var customToggle = _answerElement.Q<CustomToggleButton>();
+            if (customToggle != null && customToggle.Toggle != null) {
+                if (evt.target != customToggle.Toggle && (evt.target as VisualElement)?.GetFirstAncestorOfType<Toggle>() != customToggle.Toggle) {
+                    customToggle.Toggle.value = !customToggle.Toggle.value;
+                }
+            }
         });
     }
 

@@ -757,6 +757,7 @@ CustomRadioButton {
     align-items: center;
     flex-grow: 1;
     flex-shrink: 1;
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 CustomToggleButton {
@@ -764,6 +765,11 @@ CustomToggleButton {
     align-items: center;
     flex-grow: 1;
     flex-shrink: 1;
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+CustomRadioButtonNoText {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 CustomRadioButton > Toggle {
@@ -898,7 +904,10 @@ CustomRadioButtonNoText > RadioButton {
     align-self: center;
 }
 
-CustomRadioButton > Toggle > Label {
+CustomRadioButton > Toggle > Label,
+CustomRadioButton > RadioButton > Label,
+CustomRadioButton > RadioButton > .unity-radio-button__label,
+CustomRadioButton > RadioButton > .unity-base-field__label {
     display: none;
     width: 0;
     height: 0;
@@ -914,14 +923,6 @@ CustomToggleButton > Toggle > Label {
     padding: 0;
 }
 
-CustomRadioButton > RadioButton > Label {
-    display: none;
-    width: 0;
-    height: 0;
-    margin: 0;
-    padding: 0;
-}
-
 CustomToggleButton > RadioButton > Label {
     display: none;
     width: 0;
@@ -930,7 +931,10 @@ CustomToggleButton > RadioButton > Label {
     padding: 0;
 }
 
-CustomRadioButtonNoText > Toggle > Label {
+CustomRadioButtonNoText > Toggle > Label,
+CustomRadioButtonNoText > RadioButton > Label,
+CustomRadioButtonNoText > RadioButton > .unity-radio-button__label,
+CustomRadioButtonNoText > RadioButton > .unity-base-field__label {
     display: none;
     width: 0;
     height: 0;
@@ -938,15 +942,12 @@ CustomRadioButtonNoText > Toggle > Label {
     padding: 0;
 }
 
-CustomRadioButtonNoText > RadioButton > Label {
-    display: none;
-    width: 0;
-    height: 0;
-    margin: 0;
-    padding: 0;
-}
-
-CustomRadioButton > Toggle > .unity-toggle__input {
+CustomRadioButton > Toggle > .unity-toggle__input,
+CustomRadioButton > Toggle > .unity-base-field__input,
+CustomRadioButton > Toggle > VisualElement,
+CustomRadioButton > RadioButton > .unity-radio-button__input,
+CustomRadioButton > RadioButton > .unity-base-field__input,
+CustomRadioButton > RadioButton > VisualElement {
     flex-shrink: 0;
     width: 32px;
     min-width: 32px;
@@ -969,98 +970,8 @@ CustomRadioButton > Toggle > .unity-toggle__input {
     align-self: center;
 }
 
-CustomRadioButton > Toggle > .unity-base-field__input {
-    flex-shrink: 0;
-    width: 32px;
-    min-width: 32px;
-    max-width: 32px;
-    height: 32px;
-    min-height: 32px;
-    max-height: 32px;
-    margin-right: 0;
-    margin-left: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    border-width: 0;
-    background-color: transparent;
-    justify-content: center;
-    align-items: center;
-    align-self: center;
-}
-
-CustomRadioButton > Toggle > VisualElement {
-    flex-shrink: 0;
-    width: 32px;
-    min-width: 32px;
-    max-width: 32px;
-    height: 32px;
-    min-height: 32px;
-    max-height: 32px;
-    margin-right: 0;
-    margin-left: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    border-width: 0;
-    background-color: transparent;
-    justify-content: center;
-    align-items: center;
-    align-self: center;
-}
-
-CustomToggleButton > Toggle > .unity-toggle__input {
-    flex-shrink: 0;
-    width: 32px;
-    min-width: 32px;
-    max-width: 32px;
-    height: 32px;
-    min-height: 32px;
-    max-height: 32px;
-    margin-right: 0;
-    margin-left: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    border-width: 0;
-    background-color: transparent;
-    justify-content: center;
-    align-items: center;
-    align-self: center;
-}
-
-CustomToggleButton > Toggle > .unity-base-field__input {
-    flex-shrink: 0;
-    width: 32px;
-    min-width: 32px;
-    max-width: 32px;
-    height: 32px;
-    min-height: 32px;
-    max-height: 32px;
-    margin-right: 0;
-    margin-left: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    border-width: 0;
-    background-color: transparent;
-    justify-content: center;
-    align-items: center;
-    align-self: center;
-}
-
+CustomToggleButton > Toggle > .unity-toggle__input,
+CustomToggleButton > Toggle > .unity-base-field__input,
 CustomToggleButton > Toggle > VisualElement {
     flex-shrink: 0;
     width: 32px;
@@ -1084,53 +995,12 @@ CustomToggleButton > Toggle > VisualElement {
     align-self: center;
 }
 
-CustomRadioButtonNoText > Toggle > .unity-toggle__input {
-    flex-shrink: 0;
-    width: 32px;
-    min-width: 32px;
-    max-width: 32px;
-    height: 32px;
-    min-height: 32px;
-    max-height: 32px;
-    margin-right: 0;
-    margin-left: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    border-width: 0;
-    background-color: transparent;
-    justify-content: center;
-    align-items: center;
-    align-self: center;
-}
-
-CustomRadioButtonNoText > Toggle > .unity-base-field__input {
-    flex-shrink: 0;
-    width: 32px;
-    min-width: 32px;
-    max-width: 32px;
-    height: 32px;
-    min-height: 32px;
-    max-height: 32px;
-    margin-right: 0;
-    margin-left: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    border-width: 0;
-    background-color: transparent;
-    justify-content: center;
-    align-items: center;
-    align-self: center;
-}
-
-CustomRadioButtonNoText > Toggle > VisualElement {
+CustomRadioButtonNoText > Toggle > .unity-toggle__input,
+CustomRadioButtonNoText > Toggle > .unity-base-field__input,
+CustomRadioButtonNoText > Toggle > VisualElement,
+CustomRadioButtonNoText > RadioButton > .unity-radio-button__input,
+CustomRadioButtonNoText > RadioButton > .unity-base-field__input,
+CustomRadioButtonNoText > RadioButton > VisualElement {
     flex-shrink: 0;
     width: 32px;
     min-width: 32px;
@@ -1199,6 +1069,12 @@ CustomRadioButtonNoText .unity-toggle__checkmark {
     transition-duration: 0.15s;
 }
 
+CustomRadioButton .unity-radio-button__checkmark-background,
+CustomRadioButton .unity-radio-button .unity-radio-button__checkmark-background,
+CustomRadioButton .unity-radio-button .unity-radio-button__input > .unity-radio-button__checkmark-background,
+CustomRadioButtonNoText .unity-radio-button__checkmark-background,
+CustomRadioButtonNoText .unity-radio-button .unity-radio-button__checkmark-background,
+CustomRadioButtonNoText .unity-radio-button .unity-radio-button__input > .unity-radio-button__checkmark-background,
 CustomRadioButton .unity-radio-button__checkmark,
 .unity-radio-button__checkmark-background,
 .unity-radio-button .unity-radio-button__checkmark-background,
@@ -1225,6 +1101,7 @@ CustomRadioButton .unity-radio-button__checkmark,
     align-self: center;
     justify-content: center;
     align-items: center;
+    flex-shrink: 0;
     transition-property: border-color, background-color;
     transition-duration: 0.15s;
 }
@@ -1245,13 +1122,21 @@ CustomRadioButtonNoText .unity-radio-button__checkmark {
     border-color: rgba(103, 80, 164, 0.4);
     background-color: rgb(255, 255, 255);
     background-image: none;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0);
     margin: 0;
     padding: 0;
     align-self: center;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
     transition-property: border-color, background-color;
     transition-duration: 0.15s;
 }
 
+CustomRadioButton .unity-radio-button .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
+CustomRadioButton .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
+CustomRadioButtonNoText .unity-radio-button .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
+CustomRadioButtonNoText .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
 .unity-radio-button .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
 .user-option-radio .unity-radio-button__checkmark-background > .unity-radio-button__checkmark {
     width: 10px;
@@ -1261,17 +1146,56 @@ CustomRadioButtonNoText .unity-radio-button__checkmark {
     max-width: 10px;
     max-height: 10px;
     border-radius: 50%;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
     background-color: transparent;
     background-image: none;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0);
     border-width: 0;
     margin: 0;
     padding: 0;
     align-self: center;
 }
 
+CustomRadioButton .unity-radio-button:checked .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
+CustomRadioButton RadioButton:checked .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
+CustomRadioButtonNoText .unity-radio-button:checked .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
+CustomRadioButtonNoText RadioButton:checked .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
 .unity-radio-button:checked .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
 .user-option-radio:checked .unity-radio-button__checkmark-background > .unity-radio-button__checkmark {
     background-color: rgb(255, 255, 255);
+    background-image: none;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+CustomRadioButton .unity-radio-button > .unity-radio-button__input > .unity-radio-button__checkmark,
+CustomRadioButton .unity-radio-button > .unity-radio-button__checkmark,
+CustomRadioButtonNoText .unity-radio-button > .unity-radio-button__input > .unity-radio-button__checkmark,
+CustomRadioButtonNoText .unity-radio-button > .unity-radio-button__checkmark,
+.unity-radio-button > .unity-radio-button__input > .unity-radio-button__checkmark,
+.unity-radio-button > .unity-radio-button__checkmark {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    max-width: 28px;
+    max-height: 28px;
+    border-radius: 50%;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-width: 2px;
+    border-color: rgba(103, 80, 164, 0.4);
+    background-color: rgb(255, 255, 255);
+    background-image: none;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0);
+    margin: 0;
+    padding: 0;
+    align-self: center;
+    flex-shrink: 0;
 }
 
 CustomToggleButton .unity-toggle__checkmark {
@@ -1330,17 +1254,23 @@ CustomRadioButtonNoText:hover .unity-toggle__checkmark {
     background-color: var(--primary-background-color);
 }
 
+CustomRadioButton:hover .unity-radio-button__checkmark-background,
+CustomRadioButton:hover .unity-radio-button .unity-radio-button__checkmark-background,
+CustomRadioButton:hover .unity-radio-button .unity-radio-button__input > .unity-radio-button__checkmark-background,
 CustomRadioButton:hover .unity-radio-button__checkmark,
+CustomRadioButton:hover .unity-radio-button > .unity-radio-button__input > .unity-radio-button__checkmark,
+CustomRadioButtonNoText:hover .unity-radio-button__checkmark-background,
+CustomRadioButtonNoText:hover .unity-radio-button .unity-radio-button__checkmark-background,
+CustomRadioButtonNoText:hover .unity-radio-button .unity-radio-button__input > .unity-radio-button__checkmark-background,
+CustomRadioButtonNoText:hover .unity-radio-button__checkmark,
+CustomRadioButtonNoText:hover .unity-radio-button > .unity-radio-button__input > .unity-radio-button__checkmark,
 .unity-radio-button:hover .unity-radio-button__checkmark-background,
 .user-option-radio:hover .unity-radio-button__checkmark-background,
 .option-row:hover .unity-radio-button .unity-radio-button__checkmark-background {
     border-color: var(--primary-color);
     background-color: var(--primary-background-color);
-}
-
-CustomRadioButtonNoText:hover .unity-radio-button__checkmark {
-    border-color: var(--primary-color);
-    background-color: var(--primary-background-color);
+    background-image: none;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0);
 }
 
 CustomToggleButton:hover .unity-toggle__checkmark {
@@ -1353,6 +1283,14 @@ CustomToggleButton:hover .unity-radio-button__checkmark {
     background-color: var(--primary-background-color);
 }
 
+CustomRadioButton .unity-radio-button:checked .unity-radio-button__checkmark-background,
+CustomRadioButton .unity-radio-button:checked .unity-radio-button__input > .unity-radio-button__checkmark-background,
+CustomRadioButton RadioButton:checked .unity-radio-button__checkmark-background,
+CustomRadioButton RadioButton:checked .unity-radio-button__input > .unity-radio-button__checkmark-background,
+CustomRadioButtonNoText .unity-radio-button:checked .unity-radio-button__checkmark-background,
+CustomRadioButtonNoText .unity-radio-button:checked .unity-radio-button__input > .unity-radio-button__checkmark-background,
+CustomRadioButtonNoText RadioButton:checked .unity-radio-button__checkmark-background,
+CustomRadioButtonNoText RadioButton:checked .unity-radio-button__input > .unity-radio-button__checkmark-background,
 .unity-radio-button:checked .unity-radio-button__checkmark-background,
 .user-option-radio:checked .unity-radio-button__checkmark-background,
 .option-row .unity-radio-button:checked .unity-radio-button__checkmark-background {
@@ -1376,15 +1314,14 @@ CustomRadioButtonNoText Toggle:checked .unity-toggle__checkmark {
     -unity-background-image-tint-color: rgb(255, 255, 255);
 }
 
-CustomRadioButton RadioButton:checked .unity-radio-button__checkmark {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/dot-white.png?fileID=2800000&guid=a123529c3fb34d638d526d7deabd69f5&type=3#dot-white");
-    -unity-background-scale-mode: scale-to-fit;
-    -unity-background-image-tint-color: rgb(255, 255, 255);
-}
-
-CustomRadioButtonNoText RadioButton:checked .unity-radio-button__checkmark {
+CustomRadioButton .unity-radio-button:checked > .unity-radio-button__input > .unity-radio-button__checkmark,
+CustomRadioButton .unity-radio-button:checked > .unity-radio-button__checkmark,
+CustomRadioButton RadioButton:checked > .unity-radio-button__input > .unity-radio-button__checkmark,
+CustomRadioButton RadioButton:checked > .unity-radio-button__checkmark,
+CustomRadioButtonNoText .unity-radio-button:checked > .unity-radio-button__input > .unity-radio-button__checkmark,
+CustomRadioButtonNoText .unity-radio-button:checked > .unity-radio-button__checkmark,
+CustomRadioButtonNoText RadioButton:checked > .unity-radio-button__input > .unity-radio-button__checkmark,
+CustomRadioButtonNoText RadioButton:checked > .unity-radio-button__checkmark {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
     background-image: url("project://database/Assets/_Features/Survey/UI/Icons/dot-white.png?fileID=2800000&guid=a123529c3fb34d638d526d7deabd69f5&type=3#dot-white");
@@ -1426,6 +1363,34 @@ CustomToggleButton TextField {
     margin-left: 0;
     margin-top: 0;
     margin-bottom: 0;
+}
+
+CustomRadioButton TextField,
+CustomRadioButton TextField *,
+CustomToggleButton TextField,
+CustomToggleButton TextField * {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
+}
+
+CustomRadioButton > RadioButton,
+CustomRadioButton > RadioButton *,
+CustomRadioButton > Toggle,
+CustomRadioButton > Toggle *,
+CustomRadioButtonNoText > RadioButton,
+CustomRadioButtonNoText > RadioButton *,
+CustomRadioButtonNoText > Toggle,
+CustomRadioButtonNoText > Toggle *,
+CustomToggleButton > RadioButton,
+CustomToggleButton > RadioButton *,
+CustomToggleButton > Toggle,
+CustomToggleButton > Toggle *,
+.unity-radio-button__checkmark-background,
+.unity-radio-button__checkmark-background *,
+.unity-radio-button__checkmark,
+.unity-toggle__checkmark,
+.grid-cell-container,
+.grid-cell-container * {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 CustomRadioButton TextField > .unity-base-text-field__input {
@@ -1525,7 +1490,7 @@ RadioButtonGroup #unity-content-container {
 }
 
 RadioButtonGroup TemplateContainer {
-    width: 100%;
+    width: auto;
     align-self: stretch;
     flex-grow: 1;
 }
@@ -1537,7 +1502,7 @@ RadioButtonGroup TemplateContainer {
 }
 
 RadioButtonGroup > TemplateContainer {
-    width: 100%;
+    width: auto;
     align-self: stretch;
     flex-grow: 1;
 }
@@ -1605,7 +1570,7 @@ RadioButtonGroup > TemplateContainer {
     margin-left: 0;
 }
 
-.radio-group-vertical #contentContainer {
+.radio-group-horizontal #contentContainer {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-around;

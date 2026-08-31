@@ -103,6 +103,7 @@ public class SurveyQuestionUIViewerGrid : SurveyQuestionUIViewer {
                         height = Length.Percent(100)
                     }
                 };
+                cellContainer.AddToClassList("grid-cell-container");
                 if (_questionType == QuestionType.CheckboxGrid) {
                     var toggle = new Toggle { name = "grid-cell-toggle" };
                     toggle.AddToClassList("grid-checkbox-toggle");
@@ -116,6 +117,20 @@ public class SurveyQuestionUIViewerGrid : SurveyQuestionUIViewer {
                     radio.label = string.Empty;
                     cellContainer.Add(radio);
                 }
+                cellContainer.RegisterCallback<ClickEvent>(evt => {
+                    var toggle = cellContainer.Q<Toggle>("grid-cell-toggle");
+                    if (toggle != null) {
+                        if (evt.target != toggle && (evt.target as VisualElement)?.GetFirstAncestorOfType<Toggle>() != toggle) {
+                            toggle.value = !toggle.value;
+                        }
+                    }
+                    var radio = cellContainer.Q<Toggle>("grid-cell-radio");
+                    if (radio != null) {
+                        if (!radio.value) {
+                            radio.value = true;
+                        }
+                    }
+                });
                 return cellContainer;
             };
 
