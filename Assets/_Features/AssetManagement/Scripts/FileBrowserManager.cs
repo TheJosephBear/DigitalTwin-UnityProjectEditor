@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using FrostweepGames.Plugins.WebGLFileBrowser;
 using UnityEngine;
+using TriLibCore;
 
 /// <summary>
 /// Provides a unified interface for opening a file browser and receiving user-selected files.
@@ -53,7 +54,6 @@ public class FileBrowserManager : Singleton<FileBrowserManager> {
             WebGLFileBrowser.GetFilteredFileExtensions(filterExtensions)
         );
     }
-
 
     /// <summary>
     /// Handles successful file selection events from the WebGL file browser.

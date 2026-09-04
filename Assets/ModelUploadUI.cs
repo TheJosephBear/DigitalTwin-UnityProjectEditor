@@ -39,13 +39,13 @@ public class ModelUploadUI : UIBehaviour {
 #if UNITY_EDITOR
         FileBrowserManager.Instance.ShowLoadDialogDebugMultiFile(
             files => HandleFilesSelected(files),
-            "obj, mtl, png, jpg",
+            FileLoadingManager.Instance.GetAllowedExtensionsString(),
             multipleSelection: true
         );
 #else
         FileBrowserManager.Instance.ShowLoadDialog(
             files => HandleFilesSelected(files),
-            "obj, mtl, png, jpg",
+            FileLoadingManager.Instance.GetAllowedExtensionsString(),
             multipleSelection: true
         );
 #endif

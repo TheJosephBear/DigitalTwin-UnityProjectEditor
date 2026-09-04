@@ -48,22 +48,23 @@ public class AssetManager : Singleton<AssetManager> {
             return null;
         }
 
-        // 1. Find OBJ file
-        FrostweepGames.Plugins.WebGLFileBrowser.File objFile = null;
+        // 1. Find OBJ file NOT ANYMOREEEEE
+        // We are looking for any main file
+        FrostweepGames.Plugins.WebGLFileBrowser.File mainFile = null;
         foreach (var f in files) {
-            if (f.fileInfo.extension.ToLower() == "obj" || f.fileInfo.extension.ToLower() == ".obj") {
-                objFile = f;
+            if (FileLoadingManager.Instance.IsMainModelExtension(f.fileInfo.extension.ToLower())) {
+                mainFile = f;
                 break;
             }
         }
 
-        if (objFile == null) {
-            Debug.LogError("No OBJ file in selection.");
+        if (mainFile == null) {
+            Debug.LogError("No main file in selection.");
             return null;
         }
 
-        // 2. Hash based on OBJ (or improve later)
-        string fileHash = GetFileHash(objFile.data);
+        // 2. Hash based on main file
+        string fileHash = GetFileHash(mainFile.data);
 
         // 3. Duplication check
         foreach (var asset in _assets) {
@@ -84,7 +85,7 @@ public class AssetManager : Singleton<AssetManager> {
         newAssetGo.transform.parent = AssetContainer.transform;
 
         ModelAsset modelAsset = newAssetGo.AddComponent<ModelAsset>();
-        modelAsset.FileName = objFile.fileInfo.fullName;
+        modelAsset.FileName = mainFile.fileInfo.fullName;
         modelAsset.FileHash = fileHash;
         modelAsset.SetModelGameObject(newAssetGo);
 

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using System.Linq;
-using QuestionnaireToolkit.Scripts.SimpleJSON;
 using System.Text.RegularExpressions;
 
 public class ProjectManager : Singleton<ProjectManager> {
