@@ -61,7 +61,7 @@ namespace TriLibCore.Samples
             {
                 return;
             }
-            var assetLoaderFilePicker = AssetLoaderFilePicker.Create();
+         /*   var assetLoaderFilePicker = AssetLoaderFilePicker.Create();
             assetLoaderFilePicker.LoadModelFromFilePickerAsync(
                 "Load Model",
                 onProgress: OnProgress,
@@ -70,7 +70,7 @@ namespace TriLibCore.Samples
             );
             _loadModelButton.SetActive(false);
             _cancelLoadingButton.SetActive(true);
-            _progressText.gameObject.SetActive(true);
+            _progressText.gameObject.SetActive(true);*/
         }
 
         /// <summary>

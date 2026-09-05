@@ -1,4 +1,4 @@
-﻿#pragma warning disable 649
+#pragma warning disable 649
 using TriLibCore.Extensions;
 using TriLibCore.Utils;
 using UnityEngine;
@@ -54,7 +54,7 @@ namespace TriLibCore.Samples
             GltfMaterialsHelper.SetupStatic(ref _assetLoaderOptions);
 
             // Create a file picker loader and open the file selection dialog.
-            var assetLoaderFilePicker = AssetLoaderFilePicker.Create();
+      /*      var assetLoaderFilePicker = AssetLoaderFilePicker.Create();
             assetLoaderFilePicker.LoadModelFromFilePickerAsync(
                 "Select a Model file",
                 OnLoad,
@@ -63,7 +63,7 @@ namespace TriLibCore.Samples
                 OnBeginLoad,
                 OnError,
                 null,
-                _assetLoaderOptions);
+                _assetLoaderOptions);*/
         }
 
         /// <summary>

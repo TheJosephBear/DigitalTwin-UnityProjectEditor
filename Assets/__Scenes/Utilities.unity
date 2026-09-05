@@ -8342,7 +8342,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09237cca709a4d84397e2dd736deac64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsCameraColissionOn: 0
 --- !u!4 &1501794202
 Transform:
   m_ObjectHideFlags: 0

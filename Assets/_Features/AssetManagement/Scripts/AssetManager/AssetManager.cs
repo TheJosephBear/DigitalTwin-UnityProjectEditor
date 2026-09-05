@@ -52,6 +52,7 @@ public class AssetManager : Singleton<AssetManager> {
         // We are looking for any main file
         FrostweepGames.Plugins.WebGLFileBrowser.File mainFile = null;
         foreach (var f in files) {
+            print(f.fileInfo.extension.ToLower());
             if (FileLoadingManager.Instance.IsMainModelExtension(f.fileInfo.extension.ToLower())) {
                 mainFile = f;
                 break;

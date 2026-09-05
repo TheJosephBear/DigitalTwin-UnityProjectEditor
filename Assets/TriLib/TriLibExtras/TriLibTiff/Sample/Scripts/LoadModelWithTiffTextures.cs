@@ -1,4 +1,4 @@
-﻿#pragma warning disable 649
+#pragma warning disable 649
 using UnityEngine;
 using TriLibCore.Extensions;
 using TriLibCore.Mappers;
@@ -53,8 +53,8 @@ namespace TriLibCore.Tiff
             // Creates and assigns the TIFF TextureMapper to the AssetLoaderOptions TextureMappers field
             var tiffTextureMapper = ScriptableObject.CreateInstance<TiffTextureMapper>();
             _assetLoaderOptions.TextureMappers = new TextureMapper[] { tiffTextureMapper };
-            var assetLoaderFilePicker = AssetLoaderFilePicker.Create();
-            assetLoaderFilePicker.LoadModelFromFilePickerAsync("Select a Model file", OnLoad, OnMaterialsLoad, OnProgress, OnBeginLoad, OnError, null, _assetLoaderOptions);
+        //    var assetLoaderFilePicker = AssetLoaderFilePicker.Create();
+        //    assetLoaderFilePicker.LoadModelFromFilePickerAsync("Select a Model file", OnLoad, OnMaterialsLoad, OnProgress, OnBeginLoad, OnError, null, _assetLoaderOptions);
         }
 
         /// <summary>

@@ -51,13 +51,15 @@ MonoBehaviour:
   - .bmp
   - .tga
   - .hdr
-  - .zip
   - .mtl
   - .bin
   - .fbx
-  - .glb
-  - .gltf
-  - .obj
-  - .stl
-  - .ply
+  _allowedFileExtensionsMain:
   - .dae
+  - .ply
+  - .stl
+  - .obj
+  - .gltf
+  - .glb
+  - .fbx
+  - .zip

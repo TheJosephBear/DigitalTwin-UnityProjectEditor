@@ -1,12 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using Dummiesman;
 using System.IO;
 using UnityEngine;
-using FrostweepGames.Plugins.WebGLFileBrowser;
 using System.Linq;
 using TriLibCore;
-using UnityEditor.PackageManager;
 
 /// <summary>
 /// Responsible for creating GameObjects from files from any source.
@@ -269,9 +266,16 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
         }
 
         AssetLoaderOptions options = AssetLoader.CreateDefaultLoaderOptions();
+        AssetLoaderContext context = null;
 
-        // Load model synchronously using TriLib 2
-        AssetLoaderContext context = AssetLoader.LoadModelFromFile(copiedModelPath, null, null, null, null, null, options);
+        // Check if the file is an archive (.zip)
+        bool isZip = System.IO.Path.GetExtension(copiedModelPath).Equals(".zip", System.StringComparison.OrdinalIgnoreCase);
+
+        if (isZip) {
+            context = AssetLoaderZip.LoadModelFromZipFile(copiedModelPath, null, null, null, null, null, options);
+        } else {
+            context = AssetLoader.LoadModelFromFile(copiedModelPath, null, null, null, null, null, options);
+        }
 
         if (context == null || context.RootGameObject == null) {
             Debug.LogError($"[FileLoadingManager] TriLib failed to load model from path: {copiedModelPath}");
@@ -314,20 +318,23 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
     }
 
     /// <summary>
-    /// Returns a comma-separated string of all allowed extensions.
-    /// Useful for displaying supported formats in UI or dialog prompts.
+    /// Returns a comma-separated string of all allowed extensions formatted with leading dots (e.g., ".obj, .fbx, .glb, .png").
     /// </summary>
-    /// <returns>Formatted string (e.g., "obj, fbx, glb, png").</returns>
+    /// <returns>Formatted string without a trailing comma.</returns>
     public string GetAllowedExtensionsString() {
-        return string.Join(", ", _allowedFileExtensions);
+        return string.Join(", ", _allowedFileExtensions.Select(e => "." + NormalizeExtension(e)));
     }
 
     /// <summary>
-    /// Returns a comma-separated string of only the main 3D model extensions.
+    /// Returns a comma-separated string of main 3D model extensions formatted with leading dots (e.g., ".obj, .fbx, .glb").
     /// </summary>
-    /// <returns>Formatted string (e.g., "obj, fbx, glb, gltf").</returns>
+    /// <returns>Formatted string without a trailing comma.</returns>
     public string GetMainAllowedExtensionsString() {
-        return string.Join(", ", _allowedFileExtensionsMain);
+        return string.Join(", ", _allowedFileExtensionsMain.Select(e => "." + NormalizeExtension(e)));
+    }
+
+    public string GetAllAllowedExtensionsString() {
+        return GetAllowedExtensionsString() + ", " + GetMainAllowedExtensionsString();
     }
 
     /// <summary>
@@ -390,112 +397,3 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
     }
 
 }
-
-/* THE HOLY WORKING CODE */
-/*
-
-    /// <summary>
-    /// Loads a model from a folder containing OBJ + MTL + texture files.
-    /// Automatically parses the MTL and applies textures to the materials.
-    /// If there is no MTL or textures, the model will be created without them.
-    /// </summary>
-    /// <param name="folderPath">Folder containing OBJ, MTL, and texture files.</param>
-    /// <param name="objFileName">Name of the OBJ file inside the folder.</param>
-    /// <returns>Loaded GameObject with materials applied, deactivated by default.</returns>
-    public GameObject LoadObj(string folderOrObjPath) {
-        // Determine if the input contains a .obj file
-        string folderPath;
-        string objFileName;
-
-        if (Path.GetExtension(folderOrObjPath).ToLower() == ".obj") {
-            // Full OBJ path provided extract folder and filename
-            folderPath = Path.GetDirectoryName(folderOrObjPath);
-            objFileName = Path.GetFileName(folderOrObjPath);
-        } else {
-            // Folder path provided assume the folder contains exactly one OBJ
-            folderPath = folderOrObjPath;
-
-            string[] objFiles = Directory.GetFiles(folderPath, "*.obj");
-            if (objFiles.Length == 0) {
-                Debug.LogError($"No OBJ file found in folder: {folderPath}");
-                return null;
-            }
-
-            objFileName = Path.GetFileName(objFiles[0]); // take the first OBJ
-        }
-
-        string objPath = Path.Combine(folderPath, objFileName);
-        string mtlPath = Path.ChangeExtension(objPath, ".mtl");
-
-        if (!File.Exists(objPath)) {
-            Debug.LogError($"OBJ file not found: {objPath}");
-            return null;
-        }
-
-        GameObject loadedObj = new OBJLoader().Load(objPath);
-        loadedObj.SetActive(false);
-
-        if (!File.Exists(mtlPath)) {
-            Debug.LogWarning($"No MTL file found. OBJ loaded without textures.");
-            return loadedObj;
-        }
-
-        ApplyMaterialsFromMtl(loadedObj, mtlPath, folderPath);
-
-        return loadedObj;
-    }
-
-
-    /// <summary>
-    /// Parses an MTL file and applies the textures to the materials on the loaded model.
-    /// </summary>
-    private void ApplyMaterialsFromMtl(GameObject obj, string mtlPath, string folder) {
-        string[] lines = File.ReadAllLines(mtlPath);
-        Dictionary<string, string> materialToTexture = new Dictionary<string, string>();
-        string currentMaterial = null;
-
-        foreach (string rawLine in lines) {
-            string line = rawLine.Trim();
-            if (line.StartsWith("newmtl ")) {
-                currentMaterial = line.Substring(7).Trim();
-            } else if (line.StartsWith("map_Kd ") && currentMaterial != null) {
-                string texName = line.Substring(7).Trim();
-                string texPath = Path.Combine(folder, Path.GetFileName(texName));
-                materialToTexture[currentMaterial] = texPath;
-            }
-        }
-
-        Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
-        foreach (Renderer renderer in renderers) {
-            foreach (Material mat in renderer.materials) {
-                string cleanName = mat.name.Replace(" (Instance)", "");
-                if (!materialToTexture.TryGetValue(cleanName, out string texPath))
-                    continue;
-
-                if (!File.Exists(texPath)) {
-                    Debug.LogWarning($"Texture not found for {cleanName}: {texPath}");
-                    continue;
-                }
-
-                byte[] data = File.ReadAllBytes(texPath);
-                Texture2D tex = new Texture2D(2, 2);
-                tex.LoadImage(data);
-                mat.mainTexture = tex;
-
-                Debug.Log($"Applied texture {texPath} -> material {cleanName}");
-            }
-        }
-    }
-*/
-
-/* OLD BYTE CREATION */
-/*
-    public GameObject LoadModel(byte[] file) {
-        using (MemoryStream memoryStream = new MemoryStream(file)) {
-            // Load the OBJ model from the MemoryStream
-            GameObject loadedObject = new OBJLoader().Load(memoryStream);
-            loadedObject.SetActive(false);
-            return loadedObject;
-        }
-    }
-*/

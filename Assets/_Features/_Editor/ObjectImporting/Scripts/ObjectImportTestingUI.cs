@@ -11,10 +11,9 @@ public class ObjectImportTestingUI : MonoBehaviour {
 
     public string ProjectToOpen = "ragh";
 
-    void Awake() {
-        foreach (var item in GetAllSupportedExtensions()) {
-            print(item);
-        }
+    void Start() {
+        print(FileLoadingManager.Instance.GetAllAllowedExtensionsString());
+
         // OpenProject(ProjectToOpen);
     }
 

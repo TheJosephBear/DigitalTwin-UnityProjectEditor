@@ -5,7 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using TriLibCore.SFB;
+// using TriLibCore.SFB;
 using TriLibCore.Extensions;
 using TriLibCore.Extras;
 using TriLibCore.Utils;
@@ -83,7 +83,7 @@ namespace TriLibCore.Samples
         /// <summary>
         /// An instance of the TriLib file picker for selecting models/directories on supported platforms.
         /// </summary>
-        public AssetLoaderFilePicker FilePickerAssetLoader;
+      //  public AssetLoaderFilePicker FilePickerAssetLoader;
 
         /// <summary>
         /// Dynamically scales input movement based on the loaded model’s bounding size.
@@ -501,7 +501,7 @@ namespace TriLibCore.Samples
         {
             ConfigureAssetLoaderOptions();
             SetLoading(false);
-            FilePickerAssetLoader = AssetLoaderFilePicker.Create();
+         /*   FilePickerAssetLoader = AssetLoaderFilePicker.Create();
             FilePickerAssetLoader.LoadModelFromDirectoryPickerAsync(
                 "Select a Directory",
                 OnLoad,
@@ -512,7 +512,7 @@ namespace TriLibCore.Samples
                 gameObject,
                 AssetLoaderOptions,
                 true
-            );
+            );*/
         }
 
         /// <summary>
@@ -535,7 +535,7 @@ namespace TriLibCore.Samples
         {
             ConfigureAssetLoaderOptions();
             SetLoading(false);
-            FilePickerAssetLoader = AssetLoaderFilePicker.Create();
+         /*   FilePickerAssetLoader = AssetLoaderFilePicker.Create();
             FilePickerAssetLoader.LoadModelFromFilePickerAsync(
                 "Select a File",
                 OnLoad,
@@ -545,7 +545,7 @@ namespace TriLibCore.Samples
                 OnError,
                 gameObject,
                 AssetLoaderOptions
-            );
+            );*/
         }
 
         /// <summary>
@@ -618,10 +618,10 @@ namespace TriLibCore.Samples
         {
             SetLoading(false);
             var title = "Select a skybox image";
-            var extensions = new ExtensionFilter[]
+          /*  var extensions = new ExtensionFilter[]
             {
                 new ExtensionFilter("Radiance HDR Image (hdr)", "hdr")
-            };
+            };*/
          //   StandaloneFileBrowser.OpenFilePanelAsync(title, null, extensions, true, OnSkyboxStreamSelected);
         }
 
@@ -1194,7 +1194,7 @@ namespace TriLibCore.Samples
         /// Handler for the file picker callback when the user selects an HDR image for the skybox.
         /// </summary>
         /// <param name="files">A list of selected items with streams.</param>
-        private void OnSkyboxStreamSelected(IList<ItemWithStream> files)
+    /*    private void OnSkyboxStreamSelected(IList<ItemWithStream> files)
         {
             if (files != null && files.Count > 0 && files[0].HasData)
             {
@@ -1204,7 +1204,7 @@ namespace TriLibCore.Samples
             {
                 Utils.Dispatcher.InvokeAsync(ClearSkybox);
             }
-        }
+        }*/
 
         /// <summary>
         /// Central logic for processing camera/light movements based on user input.

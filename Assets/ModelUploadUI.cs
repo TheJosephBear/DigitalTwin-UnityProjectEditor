@@ -36,16 +36,19 @@ public class ModelUploadUI : UIBehaviour {
     /// Opens the file dialog and returns the created asset via callback
     /// </summary>
     public void OnSelectFiles() {
+        string extensions = FileLoadingManager.Instance.GetAllAllowedExtensionsString();
+        extensions = extensions.Replace(".", "");
+
 #if UNITY_EDITOR
         FileBrowserManager.Instance.ShowLoadDialogDebugMultiFile(
             files => HandleFilesSelected(files),
-            FileLoadingManager.Instance.GetAllowedExtensionsString(),
+            extensions,
             multipleSelection: true
         );
 #else
         FileBrowserManager.Instance.ShowLoadDialog(
             files => HandleFilesSelected(files),
-            FileLoadingManager.Instance.GetAllowedExtensionsString(),
+            extensions,
             multipleSelection: true
         );
 #endif

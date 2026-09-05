@@ -1,4 +1,4 @@
-﻿#pragma warning disable 649
+#pragma warning disable 649
 using System;
 using TriLibCore.Extensions;
 using TriLibCore.General;
@@ -137,7 +137,7 @@ namespace TriLibCore.Samples
         /// The <see cref="AssetLoaderFilePicker"/> created for this viewer,
         /// enabling file or directory selection for model loading.
         /// </summary>
-        public AssetLoaderFilePicker FilePickerAssetLoader;
+//        public AssetLoaderFilePicker FilePickerAssetLoader;
 
         /// <summary>
         /// Tracks the peak memory usage (in bytes) observed during model loading.
@@ -257,7 +257,7 @@ namespace TriLibCore.Samples
         public void LoadModelFromFile(GameObject wrapperGameObject = null, Action<AssetLoaderContext> onMaterialsLoad = null)
         {
             SetLoading(false);
-            FilePickerAssetLoader = AssetLoaderFilePicker.Create();
+        /*    FilePickerAssetLoader = AssetLoaderFilePicker.Create();
             FilePickerAssetLoader.LoadModelFromFilePickerAsync(
                 "Select a File",
                 OnLoad,
@@ -267,7 +267,7 @@ namespace TriLibCore.Samples
                 OnError,
                 wrapperGameObject ? wrapperGameObject : gameObject,
                 AssetLoaderOptions
-            );
+            );*/
         }
 
         /// <summary>
@@ -279,7 +279,7 @@ namespace TriLibCore.Samples
         public void LoadModelFromDirectory(GameObject wrapperGameObject = null, Action<AssetLoaderContext> onMaterialsLoad = null)
         {
             SetLoading(false);
-            FilePickerAssetLoader = AssetLoaderFilePicker.Create();
+           /* FilePickerAssetLoader = AssetLoaderFilePicker.Create();
             FilePickerAssetLoader.LoadModelFromDirectoryPickerAsync(
                 "Select a Directory",
                 OnLoad,
@@ -290,7 +290,7 @@ namespace TriLibCore.Samples
                 wrapperGameObject ? wrapperGameObject : gameObject,
                 AssetLoaderOptions,
                 true
-            );
+            );*/
         }
 
         /// <summary>

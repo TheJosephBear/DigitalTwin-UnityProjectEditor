@@ -1,4 +1,4 @@
-﻿#pragma warning disable 649
+#pragma warning disable 649
 using UnityEngine;
 using TriLibCore.Extensions;
 using UnityEngine.UI;
@@ -52,7 +52,7 @@ namespace TriLibCore.Samples
             }
 
             // Create an AssetLoaderFilePicker to open a file dialog
-            var assetLoaderFilePicker = AssetLoaderFilePicker.Create();
+       /*     var assetLoaderFilePicker = AssetLoaderFilePicker.Create();
             // Asynchronously load the chosen model, providing callbacks for various events
             assetLoaderFilePicker.LoadModelFromFilePickerAsync(
                 "Select a Model file",
@@ -62,7 +62,7 @@ namespace TriLibCore.Samples
                 OnBeginLoad,
                 OnError,
                 null,
-                _assetLoaderOptions);
+                _assetLoaderOptions);*/
         }
 
         /// <summary>
