@@ -57,7 +57,10 @@ public abstract class SurveyQuestionUIViewer : SurveyQuestionUIBase {
     }
 
     public override void SetTitle(string title) {
-        _root.Q<Label>("question-title").text = title;
+        var label = _root.Q<Label>("question-title");
+        if (label != null) {
+            label.text = title;
+        }
     }
 
     public override void SetDescription(string desc) {

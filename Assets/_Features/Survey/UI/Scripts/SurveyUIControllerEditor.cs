@@ -284,6 +284,10 @@ public class SurveyUIControllerEditor : MonoBehaviour {
             imageUI.OnAnswerImageChanged += HandleImageQuestionAnswerImageUpload;
             imageUI.OnAnswerAdded += HandleAddAnswerImage;
             imageUI.OnAnswerRemoved += HandleAnswerRemoved;
+
+            if (!isDeserialized) {
+                imageUI.AddInitialAnswer();
+            }
         } else if (addedQuestionUI is SurveyQuestionUIEditorLinearScale scaleUI) {
             scaleUI.OnAnswerAdded += HandleAnswerAdded;
             scaleUI.OnAnswerRemoved += HandleAnswerRemoved;

@@ -9,9 +9,9 @@
         </ui:VisualElement>
         <ui:VisualElement name="question-container" class="question-container">
             <ui:Instance template="QuestionTitleBar" name="question-bar" />
-            <ui:VisualElement name="options-list" class="options-list">
+            <ui:RadioButtonGroup name="options-list" class="options-list">
                 <ui:Instance template="OptionRadio" name="TemplateContainer" />
-            </ui:VisualElement>
+            </ui:RadioButtonGroup>
             <ui:VisualElement name="add-buttons" class="add-buttons">
                 <ui:Button text="Přidat odpověď" name="add-option-button" />
                 <ui:Button text="Přidat &quot;Jiná&quot; odpověď" name="add-other-option-button" />

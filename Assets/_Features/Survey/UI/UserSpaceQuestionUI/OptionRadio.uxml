@@ -1,6 +1,6 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/UserStyles.uss" />
     <ui:VisualElement class="option-row">
-        <ui:RadioButton label="Radio Button" style="flex-grow: 1; flex-direction: row-reverse;" />
+        <ui:RadioButton name="option-radio" class="user-option-radio" />
     </ui:VisualElement>
 </ui:UXML>
