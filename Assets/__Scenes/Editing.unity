@@ -1202,7 +1202,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1791
+    m_Bits: 1279
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -7385,12 +7385,24 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
+      propertyPath: MaxPanSpeed
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
+      propertyPath: MinPanSpeed
+      value: 0.0001
+      objectReference: {fileID: 0}
+    - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: MaxScrollSpeed
       value: 3.61
       objectReference: {fileID: 0}
     - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: MinScrollSpeed
       value: 0.007
+      objectReference: {fileID: 0}
+    - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
+      propertyPath: PanSlowDistance
+      value: 160
       objectReference: {fileID: 0}
     - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: boundsPadding.x

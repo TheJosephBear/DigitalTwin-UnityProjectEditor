@@ -17,7 +17,6 @@ public class GeoMapManager : Singleton<GeoMapManager> {
         if(vcam!=null) vcam.SetActive(false);
     }
 
-
     public void ActivateGeoLocalization(bool firstOpen = true) {
     //    UIManager.Instance.ShowUI(UIType.GeoLocalizationUI);
         ToggleGeoMap(true);
@@ -95,6 +94,11 @@ public class GeoMapManager : Singleton<GeoMapManager> {
             OnlineMapsReff.floatZoom += step;
             if (OnlineMapsReff.floatZoom > 20) return;
         }
+    }
+
+    public Vector2 GetCoordinates() {
+        GeoLocalizationData data = GeoMapLocalizationManager.Instance.GetPlacementMapData();
+        return new Vector2(data.latitude, data.longtitude);
     }
 
     public SerializableGeoMapManager SerializeManager() {

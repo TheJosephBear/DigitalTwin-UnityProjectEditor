@@ -46,6 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DirectionalLightReference: {fileID: 8666099211360190690}
+  DirectionalLightComponent: {fileID: 5054301632373115256}
+  MaxIntensity: 1
+  SunsetFadeAngle: 5
   Latitude: 50.665092
   Longitude: 14.023887
   UtcOffsetHours: 2

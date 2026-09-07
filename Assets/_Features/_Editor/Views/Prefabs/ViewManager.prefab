@@ -144,6 +144,7 @@ MonoBehaviour:
   cameraViewUI: {fileID: 8794994671842005292}
   previewCam: {fileID: 8794994672007692011}
   isActivelyShowingCam: 0
+  isViewMovingActive: 0
   OnViewPointAddedEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -175,6 +176,13 @@ MonoBehaviour:
   RightClickLookEnabled: 1
   moveSpeed: 5
   lookSensitivity: 2
+  panSensitivity: 0.5
+  ScrollSlowDistance: 50
+  MinScrollSpeed: 2
+  MaxScrollSpeed: 20
+  GroundGeometryLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &8794994671842005292
 GameObject:
   m_ObjectHideFlags: 0
@@ -348,7 +356,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 7423
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: 2a8e549540c356544a808bf02a27c4e1, type: 2}
   m_TargetDisplay: 0

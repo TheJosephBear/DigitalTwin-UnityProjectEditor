@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-  m_Sun: {fileID: 0}
+  m_Sun: {fileID: 5654090384495486397}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4679,6 +4679,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1357841082604581935, guid: e71b89e5a4148374088ed6e299413278, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.8844342
+      objectReference: {fileID: 0}
+    - target: {fileID: 1357841082604581935, guid: e71b89e5a4148374088ed6e299413278, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.4414082
+      objectReference: {fileID: 0}
+    - target: {fileID: 1357841082604581935, guid: e71b89e5a4148374088ed6e299413278, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.13550434
+      objectReference: {fileID: 0}
+    - target: {fileID: 1357841082604581935, guid: e71b89e5a4148374088ed6e299413278, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.06762823
+      objectReference: {fileID: 0}
+    - target: {fileID: 4439592890628603482, guid: e71b89e5a4148374088ed6e299413278, type: 3}
+      propertyPath: Hour
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 4439592890628603482, guid: e71b89e5a4148374088ed6e299413278, type: 3}
+      propertyPath: Minute
+      value: 21
+      objectReference: {fileID: 0}
     - target: {fileID: 5913108950166972794, guid: e71b89e5a4148374088ed6e299413278, type: 3}
       propertyPath: m_LocalPosition.x
       value: 184.49765
@@ -4728,6 +4752,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e71b89e5a4148374088ed6e299413278, type: 3}
+--- !u!108 &5654090384495486397 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 82809674905612247, guid: e71b89e5a4148374088ed6e299413278, type: 3}
+  m_PrefabInstance: {fileID: 5654090384495486396}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

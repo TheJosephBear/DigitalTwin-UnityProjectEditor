@@ -34,22 +34,13 @@ public class SunIRLUI: MonoBehaviour {
     private SunManager sunManager;
     private bool isInitializing = false;
 
-    public void Initialize(SunManager manager) {
+    public void Initialize(SunManager manager, bool applyDefaults = true) {
         sunManager = manager;
         isInitializing = true;
 
         // 1. Setup UI fields and dropdown options
         PopulateYears();
         PopulateMonths();
-
-        // Apply Initial Values to UI
-        latitudeInput.text = initialLatitude.ToString();
-        longitudeInput.text = initialLongitude.ToString();
-        hourInput.text = initialHour.ToString("D2");
-        minuteInput.text = initialMinute.ToString("D2");
-
-        SetDropdownToValue(yearDropdown, initialYear.ToString());
-        monthDropdown.value = (int)Mathf.Clamp(initialMonth - 1, 0, 11);
 
         // Build days according to initial year/month, then select day
         UpdateDays();
@@ -69,10 +60,53 @@ public class SunIRLUI: MonoBehaviour {
 
         isInitializing = false;
 
-        // 3. Trigger updates on manager with initial values
-        ApplyAllValuesToManager();
+        // 3. ONLY trigger initial defaults if NOT loading saved data
+        if (applyDefaults) {
+            ApplyAllValuesToManager();
+        }
 
         OnHideUI();
+    }
+
+    public void SetUIValues(float latitude, float longitude, int year, int month, int day, int hour, int minute) {
+        bool wasInitializing = isInitializing;
+        isInitializing = true; // Block UI event callbacks from re-triggering SunManager
+
+        // 1. Set Coordinate Inputs
+        if (latitudeInput != null) {
+            latitudeInput.text = latitude.ToString("F4");
+        }
+        if (longitudeInput != null) {
+            longitudeInput.text = longitude.ToString("F4");
+        }
+
+        // 2. Ensure Year and Month options are populated
+        if (yearDropdown.options.Count == 0) PopulateYears();
+        if (monthDropdown.options.Count == 0) PopulateMonths();
+
+        // 3. Set Year Dropdown
+        SetDropdownToValue(yearDropdown, year.ToString());
+
+        // 4. Set Month Dropdown (1-indexed input to 0-indexed dropdown index)
+        int monthIndex = Mathf.Clamp(month - 1, 0, 11);
+        monthDropdown.value = monthIndex;
+        monthDropdown.RefreshShownValue();
+
+        // 5. Repopulate Days according to Year/Month and pick Day
+        UpdateDays();
+        int dayIndex = Mathf.Clamp(day - 1, 0, dayDropdown.options.Count - 1);
+        dayDropdown.value = dayIndex;
+        dayDropdown.RefreshShownValue();
+
+        // 6. Set Time Inputs (Formatted with two digits)
+        if (hourInput != null) {
+            hourInput.text = Mathf.Clamp(hour, 0, 23).ToString("D2");
+        }
+        if (minuteInput != null) {
+            minuteInput.text = Mathf.Clamp(minute, 0, 59).ToString("D2");
+        }
+
+        isInitializing = wasInitializing; // Restore state
     }
 
     public void OnShowUI() {

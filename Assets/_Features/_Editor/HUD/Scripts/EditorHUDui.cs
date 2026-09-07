@@ -79,7 +79,7 @@ public class EditorHUDui : UIBehaviour {
 
     public void OnLeave() {
         if (MainManagerBase.Instance is EditorManager editorMgr) {
-            editorMgr.ExitEditor((exitSuccess) => { });
+            editorMgr.ExitEditor((exitSuccess) => { }, save: false);
         }
     }
 

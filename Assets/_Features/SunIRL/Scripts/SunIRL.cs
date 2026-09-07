@@ -1,10 +1,16 @@
 using System;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class SunIRL: MonoBehaviour {
 
     [Header("References")]
     [SerializeField] private GameObject DirectionalLightReference;
+    [SerializeField] private Light DirectionalLightComponent;
+
+    [Header("Lighting Settings")]
+    [SerializeField] private float MaxIntensity = 1.2f;
+    [SerializeField] private float SunsetFadeAngle = 5f;
 
     [Header("Spatial Coordinates")]
     [Range(-90f, 90f)] public float Latitude = 0f;
@@ -81,11 +87,27 @@ public class SunIRL: MonoBehaviour {
     public void UpdateSunPosition() {
         if (DirectionalLightReference == null) return;
 
-        Quaternion calculatedValue = CalculateSunQuaternion();
-        DirectionalLightReference.transform.rotation = calculatedValue;
+        // Cache the Light component reference automatically
+        if (DirectionalLightComponent == null) {
+            DirectionalLightComponent = DirectionalLightReference.GetComponent<Light>();
+        }
+
+        Quaternion calculatedRotation = CalculateSunQuaternion(out float altitudeDeg);
+        DirectionalLightReference.transform.rotation = calculatedRotation;
+
+        // Smoothly fade light intensity near and below the horizon
+        if (DirectionalLightComponent != null) {
+            // Evaluate altitude: > 5 deg = 100% brightness, < 0 deg = 0% brightness
+            float lightFactor = Mathf.Clamp01(altitudeDeg / SunsetFadeAngle);
+
+            DirectionalLightComponent.intensity = Mathf.Lerp(0f, MaxIntensity, lightFactor);
+
+            // Disable shadows below horizon to prevent unwanted subsurface light artifacts
+            DirectionalLightComponent.shadows = (altitudeDeg > 0f) ? LightShadows.Soft : LightShadows.None;
+        }
     }
 
-    private Quaternion CalculateSunQuaternion() {
+    private Quaternion CalculateSunQuaternion(out float altitudeDeg) {
         DateTime currentDateTime;
         try {
             currentDateTime = new DateTime((int)Year, (int)Month, (int)Day, (int)Hour, (int)Minute, 0, DateTimeKind.Unspecified);
@@ -120,6 +142,7 @@ public class SunIRL: MonoBehaviour {
         float sinAltitude = Mathf.Sin(latRad) * Mathf.Sin(declinationRad) +
                             Mathf.Cos(latRad) * Mathf.Cos(declinationRad) * Mathf.Cos(hourAngleRad);
         float altitudeRad = Mathf.Asin(Mathf.Clamp(sinAltitude, -1f, 1f));
+        altitudeDeg = altitudeRad * Mathf.Rad2Deg;
 
         // 8. Calculate Solar Azimuth angle (Measured from True North = 0°)
         float cosAzimuth = (Mathf.Sin(declinationRad) * Mathf.Cos(latRad) -
@@ -132,11 +155,46 @@ public class SunIRL: MonoBehaviour {
             azimuthRad = (2f * Mathf.PI) - azimuthRad;
         }
 
-        float altitudeDeg = altitudeRad * Mathf.Rad2Deg;
         float azimuthDeg = azimuthRad * Mathf.Rad2Deg;
 
         float adjustedAzimuthDeg = azimuthDeg + 180f;
 
         return Quaternion.Euler(altitudeDeg, adjustedAzimuthDeg, 0f);
     }
+
+    public SerializableSun Serialize() {
+        return new SerializableSun {
+            year = (int)Year,
+            month = (int)Month,
+            day = (int)Day,
+            hour = (int)Hour,
+            minute = (int)Minute,
+        };
+    }
+
+    public void Deserialize(SerializableSun serializedSun, Vector2 geoCoordinates) {
+        if (serializedSun == null) return;
+
+        print("WEEEE ESHOULD BE DOINNNNN");
+        SetYear((uint)serializedSun.year);
+        SetMonth((uint)serializedSun.month);
+        SetDay((uint)serializedSun.day);
+        SetHour((uint)serializedSun.hour);
+        SetMinute((uint)serializedSun.minute);
+
+        if (geoCoordinates != Vector2.zero) {
+            SetCoordinates(geoCoordinates.x, geoCoordinates.y);
+        }
+
+        UpdateSunPosition();
+    }
+}
+
+[Serializable]
+public class SerializableSun {
+    public int year;
+    public int month;
+    public int day;
+    public int hour;
+    public int minute;
 }

@@ -23,17 +23,19 @@ public class SunManager: Singleton<SunManager> {
         }
     }
 
-    private void InstantiateUI() {
+    private void InstantiateUI(bool applyDefaults = true) {
         if (_uiPrefab == null) {
             Debug.LogError("SunManager: UIPrefab reference is missing!");
             return;
         }
 
-        _uiInstance = Instantiate(_uiPrefab, _canvasParent != null ? _canvasParent : transform);
-        _uiScript = _uiInstance.GetComponent<SunIRLUI>();
+        if (_uiInstance == null) {
+            _uiInstance = Instantiate(_uiPrefab, _canvasParent != null ? _canvasParent : transform);
+            _uiScript = _uiInstance.GetComponent<SunIRLUI>();
+        }
 
         if (_uiScript != null) {
-            _uiScript.Initialize(this);
+            _uiScript.Initialize(this, applyDefaults);
         } else {
             Debug.LogError("SunManager: UIPrefab does not contain a SunIRLUI component!");
         }
@@ -62,4 +64,24 @@ public class SunManager: Singleton<SunManager> {
     }
 
     #endregion
+
+    public SerializableSun Serialize() {
+        return _sunIRL.Serialize();
+    }
+
+    public void Deserialize(SerializableSun serializedSun, Vector2 geoCoordinates) {
+        _sunIRL.Deserialize(serializedSun, geoCoordinates);
+
+        InstantiateUI(applyDefaults: false);
+        ToggleUI(false);
+        _uiScript?.SetUIValues(
+            geoCoordinates.x,
+            geoCoordinates.y,
+            serializedSun.year,
+            serializedSun.month,
+            serializedSun.day,
+            serializedSun.hour,
+            serializedSun.minute
+        );
+    }
 }

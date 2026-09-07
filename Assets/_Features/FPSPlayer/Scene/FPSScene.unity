@@ -937,6 +937,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6365697707034130103, guid: 5669c7145fc631242b2c46373919876d, type: 3}
+      propertyPath: m_AmplitudeGain
+      value: 0.8000003
+      objectReference: {fileID: 0}
+    - target: {fileID: 6365697707034130103, guid: 5669c7145fc631242b2c46373919876d, type: 3}
+      propertyPath: m_FrequencyGain
+      value: 0.8000003
+      objectReference: {fileID: 0}
     - target: {fileID: 7362803944433560628, guid: 5669c7145fc631242b2c46373919876d, type: 3}
       propertyPath: m_Name
       value: Player

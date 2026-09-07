@@ -43,6 +43,7 @@ public class ViewHUDButton : MonoBehaviour {
     }
 
     public void OnHover() {
+        print("View moving active? " + ViewManager.Instance.isViewMovingActive);
         if (ViewManager.Instance.isViewMovingActive) return;
 
         _previousActiveViewPoint = ViewManager.Instance.GetActiveViewPoint();

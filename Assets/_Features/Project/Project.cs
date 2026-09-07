@@ -44,6 +44,7 @@ public class SerializableProject {
     public List<serializableTextureAsset> serializableTextureAssets;
     public SerializableViewPointManager serializableViewPointManager;
     public SerializableGeoMapManager serializableGeoMapManager;
+    public SerializableSun serializableSun;
     //    public List<SerializableDecorationPreset> decorationPresets;
     //    public List<SerializableDecorationInstantiated> decorationsInstantiated;
 }

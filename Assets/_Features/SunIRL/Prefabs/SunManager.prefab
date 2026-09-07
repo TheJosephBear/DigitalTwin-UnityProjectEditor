@@ -96,6 +96,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5054301632373115256, guid: fa772babde46b594597406ac3770afb1, type: 3}
+      propertyPath: m_Shadows.m_Bias
+      value: 0.76
+      objectReference: {fileID: 0}
+    - target: {fileID: 5054301632373115256, guid: fa772babde46b594597406ac3770afb1, type: 3}
+      propertyPath: m_Shadows.m_NormalBias
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6174617550734146512, guid: fa772babde46b594597406ac3770afb1, type: 3}
       propertyPath: m_Name
       value: SunIRL

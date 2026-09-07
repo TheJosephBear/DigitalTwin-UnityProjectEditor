@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 
-public class CameraManager : Singleton<CameraManager> {
+public class CameraManager: Singleton<CameraManager> {
 
     public CameraCollisionEnforcer CameraColissionScriptRef;
     public GameObject VcamFreeCamPrefab;
@@ -14,12 +14,20 @@ public class CameraManager : Singleton<CameraManager> {
     public Vector3 BoundsPadding;
     public bool EnableBoundsClamping = true;
 
-    [Header("Camera")]
+    [Header("Camera & Movement")]
     [Range(0.1f, 10f)]
     public float MaxScrollSpeed = 0.9f;
     [Range(0f, 0.5f)]
     public float MinScrollSpeed = 0.2f;
     public float ScrollSlowDistance = 10f;
+
+    [Header("Pan Speed Settings")]
+    [Range(0.1f, 10f)]
+    public float MaxPanSpeed = 1.0f;
+    [Range(0.0001f, 0.5f)]
+    public float MinPanSpeed = 0.1f;
+    public float PanSlowDistance = 10f;
+
     public LayerMask GroundGeometryLayers;
 
     // Bounds tracking
@@ -46,7 +54,6 @@ public class CameraManager : Singleton<CameraManager> {
 
         vCamFreeCamRefference = SceneLoadingManager.Instance.InstantiateObjectInScene(VcamFreeCamPrefab, InitialCameraPosition.position, MainManagerBase.Instance.SceneType);
         vCamFreeCamRefference.transform.rotation = InitialCameraPosition.rotation;
-        //  DisableCinemachineAfterTransition();
 
         StartCoroutine(WaitForGlobalSettingsLoad());
     }
@@ -62,7 +69,7 @@ public class CameraManager : Singleton<CameraManager> {
             _editorManager = MainManagerBase.Instance;
         }
 
-        if (_editorManager != null && _editorManager.ActiveState == AppState.Freecam || _editorManager.ActiveState == AppState.Survey) {
+        if (_editorManager != null && (_editorManager.ActiveState == AppState.Freecam || _editorManager.ActiveState == AppState.Survey)) {
             UpdateFreeCamTransform();
         }
 
@@ -95,32 +102,27 @@ public class CameraManager : Singleton<CameraManager> {
                 rawBounds.Encapsulate(renderers[i].bounds);
             }
 
-            // 1. Half-width/depth expansion: Half of the geometry's size along X and Z
             Vector3 halfSize = rawBounds.size * 0.5f;
 
-            // 2. Dynamic height padding: Distance required for the camera to view the full geometry width/height
             Camera targetCam = Camera.main;
             float verticalFOV = targetCam.fieldOfView;
             float aspect = targetCam.aspect;
 
-            // Calculate view distance needed to fit vertical and horizontal extents of the geometry
             float requiredDistForHeight = (rawBounds.size.z * 0.5f) / Mathf.Tan(verticalFOV * 0.5f * Mathf.Deg2Rad);
             float horizontalFOV = 2f * Mathf.Atan(Mathf.Tan(verticalFOV * 0.5f * Mathf.Deg2Rad) * aspect);
             float requiredDistForWidth = (rawBounds.size.x * 0.5f) / Mathf.Tan(horizontalFOV * 0.5f);
 
-            // Maximum distance required to clear both horizontal and vertical bounds
             float viewDistancePadding = Mathf.Max(requiredDistForHeight, requiredDistForWidth);
 
-            // Define min/max bounds
             Vector3 min = new Vector3(
                 rawBounds.min.x - halfSize.x - BoundsPadding.x,
-                rawBounds.min.y, // Slapped strictly to the bottom-most point of the geometry
+                rawBounds.min.y,
                 rawBounds.min.z - halfSize.z - BoundsPadding.z
             );
 
             Vector3 max = new Vector3(
                 rawBounds.max.x + halfSize.x + BoundsPadding.x,
-                rawBounds.max.y + viewDistancePadding + BoundsPadding.y, // High enough to view full geometry
+                rawBounds.max.y + viewDistancePadding + BoundsPadding.y,
                 rawBounds.max.z + halfSize.z + BoundsPadding.z
             );
 
@@ -138,7 +140,6 @@ public class CameraManager : Singleton<CameraManager> {
         Transform camTransform = Camera.main.transform;
         float currentDistance = ScrollSlowDistance; // Default to max distance if nothing is hit
 
-        // Cast a ray forward from the camera center to find the target geometry
         Ray ray = new Ray(camTransform.position, camTransform.forward);
 
         if (Physics.Raycast(ray, out RaycastHit hit, ScrollSlowDistance, GroundGeometryLayers)) {
@@ -147,11 +148,14 @@ public class CameraManager : Singleton<CameraManager> {
 
         // Map distance (0 to ScrollSlowDistance) to t (0 to 1)
         float t = Mathf.Clamp01(currentDistance / ScrollSlowDistance);
+        float tPan = Mathf.Clamp01(currentDistance / PanSlowDistance);
 
-        // Smoothly transition from MinScrollSpeed (close) to MaxScrollSpeed (far)
+        // Smoothly transition speeds based on distance
         float newScrollSpeed = Mathf.Lerp(MinScrollSpeed, MaxScrollSpeed, t);
+        float newPanSpeed = Mathf.Lerp(MinPanSpeed, MaxPanSpeed, t);
 
         GizmoManager.Instance.SetFreecamScrollSpeed(newScrollSpeed);
+        GizmoManager.Instance.SetFreecamPanSpeed(newPanSpeed);
     }
 
     private void EnforceCameraBounds() {
@@ -159,17 +163,14 @@ public class CameraManager : Singleton<CameraManager> {
 
         Vector3 currentPos = _freeCamCameraTransform.position;
 
-        // Clamp position within min and max allowed vectors
         Vector3 clampedPos = new Vector3(
             Mathf.Clamp(currentPos.x, _mapBounds.min.x, _mapBounds.max.x),
             Mathf.Clamp(currentPos.y, _mapBounds.min.y, _mapBounds.max.y),
             Mathf.Clamp(currentPos.z, _mapBounds.min.z, _mapBounds.max.z)
         );
 
-        // Re-assign clamped position back to the camera
         _freeCamCameraTransform.position = clampedPos;
-        Camera.main.transform.position = clampedPos;   
-        // print("trying to set the free cam position");
+        Camera.main.transform.position = clampedPos;
     }
 
     public Transform GetFreeCamTransform() {
@@ -185,7 +186,6 @@ public class CameraManager : Singleton<CameraManager> {
     public void UpdateFreeCamVcamPosition() {
         if (_freeCamCameraTransform == null) return;
 
-        // Ensure virtual camera position updates to the clamped camera position
         vCamFreeCamRefference.transform.position = _freeCamCameraTransform.position;
         vCamFreeCamRefference.transform.rotation = _freeCamCameraTransform.rotation;
     }
@@ -215,8 +215,6 @@ public class CameraManager : Singleton<CameraManager> {
         }
 
         _cinemachineBrainRefference.enabled = false;
-
-        // Clear the reference now that it's finished
         _disableCoroutine = null;
     }
 
