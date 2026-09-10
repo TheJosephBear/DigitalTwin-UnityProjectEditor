@@ -22,6 +22,7 @@ public class ViewPointUI : MonoBehaviour {
         foreach (ViewHUDButton button in _buttonList) {
             button.ToggleMovableVisual(false);
         }
+
         ResetButtonsVisual();
     }
 
@@ -51,15 +52,12 @@ public class ViewPointUI : MonoBehaviour {
                 MainManagerBase.Instance.ChangeState(AppState.ViewActive);
             }
 
-            if (clickedSameViewTwice) {
-                // exit
-                MainManagerBase.Instance.ChangeState(AppState.Freecam);
-                ResetButtonsVisual();
-            } else {
-                // activate
-                ViewManager.Instance.ActivateViewPoint();
-                OnHUDButtonClick(ViewPointRefference); // Simulate clicking it again
-            }
+            // 1. Trigger the camera movement to the viewpoint
+            ViewManager.Instance.ActivateViewPoint();
+
+            // 2. Immediately switch to Freecam and reset button visuals
+            MainManagerBase.Instance.ChangeState(AppState.Freecam);
+            ResetButtonsVisual();
         } else {
             if (MainManagerBase.Instance.ActiveState == AppState.ViewActive) {
                 ViewManager.Instance.StartViewMoving();
@@ -67,19 +65,6 @@ public class ViewPointUI : MonoBehaviour {
                 MainManagerBase.Instance.ChangeState(AppState.ViewActive);
             }
         }
-
-        /*
-        if (MainManagerBase.Instance is EditorManager manager) {
-            MainManagerBase.Instance.ChangeState(AppState.ViewActive);
-        } else {
-            // Toggle state
-            if (MainManagerBase.Instance.ActiveState == AppState.Freecam) {
-                MainManagerBase.Instance.ChangeState(AppState.ViewActive);
-            } else if (MainManagerBase.Instance.ActiveState == AppState.ViewActive) {
-                MainManagerBase.Instance.ChangeState(AppState.Freecam);
-            }
-        }
-        */
     }
 
     public void OnMoveButton(int index, bool moveUp) {
