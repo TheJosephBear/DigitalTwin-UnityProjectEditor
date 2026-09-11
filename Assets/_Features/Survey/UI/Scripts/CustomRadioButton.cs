@@ -1,4 +1,5 @@
 using UnityEngine.UIElements;
+using UIRadioButton = UnityEngine.UIElements.RadioButton;
 
 [UxmlElement]
 public partial class CustomRadioButton : VisualElement {
@@ -16,8 +17,8 @@ public partial class CustomRadioButton : VisualElement {
 
     [UxmlAttribute]
     public bool @Checked {
-        get => _toggle.value;
-        set => _toggle.value = value;
+        get => _radioButton.value;
+        set => _radioButton.value = value;
     }
 
     [UxmlAttribute]
@@ -27,15 +28,16 @@ public partial class CustomRadioButton : VisualElement {
     }
 
     private readonly TextField _labelTextField;
-    private readonly Toggle _toggle;
-    public Toggle Radio => _toggle;
+    private readonly UIRadioButton _radioButton;
+    public UIRadioButton Radio => _radioButton;
 
     public CustomRadioButton() {
         this.style.flexDirection = FlexDirection.Row;
 
-        _toggle = new Toggle();
-        _toggle.text = string.Empty;
-        Add(_toggle);
+        _radioButton = new UIRadioButton();
+        _radioButton.text = string.Empty;
+        _radioButton.label = string.Empty;
+        Add(_radioButton);
 
         _labelTextField = new TextField();
         _labelTextField.textEdition.placeholder = "Option text";
@@ -47,10 +49,19 @@ public partial class CustomRadioButton : VisualElement {
         textFieldWrapper.style.flexGrow = 1;
         textFieldWrapper.Add(_labelTextField);
         Add(textFieldWrapper);
+
+        this.RegisterCallback<ClickEvent>(evt => {
+            if (evt.target is TextField || (evt.target as VisualElement)?.GetFirstAncestorOfType<TextField>() != null) {
+                return;
+            }
+            if (!_radioButton.value) {
+                _radioButton.value = true;
+            }
+        });
     }
 
     public void RegisterRadioCallback(EventCallback<ChangeEvent<bool>> callback) {
-        _toggle.RegisterValueChangedCallback(callback);
+        _radioButton.RegisterValueChangedCallback(callback);
     }
 }
 
@@ -61,22 +72,29 @@ public partial class CustomRadioButtonNoText : VisualElement {
     [UxmlAttribute]
     public bool @Checked
     {
-        get => _toggle.value;
-        set => _toggle.value = value;
+        get => _radioButton.value;
+        set => _radioButton.value = value;
     }
 
-    private readonly Toggle _toggle;
-    public Toggle Radio => _toggle;
+    private readonly UIRadioButton _radioButton;
+    public UIRadioButton Radio => _radioButton;
 
     public CustomRadioButtonNoText() {
         this.style.flexDirection = FlexDirection.Row;
 
-        _toggle = new Toggle();
-        _toggle.text = string.Empty;
-        Add(_toggle);
+        _radioButton = new UIRadioButton();
+        _radioButton.text = string.Empty;
+        _radioButton.label = string.Empty;
+        Add(_radioButton);
+
+        this.RegisterCallback<ClickEvent>(evt => {
+            if (!_radioButton.value) {
+                _radioButton.value = true;
+            }
+        });
     }
 
     public void RegisterRadioCallback(EventCallback<ChangeEvent<bool>> callback) {
-        _toggle.RegisterValueChangedCallback(callback);
+        _radioButton.RegisterValueChangedCallback(callback);
     }
 }

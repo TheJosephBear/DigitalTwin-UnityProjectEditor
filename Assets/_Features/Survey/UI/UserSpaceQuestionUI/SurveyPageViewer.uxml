@@ -18,7 +18,7 @@
                 <ui:Button text="Zavřít dotazník" name="thank-you-close-btn" class="thank-you-btn" />
             </ui:VisualElement>
         </ui:ScrollView>
-        <ui:VisualElement name="bottom-bar">
+        <ui:VisualElement name="bottom-bar" class="viewer-bottom-bar">
             <ui:Button name="previous-btn" class="nav-btn" />
             <ui:Label text="999/999" name="page-count-label" />
             <ui:Button name="next-btn" class="nav-btn" />

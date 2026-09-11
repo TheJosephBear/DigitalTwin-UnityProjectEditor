@@ -114,12 +114,22 @@ public class SurveyQuestionUIViewerString : SurveyQuestionUIViewer {
             if (_answerTemplate == null) return null;
             answerElement = _answerTemplate.Instantiate();
 
-            var textLabel = answerElement.Q<Label>();
-            if (textLabel != null) textLabel.text = answerText;
             var radio = answerElement.Q<UIRadioButton>();
-            if (radio != null) radio.text = answerText;
+            if (radio != null) {
+                radio.label = string.Empty;
+                radio.text = answerText;
+            }
             var toggle = answerElement.Q<Toggle>();
-            if (toggle != null) toggle.text = answerText;
+            if (toggle != null) {
+                toggle.label = string.Empty;
+                toggle.text = answerText;
+            }
+            var textLabel = answerElement.Q<Label>();
+            if (textLabel != null && (object)textLabel != radio && (object)textLabel != toggle && 
+                !textLabel.ClassListContains("unity-radio-button__text") && !textLabel.ClassListContains("unity-toggle__text") &&
+                !textLabel.ClassListContains("unity-base-field__label")) {
+                textLabel.text = answerText;
+            }
         }
 
         // RadioGroup event
@@ -149,6 +159,39 @@ public class SurveyQuestionUIViewerString : SurveyQuestionUIViewer {
         }
 
         return answerUI;
+    }
+
+    public void SelectAnswerRadio(int selectedIndex) {
+        if (_questionType != QuestionType.MultipleChoiceSingle) return;
+
+        for (int i = 0; i < _addedAnswers.Count; i++) {
+            if (_addedAnswers[i]?.AnswerElement != null) {
+                var radio = _addedAnswers[i].AnswerElement.Q<UIRadioButton>();
+                if (radio != null) {
+                    radio.SetValueWithoutNotify(i == selectedIndex);
+                }
+                var customRadio = _addedAnswers[i].AnswerElement.Q<CustomRadioButton>();
+                if (customRadio != null && customRadio.Radio != null) {
+                    customRadio.Radio.SetValueWithoutNotify(i == selectedIndex);
+                }
+            }
+        }
+
+        if (_otherAnswerUI?.AnswerElement != null) {
+            var radio = _otherAnswerUI.AnswerElement.Q<UIRadioButton>();
+            if (radio != null) {
+                radio.SetValueWithoutNotify(_otherAnswerUI.AnswerIndex == selectedIndex);
+            }
+            var customRadio = _otherAnswerUI.AnswerElement.Q<CustomRadioButton>();
+            if (customRadio != null && customRadio.Radio != null) {
+                customRadio.Radio.SetValueWithoutNotify(_otherAnswerUI.AnswerIndex == selectedIndex);
+            }
+        }
+
+        var radioGroup = _root.Q<RadioButtonGroup>("options-list");
+        if (radioGroup != null) {
+            radioGroup.SetValueWithoutNotify(selectedIndex);
+        }
     }
 
     protected override SurveyAnswerUIBase CreateAnswerUI(VisualElement element, int index, bool isOther) {

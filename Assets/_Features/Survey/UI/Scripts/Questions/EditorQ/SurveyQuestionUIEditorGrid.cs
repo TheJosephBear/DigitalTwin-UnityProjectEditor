@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UIRadioButton = UnityEngine.UIElements.RadioButton;
 
 public class RadioCallbacks {
     public EventCallback<PointerDownEvent> PointerCb;
@@ -226,14 +227,32 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
                     alignItems = Align.Center,
                     justifyContent = Justify.Center,
                     flexGrow = 1,
-                    width = Length.Percent(100)
+                    width = Length.Percent(100),
+                    height = Length.Percent(100)
                 }
             };
+            cell.AddToClassList("grid-cell-container");
             if (_questionType == QuestionType.CheckboxGrid) {
                 cell.Add(new Toggle { name = "grid-cell-toggle" });
             } else {
                 cell.Add(new CustomRadioButtonNoText { name = "grid-cell-radio" });
             }
+            cell.RegisterCallback<ClickEvent>(evt => {
+                var toggle = cell.Q<Toggle>("grid-cell-toggle");
+                if (toggle != null) {
+                    if (evt.target != toggle && (evt.target as VisualElement)?.GetFirstAncestorOfType<Toggle>() != toggle) {
+                        toggle.value = !toggle.value;
+                    }
+                }
+                var radio = cell.Q<CustomRadioButtonNoText>("grid-cell-radio");
+                if (radio != null && radio.Radio != null) {
+                    if (evt.target != radio && (evt.target as VisualElement)?.GetFirstAncestorOfType<CustomRadioButtonNoText>() != radio) {
+                        if (!radio.Radio.value) {
+                            radio.Radio.value = true;
+                        }
+                    }
+                }
+            });
             return cell;
         };
 

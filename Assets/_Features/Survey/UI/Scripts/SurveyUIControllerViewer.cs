@@ -18,6 +18,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
     private int _currentPage = 0; // 0 = Intro Page, 1..N = Questions
     private VisualElement _firstPageElement;
     private VisualElement _thankYouPageElement;
+    private VisualElement _bottomBar;
     private Button _prevButton;
     private Button _nextButton;
     private Label _pageCountLabel;
@@ -39,6 +40,8 @@ public class SurveyUIControllerViewer : MonoBehaviour {
 
         var toggleButton = _root.Q<Button>("toggle-btn");
         if (toggleButton != null) toggleButton.clicked += HandleTogglePressed;
+
+        _bottomBar = _root.Q<VisualElement>("bottom-bar");
 
         _prevButton = _root.Q<Button>("previous-btn");
         if (_prevButton != null) _prevButton.clicked += HandlePreviousPressed;
@@ -194,6 +197,10 @@ public class SurveyUIControllerViewer : MonoBehaviour {
             _thankYouPageElement.style.display = DisplayStyle.None;
         }
 
+        if (_bottomBar != null) {
+            _bottomBar.style.display = DisplayStyle.Flex;
+        }
+
         // Update buttons and labels
         UpdateNavigationUI(totalQuestions, hasIntro);
 
@@ -272,6 +279,10 @@ public class SurveyUIControllerViewer : MonoBehaviour {
 
         if (_thankYouPageElement != null) {
             _thankYouPageElement.style.display = DisplayStyle.Flex;
+        }
+
+        if (_bottomBar != null) {
+            _bottomBar.style.display = DisplayStyle.None;
         }
 
         if (_prevButton != null) {

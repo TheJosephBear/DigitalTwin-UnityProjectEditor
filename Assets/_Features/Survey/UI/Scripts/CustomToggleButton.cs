@@ -48,6 +48,15 @@ public partial class CustomToggleButton : VisualElement {
         textFieldWrapper.style.flexGrow = 1;
         textFieldWrapper.Add(_labelTextField);
         Add(textFieldWrapper);
+
+        this.RegisterCallback<ClickEvent>(evt => {
+            if (evt.target is TextField || (evt.target as VisualElement)?.GetFirstAncestorOfType<TextField>() != null) {
+                return;
+            }
+            if (evt.target != _toggleButton && (evt.target as VisualElement)?.GetFirstAncestorOfType<Toggle>() != _toggleButton) {
+                _toggleButton.value = !_toggleButton.value;
+            }
+        });
     }
 
     public void RegisterToggleCallback(EventCallback<ChangeEvent<bool>> callback) {

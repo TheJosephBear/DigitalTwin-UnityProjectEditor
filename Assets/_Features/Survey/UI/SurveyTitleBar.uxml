@@ -14,14 +14,14 @@
                 </ui:Button>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="views" style="flex-grow: 1; flex-direction: row; justify-content: flex-start;">
-            <ui:VisualElement name="camera-view" style="flex-grow: 0; max-height: 120px; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/image-outline.png?fileID=2800000&amp;guid=2a8b0a5a8db48ee46924cdb62930cde7&amp;type=3#image-outline&quot;); -unity-background-scale-mode: scale-to-fit; min-height: 120px; display: none; min-width: 120px; width: 120px; max-width: 120px; margin-right: 12px; border-radius: 8px; overflow: hidden; border-width: 1px; border-color: rgba(0, 0, 0, 0.1);">
-                <ui:Button name="remove-view" class="icon remove-button" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/close.png?fileID=2800000&amp;guid=36073b272ed400e4fb5cef1e5e174a8d&amp;type=3#close&quot;); right: 2px; position: absolute; top: 2px; width: 20px; height: 20px;" />
-                <ui:Button name="enhance-image" class="icon enhance-button" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/magnify-plus-outline.png?fileID=2800000&amp;guid=11b0b51f78ca2b648a63350ae0bd5145&amp;type=3#magnify-plus-outline&quot;); position: absolute; bottom: 2px; right: 2px; width: 20px; height: 20px;" />
+        <ui:VisualElement name="views" class="media-views-container">
+            <ui:VisualElement name="camera-view" class="media-preview-card" style="display: none;">
+                <ui:Button name="remove-view" class="icon remove-button" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/close.png?fileID=2800000&amp;guid=36073b272ed400e4fb5cef1e5e174a8d&amp;type=3#close&quot;); right: 4px; position: absolute; top: 4px; width: 22px; height: 22px;" />
+                <ui:Button name="enhance-image" class="icon enhance-button" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/magnify-plus-outline.png?fileID=2800000&amp;guid=11b0b51f78ca2b648a63350ae0bd5145&amp;type=3#magnify-plus-outline&quot;); position: absolute; bottom: 4px; right: 4px; width: 22px; height: 22px;" />
             </ui:VisualElement>
-            <ui:VisualElement name="question-image" style="flex-grow: 0; min-height: 120px; max-height: 120px; -unity-background-scale-mode: scale-to-fit; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/image-outline.png?fileID=2800000&amp;guid=2a8b0a5a8db48ee46924cdb62930cde7&amp;type=3#image-outline&quot;); min-width: 120px; max-width: 120px; width: 120px; display: none; border-radius: 8px; overflow: hidden; border-width: 1px; border-color: rgba(0, 0, 0, 0.1);">
-                <ui:Button name="remove-image" class="icon remove-button" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/close.png?fileID=2800000&amp;guid=36073b272ed400e4fb5cef1e5e174a8d&amp;type=3#close&quot;); right: 2px; position: absolute; top: 2px; width: 20px; height: 20px;" />
-                <ui:Button name="enhance-image" class="icon enhance-button" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/magnify-plus-outline.png?fileID=2800000&amp;guid=11b0b51f78ca2b648a63350ae0bd5145&amp;type=3#magnify-plus-outline&quot;); position: absolute; bottom: 2px; right: 2px; width: 20px; height: 20px;" />
+            <ui:VisualElement name="question-image" class="media-preview-card" style="display: none;">
+                <ui:Button name="remove-image" class="icon remove-button" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/close.png?fileID=2800000&amp;guid=36073b272ed400e4fb5cef1e5e174a8d&amp;type=3#close&quot;); right: 4px; position: absolute; top: 4px; width: 22px; height: 22px;" />
+                <ui:Button name="enhance-image" class="icon enhance-button" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/magnify-plus-outline.png?fileID=2800000&amp;guid=11b0b51f78ca2b648a63350ae0bd5145&amp;type=3#magnify-plus-outline&quot;); position: absolute; bottom: 4px; right: 4px; width: 22px; height: 22px;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

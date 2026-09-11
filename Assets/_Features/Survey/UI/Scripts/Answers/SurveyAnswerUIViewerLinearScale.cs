@@ -110,7 +110,7 @@ public class SurveyAnswerUIViewerLinearScale : SurveyAnswerUIViewer {
         if (_slider != null) {
             _slider.lowValue = min;
             _slider.highValue = max;
-            int val = initialValue ?? min;
+            int val = initialValue ?? ((min + max) / 2);
             _slider.SetValueWithoutNotify(val);
 
             if (_valueBadge != null) {
