@@ -12,11 +12,15 @@ public class EditorProjectSerializer : MonoBehaviour {
         SerializableProject serializableProject = new SerializableProject {
             projectId = OpenedProject.ProjectID,
             projectName = OpenedProject.ProjectName,
+            projectDescription = OpenedProject.ProjectDescription,
+            projectImageID = OpenedProject.ProjectImageID,
+            owner = OpenedProject.Owner,
             serializableModelAssets = AssetManager.Instance.SerializeAssetList(),
             serializableTextureAssets = ImageManager.Instance.SerializeTextureList(),
             serializableMapManager = EditorManager.Instance.MapManager.Serialize(),
             serializableViewPointManager = EditorManager.Instance.ViewManager.Serialize(),
-            serializableGeoMapManager = EditorManager.Instance.GeoMapManager.SerializeManager()
+            serializableGeoMapManager = EditorManager.Instance.GeoMapManager.SerializeManager(),
+            serializableSun = SunManager.Instance.Serialize()
         };
         return serializableProject;
     }
@@ -47,6 +51,7 @@ public class EditorProjectSerializer : MonoBehaviour {
         EditorManager.Instance.MapManager.Deserialize(serializedProject.serializableMapManager);
         EditorManager.Instance.ViewManager.Deserialize(serializedProject.serializableViewPointManager);
         EditorManager.Instance.GeoMapManager.DeserializeManager(serializedProject.serializableGeoMapManager);
+        SunManager.Instance.Deserialize(serializedProject.serializableSun, GeoMapManager.Instance.GetCoordinates());
 
         UIManager.Instance.HideUI(UIType.LoadingScreen);
     }

@@ -2,15 +2,24 @@ using Dummiesman;
 using FrostweepGames.Plugins.WebGLFileBrowser;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using TriLibCore;
 using UnityEngine;
 
 public class ObjectImportTestingUI : MonoBehaviour {
 
     public string ProjectToOpen = "ragh";
 
-    void Awake() {
-        OpenProject(ProjectToOpen);
+    void Start() {
+        print(FileLoadingManager.Instance.GetAllAllowedExtensionsString());
+
+        // OpenProject(ProjectToOpen);
+    }
+
+    public static List<string> GetAllSupportedExtensions() {
+        // Returns a list of supported extensions (e.g., "fbx", "obj", "gltf", "glb", "stl", etc.)
+        return new List<string>(Readers.Extensions);
     }
 
     void OpenProject(string projectName) {

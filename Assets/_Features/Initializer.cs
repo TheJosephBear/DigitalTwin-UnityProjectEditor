@@ -13,6 +13,9 @@ public class Initializer : MonoBehaviour {
     public SceneType firstSceneToLoadViewer;
     public bool LoadEditorInUnityEditor;
 
+    [Header("In-Editor Debugging")]
+    public string projectName;
+
     void Awake() {
 #if UNITY_EDITOR
         if (LoadEditorInUnityEditor) {
@@ -21,7 +24,7 @@ public class Initializer : MonoBehaviour {
             EnterViewerMode();
         }
 #else
-            InitializeCorrectAppMode();
+        InitializeCorrectAppMode();
 #endif
     }
 
@@ -42,8 +45,6 @@ public class Initializer : MonoBehaviour {
             print("entering editor mode");
             EnterEditorMode();
         }
-
-        string projectName = GetUrlParameter("_projectName");
     }
 
     void EnterEditorMode() {
@@ -59,6 +60,17 @@ public class Initializer : MonoBehaviour {
         while (!loading.isDone) {
             yield return null;
         }
+
+        if (string.IsNullOrWhiteSpace(projectName)) {
+            projectName = GetUrlParameter("projectName");
+            if (string.IsNullOrEmpty(projectName)) projectName = GetUrlParameter("_projectName");
+            if (string.IsNullOrEmpty(projectName)) projectName = GetUrlParameter("project");
+        }
+
+        if (!string.IsNullOrWhiteSpace(projectName) && ProjectManager.Instance != null) {
+            ProjectManager.Instance.SelectedProject = new Project(projectName);
+        }
+
         UIManager.Instance.ShowUI(UIType.LoadingScreen);
         var loadTask = SceneLoadingManager.Instance.LoadSceneAsync(firstScene, 0f);
         yield return new WaitUntil(() => loadTask.IsCompleted);

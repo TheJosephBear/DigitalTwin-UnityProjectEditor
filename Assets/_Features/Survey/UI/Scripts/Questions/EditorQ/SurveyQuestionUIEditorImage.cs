@@ -8,7 +8,7 @@ public class SurveyQuestionUIEditorImage : SurveyQuestionUIEditor {
 
     public event Action<int, int, string> OnAnswerImageChanged;
     public event Action<int> OnAnswerAdded;
-    public event Action<int, int> OnAnswerRemoved; // Nejde na to tlaèítko kliknou tak zatím nemusíme implementit
+    public event Action<int, int> OnAnswerRemoved;
 
     public SurveyQuestionUIEditorImage(VisualElement root, int questionId, QuestionType questionType, List<SerializableViewPoint> viewPoints, SurveyUIBuilder uiBuilder)
         : base(root, questionId, questionType, viewPoints, uiBuilder) {
@@ -40,6 +40,11 @@ public class SurveyQuestionUIEditorImage : SurveyQuestionUIEditor {
 
         // Standard question buttons (Move, Delete, Upload main question image)
         RegisterQuestionModalButtonEvents();
+    }
+
+    public void AddInitialAnswer() {
+        AddAnswerUI();
+        OnAnswerAdded?.Invoke(QuestionID);
     }
 
     public void SetAnswerImage(int answerIndex, string imageId) {

@@ -95,11 +95,17 @@ public abstract class SurveyQuestionUIBase {
 
     public abstract SurveyAnswerUIBase AddAnswer(string answerText, bool isOther = false);
     public virtual void SetTitle(string title) {
-        _root.Q<TextField>("question-title").value = title;
+        var field = _root.Q<TextField>("question-title");
+        if (field != null) {
+            field.SetValueWithoutNotify(title);
+        }
     }
 
     public virtual void SetDescription(string desc) {
-        _root.Q<TextField>("question-description").value = desc;
+        var field = _root.Q<TextField>("question-description");
+        if (field != null) {
+            field.SetValueWithoutNotify(desc);
+        }
     }
 
     public void SetQuestionPosition(int position) {

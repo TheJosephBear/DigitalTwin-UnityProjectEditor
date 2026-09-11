@@ -1,14 +1,35 @@
 :root {
     --primary-color: rgb(103, 80, 164);
-    --secondary-color: rgb(73, 62, 105);
+    --primary-hover: rgb(86, 61, 141);
     --primary-background-color: rgb(247, 242, 250);
     --secondary-background-color: rgb(246, 230, 255);
+    --page-bg: rgb(251, 248, 253);
+    --card-border: rgb(232, 224, 236);
+    --card-hover-border: rgb(200, 184, 219);
+    --card-active-border: rgb(103, 80, 164);
+    --text-main: rgb(29, 25, 43);
+    --text-muted: rgb(98, 91, 113);
+    --input-bg: rgb(247, 245, 250);
+    --input-hover-bg: rgb(242, 239, 247);
+    --input-focus-bg: rgb(255, 255, 255);
+}
+
+#page-container {
+    background-color: var(--page-bg);
+}
+
+.page-container {
+    background-color: var(--page-bg);
+}
+
+#survey-scroll-view {
+    background-color: var(--page-bg);
 }
 
 #survey-scroll-view #unity-content-container {
     padding-top: 30px;
     padding-right: 10%;
-    padding-bottom: 20px;
+    padding-bottom: 80px;
     padding-left: 10%;
     margin-top: 0;
     margin-right: 0;
@@ -19,12 +40,710 @@
 #survey-scroll-view .unity-scroll-view__content-container {
     padding-top: 20px;
     padding-right: 10%;
-    padding-bottom: 20px;
+    padding-bottom: 80px;
     padding-left: 10%;
     margin-top: 0;
     margin-right: 0;
     margin-bottom: 0;
     margin-left: 0;
+}
+
+.unity-scroller {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-right: 12px;
+    margin-left: 0;
+    position: relative;
+}
+
+#survey-scroll-view .unity-scroller {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-right: 12px;
+    margin-left: 0;
+    position: relative;
+}
+
+.unity-scroller--vertical {
+    width: 20px;
+    min-width: 20px;
+    max-width: 20px;
+    background-color: transparent;
+    border-width: 0;
+    margin-right: 12px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    position: relative;
+}
+
+.unity-scroller.unity-scroller--vertical {
+    width: 20px;
+    min-width: 20px;
+    max-width: 20px;
+    background-color: transparent;
+    border-width: 0;
+    margin-right: 12px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    position: relative;
+}
+
+#survey-scroll-view .unity-scroller--vertical {
+    width: 20px;
+    min-width: 20px;
+    max-width: 20px;
+    background-color: transparent;
+    border-width: 0;
+    margin-right: 12px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    position: relative;
+}
+
+.unity-scroller--horizontal {
+    height: 20px;
+    min-height: 20px;
+    max-height: 20px;
+    background-color: transparent;
+    border-width: 0;
+    margin-bottom: 12px;
+    margin-left: 8px;
+    margin-right: 8px;
+    position: relative;
+}
+
+.unity-scroller.unity-scroller--horizontal {
+    height: 20px;
+    min-height: 20px;
+    max-height: 20px;
+    background-color: transparent;
+    border-width: 0;
+    margin-bottom: 12px;
+    margin-left: 8px;
+    margin-right: 8px;
+    position: relative;
+}
+
+.unity-scroller--vertical > .unity-scroller__low-button {
+    position: absolute;
+    top: 0;
+    left: 1px;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    max-width: 18px;
+    max-height: 18px;
+    background-color: transparent;
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-up.png?fileID=2800000&guid=13e6e2a9f27e5874eab92e305adb3fa1&type=3#chevron-up");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    transition-property: -unity-background-image-tint-color;
+    transition-duration: 0.15s;
+}
+
+.unity-scroller--vertical #unity-low-button {
+    position: absolute;
+    top: 0;
+    left: 1px;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    max-width: 18px;
+    max-height: 18px;
+    background-color: transparent;
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-up.png?fileID=2800000&guid=13e6e2a9f27e5874eab92e305adb3fa1&type=3#chevron-up");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    transition-property: -unity-background-image-tint-color;
+    transition-duration: 0.15s;
+}
+
+#survey-scroll-view .unity-scroller--vertical #unity-low-button {
+    position: absolute;
+    top: 0;
+    left: 1px;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    max-width: 18px;
+    max-height: 18px;
+    background-color: transparent;
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-up.png?fileID=2800000&guid=13e6e2a9f27e5874eab92e305adb3fa1&type=3#chevron-up");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    transition-property: -unity-background-image-tint-color;
+    transition-duration: 0.15s;
+}
+
+.unity-scroller--vertical > .unity-scroller__low-button:hover {
+    -unity-background-image-tint-color: var(--primary-color);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.unity-scroller--vertical #unity-low-button:hover {
+    -unity-background-image-tint-color: var(--primary-color);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.unity-scroller--vertical > .unity-scroller__low-button:active {
+    -unity-background-image-tint-color: var(--primary-hover);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.unity-scroller--vertical #unity-low-button:active {
+    -unity-background-image-tint-color: var(--primary-hover);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.unity-scroller--vertical > .unity-scroller__low-button > VisualElement {
+    display: none;
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+.unity-scroller--vertical #unity-low-button > VisualElement {
+    display: none;
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+.unity-scroller--vertical > .unity-scroller__high-button {
+    position: absolute;
+    bottom: 0;
+    left: 1px;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    max-width: 18px;
+    max-height: 18px;
+    background-color: transparent;
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-down.png?fileID=2800000&guid=d1a74cec442a2284589bab0730540f72&type=3#chevron-down");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    transition-property: -unity-background-image-tint-color;
+    transition-duration: 0.15s;
+}
+
+.unity-scroller--vertical #unity-high-button {
+    position: absolute;
+    bottom: 0;
+    left: 1px;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    max-width: 18px;
+    max-height: 18px;
+    background-color: transparent;
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-down.png?fileID=2800000&guid=d1a74cec442a2284589bab0730540f72&type=3#chevron-down");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    transition-property: -unity-background-image-tint-color;
+    transition-duration: 0.15s;
+}
+
+#survey-scroll-view .unity-scroller--vertical #unity-high-button {
+    position: absolute;
+    bottom: 0;
+    left: 1px;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    max-width: 18px;
+    max-height: 18px;
+    background-color: transparent;
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-down.png?fileID=2800000&guid=d1a74cec442a2284589bab0730540f72&type=3#chevron-down");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    transition-property: -unity-background-image-tint-color;
+    transition-duration: 0.15s;
+}
+
+.unity-scroller--vertical > .unity-scroller__high-button:hover {
+    -unity-background-image-tint-color: var(--primary-color);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.unity-scroller--vertical #unity-high-button:hover {
+    -unity-background-image-tint-color: var(--primary-color);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.unity-scroller--vertical > .unity-scroller__high-button:active {
+    -unity-background-image-tint-color: var(--primary-hover);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.unity-scroller--vertical #unity-high-button:active {
+    -unity-background-image-tint-color: var(--primary-hover);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.unity-scroller--vertical > .unity-scroller__high-button > VisualElement {
+    display: none;
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+.unity-scroller--vertical #unity-high-button > VisualElement {
+    display: none;
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+.unity-scroller--horizontal > .unity-scroller__low-button {
+    position: absolute;
+    left: 0;
+    top: 1px;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    background-color: transparent;
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-left.png?fileID=2800000&guid=4ab49af5e05cd304a88ca8241e489d55&type=3#chevron-left");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.unity-scroller--horizontal #unity-low-button {
+    position: absolute;
+    left: 0;
+    top: 1px;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    background-color: transparent;
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-left.png?fileID=2800000&guid=4ab49af5e05cd304a88ca8241e489d55&type=3#chevron-left");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.unity-scroller--horizontal > .unity-scroller__high-button {
+    position: absolute;
+    right: 0;
+    top: 1px;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    background-color: transparent;
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-right.png?fileID=2800000&guid=05c0e935411a9e64383e2a9a89216d33&type=3#chevron-right");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.unity-scroller--horizontal #unity-high-button {
+    position: absolute;
+    right: 0;
+    top: 1px;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    background-color: transparent;
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-right.png?fileID=2800000&guid=05c0e935411a9e64383e2a9a89216d33&type=3#chevron-right");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.unity-scroller--horizontal > .unity-scroller__low-button > VisualElement {
+    display: none;
+}
+
+.unity-scroller--horizontal #unity-low-button > VisualElement {
+    display: none;
+}
+
+.unity-scroller--horizontal > .unity-scroller__high-button > VisualElement {
+    display: none;
+}
+
+.unity-scroller--horizontal #unity-high-button > VisualElement {
+    display: none;
+}
+
+.unity-scroller--vertical .unity-slider {
+    position: absolute;
+    top: 22px;
+    bottom: 22px;
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    border-width: 0;
+    width: 20px;
+    min-width: 20px;
+    max-width: 20px;
+}
+
+.unity-scroller--vertical .unity-scroller__slider {
+    position: absolute;
+    top: 22px;
+    bottom: 22px;
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    border-width: 0;
+    width: 20px;
+    min-width: 20px;
+    max-width: 20px;
+}
+
+.unity-scroller--vertical #unity-slider {
+    position: absolute;
+    top: 22px;
+    bottom: 22px;
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    border-width: 0;
+    width: 20px;
+    min-width: 20px;
+    max-width: 20px;
+}
+
+#survey-scroll-view .unity-scroller--vertical #unity-slider {
+    position: absolute;
+    top: 22px;
+    bottom: 22px;
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    border-width: 0;
+    width: 20px;
+    min-width: 20px;
+    max-width: 20px;
+}
+
+.unity-scroller--horizontal .unity-slider {
+    position: absolute;
+    left: 22px;
+    right: 22px;
+    top: 0;
+    bottom: 0;
+    height: 20px;
+    min-height: 20px;
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    border-width: 0;
+}
+
+.unity-scroller--horizontal .unity-scroller__slider {
+    position: absolute;
+    left: 22px;
+    right: 22px;
+    top: 0;
+    bottom: 0;
+    height: 20px;
+    min-height: 20px;
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    border-width: 0;
+}
+
+.unity-scroller--horizontal #unity-slider {
+    position: absolute;
+    left: 22px;
+    right: 22px;
+    top: 0;
+    bottom: 0;
+    height: 20px;
+    min-height: 20px;
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    border-width: 0;
+}
+
+.unity-scroller .unity-base-slider__drag-container {
+    background-color: transparent;
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.unity-scroller #unity-drag-container {
+    background-color: transparent;
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.unity-scroller--vertical .unity-base-slider__tracker {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 3px;
+    right: 3px;
+    width: 14px;
+    min-width: 14px;
+    max-width: 14px;
+    background-color: rgba(103, 80, 164, 0.08);
+    border-width: 0;
+    border-radius: 7px;
+    margin: 0;
+    padding: 0;
+}
+
+.unity-scroller--vertical .unity-scroller__tracker {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 3px;
+    right: 3px;
+    width: 14px;
+    min-width: 14px;
+    max-width: 14px;
+    background-color: rgba(103, 80, 164, 0.08);
+    border-width: 0;
+    border-radius: 7px;
+    margin: 0;
+    padding: 0;
+}
+
+.unity-scroller--vertical #unity-tracker {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 3px;
+    right: 3px;
+    width: 14px;
+    min-width: 14px;
+    max-width: 14px;
+    background-color: rgba(103, 80, 164, 0.08);
+    border-width: 0;
+    border-radius: 7px;
+    margin: 0;
+    padding: 0;
+}
+
+#survey-scroll-view .unity-scroller--vertical #unity-tracker {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 3px;
+    right: 3px;
+    width: 14px;
+    min-width: 14px;
+    max-width: 14px;
+    background-color: rgba(103, 80, 164, 0.08);
+    border-width: 0;
+    border-radius: 7px;
+    margin: 0;
+    padding: 0;
+}
+
+.unity-scroller--horizontal .unity-base-slider__tracker {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 3px;
+    bottom: 3px;
+    height: 14px;
+    min-height: 14px;
+    background-color: rgba(103, 80, 164, 0.08);
+    border-width: 0;
+    border-radius: 7px;
+    margin: 0;
+    padding: 0;
+}
+
+.unity-scroller--horizontal #unity-tracker {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 3px;
+    bottom: 3px;
+    height: 14px;
+    min-height: 14px;
+    background-color: rgba(103, 80, 164, 0.08);
+    border-width: 0;
+    border-radius: 7px;
+    margin: 0;
+    padding: 0;
+}
+
+.unity-scroller--vertical .unity-base-slider__dragger {
+    position: absolute;
+    left: 3px;
+    width: 14px;
+    min-width: 14px;
+    max-width: 14px;
+    min-height: 28px;
+    background-color: rgba(103, 80, 164, 0.42);
+    border-width: 0;
+    border-radius: 7px;
+    margin: 0;
+    padding: 0;
+    transition-property: background-color;
+    transition-duration: 0.15s;
+}
+
+.unity-scroller--vertical .unity-scroller__dragger {
+    position: absolute;
+    left: 3px;
+    width: 14px;
+    min-width: 14px;
+    max-width: 14px;
+    min-height: 28px;
+    background-color: rgba(103, 80, 164, 0.42);
+    border-width: 0;
+    border-radius: 7px;
+    margin: 0;
+    padding: 0;
+    transition-property: background-color;
+    transition-duration: 0.15s;
+}
+
+.unity-scroller--vertical #unity-dragger {
+    position: absolute;
+    left: 3px;
+    width: 14px;
+    min-width: 14px;
+    max-width: 14px;
+    min-height: 28px;
+    background-color: rgba(103, 80, 164, 0.42);
+    border-width: 0;
+    border-radius: 7px;
+    margin: 0;
+    padding: 0;
+    transition-property: background-color;
+    transition-duration: 0.15s;
+}
+
+#survey-scroll-view .unity-scroller--vertical #unity-dragger {
+    position: absolute;
+    left: 3px;
+    width: 14px;
+    min-width: 14px;
+    max-width: 14px;
+    min-height: 28px;
+    background-color: rgba(103, 80, 164, 0.42);
+    border-width: 0;
+    border-radius: 7px;
+    margin: 0;
+    padding: 0;
+    transition-property: background-color;
+    transition-duration: 0.15s;
+}
+
+.unity-scroller--vertical .unity-base-slider__dragger:hover {
+    background-color: rgba(103, 80, 164, 0.65);
+}
+
+.unity-scroller--vertical #unity-dragger:hover {
+    background-color: rgba(103, 80, 164, 0.65);
+}
+
+.unity-scroller--vertical .unity-base-slider__dragger:active {
+    background-color: var(--primary-color);
+}
+
+.unity-scroller--vertical #unity-dragger:active {
+    background-color: var(--primary-color);
+}
+
+.unity-scroller--horizontal .unity-base-slider__dragger {
+    position: absolute;
+    top: 3px;
+    height: 14px;
+    min-height: 14px;
+    min-width: 28px;
+    background-color: rgba(103, 80, 164, 0.42);
+    border-width: 0;
+    border-radius: 7px;
+    margin: 0;
+    padding: 0;
+}
+
+.unity-scroller--horizontal #unity-dragger {
+    position: absolute;
+    top: 3px;
+    height: 14px;
+    min-height: 14px;
+    min-width: 28px;
+    background-color: rgba(103, 80, 164, 0.42);
+    border-width: 0;
+    border-radius: 7px;
+    margin: 0;
+    padding: 0;
+}
+
+.unity-scroller .unity-base-slider__dragger-border {
+    display: none;
+    border-width: 0;
+    background-color: transparent;
+}
+
+.unity-scroller .unity-scroller__dragger-border {
+    display: none;
+    border-width: 0;
+    background-color: transparent;
+}
+
+.unity-scroller #unity-dragger-border {
+    display: none;
+    border-width: 0;
+    background-color: transparent;
 }
 
 .question-type-selection {
@@ -33,60 +752,791 @@
     top: 25px;
 }
 
-RadioButton > Label {
+CustomRadioButton {
+    flex-direction: row;
+    align-items: center;
     flex-grow: 1;
+    flex-shrink: 1;
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+CustomToggleButton {
+    flex-direction: row;
+    align-items: center;
+    flex-grow: 1;
+    flex-shrink: 1;
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+CustomRadioButtonNoText {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+CustomRadioButton > Toggle {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 32px;
+    min-width: 32px;
+    max-width: 32px;
+    height: 32px;
+    min-height: 32px;
+    max-height: 32px;
+    margin-right: 20px;
+    margin-left: 4px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+}
+
+CustomToggleButton > Toggle {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 32px;
+    min-width: 32px;
+    max-width: 32px;
+    height: 32px;
+    min-height: 32px;
+    max-height: 32px;
+    margin-right: 20px;
+    margin-left: 4px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+}
+
+CustomRadioButton > RadioButton {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 32px;
+    min-width: 32px;
+    max-width: 32px;
+    height: 32px;
+    min-height: 32px;
+    max-height: 32px;
+    margin-right: 20px;
+    margin-left: 4px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+}
+
+CustomToggleButton > RadioButton {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 32px;
+    min-width: 32px;
+    max-width: 32px;
+    height: 32px;
+    min-height: 32px;
+    max-height: 32px;
+    margin-right: 20px;
+    margin-left: 4px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+}
+
+CustomRadioButtonNoText > Toggle {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 32px;
+    min-width: 32px;
+    max-width: 32px;
+    height: 32px;
+    min-height: 32px;
+    max-height: 32px;
+    margin-right: 20px;
+    margin-left: 4px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+}
+
+CustomRadioButtonNoText > RadioButton {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 32px;
+    min-width: 32px;
+    max-width: 32px;
+    height: 32px;
+    min-height: 32px;
+    max-height: 32px;
+    margin-right: 20px;
+    margin-left: 4px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+}
+
+CustomRadioButton > Toggle > Label,
+CustomRadioButton > RadioButton > Label,
+CustomRadioButton > RadioButton > .unity-radio-button__label,
+CustomRadioButton > RadioButton > .unity-base-field__label {
+    display: none;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+CustomToggleButton > Toggle > Label {
+    display: none;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+CustomToggleButton > RadioButton > Label {
+    display: none;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+CustomRadioButtonNoText > Toggle > Label,
+CustomRadioButtonNoText > RadioButton > Label,
+CustomRadioButtonNoText > RadioButton > .unity-radio-button__label,
+CustomRadioButtonNoText > RadioButton > .unity-base-field__label {
+    display: none;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+CustomRadioButton > Toggle > .unity-toggle__input,
+CustomRadioButton > Toggle > .unity-base-field__input,
+CustomRadioButton > Toggle > VisualElement,
+CustomRadioButton > RadioButton > .unity-radio-button__input,
+CustomRadioButton > RadioButton > .unity-base-field__input,
+CustomRadioButton > RadioButton > VisualElement {
+    flex-shrink: 0;
+    width: 32px;
+    min-width: 32px;
+    max-width: 32px;
+    height: 32px;
+    min-height: 32px;
+    max-height: 32px;
+    margin-right: 0;
+    margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-width: 0;
+    background-color: transparent;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+}
+
+CustomToggleButton > Toggle > .unity-toggle__input,
+CustomToggleButton > Toggle > .unity-base-field__input,
+CustomToggleButton > Toggle > VisualElement {
+    flex-shrink: 0;
+    width: 32px;
+    min-width: 32px;
+    max-width: 32px;
+    height: 32px;
+    min-height: 32px;
+    max-height: 32px;
+    margin-right: 0;
+    margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-width: 0;
+    background-color: transparent;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+}
+
+CustomRadioButtonNoText > Toggle > .unity-toggle__input,
+CustomRadioButtonNoText > Toggle > .unity-base-field__input,
+CustomRadioButtonNoText > Toggle > VisualElement,
+CustomRadioButtonNoText > RadioButton > .unity-radio-button__input,
+CustomRadioButtonNoText > RadioButton > .unity-base-field__input,
+CustomRadioButtonNoText > RadioButton > VisualElement {
+    flex-shrink: 0;
+    width: 32px;
+    min-width: 32px;
+    max-width: 32px;
+    height: 32px;
+    min-height: 32px;
+    max-height: 32px;
+    margin-right: 0;
+    margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-width: 0;
+    background-color: transparent;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+}
+
+CustomRadioButton .unity-toggle__checkmark {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    max-width: 28px;
+    max-height: 28px;
+    border-radius: 50%;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-width: 2px;
+    border-color: rgba(103, 80, 164, 0.4);
+    background-color: rgb(255, 255, 255);
+    background-image: none;
+    margin: 0;
+    padding: 0;
+    align-self: center;
+    transition-property: border-color, background-color;
+    transition-duration: 0.15s;
+}
+
+CustomRadioButtonNoText .unity-toggle__checkmark {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    max-width: 28px;
+    max-height: 28px;
+    border-radius: 50%;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-width: 2px;
+    border-color: rgba(103, 80, 164, 0.4);
+    background-color: rgb(255, 255, 255);
+    background-image: none;
+    margin: 0;
+    padding: 0;
+    align-self: center;
+    transition-property: border-color, background-color;
+    transition-duration: 0.15s;
+}
+
+CustomRadioButton .unity-radio-button__checkmark-background,
+CustomRadioButton .unity-radio-button .unity-radio-button__checkmark-background,
+CustomRadioButton .unity-radio-button .unity-radio-button__input > .unity-radio-button__checkmark-background,
+CustomRadioButtonNoText .unity-radio-button__checkmark-background,
+CustomRadioButtonNoText .unity-radio-button .unity-radio-button__checkmark-background,
+CustomRadioButtonNoText .unity-radio-button .unity-radio-button__input > .unity-radio-button__checkmark-background,
+CustomRadioButton .unity-radio-button__checkmark,
+.unity-radio-button__checkmark-background,
+.unity-radio-button .unity-radio-button__checkmark-background,
+.user-option-radio .unity-radio-button__checkmark-background,
+.unity-radio-button .unity-radio-button__input > .unity-radio-button__checkmark-background {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    max-width: 28px;
+    max-height: 28px;
+    border-radius: 50%;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-width: 2px;
+    border-color: rgba(103, 80, 164, 0.4);
+    background-color: rgb(255, 255, 255);
+    background-image: none;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0);
+    margin: 0;
+    padding: 0;
+    align-self: center;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    transition-property: border-color, background-color;
+    transition-duration: 0.15s;
+}
+
+CustomRadioButtonNoText .unity-radio-button__checkmark {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    max-width: 28px;
+    max-height: 28px;
+    border-radius: 50%;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-width: 2px;
+    border-color: rgba(103, 80, 164, 0.4);
+    background-color: rgb(255, 255, 255);
+    background-image: none;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0);
+    margin: 0;
+    padding: 0;
+    align-self: center;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    transition-property: border-color, background-color;
+    transition-duration: 0.15s;
+}
+
+CustomRadioButton .unity-radio-button .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
+CustomRadioButton .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
+CustomRadioButtonNoText .unity-radio-button .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
+CustomRadioButtonNoText .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
+.unity-radio-button .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
+.user-option-radio .unity-radio-button__checkmark-background > .unity-radio-button__checkmark {
+    width: 10px;
+    height: 10px;
+    min-width: 10px;
+    min-height: 10px;
+    max-width: 10px;
+    max-height: 10px;
+    border-radius: 50%;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    background-color: transparent;
+    background-image: none;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0);
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+    align-self: center;
+}
+
+CustomRadioButton .unity-radio-button:checked .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
+CustomRadioButton RadioButton:checked .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
+CustomRadioButtonNoText .unity-radio-button:checked .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
+CustomRadioButtonNoText RadioButton:checked .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
+.unity-radio-button:checked .unity-radio-button__checkmark-background > .unity-radio-button__checkmark,
+.user-option-radio:checked .unity-radio-button__checkmark-background > .unity-radio-button__checkmark {
+    background-color: rgb(255, 255, 255);
+    background-image: none;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+CustomRadioButton .unity-radio-button > .unity-radio-button__input > .unity-radio-button__checkmark,
+CustomRadioButton .unity-radio-button > .unity-radio-button__checkmark,
+CustomRadioButtonNoText .unity-radio-button > .unity-radio-button__input > .unity-radio-button__checkmark,
+CustomRadioButtonNoText .unity-radio-button > .unity-radio-button__checkmark,
+.unity-radio-button > .unity-radio-button__input > .unity-radio-button__checkmark,
+.unity-radio-button > .unity-radio-button__checkmark {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    max-width: 28px;
+    max-height: 28px;
+    border-radius: 50%;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-width: 2px;
+    border-color: rgba(103, 80, 164, 0.4);
+    background-color: rgb(255, 255, 255);
+    background-image: none;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0);
+    margin: 0;
+    padding: 0;
+    align-self: center;
     flex-shrink: 0;
 }
 
-RadioButton > VisualElement {
-    flex-shrink: 1;
-    max-width: 24px;
-    min-width: 24px;
-    width: 24px;
+CustomToggleButton .unity-toggle__checkmark {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    max-width: 28px;
+    max-height: 28px;
+    border-radius: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-width: 2px;
+    border-color: rgba(103, 80, 164, 0.4);
+    background-color: rgb(255, 255, 255);
+    background-image: none;
+    margin: 0;
+    padding: 0;
+    align-self: center;
+    transition-property: border-color, background-color;
+    transition-duration: 0.15s;
 }
 
-Toggle > Label {
+CustomToggleButton .unity-radio-button__checkmark {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    max-width: 28px;
+    max-height: 28px;
+    border-radius: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-width: 2px;
+    border-color: rgba(103, 80, 164, 0.4);
+    background-color: rgb(255, 255, 255);
+    background-image: none;
+    margin: 0;
+    padding: 0;
+    align-self: center;
+    transition-property: border-color, background-color;
+    transition-duration: 0.15s;
+}
+
+CustomRadioButton:hover .unity-toggle__checkmark {
+    border-color: var(--primary-color);
+    background-color: var(--primary-background-color);
+}
+
+CustomRadioButtonNoText:hover .unity-toggle__checkmark {
+    border-color: var(--primary-color);
+    background-color: var(--primary-background-color);
+}
+
+CustomRadioButton:hover .unity-radio-button__checkmark-background,
+CustomRadioButton:hover .unity-radio-button .unity-radio-button__checkmark-background,
+CustomRadioButton:hover .unity-radio-button .unity-radio-button__input > .unity-radio-button__checkmark-background,
+CustomRadioButton:hover .unity-radio-button__checkmark,
+CustomRadioButton:hover .unity-radio-button > .unity-radio-button__input > .unity-radio-button__checkmark,
+CustomRadioButtonNoText:hover .unity-radio-button__checkmark-background,
+CustomRadioButtonNoText:hover .unity-radio-button .unity-radio-button__checkmark-background,
+CustomRadioButtonNoText:hover .unity-radio-button .unity-radio-button__input > .unity-radio-button__checkmark-background,
+CustomRadioButtonNoText:hover .unity-radio-button__checkmark,
+CustomRadioButtonNoText:hover .unity-radio-button > .unity-radio-button__input > .unity-radio-button__checkmark,
+.unity-radio-button:hover .unity-radio-button__checkmark-background,
+.user-option-radio:hover .unity-radio-button__checkmark-background,
+.option-row:hover .unity-radio-button .unity-radio-button__checkmark-background {
+    border-color: var(--primary-color);
+    background-color: var(--primary-background-color);
+    background-image: none;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0);
+}
+
+CustomToggleButton:hover .unity-toggle__checkmark {
+    border-color: var(--primary-color);
+    background-color: var(--primary-background-color);
+}
+
+CustomToggleButton:hover .unity-radio-button__checkmark {
+    border-color: var(--primary-color);
+    background-color: var(--primary-background-color);
+}
+
+CustomRadioButton .unity-radio-button:checked .unity-radio-button__checkmark-background,
+CustomRadioButton .unity-radio-button:checked .unity-radio-button__input > .unity-radio-button__checkmark-background,
+CustomRadioButton RadioButton:checked .unity-radio-button__checkmark-background,
+CustomRadioButton RadioButton:checked .unity-radio-button__input > .unity-radio-button__checkmark-background,
+CustomRadioButtonNoText .unity-radio-button:checked .unity-radio-button__checkmark-background,
+CustomRadioButtonNoText .unity-radio-button:checked .unity-radio-button__input > .unity-radio-button__checkmark-background,
+CustomRadioButtonNoText RadioButton:checked .unity-radio-button__checkmark-background,
+CustomRadioButtonNoText RadioButton:checked .unity-radio-button__input > .unity-radio-button__checkmark-background,
+.unity-radio-button:checked .unity-radio-button__checkmark-background,
+.user-option-radio:checked .unity-radio-button__checkmark-background,
+.option-row .unity-radio-button:checked .unity-radio-button__checkmark-background {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+CustomRadioButton Toggle:checked .unity-toggle__checkmark {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/dot-white.png?fileID=2800000&guid=a123529c3fb34d638d526d7deabd69f5&type=3#dot-white");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+CustomRadioButtonNoText Toggle:checked .unity-toggle__checkmark {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/dot-white.png?fileID=2800000&guid=a123529c3fb34d638d526d7deabd69f5&type=3#dot-white");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+CustomRadioButton .unity-radio-button:checked > .unity-radio-button__input > .unity-radio-button__checkmark,
+CustomRadioButton .unity-radio-button:checked > .unity-radio-button__checkmark,
+CustomRadioButton RadioButton:checked > .unity-radio-button__input > .unity-radio-button__checkmark,
+CustomRadioButton RadioButton:checked > .unity-radio-button__checkmark,
+CustomRadioButtonNoText .unity-radio-button:checked > .unity-radio-button__input > .unity-radio-button__checkmark,
+CustomRadioButtonNoText .unity-radio-button:checked > .unity-radio-button__checkmark,
+CustomRadioButtonNoText RadioButton:checked > .unity-radio-button__input > .unity-radio-button__checkmark,
+CustomRadioButtonNoText RadioButton:checked > .unity-radio-button__checkmark {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/dot-white.png?fileID=2800000&guid=a123529c3fb34d638d526d7deabd69f5&type=3#dot-white");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+CustomToggleButton Toggle:checked .unity-toggle__checkmark {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/check-white.png?fileID=2800000&guid=631e4421e2e8456f9d8d1bb1e039336b&type=3#check-white");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+CustomToggleButton RadioButton:checked .unity-radio-button__checkmark {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/check-white.png?fileID=2800000&guid=631e4421e2e8456f9d8d1bb1e039336b&type=3#check-white");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+CustomRadioButton TextField {
     flex-grow: 1;
-    flex-shrink: 0;
+    flex-shrink: 1;
+    width: 100%;
+    margin-right: 0;
+    margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
-Toggle > VisualElement {
+CustomToggleButton TextField {
+    flex-grow: 1;
     flex-shrink: 1;
-    max-width: 24px;
-    min-width: 24px;
-    width: 24px;
-    margin-right: 8px;
+    width: 100%;
+    margin-right: 0;
+    margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+CustomRadioButton TextField,
+CustomRadioButton TextField *,
+CustomToggleButton TextField,
+CustomToggleButton TextField * {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
+}
+
+CustomRadioButton > RadioButton,
+CustomRadioButton > RadioButton *,
+CustomRadioButton > Toggle,
+CustomRadioButton > Toggle *,
+CustomRadioButtonNoText > RadioButton,
+CustomRadioButtonNoText > RadioButton *,
+CustomRadioButtonNoText > Toggle,
+CustomRadioButtonNoText > Toggle *,
+CustomToggleButton > RadioButton,
+CustomToggleButton > RadioButton *,
+CustomToggleButton > Toggle,
+CustomToggleButton > Toggle *,
+.unity-radio-button__checkmark-background,
+.unity-radio-button__checkmark-background *,
+.unity-radio-button__checkmark,
+.unity-toggle__checkmark,
+.grid-cell-container,
+.grid-cell-container * {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+CustomRadioButton TextField > .unity-base-text-field__input {
+    flex-grow: 1;
+    width: 100%;
+}
+
+CustomToggleButton TextField > .unity-base-text-field__input {
+    flex-grow: 1;
+    width: 100%;
+}
+
+RadioButtonGroup {
+    flex-direction: column;
+    width: 100%;
+    align-self: stretch;
+    margin-top: 6px;
+    margin-bottom: 4px;
+}
+
+.options-list {
+    flex-direction: column;
+    width: 100%;
+    align-self: stretch;
+    margin-top: 6px;
+    margin-bottom: 4px;
 }
 
 RadioButtonGroup > VisualElement {
-    align-self: center;
-    justify-content: center;
-    background-color: initial;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    width: 100%;
+    align-self: stretch;
+    flex-grow: 1;
+    justify-content: flex-start;
+    align-items: stretch;
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
 }
 
-RadioButtonGroup > VisualElement:hover {
-    background-color: initial;
+RadioButtonGroup > .unity-base-field__input {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    width: 100%;
+    align-self: stretch;
+    flex-grow: 1;
+    justify-content: flex-start;
+    align-items: stretch;
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
 }
 
-RadioButtonGroup > VisualElement:focus {
-    background-color: initial;
+RadioButtonGroup .unity-radio-button-group__container {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    width: 100%;
+    align-self: stretch;
+    flex-grow: 1;
+    justify-content: flex-start;
+    align-items: stretch;
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
 }
 
 RadioButtonGroup #contentContainer {
     flex-direction: column;
     flex-wrap: nowrap;
     width: 100%;
+    align-self: stretch;
+    flex-grow: 1;
     justify-content: flex-start;
+    align-items: stretch;
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+}
+
+RadioButtonGroup #unity-content-container {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    width: 100%;
+    align-self: stretch;
+    flex-grow: 1;
+    justify-content: flex-start;
+    align-items: stretch;
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
 }
 
 RadioButtonGroup TemplateContainer {
+    width: auto;
+    align-self: stretch;
+    flex-grow: 1;
+}
+
+.options-list TemplateContainer {
+    width: 100%;
+    align-self: stretch;
+    flex-grow: 1;
+}
+
+RadioButtonGroup > TemplateContainer {
+    width: auto;
+    align-self: stretch;
+    flex-grow: 1;
+}
+
+.options-list > TemplateContainer {
+    width: 100%;
+    align-self: stretch;
+    flex-grow: 1;
 }
 
 #option-container {
-    flex-grow: 0;
+    flex-grow: 1;
     flex-direction: row;
     align-items: center;
     width: 100%;
+    align-self: stretch;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.option-container {
+    flex-grow: 1;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    align-self: stretch;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.option-container--other {
+    background-color: transparent;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 #edit-option-button {
@@ -120,7 +1570,7 @@ RadioButtonGroup TemplateContainer {
     margin-left: 0;
 }
 
-.radio-group-vertical #contentContainer {
+.radio-group-horizontal #contentContainer {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-around;
@@ -136,17 +1586,34 @@ RadioButtonGroup TemplateContainer {
 }
 
 Button {
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    border-bottom-left-radius: 8px;
-    border-top-left-radius: 8px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-left-radius: 12px;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
     background-color: var(--primary-background-color);
     color: var(--primary-color);
+    font-size: 13px;
+    -unity-font-style: bold;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
+    transition-property: background-color, scale;
+    transition-duration: 0.15s;
 }
 
 Button:hover {
     background-color: var(--secondary-background-color);
+    color: var(--primary-color);
     cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+Button:active {
+    background-color: rgb(235, 215, 250);
 }
 
 Button VisualElement:hover {
@@ -162,10 +1629,30 @@ Button.icon {
     height: 32px;
     -unity-background-scale-mode: scale-to-fit;
     background-color: rgba(0, 0, 0, 0);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    -unity-background-image-tint-color: rgb(150, 145, 160);
+    transition-property: background-color, -unity-background-image-tint-color;
+    transition-duration: 0.15s;
 }
 
 Button.icon:hover {
-    background-color: rgb(247, 242, 250);
+    background-color: var(--primary-background-color);
+    -unity-background-image-tint-color: var(--primary-color);
+}
+
+Button.icon:active {
+    background-color: var(--secondary-background-color);
 }
 
 Button.icon:disabled {
@@ -177,102 +1664,1987 @@ TextField TextElement:hover {
     cursor: url("project://database/Assets/_Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
 }
 
-TextField TextInput {
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    border-bottom-left-radius: 8px;
-    background-color: rgb(255, 255, 255);
+TextField {
+    flex-grow: 1;
 }
 
-TextField TextInput:hover {
+TextField > .unity-base-text-field__input {
+    flex-grow: 1;
+    width: 100%;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: rgba(103, 80, 164, 0.08);
+    border-right-color: rgba(103, 80, 164, 0.08);
+    border-bottom-color: rgba(103, 80, 164, 0.08);
+    border-left-color: rgba(103, 80, 164, 0.08);
+    background-color: var(--input-bg);
+    color: var(--text-main);
+    font-size: 14px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
+    min-height: 34px;
+    transition-property: background-color, border-color;
+    transition-duration: 0.15s;
+}
+
+TextField > #unity-text-input {
+    flex-grow: 1;
+    width: 100%;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: rgba(103, 80, 164, 0.08);
+    border-right-color: rgba(103, 80, 164, 0.08);
+    border-bottom-color: rgba(103, 80, 164, 0.08);
+    border-left-color: rgba(103, 80, 164, 0.08);
+    background-color: var(--input-bg);
+    color: var(--text-main);
+    font-size: 14px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
+    min-height: 34px;
+    transition-property: background-color, border-color;
+    transition-duration: 0.15s;
+}
+
+TextField .unity-base-text-field__input {
+    flex-grow: 1;
+    width: 100%;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: rgba(103, 80, 164, 0.08);
+    border-right-color: rgba(103, 80, 164, 0.08);
+    border-bottom-color: rgba(103, 80, 164, 0.08);
+    border-left-color: rgba(103, 80, 164, 0.08);
+    background-color: var(--input-bg);
+    color: var(--text-main);
+    font-size: 14px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
+    min-height: 34px;
+    transition-property: background-color, border-color;
+    transition-duration: 0.15s;
+}
+
+TextField #unity-text-input {
+    flex-grow: 1;
+    width: 100%;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: rgba(103, 80, 164, 0.08);
+    border-right-color: rgba(103, 80, 164, 0.08);
+    border-bottom-color: rgba(103, 80, 164, 0.08);
+    border-left-color: rgba(103, 80, 164, 0.08);
+    background-color: var(--input-bg);
+    color: var(--text-main);
+    font-size: 14px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
+    min-height: 34px;
+    transition-property: background-color, border-color;
+    transition-duration: 0.15s;
+}
+
+TextField TextInput {
+    flex-grow: 1;
+    width: 100%;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: rgba(103, 80, 164, 0.08);
+    border-right-color: rgba(103, 80, 164, 0.08);
+    border-bottom-color: rgba(103, 80, 164, 0.08);
+    border-left-color: rgba(103, 80, 164, 0.08);
+    background-color: var(--input-bg);
+    color: var(--text-main);
+    font-size: 14px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
+    min-height: 34px;
+    transition-property: background-color, border-color;
+    transition-duration: 0.15s;
+}
+
+TextField:hover > .unity-base-text-field__input {
+    background-color: var(--input-hover-bg);
+    border-top-color: rgba(103, 80, 164, 0.22);
+    border-right-color: rgba(103, 80, 164, 0.22);
+    border-bottom-color: rgba(103, 80, 164, 0.22);
+    border-left-color: rgba(103, 80, 164, 0.22);
     cursor: url("project://database/Assets/_Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
 }
 
-.active-question {
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
-    border-left-color: var(--primary-color);
-    border-right-color: var(--primary-color);
+TextField:hover > #unity-text-input {
+    background-color: var(--input-hover-bg);
+    border-top-color: rgba(103, 80, 164, 0.22);
+    border-right-color: rgba(103, 80, 164, 0.22);
+    border-bottom-color: rgba(103, 80, 164, 0.22);
+    border-left-color: rgba(103, 80, 164, 0.22);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
+}
+
+TextField:hover .unity-base-text-field__input {
+    background-color: var(--input-hover-bg);
+    border-top-color: rgba(103, 80, 164, 0.22);
+    border-right-color: rgba(103, 80, 164, 0.22);
+    border-bottom-color: rgba(103, 80, 164, 0.22);
+    border-left-color: rgba(103, 80, 164, 0.22);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
+}
+
+TextField:hover #unity-text-input {
+    background-color: var(--input-hover-bg);
+    border-top-color: rgba(103, 80, 164, 0.22);
+    border-right-color: rgba(103, 80, 164, 0.22);
+    border-bottom-color: rgba(103, 80, 164, 0.22);
+    border-left-color: rgba(103, 80, 164, 0.22);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
+}
+
+TextField:hover TextInput {
+    background-color: var(--input-hover-bg);
+    border-top-color: rgba(103, 80, 164, 0.22);
+    border-right-color: rgba(103, 80, 164, 0.22);
+    border-bottom-color: rgba(103, 80, 164, 0.22);
+    border-left-color: rgba(103, 80, 164, 0.22);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
+}
+
+TextField:focus > .unity-base-text-field__input {
+    background-color: var(--input-focus-bg);
     border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
     border-bottom-color: var(--primary-color);
-    border-top-left-radius: 21px;
-    border-top-right-radius: 21px;
-    border-bottom-right-radius: 21px;
-    border-bottom-left-radius: 21px;
+    border-left-color: var(--primary-color);
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    color: var(--text-main);
+}
+
+TextField:focus > #unity-text-input {
+    background-color: var(--input-focus-bg);
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    color: var(--text-main);
+}
+
+TextField:focus .unity-base-text-field__input {
+    background-color: var(--input-focus-bg);
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    color: var(--text-main);
+}
+
+TextField:focus #unity-text-input {
+    background-color: var(--input-focus-bg);
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    color: var(--text-main);
+}
+
+TextField:focus TextInput {
+    background-color: var(--input-focus-bg);
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    color: var(--text-main);
+}
+
+.unity-base-text-field__placeholder-label {
+    color: rgb(150, 145, 160);
+}
+
+.unity-base-text-field__input--placeholder {
+    color: rgb(150, 145, 160);
+}
+
+.unity-base-text-field__placeholder {
+    color: rgb(150, 145, 160);
+}
+
+#question-title > .unity-base-text-field__input {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: var(--text-main);
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 14px;
+    padding-right: 14px;
+    min-height: 38px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: rgba(103, 80, 164, 0.08);
+    border-right-color: rgba(103, 80, 164, 0.08);
+    border-bottom-color: rgba(103, 80, 164, 0.08);
+    border-left-color: rgba(103, 80, 164, 0.08);
+    background-color: var(--input-bg);
+}
+
+#question-title > #unity-text-input {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: var(--text-main);
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 14px;
+    padding-right: 14px;
+    min-height: 38px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: rgba(103, 80, 164, 0.08);
+    border-right-color: rgba(103, 80, 164, 0.08);
+    border-bottom-color: rgba(103, 80, 164, 0.08);
+    border-left-color: rgba(103, 80, 164, 0.08);
+    background-color: var(--input-bg);
+}
+
+#question-title .unity-base-text-field__input {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: var(--text-main);
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 14px;
+    padding-right: 14px;
+    min-height: 38px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: rgba(103, 80, 164, 0.08);
+    border-right-color: rgba(103, 80, 164, 0.08);
+    border-bottom-color: rgba(103, 80, 164, 0.08);
+    border-left-color: rgba(103, 80, 164, 0.08);
+    background-color: var(--input-bg);
+}
+
+#question-title #unity-text-input {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: var(--text-main);
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 14px;
+    padding-right: 14px;
+    min-height: 38px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: rgba(103, 80, 164, 0.08);
+    border-right-color: rgba(103, 80, 164, 0.08);
+    border-bottom-color: rgba(103, 80, 164, 0.08);
+    border-left-color: rgba(103, 80, 164, 0.08);
+    background-color: var(--input-bg);
+}
+
+#question-title TextInput {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: var(--text-main);
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 14px;
+    padding-right: 14px;
+    min-height: 38px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: rgba(103, 80, 164, 0.08);
+    border-right-color: rgba(103, 80, 164, 0.08);
+    border-bottom-color: rgba(103, 80, 164, 0.08);
+    border-left-color: rgba(103, 80, 164, 0.08);
+    background-color: var(--input-bg);
+}
+
+#question-title:hover > .unity-base-text-field__input {
+    background-color: var(--input-hover-bg);
+    border-top-color: rgba(103, 80, 164, 0.22);
+    border-right-color: rgba(103, 80, 164, 0.22);
+    border-bottom-color: rgba(103, 80, 164, 0.22);
+    border-left-color: rgba(103, 80, 164, 0.22);
+}
+
+#question-title:hover > #unity-text-input {
+    background-color: var(--input-hover-bg);
+    border-top-color: rgba(103, 80, 164, 0.22);
+    border-right-color: rgba(103, 80, 164, 0.22);
+    border-bottom-color: rgba(103, 80, 164, 0.22);
+    border-left-color: rgba(103, 80, 164, 0.22);
+}
+
+#question-title:hover .unity-base-text-field__input {
+    background-color: var(--input-hover-bg);
+    border-top-color: rgba(103, 80, 164, 0.22);
+    border-right-color: rgba(103, 80, 164, 0.22);
+    border-bottom-color: rgba(103, 80, 164, 0.22);
+    border-left-color: rgba(103, 80, 164, 0.22);
+}
+
+#question-title:hover #unity-text-input {
+    background-color: var(--input-hover-bg);
+    border-top-color: rgba(103, 80, 164, 0.22);
+    border-right-color: rgba(103, 80, 164, 0.22);
+    border-bottom-color: rgba(103, 80, 164, 0.22);
+    border-left-color: rgba(103, 80, 164, 0.22);
+}
+
+#question-title:hover TextInput {
+    background-color: var(--input-hover-bg);
+    border-top-color: rgba(103, 80, 164, 0.22);
+    border-right-color: rgba(103, 80, 164, 0.22);
+    border-bottom-color: rgba(103, 80, 164, 0.22);
+    border-left-color: rgba(103, 80, 164, 0.22);
+}
+
+#question-title:focus > .unity-base-text-field__input {
+    background-color: var(--input-focus-bg);
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+}
+
+#question-title:focus > #unity-text-input {
+    background-color: var(--input-focus-bg);
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+}
+
+#question-title:focus .unity-base-text-field__input {
+    background-color: var(--input-focus-bg);
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+}
+
+#question-title:focus #unity-text-input {
+    background-color: var(--input-focus-bg);
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+}
+
+#question-title:focus TextInput {
+    background-color: var(--input-focus-bg);
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+}
+
+#question-description {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 100px;
+}
+
+.question-description {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 100px;
+}
+
+#question-title {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 100px;
+}
+
+.question-title {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 100px;
+}
+
+#question-description > .unity-base-text-field__input {
+    font-size: 13px;
+    -unity-font-style: normal;
+    color: var(--text-muted);
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
+    min-height: 34px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: rgba(103, 80, 164, 0.08);
+    border-right-color: rgba(103, 80, 164, 0.08);
+    border-bottom-color: rgba(103, 80, 164, 0.08);
+    border-left-color: rgba(103, 80, 164, 0.08);
+    background-color: var(--input-bg);
+}
+
+#question-description > #unity-text-input {
+    font-size: 13px;
+    -unity-font-style: normal;
+    color: var(--text-muted);
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
+    min-height: 34px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: rgba(103, 80, 164, 0.08);
+    border-right-color: rgba(103, 80, 164, 0.08);
+    border-bottom-color: rgba(103, 80, 164, 0.08);
+    border-left-color: rgba(103, 80, 164, 0.08);
+    background-color: var(--input-bg);
+}
+
+#question-description .unity-base-text-field__input {
+    font-size: 13px;
+    -unity-font-style: normal;
+    color: var(--text-muted);
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
+    min-height: 34px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: rgba(103, 80, 164, 0.08);
+    border-right-color: rgba(103, 80, 164, 0.08);
+    border-bottom-color: rgba(103, 80, 164, 0.08);
+    border-left-color: rgba(103, 80, 164, 0.08);
+    background-color: var(--input-bg);
+}
+
+#question-description #unity-text-input {
+    font-size: 13px;
+    -unity-font-style: normal;
+    color: var(--text-muted);
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
+    min-height: 34px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: rgba(103, 80, 164, 0.08);
+    border-right-color: rgba(103, 80, 164, 0.08);
+    border-bottom-color: rgba(103, 80, 164, 0.08);
+    border-left-color: rgba(103, 80, 164, 0.08);
+    background-color: var(--input-bg);
+}
+
+#question-description TextInput {
+    font-size: 13px;
+    -unity-font-style: normal;
+    color: var(--text-muted);
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
+    min-height: 34px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: rgba(103, 80, 164, 0.08);
+    border-right-color: rgba(103, 80, 164, 0.08);
+    border-bottom-color: rgba(103, 80, 164, 0.08);
+    border-left-color: rgba(103, 80, 164, 0.08);
+    background-color: var(--input-bg);
+}
+
+#question-description:hover > .unity-base-text-field__input {
+    background-color: var(--input-hover-bg);
+    border-top-color: rgba(103, 80, 164, 0.22);
+    border-right-color: rgba(103, 80, 164, 0.22);
+    border-bottom-color: rgba(103, 80, 164, 0.22);
+    border-left-color: rgba(103, 80, 164, 0.22);
+}
+
+#question-description:hover > #unity-text-input {
+    background-color: var(--input-hover-bg);
+    border-top-color: rgba(103, 80, 164, 0.22);
+    border-right-color: rgba(103, 80, 164, 0.22);
+    border-bottom-color: rgba(103, 80, 164, 0.22);
+    border-left-color: rgba(103, 80, 164, 0.22);
+}
+
+#question-description:hover .unity-base-text-field__input {
+    background-color: var(--input-hover-bg);
+    border-top-color: rgba(103, 80, 164, 0.22);
+    border-right-color: rgba(103, 80, 164, 0.22);
+    border-bottom-color: rgba(103, 80, 164, 0.22);
+    border-left-color: rgba(103, 80, 164, 0.22);
+}
+
+#question-description:hover #unity-text-input {
+    background-color: var(--input-hover-bg);
+    border-top-color: rgba(103, 80, 164, 0.22);
+    border-right-color: rgba(103, 80, 164, 0.22);
+    border-bottom-color: rgba(103, 80, 164, 0.22);
+    border-left-color: rgba(103, 80, 164, 0.22);
+}
+
+#question-description:hover TextInput {
+    background-color: var(--input-hover-bg);
+    border-top-color: rgba(103, 80, 164, 0.22);
+    border-right-color: rgba(103, 80, 164, 0.22);
+    border-bottom-color: rgba(103, 80, 164, 0.22);
+    border-left-color: rgba(103, 80, 164, 0.22);
+}
+
+#question-description:focus > .unity-base-text-field__input {
+    background-color: var(--input-focus-bg);
+    color: var(--text-main);
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+}
+
+#question-description:focus > #unity-text-input {
+    background-color: var(--input-focus-bg);
+    color: var(--text-main);
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+}
+
+#question-description:focus .unity-base-text-field__input {
+    background-color: var(--input-focus-bg);
+    color: var(--text-main);
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+}
+
+#question-description:focus #unity-text-input {
+    background-color: var(--input-focus-bg);
+    color: var(--text-main);
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+}
+
+#question-description:focus TextInput {
+    background-color: var(--input-focus-bg);
+    color: var(--text-main);
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+}
+
+.survey-header-card #question-title > .unity-base-text-field__input {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: var(--text-main);
+    background-color: var(--input-bg);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 14px;
+    padding-right: 14px;
+}
+
+.survey-header-card #question-title > #unity-text-input {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: var(--text-main);
+    background-color: var(--input-bg);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 14px;
+    padding-right: 14px;
+}
+
+.survey-header-card #question-title .unity-base-text-field__input {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: var(--text-main);
+    background-color: var(--input-bg);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 14px;
+    padding-right: 14px;
+}
+
+.survey-header-card #question-title #unity-text-input {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: var(--text-main);
+    background-color: var(--input-bg);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 14px;
+    padding-right: 14px;
+}
+
+.survey-header-card #question-title TextInput {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: var(--text-main);
+    background-color: var(--input-bg);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 14px;
+    padding-right: 14px;
+}
+
+.survey-header-card #question-title:focus > .unity-base-text-field__input {
+    background-color: var(--input-focus-bg);
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+}
+
+.survey-header-card #question-title:focus > #unity-text-input {
+    background-color: var(--input-focus-bg);
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+}
+
+.survey-header-card #question-title:focus .unity-base-text-field__input {
+    background-color: var(--input-focus-bg);
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+}
+
+.survey-header-card #question-title:focus #unity-text-input {
+    background-color: var(--input-focus-bg);
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+}
+
+.survey-header-card #question-title:focus TextInput {
+    background-color: var(--input-focus-bg);
+    border-top-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    border-left-color: var(--primary-color);
+}
+
+.question-wrapper {
+    flex-direction: row;
+    align-items: stretch;
+    width: 100%;
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+
+.question-move-controls {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    margin-right: 8px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    flex-shrink: 0;
+}
+
+.question-move-controls .icon-move-up {
+    width: 28px;
+    height: 28px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.question-move-controls .icon-move-down {
+    width: 28px;
+    height: 28px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.question-header-info {
+    flex-grow: 0;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+#question-position {
+    flex-shrink: 1;
+    -unity-font-style: bold;
+    color: var(--primary-color);
+    font-size: 14px;
+    margin-right: 8px;
+}
+
+#question-type {
+    flex-shrink: 1;
+    color: rgb(73, 69, 79);
+    font-size: 11px;
+    background-color: rgb(240, 238, 244);
+    border-width: 0;
+    border-radius: 12px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    -unity-font-style: bold;
+}
+
+.question-container {
+    flex-grow: 1;
+    background-color: rgb(255, 255, 255);
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+    border-bottom-left-radius: 18px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: var(--card-border);
+    border-right-color: var(--card-border);
+    border-bottom-color: var(--card-border);
+    border-left-color: var(--card-border);
+    padding-top: 22px;
+    padding-right: 26px;
+    padding-bottom: 20px;
+    padding-left: 26px;
+    transition-property: border-color, background-color;
+    transition-duration: 0.15s;
 }
 
 #question-container {
-    padding-top: 24px;
-    padding-right: 24px;
-    padding-bottom: 24px;
-    padding-left: 24px;
+    flex-grow: 1;
+    background-color: rgb(255, 255, 255);
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+    border-bottom-left-radius: 18px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: var(--card-border);
+    border-right-color: var(--card-border);
+    border-bottom-color: var(--card-border);
+    border-left-color: var(--card-border);
+    padding-top: 22px;
+    padding-right: 26px;
+    padding-bottom: 20px;
+    padding-left: 26px;
+    transition-property: border-color, background-color;
+    transition-duration: 0.15s;
 }
 
-DropdownField > Label {
-    color: var(--primary-color);
+.question-container:hover {
+    border-top-color: var(--card-hover-border);
+    border-right-color: var(--card-hover-border);
+    border-bottom-color: var(--card-hover-border);
+    border-left-color: var(--card-hover-border);
 }
 
-DropdownField > VisualElement {
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    border-bottom-left-radius: 8px;
-    border-top-left-radius: 8px;
-    background-color: var(--primary-background-color);
-    color: var(--primary-color);
+#question-container:hover {
+    border-top-color: var(--card-hover-border);
+    border-right-color: var(--card-hover-border);
+    border-bottom-color: var(--card-hover-border);
+    border-left-color: var(--card-hover-border);
 }
 
-DropdownField:hover {
+TemplateContainer.active-question {
+    border-width: 0;
+    border-color: rgba(0, 0, 0, 0);
+}
+
+.question-wrapper.active-question {
+    border-width: 0;
+    border-color: rgba(0, 0, 0, 0);
+}
+
+.active-question {
+    border-width: 0;
+    border-color: rgba(0, 0, 0, 0);
+}
+
+.active-question > .question-wrapper > .question-container {
+    border-top-color: var(--card-active-border);
+    border-right-color: var(--card-active-border);
+    border-bottom-color: var(--card-active-border);
+    border-left-color: var(--card-active-border);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+}
+
+.active-question > .question-container {
+    border-top-color: var(--card-active-border);
+    border-right-color: var(--card-active-border);
+    border-bottom-color: var(--card-active-border);
+    border-left-color: var(--card-active-border);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+}
+
+.active-question .question-container {
+    border-top-color: var(--card-active-border);
+    border-right-color: var(--card-active-border);
+    border-bottom-color: var(--card-active-border);
+    border-left-color: var(--card-active-border);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+}
+
+.active-question #question-container {
+    border-top-color: var(--card-active-border);
+    border-right-color: var(--card-active-border);
+    border-bottom-color: var(--card-active-border);
+    border-left-color: var(--card-active-border);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+}
+
+.question-wrapper.active-question .question-container {
+    border-top-color: var(--card-active-border);
+    border-right-color: var(--card-active-border);
+    border-bottom-color: var(--card-active-border);
+    border-left-color: var(--card-active-border);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+}
+
+.question-container.active-question {
+    border-top-color: var(--card-active-border);
+    border-right-color: var(--card-active-border);
+    border-bottom-color: var(--card-active-border);
+    border-left-color: var(--card-active-border);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+}
+
+.survey-header-card {
+    background-color: rgb(255, 255, 255);
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+    border-bottom-left-radius: 18px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-color: var(--card-border);
+    border-right-color: var(--card-border);
+    border-bottom-color: var(--card-border);
+    border-left-color: var(--card-border);
+    padding-top: 22px;
+    padding-right: 26px;
+    padding-bottom: 20px;
+    padding-left: 26px;
+    margin-bottom: 8px;
+}
+
+.question-row {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.question-row-actions {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    min-width: 370px;
+    flex-shrink: 0;
+}
+
+#question-description-row .question-row-actions {
+    width: auto;
+    min-width: 460px;
+    max-width: none;
+}
+
+#survey-description-row .question-row-actions {
+    width: auto;
+    min-width: 460px;
+    max-width: none;
+}
+
+.edit-option-container {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    width: 370px;
+    min-width: 370px;
+    max-width: 370px;
+    flex-shrink: 0;
+}
+
+.required-container {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    margin-right: 8px;
+}
+
+.required-label {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-right: 8px;
+    white-space: nowrap;
+    -unity-font-style: normal;
+}
+
+.required-label:hover {
     cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
-DropdownField:hover > VisualElement {
-    background-color: var(--secondary-background-color);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+DropdownField {
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
-VisualElement.unity-base-dropdown > VisualElement.unity-base-dropdown__container-outer {
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    border-bottom-left-radius: 8px;
-    border-top-left-radius: 8px;
-    background-color: var(--primary-background-color);
-    color: var(--primary-color);
+.unity-dropdown-field {
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
-ScrollView.unity-base-dropdown__container-inner {
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    border-bottom-left-radius: 8px;
-    border-top-left-radius: 8px;
-    background-color: var(--primary-background-color);
-    color: var(--primary-color);
+DropdownField > .unity-base-field__label {
+    color: var(--text-muted);
+    font-size: 12px;
+    -unity-font-style: normal;
+    min-width: auto;
+    margin-right: 6px;
 }
 
-.required-toggle {
-    border-top-left-radius: 100px;
-    border-top-right-radius: 100px;
-    border-bottom-right-radius: 100px;
-    border-bottom-left-radius: 100px;
-    width: 32px;
+.unity-dropdown-field > .unity-base-field__label {
+    color: var(--text-muted);
+    font-size: 12px;
+    -unity-font-style: normal;
+    min-width: auto;
+    margin-right: 6px;
+}
+
+DropdownField > .unity-base-field__input {
+    background-color: var(--input-bg);
+    border-radius: 12px;
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.18);
     height: 32px;
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/asterisk.png?fileID=2800000&guid=7ff93a71ce7cf10439fdd8ba5dd4d774&type=3#asterisk");
-    -unity-background-scale-mode: scale-to-fit;
-    background-size: 70% 70%;
-    background-color: rgba(255, 255, 255, 0);
+    padding-left: 10px;
+    padding-right: 8px;
+    color: var(--primary-color);
+    font-size: 12px;
+    -unity-font-style: bold;
+    align-items: center;
+    transition-property: background-color, border-color;
+    transition-duration: 0.15s;
+}
+
+.unity-dropdown-field > .unity-base-field__input {
+    background-color: var(--input-bg);
+    border-radius: 12px;
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.18);
+    height: 32px;
+    padding-left: 10px;
+    padding-right: 8px;
+    color: var(--primary-color);
+    font-size: 12px;
+    -unity-font-style: bold;
+    align-items: center;
+    transition-property: background-color, border-color;
+    transition-duration: 0.15s;
+}
+
+DropdownField > .unity-dropdown-field__input {
+    background-color: var(--input-bg);
+    border-radius: 12px;
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.18);
+    height: 32px;
+    padding-left: 10px;
+    padding-right: 8px;
+    color: var(--primary-color);
+    font-size: 12px;
+    -unity-font-style: bold;
+    align-items: center;
+    transition-property: background-color, border-color;
+    transition-duration: 0.15s;
+}
+
+.unity-dropdown-field > .unity-dropdown-field__input {
+    background-color: var(--input-bg);
+    border-radius: 12px;
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.18);
+    height: 32px;
+    padding-left: 10px;
+    padding-right: 8px;
+    color: var(--primary-color);
+    font-size: 12px;
+    -unity-font-style: bold;
+    align-items: center;
+    transition-property: background-color, border-color;
+    transition-duration: 0.15s;
+}
+
+DropdownField:hover > .unity-base-field__input {
+    background-color: var(--input-hover-bg);
+    border-color: rgba(103, 80, 164, 0.35);
+}
+
+.unity-dropdown-field:hover > .unity-base-field__input {
+    background-color: var(--input-hover-bg);
+    border-color: rgba(103, 80, 164, 0.35);
+}
+
+DropdownField > .unity-base-field__input > .unity-dropdown-field__text {
+    color: var(--primary-color);
+    font-size: 12px;
+    -unity-font-style: bold;
+}
+
+.unity-dropdown-field > .unity-base-field__input > .unity-dropdown-field__text {
+    color: var(--primary-color);
+    font-size: 12px;
+    -unity-font-style: bold;
+}
+
+DropdownField > .unity-base-field__input > .unity-dropdown-field__arrow {
+    -unity-background-image-tint-color: var(--primary-color);
+}
+
+.unity-dropdown-field > .unity-base-field__input > .unity-dropdown-field__arrow {
+    -unity-background-image-tint-color: var(--primary-color);
+}
+
+.camera-view-dropdown {
+    flex-direction: row;
+    align-items: center;
+    margin-right: 8px;
+    margin-top: 0;
+    margin-bottom: 0;
+    width: 320px;
+    min-width: 260px;
+    max-width: 380px;
+    flex-shrink: 0;
+}
+
+.camera-view-dropdown > .unity-base-field__label {
+    color: var(--text-muted);
+    font-size: 12px;
+    -unity-font-style: normal;
+    min-width: auto;
+    max-width: none;
+    width: auto;
+    margin-right: 6px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    -unity-text-align: middle-left;
+    white-space: nowrap;
+}
+
+.camera-view-dropdown > .unity-dropdown-field__label {
+    color: var(--text-muted);
+    font-size: 12px;
+    -unity-font-style: normal;
+    min-width: auto;
+    max-width: none;
+    width: auto;
+    margin-right: 6px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    -unity-text-align: middle-left;
+    white-space: nowrap;
+}
+
+.camera-view-dropdown > .unity-base-field__input {
+    flex-grow: 1;
+    height: 32px;
+    border-radius: 12px;
+    background-color: var(--input-bg);
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.18);
+    padding-left: 10px;
+    padding-right: 8px;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    color: var(--primary-color);
+    font-size: 12px;
+    -unity-font-style: bold;
+    align-items: center;
+    justify-content: space-between;
+    transition-property: background-color, border-color;
+    transition-duration: 0.15s;
+}
+
+.camera-view-dropdown > .unity-dropdown-field__input {
+    flex-grow: 1;
+    height: 32px;
+    border-radius: 12px;
+    background-color: var(--input-bg);
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.18);
+    padding-left: 10px;
+    padding-right: 8px;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    color: var(--primary-color);
+    font-size: 12px;
+    -unity-font-style: bold;
+    align-items: center;
+    justify-content: space-between;
+    transition-property: background-color, border-color;
+    transition-duration: 0.15s;
+}
+
+.camera-view-dropdown:hover > .unity-base-field__input {
+    background-color: var(--input-hover-bg);
+    border-color: rgba(103, 80, 164, 0.35);
+}
+
+.camera-view-dropdown .unity-dropdown-field__text {
+    color: var(--primary-color);
+    font-size: 12px;
+    -unity-font-style: bold;
+}
+
+.camera-view-dropdown .unity-dropdown-field__arrow {
+    -unity-background-image-tint-color: var(--primary-color);
+}
+
+.unity-base-dropdown {
+    background-color: transparent;
+    border-width: 0;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+}
+
+.unity-base-dropdown-menu {
+    background-color: transparent;
+    border-width: 0;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+}
+
+GenericDropdownMenu {
+    background-color: transparent;
+    border-width: 0;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+}
+
+#unity-base-dropdown {
+    background-color: transparent;
+    border-width: 0;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+}
+
+.unity-base-dropdown__container-outer {
+    background-color: rgb(255, 255, 255);
+    border-radius: 12px;
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.2);
+    padding: 4px;
+    margin-top: 4px;
+    overflow: hidden;
+}
+
+.unity-base-dropdown-menu__container-outer {
+    background-color: rgb(255, 255, 255);
+    border-radius: 12px;
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.2);
+    padding: 4px;
+    margin-top: 4px;
+    overflow: hidden;
+}
+
+.unity-base-dropdown__container-inner {
+    background-color: transparent;
+    border-width: 0;
+    padding: 0;
+}
+
+.unity-base-dropdown-menu__container-inner {
+    background-color: transparent;
+    border-width: 0;
+    padding: 0;
+}
+
+.unity-base-dropdown__scroll-view {
+    background-color: transparent;
+    max-height: 240px;
+}
+
+.unity-base-dropdown-menu__scroll-view {
+    background-color: transparent;
+    max-height: 240px;
+}
+
+.unity-base-dropdown__item {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 32px;
+    height: 32px;
+    padding-left: 14px;
+    padding-right: 14px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    border-radius: 8px;
+    background-color: transparent;
+    transition-property: background-color;
+    transition-duration: 0.12s;
+}
+
+.unity-base-dropdown-menu__item {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 32px;
+    height: 32px;
+    padding-left: 14px;
+    padding-right: 14px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    border-radius: 8px;
+    background-color: transparent;
+    transition-property: background-color;
+    transition-duration: 0.12s;
+}
+
+.unity-base-dropdown__item:hover {
+    background-color: rgb(246, 230, 255);
+}
+
+.unity-base-dropdown-menu__item:hover {
+    background-color: rgb(246, 230, 255);
+}
+
+.unity-base-dropdown__item:checked {
+    background-color: rgb(247, 242, 250);
+}
+
+.unity-base-dropdown-menu__item:checked {
+    background-color: rgb(247, 242, 250);
+}
+
+.unity-base-dropdown__item--selected {
+    background-color: rgb(247, 242, 250);
+}
+
+.unity-base-dropdown-menu__item--selected {
+    background-color: rgb(247, 242, 250);
+}
+
+.unity-base-dropdown__item-checkmark {
+    display: none;
+    width: 0;
+    height: 0;
+    min-width: 0;
+    min-height: 0;
+    max-width: 0;
+    max-height: 0;
+    margin-right: 0;
+    margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.unity-base-dropdown-menu__item-checkmark {
+    display: none;
+    width: 0;
+    height: 0;
+    min-width: 0;
+    min-height: 0;
+    max-width: 0;
+    max-height: 0;
+    margin-right: 0;
+    margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.unity-base-dropdown__checkmark {
+    display: none;
+    width: 0;
+    height: 0;
+    min-width: 0;
+    min-height: 0;
+    max-width: 0;
+    max-height: 0;
+    margin-right: 0;
+    margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.unity-base-dropdown-menu__checkmark {
+    display: none;
+    width: 0;
+    height: 0;
+    min-width: 0;
+    min-height: 0;
+    max-width: 0;
+    max-height: 0;
+    margin-right: 0;
+    margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.unity-base-dropdown .unity-base-dropdown__item-checkmark {
+    display: none;
+    width: 0;
+    height: 0;
+    min-width: 0;
+    min-height: 0;
+    max-width: 0;
+    max-height: 0;
+    margin-right: 0;
+    margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.unity-base-dropdown-menu .unity-base-dropdown-menu__item-checkmark {
+    display: none;
+    width: 0;
+    height: 0;
+    min-width: 0;
+    min-height: 0;
+    max-width: 0;
+    max-height: 0;
+    margin-right: 0;
+    margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.unity-base-dropdown__item-content {
+    flex-grow: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 0;
+    padding: 0;
+}
+
+.unity-base-dropdown-menu__item-content {
+    flex-grow: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 0;
+    padding: 0;
+}
+
+.unity-base-dropdown__item-text {
+    color: rgb(29, 25, 43);
+    font-size: 13px;
+    -unity-font-style: normal;
+    -unity-text-align: middle-left;
+    text-align: left;
+    align-self: center;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.unity-base-dropdown-menu__item-text {
+    color: rgb(29, 25, 43);
+    font-size: 13px;
+    -unity-font-style: normal;
+    -unity-text-align: middle-left;
+    text-align: left;
+    align-self: center;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.unity-base-dropdown__label {
+    color: rgb(29, 25, 43);
+    font-size: 13px;
+    -unity-font-style: normal;
+    -unity-text-align: middle-left;
+    text-align: left;
+    align-self: center;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.unity-base-dropdown-menu__label {
+    color: rgb(29, 25, 43);
+    font-size: 13px;
+    -unity-font-style: normal;
+    -unity-text-align: middle-left;
+    text-align: left;
+    align-self: center;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.unity-base-dropdown .unity-label {
+    color: rgb(29, 25, 43);
+    font-size: 13px;
+    -unity-font-style: normal;
+    -unity-text-align: middle-left;
+    text-align: left;
+    align-self: center;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.unity-base-dropdown-menu .unity-label {
+    color: rgb(29, 25, 43);
+    font-size: 13px;
+    -unity-font-style: normal;
+    -unity-text-align: middle-left;
+    text-align: left;
+    align-self: center;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.unity-base-dropdown TextElement {
+    color: rgb(29, 25, 43);
+    font-size: 13px;
+    -unity-font-style: normal;
+    -unity-text-align: middle-left;
+    text-align: left;
+    align-self: center;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.unity-base-dropdown-menu TextElement {
+    color: rgb(29, 25, 43);
+    font-size: 13px;
+    -unity-font-style: normal;
+    -unity-text-align: middle-left;
+    text-align: left;
+    align-self: center;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.unity-base-dropdown__item:hover .unity-base-dropdown__item-text {
+    color: rgb(103, 80, 164);
+}
+
+.unity-base-dropdown__item:hover .unity-base-dropdown__label {
+    color: rgb(103, 80, 164);
+}
+
+.unity-base-dropdown__item:hover .unity-label {
+    color: rgb(103, 80, 164);
+}
+
+.unity-base-dropdown__item:hover TextElement {
+    color: rgb(103, 80, 164);
+}
+
+.unity-base-dropdown-menu__item:hover TextElement {
+    color: rgb(103, 80, 164);
+}
+
+.unity-base-dropdown__item:checked .unity-base-dropdown__item-text {
+    color: rgb(103, 80, 164);
+    -unity-font-style: bold;
+}
+
+.unity-base-dropdown__item:checked .unity-base-dropdown__label {
+    color: rgb(103, 80, 164);
+    -unity-font-style: bold;
+}
+
+.unity-base-dropdown__item:checked .unity-label {
+    color: rgb(103, 80, 164);
+    -unity-font-style: bold;
+}
+
+.unity-base-dropdown__item:checked TextElement {
+    color: rgb(103, 80, 164);
+    -unity-font-style: bold;
+}
+
+.unity-base-dropdown__item--selected .unity-base-dropdown__item-text {
+    color: rgb(103, 80, 164);
+    -unity-font-style: bold;
+}
+
+.unity-base-dropdown__item--selected .unity-base-dropdown__label {
+    color: rgb(103, 80, 164);
+    -unity-font-style: bold;
+}
+
+.unity-base-dropdown__item--selected .unity-label {
+    color: rgb(103, 80, 164);
+    -unity-font-style: bold;
+}
+
+.unity-base-dropdown__item--selected TextElement {
+    color: rgb(103, 80, 164);
+    -unity-font-style: bold;
+}
+
+.unity-base-dropdown-menu__item:checked TextElement {
+    color: rgb(103, 80, 164);
+    -unity-font-style: bold;
+}
+
+.unity-base-dropdown-menu__item--selected TextElement {
+    color: rgb(103, 80, 164);
+    -unity-font-style: bold;
+}
+
+.unity-base-dropdown__separator {
+    height: 1px;
+    background-color: rgba(103, 80, 164, 0.12);
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.unity-base-dropdown-menu__separator {
+    height: 1px;
+    background-color: rgba(103, 80, 164, 0.12);
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+#image-button {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 130px;
+    min-width: 130px;
+    max-width: 130px;
+    height: 32px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 12px;
+    background-color: var(--primary-background-color);
+    color: var(--primary-color);
+    font-size: 12px;
+    -unity-font-style: bold;
+    border-width: 0;
+    margin-left: 0;
+    margin-right: 0;
+    flex-shrink: 0;
+    transition-property: background-color;
+    transition-duration: 0.15s;
+}
+
+.add-image-button {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 130px;
+    min-width: 130px;
+    max-width: 130px;
+    height: 32px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 12px;
+    background-color: var(--primary-background-color);
+    color: var(--primary-color);
+    font-size: 12px;
+    -unity-font-style: bold;
+    border-width: 0;
+    margin-left: 0;
+    margin-right: 0;
+    flex-shrink: 0;
+    transition-property: background-color;
+    transition-duration: 0.15s;
+}
+
+#image-button:hover {
+    background-color: var(--secondary-background-color);
+}
+
+.add-image-button:hover {
+    background-color: var(--secondary-background-color);
+}
+
+#image-button #icon {
+    -unity-background-image-tint-color: var(--primary-color);
+    margin-right: 4px;
+}
+
+.add-image-button #icon {
+    -unity-background-image-tint-color: var(--primary-color);
+    margin-right: 4px;
+}
+
+#image-button Label {
+    color: var(--primary-color);
+    font-size: 12px;
+    -unity-font-style: bold;
+}
+
+.add-image-button Label {
+    color: var(--primary-color);
+    font-size: 12px;
+    -unity-font-style: bold;
+}
+
+.switch-pill {
+    width: 44px;
+    min-width: 44px;
+    max-width: 44px;
+    height: 24px;
+    min-height: 24px;
+    max-height: 24px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.switch-pill .unity-toggle__label {
+    display: none;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.switch-pill .unity-toggle__input {
+    width: 44px;
+    min-width: 44px;
+    max-width: 44px;
+    height: 24px;
+    min-height: 24px;
+    max-height: 24px;
+    background-color: rgb(225, 220, 230);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
     border-top-width: 0;
     border-right-width: 0;
     border-bottom-width: 0;
     border-left-width: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    position: relative;
+    overflow: hidden;
+    transition-property: background-color;
+    transition-duration: 0.18s;
 }
 
-.required-toggle__required {
+.switch-pill .unity-toggle__checkmark {
+    width: 20px;
+    min-width: 20px;
+    max-width: 20px;
+    height: 20px;
+    min-height: 20px;
+    max-height: 20px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    background-color: rgb(255, 255, 255);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    background-image: none;
+    -unity-background-image-tint-color: rgba(0, 0, 0, 0);
+    transition-property: left, background-color;
+    transition-duration: 0.18s;
 }
 
-.required-toggle__optional {
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/asterisk-crossed.png?fileID=2800000&guid=092533b3b39958b4184c2346388f42f5&type=3#asterisk-crossed");
+.switch-pill:checked .unity-toggle__input {
+    background-color: var(--primary-color);
+}
+
+.switch-pill:checked .unity-toggle__checkmark {
+    left: 22px;
+    background-color: rgb(255, 255, 255);
+    background-image: none;
+    -unity-background-image-tint-color: rgba(0, 0, 0, 0);
+}
+
+.switch-pill:checked > .unity-toggle__input > .unity-toggle__checkmark {
+    left: 22px;
+    background-color: rgb(255, 255, 255);
+    background-image: none;
+    -unity-background-image-tint-color: rgba(0, 0, 0, 0);
+}
+
+.switch-pill:hover {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.switch-pill .unity-toggle__input:hover {
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.question-section-spacer {
+    height: 14px;
+    flex-shrink: 0;
 }
 
 #grid-table {
@@ -426,12 +3798,6 @@ ScrollView.unity-base-dropdown__container-inner {
 }
 
 #grid-table .unity-multi-column-header__column#row-title-col {
-    font-size: 13px;
-    -unity-font-style: bold;
-    color: rgb(73, 62, 105);
-}
-
-#grid-table .unity-multi-column-header__column:first-child {
     font-size: 13px;
     -unity-font-style: bold;
     color: rgb(73, 62, 105);
@@ -612,105 +3978,451 @@ ScrollView.unity-base-dropdown__container-inner {
 .icon-trash {
     background-image: url("project://database/Assets/_Features/Survey/UI/Icons/trash-can-outline.png?fileID=2800000&guid=7ad15b4efd0e279438b167e4bed1c7e6&type=3#trash-can-outline");
     -unity-background-scale-mode: scale-to-fit;
-    width: 20px;
-    height: 20px;
+    width: 28px;
+    height: 28px;
     background-color: transparent;
     border-width: 0;
+    border-radius: 8px;
     margin-left: 2px;
     margin-right: 2px;
+    -unity-background-image-tint-color: rgb(150, 145, 160);
+    transition-property: background-color, -unity-background-image-tint-color;
+    transition-duration: 0.15s;
 }
 
 .icon-trash:hover {
+    background-color: rgb(254, 242, 242);
+    -unity-background-image-tint-color: rgb(220, 38, 38);
     opacity: 1;
-    -unity-background-image-tint-color: rgb(229, 57, 53);
 }
 
 .icon-move-up {
     background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-up.png?fileID=2800000&guid=13e6e2a9f27e5874eab92e305adb3fa1&type=3#chevron-up");
     -unity-background-scale-mode: scale-to-fit;
-    width: 20px;
-    height: 20px;
+    width: 28px;
+    height: 28px;
     background-color: transparent;
     border-width: 0;
+    border-radius: 8px;
     margin-left: 2px;
     margin-right: 2px;
+    -unity-background-image-tint-color: rgb(150, 145, 160);
+    transition-property: background-color, -unity-background-image-tint-color;
+    transition-duration: 0.15s;
 }
 
 .icon-move-up:hover {
+    background-color: var(--primary-background-color);
+    -unity-background-image-tint-color: var(--primary-color);
     opacity: 1;
-    -unity-background-image-tint-color: rgb(103, 80, 164);
 }
 
 .icon-move-up:disabled {
-    opacity: 0.3;
+    opacity: 0.25;
 }
 
 .icon-move-down {
     background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-down.png?fileID=2800000&guid=d1a74cec442a2284589bab0730540f72&type=3#chevron-down");
     -unity-background-scale-mode: scale-to-fit;
-    width: 20px;
-    height: 20px;
+    width: 28px;
+    height: 28px;
     background-color: transparent;
     border-width: 0;
+    border-radius: 8px;
     margin-left: 2px;
     margin-right: 2px;
+    -unity-background-image-tint-color: rgb(150, 145, 160);
+    transition-property: background-color, -unity-background-image-tint-color;
+    transition-duration: 0.15s;
 }
 
 .icon-move-down:hover {
+    background-color: var(--primary-background-color);
+    -unity-background-image-tint-color: var(--primary-color);
     opacity: 1;
-    -unity-background-image-tint-color: rgb(103, 80, 164);
 }
 
 .icon-move-down:disabled {
-    opacity: 0.3;
+    opacity: 0.25;
 }
 
 #add-buttons {
-    margin-top: 8px;
+    margin-top: 12px;
+    margin-left: 56px;
+    margin-right: 386px;
     flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.add-buttons {
+    margin-top: 12px;
+    margin-left: 56px;
+    margin-right: 386px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#add-buttons Button {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+    height: 34px;
+    padding-left: 12px;
+    padding-right: 12px;
+    border-radius: 12px;
+    background-color: var(--primary-background-color);
+    color: var(--primary-color);
+    font-size: 13px;
+    -unity-font-style: bold;
+    border-width: 0;
+    transition-property: background-color;
+    transition-duration: 0.15s;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.add-buttons Button {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+    height: 34px;
+    padding-left: 12px;
+    padding-right: 12px;
+    border-radius: 12px;
+    background-color: var(--primary-background-color);
+    color: var(--primary-color);
+    font-size: 13px;
+    -unity-font-style: bold;
+    border-width: 0;
+    transition-property: background-color;
+    transition-duration: 0.15s;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+#add-buttons #add-option-button {
+    margin-right: 8px;
+    margin-left: 0;
+}
+
+.add-buttons #add-option-button {
+    margin-right: 8px;
+    margin-left: 0;
+}
+
+#add-buttons #add-other-option-button {
+    margin-left: 8px;
+    margin-right: 0;
+}
+
+.add-buttons #add-other-option-button {
+    margin-left: 8px;
+    margin-right: 0;
+}
+
+#add-buttons Button:hover {
+    background-color: var(--secondary-background-color);
+}
+
+.add-buttons Button:hover {
+    background-color: var(--secondary-background-color);
+}
+
+.grid-add-buttons {
+    flex-grow: 0;
+    flex-direction: row;
+    align-self: stretch;
+    margin-top: 10px;
+    margin-left: 0;
+    margin-right: 0;
     align-items: center;
 }
 
+.grid-add-row-button,
+#add-row-button {
+    width: 150px;
+    min-width: 150px;
+    max-width: 150px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+    height: 34px;
+    padding-left: 14px;
+    padding-right: 14px;
+    border-radius: 12px;
+    background-color: var(--primary-background-color);
+    color: var(--primary-color);
+    font-size: 13px;
+    -unity-font-style: bold;
+    border-width: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 8px;
+    transition-property: background-color;
+    transition-duration: 0.15s;
+}
+
+.grid-add-col-button,
+#add-column-button {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    height: 34px;
+    padding-left: 14px;
+    padding-right: 14px;
+    border-radius: 12px;
+    background-color: var(--primary-background-color);
+    color: var(--primary-color);
+    font-size: 13px;
+    -unity-font-style: bold;
+    border-width: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 110px;
+    transition-property: background-color;
+    transition-duration: 0.15s;
+}
+
+.grid-add-row-button:hover,
+#add-row-button:hover {
+    background-color: var(--secondary-background-color);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.grid-add-col-button:hover,
+#add-column-button:hover {
+    background-color: var(--secondary-background-color);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.image-choice-add-container {
+    flex-grow: 0;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 14px;
+    margin-bottom: 4px;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.add-image-option-btn,
+.add-image-choice-btn {
+    height: 34px;
+    padding-left: 18px;
+    padding-right: 18px;
+    border-radius: 12px;
+    background-color: var(--primary-background-color);
+    color: var(--primary-color);
+    font-size: 13px;
+    -unity-font-style: bold;
+    border-width: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+    transition-property: background-color;
+    transition-duration: 0.15s;
+}
+
+.add-image-option-btn:hover,
+.add-image-choice-btn:hover {
+    background-color: var(--secondary-background-color);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.add-question-bar {
+    flex-grow: 0;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 14px;
+    margin-bottom: 14px;
+    height: 36px;
+    justify-content: center;
+}
+
+.add-question-divider-line {
+    flex-grow: 1;
+    height: 1px;
+    background-color: rgb(73, 69, 79);
+    transition-property: background-color;
+    transition-duration: 0.15s;
+}
+
+.add-question-bar:hover .add-question-divider-line {
+    background-color: var(--primary-color);
+}
+
+.add-question-button {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+    max-width: 32px;
+    max-height: 32px;
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: rgb(73, 69, 79);
+    background-color: rgb(255, 255, 255);
+    -unity-background-image-tint-color: rgb(29, 25, 43);
+    -unity-background-scale-mode: scale-to-fit;
+    transition-property: background-color, border-color, -unity-background-image-tint-color, scale;
+    transition-duration: 0.15s;
+    scale: 1 1;
+    margin-left: 0;
+    margin-right: 0;
+    padding-top: 6px;
+    padding-right: 6px;
+    padding-bottom: 6px;
+    padding-left: 6px;
+}
+
+#add-question-button {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+    max-width: 32px;
+    max-height: 32px;
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: rgb(73, 69, 79);
+    background-color: rgb(255, 255, 255);
+    -unity-background-image-tint-color: rgb(29, 25, 43);
+    -unity-background-scale-mode: scale-to-fit;
+    transition-property: background-color, border-color, -unity-background-image-tint-color, scale;
+    transition-duration: 0.15s;
+    scale: 1 1;
+    margin-left: 0;
+    margin-right: 0;
+    padding-top: 6px;
+    padding-right: 6px;
+    padding-bottom: 6px;
+    padding-left: 6px;
+}
+
+.add-question-bar:hover .add-question-button {
+    scale: 1.08 1.08;
+    background-color: var(--primary-background-color);
+    border-color: var(--primary-color);
+    -unity-background-image-tint-color: var(--primary-color);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.add-question-bar:hover #add-question-button {
+    scale: 1.08 1.08;
+    background-color: var(--primary-background-color);
+    border-color: var(--primary-color);
+    -unity-background-image-tint-color: var(--primary-color);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.add-question-button:hover {
+    scale: 1.08 1.08;
+    background-color: var(--primary-background-color);
+    border-color: var(--primary-color);
+    -unity-background-image-tint-color: var(--primary-color);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+#add-question-button:hover {
+    scale: 1.08 1.08;
+    background-color: var(--primary-background-color);
+    border-color: var(--primary-color);
+    -unity-background-image-tint-color: var(--primary-color);
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
 .enhance-button {
-    background-color: rgba(255, 255, 255, 0.6);
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-    border-bottom-left-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-width: 0;
     transition-duration: 0.15s;
     transition-property: background-color, scale;
 }
 
 .remove-button {
-    background-color: rgba(255, 255, 255, 0.6);
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-    border-bottom-left-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-width: 0;
     transition-duration: 0.15s;
     transition-property: background-color, scale;
 }
 
 .enhance-button:hover {
-    background-color: rgba(255, 255, 255, 0.95);
-    scale: 1.15 1.15;
+    background-color: rgb(255, 255, 255);
+    scale: 1.1 1.1;
     cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .remove-button:hover {
-    background-color: rgba(255, 255, 255, 0.95);
-    scale: 1.15 1.15;
+    background-color: rgb(255, 255, 255);
+    scale: 1.1 1.1;
     cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .enhance-button:active {
-    background-color: rgb(220, 220, 220);
+    background-color: rgb(240, 240, 240);
     scale: 0.95 0.95;
 }
 
 .remove-button:active {
-    background-color: rgb(220, 220, 220);
+    background-color: rgb(240, 240, 240);
     scale: 0.95 0.95;
+}
+
+.media-views-container,
+#views {
+    flex-grow: 0;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 6px;
+    margin-bottom: 12px;
+}
+
+.media-preview-card,
+#camera-view,
+#question-image {
+    width: 285px;
+    min-width: 285px;
+    max-width: 285px;
+    height: 165px;
+    min-height: 165px;
+    max-height: 165px;
+    border-radius: 12px;
+    border-width: 1.5px;
+    border-color: var(--card-border);
+    background-color: var(--input-bg);
+    overflow: hidden;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    position: relative;
+    -unity-background-scale-mode: scale-to-fit;
+    transition-property: border-color;
+    transition-duration: 0.15s;
+}
+
+.media-preview-card:hover,
+#camera-view:hover,
+#question-image:hover {
+    border-color: var(--card-hover-border);
 }
 
 .scale-config-bar {
@@ -949,10 +4661,22 @@ ScrollView.unity-base-dropdown__container-inner {
 }
 
 .add-scale-row-btn {
-    width: 150px;
-    height: 32px;
+    width: 160px;
+    height: 34px;
     align-items: center;
     justify-content: center;
+    border-radius: 12px;
+    background-color: var(--primary-background-color);
+    color: var(--primary-color);
+    font-size: 13px;
+    -unity-font-style: bold;
+    border-width: 0;
+    transition-property: background-color;
+    transition-duration: 0.15s;
+}
+
+.add-scale-row-btn:hover {
+    background-color: var(--secondary-background-color);
 }
 
 .scale-viewer-row {
@@ -986,4 +4710,372 @@ ScrollView.unity-base-dropdown__container-inner {
     font-size: 14px;
     -unity-font-style: bold;
     margin-left: 12px;
+}
+
+.floating-bottom-bar {
+    position: absolute;
+    bottom: 24px;
+    right: 42px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    background-color: transparent;
+    border-width: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.floating-bottom-bar #exit-btn {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    min-height: 42px;
+    border-radius: 21px;
+    background-color: rgb(255, 255, 255);
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.25);
+    padding: 0;
+    margin-right: 12px;
+    justify-content: center;
+    align-items: center;
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    transition-property: background-color, border-color, scale;
+    transition-duration: 0.15s;
+    scale: 1 1;
+}
+
+.floating-fab-secondary {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    min-height: 42px;
+    border-radius: 21px;
+    background-color: rgb(255, 255, 255);
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.25);
+    padding: 0;
+    margin-right: 12px;
+    justify-content: center;
+    align-items: center;
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    transition-property: background-color, border-color, scale;
+    transition-duration: 0.15s;
+    scale: 1 1;
+}
+
+.floating-bottom-bar #exit-btn:hover {
+    background-color: var(--primary-background-color);
+    border-color: var(--primary-color);
+    scale: 1.08 1.08;
+}
+
+.floating-fab-secondary:hover {
+    background-color: var(--primary-background-color);
+    border-color: var(--primary-color);
+    scale: 1.08 1.08;
+}
+
+.floating-bottom-bar #exit-btn:active {
+    background-color: var(--secondary-background-color);
+    scale: 0.95 0.95;
+}
+
+.floating-fab-secondary:active {
+    background-color: var(--secondary-background-color);
+    scale: 0.95 0.95;
+}
+
+.floating-fab-exit-icon {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    min-height: 20px;
+    -unity-background-image-tint-color: rgb(98, 91, 113);
+    -unity-background-scale-mode: scale-to-fit;
+    transition-property: -unity-background-image-tint-color;
+    transition-duration: 0.15s;
+}
+
+.floating-bottom-bar #exit-btn:hover .floating-fab-exit-icon {
+    -unity-background-image-tint-color: var(--primary-color);
+}
+
+.floating-fab-secondary:hover .floating-fab-exit-icon {
+    -unity-background-image-tint-color: var(--primary-color);
+}
+
+.floating-bottom-bar #save-btn {
+    height: 42px;
+    min-height: 42px;
+    padding-left: 18px;
+    padding-right: 20px;
+    border-radius: 21px;
+    background-color: var(--primary-color);
+    border-width: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    transition-property: background-color, scale;
+    transition-duration: 0.15s;
+    scale: 1 1;
+}
+
+.floating-fab-primary {
+    height: 42px;
+    min-height: 42px;
+    padding-left: 18px;
+    padding-right: 20px;
+    border-radius: 21px;
+    background-color: var(--primary-color);
+    border-width: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    transition-property: background-color, scale;
+    transition-duration: 0.15s;
+    scale: 1 1;
+}
+
+.floating-bottom-bar #save-btn:hover {
+    background-color: var(--primary-hover);
+    scale: 1.06 1.06;
+}
+
+.floating-fab-primary:hover {
+    background-color: var(--primary-hover);
+    scale: 1.06 1.06;
+}
+
+.floating-bottom-bar #save-btn:active {
+    background-color: rgb(73, 50, 125);
+    scale: 0.96 0.96;
+}
+
+.floating-fab-primary:active {
+    background-color: rgb(73, 50, 125);
+    scale: 0.96 0.96;
+}
+
+.floating-fab-save-icon {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    -unity-background-scale-mode: scale-to-fit;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.floating-bottom-bar #save-btn .floating-fab-save-icon {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    -unity-background-scale-mode: scale-to-fit;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+#save-btn .floating-fab-save-icon {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    -unity-background-scale-mode: scale-to-fit;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.floating-fab-save-label {
+    color: rgb(255, 255, 255);
+    font-size: 13.5px;
+    -unity-font-style: bold;
+    margin: 0;
+    padding: 0;
+}
+
+.question-selection-popup {
+    width: 250px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 14px;
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.2);
+    padding: 6px;
+    margin: 0;
+}
+
+#question-selection-container {
+    width: 250px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 14px;
+    border-width: 1px;
+    border-color: rgba(103, 80, 164, 0.2);
+    padding: 6px;
+    margin: 0;
+}
+
+.question-selection-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 4px;
+    padding-bottom: 2px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.question-selection-header-title {
+    font-size: 11px;
+    -unity-font-style: bold;
+    color: var(--primary-color);
+    letter-spacing: 0.5px;
+    margin: 0;
+    padding: 0;
+}
+
+.question-selection-divider {
+    height: 1px;
+    background-color: var(--card-border);
+    margin-top: 4px;
+    margin-bottom: 4px;
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.question-selection-subdivider {
+    height: 1px;
+    background-color: rgba(232, 224, 236, 0.7);
+    margin-top: 3px;
+    margin-bottom: 3px;
+    margin-left: 6px;
+    margin-right: 6px;
+}
+
+.question-selection-list {
+    flex-direction: column;
+}
+
+.question-selection-item {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    height: 38px;
+    min-height: 38px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    border-radius: 8px;
+    border-width: 0;
+    background-color: transparent;
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    transition-property: background-color, scale;
+    transition-duration: 0.12s;
+    scale: 1 1;
+}
+
+.question-selection-item:hover {
+    background-color: var(--secondary-background-color);
+    scale: 1.015 1.015;
+    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.question-selection-item:active {
+    background-color: var(--primary-background-color);
+    scale: 0.985 0.985;
+}
+
+.question-selection-item-icon-box {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    border-radius: 6px;
+    background-color: var(--primary-background-color);
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    flex-shrink: 0;
+    transition-property: background-color;
+    transition-duration: 0.12s;
+}
+
+.question-selection-item:hover .question-selection-item-icon-box {
+    background-color: rgb(238, 222, 252);
+}
+
+.question-selection-item-icon {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    -unity-background-image-tint-color: var(--primary-color);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.question-selection-item-title {
+    font-size: 13.5px;
+    -unity-font-style: bold;
+    color: var(--text-main);
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    flex-grow: 1;
+    -unity-text-align: middle-left;
+    transition-property: color;
+    transition-duration: 0.12s;
+}
+
+.question-selection-item:hover .question-selection-item-title {
+    color: var(--primary-color);
+}
+
+#tooltipLabel {
+    position: absolute;
+    background-color: rgb(32, 26, 44);
+    color: rgb(255, 255, 255);
+    border-radius: 7px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 12px;
+    -unity-font-style: normal;
+    white-space: normal;
+    max-width: 250px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.12);
+    display: none;
+    -unity-text-align: middle-left;
+}
+
+.custom-tooltip-label {
+    position: absolute;
+    background-color: rgb(32, 26, 44);
+    color: rgb(255, 255, 255);
+    border-radius: 7px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 12px;
+    -unity-font-style: normal;
+    white-space: normal;
+    max-width: 250px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.12);
+    display: none;
+    -unity-text-align: middle-left;
 }

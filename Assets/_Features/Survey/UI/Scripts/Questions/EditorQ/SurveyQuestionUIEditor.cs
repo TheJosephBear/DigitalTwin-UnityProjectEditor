@@ -54,7 +54,6 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
 
     }
 
-
     #region Interface for editing the question
 
     // Make it virtual or abstract - check the other add answer function and how different it is (this is for code calls, theo ther is for ui calls)
@@ -79,18 +78,23 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
             }
         }
 
-        if (!isOther) {
-            TextField tf = FindTextFieldRecursive(element);
-            if (tf != null)
-                tf.value = answerText;
-        }
+        TextField tf = FindTextFieldRecursive(element);
+        if (tf != null)
+            tf.value = answerText;
 
         SurveyAnswerUIBase answerUI = CreateAnswerUI(element, index, isOther);
 
         if (isOther) {
-            var button = element.Q<CustomRadioButton>();
-            if (button != null) {
-                element.Q<CustomRadioButton>().Placeholder = "Other";
+            var optContainer = element.Q<VisualElement>("option-container") ?? element;
+            optContainer.AddToClassList("option-container--other");
+
+            var radioButton = element.Q<CustomRadioButton>();
+            if (radioButton != null) {
+                radioButton.Placeholder = "Jiná odpověď...";
+            }
+            var toggleButton = element.Q<CustomToggleButton>();
+            if (toggleButton != null) {
+                toggleButton.Placeholder = "Jiná odpověď...";
             }
             _otherAnswerUI = answerUI;
         } else {
@@ -105,7 +109,7 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
     public void SetSelectedView(ViewPoint viewPoint) {
         var dropdown = _root.Q<DropdownField>("camera-view-dropdown");
         if (dropdown == null || viewPoint == null) return;
-        dropdown.value = viewPoint.Name;
+        dropdown.SetValueWithoutNotify(viewPoint.Name);
         SetViewPointRender(viewPoint.ID);
     }
 
@@ -117,7 +121,7 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
     public void ClearSelectedView() {
         var dropdown = _root.Q<DropdownField>("camera-view-dropdown");
         if (dropdown != null && dropdown.choices != null && dropdown.choices.Count > 0) {
-            dropdown.value = dropdown.choices[0];
+            dropdown.SetValueWithoutNotify(dropdown.choices[0]);
         }
     }
 
@@ -130,21 +134,9 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
         // Inner flag
         _isRequired = required;
 
-        // Set texture
-        Texture textureToUse = null;
-
-        if (_isRequired) {
-            textureToUse = _surveyUIBuilder.AsteriskTexture;
-        } else {
-            textureToUse = _surveyUIBuilder.AsteriskCrossedTexture;
-        }
-
-        Texture2D texture2D = textureToUse as Texture2D;
-
-        if (texture2D != null) {
-            _root.Q<Button>("required-toggle").style.backgroundImage = new StyleBackground(texture2D);
-        } else {
-            Debug.LogError("textureToUse is not a valid Texture2D!");
+        var toggle = _root.Q<Toggle>("required-toggle");
+        if (toggle != null) {
+            toggle.SetValueWithoutNotify(required);
         }
 
         // Event
@@ -156,17 +148,28 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
     #region UI Input Registration
 
     protected override void RegisterButtons() {
-        // required toggle
-        var requiredButton = _root.Q<Button>("required-toggle");
-        Debug.Log(requiredButton==null);
-        if (requiredButton != null) {
-            requiredButton.clicked += () => {
-                ToggleRequired();
-            };
+        // required toggle switch pill
+        var requiredToggle = _root.Q<Toggle>("required-toggle");
+        if (requiredToggle != null) {
+            requiredToggle.RegisterValueChangedCallback(evt => {
+                _isRequired = evt.newValue;
+                OnToggleRequired?.Invoke(QuestionID, _isRequired);
+            });
         }
 
-        // Active question
+        var requiredLabel = _root.Q<Label>("required-label");
+        if (requiredLabel != null) {
+            requiredLabel.RegisterCallback<ClickEvent>(evt => {
+                ToggleRequired();
+            });
+        }
+
+        // Active question on pointer down or focus (keeps active when typing)
         _root.RegisterCallback<PointerDownEvent>(evt => {
+            OnQuestionSelected?.Invoke(this);
+        });
+
+        _root.RegisterCallback<FocusInEvent>(evt => {
             OnQuestionSelected?.Invoke(this);
         });
 
@@ -376,21 +379,20 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
 
     protected virtual void RegisterQuestionModalButtonEvents() {
         var modal = _root.Q<VisualElement>("edit-question-modal");
-        var moveUpButton = modal?.Q<Button>("move-up-button") ?? _root.Q<Button>("move-up-button");
-        var moveDownButton = modal?.Q<Button>("move-down-button") ?? _root.Q<Button>("move-down-button");
-        var deleteButton = modal?.Q<Button>("delete-option-button") ?? _root.Q<Button>("delete-option-button");
+        var moveUpButton = _root.Q<Button>("move-up-button") ?? modal?.Q<Button>("move-up-button");
+        var moveDownButton = _root.Q<Button>("move-down-button") ?? modal?.Q<Button>("move-down-button");
+        var deleteButton = _root.Q<Button>("delete-question-button") ?? _root.Q<Button>("delete-option-button") ?? modal?.Q<Button>("delete-option-button");
         var imageButton = _root.Q<Button>("image-button");
 
         if (moveUpButton == null || moveDownButton == null || deleteButton == null || imageButton == null) {
-            Debug.LogError($"[{QuestionID}] Failed to register button events: One or more buttons not found in UIDocument.");
-            return;
+            Debug.LogWarning($"[{QuestionID}] Button check: moveUp={moveUpButton != null}, moveDown={moveDownButton != null}, delete={deleteButton != null}, image={imageButton != null}");
         }
 
         // Remove old callbacks first
-        if (_onMoveUp != null) moveUpButton.clicked -= _onMoveUp;
-        if (_onMoveDown != null) moveDownButton.clicked -= _onMoveDown;
-        if (_onDelete != null) deleteButton.clicked -= _onDelete;
-        if (_onUpload != null) imageButton.clicked -= _onUpload;
+        if (_onMoveUp != null && moveUpButton != null) moveUpButton.clicked -= _onMoveUp;
+        if (_onMoveDown != null && moveDownButton != null) moveDownButton.clicked -= _onMoveDown;
+        if (_onDelete != null && deleteButton != null) deleteButton.clicked -= _onDelete;
+        if (_onUpload != null && imageButton != null) imageButton.clicked -= _onUpload;
 
         // Create new ones with dynamic index calculation
         _onMoveUp = () => {
@@ -414,10 +416,10 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
         };
 
         // Register
-        moveUpButton.clicked += _onMoveUp;
-        moveDownButton.clicked += _onMoveDown;
-        deleteButton.clicked += _onDelete;
-        imageButton.clicked += _onUpload;
+        if (moveUpButton != null) moveUpButton.clicked += _onMoveUp;
+        if (moveDownButton != null) moveDownButton.clicked += _onMoveDown;
+        if (deleteButton != null) deleteButton.clicked += _onDelete;
+        if (imageButton != null) imageButton.clicked += _onUpload;
     }
 
     #endregion

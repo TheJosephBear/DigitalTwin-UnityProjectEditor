@@ -2,6 +2,7 @@ using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,7 +12,7 @@ public class ViewManager : Singleton<ViewManager> {
     public bool ShowAddViewButton = false;
     public GameObject ViewPointPrefab;
     public GameObject ViewPointUIPrefab;
-    List<ViewPoint> viewPoints = new List<ViewPoint>();
+    List<ViewPoint> _viewPoints = new List<ViewPoint>();
     //   List<EditorObjectBase> interestPoints = new List<EditorObjectBase>();
     public Vector3 viewPointSpawnPosition;
     public GameObject cameraViewUI;
@@ -59,6 +60,7 @@ public class ViewManager : Singleton<ViewManager> {
             MoveMainCamToActiveViewPoint();
             DeactivateViewPoint();
             _viewPointUIInstance.OnExitMoving();
+            (EditorManager.Instance as EditorManager).ToggleUnsavedChanges(true);
             MainManagerBase.Instance.ChangeState(AppState.Freecam);
         });
     }
@@ -78,7 +80,7 @@ public class ViewManager : Singleton<ViewManager> {
 
     #region View point management
 
-    public GameObject CreateNewViewPoint(bool updateUI = true) {
+    public GameObject CreateNewViewPoint(bool updateUI = true, bool deserialization = false) {
         if (SceneLoadingManager.Instance == null) {
             Debug.LogError("DEBUG: SceneLoadingManager.Instance is NULL!");
             return null;
@@ -87,6 +89,8 @@ public class ViewManager : Singleton<ViewManager> {
         if (ViewPointPrefab == null) {
             return null;
         }
+
+        if(!deserialization) (EditorManager.Instance as EditorManager).ToggleUnsavedChanges(true);
 
         Vector3 spawnPos = Vector3.zero;
         Quaternion spawnRot = Quaternion.identity;
@@ -110,11 +114,11 @@ public class ViewManager : Singleton<ViewManager> {
         }
 
         //    newInterestPoint.SetName("Default view point name " + newInterestPoint.ID);
-        newInterestPoint.SetName("Pohled " + (viewPoints.Count + 1).ToString());
+        newInterestPoint.SetName("Pohled " + (_viewPoints.Count + 1).ToString());
         newInterestPoint.transform.rotation = spawnRot;
         newInterestPoint.Deactivate();
 
-        viewPoints.Add(newInterestPoint);
+        _viewPoints.Add(newInterestPoint);
         if (updateUI) _viewPointUIInstance.UpdateViewButtonList();
 
         if (OnViewPointAddedEvent != null) {
@@ -132,7 +136,7 @@ public class ViewManager : Singleton<ViewManager> {
                 if(viewPoint == _activeViewPoint) {
                     _activeViewPoint = null;
                 }
-                viewPoints.Remove(viewPoint);
+                _viewPoints.Remove(viewPoint);
                 Destroy(viewPoint.gameObject);
                 _viewPointUIInstance.UpdateViewButtonList();
             }
@@ -150,11 +154,11 @@ public class ViewManager : Singleton<ViewManager> {
     }
 
     public List<ViewPoint> GetViewPoints() {
-        return viewPoints;
+        return _viewPoints;
     }
 
     public ViewPoint GetViewPointByID(string id) {
-        return viewPoints.Find(vp => vp.ID == id);
+        return _viewPoints.Find(vp => vp.ID == id);
     }
 
     #endregion
@@ -162,6 +166,11 @@ public class ViewManager : Singleton<ViewManager> {
     #region UI management
 
     public void ToggleCameraPreview(bool toggleOn) {
+        print($"Toggle preview function, toggleOn {toggleOn}");
+        print($"Toggle preview function, cameraViewUI {cameraViewUI}");
+        print($"Toggle preview function, previewCam {previewCam}");
+        print($"Toggle preview function, _activeViewPoint {_activeViewPoint}");
+
         if (cameraViewUI == null || previewCam == null) return;
 
         if (toggleOn) {
@@ -170,6 +179,8 @@ public class ViewManager : Singleton<ViewManager> {
             previewCam.transform.SetParent(_activeViewPoint.gameObject.transform);
             previewCam.transform.localPosition = new Vector3(0, 0, 0);
             previewCam.transform.rotation = _activeViewPoint.transform.rotation;
+        } else {
+            previewCam.transform.SetParent(gameObject.transform);
         }
         // Toggle UI and cam
         cameraViewUI.SetActive(toggleOn);
@@ -208,7 +219,7 @@ public class ViewManager : Singleton<ViewManager> {
     public void ClearEverything() {
         ExitViewMoving(false);
         SetActiveViewPoint(null);
-        Utilities.DestroyAllGameObjects(viewPoints);
+        Utilities.DestroyAllGameObjects(_viewPoints);
         _viewPointUIInstance.ClearViewButtonList();
     }
 
@@ -217,7 +228,7 @@ public class ViewManager : Singleton<ViewManager> {
     public List<SerializableViewPoint> GetSerializedViewPointsList() {
         List<SerializableViewPoint> list = new List<SerializableViewPoint>();
 
-        foreach (ViewPoint vp in viewPoints) {
+        foreach (ViewPoint vp in _viewPoints) {
             list.Add(vp.Serialize());
         }
 
@@ -226,7 +237,7 @@ public class ViewManager : Singleton<ViewManager> {
 
     public SerializableViewPointManager Serialize() {
         List<SerializableViewPoint> serializablePoints = new List<SerializableViewPoint>();
-        foreach (var interestPoint in viewPoints) {
+        foreach (var interestPoint in _viewPoints) {
             SerializableViewPoint instantiated = interestPoint.Serialize();
             serializablePoints.Add(instantiated);
         }
@@ -245,7 +256,7 @@ public class ViewManager : Singleton<ViewManager> {
 
         foreach (var serializedInterestPoint in serializedManager.ViewPoints) {
 
-            GameObject vpObject = CreateNewViewPoint();
+            GameObject vpObject = CreateNewViewPoint(deserialization: true);
 
             if (vpObject == null) {
                 continue;

@@ -68,8 +68,12 @@ public class ProjectListUI : UIBehaviour {
         ProjectListManager.Instance.ExportProject(projectMedata);
     }
 
+    public void OnDownloadSurveyResponses(ProjectMetadata projectMetadata) {
+        ProjectListManager.Instance.DownloadSurveyResponses(projectMetadata);
+    }
+
     public void OnShowFeedBack(ProjectMetadata projectMedata) {
-        ProjectListManager.Instance.ShowFeedBack(projectMedata);
+        OnDownloadSurveyResponses(projectMedata);
     }
 
     public void OnDeleteProject(ProjectMetadata projectMedata) {

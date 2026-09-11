@@ -43,6 +43,7 @@ public class ViewHUDButton : MonoBehaviour {
     }
 
     public void OnHover() {
+        print("View moving active? " + ViewManager.Instance.isViewMovingActive);
         if (ViewManager.Instance.isViewMovingActive) return;
 
         _previousActiveViewPoint = ViewManager.Instance.GetActiveViewPoint();
@@ -64,6 +65,10 @@ public class ViewHUDButton : MonoBehaviour {
     }
     
     public void ToggleMovableVisual(bool toggleOn) {
+        if (MainManagerBase.Instance is ViewingManager) {
+            toggleOn = false;
+        }
+
         RectTransform rectTransform = GetComponent<RectTransform>();
 
         Vector2 size = rectTransform.sizeDelta;

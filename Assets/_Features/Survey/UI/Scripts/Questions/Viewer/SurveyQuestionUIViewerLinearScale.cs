@@ -76,11 +76,12 @@ public class SurveyQuestionUIViewerLinearScale : SurveyQuestionUIViewer {
         minLabel.AddToClassList("scale-limit-label");
         sliderContainer.Add(minLabel);
 
+        int defaultVal = (_min + _max) / 2;
         var slider = new SliderInt();
         slider.name = "scale-slider";
         slider.lowValue = _min;
         slider.highValue = _max;
-        slider.value = _min;
+        slider.value = defaultVal;
         slider.AddToClassList("scale-slider");
         sliderContainer.Add(slider);
 
@@ -89,7 +90,7 @@ public class SurveyQuestionUIViewerLinearScale : SurveyQuestionUIViewer {
         maxLabel.AddToClassList("scale-limit-label");
         sliderContainer.Add(maxLabel);
 
-        var valueBadge = new Label(_min.ToString());
+        var valueBadge = new Label(defaultVal.ToString());
         valueBadge.name = "scale-value-badge";
         valueBadge.AddToClassList("scale-value-badge");
         sliderContainer.Add(valueBadge);

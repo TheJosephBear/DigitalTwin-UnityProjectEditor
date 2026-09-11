@@ -51,10 +51,16 @@ public class MapManager : Singleton<MapManager> {
         map.Name = name;
     }
 
-    public MapVariant UploadMapVariant(ModelAsset newMap) {
+    public MapVariant UploadMapVariant(ModelAsset newMap, bool deseralization = false) {
+        if(!deseralization)
+            (EditorManager.Instance as EditorManager).ToggleUnsavedChanges(true);
+
+        print("UPLOADING VARIANT MODEL " + newMap.FileName);
+
         MapVariant addedMap = newMap.InstantiateModel(mapSpawnPosition).AddComponent<MapVariant>();
         addedMap.ModelAsset = newMap;
         addedMap.Name = newMap.FileName;
+        addedMap.IsBaseMap = false;
         addedMap.AddCollider();
         _mapVariants.Add(addedMap);
         return addedMap;
@@ -114,8 +120,6 @@ public class MapManager : Singleton<MapManager> {
         MapVariantAdjustManager.Instance.EnterAdjusting(map);
     }
 
-
-
     public void SpawnMap() {
         _baseMap?.ToggleMeshVisibility(true);
         _baseMap?.AddCollider();
@@ -151,7 +155,6 @@ public class MapManager : Singleton<MapManager> {
     public List<MapVariant> GetVariantsWithoutBase() {
         return new List<MapVariant>(_mapVariants);
     }
-
 
 
     #region Transform offsetting
@@ -198,7 +201,6 @@ public class MapManager : Singleton<MapManager> {
         };
     }
 
-
     public void Deserialize(SerializableMapManager serializedMap) {
         if (serializedMap == null || serializedMap.baseMap == null) return;
         /*
@@ -225,7 +227,7 @@ public class MapManager : Singleton<MapManager> {
             var asset = AssetManager.Instance.FindModelAssetByFileHash(variantData.modelFileHash);
 
             // Assuming UploadMapVariant instantiates and returns the created MapVariant reference
-            MapVariant spawnedVariant = UploadMapVariant(asset);
+            MapVariant spawnedVariant = UploadMapVariant(asset, deseralization: true);
 
             if (spawnedVariant != null) {
                 // Restore variant transform values and apply to scene
@@ -237,7 +239,6 @@ public class MapManager : Singleton<MapManager> {
     #endregion
 
 }
-
 
 [Serializable]
 public class SerializableMapManager {

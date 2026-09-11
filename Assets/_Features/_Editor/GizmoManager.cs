@@ -62,6 +62,9 @@ public class GizmoManager: Singleton<GizmoManager> {
     public void SetFreecamScrollSpeed(float value) {
         RTFocusCameraScript.ZoomSettings.PerspStandardZoomSensitivity = value;
     }
+    public void SetFreecamPanSpeed(float value) {
+        RTFocusCameraScript.PanSettings.StandardPanSensitivity = value; 
+    }
 
     public void SetTargetGameObject(GameObject go) {
         OnTargetObjectChanged(go);

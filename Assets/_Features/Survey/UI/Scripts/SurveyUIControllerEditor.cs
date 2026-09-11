@@ -284,6 +284,10 @@ public class SurveyUIControllerEditor : MonoBehaviour {
             imageUI.OnAnswerImageChanged += HandleImageQuestionAnswerImageUpload;
             imageUI.OnAnswerAdded += HandleAddAnswerImage;
             imageUI.OnAnswerRemoved += HandleAnswerRemoved;
+
+            if (!isDeserialized) {
+                imageUI.AddInitialAnswer();
+            }
         } else if (addedQuestionUI is SurveyQuestionUIEditorLinearScale scaleUI) {
             scaleUI.OnAnswerAdded += HandleAnswerAdded;
             scaleUI.OnAnswerRemoved += HandleAnswerRemoved;
@@ -367,8 +371,11 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         }
     }
 
-    public void HandleAnswerOtherAdded(int questionId) {
+    public void HandleAnswerOtherAdded(int questionId, SurveyAnswerUIBase answerUI) {
         _surveyBuilder.AddNewAnswerToQuestion(questionId, true);
+        if (answerUI is SurveyAnswerUIEditorString answerEditor) {
+            answerEditor.OnTextChanged += HandleAnswerTextChanged;
+        }
     }
 
     public void HandleAnswerTextChanged(int questionId, int answerId, string newText) {
@@ -435,6 +442,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
 
         // 2. Remove the USS class from the previously selected question
         if (_currentlySelectedQuestion != null && _currentlySelectedQuestion.QuestionElement != null) {
+            _currentlySelectedQuestion.QuestionElement.RemoveFromClassList("active-question");
             _currentlySelectedQuestion.QuestionElement.RemoveFromClassList("new-question");
         }
 
@@ -442,7 +450,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         _currentlySelectedQuestion = selectedQuestion;
 
         if (_currentlySelectedQuestion != null && _currentlySelectedQuestion.QuestionElement != null) {
-            _currentlySelectedQuestion.QuestionElement.AddToClassList("new-question");
+            _currentlySelectedQuestion.QuestionElement.AddToClassList("active-question");
         }
     }
 
@@ -456,20 +464,20 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         // set title & description
         var titleField = _surveyHeaderContainer?.Q<TextField>("question-title") ?? _root.Q<TextField>("question-title");
         var descField = _surveyHeaderContainer?.Q<TextField>("question-description") ?? _root.Q<TextField>("question-description");
-        if (titleField != null) titleField.value = survey.Name ?? "";
-        if (descField != null) descField.value = survey.Description ?? "";
+        if (titleField != null) titleField.SetValueWithoutNotify(survey.Name ?? "");
+        if (descField != null) descField.SetValueWithoutNotify(survey.Description ?? "");
 
         // Restore survey viewpoint
         if (MainManagerBase.Instance != null && !string.IsNullOrEmpty(survey.ViewPointId)) {
             ViewPoint vp = MainManagerBase.Instance.ViewManager.GetViewPointByID(survey.ViewPointId);
             if (vp != null && _surveyCameraDropdown != null) {
-                _surveyCameraDropdown.value = vp.Name;
+                _surveyCameraDropdown.SetValueWithoutNotify(vp.Name);
                 SetSurveyViewPointRender(survey.ViewPointId);
             } else if (_surveyCameraDropdown != null && _surveyCameraDropdown.choices != null && _surveyCameraDropdown.choices.Count > 0) {
-                _surveyCameraDropdown.value = _surveyCameraDropdown.choices[0];
+                _surveyCameraDropdown.SetValueWithoutNotify(_surveyCameraDropdown.choices[0]);
             }
         } else if (_surveyCameraDropdown != null && _surveyCameraDropdown.choices != null && _surveyCameraDropdown.choices.Count > 0) {
-            _surveyCameraDropdown.value = _surveyCameraDropdown.choices[0];
+            _surveyCameraDropdown.SetValueWithoutNotify(_surveyCameraDropdown.choices[0]);
         }
 
         // Restore survey image unconditionally

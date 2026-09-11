@@ -14,10 +14,14 @@ public class ViewingInitializer : MonoBehaviour, Iinitializer {
     public void Initialize() {
 #if UNITY_EDITOR
         if (!InEditorDebugging) {
-#endif
-            _projectName = GetUrlParameter("projectName");
-#if UNITY_EDITOR
+            if (ProjectManager.Instance != null && ProjectManager.Instance.SelectedProject != null && !string.IsNullOrWhiteSpace(ProjectManager.Instance.SelectedProject.ProjectName)) {
+                _projectName = ProjectManager.Instance.SelectedProject.ProjectName;
+            } else {
+                _projectName = GetUrlParameter("projectName");
+            }
         }
+#else
+        _projectName = GetUrlParameter("projectName");
 #endif
 
         SceneLoadingManager.Instance.SetActiveScene(SceneType.Viewing);

@@ -40,8 +40,12 @@ public class ProjectListButton : MonoBehaviour {
         _projectListUI.OnExportProject(_projectMetadata);
     }
 
+    public void OnDownloadSurveyResponses() {
+        _projectListUI.OnDownloadSurveyResponses(_projectMetadata);
+    }
+
     public void OnShowFeedBack() {
-        _projectListUI.OnShowFeedBack(_projectMetadata);
+        OnDownloadSurveyResponses();
     }
 
     public void OnDeleteProject() {

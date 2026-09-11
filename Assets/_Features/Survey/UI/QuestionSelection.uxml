@@ -1,33 +1,71 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/_Features/Survey/UI/Styles.uss?fileID=7433441132597879392&amp;guid=e2857671203a4094b98524b8aefbd78f&amp;type=3#Styles" />
-    <ui:VisualElement name="container" style="width: 280px; padding-top: 6px; padding-right: 6px; padding-bottom: 6px; padding-left: 6px; background-color: rgb(236, 236, 236); border-top-left-radius: -120px; border-top-right-radius: -120px; border-bottom-right-radius: -120px; border-bottom-left-radius: -120px;">
-        <ui:Button name="MultipleChoiceSingle" style="flex-direction: row; align-items: center;">
-            <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/radiobox-marked.png?fileID=2800000&amp;guid=37e9f9f378ccfdc408c1f609b92c11ab&amp;type=3#radiobox-marked&quot;); -unity-background-scale-mode: scale-to-fit; width: 32px; height: 32px;" />
-            <ui:Label text="Výběr jedné možnosti" style="font-size: 16px;" />
-        </ui:Button>
-        <ui:Button name="MultipleChoiceMultiple" style="flex-direction: row; align-items: center;">
-            <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/checkbox-outline.png?fileID=2800000&amp;guid=59ce6c32913445d4ea17176e8eaa821c&amp;type=3#checkbox-outline&quot;); -unity-background-scale-mode: scale-to-fit; width: 32px; height: 32px;" />
-            <ui:Label text="Výběr více možností" style="font-size: 16px;" />
-        </ui:Button>
-        <ui:Button name="Paragraph" style="flex-direction: row; align-items: center;">
-            <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/text-long.png?fileID=2800000&amp;guid=109d9144e1e668e4e9421d69b95d1fed&amp;type=3#text-long&quot;); -unity-background-scale-mode: scale-to-fit; width: 32px; height: 32px;" />
-            <ui:Label text="Textová odpověď" style="font-size: 16px;" />
-        </ui:Button>
-        <ui:Button name="MultipleChoiceGrid" style="flex-direction: row; align-items: center;">
-            <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/dots-grid.png?fileID=2800000&amp;guid=e33b5d874beaea7449ae151cfc33622c&amp;type=3#dots-grid&quot;); -unity-background-scale-mode: scale-to-fit; width: 32px; height: 32px;" />
-            <ui:Label text="Matice jedné možnosti" style="font-size: 16px;" />
-        </ui:Button>
-        <ui:Button name="CheckboxGrid" style="flex-direction: row; align-items: center;">
-            <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/grid.png?fileID=2800000&amp;guid=13bd22408d8dec548ae2c44a66a972ec&amp;type=3#grid&quot;); -unity-background-scale-mode: scale-to-fit; width: 32px; height: 32px;" />
-            <ui:Label text="Matice více možností" style="font-size: 16px;" />
-        </ui:Button>
-        <ui:Button name="LinearScale" style="flex-direction: row; align-items: center;">
-            <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/tune-variant.png?fileID=2800000&amp;guid=e3afdd3fd3406684aa08feaea540d51c&amp;type=3#tune-variant&quot;); -unity-background-scale-mode: scale-to-fit; width: 32px; height: 32px;" />
-            <ui:Label text="Lineární škála" style="font-size: 16px;" />
-        </ui:Button>
-        <ui:Button name="ImageChoice" style="flex-direction: row; align-items: center;">
-            <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/image-multiple-outline.png?fileID=2800000&amp;guid=ec7fb72a04c535948a0e19a96b81d5ee&amp;type=3#image-multiple-outline&quot;); -unity-background-scale-mode: scale-to-fit; width: 32px; height: 32px;" />
-            <ui:Label text="Výběr obrázku" style="font-size: 16px;" />
-        </ui:Button>
+    <ui:VisualElement name="question-selection-container" class="question-selection-popup">
+        <!-- Header -->
+        <ui:VisualElement class="question-selection-header">
+            <ui:Label text="PŘIDAT OTÁZKU" class="question-selection-header-title" />
+        </ui:VisualElement>
+        <ui:VisualElement class="question-selection-divider" />
+
+        <!-- Question Types List -->
+        <ui:VisualElement class="question-selection-list">
+            <!-- 1. MultipleChoiceSingle -->
+            <ui:Button name="MultipleChoiceSingle" tooltip="Jedna odpověď ze seznamu" class="question-selection-item">
+                <ui:VisualElement class="question-selection-item-icon-box">
+                    <ui:VisualElement class="question-selection-item-icon" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/radiobox-marked.png?fileID=2800000&amp;guid=37e9f9f378ccfdc408c1f609b92c11ab&amp;type=3#radiobox-marked&quot;);" />
+                </ui:VisualElement>
+                <ui:Label text="Výběr jedné možnosti" class="question-selection-item-title" />
+            </ui:Button>
+
+            <!-- 2. MultipleChoiceMultiple -->
+            <ui:Button name="MultipleChoiceMultiple" tooltip="Zaškrtnutí více odpovědí" class="question-selection-item">
+                <ui:VisualElement class="question-selection-item-icon-box">
+                    <ui:VisualElement class="question-selection-item-icon" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/checkbox-outline.png?fileID=2800000&amp;guid=59ce6c32913445d4ea17176e8eaa821c&amp;type=3#checkbox-outline&quot;);" />
+                </ui:VisualElement>
+                <ui:Label text="Výběr více možností" class="question-selection-item-title" />
+            </ui:Button>
+
+            <!-- 3. Paragraph -->
+            <ui:Button name="Paragraph" tooltip="Dlouhá nebo krátká textová odpověď" class="question-selection-item">
+                <ui:VisualElement class="question-selection-item-icon-box">
+                    <ui:VisualElement class="question-selection-item-icon" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/text-long.png?fileID=2800000&amp;guid=109d9144e1e668e4e9421d69b95d1fed&amp;type=3#text-long&quot;);" />
+                </ui:VisualElement>
+                <ui:Label text="Textová odpověď" class="question-selection-item-title" />
+            </ui:Button>
+
+            <ui:VisualElement class="question-selection-subdivider" />
+
+            <!-- 4. MultipleChoiceGrid -->
+            <ui:Button name="MultipleChoiceGrid" tooltip="Tabulka s jednou volbou na řádek" class="question-selection-item">
+                <ui:VisualElement class="question-selection-item-icon-box">
+                    <ui:VisualElement class="question-selection-item-icon" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/dots-grid.png?fileID=2800000&amp;guid=e33b5d874beaea7449ae151cfc33622c&amp;type=3#dots-grid&quot;);" />
+                </ui:VisualElement>
+                <ui:Label text="Matice jedné možnosti" class="question-selection-item-title" />
+            </ui:Button>
+
+            <!-- 5. CheckboxGrid -->
+            <ui:Button name="CheckboxGrid" tooltip="Tabulka s více volbami na řádek" class="question-selection-item">
+                <ui:VisualElement class="question-selection-item-icon-box">
+                    <ui:VisualElement class="question-selection-item-icon" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/grid.png?fileID=2800000&amp;guid=13bd22408d8dec548ae2c44a66a972ec&amp;type=3#grid&quot;);" />
+                </ui:VisualElement>
+                <ui:Label text="Matice více možností" class="question-selection-item-title" />
+            </ui:Button>
+
+            <!-- 6. LinearScale -->
+            <ui:Button name="LinearScale" tooltip="Číselná škála pro hodnocení" class="question-selection-item">
+                <ui:VisualElement class="question-selection-item-icon-box">
+                    <ui:VisualElement class="question-selection-item-icon" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/tune-variant.png?fileID=2800000&amp;guid=e3afdd3fd3406684aa08feaea540d51c&amp;type=3#tune-variant&quot;);" />
+                </ui:VisualElement>
+                <ui:Label text="Lineární škála" class="question-selection-item-title" />
+            </ui:Button>
+
+            <!-- 7. ImageChoice -->
+            <ui:Button name="ImageChoice" tooltip="Volba z obrázkových možností" class="question-selection-item">
+                <ui:VisualElement class="question-selection-item-icon-box">
+                    <ui:VisualElement class="question-selection-item-icon" style="background-image: url(&quot;project://database/Assets/_Features/Survey/UI/Icons/image-multiple-outline.png?fileID=2800000&amp;guid=ec7fb72a04c535948a0e19a96b81d5ee&amp;type=3#image-multiple-outline&quot;);" />
+                </ui:VisualElement>
+                <ui:Label text="Výběr obrázku" class="question-selection-item-title" />
+            </ui:Button>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

@@ -1,15 +1,12 @@
-using QuestionnaireToolkit.Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using SurveySystem;
 using System;
-using QuestionnaireToolkit.Scripts.SimpleJSON;
-using System.Diagnostics;
 
 public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
-    
+
     public GameObject SurveyBuildingManagerPrefab;
 
     SurveyFlowManager _flowManager;
@@ -119,8 +116,31 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
         ServerCommunicationManager.Instance.StartSurveyUpload(_surveyJsonData, ProjectManager.Instance.SelectedProject.ProjectName);
     }
 
-    public void UploadSurveyAnswers() {
+    public void UploadSurveyAnswers(Action<bool> onComplete = null) {
+        string projectName = ProjectManager.Instance?.SelectedProject?.ProjectName;
+        if (string.IsNullOrEmpty(projectName)) {
+            UnityEngine.Debug.LogWarning("[SurveyManager] Cannot upload answers: ProjectName is empty");
+            onComplete?.Invoke(false);
+            return;
+        }
 
+        _responseJsonData = _flowManager != null ? _flowManager.GetResponseJsonData() : null;
+        if (string.IsNullOrEmpty(_responseJsonData)) {
+            UnityEngine.Debug.LogWarning("[SurveyManager] Cannot upload answers: response data is empty");
+            onComplete?.Invoke(false);
+            return;
+        }
+
+        UnityEngine.Debug.Log($"[SurveyManager] Uploading survey answers for project '{projectName}'");
+
+        ServerCommunicationManager.Instance.StartSurveyResponseUpload(_responseJsonData, projectName, (success, response) => {
+            if (success) {
+                UnityEngine.Debug.Log("[SurveyManager] Survey answers uploaded successfully!");
+            } else {
+                UnityEngine.Debug.LogError($"[SurveyManager] Failed to upload survey answers: {response}");
+            }
+            onComplete?.Invoke(success);
+        });
     }
 
     #endregion
@@ -135,7 +155,7 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
     }
 
     public void SaveAnswers() {
-        _responseJsonData = _flowManager.GetResponseJsonData();
+        _responseJsonData = _flowManager != null ? _flowManager.GetResponseJsonData() : null;
         print(_responseJsonData);
     }
 
@@ -145,28 +165,66 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
     /// Internal check to see if the string contains actual survey questions.
     /// </summary>
     private bool ValidateJsonContent(string json) {
-        if (string.IsNullOrWhiteSpace(json) || json == "{}" || json == "[]") {
+        if (string.IsNullOrWhiteSpace(json)) {
+            return false;
+        }
+
+        // 1. Sanitize whitespace and light cleanup
+        string trimmed = json.Trim();
+
+        // Check for trivial empty JSON objects/arrays
+        if (trimmed == "{}" || trimmed == "[]" || trimmed.Length < 3) {
+            return false;
+        }
+
+        // Must start and end with valid JSON brackets
+        bool isObject = trimmed.StartsWith("{") && trimmed.EndsWith("}");
+        bool isArray = trimmed.StartsWith("[") && trimmed.EndsWith("]");
+
+        if (!isObject && !isArray) {
             return false;
         }
 
         try {
-            var node = JSON.Parse(json);
-            if (node == null) return false;
+            string target = trimmed;
 
-            // 1. Unwrap survey_data if this payload is wrapped inside a database document
-            if (node["survey_data"] != null) {
-                node = node["survey_data"];
+            // 2. Unwrap "survey_data" if present
+            int surveyDataIndex = target.IndexOf("\"survey_data\"", StringComparison.OrdinalIgnoreCase);
+            if (surveyDataIndex != -1) {
+                int colonIndex = target.IndexOf(':', surveyDataIndex);
+                if (colonIndex != -1) {
+                    target = target.Substring(colonIndex + 1).Trim();
+                }
             }
 
-            // 2. Check for Questions array in the current object
-            var questions = (node["Questions"] ?? node["questions"])?.AsArray;
-            if (questions != null && questions.Count > 0) {
-                return true;
+            // 3. Fallback: Check if the root target itself is a non-empty array
+            if (target.StartsWith("[")) {
+                // Check if there is actual content between [ and ]
+                string arrayContent = target.Substring(1, target.LastIndexOf(']') - 1).Trim();
+                return arrayContent.Length > 0;
             }
 
-            // 3. Fallback check if the root itself is an array of questions
-            if (node.AsArray != null) {
-                return node.AsArray.Count > 0;
+            // 4. Check for "Questions" or "questions" array in object
+            int questionsIndex = target.IndexOf("\"Questions\"", StringComparison.OrdinalIgnoreCase);
+            if (questionsIndex == -1) {
+                questionsIndex = target.IndexOf("\"questions\"", StringComparison.OrdinalIgnoreCase);
+            }
+
+            if (questionsIndex != -1) {
+                int colonIndex = target.IndexOf(':', questionsIndex);
+                if (colonIndex != -1) {
+                    string afterColon = target.Substring(colonIndex + 1).Trim();
+
+                    // Make sure it starts an array
+                    if (afterColon.StartsWith("[")) {
+                        int closingBracketIndex = afterColon.IndexOf(']');
+                        if (closingBracketIndex > 1) {
+                            // Extract array contents and check if it has elements
+                            string arrayContent = afterColon.Substring(1, closingBracketIndex - 1).Trim();
+                            return !string.IsNullOrWhiteSpace(arrayContent) && arrayContent != "{}";
+                        }
+                    }
+                }
             }
         } catch {
             return false;

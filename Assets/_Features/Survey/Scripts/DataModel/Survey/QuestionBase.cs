@@ -1,4 +1,3 @@
-using QuestionnaireToolkit.Scripts.SimpleJSON;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -72,6 +71,9 @@ namespace SurveySystem {
 
         public void RemoveAnswer(int idx) {
             _answers.RemoveAt(idx);
+            for (int i = 0; i < _answers.Count; i++) {
+                _answers[i].Idx = i;
+            }
         }
 
         public void SetActiveAnswer(int idx) {

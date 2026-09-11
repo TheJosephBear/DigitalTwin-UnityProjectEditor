@@ -55,28 +55,65 @@ public class AddQuestion : Singleton<AddQuestion> {
     }
 
     private void ShowModal() {
-        // Move the modal into the triggering bar so it appears anchored to it
+        // Move the modal into root so it appears anchored above everything
         _questionTypeSelectionInstance.RemoveFromHierarchy();
         _root.Add(_questionTypeSelectionInstance);
 
         _questionTypeSelectionInstance.style.display = DisplayStyle.Flex;
         _questionTypeSelectionInstance.style.position = Position.Absolute;
-        Vector2 pendingBarButtonPos = _pendingBar.Q<Button>().worldBound.center;
+        
+        Vector2 pendingBarButtonPos = _pendingBar != null && _pendingBar.Q<Button>() != null 
+            ? _pendingBar.Q<Button>().worldBound.center 
+            : new Vector2(_root.layout.width / 2f, _root.layout.height / 2f);
 
-        float targetX = Mathf.Ceil(pendingBarButtonPos.x);
-        float targetY = Mathf.Ceil(pendingBarButtonPos.y);
+        float defaultWidth = 250f;
+        float defaultHeight = 330f;
+        float modalWidth = _questionTypeSelectionInstance.layout.width > 0 ? _questionTypeSelectionInstance.layout.width : defaultWidth;
+        float modalHeight = _questionTypeSelectionInstance.layout.height > 0 ? _questionTypeSelectionInstance.layout.height : defaultHeight;
 
-        _questionTypeSelectionInstance.style.left = targetX;
-        _questionTypeSelectionInstance.style.top = targetY;
+        // Position horizontally centered under the + button
+        float targetX = pendingBarButtonPos.x - (modalWidth / 2f);
+        float targetY = pendingBarButtonPos.y + 22f;
+
+        if (_root.layout.height > 0 && targetY + modalHeight > _root.layout.height - 20f) {
+            float aboveY = pendingBarButtonPos.y - modalHeight - 22f;
+            if (aboveY >= 10f) {
+                targetY = aboveY;
+            }
+        }
+
+        float maxX = Mathf.Max(0, _root.layout.width - modalWidth);
+        float maxY = Mathf.Max(0, _root.layout.height - modalHeight);
+
+        _questionTypeSelectionInstance.style.left = Mathf.Clamp(targetX, 16f, Mathf.Max(16f, maxX - 16f));
+        _questionTypeSelectionInstance.style.top = Mathf.Clamp(targetY, 16f, Mathf.Max(16f, maxY - 16f));
         _questionTypeSelectionInstance.BringToFront();
 
-        // Ensure the modal stays within the screen bounds after its layout resolves
+        // Ensure the modal stays precisely centered and within bounds after layout pass
         _questionTypeSelectionInstance.schedule.Execute(() => {
-            float maxX = Mathf.Max(0, _root.layout.width - _questionTypeSelectionInstance.layout.width);
-            float maxY = Mathf.Max(0, _root.layout.height - _questionTypeSelectionInstance.layout.height);
+            if (_pendingBar == null) return;
+            Button barButton = _pendingBar.Q<Button>();
+            if (barButton == null) return;
 
-            _questionTypeSelectionInstance.style.left = Mathf.Clamp(targetX, 0, maxX);
-            _questionTypeSelectionInstance.style.top = Mathf.Clamp(targetY, 0, maxY);
+            Vector2 barCenter = barButton.worldBound.center;
+            float resolvedWidth = _questionTypeSelectionInstance.layout.width > 0 ? _questionTypeSelectionInstance.layout.width : defaultWidth;
+            float resolvedHeight = _questionTypeSelectionInstance.layout.height > 0 ? _questionTypeSelectionInstance.layout.height : defaultHeight;
+
+            float exactTargetX = barCenter.x - (resolvedWidth / 2f);
+            float exactTargetY = barCenter.y + 22f;
+
+            if (_root.layout.height > 0 && exactTargetY + resolvedHeight > _root.layout.height - 20f) {
+                float aboveY = barCenter.y - resolvedHeight - 22f;
+                if (aboveY >= 10f) {
+                    exactTargetY = aboveY;
+                }
+            }
+
+            float resolvedMaxX = Mathf.Max(0, _root.layout.width - resolvedWidth);
+            float resolvedMaxY = Mathf.Max(0, _root.layout.height - resolvedHeight);
+
+            _questionTypeSelectionInstance.style.left = Mathf.Clamp(exactTargetX, 16f, Mathf.Max(16f, resolvedMaxX - 16f));
+            _questionTypeSelectionInstance.style.top = Mathf.Clamp(exactTargetY, 16f, Mathf.Max(16f, resolvedMaxY - 16f));
         });
 
         List<Button> buttons = _questionTypeSelectionInstance.Query<Button>().ToList();

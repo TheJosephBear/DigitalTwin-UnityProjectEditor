@@ -35,6 +35,7 @@ public class ModelUploadManager : Singleton<ModelUploadManager> {
     }
 
     public void ExitUploading() {
+        _files.Clear();
         _instantiatedUI.ClearFileList();
         HideUI();
     }

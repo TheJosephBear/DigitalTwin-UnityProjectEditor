@@ -3,11 +3,37 @@ using System.Collections.Generic;
 
 public class EditorHUDui : UIBehaviour {
 
+    public UISwitcher.UISwitcher CameraCollisionToggleRef;
+
     public override void Show() {
         base.Show();
     //    GetComponent<DecorationUI>().ToggleVariantUI(false);
         UIManager.Instance.SetRaycasterFromLatestUI();
     }
+
+    #region Button visual event change
+
+    private void OnEnable() {
+        GlobalSettings.OnSettingsLoadedOrChanged += HandleSettingsUpdated;
+
+        if (GlobalSettings.Instance != null && GlobalSettings.Instance.IsLoaded) {
+            HandleSettingsUpdated(GlobalSettings.Instance.Data);
+        }
+    }
+
+    private void OnDisable() {
+        GlobalSettings.OnSettingsLoadedOrChanged -= HandleSettingsUpdated;
+    }
+
+    private void HandleSettingsUpdated(GlobalSettings.SettingsData data) {
+        CameraCollisionToggleRef.SetWithoutNotify(data.IsCameraCollisionOn);
+    }
+
+    public void OnCollisionToggleChangedByUser(bool toggleOn) {
+        GlobalSettings.Instance.Set(data => data.IsCameraCollisionOn = toggleOn);
+    }
+
+    #endregion
 
     #region ButtonFunctions
 
@@ -53,7 +79,7 @@ public class EditorHUDui : UIBehaviour {
 
     public void OnLeave() {
         if (MainManagerBase.Instance is EditorManager editorMgr) {
-            editorMgr.ExitEditor((exitSuccess) => { });
+            editorMgr.ExitEditor((exitSuccess) => { }, save: false);
         }
     }
 

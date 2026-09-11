@@ -1,4 +1,5 @@
 using UnityEngine.UIElements;
+using UIRadioButton = UnityEngine.UIElements.RadioButton;
 
 [UxmlElement]
 public partial class CustomRadioButton : VisualElement {
@@ -15,7 +16,7 @@ public partial class CustomRadioButton : VisualElement {
     }
 
     [UxmlAttribute]
-    public bool @Checked { // with the @ symbol since checked is a C# keyword
+    public bool @Checked {
         get => _radioButton.value;
         set => _radioButton.value = value;
     }
@@ -27,14 +28,15 @@ public partial class CustomRadioButton : VisualElement {
     }
 
     private readonly TextField _labelTextField;
-    private readonly UnityEngine.UIElements.RadioButton _radioButton;
-    public UnityEngine.UIElements.RadioButton Radio => _radioButton;
+    private readonly UIRadioButton _radioButton;
+    public UIRadioButton Radio => _radioButton;
 
     public CustomRadioButton() {
         this.style.flexDirection = FlexDirection.Row;
 
-        _radioButton = new UnityEngine.UIElements.RadioButton();
+        _radioButton = new UIRadioButton();
         _radioButton.text = string.Empty;
+        _radioButton.label = string.Empty;
         Add(_radioButton);
 
         _labelTextField = new TextField();
@@ -43,10 +45,19 @@ public partial class CustomRadioButton : VisualElement {
         _labelTextField.multiline = true;
         _labelTextField.style.whiteSpace = WhiteSpace.Normal;
 
-        var textFieldWrapper = new VisualElement(); // Wrapper to allow the TextField to grow properly (fixes element overflow to other elements)
+        var textFieldWrapper = new VisualElement();
         textFieldWrapper.style.flexGrow = 1;
         textFieldWrapper.Add(_labelTextField);
         Add(textFieldWrapper);
+
+        this.RegisterCallback<ClickEvent>(evt => {
+            if (evt.target is TextField || (evt.target as VisualElement)?.GetFirstAncestorOfType<TextField>() != null) {
+                return;
+            }
+            if (!_radioButton.value) {
+                _radioButton.value = true;
+            }
+        });
     }
 
     public void RegisterRadioCallback(EventCallback<ChangeEvent<bool>> callback) {
@@ -59,21 +70,28 @@ public partial class CustomRadioButton : VisualElement {
 public partial class CustomRadioButtonNoText : VisualElement {
 
     [UxmlAttribute]
-    public bool @Checked // with the @ symbol since checked is a C# keyword
+    public bool @Checked
     {
         get => _radioButton.value;
         set => _radioButton.value = value;
     }
 
-    private readonly UnityEngine.UIElements.RadioButton _radioButton;
-    public UnityEngine.UIElements.RadioButton Radio => _radioButton;
+    private readonly UIRadioButton _radioButton;
+    public UIRadioButton Radio => _radioButton;
 
     public CustomRadioButtonNoText() {
         this.style.flexDirection = FlexDirection.Row;
 
-        _radioButton = new UnityEngine.UIElements.RadioButton();
+        _radioButton = new UIRadioButton();
         _radioButton.text = string.Empty;
+        _radioButton.label = string.Empty;
         Add(_radioButton);
+
+        this.RegisterCallback<ClickEvent>(evt => {
+            if (!_radioButton.value) {
+                _radioButton.value = true;
+            }
+        });
     }
 
     public void RegisterRadioCallback(EventCallback<ChangeEvent<bool>> callback) {

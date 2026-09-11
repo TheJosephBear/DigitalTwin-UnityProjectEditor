@@ -173,6 +173,25 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
         }, true));
     }
 
+    // Upload survey response/submission
+    public void StartSurveyResponseUpload(string responseJson, string projectName, System.Action<bool, string> callback = null) {
+        string url = $"{serverUrl}/upload_survey_response";
+        Dictionary<string, string> formData = new Dictionary<string, string>
+        {
+            { "response_data", responseJson },
+            { "project_name", projectName }
+        };
+        StartCoroutine(PostRequest(url, formData, callback));
+    }
+
+    // Download all survey responses for a project
+    public void StartSurveyResponsesDownload(string projectName, System.Action<bool, string> callback) {
+        string url = $"{serverUrl}/download_survey_responses?project_name={UnityWebRequest.EscapeURL(projectName)}";
+        StartCoroutine(GetRequest<string>(url, (success, data) => {
+            callback(success, data);
+        }, true));
+    }
+
     // Upload file into a project
     public void UploadFileToServer(string path, string fileName, string projectName, string assetHash) {
         string url = $"{serverUrl}/upload_model_files";

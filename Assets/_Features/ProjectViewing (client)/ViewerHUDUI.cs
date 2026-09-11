@@ -6,14 +6,16 @@ public class ViewerHUDUI : UIBehaviour {
     public GameObject MultiviewButton;
 
     public void DisableUnneededButtons() {
-        SurveyManager.Instance.CheckHasValidSurvey((result) => {
-            if (!result) {
+        SurveyManager.Instance?.CheckHasValidSurvey((result) => {
+            if (!result && SurveyButton != null) {
                 SurveyButton.SetActive(false);
             }
         });
 
-        if (!MapManager.Instance.HasVariant()) {
-            MultiviewButton.SetActive(false);
+        if (MapManager.Instance != null && !MapManager.Instance.HasVariant()) {
+            if (MultiviewButton != null) {
+                MultiviewButton.SetActive(false);
+            }
         }
     }
 

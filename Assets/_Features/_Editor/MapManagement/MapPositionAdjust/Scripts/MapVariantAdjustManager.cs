@@ -15,43 +15,56 @@ public class MapVariantAdjustManager : Singleton<MapVariantAdjustManager> {
     MapVariant _variantReference;
 
     public void EnterAdjusting(MapVariant mapToAdjust) {
-        // Open UI
+        if (mapToAdjust == null || mapToAdjust.ModelAsset == null) {
+            Debug.LogError("Cannot adjust map variant: Target or ModelAsset is null.");
+            return;
+        }
+
         ToggleUI(true);
-        // Create gameobject copy of variant
         _variantReference = mapToAdjust;
-        _variantCopy = SceneLoadingManager.Instance.InstantiateObjectInScene(mapToAdjust.gameObject, mapToAdjust.transform.position, mapToAdjust.transform.rotation)
-            .GetComponent<MapVariant>();
-        _variantCopy.gameObject.SetActive(true);
-        // Make variant copies movable
-        Movable movableReff = _variantCopy.AddComponent<Movable>();
+
+        // 1. Hide the original model while adjusting to prevent z-fighting and asset conflicts
+        _variantReference.gameObject.SetActive(false);
+
+        // 2. Instantiate a FRESH visual model from the source ModelAsset
+        // (This avoids duplicating active state/scripts that mess up the original)
+        GameObject previewGo = _variantReference.ModelAsset.InstantiateModel(_variantReference.transform.position);
+        previewGo.transform.rotation = _variantReference.transform.rotation;
+        previewGo.SetActive(true);
+
+        // 3. Attach a fresh MapVariant component to the clone, NOT the old one
+        _variantCopy = previewGo.AddComponent<MapVariant>();
+        _variantCopy.ModelAsset = _variantReference.ModelAsset;
+        _variantCopy.Name = _variantReference.Name + "_Preview";
+
+        // 4. Attach movement gizmo setup
+        Movable movableReff = previewGo.AddComponent<Movable>();
         movableReff.ShownAxis = new List<GizmoAxis>() { GizmoAxis.X, GizmoAxis.Y, GizmoAxis.Z };
         movableReff.MovableType = GizmoType.Universal;
-        GizmoManager.Instance.SetTargetGameObject(_variantCopy.gameObject);
+
+        GizmoManager.Instance.SetTargetGameObject(previewGo);
         GizmoManager.Instance.ShowGizmo(GizmoType.Universal, new List<GizmoAxis> { GizmoAxis.All }, UniversalGizmoScaleDisabled: true);
-        ObjectTransformGizmo.ObjectRestrictions restrictions = new ObjectTransformGizmo.ObjectRestrictions();
+
         GizmoManager.Instance.SetCustomRestrictions(
-               MoveX: true,
-               MoveY: true,
-               MoveZ: true,
-               CamRotationZ: true,
-               CamRotationXY: true,
-               RotationX: true,
-               RotationY: true,
-               RotationZ: true,
-               Scale: false
+            MoveX: true, MoveY: true, MoveZ: true,
+            CamRotationZ: true, CamRotationXY: true,
+            RotationX: true, RotationY: true, RotationZ: true,
+            Scale: false
         );
-        // Add a color and transparency to the variant copies
-        ChangeObjectMaterials(_variantCopy.gameObject, 0.8f, Color.magenta);
-        // Show base map solid
-        MapManager.Instance.GetBaseMap().ToggleMeshVisibility(true);
+
+        // 5. Apply preview materials safely
+        ApplyPreviewMaterial(previewGo, new Color(1f, 0f, 1f, 0.5f));
+
+        // Show base map solid if needed
+        if (MapManager.Instance.GetBaseMap() != null) {
+            MapManager.Instance.GetBaseMap().ToggleMeshVisibility(true);
+        }
     }
 
     public void ExitAdjusting(bool saveChanges = false) {
-        // Apply position and rotation to the variants
-        if (saveChanges) {
+        if (saveChanges && _variantCopy != null && _variantReference != null) {
             Transform copyTransform = _variantCopy.transform;
 
-            // Pass direct world position and Euler rotation
             MapManager.Instance.ApplyAndSaveMapTransform(
                 _variantReference,
                 copyTransform.position,
@@ -60,9 +73,20 @@ public class MapVariantAdjustManager : Singleton<MapVariantAdjustManager> {
         }
 
         GizmoManager.Instance.HideGizmo();
-        // Destroy all copies
-        Destroy(_variantCopy.gameObject);
-        // Hide UI
+
+        // Destroy ONLY the temporary adjustment copy
+        if (_variantCopy != null) {
+            Destroy(_variantCopy.gameObject);
+            _variantCopy = null;
+        }
+
+        // Re-enable and restore the original target map model
+        if (_variantReference != null) {
+            _variantReference.gameObject.SetActive(true);
+            _variantReference.ToggleMeshVisibility(true);
+            _variantReference = null;
+        }
+
         ToggleUI(false);
         EditorManager.Instance.ChangeState(AppState.Freecam);
         MapManager.Instance.ToggleMapUI(true);
@@ -100,29 +124,41 @@ public class MapVariantAdjustManager : Singleton<MapVariantAdjustManager> {
         return _variantCopy.gameObject;
     }
 
-    void ChangeObjectMaterials(GameObject targetObject, float transparency, Color newColor) {
-        foreach (Transform child in targetObject.GetComponentsInChildren<Transform>()) {
-            if (child.GetComponent<MeshRenderer>() != null || child.GetComponent<MeshFilter>() != null) {
-                child.AddComponent<MeshCollider>(); // add the collider
-                Renderer rend = child.GetComponent<Renderer>();
-                if (rend == null) {
-                    print(child.name + "doesnt have renderer");
-                    continue;
-                }
-                Material[] materials = rend.materials;
-                foreach (Material mat in materials) {
-                    Color color = newColor;
-                    color.a = transparency;
-                    mat.color = color;
-                    mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-                    mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                    mat.SetInt("_ZWrite", 0);
-                    mat.DisableKeyword("_ALPHATEST_ON");
-                    mat.EnableKeyword("_ALPHABLEND_ON");
-                    mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-                    mat.renderQueue = 3000;
-                }
+    private void ApplyPreviewMaterial(GameObject targetObject, Color color) {
+        // Create a single transparent preview material instance
+        Shader standardShader = Shader.Find("Standard");
+        if (standardShader == null) standardShader = Shader.Find("Universal Render Pipeline/Lit");
+
+        Material previewMat = new Material(standardShader);
+        previewMat.color = color;
+
+        // Set transparency modes
+        previewMat.SetFloat("_Mode", 3); // Transparent
+        previewMat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+        previewMat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        previewMat.SetInt("_ZWrite", 0);
+        previewMat.DisableKeyword("_ALPHATEST_ON");
+        previewMat.EnableKeyword("_ALPHABLEND_ON");
+        previewMat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+        previewMat.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+
+        // Get all renderers on the target preview
+        MeshRenderer[] renderers = targetObject.GetComponentsInChildren<MeshRenderer>(true);
+        foreach (MeshRenderer rend in renderers) {
+            // Ensure a MeshCollider exists for gizmo raycasting on the clone
+            if (rend.GetComponent<MeshCollider>() == null && rend.GetComponent<MeshFilter>() != null) {
+                MeshCollider col = rend.gameObject.AddComponent<MeshCollider>();
+                col.sharedMesh = rend.GetComponent<MeshFilter>().sharedMesh;
             }
+
+            // Override materials with our temporary material instance array
+            Material[] mats = new Material[rend.sharedMaterials.Length];
+            for (int i = 0; i < mats.Length; i++) {
+                mats[i] = previewMat;
+            }
+
+            rend.materials = mats;
         }
     }
+
 }
