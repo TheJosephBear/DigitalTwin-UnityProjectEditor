@@ -5,7 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class ViewingInitializer : MonoBehaviour, Iinitializer {
 
+    [Header("Scene references")]
     public ViewingSerializer Serializer;
+    public ViewerHUDUI HUDUI;
 
     [Header("Debugging")]
     public string _projectName;
@@ -70,7 +72,7 @@ public class ViewingInitializer : MonoBehaviour, Iinitializer {
                 MainManagerBase.Instance.ChangeState(AppState.Survey);
             }
 
-            FindAnyObjectByType<ViewerHUDUI>().DisableUnneededButtons();
+            HUDUI.DisableUnneededButtons();
             UIManager.Instance.HideUI(UIType.LoadingScreen);
         });
     }

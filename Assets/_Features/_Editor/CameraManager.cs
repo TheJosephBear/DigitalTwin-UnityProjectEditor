@@ -24,7 +24,7 @@ public class CameraManager: Singleton<CameraManager> {
     [Header("Pan Speed Settings")]
     [Range(0.1f, 10f)]
     public float MaxPanSpeed = 1.0f;
-    [Range(0.0001f, 0.5f)]
+    [Range(0.0000001f, 0.5f)]
     public float MinPanSpeed = 0.1f;
     public float PanSlowDistance = 10f;
 

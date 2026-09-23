@@ -7390,7 +7390,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: MinPanSpeed
-      value: 0.0001
+      value: 0.0000001
       objectReference: {fileID: 0}
     - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: MaxScrollSpeed
@@ -7402,7 +7402,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: PanSlowDistance
-      value: 160
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: boundsPadding.x
@@ -7423,11 +7423,11 @@ PrefabInstance:
     - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: InitialCameraPosition
       value: 
-      objectReference: {fileID: 1632604755}
+      objectReference: {fileID: 0}
     - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: CameraColissionScriptRef
       value: 
-      objectReference: {fileID: 1642862919}
+      objectReference: {fileID: 0}
     - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: GroundGeometryLayers.m_Bits
       value: 1025
