@@ -1,7 +1,29 @@
 ﻿<Solution>
   <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="TriLibCore.Source.csproj" />
+  <Project Path="TriLibCore.csproj" />
+  <Project Path="TriLibCore.Gltf.Source.csproj" />
+  <Project Path="LibTessDotNet.Source.csproj" />
+  <Project Path="TriLibCore.Fbx.Source.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="TriLibCore.Obj.Source.csproj" />
+  <Project Path="TriLibCore.Dae.Source.csproj" />
   <Project Path="Assembly-CSharp-Editor-firstpass.csproj" />
+  <Project Path="ICSharpCode.SharpZipLib.Source.csproj" />
+  <Project Path="TriLibCore.Samples.csproj" />
   <Project Path="SimpleFileBrowser.Runtime.csproj" />
+  <Project Path="StbImageSharp.Source.csproj" />
+  <Project Path="IxMilia.ThreeMf.Source.csproj" />
   <Project Path="Assembly-CSharp-firstpass.csproj" />
+  <Project Path="TriLibCore.Ply.Source.csproj" />
+  <Project Path="TriLibCore.Editor.csproj" />
+  <Project Path="TriLibCore.MaterialMappers.csproj" />
+  <Project Path="TriLibCore.3mf.Source.csproj" />
+  <Project Path="TriLibCore.Gltf.Draco.Source.csproj" />
+  <Project Path="TriLibCore.URP.csproj" />
+  <Project Path="TriLibCore.HDRLoader.Source.csproj" />
+  <Project Path="TriLibCore.BlendShapePlayer.csproj" />
+  <Project Path="TriLibCore.Stl.Source.csproj" />
+  <Project Path="TriLibCore.Tiff.csproj" />
+  <Project Path="TriLibCore.HDRP.csproj" />
 </Solution>

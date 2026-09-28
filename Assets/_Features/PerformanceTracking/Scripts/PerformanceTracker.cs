@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.Profiling;
+using Unity.Profiling;
 using TMPro;
 using System.Collections.Generic;
-using UnityEditor;
 
 public class PerformanceTracker: MonoBehaviour {
     [Header("UI References")]
@@ -21,15 +21,24 @@ public class PerformanceTracker: MonoBehaviour {
     private Camera _mainCam;
     private float _deltaTime;
     private float _timer;
+    private ProfilerRecorder _batchesRecorder;
+    private ProfilerRecorder _setPassCallsRecorder;
 
     // Cached collection to eliminate GC Allocations every frame
     private HashSet<Material> _uniqueSharedMaterials = new HashSet<Material>();
 
     void Start() {
         _mainCam = Camera.main;
+        _batchesRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Batches Count");
+        _setPassCallsRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Render, "SetPass Calls Count");
         if (_dataContainer != null) {
             _dataContainer.SetActive(false); // Hide data view by default
         }
+    }
+
+    void OnDisable() {
+        _batchesRecorder.Dispose();
+        _setPassCallsRecorder.Dispose();
     }
 
     void Update() {
@@ -108,8 +117,8 @@ public class PerformanceTracker: MonoBehaviour {
 
         // --- 3 & 4. Draw Calls & Batching ---
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
-        int activeBatches = UnityStats.batches;
-        int setPassCalls = UnityStats.setPassCalls;
+    long activeBatches = _batchesRecorder.Valid ? _batchesRecorder.LastValue : 0;
+    long setPassCalls = _setPassCallsRecorder.Valid ? _setPassCallsRecorder.LastValue : 0;
 
         if (_drawCallsText != null)
             _drawCallsText.text = $"Batches: {activeBatches} | SetPass: {setPassCalls}";
