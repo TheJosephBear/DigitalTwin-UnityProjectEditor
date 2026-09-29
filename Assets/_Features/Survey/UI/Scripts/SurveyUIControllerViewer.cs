@@ -102,9 +102,12 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         }
     }
 
+    // Intro page is skipped only when it would be empty (no title, description nor image)
     private bool HasIntroPage(Survey survey) {
         if (survey == null) return false;
-        return !string.IsNullOrWhiteSpace(survey.Name) && !string.IsNullOrWhiteSpace(survey.Description);
+        return !string.IsNullOrWhiteSpace(survey.Name)
+            || !string.IsNullOrWhiteSpace(survey.Description)
+            || !string.IsNullOrEmpty(survey.ImageID);
     }
 
     void SetupIntroPage(Survey survey) {
