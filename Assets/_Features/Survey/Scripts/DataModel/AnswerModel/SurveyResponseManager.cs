@@ -53,6 +53,12 @@ namespace SurveySystem {
                 response.SelectedIdx = isSelected ? answerID : -1;
             }
 
+            // Image choice: store the letter (+ caption) instead of the image file name
+            if (response.Type == QuestionType.ImageChoice) {
+                var imageAnswer = _activeSurvey.GetQuestionById(questionID)?.GetAnswerByIdx(answerID) as AnswerImage;
+                response.SelectedLabel = isSelected ? imageAnswer?.GetLabel() : null;
+            }
+
             // 4. Handle "Other" text for Choice questions
             // This allows a choice question to have both a SelectedIdx AND custom text
             if (textValue != null && (response.Type != QuestionType.Paragraph && response.Type != QuestionType.ShortAnswer)) {
@@ -193,6 +199,7 @@ namespace SurveySystem {
         public int SelectedIdx = -1;             // For SingleChoice/Range
         public List<int> SelectedIndices = null; // For MultipleChoice
         public string ResponseText = null;       // For OpenEnded or "Other" text
+        public string SelectedLabel = null;      // For ImageChoice: letter + optional caption, e.g. "B – Park"
         public List<GridRowResponse> GridResponses = new();
         public List<ScaleRowResponse> ScaleResponses = new();
     }

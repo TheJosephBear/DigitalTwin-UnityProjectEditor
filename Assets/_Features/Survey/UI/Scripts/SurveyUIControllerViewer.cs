@@ -539,7 +539,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
             imageUI.OnAnswerSelected += HandleAnswerSelected;
             foreach (AnswerBase answer in questionBase.Answers) {
                 if (answer is AnswerImage imageAnswer) {
-                    imageUI.AddAnswer(imageAnswer.GetImageId());
+                    imageUI.AddImageAnswer(imageAnswer.GetImageId(), imageAnswer.Text);
                 }
             }
         } else if (questionBase is QuestionLinearScale linScaleQuestion && questionUI is SurveyQuestionUIViewerLinearScale scaleUI) {

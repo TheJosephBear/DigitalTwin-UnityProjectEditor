@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 public class SurveyQuestionUIEditorImage : SurveyQuestionUIEditor {
 
     public event Action<int, int, string> OnAnswerImageChanged;
+    public event Action<int, int, string> OnAnswerCaptionChanged;
     public event Action<int> OnAnswerAdded;
     public event Action<int, int> OnAnswerRemoved;
 
@@ -22,7 +23,9 @@ public class SurveyQuestionUIEditorImage : SurveyQuestionUIEditor {
             OnAnswerImageChanged?.Invoke(QuestionID, idx, imageId);
         };
 
-        answerUI.OnRemoveClicked += (idx) => DeleteAnswer(idx);
+        answerUI.OnCaptionChanged += (idx, caption) => {
+            OnAnswerCaptionChanged?.Invoke(QuestionID, idx, caption);
+        };
 
         return answerUI;
     }
@@ -55,13 +58,14 @@ public class SurveyQuestionUIEditorImage : SurveyQuestionUIEditor {
         }
     }
 
-    public void AddAnswerWithImage(string imageId) {
+    public void AddAnswerWithImage(string imageId, string caption) {
         // 1. Create the UI element (inherited from SurveyQuestionUIBase)
         SurveyAnswerUIBase newAnswerUI = AddAnswerUI();
 
         // 2. Cast and set the image
         if (newAnswerUI is SurveyAnswerUIEditorImage imageAnswer) {
             imageAnswer.SetImage(imageId);
+            imageAnswer.SetCaption(caption);
 
             // 3. Notify the builder/manager so the data model is updated
          //   OnAnswerAdded?.Invoke(QuestionID);

@@ -1722,14 +1722,14 @@ TextField:focus TextInput {
 .image-choice-grid TemplateContainer {
     flex-shrink: 0;
     width: 190px;
-    height: 190px;
+    min-height: 190px;
     margin-right: 12px;
     margin-bottom: 12px;
 }
 
 .image-option-card {
     width: 100%;
-    height: 100%;
+    flex-grow: 1;
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
     border-bottom-left-radius: 12px;
@@ -1768,29 +1768,90 @@ TextField:focus TextInput {
 
 .image-option-preview {
     flex-grow: 1;
+    justify-content: center;
+    align-items: center;
     -unity-background-scale-mode: scale-to-fit;
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/image-outline.png?fileID=2800000&guid=2a8b0a5a8db48ee46924cdb62930cde7&type=3#image-outline");
-    background-color: rgb(245, 242, 250);
+    /* Transparent so the letterbox around fitted images matches the card (also when hovered/selected) */
+    background-color: rgba(0, 0, 0, 0);
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    min-height: 100%;
+    /* Fills a 190px card with a one-line caption; longer captions make the card taller instead */
+    min-height: 150px;
+}
+
+/* Small grey icon shown while an option has no image */
+.image-option-placeholder {
+    width: 48px;
+    height: 48px;
+    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/image-outline.png?fileID=2800000&guid=2a8b0a5a8db48ee46924cdb62930cde7&type=3#image-outline");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgba(0, 0, 0, 0.25);
+}
+
+/* The card is named "option-container" too; override the generic #option-container row layout */
+#option-container.image-option-card {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.image-option-letter {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    min-width: 22px;
+    height: 22px;
+    padding-left: 6px;
+    padding-right: 6px;
+    border-top-left-radius: 11px;
+    border-top-right-radius: 11px;
+    border-bottom-left-radius: 11px;
+    border-bottom-right-radius: 11px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-color: var(--primary-color);
+    background-color: rgba(255, 255, 255, 0.9);
+    color: var(--primary-color);
+    font-size: 12px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.image-option-card--selected .image-option-letter {
+    background-color: var(--primary-color);
+    color: rgb(255, 255, 255);
 }
 
 .image-option-label {
-    height: 32px;
+    flex-shrink: 0;
+    min-height: 32px;
+    padding-top: 6px;
+    padding-bottom: 6px;
     padding-left: 8px;
     padding-right: 8px;
     justify-content: center;
-    align-items: center;
-    background-color: rgba(255, 255, 255, 0.9);
+    align-items: stretch;
+    border-top-width: 1px;
+    border-top-color: var(--border-color);
 }
 
 .image-option-label Label {
-    font-size: 11px;
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+    font-size: 12px;
     color: var(--dark-text);
     -unity-text-align: middle-center;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+.image-option-card--selected .image-option-label Label {
+    color: var(--primary-color);
+    -unity-font-style: bold;
 }
 
 .options-list-vertical {

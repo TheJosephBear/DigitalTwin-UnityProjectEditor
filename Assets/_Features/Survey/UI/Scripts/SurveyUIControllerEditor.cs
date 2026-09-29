@@ -282,6 +282,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
             }
         } else if (addedQuestionUI is SurveyQuestionUIEditorImage imageUI) {
             imageUI.OnAnswerImageChanged += HandleImageQuestionAnswerImageUpload;
+            imageUI.OnAnswerCaptionChanged += HandleAnswerTextChanged;
             imageUI.OnAnswerAdded += HandleAddAnswerImage;
             imageUI.OnAnswerRemoved += HandleAnswerRemoved;
 
@@ -521,7 +522,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
                 if (questionUI is SurveyQuestionUIEditorImage imageUI) {
                     foreach (AnswerBase answer in imageQuestion.Answers) {
                         if (answer is AnswerImage imgAns) {
-                            imageUI.AddAnswerWithImage(imgAns.GetImageId());
+                            imageUI.AddAnswerWithImage(imgAns.GetImageId(), imgAns.Text);
                         }
                     }
                 }
