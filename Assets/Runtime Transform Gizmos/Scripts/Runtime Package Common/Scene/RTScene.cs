@@ -103,7 +103,9 @@ namespace RTG
             // Raycast all and return the result
             List<RaycastResult> results = new List<RaycastResult>();
             EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
-            results.RemoveAll(item => item.gameObject.GetComponent<RectTransform>() == null);
+            // Keep uGUI hits (RectTransform) and UI Toolkit hits (PanelRaycaster only reports a hit when an element is picked)
+            results.RemoveAll(item => item.module is not UnityEngine.UIElements.PanelRaycaster &&
+                                      item.gameObject.GetComponent<RectTransform>() == null);
 
             return results;
         }
