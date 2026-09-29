@@ -80,6 +80,13 @@ public class SurveyUIControllerViewer : MonoBehaviour {
             SetupIntroPage(survey);
         }
 
+        // Already submitted (e.g. before page refresh) -> don't allow filling it again
+        if (_surveyManager != null && _surveyManager.IsSurveySubmitted()) {
+            _isSubmitted = true;
+            DisplayThankYouPage(alreadySubmitted: true);
+            return;
+        }
+
         if (HasIntroPage(survey)) {
             DisplayPage(0);
         } else if (_questions.Count > 0) {
@@ -149,6 +156,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         SurveyManager.Instance.SaveAnswers();
         SurveyManager.Instance.UploadSurveyAnswers(success => {
             if (success) {
+                SurveyManager.Instance.MarkSurveySubmitted();
                 Debug.Log("[Viewer] Survey successfully submitted to server.");
             } else {
                 Debug.LogWarning("[Viewer] Server submission completed with warning/error.");
@@ -269,7 +277,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         }
     }
 
-    void DisplayThankYouPage() {
+    void DisplayThankYouPage(bool alreadySubmitted = false) {
         _currentPage = _questions.Count + 1;
         ClearQuestionFromUI();
 
@@ -279,6 +287,14 @@ public class SurveyUIControllerViewer : MonoBehaviour {
 
         if (_thankYouPageElement != null) {
             _thankYouPageElement.style.display = DisplayStyle.Flex;
+
+            if (alreadySubmitted) {
+                var titleLabel = _thankYouPageElement.Q<Label>("thank-you-title");
+                if (titleLabel != null) titleLabel.text = "Dotazník byl vyplněn";
+
+                var descLabel = _thankYouPageElement.Q<Label>("thank-you-description");
+                if (descLabel != null) descLabel.text = "Tento dotazník jste již vyplnili a odeslali.";
+            }
         }
 
         if (_bottomBar != null) {

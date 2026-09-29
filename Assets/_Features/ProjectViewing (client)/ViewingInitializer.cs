@@ -68,7 +68,8 @@ public class ViewingInitializer : MonoBehaviour, Iinitializer {
 
         SurveyManager.Instance.CheckHasValidSurvey((result) => {
             print("VALID SURVEYX RESULT: " + result);
-            if (result) {
+            // Don't auto-open the survey if this client already submitted it
+            if (result && !SurveyManager.Instance.IsSurveySubmitted()) {
                 MainManagerBase.Instance.ChangeState(AppState.Survey);
             }
 
