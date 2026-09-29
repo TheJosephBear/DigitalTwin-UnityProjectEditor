@@ -70,6 +70,8 @@ public class SunManager: Singleton<SunManager> {
     }
 
     public void Deserialize(SerializableSun serializedSun, Vector2 geoCoordinates) {
+        if (serializedSun == null) return;
+
         _sunIRL.Deserialize(serializedSun, geoCoordinates);
 
         InstantiateUI(applyDefaults: false);
