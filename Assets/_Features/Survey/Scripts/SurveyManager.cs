@@ -169,6 +169,16 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
         PlayerPrefs.Save(); // WebGL: flush to IndexedDB immediately, otherwise it may be lost on refresh
     }
 
+#if UNITY_EDITOR
+    // Debug only: allows filling the survey again in play mode
+    public void ClearSurveySubmitted() {
+        string key = GetSubmittedPrefsKey();
+        if (key == null) return;
+        PlayerPrefs.DeleteKey(key);
+        PlayerPrefs.Save();
+    }
+#endif
+
     #endregion
 
     public void SetSurveyJson(string json, bool debug = false) {

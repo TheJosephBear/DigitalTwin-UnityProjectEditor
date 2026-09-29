@@ -69,6 +69,10 @@ public class SurveyUIControllerViewer : MonoBehaviour {
             };
         }
 
+#if UNITY_EDITOR
+        AddDebugRepeatButton();
+#endif
+
         if (_surveyUIBuilder != null) {
             _surveyUIBuilder.ClearAddQuestionBars();
         }
@@ -404,6 +408,58 @@ public class SurveyUIControllerViewer : MonoBehaviour {
             _pageCountLabel.text = "Dokončeno";
         }
     }
+
+#if UNITY_EDITOR
+    #region Debug repeat
+
+    const string DebugRepeatButtonName = "debug-repeat-btn";
+
+    // Editor only: button on the thank-you page that resets the submission flag and restarts the survey
+    void AddDebugRepeatButton() {
+        if (_thankYouPageElement == null || _thankYouPageElement.Q<Button>(DebugRepeatButtonName) != null) return;
+
+        var titleLabel = _thankYouPageElement.Q<Label>("thank-you-title");
+        var descLabel = _thankYouPageElement.Q<Label>("thank-you-description");
+        string defaultTitle = titleLabel?.text;
+        string defaultDesc = descLabel?.text;
+
+        var repeatBtn = new Button(() => {
+            if (titleLabel != null) titleLabel.text = defaultTitle;
+            if (descLabel != null) descLabel.text = defaultDesc;
+            RestartSurvey();
+        }) {
+            name = DebugRepeatButtonName,
+            text = "Vyplnit znovu (debug)"
+        };
+        repeatBtn.AddToClassList("thank-you-btn");
+        repeatBtn.style.marginTop = 12;
+        _thankYouPageElement.Add(repeatBtn);
+    }
+
+    void RestartSurvey() {
+        _surveyManager?.ClearSurveySubmitted();
+
+        Survey survey = _surveyBuilder.GetActiveSurvey();
+        if (survey != null) _responseManager?.Initialize(survey);
+
+        // Drop cached question UIs so all answers start empty again
+        foreach (var questionUI in _questionUICache.Values) {
+            int idx = _surveyUIBuilder != null ? _surveyUIBuilder.GetQuestionIndex(questionUI) : -1;
+            if (idx >= 0) {
+                _surveyUIBuilder.DeleteQuestion(idx);
+            } else {
+                questionUI.QuestionElement?.RemoveFromHierarchy();
+            }
+        }
+        _questionUICache.Clear();
+        _questionsWithShownError.Clear();
+
+        _isSubmitted = false;
+        DisplayPage(0); // Skips to the first question when there is no intro page
+    }
+
+    #endregion
+#endif
 
     IEnumerator ShowViewCoroutine(string viewPointId) {
         if (MainManagerBase.Instance == null || string.IsNullOrEmpty(viewPointId)) yield break;
