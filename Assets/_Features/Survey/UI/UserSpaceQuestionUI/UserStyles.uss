@@ -2222,3 +2222,44 @@ TextField:focus TextInput {
     -unity-text-align: middle-left;
 }
 
+
+/* --------------------------------------------------------------------------
+   Required questions validation (viewer)
+   -------------------------------------------------------------------------- */
+
+.validation-message {
+    color: rgb(200, 30, 30);
+    background-color: rgb(253, 236, 236);
+    font-size: 13px;
+    -unity-font-style: bold;
+    white-space: normal;
+    padding: 8px 24px;
+    border-top-width: 1px;
+    border-top-color: rgba(200, 30, 30, 0.25);
+}
+
+.question-card--invalid {
+    border-color: rgb(200, 30, 30);
+}
+
+.grid-row--invalid #row-label {
+    color: rgb(200, 30, 30);
+    -unity-font-style: bold;
+}
+
+.scale-viewer-row--invalid {
+    border-color: rgb(200, 30, 30);
+    background-color: rgb(253, 236, 236);
+}
+
+.scale-viewer-row--invalid .scale-viewer-row-label {
+    color: rgb(200, 30, 30);
+}
+
+.scale-viewer-row--unset .scale-value-badge {
+    background-color: rgb(190, 190, 190);
+}
+
+.scale-viewer-row--unset .unity-base-slider__dragger {
+    opacity: 0.35;
+}

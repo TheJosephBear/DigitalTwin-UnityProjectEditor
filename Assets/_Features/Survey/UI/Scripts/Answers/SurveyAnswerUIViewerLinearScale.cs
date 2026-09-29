@@ -13,8 +13,13 @@ public class SurveyAnswerUIViewerLinearScale : SurveyAnswerUIViewer {
     private SliderInt _slider;
     private Label _draggerTooltip;
     private bool _isDragging = false;
+    private bool _hasValue = false; // Row counts as answered only after user interaction
+
+    private const string UnsetClass = "scale-viewer-row--unset";
+    private const string NoValueText = "–";
 
     public int CurrentValue => _slider != null ? _slider.value : 0;
+    public bool HasValue => _hasValue;
 
     public SurveyAnswerUIViewerLinearScale(VisualElement answerElement, int answerIndex, SurveyQuestionUIViewer questionUI, bool isOther = false)
         : base(answerElement, answerIndex, questionUI, isOther) {
@@ -27,6 +32,7 @@ public class SurveyAnswerUIViewerLinearScale : SurveyAnswerUIViewer {
 
         RegisterAnswerEvents();
         SetupDraggerTooltip();
+        _answerElement?.AddToClassList(UnsetClass);
     }
 
     private void SetupDraggerTooltip() {
@@ -34,7 +40,7 @@ public class SurveyAnswerUIViewerLinearScale : SurveyAnswerUIViewer {
 
         var dragger = _slider.Q("unity-dragger") ?? _slider.Q(className: "unity-base-slider__dragger");
         if (dragger != null && _draggerTooltip == null) {
-            _draggerTooltip = new Label(_slider.value.ToString());
+            _draggerTooltip = new Label(_hasValue ? _slider.value.ToString() : NoValueText);
             _draggerTooltip.AddToClassList("scale-dragger-tooltip");
             _draggerTooltip.pickingMode = PickingMode.Ignore;
             dragger.Add(_draggerTooltip);
@@ -45,12 +51,8 @@ public class SurveyAnswerUIViewerLinearScale : SurveyAnswerUIViewer {
         if (_slider == null) return;
 
         _slider.RegisterValueChangedCallback(evt => {
-            if (_valueBadge != null) {
-                _valueBadge.text = evt.newValue.ToString();
-            }
-            if (_draggerTooltip != null) {
-                _draggerTooltip.text = evt.newValue.ToString();
-            }
+            MarkAsSet();
+            UpdateValueLabels(evt.newValue.ToString());
             OnValueChanged?.Invoke(_questionUIRef.QuestionID, AnswerIndex, evt.newValue);
         });
 
@@ -71,6 +73,7 @@ public class SurveyAnswerUIViewerLinearScale : SurveyAnswerUIViewer {
         }, TrickleDown.TrickleDown);
 
         _slider.RegisterCallback<PointerUpEvent>(evt => {
+            ConfirmUntouchedValue();
             _isDragging = false;
             _slider.RemoveFromClassList("is-dragging");
             if (_draggerTooltip != null) {
@@ -80,6 +83,7 @@ public class SurveyAnswerUIViewerLinearScale : SurveyAnswerUIViewer {
         }, TrickleDown.TrickleDown);
 
         _slider.RegisterCallback<PointerCaptureOutEvent>(evt => {
+            ConfirmUntouchedValue();
             _isDragging = false;
             _slider.RemoveFromClassList("is-dragging");
             if (_draggerTooltip != null) {
@@ -98,6 +102,29 @@ public class SurveyAnswerUIViewerLinearScale : SurveyAnswerUIViewer {
         }, TrickleDown.TrickleDown);
     }
 
+    // Clicking the slider on its current value doesn't raise ValueChanged, so register it here
+    private void ConfirmUntouchedValue() {
+        if (_hasValue || _slider == null) return;
+        MarkAsSet();
+        UpdateValueLabels(_slider.value.ToString());
+        OnValueChanged?.Invoke(_questionUIRef.QuestionID, AnswerIndex, _slider.value);
+    }
+
+    private void MarkAsSet() {
+        if (_hasValue) return;
+        _hasValue = true;
+        _answerElement?.RemoveFromClassList(UnsetClass);
+    }
+
+    private void UpdateValueLabels(string text) {
+        if (_valueBadge != null) {
+            _valueBadge.text = text;
+        }
+        if (_draggerTooltip != null) {
+            _draggerTooltip.text = text;
+        }
+    }
+
     public void SetText(string text) {
         if (_rowLabel != null) {
             _rowLabel.text = text;
@@ -112,15 +139,9 @@ public class SurveyAnswerUIViewerLinearScale : SurveyAnswerUIViewer {
             _slider.highValue = max;
             int val = initialValue ?? ((min + max) / 2);
             _slider.SetValueWithoutNotify(val);
+            if (initialValue.HasValue) MarkAsSet();
 
-            if (_valueBadge != null) {
-                _valueBadge.text = val.ToString();
-            }
-            if (_draggerTooltip != null) {
-                _draggerTooltip.text = val.ToString();
-            }
-
-            OnValueChanged?.Invoke(_questionUIRef.QuestionID, AnswerIndex, val);
+            UpdateValueLabels(_hasValue ? val.ToString() : NoValueText);
         }
     }
 }

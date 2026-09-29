@@ -63,6 +63,19 @@ public abstract class SurveyQuestionUIViewer : SurveyQuestionUIBase {
         }
     }
 
+    public void SetRequired(bool required) {
+        var requiredSymbol = _root.Q<VisualElement>("required-symbol");
+        if (requiredSymbol != null) {
+            requiredSymbol.style.display = required ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+        _root.Q<VisualElement>("question-container")?.EnableInClassList("question-card--required", required);
+    }
+
+    // Highlights the question (and its unanswered parts) when a required question isn't filled
+    public virtual void SetValidationError(bool invalid, QuestionValidationResult result) {
+        _root.Q<VisualElement>("question-container")?.EnableInClassList("question-card--invalid", invalid);
+    }
+
     public override void SetDescription(string desc) {
         var label = _root.Q<Label>("question-description");
         if (label != null) {

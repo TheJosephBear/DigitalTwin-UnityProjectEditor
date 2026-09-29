@@ -104,9 +104,86 @@ namespace SurveySystem {
             response.SelectedIdx = value;
         }
 
+        public QuestionValidationResult ValidateQuestion(QuestionBase question) {
+            var result = new QuestionValidationResult();
+            if (question == null) return result;
+
+            var response = _currentSubmission?.Responses.Find(r => r.QuestionId == question.Id);
+
+            switch (question.QuestionType) {
+                case QuestionType.MultipleChoiceSingle:
+                case QuestionType.Dropdown: {
+                    int otherIdx = FindOtherAnswerIdx(question);
+                    int selected = response?.SelectedIdx ?? -1;
+                    result.IsAnswered = selected >= 0;
+                    if (result.IsAnswered && otherIdx >= 0 && selected == otherIdx && string.IsNullOrWhiteSpace(response.ResponseText)) {
+                        result.IsAnswered = false;
+                        result.MissingOtherText = true;
+                    }
+                    break;
+                }
+                case QuestionType.MultipleChoiceMultiple: {
+                    int otherIdx = FindOtherAnswerIdx(question);
+                    var selected = response?.SelectedIndices;
+                    result.IsAnswered = selected != null && selected.Count > 0;
+                    if (result.IsAnswered && otherIdx >= 0 && selected.Contains(otherIdx) && string.IsNullOrWhiteSpace(response.ResponseText)) {
+                        result.IsAnswered = false;
+                        result.MissingOtherText = true;
+                    }
+                    break;
+                }
+                case QuestionType.ImageChoice:
+                    result.IsAnswered = response != null && response.SelectedIdx >= 0;
+                    break;
+                case QuestionType.Paragraph:
+                case QuestionType.ShortAnswer:
+                    result.IsAnswered = response != null && !string.IsNullOrWhiteSpace(response.ResponseText);
+                    break;
+                case QuestionType.MultipleChoiceGrid:
+                case QuestionType.CheckboxGrid: {
+                    int rowCount = question is QuestionGridBase grid ? grid.GetRowCount() : 0;
+                    for (int row = 0; row < rowCount; row++) {
+                        var rowResponse = response?.GridResponses.Find(gr => gr.RowIdx == row);
+                        bool rowAnswered = question.QuestionType == QuestionType.MultipleChoiceGrid
+                            ? rowResponse != null && rowResponse.SelectedColumnIdx >= 0
+                            : rowResponse?.SelectedColumnIndices != null && rowResponse.SelectedColumnIndices.Count > 0;
+                        if (!rowAnswered) result.MissingRows.Add(row);
+                    }
+                    result.IsAnswered = result.MissingRows.Count == 0;
+                    break;
+                }
+                case QuestionType.LinearScale: {
+                    for (int row = 0; row < question.Answers.Count; row++) {
+                        bool rowAnswered = response != null && response.ScaleResponses.Exists(sr => sr.RowIdx == row);
+                        if (!rowAnswered) result.MissingRows.Add(row);
+                    }
+                    result.IsAnswered = result.MissingRows.Count == 0;
+                    break;
+                }
+                default:
+                    result.IsAnswered = true;
+                    break;
+            }
+
+            return result;
+        }
+
+        private static int FindOtherAnswerIdx(QuestionBase question) {
+            for (int i = 0; i < question.Answers.Count; i++) {
+                if (question.Answers[i].IsOther) return i;
+            }
+            return -1;
+        }
+
         public string ExportResponseJson() {
             return JsonUtility.ToJson(_currentSubmission, true);
         }
+    }
+
+    public class QuestionValidationResult {
+        public bool IsAnswered;
+        public List<int> MissingRows = new();   // Grid / LinearScale rows without answer
+        public bool MissingOtherText;           // "Other" option selected but its text is empty
     }
 
     [Serializable]
