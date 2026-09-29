@@ -7423,11 +7423,11 @@ PrefabInstance:
     - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: InitialCameraPosition
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1632604755}
     - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: CameraColissionScriptRef
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1642862919}
     - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: GroundGeometryLayers.m_Bits
       value: 1025
