@@ -64,6 +64,7 @@ public class ViewingInitializer : MonoBehaviour, Iinitializer {
 
         // UIManager.Instance.ShowUI(UIType.ViewerHUD);
         yield return Serializer.DeserializeProjectCoroutine(ProjectManager.Instance.SelectedProject);
+        MemoryLogger.Log("After viewer project deserialization");
         MainManagerBase.Instance.ChangeState(AppState.Freecam);
 
         SurveyManager.Instance.CheckHasValidSurvey((result) => {

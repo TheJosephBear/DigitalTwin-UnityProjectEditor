@@ -265,6 +265,9 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
             return null;
         }
 
+        string fileName = System.IO.Path.GetFileName(copiedModelPath);
+        MemoryLogger.Log($"Before loading {fileName}");
+
         AssetLoaderOptions options = AssetLoader.CreateDefaultLoaderOptions();
         AssetLoaderContext context = null;
 
@@ -285,6 +288,7 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
         GameObject loadedModel = context.RootGameObject;
         loadedModel.SetActive(false);
 
+        MemoryLogger.Log($"After loading {fileName}");
         return loadedModel;
     }
 

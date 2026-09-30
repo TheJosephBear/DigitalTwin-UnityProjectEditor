@@ -16,7 +16,14 @@ public class Initializer : MonoBehaviour {
     [Header("In-Editor Debugging")]
     public string projectName;
 
+    [Header("Memory Debugging")]
+    [Tooltip("Logs memory usage at key points (scene loads, model loads, saves). In WebGL builds it can also be turned on with the URL parameter memoryLog=true.")]
+    public bool MemoryLogging = false;
+
     void Awake() {
+        MemoryLogger.Enabled = MemoryLogging || GetUrlParameter("memoryLog").Trim().ToLower() == "true";
+        MemoryLogger.Log("App start");
+
 #if UNITY_EDITOR
         if (LoadEditorInUnityEditor) {
             EnterEditorMode();
@@ -60,6 +67,7 @@ public class Initializer : MonoBehaviour {
         while (!loading.isDone) {
             yield return null;
         }
+        MemoryLogger.Log("After loading Utilities scene");
 
         if (string.IsNullOrWhiteSpace(projectName)) {
             projectName = GetUrlParameter("projectName");

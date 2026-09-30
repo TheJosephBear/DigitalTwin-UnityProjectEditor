@@ -23,6 +23,7 @@ public class ProjectManager : Singleton<ProjectManager> {
     public void SaveProject(SerializableProject serializableProject) {
         AssetManager.Instance.UploadModelsToWeb(SelectedProject.ProjectName);
         ImageManager.Instance.UploadImagesToServer(SelectedProject.ProjectName);
+        MemoryLogger.Log("After starting model and image uploads");
         string serializedProject = JsonUtility.ToJson(serializableProject);
         ServerCommunicationManager.Instance.StartProjectDataUpload(serializedProject, serializableProject.projectName);
     //    MessageDisplayManager.Instance.DisplayMessage("Projekt úspěšně uložen");
