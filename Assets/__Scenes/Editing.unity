@@ -1659,13 +1659,33 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 22115425409682533, guid: 7c5590b20c1668c479b1df239e62092c, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -52
-      objectReference: {fileID: 0}
     - target: {fileID: 2695984069187568526, guid: 7c5590b20c1668c479b1df239e62092c, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4561132960486692163, guid: 7c5590b20c1668c479b1df239e62092c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4561132960486692163, guid: 7c5590b20c1668c479b1df239e62092c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4561132960486692163, guid: 7c5590b20c1668c479b1df239e62092c, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4561132960486692163, guid: 7c5590b20c1668c479b1df239e62092c, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4561132960486692163, guid: 7c5590b20c1668c479b1df239e62092c, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -110.5
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4561132960486692163, guid: 7c5590b20c1668c479b1df239e62092c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6191186185132237853, guid: 7c5590b20c1668c479b1df239e62092c, type: 3}
       propertyPath: m_Pivot.x
@@ -7390,7 +7410,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: MinPanSpeed
-      value: 0.0001
+      value: 0.0000001
       objectReference: {fileID: 0}
     - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: MaxScrollSpeed
@@ -7402,7 +7422,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: PanSlowDistance
-      value: 160
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: boundsPadding.x

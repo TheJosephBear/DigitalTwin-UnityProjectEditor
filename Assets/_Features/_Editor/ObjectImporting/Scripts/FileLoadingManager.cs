@@ -265,7 +265,17 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
             return null;
         }
 
+        string fileName = System.IO.Path.GetFileName(copiedModelPath);
+        MemoryLogger.Log($"Before loading {fileName}");
+
         AssetLoaderOptions options = AssetLoader.CreateDefaultLoaderOptions();
+        // TriLib otherwise pre-sizes every OBJ group's buffers to the whole file's vertex count (files under ~196k vertices),
+        // which for models with thousands of groups reserves tens of GB. Start small and grow per group instead.
+        options.MaxVertexDataInitialCapacity = 1;
+        // Stream the file instead of copying it whole into the heap first (default buffers files up to 50 MB)
+        options.BufferizeFiles = FileBufferingMode.Disabled;
+        // optional, if our OBJs never carry vertex colors (skips a 16 B/vertex buffer):
+        // TriLibCore.Obj.Reader.ObjReader.ParseVertexColors = false;
         AssetLoaderContext context = null;
 
         // Check if the file is an archive (.zip)
@@ -285,6 +295,7 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
         GameObject loadedModel = context.RootGameObject;
         loadedModel.SetActive(false);
 
+        MemoryLogger.Log($"After loading {fileName}");
         return loadedModel;
     }
 

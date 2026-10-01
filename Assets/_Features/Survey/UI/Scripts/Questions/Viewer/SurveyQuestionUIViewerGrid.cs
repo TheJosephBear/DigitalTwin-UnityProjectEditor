@@ -12,6 +12,7 @@ public class SurveyQuestionUIViewerGrid : SurveyQuestionUIViewer {
 
     private Dictionary<int, int> _selectedColPerRow = new(); // rowIdx -> colIdx
     private HashSet<(int row, int col)> _checkedCells = new(); // (rowIdx, colIdx)
+    private HashSet<int> _invalidRows = new(); // Rows highlighted as unanswered
 
     private MultiColumnListView _table;
 
@@ -67,6 +68,7 @@ public class SurveyQuestionUIViewerGrid : SurveyQuestionUIViewer {
             if (label != null) {
                 label.text = _rowTexts[rowIndex];
             }
+            cell.EnableInClassList("grid-row--invalid", _invalidRows.Contains(rowIndex));
         };
 
         _table.columns.Add(rowTitleCol);
@@ -196,6 +198,15 @@ public class SurveyQuestionUIViewerGrid : SurveyQuestionUIViewer {
             _table.Rebuild();
             _table.RefreshItems();
         }
+    }
+
+    public override void SetValidationError(bool invalid, QuestionValidationResult result) {
+        base.SetValidationError(invalid, result);
+        _invalidRows.Clear();
+        if (invalid && result != null) {
+            _invalidRows.UnionWith(result.MissingRows);
+        }
+        _table?.RefreshItems();
     }
 
     public void InvokeAnswerSelected(int rowIdx, int colIdx, bool value) {

@@ -90,13 +90,21 @@ public class SurveyQuestionUIViewerLinearScale : SurveyQuestionUIViewer {
         maxLabel.AddToClassList("scale-limit-label");
         sliderContainer.Add(maxLabel);
 
-        var valueBadge = new Label(defaultVal.ToString());
+        var valueBadge = new Label("–"); // No value until the user touches the slider
         valueBadge.name = "scale-value-badge";
         valueBadge.AddToClassList("scale-value-badge");
         sliderContainer.Add(valueBadge);
 
         row.Add(sliderContainer);
         return row;
+    }
+
+    public override void SetValidationError(bool invalid, QuestionValidationResult result) {
+        base.SetValidationError(invalid, result);
+        for (int i = 0; i < _addedAnswers.Count; i++) {
+            bool rowInvalid = invalid && result != null && result.MissingRows.Contains(i);
+            _addedAnswers[i].AnswerElement?.EnableInClassList("scale-viewer-row--invalid", rowInvalid);
+        }
     }
 
     protected override SurveyAnswerUIBase CreateAnswerUI(VisualElement element, int index, bool isOther) {

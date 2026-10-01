@@ -60,8 +60,14 @@ public class ProjectListUINew : MonoBehaviour {
     private IEnumerator RefreshCoroutine(System.Action onCompleted) {
         UIManager.Instance.ShowUI(UIType.LoadingScreen);
         ProjectListManager.Instance.GetProjectMetadataList(list => {
+            MemoryLogger.Log($"Project list metadata received ({list.Count} projects)");
+            int remainingPreviews = list.Count;
+
             foreach (ProjectMetadata project in list) {
                 ImageManager.Instance.DownloadPreviewImage(project.projectName, success => {
+                    remainingPreviews--;
+                    if (remainingPreviews == 0) MemoryLogger.Log("After downloading all project preview images");
+
                     print($"Refresh called. Downloading preview image for: {project.projectName}, success: {success}");
                     TextureAsset previewAsset = null;
                     if (success) {

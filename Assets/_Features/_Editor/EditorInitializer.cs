@@ -31,6 +31,7 @@ public class EditorInitializer : MonoBehaviour, Iinitializer {
         // Wait for project deserialization
         yield return StartCoroutine(_projectDeserializer.DeserializeProjectCoroutinable(
             ProjectManager.Instance.SelectedProject));
+        MemoryLogger.Log("After editor project deserialization");
 
         if (!EditorManager.Instance.MapManager.IsBaseMapUploaded()) {
             EditorManager.Instance.ChangeState(AppState.GeoLocalization);

@@ -22,7 +22,10 @@ public class SurveyUIControllerViewer : MonoBehaviour {
     private Button _prevButton;
     private Button _nextButton;
     private Label _pageCountLabel;
+    private Label _validationLabel;
+    private ScrollView _scrollView;
     private bool _isSubmitted = false;
+    private HashSet<int> _questionsWithShownError = new(); // Required questions the user was already warned about
 
     public void Initialize(SurveyBuilder surveyBuilder, SurveyResponseManager responseManager, SurveyManager manager) {
         _surveyBuilder = surveyBuilder;
@@ -53,6 +56,9 @@ public class SurveyUIControllerViewer : MonoBehaviour {
 
         #endregion
 
+        _validationLabel = _root.Q<Label>("validation-message");
+        _scrollView = _root.Q<ScrollView>("survey-scroll-view");
+
         _firstPageElement = _root.Q<VisualElement>("survey-first-page");
         _thankYouPageElement = _root.Q<VisualElement>("survey-thank-you-page");
 
@@ -62,6 +68,10 @@ public class SurveyUIControllerViewer : MonoBehaviour {
                 SurveyManager.Instance.ExitSurvey();
             };
         }
+
+#if UNITY_EDITOR
+        AddDebugRepeatButton();
+#endif
 
         if (_surveyUIBuilder != null) {
             _surveyUIBuilder.ClearAddQuestionBars();
@@ -80,6 +90,13 @@ public class SurveyUIControllerViewer : MonoBehaviour {
             SetupIntroPage(survey);
         }
 
+        // Already submitted (e.g. before page refresh) -> don't allow filling it again
+        if (_surveyManager != null && _surveyManager.IsSurveySubmitted()) {
+            _isSubmitted = true;
+            DisplayThankYouPage(alreadySubmitted: true);
+            return;
+        }
+
         if (HasIntroPage(survey)) {
             DisplayPage(0);
         } else if (_questions.Count > 0) {
@@ -89,9 +106,12 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         }
     }
 
+    // Intro page is skipped only when it would be empty (no title, description nor image)
     private bool HasIntroPage(Survey survey) {
         if (survey == null) return false;
-        return !string.IsNullOrWhiteSpace(survey.Name) && !string.IsNullOrWhiteSpace(survey.Description);
+        return !string.IsNullOrWhiteSpace(survey.Name)
+            || !string.IsNullOrWhiteSpace(survey.Description)
+            || !string.IsNullOrEmpty(survey.ImageID);
     }
 
     void SetupIntroPage(Survey survey) {
@@ -131,6 +151,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
 
     void HandleNextPressed() {
         if (_isSubmitted) return;
+        if (!ValidateCurrentQuestion()) return;
 
         if (_currentPage < _questions.Count) {
             DisplayPage(_currentPage + 1);
@@ -145,10 +166,19 @@ public class SurveyUIControllerViewer : MonoBehaviour {
     }
 
     void SubmitSurvey() {
+        // Safety net: never submit while some required question is unanswered
+        int invalidIdx = _questions.FindIndex(q => q.IsRequired && !_responseManager.ValidateQuestion(q).IsAnswered);
+        if (invalidIdx >= 0) {
+            DisplayPage(invalidIdx + 1);
+            ValidateCurrentQuestion();
+            return;
+        }
+
         _isSubmitted = true;
         SurveyManager.Instance.SaveAnswers();
         SurveyManager.Instance.UploadSurveyAnswers(success => {
             if (success) {
+                SurveyManager.Instance.MarkSurveySubmitted();
                 Debug.Log("[Viewer] Survey successfully submitted to server.");
             } else {
                 Debug.LogWarning("[Viewer] Server submission completed with warning/error.");
@@ -170,11 +200,79 @@ public class SurveyUIControllerViewer : MonoBehaviour {
     public void HandleAnswerSelected(int questionId, int answerId, bool isSelected) {
         print("ANSWER SELECTED");
         _responseManager.RegisterAnswer(questionId, answerId, isSelected);
+        RefreshValidation(questionId);
     }
 
     public void HandleAnswerTextFilled(int questionId, int answerId, string newText) {
         print("TEXT FILLED");
         _responseManager.RegisterAnswer(questionId, answerId, true, newText);
+        RefreshValidation(questionId);
+    }
+
+    #endregion
+
+    #region Required questions validation
+
+    // Returns false (and shows warning) if the current question is required and not fully answered
+    bool ValidateCurrentQuestion() {
+        int questionIndex = _currentPage - 1;
+        if (questionIndex < 0 || questionIndex >= _questions.Count) return true;
+
+        QuestionBase question = _questions[questionIndex];
+        if (!question.IsRequired) return true;
+
+        QuestionValidationResult result = _responseManager.ValidateQuestion(question);
+        if (result.IsAnswered) return true;
+
+        _questionsWithShownError.Add(question.Id);
+        ApplyValidationResult(question, result);
+
+        if (_scrollView != null && _questionUICache.TryGetValue(question.Id, out var questionUI)
+            && _scrollView.contentContainer.Contains(questionUI.QuestionElement)) {
+            _scrollView.ScrollTo(questionUI.QuestionElement);
+        }
+        return false;
+    }
+
+    // Re-evaluates an already warned question after its answer changed, so the warning disappears once filled
+    void RefreshValidation(int questionId) {
+        if (!_questionsWithShownError.Contains(questionId)) return;
+
+        QuestionBase question = _questions.Find(q => q.Id == questionId);
+        if (question == null) return;
+
+        QuestionValidationResult result = _responseManager.ValidateQuestion(question);
+        if (result.IsAnswered) {
+            _questionsWithShownError.Remove(questionId);
+        }
+        ApplyValidationResult(question, result);
+    }
+
+    void ApplyValidationResult(QuestionBase question, QuestionValidationResult result) {
+        bool invalid = !result.IsAnswered;
+
+        if (_questionUICache.TryGetValue(question.Id, out var questionUI) && questionUI is SurveyQuestionUIViewer viewerUI) {
+            viewerUI.SetValidationError(invalid, result);
+        }
+
+        // Message is shown only for the question currently on screen
+        int currentIdx = _currentPage - 1;
+        bool isCurrent = currentIdx >= 0 && currentIdx < _questions.Count && _questions[currentIdx].Id == question.Id;
+        if (isCurrent) {
+            SetValidationMessage(invalid ? GetValidationMessage(result) : null);
+        }
+    }
+
+    string GetValidationMessage(QuestionValidationResult result) {
+        if (result.MissingOtherText) return "Doplňte prosím text u možnosti „Jiná…“.";
+        if (result.MissingRows.Count > 0) return "Vyplňte prosím všechny řádky této povinné otázky.";
+        return "Toto je povinná otázka. Před pokračováním na ni prosím odpovězte.";
+    }
+
+    void SetValidationMessage(string message) {
+        if (_validationLabel == null) return;
+        _validationLabel.text = message ?? string.Empty;
+        _validationLabel.style.display = string.IsNullOrEmpty(message) ? DisplayStyle.None : DisplayStyle.Flex;
     }
 
     #endregion
@@ -192,6 +290,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         int totalQuestions = _questions.Count;
 
         ClearQuestionFromUI();
+        SetValidationMessage(null);
 
         if (_thankYouPageElement != null) {
             _thankYouPageElement.style.display = DisplayStyle.None;
@@ -225,6 +324,9 @@ public class SurveyUIControllerViewer : MonoBehaviour {
                 QuestionBase currentQuestion = _questions[questionIndex];
                 SurveyQuestionUIBase addedQuestionUI = AddQuestionToUI(currentQuestion);
                 addedQuestionUI.SetImageRender();
+
+                // Returning to a question the user was already warned about -> show the warning again
+                RefreshValidation(currentQuestion.Id);
 
                 if (!string.IsNullOrEmpty(currentQuestion.ViewPointId)) {
                     StartCoroutine(ShowViewCoroutine(currentQuestion.ViewPointId));
@@ -269,9 +371,10 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         }
     }
 
-    void DisplayThankYouPage() {
+    void DisplayThankYouPage(bool alreadySubmitted = false) {
         _currentPage = _questions.Count + 1;
         ClearQuestionFromUI();
+        SetValidationMessage(null);
 
         if (_firstPageElement != null) {
             _firstPageElement.style.display = DisplayStyle.None;
@@ -279,6 +382,14 @@ public class SurveyUIControllerViewer : MonoBehaviour {
 
         if (_thankYouPageElement != null) {
             _thankYouPageElement.style.display = DisplayStyle.Flex;
+
+            if (alreadySubmitted) {
+                var titleLabel = _thankYouPageElement.Q<Label>("thank-you-title");
+                if (titleLabel != null) titleLabel.text = "Dotazník byl vyplněn";
+
+                var descLabel = _thankYouPageElement.Q<Label>("thank-you-description");
+                if (descLabel != null) descLabel.text = "Tento dotazník jste již vyplnili a odeslali.";
+            }
         }
 
         if (_bottomBar != null) {
@@ -297,6 +408,58 @@ public class SurveyUIControllerViewer : MonoBehaviour {
             _pageCountLabel.text = "Dokončeno";
         }
     }
+
+#if UNITY_EDITOR
+    #region Debug repeat
+
+    const string DebugRepeatButtonName = "debug-repeat-btn";
+
+    // Editor only: button on the thank-you page that resets the submission flag and restarts the survey
+    void AddDebugRepeatButton() {
+        if (_thankYouPageElement == null || _thankYouPageElement.Q<Button>(DebugRepeatButtonName) != null) return;
+
+        var titleLabel = _thankYouPageElement.Q<Label>("thank-you-title");
+        var descLabel = _thankYouPageElement.Q<Label>("thank-you-description");
+        string defaultTitle = titleLabel?.text;
+        string defaultDesc = descLabel?.text;
+
+        var repeatBtn = new Button(() => {
+            if (titleLabel != null) titleLabel.text = defaultTitle;
+            if (descLabel != null) descLabel.text = defaultDesc;
+            RestartSurvey();
+        }) {
+            name = DebugRepeatButtonName,
+            text = "Vyplnit znovu (debug)"
+        };
+        repeatBtn.AddToClassList("thank-you-btn");
+        repeatBtn.style.marginTop = 12;
+        _thankYouPageElement.Add(repeatBtn);
+    }
+
+    void RestartSurvey() {
+        _surveyManager?.ClearSurveySubmitted();
+
+        Survey survey = _surveyBuilder.GetActiveSurvey();
+        if (survey != null) _responseManager?.Initialize(survey);
+
+        // Drop cached question UIs so all answers start empty again
+        foreach (var questionUI in _questionUICache.Values) {
+            int idx = _surveyUIBuilder != null ? _surveyUIBuilder.GetQuestionIndex(questionUI) : -1;
+            if (idx >= 0) {
+                _surveyUIBuilder.DeleteQuestion(idx);
+            } else {
+                questionUI.QuestionElement?.RemoveFromHierarchy();
+            }
+        }
+        _questionUICache.Clear();
+        _questionsWithShownError.Clear();
+
+        _isSubmitted = false;
+        DisplayPage(0); // Skips to the first question when there is no intro page
+    }
+
+    #endregion
+#endif
 
     IEnumerator ShowViewCoroutine(string viewPointId) {
         if (MainManagerBase.Instance == null || string.IsNullOrEmpty(viewPointId)) yield break;
@@ -343,6 +506,9 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         questionUI.SetTitle(questionBase.Title);
         questionUI.SetDescription(questionBase.Description);
         questionUI.ImageID = questionBase.ImageID;
+        if (questionUI is SurveyQuestionUIViewer viewerQuestionUI) {
+            viewerQuestionUI.SetRequired(questionBase.IsRequired);
+        }
 
         questionUI.SetQuestionPosition(_currentPage);
         var mapping = _surveyUIBuilder.questionUIMapping.GetMappingByQuestionType(questionBase.QuestionType);
@@ -360,7 +526,8 @@ public class SurveyUIControllerViewer : MonoBehaviour {
             }
 
             gridUI.OnGridAnswerSelected += (qId, row, col, val) => {
-                if (val) _responseManager.RegisterGridAnswer(qId, row, col);
+                _responseManager.RegisterGridAnswer(qId, row, col, val);
+                RefreshValidation(qId);
             };
         } else if (questionUI is SurveyQuestionUIViewerString stringUI) {
             stringUI.OnAnswerSelected += HandleAnswerSelected;
@@ -372,13 +539,14 @@ public class SurveyUIControllerViewer : MonoBehaviour {
             imageUI.OnAnswerSelected += HandleAnswerSelected;
             foreach (AnswerBase answer in questionBase.Answers) {
                 if (answer is AnswerImage imageAnswer) {
-                    imageUI.AddAnswer(imageAnswer.GetImageId());
+                    imageUI.AddImageAnswer(imageAnswer.GetImageId(), imageAnswer.Text);
                 }
             }
         } else if (questionBase is QuestionLinearScale linScaleQuestion && questionUI is SurveyQuestionUIViewerLinearScale scaleUI) {
             scaleUI.SetScaleRange(linScaleQuestion.ScaleType, linScaleQuestion.Min, linScaleQuestion.Max);
             scaleUI.OnScaleValueChanged += (qId, rowIdx, val) => {
                 _responseManager.RegisterScaleAnswer(qId, rowIdx, val);
+                RefreshValidation(qId);
             };
             foreach (AnswerBase answer in questionBase.Answers) {
                 scaleUI.AddAnswer(answer.Text);

@@ -14,6 +14,10 @@ public class SurveyQuestionUIViewerImage : SurveyQuestionUIViewer {
 
     // This is called by the UI Builder when iterating through the question's answers
     public override SurveyAnswerUIBase AddAnswer(string imageId, bool isOther = false) {
+        return AddImageAnswer(imageId, null);
+    }
+
+    public SurveyAnswerUIBase AddImageAnswer(string imageId, string caption) {
         if (_optionsList == null || _answerTemplate == null) return null;
 
         // 1. Instantiate the Template
@@ -21,10 +25,11 @@ public class SurveyQuestionUIViewerImage : SurveyQuestionUIViewer {
         int answerIndex = _addedAnswers.Count;
 
         // 2. Initialize the Answer Logic
-        SurveyAnswerUIViewerImage answerUI = new SurveyAnswerUIViewerImage(answerElement, answerIndex, this, isOther);
+        SurveyAnswerUIViewerImage answerUI = new SurveyAnswerUIViewerImage(answerElement, answerIndex, this, false);
 
-        // 3. Set the Image
+        // 3. Set the Image and optional caption
         answerUI.SetImage(imageId);
+        answerUI.SetCaption(caption);
 
         // 4. Bind Selection Event
         answerUI.OnSelected += (qId, aIdx, val) => {

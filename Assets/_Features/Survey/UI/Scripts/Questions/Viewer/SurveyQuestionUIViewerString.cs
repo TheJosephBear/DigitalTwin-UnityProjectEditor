@@ -194,6 +194,26 @@ public class SurveyQuestionUIViewerString : SurveyQuestionUIViewer {
         }
     }
 
+    public override void SetValidationError(bool invalid, QuestionValidationResult result) {
+        base.SetValidationError(invalid, result);
+
+        var otherField = _otherAnswerUI?.AnswerElement?.Q<TextField>("other-text-field");
+        if (otherField == null) return;
+
+        bool otherInvalid = invalid && result != null && result.MissingOtherText;
+        otherField.EnableInClassList("other-text-input--invalid", otherInvalid);
+
+        // Border is styled inline in AddAnswer, so the color has to be overridden inline as well
+        var input = otherField.Q(className: "unity-base-text-field__input") ?? otherField.Q("unity-text-input");
+        if (input != null) {
+            Color borderCol = otherInvalid ? new Color(0.8f, 0f, 0f, 1f) : new Color(0, 0, 0, 0.25f);
+            input.style.borderTopColor = borderCol;
+            input.style.borderBottomColor = borderCol;
+            input.style.borderLeftColor = borderCol;
+            input.style.borderRightColor = borderCol;
+        }
+    }
+
     protected override SurveyAnswerUIBase CreateAnswerUI(VisualElement element, int index, bool isOther) {
         return null;
     }

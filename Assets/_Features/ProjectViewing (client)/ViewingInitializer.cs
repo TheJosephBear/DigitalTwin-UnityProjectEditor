@@ -5,7 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class ViewingInitializer : MonoBehaviour, Iinitializer {
 
+    [Header("Scene references")]
     public ViewingSerializer Serializer;
+    public ViewerHUDUI HUDUI;
 
     [Header("Debugging")]
     public string _projectName;
@@ -62,15 +64,17 @@ public class ViewingInitializer : MonoBehaviour, Iinitializer {
 
         // UIManager.Instance.ShowUI(UIType.ViewerHUD);
         yield return Serializer.DeserializeProjectCoroutine(ProjectManager.Instance.SelectedProject);
+        MemoryLogger.Log("After viewer project deserialization");
         MainManagerBase.Instance.ChangeState(AppState.Freecam);
 
         SurveyManager.Instance.CheckHasValidSurvey((result) => {
             print("VALID SURVEYX RESULT: " + result);
-            if (result) {
+            // Don't auto-open the survey if this client already submitted it
+            if (result && !SurveyManager.Instance.IsSurveySubmitted()) {
                 MainManagerBase.Instance.ChangeState(AppState.Survey);
             }
 
-            FindAnyObjectByType<ViewerHUDUI>().DisableUnneededButtons();
+            HUDUI.DisableUnneededButtons();
             UIManager.Instance.HideUI(UIType.LoadingScreen);
         });
     }

@@ -145,6 +145,42 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
 
     #endregion
 
+    #region Submission flag
+
+    const string SubmittedPrefsKeyPrefix = "SurveySubmitted_";
+
+    static string GetSubmittedPrefsKey() {
+        string projectName = ProjectManager.Instance?.SelectedProject?.ProjectName;
+        return string.IsNullOrEmpty(projectName) ? null : SubmittedPrefsKeyPrefix + projectName;
+    }
+
+    /// <summary>
+    /// True if this client already submitted the survey of the selected project (persists across page refresh).
+    /// </summary>
+    public bool IsSurveySubmitted() {
+        string key = GetSubmittedPrefsKey();
+        return key != null && PlayerPrefs.GetInt(key, 0) == 1;
+    }
+
+    public void MarkSurveySubmitted() {
+        string key = GetSubmittedPrefsKey();
+        if (key == null) return;
+        PlayerPrefs.SetInt(key, 1);
+        PlayerPrefs.Save(); // WebGL: flush to IndexedDB immediately, otherwise it may be lost on refresh
+    }
+
+#if UNITY_EDITOR
+    // Debug only: allows filling the survey again in play mode
+    public void ClearSurveySubmitted() {
+        string key = GetSubmittedPrefsKey();
+        if (key == null) return;
+        PlayerPrefs.DeleteKey(key);
+        PlayerPrefs.Save();
+    }
+#endif
+
+    #endregion
+
     public void SetSurveyJson(string json, bool debug = false) {
         _surveyJsonData = json;
     }

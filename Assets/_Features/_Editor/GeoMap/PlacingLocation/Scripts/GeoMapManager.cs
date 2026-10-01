@@ -96,8 +96,10 @@ public class GeoMapManager : Singleton<GeoMapManager> {
         }
     }
 
+    // Returns Vector2.zero if the project hasn't been geolocated yet (e.g. new project)
     public Vector2 GetCoordinates() {
-        GeoLocalizationData data = GeoMapLocalizationManager.Instance.GetPlacementMapData();
+        GeoLocalizationData data = GeoMapLocalizationManager.Instance?.GetPlacementMapData();
+        if (data == null) return Vector2.zero;
         return new Vector2(data.latitude, data.longtitude);
     }
 
@@ -108,10 +110,8 @@ public class GeoMapManager : Singleton<GeoMapManager> {
     }
 
     public void DeserializeManager(SerializableGeoMapManager serializedData) {
-        if (serializedData == null || serializedData.geoData == null)
-            return;
-
-        GeoMapLocalizationManager.Instance?.InitializeWithPlacementMapData(serializedData.geoData);
+        // Null geoData clears data left over from a previously opened project
+        GeoMapLocalizationManager.Instance?.InitializeWithPlacementMapData(serializedData?.geoData);
     }
 }
 

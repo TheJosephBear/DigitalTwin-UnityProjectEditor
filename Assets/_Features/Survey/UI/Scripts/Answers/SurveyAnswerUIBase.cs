@@ -26,7 +26,7 @@ public abstract class SurveyAnswerUIBase {
     protected abstract void RegisterAnswerEvents();
 
 
-    public void UpdateIndex(int newIndex) {
+    public virtual void UpdateIndex(int newIndex) {
         _answerIndex = newIndex;
     }
     public virtual void HideCurrentModal() { } // Shouldnt be here but it fixed a big issue the easiest way

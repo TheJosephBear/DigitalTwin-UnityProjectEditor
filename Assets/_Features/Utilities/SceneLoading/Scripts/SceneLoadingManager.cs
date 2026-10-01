@@ -176,6 +176,7 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
         }
         _loadedScenes.Add(scene);
         SetActiveScene(scene);
+        MemoryLogger.Log($"After loading scene {scene.SceneName}");
         CallSceneInitializer(scene);
         tcs.SetResult(true);
     }
@@ -190,6 +191,7 @@ public class SceneLoadingManager : Singleton<SceneLoadingManager> {
         if (_loadedScenes.Contains(scene)) {
             _loadedScenes.Remove(scene);
         }
+        MemoryLogger.Log($"After unloading scene {scene.SceneName}");
         tcs.SetResult(true);
     }
 

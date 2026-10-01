@@ -49,6 +49,7 @@ public class ProjectListManager : Singleton<ProjectListManager> {
             yield return null;
 
         print(" project downloaded");
+        MemoryLogger.Log($"After downloading project data {projectMetadata.projectName}");
         print(" loading editor");
         var loading = SceneLoadingManager.Instance.LoadSceneAsync(SceneType.Editing, 0f);
         while (!loading.IsCompleted)
