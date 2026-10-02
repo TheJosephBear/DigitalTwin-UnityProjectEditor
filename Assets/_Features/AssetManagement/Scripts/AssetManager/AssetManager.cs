@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
+using UnityEditor;
 using UnityEngine;
 
 public class AssetManager : Singleton<AssetManager> {
@@ -42,7 +43,7 @@ public class AssetManager : Singleton<AssetManager> {
         return modelAsset;
     }
 
-    public ModelAsset CreateNewAssetFromFiles(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
+    public ModelAsset CreateNewAssetFromFiles(FrostweepGames.Plugins.WebGLFileBrowser.File[] files, Action<float> onProgress = null) {
         if (files == null || files.Length == 0) {
             Debug.LogError("No files selected.");
             return null;
@@ -77,7 +78,7 @@ public class AssetManager : Singleton<AssetManager> {
 
         // 4. Upload full bundle
         GameObject newAssetGo =
-            FileLoadingManager.Instance.UploadFromWebGLFiles(files, fileHash);
+            FileLoadingManager.Instance.UploadFromWebGLFiles(files, fileHash, onProgress);
 
         if (newAssetGo == null)
             return null;

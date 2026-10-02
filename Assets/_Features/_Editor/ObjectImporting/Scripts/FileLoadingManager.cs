@@ -4,6 +4,8 @@ using System.IO;
 using UnityEngine;
 using System.Linq;
 using TriLibCore;
+using System;
+using UnityEditor;
 
 /// <summary>
 /// Responsible for creating GameObjects from files from any source.
@@ -53,7 +55,8 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
     /// <returns>Loaded model GameObject.</returns>
     public GameObject UploadFromWebGLFile(
         FrostweepGames.Plugins.WebGLFileBrowser.File file,
-        string fileHash
+        string fileHash,
+        Action<float> onProgress = null
     ) {
         if (file == null || file.fileInfo == null) {
             Debug.LogError("[FileLoadingManager] Null file passed to WebGL upload.");
@@ -75,7 +78,7 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
             return null;
         }
 
-        return BuildModelFromCopiedFiles(targetPath);
+        return BuildModelFromCopiedFiles(targetPath, onProgress);
     }
 
     /// <summary>
@@ -86,7 +89,8 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
     /// <returns>Loaded model GameObject.</returns>
     public GameObject UploadFromWebGLFiles(
         FrostweepGames.Plugins.WebGLFileBrowser.File[] files,
-        string fileHash
+        string fileHash,
+        Action<float> onProgress = null
     ) {
         if (files == null || files.Length == 0) {
             Debug.LogError("[FileLoadingManager] No files provided in array.");
@@ -131,7 +135,7 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
             return null;
         }
 
-        return BuildModelFromCopiedFiles(mainModelPath);
+        return BuildModelFromCopiedFiles(mainModelPath, onProgress);
     }
 
     #endregion
@@ -259,7 +263,7 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
     /// Loads any supported 3D model format (FBX, GLTF, OBJ, STL, etc.) using TriLib 2.
     /// TriLib automatically locates and binds companion files (MTL, PNG, JPG, BIN) in the same directory.
     /// </summary>
-    private GameObject BuildModelFromCopiedFiles(string copiedModelPath) {
+    private GameObject BuildModelFromCopiedFiles(string copiedModelPath, Action<float> onProgress = null) {
         if (!System.IO.File.Exists(copiedModelPath)) {
             Debug.LogError($"[FileLoadingManager] Model file does not exist: {copiedModelPath}");
             return null;
@@ -278,13 +282,18 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
         // TriLibCore.Obj.Reader.ObjReader.ParseVertexColors = false;
         AssetLoaderContext context = null;
 
+        // Progress callback handler for TriLib
+        Action<AssetLoaderContext, float> progressHandler = (ctx, progress) => {
+            onProgress?.Invoke(progress);
+        };
+
         // Check if the file is an archive (.zip)
         bool isZip = System.IO.Path.GetExtension(copiedModelPath).Equals(".zip", System.StringComparison.OrdinalIgnoreCase);
 
         if (isZip) {
-            context = AssetLoaderZip.LoadModelFromZipFile(copiedModelPath, null, null, null, null, null, options);
+            context = AssetLoaderZip.LoadModelFromZipFile(copiedModelPath, null, null, progressHandler, null, null, options);
         } else {
-            context = AssetLoader.LoadModelFromFile(copiedModelPath, null, null, null, null, null, options);
+            context = AssetLoader.LoadModelFromFile(copiedModelPath, null, null, progressHandler, null, null, options);
         }
 
         if (context == null || context.RootGameObject == null) {
