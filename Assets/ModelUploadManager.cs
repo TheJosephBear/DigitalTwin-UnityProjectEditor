@@ -10,7 +10,6 @@ public class ModelUploadManager : Singleton<ModelUploadManager> {
     Action<ModelAsset> _callback;
     List<FrostweepGames.Plugins.WebGLFileBrowser.File> _files = new List<FrostweepGames.Plugins.WebGLFileBrowser.File>();
 
-
     public void AskForModel(Action<ModelAsset> callback) {
         if (_instantiatedUI == null) {
             _instantiatedUI = Instantiate(ModelUploadUIPrefab, transform);
@@ -28,8 +27,8 @@ public class ModelUploadManager : Singleton<ModelUploadManager> {
         }
     }
 
-    public void FinishUploading() {
-        ModelAsset asset = AssetManager.Instance.CreateNewAssetFromFiles(_files.ToArray());
+    public void FinishUploading(Action<float> onProgress = null) {
+        ModelAsset asset = AssetManager.Instance.CreateNewAssetFromFiles(_files.ToArray(), onProgress);
         _callback?.Invoke(asset);
         ExitUploading();
     }

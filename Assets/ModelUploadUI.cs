@@ -7,15 +7,22 @@ using UnityEngine.UI;
 
 public class ModelUploadUI : UIBehaviour {
 
+    [Header("UI References")]
     public GameObject FileTextPrefab;
     public Transform ScrollviewContentTransformRef;
 
+    [Header("Progress UI")]
+    [SerializeField] private Slider progressBar;
+    [SerializeField] private TextMeshProUGUI progressText;
+    [SerializeField] private GameObject progressContainer;
+
     public void Initialize() {
         ClearFileList();
+        UpdateProgress(0f, false);
     }
 
     public void OnFinished() {
-        ModelUploadManager.Instance.FinishUploading();
+        ModelUploadManager.Instance.FinishUploading(progress => UpdateProgress(progress, true));
     }
 
     public void OnCancel() {
@@ -30,6 +37,25 @@ public class ModelUploadUI : UIBehaviour {
 
     public void ClearFileList() {
          Utilities.KillAllChildren(ScrollviewContentTransformRef);
+    }
+
+    /// <summary>
+    /// Call this method to update the progress bar and percentage text.
+    /// </summary>
+    /// <param name="progress">Normalized value between 0.0 and 1.0</param>
+    /// <param name="isVisible">Whether the progress UI should be visible.</param>
+    public void UpdateProgress(float progress, bool isVisible = true) {
+        if (progressContainer != null) {
+            progressContainer.SetActive(isVisible);
+        }
+
+        if (progressBar != null) {
+            progressBar.value = progress;
+        }
+
+        if (progressText != null) {
+            progressText.text = $"Loading... {Mathf.RoundToInt(progress * 100f)}%";
+        }
     }
 
     /// <summary>
@@ -60,6 +86,7 @@ public class ModelUploadUI : UIBehaviour {
             return;
         }
 
+     //   UpdateProgress(0f, true);
         ModelUploadManager.Instance.AddFiles(files);
 
         /*
@@ -73,11 +100,3 @@ public class ModelUploadUI : UIBehaviour {
     }
 
 }
-
-/*
- 
-FileLoadingManager.OnSelectFiles(asset => {
-            
-}); 
-
- */
