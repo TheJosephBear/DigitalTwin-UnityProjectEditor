@@ -66,4 +66,5 @@ public enum AppState {
     ViewActive,
     Survey,
     VariantAdjusting,
+    FPS
 }

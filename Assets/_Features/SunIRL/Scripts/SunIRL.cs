@@ -175,7 +175,6 @@ public class SunIRL: MonoBehaviour {
     public void Deserialize(SerializableSun serializedSun, Vector2 geoCoordinates) {
         if (serializedSun == null) return;
 
-        print("WEEEE ESHOULD BE DOINNNNN");
         SetYear((uint)serializedSun.year);
         SetMonth((uint)serializedSun.month);
         SetDay((uint)serializedSun.day);

@@ -23,7 +23,15 @@ public class FPSManager: Singleton<FPSManager> {
     private void Start() {
         // Instantiate the player up front and keep it inactive
         if (playerPrefab != null) {
-            playerInstance = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
+            if(SceneLoadingManager.Instance != null) {
+                SceneType sceneToLoadInto;
+                if (MainManagerBase.Instance is EditorManager) sceneToLoadInto = SceneType.Editing; else sceneToLoadInto = SceneType.Viewing;
+                playerInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(playerPrefab, spawnPosition, Quaternion.identity, sceneToLoadInto);
+            } else {
+                playerInstance = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
+            }
+            
+            print(playerInstance);
 
             // Cache references for resetting physics/movement on respawn
             playerRigidbody = playerInstance.GetComponent<Rigidbody>();
@@ -128,6 +136,8 @@ public class FPSManager: Singleton<FPSManager> {
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        MainManagerBase.Instance?.ChangeState(AppState.FPS);
     }
 
     /// <summary>
@@ -148,5 +158,7 @@ public class FPSManager: Singleton<FPSManager> {
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
+        MainManagerBase.Instance?.ChangeState(AppState.Freecam);
     }
 }

@@ -37,6 +37,10 @@ public class EditorHUDui : UIBehaviour {
 
     #region ButtonFunctions
 
+    public void OnFPSSettings() {
+        FPSManager.Instance.ToggleUI(true);
+    }
+
     public void OnMapUpload() {
         // UIManager.Instance.ShowUI(UIType.MapUI);
         MapManager.Instance.ToggleMapUI(true);
