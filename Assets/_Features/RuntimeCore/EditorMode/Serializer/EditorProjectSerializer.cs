@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EditorProjectSerializer : MonoBehaviour {
@@ -17,9 +16,9 @@ public class EditorProjectSerializer : MonoBehaviour {
             owner = OpenedProject.Owner,
             serializableModelAssets = AssetManager.Instance.SerializeAssetList(),
             serializableTextureAssets = ImageManager.Instance.SerializeTextureList(),
-            serializableMapManager = EditorManager.Instance.MapManager.Serialize(),
-            serializableViewPointManager = EditorManager.Instance.ViewManager.Serialize(),
-            serializableGeoMapManager = EditorManager.Instance.GeoMapManager.SerializeManager(),
+            serializableMapManager = MapManager.Instance.Serialize(),
+            serializableViewPointManager = ViewManager.Instance.Serialize(),
+            serializableGeoMapManager = GeoMapManager.Instance.SerializeManager(),
             serializableSun = SunManager.Instance.Serialize()
         };
         return serializableProject;
@@ -48,9 +47,9 @@ public class EditorProjectSerializer : MonoBehaviour {
 
         // Deserialize everything else
         ImageManager.Instance.Deserialize(serializedProject.serializableTextureAssets);
-        EditorManager.Instance.MapManager.Deserialize(serializedProject.serializableMapManager);
-        EditorManager.Instance.ViewManager.Deserialize(serializedProject.serializableViewPointManager);
-        EditorManager.Instance.GeoMapManager.DeserializeManager(serializedProject.serializableGeoMapManager);
+        MapManager.Instance.Deserialize(serializedProject.serializableMapManager);
+        ViewManager.Instance.Deserialize(serializedProject.serializableViewPointManager);
+        GeoMapManager.Instance.DeserializeManager(serializedProject.serializableGeoMapManager);
         SunManager.Instance.Deserialize(serializedProject.serializableSun, GeoMapManager.Instance.GetCoordinates());
 
         UIManager.Instance.HideUI(UIType.LoadingScreen);

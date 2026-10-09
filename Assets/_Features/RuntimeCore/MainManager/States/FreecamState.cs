@@ -7,7 +7,7 @@ public class FreecamState : StateBase {
         UIManager.Instance.HideUI(UIType.EditorInitUI);
         SunManager.Instance.ToggleUI(true);
         MainManagerBase.Instance.ToggleHUD(true);
-        MainManagerBase.Instance.ViewManager.ToggleViewPointUI(true);
+        ViewManager.Instance.ToggleViewPointUI(true);
         CameraManager.Instance.InitializeFreeCamBounds(MapManager.Instance?.GetBaseMap()?.gameObject);
         CameraManager.Instance.ToggleFreecamUpdating(true);
         CameraManager.Instance.ToggleBoundsEnforcing(true);
@@ -16,7 +16,7 @@ public class FreecamState : StateBase {
             CameraManager.Instance.ToggleVcamVisbility(false);
         }
         //      if (TwoCameraInstantiated != null) Destroy(TwoCameraInstantiated);
-        MainManagerBase.Instance.EditorCameraManager.DisableCinemachineAfterTransition();
+        CameraManager.Instance.DisableCinemachineAfterTransition();
     }
 
     public override void Exit() {

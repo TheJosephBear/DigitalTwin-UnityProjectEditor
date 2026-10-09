@@ -35,8 +35,8 @@ public class PinManager: Singleton<PinManager> {
     public PinObject CreateNewPin() {
         Vector3 spawnPos = Vector3.zero;
 
-        if (EditorManager.Instance?.EditorCameraManager != null) {
-            var freecam = EditorManager.Instance.EditorCameraManager.GetFreeCamTransform();
+        if (CameraManager.Instance != null) {
+            var freecam = CameraManager.Instance.GetFreeCamTransform();
             if (freecam != null) {
                 spawnPos = freecam.position + freecam.forward * 2f;
             }

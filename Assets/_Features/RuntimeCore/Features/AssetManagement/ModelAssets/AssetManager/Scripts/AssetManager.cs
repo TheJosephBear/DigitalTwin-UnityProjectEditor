@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
-using UnityEditor;
 using UnityEngine;
 
 public class AssetManager : Singleton<AssetManager> {
@@ -149,6 +148,8 @@ public class AssetManager : Singleton<AssetManager> {
             };
             serializableAssets.Add(serializableAsset);
         }
+
+        UploadModelsToWeb(ProjectManager.Instance.SelectedProject.ProjectName);
 
         return serializableAssets;
     }

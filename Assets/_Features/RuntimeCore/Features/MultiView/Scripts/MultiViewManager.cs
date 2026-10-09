@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MultiViewManager : MonoBehaviour {
+public class MultiViewManager : Singleton<MultiViewManager> {
 
     public GameObject MultiviewCamerasPrefab;
 
@@ -12,7 +12,7 @@ public class MultiViewManager : MonoBehaviour {
     private MapVariant _secondaryMapInstance;
 
     public void EnterMultiView() {
-        _multiviewCamerasSpawnTransform = EditorManager.Instance.EditorCameraManager.GetFreeCamTransform();
+        _multiviewCamerasSpawnTransform = CameraManager.Instance.GetFreeCamTransform();
 
         if (_multiviewUIRefference == null) {
             _multiviewUIRefference = FindAnyObjectByType<MultiviewUI>();

@@ -38,16 +38,16 @@ public class ViewPointContextUI : MonoBehaviour {
     }
 
     public void OnSave() {
-        MainManagerBase.Instance.ViewManager.ExitViewMoving(save: true);
+        ViewManager.Instance.ExitViewMoving(save: true);
     }
 
     public void OnDelete() {
-        MainManagerBase.Instance.ViewManager.DeleteViewPoint(_vp);
-        MainManagerBase.Instance.ViewManager.ExitViewMoving(save: true);
+        ViewManager.Instance.DeleteViewPoint(_vp);
+        ViewManager.Instance.ExitViewMoving(save: true);
     }
 
     public void OnCancel() {
-        MainManagerBase.Instance.ViewManager.ExitViewMoving(
+        ViewManager.Instance.ExitViewMoving(
             save: false,
             message: "Neuložené změny, přejete si odejít?"
         );

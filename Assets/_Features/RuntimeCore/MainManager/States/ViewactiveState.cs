@@ -8,15 +8,15 @@ public class ViewactiveState : StateBase {
     bool _isCollisionEnabled = false;
 
     public override void Enter() {
-        EditorManager.Instance.EditorCameraManager.UpdateFreeCamVcamPosition();
-        EditorManager.Instance.EditorCameraManager.ToggleCinemachineBrain(true);
+        CameraManager.Instance.UpdateFreeCamVcamPosition();
+        CameraManager.Instance.ToggleCinemachineBrain(true);
         CinemachineCore.Instance.GetActiveBrain(0).ManualUpdate();
-        if(MainManagerBase.Instance is EditorManager em) {
+        if(MainManagerBase.Instance is EditorManager) {
             _isCollisionEnabled = CameraManager.Instance.IsCollisionEnabled;
             CameraManager.Instance.ToggleCameraCollision(false);
-            em.ViewManager.StartViewMoving();
+            ViewManager.Instance.StartViewMoving();
         } else {
-            MainManagerBase.Instance.ViewManager.ActivateViewPoint();
+            ViewManager.Instance.ActivateViewPoint();
         }
       //  MainManagerBase.Instance.ToggleHUD(false);
     }

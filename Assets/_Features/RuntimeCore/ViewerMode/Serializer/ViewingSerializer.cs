@@ -27,14 +27,14 @@ public class ViewingSerializer : MonoBehaviour {
         yield return new WaitUntil(() => isImageDeserializationComplete);
 
 
-        if (ViewingManager.Instance.MapManager != null)
-            ViewingManager.Instance.MapManager.Deserialize(serializedProject.serializableMapManager);
+        if (MapManager.Instance != null)
+            MapManager.Instance.Deserialize(serializedProject.serializableMapManager);
 
-        if (ViewingManager.Instance.ViewManager != null)
-            ViewingManager.Instance.ViewManager.Deserialize(serializedProject.serializableViewPointManager);
+        if (ViewManager.Instance != null)
+            ViewManager.Instance.Deserialize(serializedProject.serializableViewPointManager);
 
-        if (ViewingManager.Instance.GeoMapManager != null)
-            ViewingManager.Instance.GeoMapManager.DeserializeManager(serializedProject.serializableGeoMapManager);
+        if (GeoMapManager.Instance != null)
+            GeoMapManager.Instance.DeserializeManager(serializedProject.serializableGeoMapManager);
 
     }
 }

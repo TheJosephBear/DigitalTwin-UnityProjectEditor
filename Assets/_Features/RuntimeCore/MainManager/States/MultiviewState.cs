@@ -5,16 +5,16 @@ using UnityEngine;
 public class MultiviewState : StateBase {
     public override void Enter() {
         print("Entering multi state");
-        if (!EditorManager.Instance.MapManager.HasVariant()) {
+        if (!MapManager.Instance.HasVariant()) {
             MessageDisplayManager.Instance.DisplayMessage("No variants added!");
             return;
         }
 
-        EditorManager.Instance.EditorCameraManager.UpdateFreeCamVcamPosition();
+        CameraManager.Instance.UpdateFreeCamVcamPosition();
         MainManagerBase.Instance.ToggleHUD(false);
-        EditorManager.Instance.EditorCameraManager.ToggleCinemachineBrain(true);
-        EditorManager.Instance.MultiViewManager.EnterMultiView();
-        EditorManager.Instance.ViewManager.ToggleViewPointUI(false);
+        CameraManager.Instance.ToggleCinemachineBrain(true);
+        MultiViewManager.Instance.EnterMultiView();
+        ViewManager.Instance.ToggleViewPointUI(false);
     }
 
     public override void Exit() {

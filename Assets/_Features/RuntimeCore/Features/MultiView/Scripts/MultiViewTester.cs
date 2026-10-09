@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MultiViewTester : MonoBehaviour {
     void Start() {
-        EditorManager.Instance.MultiViewManager.EnterMultiView();
+        MultiViewManager.Instance.EnterMultiView();
     }
 
 }

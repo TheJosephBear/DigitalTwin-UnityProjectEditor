@@ -57,8 +57,16 @@ public class SoundBoardEditor : Editor {
             }
         }
 
+        MonoScript script = MonoScript.FromScriptableObject(this); 
+        string scriptPath = AssetDatabase.GetAssetPath(script);
+        string scriptDirectory = Path.GetDirectoryName(scriptPath);
+        string targetDirectory = Path.Combine(scriptDirectory, "Enums");
+        if (!Directory.Exists(targetDirectory)) {
+            Directory.CreateDirectory(targetDirectory);
+        }
+
         string enumName = "SoundType";
-        string filePath = "Assets/Enums/SoundType.cs";
+        string filePath = Path.Combine(targetDirectory, $"{enumName}.cs");
 
         using (StreamWriter writer = new StreamWriter(filePath, false)) {
             writer.WriteLine("public enum " + enumName);

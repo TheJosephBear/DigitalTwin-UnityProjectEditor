@@ -464,14 +464,14 @@ public class SurveyUIControllerViewer : MonoBehaviour {
     IEnumerator ShowViewCoroutine(string viewPointId) {
         if (MainManagerBase.Instance == null || string.IsNullOrEmpty(viewPointId)) yield break;
 
-        ViewManager viewManager = MainManagerBase.Instance.ViewManager;
+        ViewManager viewManager = ViewManager.Instance;
         if (viewManager == null) yield break;
 
         ViewPoint vp = viewManager.GetViewPointByID(viewPointId);
         if (vp == null) yield break;
 
-        if (EditorManager.Instance != null && EditorManager.Instance.EditorCameraManager != null) {
-            EditorManager.Instance.EditorCameraManager.ToggleCinemachineBrain(true);
+        if (CameraManager.Instance != null) {
+            CameraManager.Instance.ToggleCinemachineBrain(true);
         }
 
         viewManager.DeactivateViewPoint();
@@ -489,8 +489,8 @@ public class SurveyUIControllerViewer : MonoBehaviour {
             yield return null;
         }
 
-        if (EditorManager.Instance != null && EditorManager.Instance.EditorCameraManager != null) {
-            EditorManager.Instance.EditorCameraManager.ToggleCinemachineBrain(false);
+        if (CameraManager.Instance != null) {
+            CameraManager.Instance.ToggleCinemachineBrain(false);
         }
     }
 

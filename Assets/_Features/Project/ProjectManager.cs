@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -21,7 +20,6 @@ public class ProjectManager : Singleton<ProjectManager> {
     /// Save new project data into the database
     /// </summary>
     public void SaveProject(SerializableProject serializableProject) {
-        AssetManager.Instance.UploadModelsToWeb(SelectedProject.ProjectName);
         ImageManager.Instance.UploadImagesToServer(SelectedProject.ProjectName);
         MemoryLogger.Log("After starting model and image uploads");
         string serializedProject = JsonUtility.ToJson(serializableProject);
@@ -77,7 +75,6 @@ public class ProjectManager : Singleton<ProjectManager> {
 
         onFinished?.Invoke(downloadedData, true);
     }
-
 
     #region Project List actions
 

@@ -25,7 +25,7 @@ public class SurveyUIBuilder : MonoBehaviour {
 #if UNITY_EDITOR
     private void OnValidate() {
         if (fullscreenImageOverlayTemplate == null) {
-            fullscreenImageOverlayTemplate = UnityEditor.AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/_Features/Survey/UI/FullscreenImageOverlay.uxml");
+            fullscreenImageOverlayTemplate = UnityEditor.AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/_Features/RuntimeCore/Features/Survey/UI/FullscreenImageOverlay.uxml");
         }
     }
 #endif

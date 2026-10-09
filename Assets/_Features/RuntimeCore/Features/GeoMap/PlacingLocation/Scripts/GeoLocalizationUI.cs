@@ -39,11 +39,11 @@ public class GeoLocalizationUI : UIBehaviour {
 
     public void OnExit() {
         if (_firstOpen) {
-            EditorManager.Instance.GeoMapManager.LeaveToMenu((exitSuccess) => {
+            GeoMapManager.Instance.LeaveToMenu((exitSuccess) => {
                 if (exitSuccess) UIManager.Instance.HideUI(UIType.GeoLocalizationUI);
             });
         } else {
-            EditorManager.Instance.GeoMapManager.ExitGeoLocalization();
+            GeoMapManager.Instance.ExitGeoLocalization();
         }
     }
 
@@ -81,7 +81,7 @@ public class GeoLocalizationUI : UIBehaviour {
     public void ZoomToScale() {
         float zoomScale;
         if (float.TryParse(ZoomScaleInputFieldReff.text, out zoomScale)) {
-            EditorManager.Instance.GeoMapManager.ZoomToFitScale(zoomScale, 1f);
+            GeoMapManager.Instance.ZoomToFitScale(zoomScale, 1f);
         }
     }
 }

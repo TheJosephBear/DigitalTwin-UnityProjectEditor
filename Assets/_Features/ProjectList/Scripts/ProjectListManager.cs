@@ -40,7 +40,6 @@ public class ProjectListManager : Singleton<ProjectListManager> {
         bool downloadFinished = false;
 
         UIManager.Instance.ShowUI(UIType.LoadingScreen);
-        print("started project download");
         StartCoroutine(ProjectManager.Instance.DownloadProjectData(projectMetadata, (list, success) => {
             downloadFinished = true;
         }));
@@ -48,14 +47,10 @@ public class ProjectListManager : Singleton<ProjectListManager> {
         while (!downloadFinished)
             yield return null;
 
-        print(" project downloaded");
         MemoryLogger.Log($"After downloading project data {projectMetadata.projectName}");
-        print(" loading editor");
         var loading = SceneLoadingManager.Instance.LoadSceneAsync(SceneType.Editing, 0f);
         while (!loading.IsCompleted)
             yield return null;
-
-        print("editor loaded");
 
       //  UIManager.Instance.HideUI(UIType.LoadingScreen);
         UIManager.Instance.HideUI(UIType.ProjectsList);

@@ -27,13 +27,14 @@ public class EditorInitializer : MonoBehaviour, Iinitializer {
     public IEnumerator InitializeCoroutine() {
         UIManager.Instance.ShowUI(UIType.LoadingScreen);
         SceneLoadingManager.Instance.SetActiveScene(SceneType.Editing);
+        EditorManager.Instance.OpenedProject = ProjectManager.Instance.SelectedProject;
 
         // Wait for project deserialization
         yield return StartCoroutine(_projectDeserializer.DeserializeProjectCoroutinable(
             ProjectManager.Instance.SelectedProject));
         MemoryLogger.Log("After editor project deserialization");
 
-        if (!EditorManager.Instance.MapManager.IsBaseMapUploaded()) {
+        if (!MapManager.Instance.IsBaseMapUploaded()) {
             EditorManager.Instance.ChangeState(AppState.GeoLocalization);
         } else {
             EditorManager.Instance.ChangeState(AppState.Freecam);

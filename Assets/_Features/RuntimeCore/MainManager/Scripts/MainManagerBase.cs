@@ -17,17 +17,13 @@ public abstract class MainManagerBase : Singleton<MainManagerBase> {
 
     [Header("Service refferences")]
     public EditorProjectSerializer ProjectSerializer;
-    public CameraManager EditorCameraManager;
-    public MapManager MapManager;
-    public GeoMapManager GeoMapManager;
-    public ViewManager ViewManager;
-    public MultiViewManager MultiViewManager;
-    public SurveyManager SurveyManager;
 
     [Header("State parent")]
     public GameObject StateParent;
     List<StateBase> _stateScripts = new List<StateBase>();
 
+    [HideInInspector]
+    public Project OpenedProject;
 
     [HideInInspector]
     public AppState ActiveState { get; private set; }

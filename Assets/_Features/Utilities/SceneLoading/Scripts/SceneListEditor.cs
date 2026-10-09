@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 
 using System.Collections.Generic;
 using System.IO;
@@ -47,8 +47,16 @@ public class SceneListEditor : Editor {
     }
 
     private void GenerateSceneEnum(SceneList sceneList) {
+        MonoScript script = MonoScript.FromScriptableObject(this);
+        string scriptPath = AssetDatabase.GetAssetPath(script);
+        string scriptDirectory = Path.GetDirectoryName(scriptPath);
+        string targetDirectory = Path.Combine(scriptDirectory, "Enums");
+        if (!Directory.Exists(targetDirectory)) {
+            Directory.CreateDirectory(targetDirectory);
+        }
+
         string enumName = "SceneType";
-        string folderPath = "Assets/Enums";
+        string folderPath = targetDirectory;
 
         if (!Directory.Exists(folderPath)) {
             Directory.CreateDirectory(folderPath);

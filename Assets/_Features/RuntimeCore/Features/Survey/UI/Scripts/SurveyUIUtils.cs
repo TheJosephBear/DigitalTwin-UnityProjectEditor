@@ -22,7 +22,7 @@ public static class SurveyUIUtils {
 
 #if UNITY_EDITOR
         if (template == null) {
-            template = UnityEditor.AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/_Features/Survey/UI/FullscreenImageOverlay.uxml");
+            template = UnityEditor.AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/_Features/RuntimeCore/Features/Survey/UI/FullscreenImageOverlay.uxml");
         }
 #endif
 

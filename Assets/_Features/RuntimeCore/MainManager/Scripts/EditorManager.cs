@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using UnityEngine;
 
 public class EditorManager : MainManagerBase {
 
@@ -52,8 +53,8 @@ public class EditorManager : MainManagerBase {
 
     void ClearManagers() {
         AssetManager.Instance.ClearManager();
-        MapManager.ClearEverything();
-        ViewManager.ClearEverything();
+        MapManager.Instance.ClearEverything();
+        ViewManager.Instance.ClearEverything();
         ImageManager.Instance.ClearManager();
     }
 }

@@ -2,7 +2,6 @@ using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -95,8 +94,8 @@ public class ViewManager : Singleton<ViewManager> {
         Vector3 spawnPos = Vector3.zero;
         Quaternion spawnRot = Quaternion.identity;
 
-        if (EditorManager.Instance?.EditorCameraManager != null) {
-            var freecam = EditorManager.Instance.EditorCameraManager.GetFreeCamTransform();
+        if (CameraManager.Instance != null) {
+            var freecam = CameraManager.Instance.GetFreeCamTransform();
             if (freecam != null) {
                 spawnPos = freecam.position;
                 spawnRot = freecam.rotation;
@@ -198,7 +197,7 @@ public class ViewManager : Singleton<ViewManager> {
     #endregion
 
     public void MoveMainCamToActiveViewPoint() {
-        GameObject freeCam = MainManagerBase.Instance.EditorCameraManager.GetFreeCamVcam();
+        GameObject freeCam = CameraManager.Instance.GetFreeCamVcam();
         freeCam.transform.position = _activeViewPoint.transform.position;
         freeCam.transform.rotation = _activeViewPoint.transform.rotation;
     }

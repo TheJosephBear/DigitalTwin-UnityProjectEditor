@@ -470,7 +470,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
 
         // Restore survey viewpoint
         if (MainManagerBase.Instance != null && !string.IsNullOrEmpty(survey.ViewPointId)) {
-            ViewPoint vp = MainManagerBase.Instance.ViewManager.GetViewPointByID(survey.ViewPointId);
+            ViewPoint vp = ViewManager.Instance.GetViewPointByID(survey.ViewPointId);
             if (vp != null && _surveyCameraDropdown != null) {
                 _surveyCameraDropdown.SetValueWithoutNotify(vp.Name);
                 SetSurveyViewPointRender(survey.ViewPointId);
@@ -498,7 +498,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
 
             // Set selected viewpoint
             if (MainManagerBase.Instance != null && !string.IsNullOrEmpty(question.ViewPointId)) {
-                ViewPoint vp = MainManagerBase.Instance.ViewManager.GetViewPointByID(question.ViewPointId);
+                ViewPoint vp = ViewManager.Instance.GetViewPointByID(question.ViewPointId);
                 if (vp != null) {
                     (questionUI as SurveyQuestionUIEditor).SetSelectedView(vp);
                 }
