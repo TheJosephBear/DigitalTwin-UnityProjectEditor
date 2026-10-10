@@ -138,10 +138,10 @@
     border-width: 0;
     margin: 0;
     padding: 0;
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-up.png?fileID=2800000&guid=13e6e2a9f27e5874eab92e305adb3fa1&type=3#chevron-up");
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/chevron-up.png?fileID=2800000&guid=13e6e2a9f27e5874eab92e305adb3fa1&type=3#chevron-up");
     -unity-background-scale-mode: scale-to-fit;
     -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
     transition-property: -unity-background-image-tint-color;
     transition-duration: 0.15s;
 }
@@ -160,10 +160,10 @@
     border-width: 0;
     margin: 0;
     padding: 0;
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-up.png?fileID=2800000&guid=13e6e2a9f27e5874eab92e305adb3fa1&type=3#chevron-up");
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/chevron-up.png?fileID=2800000&guid=13e6e2a9f27e5874eab92e305adb3fa1&type=3#chevron-up");
     -unity-background-scale-mode: scale-to-fit;
     -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
     transition-property: -unity-background-image-tint-color;
     transition-duration: 0.15s;
 }
@@ -182,32 +182,32 @@
     border-width: 0;
     margin: 0;
     padding: 0;
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-up.png?fileID=2800000&guid=13e6e2a9f27e5874eab92e305adb3fa1&type=3#chevron-up");
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/chevron-up.png?fileID=2800000&guid=13e6e2a9f27e5874eab92e305adb3fa1&type=3#chevron-up");
     -unity-background-scale-mode: scale-to-fit;
     -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
     transition-property: -unity-background-image-tint-color;
     transition-duration: 0.15s;
 }
 
 .unity-scroller--vertical > .unity-scroller__low-button:hover {
     -unity-background-image-tint-color: var(--primary-color);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .unity-scroller--vertical #unity-low-button:hover {
     -unity-background-image-tint-color: var(--primary-color);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .unity-scroller--vertical > .unity-scroller__low-button:active {
     -unity-background-image-tint-color: var(--primary-hover);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .unity-scroller--vertical #unity-low-button:active {
     -unity-background-image-tint-color: var(--primary-hover);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .unity-scroller--vertical > .unity-scroller__low-button > VisualElement {
@@ -238,10 +238,10 @@
     border-width: 0;
     margin: 0;
     padding: 0;
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-down.png?fileID=2800000&guid=d1a74cec442a2284589bab0730540f72&type=3#chevron-down");
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/chevron-down.png?fileID=2800000&guid=d1a74cec442a2284589bab0730540f72&type=3#chevron-down");
     -unity-background-scale-mode: scale-to-fit;
     -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
     transition-property: -unity-background-image-tint-color;
     transition-duration: 0.15s;
 }
@@ -260,10 +260,10 @@
     border-width: 0;
     margin: 0;
     padding: 0;
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-down.png?fileID=2800000&guid=d1a74cec442a2284589bab0730540f72&type=3#chevron-down");
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/chevron-down.png?fileID=2800000&guid=d1a74cec442a2284589bab0730540f72&type=3#chevron-down");
     -unity-background-scale-mode: scale-to-fit;
     -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
     transition-property: -unity-background-image-tint-color;
     transition-duration: 0.15s;
 }
@@ -282,32 +282,32 @@
     border-width: 0;
     margin: 0;
     padding: 0;
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-down.png?fileID=2800000&guid=d1a74cec442a2284589bab0730540f72&type=3#chevron-down");
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/chevron-down.png?fileID=2800000&guid=d1a74cec442a2284589bab0730540f72&type=3#chevron-down");
     -unity-background-scale-mode: scale-to-fit;
     -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
     transition-property: -unity-background-image-tint-color;
     transition-duration: 0.15s;
 }
 
 .unity-scroller--vertical > .unity-scroller__high-button:hover {
     -unity-background-image-tint-color: var(--primary-color);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .unity-scroller--vertical #unity-high-button:hover {
     -unity-background-image-tint-color: var(--primary-color);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .unity-scroller--vertical > .unity-scroller__high-button:active {
     -unity-background-image-tint-color: var(--primary-hover);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .unity-scroller--vertical #unity-high-button:active {
     -unity-background-image-tint-color: var(--primary-hover);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .unity-scroller--vertical > .unity-scroller__high-button > VisualElement {
@@ -336,10 +336,10 @@
     border-width: 0;
     margin: 0;
     padding: 0;
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-left.png?fileID=2800000&guid=4ab49af5e05cd304a88ca8241e489d55&type=3#chevron-left");
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/chevron-left.png?fileID=2800000&guid=4ab49af5e05cd304a88ca8241e489d55&type=3#chevron-left");
     -unity-background-scale-mode: scale-to-fit;
     -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .unity-scroller--horizontal #unity-low-button {
@@ -354,10 +354,10 @@
     border-width: 0;
     margin: 0;
     padding: 0;
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-left.png?fileID=2800000&guid=4ab49af5e05cd304a88ca8241e489d55&type=3#chevron-left");
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/chevron-left.png?fileID=2800000&guid=4ab49af5e05cd304a88ca8241e489d55&type=3#chevron-left");
     -unity-background-scale-mode: scale-to-fit;
     -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .unity-scroller--horizontal > .unity-scroller__high-button {
@@ -372,10 +372,10 @@
     border-width: 0;
     margin: 0;
     padding: 0;
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-right.png?fileID=2800000&guid=05c0e935411a9e64383e2a9a89216d33&type=3#chevron-right");
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/chevron-right.png?fileID=2800000&guid=05c0e935411a9e64383e2a9a89216d33&type=3#chevron-right");
     -unity-background-scale-mode: scale-to-fit;
     -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .unity-scroller--horizontal #unity-high-button {
@@ -390,10 +390,10 @@
     border-width: 0;
     margin: 0;
     padding: 0;
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-right.png?fileID=2800000&guid=05c0e935411a9e64383e2a9a89216d33&type=3#chevron-right");
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/chevron-right.png?fileID=2800000&guid=05c0e935411a9e64383e2a9a89216d33&type=3#chevron-right");
     -unity-background-scale-mode: scale-to-fit;
     -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .unity-scroller--horizontal > .unity-scroller__low-button > VisualElement {
@@ -757,7 +757,7 @@ CustomRadioButton {
     align-items: center;
     flex-grow: 1;
     flex-shrink: 1;
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 CustomToggleButton {
@@ -765,11 +765,11 @@ CustomToggleButton {
     align-items: center;
     flex-grow: 1;
     flex-shrink: 1;
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 CustomRadioButtonNoText {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 CustomRadioButton > Toggle {
@@ -1301,7 +1301,7 @@ CustomRadioButtonNoText RadioButton:checked .unity-radio-button__input > .unity-
 CustomRadioButton Toggle:checked .unity-toggle__checkmark {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/dot-white.png?fileID=2800000&guid=a123529c3fb34d638d526d7deabd69f5&type=3#dot-white");
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/dot-white.png?fileID=2800000&guid=a123529c3fb34d638d526d7deabd69f5&type=3#dot-white");
     -unity-background-scale-mode: scale-to-fit;
     -unity-background-image-tint-color: rgb(255, 255, 255);
 }
@@ -1309,7 +1309,7 @@ CustomRadioButton Toggle:checked .unity-toggle__checkmark {
 CustomRadioButtonNoText Toggle:checked .unity-toggle__checkmark {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/dot-white.png?fileID=2800000&guid=a123529c3fb34d638d526d7deabd69f5&type=3#dot-white");
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/dot-white.png?fileID=2800000&guid=a123529c3fb34d638d526d7deabd69f5&type=3#dot-white");
     -unity-background-scale-mode: scale-to-fit;
     -unity-background-image-tint-color: rgb(255, 255, 255);
 }
@@ -1324,7 +1324,7 @@ CustomRadioButtonNoText RadioButton:checked > .unity-radio-button__input > .unit
 CustomRadioButtonNoText RadioButton:checked > .unity-radio-button__checkmark {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/dot-white.png?fileID=2800000&guid=a123529c3fb34d638d526d7deabd69f5&type=3#dot-white");
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/dot-white.png?fileID=2800000&guid=a123529c3fb34d638d526d7deabd69f5&type=3#dot-white");
     -unity-background-scale-mode: scale-to-fit;
     -unity-background-image-tint-color: rgb(255, 255, 255);
 }
@@ -1332,7 +1332,7 @@ CustomRadioButtonNoText RadioButton:checked > .unity-radio-button__checkmark {
 CustomToggleButton Toggle:checked .unity-toggle__checkmark {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/check-white.png?fileID=2800000&guid=631e4421e2e8456f9d8d1bb1e039336b&type=3#check-white");
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/check-white.png?fileID=2800000&guid=631e4421e2e8456f9d8d1bb1e039336b&type=3#check-white");
     -unity-background-scale-mode: scale-to-fit;
     -unity-background-image-tint-color: rgb(255, 255, 255);
 }
@@ -1340,7 +1340,7 @@ CustomToggleButton Toggle:checked .unity-toggle__checkmark {
 CustomToggleButton RadioButton:checked .unity-radio-button__checkmark {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/check-white.png?fileID=2800000&guid=631e4421e2e8456f9d8d1bb1e039336b&type=3#check-white");
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/check-white.png?fileID=2800000&guid=631e4421e2e8456f9d8d1bb1e039336b&type=3#check-white");
     -unity-background-scale-mode: scale-to-fit;
     -unity-background-image-tint-color: rgb(255, 255, 255);
 }
@@ -1369,7 +1369,7 @@ CustomRadioButton TextField,
 CustomRadioButton TextField *,
 CustomToggleButton TextField,
 CustomToggleButton TextField * {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
 }
 
 CustomRadioButton > RadioButton,
@@ -1390,7 +1390,7 @@ CustomToggleButton > Toggle *,
 .unity-toggle__checkmark,
 .grid-cell-container,
 .grid-cell-container * {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 CustomRadioButton TextField > .unity-base-text-field__input {
@@ -1541,7 +1541,7 @@ RadioButtonGroup > TemplateContainer {
 
 #edit-option-button {
     flex-grow: 0;
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/dots-vertical.png?fileID=2800000&guid=2040f2cd9ea79384fa550b86e042f01b&type=3#dots-vertical");
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/dots-vertical.png?fileID=2800000&guid=2040f2cd9ea79384fa550b86e042f01b&type=3#dots-vertical");
     width: 32px;
     height: 32px;
     -unity-background-scale-mode: scale-to-fit;
@@ -1550,7 +1550,7 @@ RadioButtonGroup > TemplateContainer {
 
 #edit-col-button {
     flex-grow: 0;
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/dots-horizontal.png?fileID=2800000&guid=e1ed4ee9247a04641bef93df4c77be7d&type=3#dots-horizontal");
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/dots-horizontal.png?fileID=2800000&guid=e1ed4ee9247a04641bef93df4c77be7d&type=3#dots-horizontal");
     width: 32px;
     height: 26px;
     -unity-background-scale-mode: scale-and-crop;
@@ -1609,7 +1609,7 @@ Button {
 Button:hover {
     background-color: var(--secondary-background-color);
     color: var(--primary-color);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 Button:active {
@@ -1617,11 +1617,11 @@ Button:active {
 }
 
 Button VisualElement:hover {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 Button Label:hover {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 Button.icon {
@@ -1661,7 +1661,7 @@ Button.icon:disabled {
 }
 
 TextField TextElement:hover {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
 }
 
 TextField {
@@ -1809,7 +1809,7 @@ TextField:hover > .unity-base-text-field__input {
     border-right-color: rgba(103, 80, 164, 0.22);
     border-bottom-color: rgba(103, 80, 164, 0.22);
     border-left-color: rgba(103, 80, 164, 0.22);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
 }
 
 TextField:hover > #unity-text-input {
@@ -1818,7 +1818,7 @@ TextField:hover > #unity-text-input {
     border-right-color: rgba(103, 80, 164, 0.22);
     border-bottom-color: rgba(103, 80, 164, 0.22);
     border-left-color: rgba(103, 80, 164, 0.22);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
 }
 
 TextField:hover .unity-base-text-field__input {
@@ -1827,7 +1827,7 @@ TextField:hover .unity-base-text-field__input {
     border-right-color: rgba(103, 80, 164, 0.22);
     border-bottom-color: rgba(103, 80, 164, 0.22);
     border-left-color: rgba(103, 80, 164, 0.22);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
 }
 
 TextField:hover #unity-text-input {
@@ -1836,7 +1836,7 @@ TextField:hover #unity-text-input {
     border-right-color: rgba(103, 80, 164, 0.22);
     border-bottom-color: rgba(103, 80, 164, 0.22);
     border-left-color: rgba(103, 80, 164, 0.22);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
 }
 
 TextField:hover TextInput {
@@ -1845,7 +1845,7 @@ TextField:hover TextInput {
     border-right-color: rgba(103, 80, 164, 0.22);
     border-bottom-color: rgba(103, 80, 164, 0.22);
     border-left-color: rgba(103, 80, 164, 0.22);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/ibeam_32thin.png?fileID=2800000&guid=02d5e55818938834894e19a703e94dab&type=3#ibeam_32thin") 16 16;
 }
 
 TextField:focus > .unity-base-text-field__input {
@@ -2787,7 +2787,7 @@ TemplateContainer.active-question {
 }
 
 .required-label:hover {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 DropdownField {
@@ -3635,11 +3635,11 @@ GenericDropdownMenu {
 }
 
 .switch-pill:hover {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .switch-pill .unity-toggle__input:hover {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .question-section-spacer {
@@ -3976,7 +3976,7 @@ GenericDropdownMenu {
 }
 
 .icon-trash {
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/trash-can-outline.png?fileID=2800000&guid=7ad15b4efd0e279438b167e4bed1c7e6&type=3#trash-can-outline");
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/trash-can-outline.png?fileID=2800000&guid=7ad15b4efd0e279438b167e4bed1c7e6&type=3#trash-can-outline");
     -unity-background-scale-mode: scale-to-fit;
     width: 28px;
     height: 28px;
@@ -3997,7 +3997,7 @@ GenericDropdownMenu {
 }
 
 .icon-move-up {
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-up.png?fileID=2800000&guid=13e6e2a9f27e5874eab92e305adb3fa1&type=3#chevron-up");
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/chevron-up.png?fileID=2800000&guid=13e6e2a9f27e5874eab92e305adb3fa1&type=3#chevron-up");
     -unity-background-scale-mode: scale-to-fit;
     width: 28px;
     height: 28px;
@@ -4022,7 +4022,7 @@ GenericDropdownMenu {
 }
 
 .icon-move-down {
-    background-image: url("project://database/Assets/_Features/Survey/UI/Icons/chevron-down.png?fileID=2800000&guid=d1a74cec442a2284589bab0730540f72&type=3#chevron-down");
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/chevron-down.png?fileID=2800000&guid=d1a74cec442a2284589bab0730540f72&type=3#chevron-down");
     -unity-background-scale-mode: scale-to-fit;
     width: 28px;
     height: 28px;
@@ -4194,13 +4194,13 @@ GenericDropdownMenu {
 .grid-add-row-button:hover,
 #add-row-button:hover {
     background-color: var(--secondary-background-color);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .grid-add-col-button:hover,
 #add-column-button:hover {
     background-color: var(--secondary-background-color);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 /* Letter badge (A, B, C...) on image choice options */
@@ -4260,7 +4260,7 @@ GenericDropdownMenu {
 .add-image-option-btn:hover,
 .add-image-choice-btn:hover {
     background-color: var(--secondary-background-color);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .add-question-bar {
@@ -4338,7 +4338,7 @@ GenericDropdownMenu {
     background-color: var(--primary-background-color);
     border-color: var(--primary-color);
     -unity-background-image-tint-color: var(--primary-color);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .add-question-bar:hover #add-question-button {
@@ -4346,7 +4346,7 @@ GenericDropdownMenu {
     background-color: var(--primary-background-color);
     border-color: var(--primary-color);
     -unity-background-image-tint-color: var(--primary-color);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .add-question-button:hover {
@@ -4354,7 +4354,7 @@ GenericDropdownMenu {
     background-color: var(--primary-background-color);
     border-color: var(--primary-color);
     -unity-background-image-tint-color: var(--primary-color);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 #add-question-button:hover {
@@ -4362,7 +4362,7 @@ GenericDropdownMenu {
     background-color: var(--primary-background-color);
     border-color: var(--primary-color);
     -unity-background-image-tint-color: var(--primary-color);
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .enhance-button {
@@ -4390,13 +4390,13 @@ GenericDropdownMenu {
 .enhance-button:hover {
     background-color: rgb(255, 255, 255);
     scale: 1.1 1.1;
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .remove-button:hover {
     background-color: rgb(255, 255, 255);
     scale: 1.1 1.1;
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .enhance-button:active {
@@ -4518,95 +4518,95 @@ GenericDropdownMenu {
 }
 
 #unity-dragger {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 #unity-dragger:hover {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 #unity-dragger:active {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 #unity-dragger:focus {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .unity-base-slider__dragger {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .unity-base-slider__dragger:hover {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .unity-base-slider__dragger:active {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .unity-base-slider__dragger:focus {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .scale-slider {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .scale-slider:hover {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .scale-slider:active {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .scale-slider.is-dragging {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .scale-slider.is-dragging * {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .scale-slider #unity-dragger {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .scale-slider #unity-dragger:hover {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .scale-slider #unity-dragger:active {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .scale-slider #unity-dragger:focus {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .scale-slider .unity-base-slider__dragger {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .scale-slider .unity-base-slider__dragger:hover {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .scale-slider .unity-base-slider__dragger:active {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .scale-slider .unity-base-slider__dragger:focus {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .scale-slider .unity-base-slider__drag-container {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .scale-slider .unity-base-slider__tracker {
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .scale-slider {
@@ -4763,7 +4763,7 @@ GenericDropdownMenu {
     margin-right: 12px;
     justify-content: center;
     align-items: center;
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
     transition-property: background-color, border-color, scale;
     transition-duration: 0.15s;
     scale: 1 1;
@@ -4782,7 +4782,7 @@ GenericDropdownMenu {
     margin-right: 12px;
     justify-content: center;
     align-items: center;
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
     transition-property: background-color, border-color, scale;
     transition-duration: 0.15s;
     scale: 1 1;
@@ -4840,7 +4840,7 @@ GenericDropdownMenu {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
     transition-property: background-color, scale;
     transition-duration: 0.15s;
     scale: 1 1;
@@ -4857,7 +4857,7 @@ GenericDropdownMenu {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
     transition-property: background-color, scale;
     transition-duration: 0.15s;
     scale: 1 1;
@@ -5000,7 +5000,7 @@ GenericDropdownMenu {
     border-radius: 8px;
     border-width: 0;
     background-color: transparent;
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
     transition-property: background-color, scale;
     transition-duration: 0.12s;
     scale: 1 1;
@@ -5009,7 +5009,7 @@ GenericDropdownMenu {
 .question-selection-item:hover {
     background-color: var(--secondary-background-color);
     scale: 1.015 1.015;
-    cursor: url("project://database/Assets/_Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
 .question-selection-item:active {

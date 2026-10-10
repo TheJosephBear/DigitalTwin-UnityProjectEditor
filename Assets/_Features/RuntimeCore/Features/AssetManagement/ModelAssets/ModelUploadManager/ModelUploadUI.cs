@@ -87,6 +87,8 @@ public class ModelUploadUI : UIBehaviour {
         }
 
      //   UpdateProgress(0f, true);
+        // TODO: Start uploading the picked files to the server right here instead of on project save
+        //       (currently AssetManager.SerializeAssetList -> UploadModelsToWeb re-uploads every model on each save).
         ModelUploadManager.Instance.AddFiles(files);
 
         /*
