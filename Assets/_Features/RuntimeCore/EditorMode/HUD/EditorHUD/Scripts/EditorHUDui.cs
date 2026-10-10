@@ -1,9 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine;
 
-public class EditorHUDui : UIBehaviour {
+public class EditorHUDui : UIBehaviour, IProjectSettingsListener {
 
     public UISwitcher.UISwitcher CameraCollisionToggleRef;
+    public GameObject MultiviewButton;
+    public GameObject FPSButton;
+    public GameObject SurveyButton;
 
     public override void Show() {
         base.Show();
@@ -11,18 +13,26 @@ public class EditorHUDui : UIBehaviour {
         UIManager.Instance.SetRaycasterFromLatestUI();
     }
 
+    public void OnSettingsChanged(ProjectSettingsSerializable settings) {
+        MultiviewButton.SetActive(settings.multiviewAllowed);
+        FPSButton.SetActive(settings.firstPersonAllowed);
+        SurveyButton.SetActive(settings.surveyAllowed);
+    }
+
     #region Button visual event change
 
     private void OnEnable() {
-      /*  GlobalSettings.OnSettingsLoadedOrChanged += HandleSettingsUpdated;
+        ProjectSettingsManager.Instance.AddObserver(this);
+        /*  GlobalSettings.OnSettingsLoadedOrChanged += HandleSettingsUpdated;
 
-        if (GlobalSettings.Instance != null && GlobalSettings.Instance.IsLoaded) {
-            HandleSettingsUpdated(GlobalSettings.Instance.Data);
-        }*/
+          if (GlobalSettings.Instance != null && GlobalSettings.Instance.IsLoaded) {
+              HandleSettingsUpdated(GlobalSettings.Instance.Data);
+          }*/
     }
 
     private void OnDisable() {
-     //  GlobalSettings.OnSettingsLoadedOrChanged -= HandleSettingsUpdated;
+        ProjectSettingsManager.Instance.AddObserver(this);
+        //  GlobalSettings.OnSettingsLoadedOrChanged -= HandleSettingsUpdated;
     }
     /*
     private void HandleSettingsUpdated(GlobalSettings.SettingsData data) {
@@ -89,6 +99,10 @@ public class EditorHUDui : UIBehaviour {
 
     public void OnColissionToggle(bool toggleOn) {
         CameraManager.Instance.ToggleCameraCollision(toggleOn);
+    }
+
+    public void OnSettings() {
+        ProjectSettingsManager.Instance.ToggleUI(true);
     }
 
     #endregion

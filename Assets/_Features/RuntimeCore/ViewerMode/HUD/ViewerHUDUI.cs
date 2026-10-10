@@ -1,9 +1,16 @@
 using UnityEngine;
 
-public class ViewerHUDUI : UIBehaviour {
+public class ViewerHUDUI : UIBehaviour, IProjectSettingsListener {
 
     public GameObject SurveyButton;
     public GameObject MultiviewButton;
+    public GameObject FPSButton;
+
+    public void OnSettingsChanged(ProjectSettingsSerializable settings) {
+        MultiviewButton.SetActive(settings.multiviewAllowed);
+        FPSButton.SetActive(settings.firstPersonAllowed);
+        SurveyButton.SetActive(settings.surveyAllowed);
+    }
 
     public void DisableUnneededButtons() {
         SurveyManager.Instance?.CheckHasValidSurvey((result) => {
@@ -12,12 +19,6 @@ public class ViewerHUDUI : UIBehaviour {
             }
         });
 
-        print("Disabling...");
-        print("Disabling...");
-        print("Disabling...");
-        print($"MapManager.Instance {MapManager.Instance}");
-        print($"!MapManager.Instance.HasVariant() {!MapManager.Instance.HasVariant()}");
-        print($"MultiviewButton != null {MultiviewButton != null}"); // THIS IS FALSE SOMEHOW EVEN THOUGH ITS ADDED IN INSPECTOR
         if (MapManager.Instance != null && !MapManager.Instance.HasVariant()) {
             if (MultiviewButton != null) {
                 MultiviewButton.SetActive(false);
@@ -31,6 +32,14 @@ public class ViewerHUDUI : UIBehaviour {
 
     public void OnMultiView() {
 
+    }
+
+    private void OnEnable() {
+        ProjectSettingsManager.Instance.AddObserver(this);
+    }
+
+    private void OnDisable() {
+        ProjectSettingsManager.Instance.AddObserver(this);
     }
 
 }

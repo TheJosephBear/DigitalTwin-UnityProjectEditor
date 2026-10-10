@@ -96,6 +96,7 @@ public class CameraManager: Singleton<CameraManager> {
         //    GlobalSettings.Instance.Set(a => a.IsCameraCollisionOn = toggleOn);
         CameraColissionScriptRef.enabled = toggleOn;
         _isCollisionEnabled = CameraColissionScriptRef.enabled;
+        ProjectSettingsManager.Instance.EditorCameraCollision = toggleOn;
     }
 
     public void InitializeFreeCamBounds(GameObject baseMapGameObject) {

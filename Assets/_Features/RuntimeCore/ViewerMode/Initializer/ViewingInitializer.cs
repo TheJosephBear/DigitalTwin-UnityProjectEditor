@@ -67,6 +67,9 @@ public class ViewingInitializer : MonoBehaviour, Iinitializer {
         MemoryLogger.Log("After viewer project deserialization");
         MainManagerBase.Instance.ChangeState(AppState.Freecam);
 
+        CameraManager.Instance.ToggleCameraCollision(ProjectSettingsManager.Instance.ViewerCameraCollision);
+        if (!ProjectSettingsManager.Instance.SurveyAllowed) yield break;
+
         SurveyManager.Instance.CheckHasValidSurvey((result) => {
             print("VALID SURVEYX RESULT: " + result);
             // Don't auto-open the survey if this client already submitted it

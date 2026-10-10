@@ -19,7 +19,8 @@ public class EditorProjectSerializer : MonoBehaviour {
             serializableMapManager = MapManager.Instance.Serialize(),
             serializableViewPointManager = ViewManager.Instance.Serialize(),
             serializableGeoMapManager = GeoMapManager.Instance.SerializeManager(),
-            serializableSun = SunManager.Instance.Serialize()
+            serializableSun = SunManager.Instance.Serialize(),
+            serializableSettings = ProjectSettingsManager.Instance.Serialize()
         };
         return serializableProject;
     }
@@ -51,6 +52,11 @@ public class EditorProjectSerializer : MonoBehaviour {
         ViewManager.Instance.Deserialize(serializedProject.serializableViewPointManager);
         GeoMapManager.Instance.DeserializeManager(serializedProject.serializableGeoMapManager);
         SunManager.Instance.Deserialize(serializedProject.serializableSun, GeoMapManager.Instance.GetCoordinates());
+        if(serializedProject.serializableSettings != null)
+            ProjectSettingsManager.Instance.Deserialize(serializedProject.serializableSettings);
+        // this hurts my soul
+        CameraManager.Instance.ToggleCameraCollision(ProjectSettingsManager.Instance.EditorCameraCollision);
+        FindAnyObjectByType<EditorHUDui>().CameraCollisionToggleRef.SetWithoutNotify(ProjectSettingsManager.Instance.EditorCameraCollision);
 
         UIManager.Instance.HideUI(UIType.LoadingScreen);
     }

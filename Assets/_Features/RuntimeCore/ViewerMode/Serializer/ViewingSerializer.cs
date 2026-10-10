@@ -36,5 +36,7 @@ public class ViewingSerializer : MonoBehaviour {
         if (GeoMapManager.Instance != null)
             GeoMapManager.Instance.DeserializeManager(serializedProject.serializableGeoMapManager);
 
+        if (serializedProject.serializableSettings != null)
+            ProjectSettingsManager.Instance.Deserialize(serializedProject.serializableSettings);
     }
 }
