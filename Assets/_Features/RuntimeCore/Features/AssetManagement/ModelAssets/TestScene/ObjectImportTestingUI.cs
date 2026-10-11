@@ -79,7 +79,7 @@ public class ObjectImportTestingUI : MonoBehaviour {
     IEnumerator DeserializeCoroutine(Project project) {
         SerializableProject serializedProject = project.SerializableProject;
 
-        // Wait for asset manager
+        // Wait for asset _manager
         bool isAssetDeserializationComplete = false;
         AssetManager.Instance.DeserializeAssetList(serializedProject.serializableModelAssets, () => {
             isAssetDeserializationComplete = true;

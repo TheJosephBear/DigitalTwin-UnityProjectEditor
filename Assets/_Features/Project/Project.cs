@@ -46,6 +46,7 @@ public class SerializableProject {
     public SerializableGeoMapManager serializableGeoMapManager;
     public SerializableSun serializableSun;
     public ProjectSettingsSerializable serializableSettings;
+    public SerializableFPSManager serializableFPS;
     //    public List<SerializableDecorationPreset> decorationPresets;
     //    public List<SerializableDecorationInstantiated> decorationsInstantiated;
 }

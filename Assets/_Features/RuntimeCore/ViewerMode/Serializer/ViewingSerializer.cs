@@ -38,5 +38,8 @@ public class ViewingSerializer : MonoBehaviour {
 
         if (serializedProject.serializableSettings != null)
             ProjectSettingsManager.Instance.Deserialize(serializedProject.serializableSettings);
+
+        if (serializedProject.serializableFPS != null)
+            FPSManager.Instance.Deserialize(serializedProject.serializableFPS);
     }
 }

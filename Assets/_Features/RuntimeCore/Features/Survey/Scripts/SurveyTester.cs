@@ -16,7 +16,7 @@ public class SurveyTester : MonoBehaviour, IInitializationListener {
 
     void Test() {
         if (_viewManager == null) {
-            Debug.LogError("View manager could not be found in scene!");
+            Debug.LogError("View _manager could not be found in scene!");
         }
         _viewManager.CreateNewViewPoint(updateUI: false);
         _viewManager.CreateNewViewPoint(updateUI: false);
@@ -44,7 +44,7 @@ public class SurveyTester : MonoBehaviour, IInitializationListener {
         }
     }
 
-    // Waiting for survey manager to instantiate his stuff
+    // Waiting for survey _manager to instantiate his stuff
     // In scenes used in the app this wait wont be needed
     IEnumerator WaitForInit() {
         yield return new WaitForSeconds(0.2f);

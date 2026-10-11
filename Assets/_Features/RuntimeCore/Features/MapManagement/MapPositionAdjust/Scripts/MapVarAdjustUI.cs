@@ -23,7 +23,7 @@ public class MapVarAdjustUI : MonoBehaviour { // Or UIBehaviour depending on you
         Vector3 pos = manager.GetPosition();
         Vector3 rot = manager.GetRotationEuler();
 
-        // Safety check: If the manager already has NaN, don't let it touch the UI strings
+        // Safety check: If the _manager already has NaN, don't let it touch the UI strings
         if (float.IsNaN(pos.x) || float.IsNaN(rot.x)) return;
 
         // Set the flag to true so our listeners know to ignore these changes

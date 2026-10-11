@@ -4,7 +4,8 @@ public class EditorHUDui : UIBehaviour, IProjectSettingsListener {
 
     public UISwitcher.UISwitcher CameraCollisionToggleRef;
     public GameObject MultiviewButton;
-    public GameObject FPSButton;
+    public GameObject FPSEnterButton;
+    public GameObject FPSSettingsButton;
     public GameObject SurveyButton;
 
     public override void Show() {
@@ -15,7 +16,8 @@ public class EditorHUDui : UIBehaviour, IProjectSettingsListener {
 
     public void OnSettingsChanged(ProjectSettingsSerializable settings) {
         MultiviewButton.SetActive(settings.multiviewAllowed);
-        FPSButton.SetActive(settings.firstPersonAllowed);
+        FPSEnterButton.SetActive(settings.firstPersonAllowed);
+        FPSSettingsButton.SetActive(settings.firstPersonAllowed);
         SurveyButton.SetActive(settings.surveyAllowed);
     }
 

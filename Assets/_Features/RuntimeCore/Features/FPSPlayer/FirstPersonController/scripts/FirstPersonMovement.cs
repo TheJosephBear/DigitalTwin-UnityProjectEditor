@@ -14,6 +14,7 @@ public class FirstPersonMovement: MonoBehaviour {
     public float movementSmoothing = 1f;
     public float slopeSlideDownSpeed = 1f;
     public float slopeSlideDownRaycastLength = 3f;
+    public float groundedStickVelocity = -2f;   // small downward push that keeps the controller grounded
 
     [Header("Sprinting and Stamina")]
     public bool sprintAllowed = true;
@@ -58,13 +59,11 @@ public class FirstPersonMovement: MonoBehaviour {
         lastDirection = Vector3.Lerp(lastDirection, desiredDirection, movementSmoothing * Time.deltaTime);
         currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, movementAcceleration * Time.deltaTime);
 
-
-        if (controller.isGrounded) {
-            if (Vector3.Angle(Vector3.up, lastDirection) > controller.slopeLimit) {
-                verticalVelocity = -5f;
-            } else {
-                verticalVelocity = -0.5f;
-            }
+        // Only "stick" to the ground when we're NOT moving upwards.
+        // Otherwise this would overwrite the jump velocity set by ApplyJump()
+        // (isGrounded is still true on the first frame after a jump).
+        if (controller.isGrounded && verticalVelocity <= 0f) {
+            verticalVelocity = groundedStickVelocity;
         } else {
             verticalVelocity += gravity * Time.deltaTime;
         }
@@ -98,6 +97,18 @@ public class FirstPersonMovement: MonoBehaviour {
                 controller.Move(slideDirection * (slopeSlideDownSpeed * Time.deltaTime));
             }
         }
+    }
+
+    public bool IsGrounded() {
+        return controller.isGrounded;
+    }
+
+    public float GetGravity() {
+        return gravity;
+    }
+
+    public void ApplyJump(float jumpVelocity) {
+        verticalVelocity = jumpVelocity;
     }
 
     #region Input Public Setters

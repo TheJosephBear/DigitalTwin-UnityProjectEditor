@@ -20,7 +20,8 @@ public class EditorProjectSerializer : MonoBehaviour {
             serializableViewPointManager = ViewManager.Instance.Serialize(),
             serializableGeoMapManager = GeoMapManager.Instance.SerializeManager(),
             serializableSun = SunManager.Instance.Serialize(),
-            serializableSettings = ProjectSettingsManager.Instance.Serialize()
+            serializableSettings = ProjectSettingsManager.Instance.Serialize(),
+            serializableFPS = FPSManager.Instance.Serialize()
         };
         return serializableProject;
     }
@@ -39,7 +40,7 @@ public class EditorProjectSerializer : MonoBehaviour {
 
         SerializableProject serializedProject = project.SerializableProject;
         
-        // Wait for asset manager
+        // Wait for asset _manager
         bool isAssetDeserializationComplete = false;
         AssetManager.Instance.DeserializeAssetList(serializedProject.serializableModelAssets, () => {
             isAssetDeserializationComplete = true;
@@ -52,6 +53,8 @@ public class EditorProjectSerializer : MonoBehaviour {
         ViewManager.Instance.Deserialize(serializedProject.serializableViewPointManager);
         GeoMapManager.Instance.DeserializeManager(serializedProject.serializableGeoMapManager);
         SunManager.Instance.Deserialize(serializedProject.serializableSun, GeoMapManager.Instance.GetCoordinates());
+        if (serializedProject.serializableFPS != null)
+            FPSManager.Instance.Deserialize(serializedProject.serializableFPS);
         if(serializedProject.serializableSettings != null)
             ProjectSettingsManager.Instance.Deserialize(serializedProject.serializableSettings);
         // this hurts my soul

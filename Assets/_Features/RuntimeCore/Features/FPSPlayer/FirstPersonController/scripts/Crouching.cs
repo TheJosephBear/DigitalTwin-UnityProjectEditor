@@ -1,92 +1,123 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Crouching : MonoBehaviour {
+public class Crouching: MonoBehaviour {
+
+    [Header("References")]
+    public Transform cameraTransform;   // the camera, or the transform that holds it
+
+    [Header("Crouch")]
+    [Range(0.3f, 0.95f)]
+    public float crouchHeightRatio = 0.5f;  // crouched height as a fraction of the standing height
+    public float crouchTime = 0.15f;        // seconds for a full stand <-> crouch transition
+
+    [Header("Obstacle check")]
+    public LayerMask obstacleLayers;    // must NOT include the player's own layer
+    public float checkSkin = 0.05f;     // shrink the check radius a bit to avoid grazing walls
+
+    /// <summary>Set by PlayerSetup. When false, crouching is ignored.</summary>
+    public bool CrouchAllowed { get; set; } = true;
 
     CharacterController characterController;
     CapsuleCollider capsuleCollider;
     FirstPersonMovement firstPersonMovement;
-    public Transform cameraTransform;
 
-    public float crouchHeight = 1.0f;
-    public float standingHeight = 2.0f;
-    public float crouchSpeed = 0.1f;
-    public float cameraCrouchOffset = -0.5f;
-    float cameraOriginalHeight;
+    // Standing state
+    float standingHeight;
+    Vector3 standingCenter;
+    Vector3 standingCameraLocalPos;
+    float crouchHeight;
+    bool sprintWasAllowed;
 
-    bool isCrouching = false;
-    bool isTransitioning = false;
-    bool wasSprintingAllowed = false;
+    bool wantsCrouch;
+    float crouchAmount;                 // 0 = standing, 1 = fully crouched
 
-    // LayerMask to define what objects can block standing up
-    public LayerMask obstacleLayers;
-
-    // Length of the ray that checks for obstacles above the player's head
-    public float raycastBuffer = 0.2f;
-
-    void Start() {
+    void Awake() {
         characterController = GetComponent<CharacterController>();
         capsuleCollider = GetComponent<CapsuleCollider>();
         firstPersonMovement = GetComponent<FirstPersonMovement>();
-        cameraOriginalHeight = cameraTransform.localPosition.y;
 
-        wasSprintingAllowed = firstPersonMovement.sprintAllowed;
+        sprintWasAllowed = firstPersonMovement.sprintAllowed;
+        CaptureStandingValues();
+    }
+
+    /// <summary>Reads the current (standing) dimensions as the new baseline. Call only while standing.</summary>
+    public void CaptureStandingValues() {
+        standingHeight = characterController.height;
+        standingCenter = characterController.center;
+        standingCameraLocalPos = cameraTransform.localPosition;
+
+        // A capsule can't be shorter than its own diameter
+        crouchHeight = Mathf.Clamp(standingHeight * crouchHeightRatio, characterController.radius * 2f, standingHeight);
+    }
+
+    /// <summary>Instantly returns to the standing state (and restores sprinting).</summary>
+    public void ResetToStanding() {
+        wantsCrouch = false;
+        crouchAmount = 0f;
+        Apply(0f);
+        firstPersonMovement.sprintAllowed = sprintWasAllowed;
     }
 
     public void CrouchToggle() {
-        if (!isTransitioning) {
-            if (isCrouching && !CanStandUp()) {
-                Debug.Log("Cannot stand up, something is blocking the way!");
-                return;
-            }
+        if (!CrouchAllowed) return;
 
-            isCrouching = !isCrouching;
-            if (wasSprintingAllowed) {
-                firstPersonMovement.sprintAllowed = !isCrouching;
-                if(isCrouching) firstPersonMovement.isSprinting = false;
-            }
+        if (wantsCrouch && !CanStandUp()) {
+            Debug.Log("Cannot stand up, something is blocking the way!");
+            return;
+        }
 
-            StartCoroutine(CrouchRoutine(isCrouching ? crouchHeight : standingHeight));
+        wantsCrouch = !wantsCrouch;
+
+        if (sprintWasAllowed) {
+            firstPersonMovement.sprintAllowed = !wantsCrouch;
+            if (wantsCrouch) firstPersonMovement.isSprinting = false;
         }
     }
 
-    // This function checks if there's space above the player to stand up
+    // Is there room for the full-height standing capsule?
     bool CanStandUp() {
-        // Calculate the distance to check based on the difference between standing and crouch height
-        float rayLength = standingHeight - crouchHeight + raycastBuffer;
+        float radius = characterController.radius - checkSkin;
 
-        // Perform the raycast starting from the player's current position, casting upwards
-        Ray ray = new Ray(transform.position, Vector3.up);
-        return !Physics.Raycast(ray, rayLength, obstacleLayers);
+        // Bottom of the standing capsule (feet), in world space
+        Vector3 feet = transform.TransformPoint(standingCenter - Vector3.up * (standingHeight * 0.5f));
+        Vector3 bottomSphere = feet + Vector3.up * characterController.radius;
+        Vector3 topSphere = feet + Vector3.up * (standingHeight - characterController.radius);
+
+        return !Physics.CheckCapsule(bottomSphere, topSphere, radius, obstacleLayers, QueryTriggerInteraction.Ignore);
     }
 
-    private IEnumerator CrouchRoutine(float targetHeight) {
-        isTransitioning = true;
+    void Update() {
+        float target = wantsCrouch ? 1f : 0f;
+        if (Mathf.Approximately(crouchAmount, target)) return;
 
-        float initialHeight = characterController.height;
-        float initialCameraHeight = cameraTransform.localPosition.y;
-        float targetCameraHeight = isCrouching ? cameraOriginalHeight + cameraCrouchOffset : cameraOriginalHeight;
-        float elapsed = 0f;
+        crouchAmount = Mathf.MoveTowards(crouchAmount, target, Time.deltaTime / Mathf.Max(crouchTime, 0.0001f));
+        Apply(Mathf.SmoothStep(0f, 1f, crouchAmount));
+    }
 
-        while (elapsed < 1f) {
-            elapsed += Time.deltaTime / crouchSpeed;
-            characterController.height = Mathf.Lerp(initialHeight, targetHeight, elapsed);
-            characterController.center = new Vector3(0, characterController.height / 2, 0);
-            capsuleCollider.height = Mathf.Lerp(initialHeight, targetHeight, elapsed);
-            capsuleCollider.center = new Vector3(0, capsuleCollider.height / 2, 0);
-            cameraTransform.localPosition = new Vector3(cameraTransform.localPosition.x, Mathf.Lerp(initialCameraHeight, targetCameraHeight, elapsed), cameraTransform.localPosition.z);
-            yield return null;
-        }
+    void Apply(float t) {
+        float height = Mathf.Lerp(standingHeight, crouchHeight, t);
+        float heightLost = standingHeight - height;
 
-        isTransitioning = false;
+        // Keep the feet where they are: the center moves down by half of what was lost
+        Vector3 center = standingCenter - Vector3.up * (heightLost * 0.5f);
+
+        characterController.height = height;
+        characterController.center = center;
+
+        capsuleCollider.height = height;
+        capsuleCollider.center = center;
+
+        // Camera keeps its distance from the top of the capsule
+        Vector3 camPos = standingCameraLocalPos;
+        camPos.y -= heightLost;
+        cameraTransform.localPosition = camPos;
     }
 
     #region Input
 
-    void OnCrouch(InputAction.CallbackContext context) {
-        CrouchToggle();
+    public void OnCrouch(InputAction.CallbackContext context) {
+        if (context.performed) CrouchToggle();
     }
 
     #endregion

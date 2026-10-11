@@ -249,7 +249,7 @@ public class ViewManager : Singleton<ViewManager> {
 
     public void Deserialize(SerializableViewPointManager serializedManager) {
         if (serializedManager == null || serializedManager.ViewPoints == null) {
-            Debug.Log("Interest point manager deserialization failed: Source data is null");
+            Debug.Log("Interest point _manager deserialization failed: Source data is null");
             return;
         }
 

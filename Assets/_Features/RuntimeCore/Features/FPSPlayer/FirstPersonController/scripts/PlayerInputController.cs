@@ -5,13 +5,16 @@ public class PlayerInputController: MonoBehaviour {
     [Header("Input Settings")]
     public KeyCode sprintKey = KeyCode.LeftShift;
     public KeyCode crouchKey = KeyCode.C;
+    public KeyCode jumpKey = KeyCode.Space;
 
     private FirstPersonMovement movement;
     private Crouching crouching;
+    private Jumping jumping;
 
     void Awake() {
         movement = GetComponent<FirstPersonMovement>();
         crouching = GetComponent<Crouching>();
+        jumping = GetComponent<Jumping>();
     }
 
     void Update() {
@@ -30,6 +33,10 @@ public class PlayerInputController: MonoBehaviour {
             if (crouching != null) {
                 crouching.CrouchToggle();
             }
+        }
+
+        if (Input.GetKeyDown(jumpKey)) {
+            jumping.Jump();
         }
     }
 }

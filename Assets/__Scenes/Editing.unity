@@ -1476,6 +1476,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bfbea646cbd7e3947a301564eb8b3573, type: 3}
+--- !u!1 &768734787 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3337124749689108773, guid: bfbea646cbd7e3947a301564eb8b3573, type: 3}
+  m_PrefabInstance: {fileID: 768734786}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &792009794
 GameObject:
   m_ObjectHideFlags: 0
@@ -5528,9 +5533,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1044905542}
     - target: {fileID: 6771719925023815692, guid: 75b9bd83da49ddc40b37759c12432941, type: 3}
+      propertyPath: FPSEnterButton
+      value: 
+      objectReference: {fileID: 768734787}
+    - target: {fileID: 6771719925023815692, guid: 75b9bd83da49ddc40b37759c12432941, type: 3}
       propertyPath: MultiviewButton
       value: 
       objectReference: {fileID: 1044905543}
+    - target: {fileID: 6771719925023815692, guid: 75b9bd83da49ddc40b37759c12432941, type: 3}
+      propertyPath: FPSSettingsButton
+      value: 
+      objectReference: {fileID: 1572042650}
     - target: {fileID: 6771719925023815692, guid: 75b9bd83da49ddc40b37759c12432941, type: 3}
       propertyPath: CameraColissionScriptRef
       value: 
