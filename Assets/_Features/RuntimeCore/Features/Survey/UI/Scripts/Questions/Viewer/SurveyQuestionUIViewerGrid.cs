@@ -4,17 +4,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+// Matrix is built from plain flex rows instead of a MultiColumnListView: header and cells share the same
+// column sizing (so checkboxes line up under their column titles), texts wrap instead of being cut
+// with "..." and the table grows with its content instead of scrolling inside a fixed-size box.
 public class SurveyQuestionUIViewerGrid : SurveyQuestionUIViewer {
+
+    private const string LabelColClass = "grid-table__label-col";
+    private const string OptionColClass = "grid-table__option-col";
+
+    // Row-title column fits its longest title, but never takes the answer columns' space
+    private const float LabelColMinWidth = 70f;
+    private const float LabelColMaxShare = 0.3f;
+    private const float LabelColExtraWidth = 20f; // Label paddings
 
     private List<string> _rowTexts = new();
     private List<string> _columnTexts = new();
-    private List<int> _rowIndices = new();
 
     private Dictionary<int, int> _selectedColPerRow = new(); // rowIdx -> colIdx
     private HashSet<(int row, int col)> _checkedCells = new(); // (rowIdx, colIdx)
-    private HashSet<int> _invalidRows = new(); // Rows highlighted as unanswered
 
-    private MultiColumnListView _table;
+    private VisualElement _table;
+    private VisualElement _header;
+    private VisualElement _corner;
+    private List<Label> _rowLabels = new();
+    private List<VisualElement> _rowElements = new();
+    private Dictionary<(int row, int col), Toggle> _cellToggles = new();
+
+    public int ColumnCount => _columnTexts.Count;
 
     public event Action<int, int, int, bool> OnGridAnswerSelected; // qId, rowIdx, colIdx, value
 
@@ -25,188 +41,130 @@ public class SurveyQuestionUIViewerGrid : SurveyQuestionUIViewer {
     }
 
     private void InitializeTable() {
-        _table = _root.Q<MultiColumnListView>("grid-table") ?? _root.Q<MultiColumnListView>();
+        _table = _root.Q<VisualElement>("grid-table");
         if (_table == null) return;
 
-        _table.fixedItemHeight = 44f;
-        _table.horizontalScrollingEnabled = true;
-        _table.reorderable = false;
-        _table.showAddRemoveFooter = false;
-        _table.selectionType = SelectionType.None;
-        _table.columns.Clear();
-        _table.itemsSource = _rowIndices;
+        _table.Clear();
+        _table.AddToClassList("grid-table");
 
-        var rowTitleCol = new Column {
-            name = "row-title-col",
-            title = "",
-            width = 130,
-            minWidth = 100,
-            stretchable = false
-        };
+        _header = new VisualElement();
+        _header.AddToClassList("grid-table__header");
 
-        rowTitleCol.makeCell = () => {
-            var container = new VisualElement {
-                style = {
-                    flexDirection = FlexDirection.Row,
-                    alignItems = Align.Center,
-                    justifyContent = Justify.FlexStart,
-                    flexGrow = 1,
-                    width = Length.Percent(100),
-                    height = Length.Percent(100)
-                }
-            };
-            var label = new Label { name = "row-label" };
-            label.style.flexGrow = 1;
-            label.style.whiteSpace = WhiteSpace.Normal;
-            container.Add(label);
-            return container;
-        };
+        _corner = new VisualElement();
+        _corner.AddToClassList(LabelColClass);
+        _header.Add(_corner);
 
-        rowTitleCol.bindCell = (VisualElement cell, int rowIndex) => {
-            if (rowIndex < 0 || rowIndex >= _rowTexts.Count) return;
-            var label = cell.Q<Label>("row-label");
-            if (label != null) {
-                label.text = _rowTexts[rowIndex];
-            }
-            cell.EnableInClassList("grid-row--invalid", _invalidRows.Contains(rowIndex));
-        };
-
-        _table.columns.Add(rowTitleCol);
+        _table.Add(_header);
+        _table.RegisterCallback<GeometryChangedEvent>(_ => UpdateLabelColumnWidth());
     }
 
-    private void RefreshAllRowRadioButtons() {
-        if (_table == null) return;
-        for (int i = 0; i < _rowIndices.Count; i++) {
-            _table.RefreshItem(i);
+    private void UpdateLabelColumnWidth() {
+        float tableWidth = _table.layout.width;
+        if (float.IsNaN(tableWidth) || tableWidth <= 0f) return;
+
+        float longest = 0f;
+        foreach (Label label in _rowLabels) {
+            if (string.IsNullOrEmpty(label.text)) continue;
+            float textWidth = label.MeasureTextSize(label.text, 0, VisualElement.MeasureMode.Undefined, 0, VisualElement.MeasureMode.Undefined).x;
+            if (!float.IsNaN(textWidth)) longest = Mathf.Max(longest, textWidth);
         }
+
+        float width = Mathf.Clamp(longest + LabelColExtraWidth, LabelColMinWidth, Mathf.Max(LabelColMinWidth, tableWidth * LabelColMaxShare));
+        width = Mathf.Ceil(width);
+        if (Mathf.Approximately(_corner.resolvedStyle.width, width)) return; // Avoid relayout loops
+
+        _corner.style.width = width;
+        foreach (Label label in _rowLabels) label.style.width = width;
     }
 
     public void AddColumn(string text) {
         int colIdx = _columnTexts.Count;
         _columnTexts.Add(text);
+        if (_table == null) return;
 
-        if (_table != null) {
-            var col = new Column {
-                name = $"col-{colIdx}",
-                title = text,
-                width = 80,
-                minWidth = 70,
-                stretchable = true
-            };
+        var title = new Label(text);
+        title.AddToClassList(OptionColClass);
+        title.AddToClassList("grid-table__col-title");
+        _header.Add(title);
 
-            col.makeCell = () => {
-                var cellContainer = new VisualElement {
-                    style = {
-                        flexDirection = FlexDirection.Row,
-                        alignItems = Align.Center,
-                        justifyContent = Justify.Center,
-                        flexGrow = 1,
-                        width = Length.Percent(100),
-                        height = Length.Percent(100)
-                    }
-                };
-                cellContainer.AddToClassList("grid-cell-container");
-                if (_questionType == QuestionType.CheckboxGrid) {
-                    var toggle = new Toggle { name = "grid-cell-toggle" };
-                    toggle.AddToClassList("grid-checkbox-toggle");
-                    toggle.text = string.Empty;
-                    toggle.label = string.Empty;
-                    cellContainer.Add(toggle);
-                } else {
-                    var radio = new Toggle { name = "grid-cell-radio" };
-                    radio.AddToClassList("grid-radio-toggle");
-                    radio.text = string.Empty;
-                    radio.label = string.Empty;
-                    cellContainer.Add(radio);
-                }
-                cellContainer.RegisterCallback<ClickEvent>(evt => {
-                    var toggle = cellContainer.Q<Toggle>("grid-cell-toggle");
-                    if (toggle != null) {
-                        if (evt.target != toggle && (evt.target as VisualElement)?.GetFirstAncestorOfType<Toggle>() != toggle) {
-                            toggle.value = !toggle.value;
-                        }
-                    }
-                    var radio = cellContainer.Q<Toggle>("grid-cell-radio");
-                    if (radio != null) {
-                        if (!radio.value) {
-                            radio.value = true;
-                        }
-                    }
-                });
-                return cellContainer;
-            };
-
-            col.bindCell = (VisualElement cell, int rowIndex) => {
-                if (rowIndex < 0 || rowIndex >= _rowIndices.Count) return;
-                if (_questionType == QuestionType.CheckboxGrid) {
-                    var toggle = cell.Q<Toggle>("grid-cell-toggle");
-                    if (toggle != null) {
-                        bool isChecked = _checkedCells.Contains((rowIndex, colIdx));
-                        toggle.SetValueWithoutNotify(isChecked);
-                        if (toggle.userData is EventCallback<ChangeEvent<bool>> oldCb) {
-                            toggle.UnregisterValueChangedCallback(oldCb);
-                        }
-                        EventCallback<ChangeEvent<bool>> newCb = evt => {
-                            if (evt.newValue) {
-                                _checkedCells.Add((rowIndex, colIdx));
-                            } else {
-                                _checkedCells.Remove((rowIndex, colIdx));
-                            }
-                            InvokeAnswerSelected(rowIndex, colIdx, evt.newValue);
-                        };
-                        toggle.userData = newCb;
-                        toggle.RegisterValueChangedCallback(newCb);
-                    }
-                } else {
-                    var radio = cell.Q<Toggle>("grid-cell-radio");
-                    if (radio != null) {
-                        bool isSelected = _selectedColPerRow.TryGetValue(rowIndex, out int selCol) && selCol == colIdx;
-                        radio.SetValueWithoutNotify(isSelected);
-
-                        if (radio.userData is EventCallback<ChangeEvent<bool>> oldCb) {
-                            radio.UnregisterValueChangedCallback(oldCb);
-                        }
-
-                        EventCallback<ChangeEvent<bool>> changeCb = evt => {
-                            if (evt.newValue) {
-                                _selectedColPerRow[rowIndex] = colIdx;
-                                InvokeAnswerSelected(rowIndex, colIdx, true);
-                                RefreshAllRowRadioButtons();
-                            } else {
-                                // Keep true if user clicks the already selected radio button
-                                radio.SetValueWithoutNotify(true);
-                            }
-                        };
-
-                        radio.userData = changeCb;
-                        radio.RegisterValueChangedCallback(changeCb);
-                    }
-                }
-            };
-
-            _table.columns.Add(col);
-            _table.Rebuild();
-            _table.RefreshItems();
+        // Rows added before this column need a cell for it too
+        for (int rowIdx = 0; rowIdx < _rowElements.Count; rowIdx++) {
+            _rowElements[rowIdx].Add(CreateCell(rowIdx, colIdx));
         }
     }
 
     public void AddRow(string text) {
+        int rowIdx = _rowTexts.Count;
         _rowTexts.Add(text);
-        _rowIndices.Add(_rowTexts.Count - 1);
-        if (_table != null) {
-            _table.itemsSource = _rowIndices;
-            _table.Rebuild();
-            _table.RefreshItems();
+        if (_table == null) return;
+
+        var row = new VisualElement();
+        row.AddToClassList("grid-table__row");
+
+        var label = new Label(text) { name = "row-label" };
+        label.AddToClassList(LabelColClass);
+        label.AddToClassList("grid-table__row-title");
+        row.Add(label);
+        _rowLabels.Add(label);
+
+        for (int colIdx = 0; colIdx < _columnTexts.Count; colIdx++) {
+            row.Add(CreateCell(rowIdx, colIdx));
         }
+
+        _rowElements.Add(row);
+        _table.Add(row);
+    }
+
+    private VisualElement CreateCell(int rowIdx, int colIdx) {
+        var cell = new VisualElement();
+        cell.AddToClassList(OptionColClass);
+        cell.AddToClassList("grid-table__cell");
+
+        bool isCheckbox = _questionType == QuestionType.CheckboxGrid;
+        var toggle = new Toggle { name = isCheckbox ? "grid-cell-toggle" : "grid-cell-radio" };
+        toggle.AddToClassList(isCheckbox ? "grid-checkbox-toggle" : "grid-radio-toggle");
+        toggle.text = string.Empty;
+        toggle.label = string.Empty;
+        cell.Add(toggle);
+        _cellToggles[(rowIdx, colIdx)] = toggle;
+
+        toggle.RegisterValueChangedCallback(evt => {
+            if (isCheckbox) {
+                if (evt.newValue) _checkedCells.Add((rowIdx, colIdx));
+                else _checkedCells.Remove((rowIdx, colIdx));
+                InvokeAnswerSelected(rowIdx, colIdx, evt.newValue);
+            } else if (evt.newValue) {
+                SelectRadio(rowIdx, colIdx);
+            } else {
+                // Clicking the already selected radio keeps it selected
+                toggle.SetValueWithoutNotify(true);
+            }
+        });
+
+        // Clicking anywhere in the cell acts like clicking the toggle itself
+        cell.RegisterCallback<ClickEvent>(evt => {
+            if (evt.target == toggle || (evt.target as VisualElement)?.GetFirstAncestorOfType<Toggle>() == toggle) return;
+            toggle.value = isCheckbox ? !toggle.value : true;
+        });
+
+        return cell;
+    }
+
+    private void SelectRadio(int rowIdx, int colIdx) {
+        if (_selectedColPerRow.TryGetValue(rowIdx, out int prevCol) && prevCol != colIdx
+            && _cellToggles.TryGetValue((rowIdx, prevCol), out var prevToggle)) {
+            prevToggle.SetValueWithoutNotify(false);
+        }
+        _selectedColPerRow[rowIdx] = colIdx;
+        InvokeAnswerSelected(rowIdx, colIdx, true);
     }
 
     public override void SetValidationError(bool invalid, QuestionValidationResult result) {
         base.SetValidationError(invalid, result);
-        _invalidRows.Clear();
-        if (invalid && result != null) {
-            _invalidRows.UnionWith(result.MissingRows);
+        for (int i = 0; i < _rowElements.Count; i++) {
+            bool rowInvalid = invalid && result != null && result.MissingRows.Contains(i);
+            _rowElements[i].EnableInClassList("grid-row--invalid", rowInvalid);
         }
-        _table?.RefreshItems();
     }
 
     public void InvokeAnswerSelected(int rowIdx, int colIdx, bool value) {

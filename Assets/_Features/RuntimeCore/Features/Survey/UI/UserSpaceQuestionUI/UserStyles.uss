@@ -78,6 +78,12 @@
    ========================================================================== */
 
 .unity-scroller,
+/* Page widened for a matrix: the default 10% side paddings (Styles.uss) would eat the extra width */
+#page-container.page-container--wide #survey-scroll-view .unity-scroll-view__content-container {
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
 #survey-scroll-view .unity-scroller {
     margin-top: 8px;
     margin-bottom: 8px;
@@ -667,10 +673,10 @@ GenericDropdownMenu,
     background-color: rgb(228, 228, 228);
 }
 
+/* White copy of the chevron: the original sprite is black, a tint can only darken it */
 #next-btn {
-    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/chevron-right.png?fileID=2800000&guid=05c0e935411a9e64383e2a9a89216d33&type=3#chevron-right");
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/chevron-right-white.png?fileID=2800000&guid=ac528657c42b4782bb1257d4bbe98749&type=3#chevron-right-white");
     background-color: var(--primary-color);
-    -unity-background-image-tint-color: rgb(255, 255, 255);
 }
 
 #next-btn:hover {
@@ -1588,8 +1594,8 @@ TextField:focus TextInput {
 }
 
 .scale-viewer-row {
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
+    align-items: stretch;
     width: 100%;
     margin-top: 6px;
     margin-bottom: 6px;
@@ -1607,16 +1613,44 @@ TextField:focus TextInput {
     border-color: rgba(103, 80, 164, 0.25);
 }
 
+/* Texts above the scale: left end text on the left, right end text on the right */
+.scale-viewer-row-labels {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 4px;
+}
+
 .scale-viewer-row-label {
     font-size: 14px;
     -unity-font-style: bold;
     color: var(--dark-text);
-    min-width: 40px;
-    max-width: 160px;
     flex-grow: 1;
     flex-shrink: 1;
+    flex-basis: 0;
+    -unity-text-align: lower-left;
     white-space: normal;
-    margin-right: 10px;
+    text-overflow: clip;
+    margin: 0;
+}
+
+.scale-viewer-row-label--right {
+    -unity-text-align: lower-right;
+    margin-left: 12px;
+}
+
+/* Overrides the old one-line layout in Styles.uss (min-width 160px pushed the right text out of the row) */
+.scale-viewer-row-labels .scale-viewer-row-label {
+    min-width: 0;
+    max-width: none;
+    flex-shrink: 1;
+}
+
+/* Scale takes the full row width, so all scales of a question have the same length */
+.scale-viewer-row .scale-preview-container {
+    min-width: 0;
+    flex-shrink: 1;
+    margin-right: 0;
 }
 
 .scale-value-badge {
@@ -1883,97 +1917,97 @@ TextField:focus TextInput {
 
 /* ==========================================================================
    GRID MATRIX QUESTION & TABLE STYLING
+   Header and rows share the same column classes, so titles line up with the
+   checkboxes. Texts wrap (no "..."), the table grows with its content.
    ========================================================================== */
 
-#grid-table {
-    flex-grow: 1;
-    min-height: 180px;
-    max-height: 350px;
+.grid-table {
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin-top: 16px;
     background-color: rgb(255, 255, 255);
     border-radius: 12px;
     border-width: 1px;
     border-color: rgba(103, 80, 164, 0.2);
+    overflow: hidden;
 }
 
-#grid-table .unity-multi-column-header {
-    min-height: 48px;
-    height: 48px;
+.grid-table__header,
+.grid-table__row {
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.grid-table__header {
+    min-height: 44px;
     background-color: rgb(247, 242, 250);
     border-bottom-width: 1px;
     border-bottom-color: rgba(103, 80, 164, 0.18);
-    margin: 0;
-    padding: 0;
 }
 
-#grid-table .unity-multi-column-header__column {
-    justify-content: center;
-    align-items: center;
-    padding: 4px 6px;
-    margin: 0;
-    background-color: transparent;
-    border-right-width: 1px;
-    border-right-color: rgba(103, 80, 164, 0.1);
+.grid-table__row {
+    min-height: 44px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(0, 0, 0, 0.05);
+    transition-property: background-color;
+    transition-duration: 0.15s;
 }
 
-#grid-table .unity-multi-column-header__column-title {
+.grid-table__row:last-child {
+    border-bottom-width: 0;
+}
+
+.grid-table__row:hover {
+    background-color: rgba(103, 80, 164, 0.04);
+}
+
+/* First column (row titles); width is set from the longest row title in SurveyQuestionUIViewerGrid */
+.grid-table__label-col {
+    width: 120px;
+    min-width: 70px;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+/* Answer columns: equal share of the remaining width */
+.grid-table__option-col {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+    min-width: 40px;
+}
+
+.grid-table__col-title {
+    margin: 0;
+    padding: 6px 4px;
     font-size: 13px;
     -unity-font-style: bold;
     color: rgb(73, 62, 105);
     -unity-text-align: middle-center;
+    white-space: normal;
+    text-overflow: clip;
+    overflow: visible;
 }
 
-#grid-table .unity-multi-column-list-view__row {
-    height: 44px;
-    min-height: 44px;
-    max-height: 44px;
+.grid-table__row-title {
     margin: 0;
-    padding: 0;
-    align-items: center;
-    border-bottom-width: 1px;
-    border-bottom-color: rgba(0, 0, 0, 0.05);
-    transition-duration: 0.15s;
-}
-
-#grid-table .unity-multi-column-list-view__row:hover {
-    background-color: rgba(103, 80, 164, 0.04);
-}
-
-#grid-table .unity-collection-view__item--selected,
-#grid-table .unity-list-view__item--selected,
-#grid-table .unity-multi-column-view__row--selected,
-#grid-table .unity-multi-column-list-view__row--selected,
-#grid-table .unity-collection-view__item:active,
-#grid-table .unity-list-view__item:active,
-#grid-table .unity-multi-column-view__row:active,
-#grid-table .unity-multi-column-list-view__row:active {
-    background-color: transparent;
-}
-
-#grid-table .unity-multi-column-list-view__cell {
-    height: 44px;
-    min-height: 44px;
-    max-height: 44px;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-    margin: 0;
-    border-right-width: 1px;
-    border-right-color: rgba(0, 0, 0, 0.04);
-}
-
-#grid-table .unity-multi-column-list-view__cell Label {
-    margin: 0;
-    padding-left: 10px;
-    padding-right: 6px;
+    padding: 6px 6px 6px 10px;
     font-size: 13px;
     color: var(--dark-text);
     -unity-text-align: middle-left;
+    white-space: normal;
+    text-overflow: clip;
 }
 
-/* Grid Cell Toggle / Radio Elements */
-#grid-table .unity-multi-column-list-view__cell Toggle,
-#grid-table .unity-multi-column-list-view__cell .grid-radio-toggle,
-#grid-table .unity-multi-column-list-view__cell .grid-checkbox-toggle {
+.grid-table__cell {
+    justify-content: center;
+    align-items: center;
+    cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
+}
+
+.grid-table__cell Toggle,
+.grid-table__cell .grid-radio-toggle,
+.grid-table__cell .grid-checkbox-toggle {
     width: 26px;
     height: 26px;
     min-width: 26px;
@@ -1990,8 +2024,8 @@ TextField:focus TextInput {
     cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
-#grid-table .unity-multi-column-list-view__cell .unity-base-field__label,
-#grid-table .unity-multi-column-list-view__cell .unity-toggle__text {
+.grid-table__cell .unity-base-field__label,
+.grid-table__cell .unity-toggle__text {
     display: none;
     width: 0;
     height: 0;
@@ -1999,8 +2033,8 @@ TextField:focus TextInput {
     padding: 0;
 }
 
-#grid-table .unity-multi-column-list-view__cell .unity-base-field__input,
-#grid-table .unity-multi-column-list-view__cell .unity-toggle__input {
+.grid-table__cell .unity-base-field__input,
+.grid-table__cell .unity-toggle__input {
     width: 26px;
     height: 26px;
     min-width: 26px;
@@ -2016,7 +2050,7 @@ TextField:focus TextInput {
 }
 
 /* Radio button in grid (Circle) */
-#grid-table .grid-radio-toggle .unity-toggle__checkmark {
+.grid-table .grid-radio-toggle .unity-toggle__checkmark {
     width: 24px;
     height: 24px;
     min-width: 24px;
@@ -2041,12 +2075,12 @@ TextField:focus TextInput {
     transition-duration: 0.15s;
 }
 
-#grid-table .grid-radio-toggle:hover .unity-toggle__checkmark {
+.grid-table .grid-radio-toggle:hover .unity-toggle__checkmark {
     border-color: var(--primary-color);
     background-color: var(--primary-background-color);
 }
 
-#grid-table .grid-radio-toggle:checked .unity-toggle__checkmark {
+.grid-table .grid-radio-toggle:checked .unity-toggle__checkmark {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
     background-image: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/dot-white.png?fileID=2800000&guid=a123529c3fb34d638d526d7deabd69f5&type=3#dot-white");
@@ -2055,7 +2089,7 @@ TextField:focus TextInput {
 }
 
 /* Checkbox in grid (Square) */
-#grid-table .grid-checkbox-toggle .unity-toggle__checkmark {
+.grid-table .grid-checkbox-toggle .unity-toggle__checkmark {
     width: 24px;
     height: 24px;
     min-width: 24px;
@@ -2080,50 +2114,17 @@ TextField:focus TextInput {
     transition-duration: 0.15s;
 }
 
-#grid-table .grid-checkbox-toggle:hover .unity-toggle__checkmark {
+.grid-table .grid-checkbox-toggle:hover .unity-toggle__checkmark {
     border-color: var(--primary-color);
     background-color: var(--primary-background-color);
 }
 
-#grid-table .grid-checkbox-toggle:checked .unity-toggle__checkmark {
+.grid-table .grid-checkbox-toggle:checked .unity-toggle__checkmark {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
     background-image: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/check-white.png?fileID=2800000&guid=631e4421e2e8456f9d8d1bb1e039336b&type=3#check-white");
     -unity-background-scale-mode: scale-to-fit;
     -unity-background-image-tint-color: rgb(255, 255, 255);
-}
-
-/* Scrollbars styling for Grid Table */
-#grid-table .unity-scroll-view__horizontal-scroller,
-#grid-table .unity-list-view__scroll-view .unity-scroll-view__horizontal-scroller {
-    height: 8px;
-    min-height: 8px;
-    background-color: rgba(0, 0, 0, 0.04);
-    border-radius: 4px;
-    margin: 2px;
-}
-
-#grid-table .unity-scroll-view__vertical-scroller,
-#grid-table .unity-list-view__scroll-view .unity-scroll-view__vertical-scroller {
-    width: 8px;
-    min-width: 8px;
-    background-color: rgba(0, 0, 0, 0.04);
-    border-radius: 4px;
-    margin: 2px;
-}
-
-#grid-table .unity-scroller__dragger,
-#grid-table .unity-base-slider__dragger {
-    background-color: rgba(103, 80, 164, 0.4);
-    border-radius: 4px;
-    border-width: 0;
-    min-width: 6px;
-    min-height: 6px;
-}
-
-#grid-table .unity-scroller__dragger:hover,
-#grid-table .unity-base-slider__dragger:hover {
-    background-color: var(--primary-color);
 }
 
 .icon-trash {
@@ -2303,7 +2304,8 @@ TextField:focus TextInput {
     border-color: rgb(200, 30, 30);
 }
 
-.grid-row--invalid #row-label {
+.grid-row--invalid #row-label,
+.grid-row--invalid .grid-table__row-title {
     color: rgb(200, 30, 30);
     -unity-font-style: bold;
 }
@@ -2323,4 +2325,16 @@ TextField:focus TextInput {
 
 .scale-viewer-row--unset .unity-base-slider__dragger {
     opacity: 0.35;
+}
+
+/* --------------------------------------------------------------------------
+   Question texts wrap instead of being cut with "..."
+   -------------------------------------------------------------------------- */
+
+#question-title,
+#question-description,
+.unity-toggle__text,
+.unity-radio-button__text {
+    white-space: normal;
+    text-overflow: clip;
 }

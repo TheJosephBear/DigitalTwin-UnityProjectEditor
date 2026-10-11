@@ -10,8 +10,7 @@ public class SurveyAnswerUIViewerString : SurveyAnswerUIViewer {
 
     public SurveyAnswerUIViewerString(VisualElement answerElement, int answerIndex, SurveyQuestionUIViewer questionUI, bool isOther)
         : base(answerElement, answerIndex, questionUI, isOther) {
-
-        RegisterAnswerEvents();
+        // RegisterAnswerEvents() is already called by the base constructor
     }
 
     protected override void RegisterAnswerEvents() {
@@ -21,9 +20,6 @@ public class SurveyAnswerUIViewerString : SurveyAnswerUIViewer {
         var radio = AnswerElement.Q<UIRadioButton>();
         var toggle = AnswerElement.Q<Toggle>();
         var customRadio = AnswerElement.Q<CustomRadioButton>();
-
-        // Register click callback on the first VisualElement (option-row) and AnswerElement
-        var optionRow = AnswerElement.Q<VisualElement>(className: "option-row") ?? (AnswerElement.childCount > 0 ? AnswerElement[0] : AnswerElement);
 
         void HandleRowClick(ClickEvent evt) {
             if (evt.target is TextField || (evt.target as VisualElement)?.GetFirstAncestorOfType<TextField>() != null) {
@@ -53,10 +49,9 @@ public class SurveyAnswerUIViewerString : SurveyAnswerUIViewer {
             }
         }
 
-        optionRow.RegisterCallback<ClickEvent>(HandleRowClick);
-        if (AnswerElement != optionRow) {
-            AnswerElement.RegisterCallback<ClickEvent>(HandleRowClick);
-        }
+        // Registered only on the root: clicks on the option row bubble up to it. Registering it on both
+        // would run the handler twice per click and flip a checkbox back to its previous state.
+        AnswerElement.RegisterCallback<ClickEvent>(HandleRowClick);
 
         if (_isOther) {
             if (textField != null) {

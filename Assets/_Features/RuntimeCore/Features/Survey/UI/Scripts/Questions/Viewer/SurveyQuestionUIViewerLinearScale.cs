@@ -40,13 +40,18 @@ public class SurveyQuestionUIViewerLinearScale : SurveyQuestionUIViewer {
     }
 
     public override SurveyAnswerUIBase AddAnswer(string answerText, bool isOther = false) {
+        return AddScaleRow(answerText, null);
+    }
+
+    public SurveyAnswerUIBase AddScaleRow(string leftText, string rightText) {
         if (_optionsList == null) return null;
 
         VisualElement rowElement = CreateViewerRowElement();
         int answerIndex = _addedAnswers.Count;
 
-        SurveyAnswerUIViewerLinearScale answerUI = new SurveyAnswerUIViewerLinearScale(rowElement, answerIndex, this, isOther);
-        answerUI.SetText(answerText);
+        SurveyAnswerUIViewerLinearScale answerUI = new SurveyAnswerUIViewerLinearScale(rowElement, answerIndex, this, false);
+        answerUI.SetText(leftText);
+        answerUI.SetRightText(rightText);
         answerUI.SetScaleRange(_min, _max);
 
         answerUI.OnValueChanged += (qId, aIdx, val) => {
@@ -59,14 +64,26 @@ public class SurveyQuestionUIViewerLinearScale : SurveyQuestionUIViewer {
         return answerUI;
     }
 
+    // Two lines: texts (left / right end) on top, full-width scale below, so all scales have the same length
     private VisualElement CreateViewerRowElement() {
         var row = new VisualElement();
         row.AddToClassList("scale-viewer-row");
 
+        var labels = new VisualElement();
+        labels.name = "scale-row-labels";
+        labels.AddToClassList("scale-viewer-row-labels");
+        row.Add(labels);
+
         var label = new Label();
         label.name = "scale-row-label";
         label.AddToClassList("scale-viewer-row-label");
-        row.Add(label);
+        labels.Add(label);
+
+        var rightLabel = new Label();
+        rightLabel.name = "scale-row-label-right";
+        rightLabel.AddToClassList("scale-viewer-row-label");
+        rightLabel.AddToClassList("scale-viewer-row-label--right");
+        labels.Add(rightLabel);
 
         var sliderContainer = new VisualElement();
         sliderContainer.AddToClassList("scale-preview-container");

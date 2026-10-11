@@ -226,6 +226,13 @@ namespace SurveySystem {
             SetAnswerText(answer, text);
         }
 
+        public void SetAnswerTextRight(int questionId, int answerId, string text) {
+            var answer = _activeSurvey.GetQuestionById(questionId)?.GetAnswerByIdx(answerId);
+            if (answer is AnswerString stringAnswer) {
+                stringAnswer.TextRight = text;
+            }
+        }
+
         public void RemoveAnswer(int questionId, int answerIdx) {
             Debug.Log("------REMOVE ANSWER--------");
             Debug.Log("GetQuestionById: " + _activeSurvey.GetQuestionById(questionId));

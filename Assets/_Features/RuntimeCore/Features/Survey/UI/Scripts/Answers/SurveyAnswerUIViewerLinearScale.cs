@@ -7,6 +7,8 @@ public class SurveyAnswerUIViewerLinearScale : SurveyAnswerUIViewer {
     public event Action<int, int, int> OnValueChanged;
 
     private Label _rowLabel;
+    private Label _rowLabelRight;
+    private VisualElement _labelsRow;
     private Label _minLabel;
     private Label _maxLabel;
     private Label _valueBadge;
@@ -25,6 +27,8 @@ public class SurveyAnswerUIViewerLinearScale : SurveyAnswerUIViewer {
         : base(answerElement, answerIndex, questionUI, isOther) {
 
         _rowLabel = _answerElement.Q<Label>("scale-row-label") ?? _answerElement.Q<Label>();
+        _rowLabelRight = _answerElement.Q<Label>("scale-row-label-right");
+        _labelsRow = _answerElement.Q<VisualElement>("scale-row-labels");
         _minLabel = _answerElement.Q<Label>("scale-min-label");
         _maxLabel = _answerElement.Q<Label>("scale-max-label");
         _valueBadge = _answerElement.Q<Label>("scale-value-badge");
@@ -58,6 +62,9 @@ public class SurveyAnswerUIViewerLinearScale : SurveyAnswerUIViewer {
 
         _slider.RegisterCallback<PointerDownEvent>(evt => {
             SetupDraggerTooltip();
+            // Row counts as touched already on press. Deferred so the slider first applies the clicked
+            // value (then ValueChanged marks it and this does nothing); pressing the current value marks it here
+            _slider.schedule.Execute(ConfirmUntouchedValue);
             _isDragging = true;
             _slider.AddToClassList("is-dragging");
             if (_draggerTooltip != null) {
@@ -102,7 +109,7 @@ public class SurveyAnswerUIViewerLinearScale : SurveyAnswerUIViewer {
         }, TrickleDown.TrickleDown);
     }
 
-    // Clicking the slider on its current value doesn't raise ValueChanged, so register it here
+    // Pressing the slider on its current value doesn't raise ValueChanged, so register it here
     private void ConfirmUntouchedValue() {
         if (_hasValue || _slider == null) return;
         MarkAsSet();
@@ -129,6 +136,22 @@ public class SurveyAnswerUIViewerLinearScale : SurveyAnswerUIViewer {
         if (_rowLabel != null) {
             _rowLabel.text = text;
         }
+        UpdateLabelsVisibility();
+    }
+
+    public void SetRightText(string text) {
+        if (_rowLabelRight != null) {
+            _rowLabelRight.text = text ?? string.Empty;
+        }
+        UpdateLabelsVisibility();
+    }
+
+    // Empty texts take no space: no right text -> left one gets the full width, no texts -> only the scale
+    private void UpdateLabelsVisibility() {
+        bool hasLeft = !string.IsNullOrWhiteSpace(_rowLabel?.text);
+        bool hasRight = !string.IsNullOrWhiteSpace(_rowLabelRight?.text);
+        if (_rowLabelRight != null) _rowLabelRight.style.display = hasRight ? DisplayStyle.Flex : DisplayStyle.None;
+        if (_labelsRow != null) _labelsRow.style.display = hasLeft || hasRight ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
     public void SetScaleRange(int min, int max, int? initialValue = null) {

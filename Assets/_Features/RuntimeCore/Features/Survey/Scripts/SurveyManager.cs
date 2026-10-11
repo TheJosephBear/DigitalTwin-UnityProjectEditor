@@ -67,6 +67,11 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
         bool hasContent = ValidateJsonContent(downloadedData);
 
         if (hasContent) {
+            // Survey images may be missing from the project's image list (survey is saved separately), load them first
+            bool imagesLoaded = false;
+            ImageManager.Instance.EnsureImagesLoaded(CollectSurveyImageIds(downloadedData), ProjectManager.Instance.SelectedProject.ProjectName, () => imagesLoaded = true);
+            yield return new WaitUntil(() => imagesLoaded);
+
             _flowManager.EnterSurveyViewing(downloadedData);
         }
 
@@ -104,11 +109,14 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
     }
 
     public void DeserializeSurvey() {
-        ServerCommunicationManager.Instance.StartSurveyDownload(ProjectManager.Instance.SelectedProject.ProjectName, (success, data) => {
+        string projectName = ProjectManager.Instance.SelectedProject.ProjectName;
+        ServerCommunicationManager.Instance.StartSurveyDownload(projectName, (success, data) => {
             _surveyJsonData = data;
-            if (_surveyJsonData != null) {
-                _flowManager.DeserializeSurvey(_surveyJsonData);
-            }
+            if (_surveyJsonData == null) return;
+
+            // Images saved only with the survey aren't in the project's image list, load them before building the UI
+            string json = _surveyJsonData;
+            ImageManager.Instance.EnsureImagesLoaded(CollectSurveyImageIds(json), projectName, () => _flowManager.DeserializeSurvey(json));
         });
     }
 
@@ -188,6 +196,49 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
     public void SaveSurvey() {
         _surveyJsonData = _flowManager.GetSurveyJsonData();
         UploadSurveyData();
+
+        // Images picked in the survey are otherwise uploaded only with the next project save
+        if (MainManagerBase.Instance is EditorManager) {
+            ImageManager.Instance.UploadImagesIfMissing(CollectSurveyImageIds(_surveyJsonData), ProjectManager.Instance.SelectedProject.ProjectName);
+        }
+    }
+
+    /// <summary>
+    /// IDs of all images used by the survey: intro image, question images and image choice options.
+    /// </summary>
+    static List<string> CollectSurveyImageIds(string surveyJson) {
+        var ids = new List<string>();
+        if (string.IsNullOrEmpty(surveyJson)) return ids;
+
+        SurveySerializable survey;
+        try {
+            survey = JsonUtility.FromJson<SurveySerializable>(surveyJson);
+        } catch (Exception e) {
+            Debug.LogWarning($"[SurveyManager] Cannot read survey images: {e.Message}");
+            return ids;
+        }
+        if (survey == null) return ids;
+
+        void AddId(string id) {
+            // Project preview is handled separately by ImageManager
+            if (!string.IsNullOrEmpty(id) && !id.StartsWith("Preview_") && !ids.Contains(id)) ids.Add(id);
+        }
+
+        AddId(survey.ImageID);
+        AddId(survey.ImageId);
+        if (survey.Questions == null) return ids;
+
+        foreach (SerializableQuestion question in survey.Questions) {
+            if (question == null) continue;
+            AddId(question.ImageID);
+            AddId(question.ImageId);
+            if (question.Answers == null) continue;
+
+            foreach (AnswerBase answer in question.Answers) {
+                if (answer is AnswerImage imageAnswer) AddId(imageAnswer.GetImageId());
+            }
+        }
+        return ids;
     }
 
     public void SaveAnswers() {

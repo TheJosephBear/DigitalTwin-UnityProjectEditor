@@ -4,8 +4,6 @@
     <ui:VisualElement name="question-container" class="question-card" style="flex-grow: 1;">
         <ui:Instance template="QuestionTitleBar" name="question-bar" />
         <ui:VisualElement class="question-divider" />
-        <ui:MultiColumnListView name="grid-table" fixed-item-height="40" style="flex-grow: 1; min-height: 150px;">
-            <ui:Columns />
-        </ui:MultiColumnListView>
+        <ui:VisualElement name="grid-table" class="grid-table" />
     </ui:VisualElement>
 </ui:UXML>

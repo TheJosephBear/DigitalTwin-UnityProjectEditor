@@ -6,8 +6,10 @@ using UnityEngine.UIElements;
 public class SurveyAnswerUIEditorLinearScale : SurveyAnswerUIEditor {
 
     public event Action<int, int, string> OnTextChanged;
+    public event Action<int, int, string> OnRightTextChanged;
 
     private TextField _textField;
+    private TextField _rightTextField;
     private Label _minLabel;
     private Label _maxLabel;
     private SliderInt _sliderPreview;
@@ -18,6 +20,7 @@ public class SurveyAnswerUIEditorLinearScale : SurveyAnswerUIEditor {
         : base(answerElement, answerIndex, questionUI, isOther) {
 
         _textField = _answerElement.Q<TextField>("scale-row-text") ?? _answerElement.Q<TextField>();
+        _rightTextField = _answerElement.Q<TextField>("scale-row-text-right");
         _minLabel = _answerElement.Q<Label>("scale-min-label");
         _maxLabel = _answerElement.Q<Label>("scale-max-label");
         _sliderPreview = _answerElement.Q<SliderInt>("scale-slider-preview") ?? _answerElement.Q<SliderInt>();
@@ -95,16 +98,25 @@ public class SurveyAnswerUIEditorLinearScale : SurveyAnswerUIEditor {
     }
 
     private void RegisterTextFieldChanges() {
-        if (_textField == null) return;
-
-        _textField.RegisterValueChangedCallback(evt => {
+        // Fields are assigned after the base constructor's first call, so this registers only once
+        _textField?.RegisterValueChangedCallback(evt => {
             OnTextChanged?.Invoke(_questionUIRef.QuestionID, _answerIndex, evt.newValue);
+        });
+
+        _rightTextField?.RegisterValueChangedCallback(evt => {
+            OnRightTextChanged?.Invoke(_questionUIRef.QuestionID, _answerIndex, evt.newValue);
         });
     }
 
     public void SetText(string text) {
         if (_textField != null) {
             _textField.value = text;
+        }
+    }
+
+    public void SetRightText(string text) {
+        if (_rightTextField != null) {
+            _rightTextField.value = text ?? string.Empty;
         }
     }
 

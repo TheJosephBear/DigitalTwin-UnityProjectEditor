@@ -168,7 +168,8 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
                 }
             };
 
-            var deleteBtn = new Button { name = "col-delete-button" };
+            var deleteBtn = new Button { name = "col-delete-button", tooltip = "Smazat sloupec" };
+            deleteBtn.AddToClassList("icon");
             deleteBtn.AddToClassList("icon-trash");
             deleteBtn.style.marginBottom = 2;
 
@@ -340,13 +341,17 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
                 }
             };
 
-            var moveUpBtn = new Button { name = "row-move-up-button" };
+            // Same classes as the option buttons (OptionToggle.uxml), so the disabled state looks the same
+            var moveUpBtn = new Button { name = "row-move-up-button", tooltip = "Posunout řádek nahoru" };
+            moveUpBtn.AddToClassList("icon");
             moveUpBtn.AddToClassList("icon-move-up");
 
-            var moveDownBtn = new Button { name = "row-move-down-button" };
+            var moveDownBtn = new Button { name = "row-move-down-button", tooltip = "Posunout řádek dolů" };
+            moveDownBtn.AddToClassList("icon");
             moveDownBtn.AddToClassList("icon-move-down");
 
-            var deleteBtn = new Button { name = "row-delete-button" };
+            var deleteBtn = new Button { name = "row-delete-button", tooltip = "Smazat řádek" };
+            deleteBtn.AddToClassList("icon");
             deleteBtn.AddToClassList("icon-trash");
 
             container.Add(moveUpBtn);

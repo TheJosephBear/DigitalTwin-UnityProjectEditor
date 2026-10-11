@@ -229,9 +229,9 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
         StartCoroutine(DownloadFileRequest(url, callback));
     }
 
-    public void UploadImageToServer(string path, string fileName, string projectName, string assetHash) {
+    public void UploadImageToServer(string path, string fileName, string projectName, string assetHash, System.Action<bool> onComplete = null) {
         string url = $"{serverUrl}/upload_image_files";
-        StartCoroutine(UploadFileRequest(url, path, fileName, projectName, assetHash));
+        StartCoroutine(UploadFileRequest(url, path, fileName, projectName, assetHash, onComplete));
     }
 
     public void DownloadPreviewImageFromServer(string projectName, System.Action<byte[]> callback) {
@@ -326,11 +326,12 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
         HandleResponse(www, callback);
     }
 
-    IEnumerator UploadFileRequest(string url, string path, string fileName, string projectName, string assetHash) {
+    IEnumerator UploadFileRequest(string url, string path, string fileName, string projectName, string assetHash, System.Action<bool> onComplete = null) {
     //    MessageDisplayManager.Instance.DisplayMessage("UploadFileRequest");
 
         if (path == null) {
             Debug.LogError("Upload file request err: PATH IS NULL");
+            onComplete?.Invoke(false);
             yield break;
         }
 
@@ -348,8 +349,10 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
 
         if (www.result != UnityWebRequest.Result.Success) {
             Debug.LogError($"Error uploading file {fileName}: {www.error}");
+            onComplete?.Invoke(false);
         } else {
             Debug.Log($"File {fileName} uploaded successfully for asset {assetHash}!");
+            onComplete?.Invoke(true);
         }
     }
 

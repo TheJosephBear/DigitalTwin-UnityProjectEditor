@@ -9,6 +9,7 @@ public class ImageManager : Singleton<ImageManager> {
     public GameObject ImageContainer;
     private List<TextureAsset> _loadedTextures = new List<TextureAsset>();
     private List<TextureAsset> _previewTextures = new List<TextureAsset>();
+    private HashSet<string> _uploadedHashes = new HashSet<string>(); // Images known to be on the server (uploaded or downloaded)
 
     private Action<TextureAsset> _onTextureAssetLoadedCallback;
     private bool _processingPreview = false;
@@ -150,17 +151,39 @@ public class ImageManager : Singleton<ImageManager> {
 
     public void UploadImagesToServer(string projectName) {
         foreach (TextureAsset asset in _loadedTextures) {
-            if (!string.IsNullOrEmpty(asset.LocalPersistentPath) && File.Exists(asset.LocalPersistentPath)) {
-                ServerCommunicationManager.Instance.UploadImageToServer(
-                    asset.LocalPersistentPath,
-                    asset.FileName,
-                    projectName,
-                    asset.FileHash
-                );
-            } else {
-                Debug.LogWarning($"Attempted to upload {asset.FileName} but local file was missing.");
-            }
+            UploadImage(asset, projectName);
         }
+    }
+
+    /// <summary>
+    /// Uploads only the given images (by ID / hash) that aren't on the server yet.
+    /// The survey is saved separately from the project, so its images would otherwise wait for the next project save.
+    /// </summary>
+    public void UploadImagesIfMissing(IEnumerable<string> imageIds, string projectName) {
+        foreach (string id in imageIds) {
+            TextureAsset asset = _loadedTextures.Find(x => x != null && (x.ID == id || x.FileHash == id));
+            if (asset == null || _uploadedHashes.Contains(asset.FileHash)) continue;
+            UploadImage(asset, projectName);
+        }
+    }
+
+    private void UploadImage(TextureAsset asset, string projectName) {
+        if (string.IsNullOrEmpty(asset.LocalPersistentPath) || !File.Exists(asset.LocalPersistentPath)) {
+            Debug.LogWarning($"Attempted to upload {asset.FileName} but local file was missing.");
+            return;
+        }
+
+        string hash = asset.FileHash;
+        _uploadedHashes.Add(hash); // Marked right away so a second save doesn't send it again, reverted on failure
+        ServerCommunicationManager.Instance.UploadImageToServer(
+            asset.LocalPersistentPath,
+            asset.FileName,
+            projectName,
+            hash,
+            success => {
+                if (!success) _uploadedHashes.Remove(hash);
+            }
+        );
     }
 
     #endregion
@@ -202,6 +225,26 @@ public class ImageManager : Singleton<ImageManager> {
                     isDone = true;
                 });
 
+            yield return new WaitUntil(() => isDone);
+        }
+
+        onComplete?.Invoke();
+    }
+
+    /// <summary>
+    /// Downloads images (by ID / hash) that aren't loaded yet, e.g. survey images that were uploaded
+    /// with the survey but aren't listed in the saved project data.
+    /// </summary>
+    public void EnsureImagesLoaded(IEnumerable<string> imageIds, string projectName, Action onComplete = null) {
+        StartCoroutine(EnsureImagesLoadedCoroutine(new List<string>(imageIds), projectName, onComplete));
+    }
+
+    private IEnumerator EnsureImagesLoadedCoroutine(List<string> imageIds, string projectName, Action onComplete) {
+        foreach (string id in new HashSet<string>(imageIds)) {
+            if (string.IsNullOrEmpty(id) || GetTextureAssetByID(id) != null) continue;
+
+            bool isDone = false;
+            DownloadTextureAsset(id, $"{id}.png", projectName, success => isDone = true);
             yield return new WaitUntil(() => isDone);
         }
 
@@ -257,6 +300,7 @@ public class ImageManager : Singleton<ImageManager> {
                         fileInfo = new FrostweepGames.Plugins.WebGLFileBrowser.FileInfo { name = fileName }
                     };
                     CreateTextureAsset(simulatedFile);
+                    _uploadedHashes.Add(hash);
                     onComplete?.Invoke(true);
                 } else {
                     Debug.LogError($"Failed to download texture: {fileName}");
@@ -275,6 +319,7 @@ public class ImageManager : Singleton<ImageManager> {
             Destroy(asset.gameObject);
         }
         _loadedTextures.Clear();
+        _uploadedHashes.Clear();
 
         foreach (var preview in _previewTextures) {
             if (preview.Texture != null) Destroy(preview.Texture);

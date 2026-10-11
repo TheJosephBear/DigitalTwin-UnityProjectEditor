@@ -27,6 +27,18 @@ public class SurveyUIControllerViewer : MonoBehaviour {
     private bool _isSubmitted = false;
     private HashSet<int> _questionsWithShownError = new(); // Required questions the user was already warned about
 
+    // Survey window gets wider for questions that don't fit its default width (matrices)
+    private VisualElement _pageContainer;
+    private StyleLength _defaultPageWidth;
+    private StyleLength _defaultPageMaxWidth;
+    private bool _isPageWidened = false;
+    private float _defaultPageResolvedWidth = 420f; // Last measured default width (layout of the widened page would be stale)
+
+    private const float GridColumnWidth = 95f;        // Space per matrix answer column
+    private const float GridRowTitleWidth = 150f;     // Space for the row-title column
+    private const float PageChromeWidth = 140f;       // Paddings, borders and scrollbar around the question content (widened page)
+    private const string PageWideClass = "page-container--wide";
+
     public void Initialize(SurveyBuilder surveyBuilder, SurveyResponseManager responseManager, SurveyManager manager) {
         _surveyBuilder = surveyBuilder;
         _responseManager = responseManager;
@@ -55,6 +67,13 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         _pageCountLabel = _root.Q<Label>("page-count-label");
 
         #endregion
+
+        _pageContainer = _root.Q<VisualElement>("page-container");
+        if (_pageContainer != null) {
+            _defaultPageWidth = _pageContainer.style.width;
+            _defaultPageMaxWidth = _pageContainer.style.maxWidth;
+            _pageContainer.RegisterCallback<GeometryChangedEvent>(LockInitialPageWidth);
+        }
 
         _validationLabel = _root.Q<Label>("validation-message");
         _scrollView = _root.Q<ScrollView>("survey-scroll-view");
@@ -304,6 +323,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         UpdateNavigationUI(totalQuestions, hasIntro);
 
         if (_currentPage == 0) {
+            UpdatePageWidth(null);
             if (_firstPageElement != null) {
                 _firstPageElement.style.display = DisplayStyle.Flex;
             }
@@ -324,6 +344,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
                 QuestionBase currentQuestion = _questions[questionIndex];
                 SurveyQuestionUIBase addedQuestionUI = AddQuestionToUI(currentQuestion);
                 addedQuestionUI.SetImageRender();
+                UpdatePageWidth(addedQuestionUI);
 
                 // Returning to a question the user was already warned about -> show the warning again
                 RefreshValidation(currentQuestion.Id);
@@ -371,10 +392,50 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         }
     }
 
+    // Minimum width of the survey window = its width when first shown (25 % of the screen, at least 420 px)
+    void LockInitialPageWidth(GeometryChangedEvent evt) {
+        if (_isPageWidened) return; // Wait for a default-sized layout
+        float width = evt.newRect.width;
+        if (float.IsNaN(width) || width <= 0f) return;
+
+        _pageContainer.UnregisterCallback<GeometryChangedEvent>(LockInitialPageWidth);
+        _pageContainer.style.minWidth = width;
+        _defaultPageResolvedWidth = width;
+    }
+
+    // Widens the survey window for the displayed question if needed, otherwise restores the default size
+    void UpdatePageWidth(SurveyQuestionUIBase questionUI) {
+        if (_pageContainer == null) return;
+
+        float wantedWidth = 0f;
+        if (questionUI is SurveyQuestionUIViewerGrid gridUI) {
+            wantedWidth = PageChromeWidth + GridRowTitleWidth + GridColumnWidth * gridUI.ColumnCount;
+        }
+
+        if (_isPageWidened) {
+            _pageContainer.style.width = _defaultPageWidth;
+            _pageContainer.style.maxWidth = _defaultPageMaxWidth;
+            _pageContainer.RemoveFromClassList(PageWideClass);
+            _isPageWidened = false;
+        } else {
+            float measured = _pageContainer.resolvedStyle.width;
+            if (!float.IsNaN(measured) && measured > 0f) _defaultPageResolvedWidth = measured;
+        }
+
+        // Never make the window narrower than its default size
+        if (wantedWidth <= _defaultPageResolvedWidth) return;
+
+        _pageContainer.style.width = wantedWidth;
+        _pageContainer.style.maxWidth = Length.Percent(95);
+        _pageContainer.AddToClassList(PageWideClass); // Smaller side paddings, the extra width goes to the content
+        _isPageWidened = true;
+    }
+
     void DisplayThankYouPage(bool alreadySubmitted = false) {
         _currentPage = _questions.Count + 1;
         ClearQuestionFromUI();
         SetValidationMessage(null);
+        UpdatePageWidth(null);
 
         if (_firstPageElement != null) {
             _firstPageElement.style.display = DisplayStyle.None;
@@ -549,7 +610,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
                 RefreshValidation(qId);
             };
             foreach (AnswerBase answer in questionBase.Answers) {
-                scaleUI.AddAnswer(answer.Text);
+                scaleUI.AddScaleRow(answer.Text, (answer as AnswerString)?.TextRight);
             }
         }
 

@@ -369,6 +369,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
             answerEditor.OnTextChanged += HandleAnswerTextChanged;
         } else if (answerUI is SurveyAnswerUIEditorLinearScale answerEditorScale) {
             answerEditorScale.OnTextChanged += HandleAnswerTextChanged;
+            answerEditorScale.OnRightTextChanged += HandleAnswerRightTextChanged;
         }
     }
 
@@ -381,6 +382,10 @@ public class SurveyUIControllerEditor : MonoBehaviour {
 
     public void HandleAnswerTextChanged(int questionId, int answerId, string newText) {
         _surveyBuilder.SetAnswerText(questionId, answerId, newText);
+    }
+
+    public void HandleAnswerRightTextChanged(int questionId, int answerId, string newText) {
+        _surveyBuilder.SetAnswerTextRight(questionId, answerId, newText);
     }
 
     public void HandleAnswerRemoved(int questionId, int answerId) {
@@ -536,8 +541,11 @@ public class SurveyUIControllerEditor : MonoBehaviour {
                 scaleUI.SetScaleRange(linScaleQuestion.ScaleType, linScaleQuestion.Min, linScaleQuestion.Max);
                 foreach (AnswerBase answer in question.Answers) {
                     SurveyAnswerUIBase answerUIBase = scaleUI.AddAnswer(answer.Text);
-                    if (answerUIBase is SurveyAnswerUIEditorLinearScale answerEditorScale)
+                    if (answerUIBase is SurveyAnswerUIEditorLinearScale answerEditorScale) {
+                        answerEditorScale.SetRightText((answer as AnswerString)?.TextRight);
                         answerEditorScale.OnTextChanged += HandleAnswerTextChanged;
+                        answerEditorScale.OnRightTextChanged += HandleAnswerRightTextChanged;
+                    }
                 }
             }
         }
