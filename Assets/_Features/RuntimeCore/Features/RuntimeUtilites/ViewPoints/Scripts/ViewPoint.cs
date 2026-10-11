@@ -1,0 +1,62 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class ViewPoint : EditorObjectBase, IClickable {
+
+    public GameObject vcam;
+
+    public void OnClickDown() {
+        ViewManager.Instance.SetActiveViewPoint(this);
+        /*
+        if (EditorManager.Instance.EditorModeCurrent != EditorMode.View) {
+            GizmoManager.Instance.SetTargetGameObject(gameObject);
+            GizmoManager.Instance.ShowGizmo(GizmoType.Universal, UniversalGizmoScaleDisabled: true);
+            _viewManager.Instance.SetActiveViewPoint(this);
+        }
+        */
+    }
+
+    public void Activate() {
+        if (GizmoManager.Instance != null)
+            GizmoManager.Instance.HideGizmo();
+        vcam.SetActive(true);
+    }
+
+    public void Deactivate() {
+        vcam?.SetActive(false);
+    }
+
+    public SerializableViewPoint Serialize() {
+        return new SerializableViewPoint {
+            ID = ID,
+            Name = Name,
+            position = transform.position,
+            eulerRotation = transform.eulerAngles 
+        };
+    }
+
+    public void Deserialize(SerializableViewPoint interestPoint) {
+        transform.position = interestPoint.position;
+        transform.eulerAngles = interestPoint.eulerRotation; 
+        ID = interestPoint.ID;
+        Name = interestPoint.Name;
+    }
+
+    public void OnClick() {
+
+    }
+
+    public void OnClickUp() {
+
+    }
+
+    public void OnHover() {
+
+    }
+
+    public void OnUnhover() {
+
+    }
+}
