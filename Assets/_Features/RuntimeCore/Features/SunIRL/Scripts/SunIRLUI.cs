@@ -4,6 +4,15 @@ using TMPro;
 using UnityEngine;
 
 public class SunIRLUI: MonoBehaviour {
+    private const int TimeStepMinutes = 5;
+    private const int MinutesPerDay = 24 * 60;
+
+    // Genitive month names for "31. prosince"; hardcoded so it doesn't depend on cs-CZ culture data (WebGL)
+    private static readonly string[] CzechMonthsGenitive = {
+        "ledna", "února", "března", "dubna", "května", "června",
+        "července", "srpna", "září", "října", "listopadu", "prosince"
+    };
+
     [Header("Initial Values")]
     [SerializeField] private float initialLatitude = 0f;
     [SerializeField] private float initialLongitude = 0f;
@@ -17,19 +26,30 @@ public class SunIRLUI: MonoBehaviour {
     [SerializeField] private TMP_InputField latitudeInput;
     [SerializeField] private TMP_InputField longitudeInput;
 
-    [Header("Date Dropdowns")]
+    [Header("Date")]
     [SerializeField] private TMP_Dropdown yearDropdown;
-    [SerializeField] private TMP_Dropdown monthDropdown;
-    [SerializeField] private TMP_Dropdown dayDropdown;
+    [SerializeField] private UnityEngine.UI.Slider dateSlider;
+    [SerializeField] private TMP_Text dateValueLabel;
 
-    [Header("Time Input")]
-    [SerializeField] private TMP_InputField hourInput;
-    [SerializeField] private TMP_InputField minuteInput;
+    [Header("Time")]
+    [SerializeField] private UnityEngine.UI.Slider timeSlider;
+    [SerializeField] private TMP_Text timeValueLabel;
+
+    [Header("Live Time")]
+    [Tooltip("\"Aktuální datum a čas\": follow the real clock until the user moves a date/time control")]
+    [SerializeField] private UnityEngine.UI.Toggle currentTimeToggle;
 
     [Header("GO References")]
     [SerializeField] private GameObject ContainerGameObject;
     [SerializeField] private GameObject ButtonGameObject;
 
+
+    // What neighbouring HUD elements (e.g. the walk button) line up next to:
+    // the card while the modal is open, the sun button while it is closed
+    public static RectTransform CurrentAnchor { get; private set; }
+    public static event Action<RectTransform, bool> AnchorChanged; // (anchor, animate)
+    // The sun button itself, so neighbours can match its on-screen size
+    public static RectTransform SunButton { get; private set; }
 
     private SunManager sunManager;
     private bool isInitializing = false;
@@ -38,25 +58,35 @@ public class SunIRLUI: MonoBehaviour {
         sunManager = manager;
         isInitializing = true;
 
-        // 1. Setup UI fields and dropdown options
+        // 1. Setup UI fields and slider ranges
         PopulateYears();
-        PopulateMonths();
+        SetDropdownToValue(yearDropdown, initialYear.ToString());
 
-        // Build days according to initial year/month, then select day
-        UpdateDays();
-        dayDropdown.value = (int)Mathf.Clamp(initialDay - 1, 0, dayDropdown.options.Count - 1);
-        dayDropdown.RefreshShownValue();
+        dateSlider.wholeNumbers = true;
+        dateSlider.minValue = 1;
+        UpdateDateSliderRange();
+        dateSlider.SetValueWithoutNotify(DayOfYear(SelectedYear(), (int)initialMonth, (int)initialDay));
+
+        timeSlider.wholeNumbers = true;
+        timeSlider.minValue = 0;
+        timeSlider.maxValue = MinutesPerDay / TimeStepMinutes - 1;
+        timeSlider.SetValueWithoutNotify(TimeToSliderValue((int)initialHour, (int)initialMinute));
+
+        RefreshDateLabel();
+        RefreshTimeLabel();
 
         // 2. Bind Listeners
         latitudeInput.onEndEdit.AddListener(OnCoordinatesChanged);
         longitudeInput.onEndEdit.AddListener(OnCoordinatesChanged);
 
-        yearDropdown.onValueChanged.AddListener(OnYearOrMonthChanged);
-        monthDropdown.onValueChanged.AddListener(OnYearOrMonthChanged);
-        dayDropdown.onValueChanged.AddListener(OnDateChanged);
+        yearDropdown.onValueChanged.AddListener(OnYearChanged);
+        dateSlider.onValueChanged.AddListener(OnDateChanged);
+        timeSlider.onValueChanged.AddListener(OnTimeChanged);
 
-        hourInput.onEndEdit.AddListener(OnTimeChanged);
-        minuteInput.onEndEdit.AddListener(OnTimeChanged);
+        if (currentTimeToggle != null) {
+            currentTimeToggle.SetIsOnWithoutNotify(sunManager.UseCurrentTime);
+            currentTimeToggle.onValueChanged.AddListener(OnCurrentTimeToggled);
+        }
 
         isInitializing = false;
 
@@ -65,7 +95,7 @@ public class SunIRLUI: MonoBehaviour {
             ApplyAllValuesToManager();
         }
 
-        OnHideUI();
+        SetVisible(false, animate: false);
     }
 
     public void SetUIValues(float latitude, float longitude, int year, int month, int day, int hour, int minute) {
@@ -80,43 +110,65 @@ public class SunIRLUI: MonoBehaviour {
             longitudeInput.text = longitude.ToString("F4");
         }
 
-        // 2. Ensure Year and Month options are populated
-        if (yearDropdown.options.Count == 0) PopulateYears();
-        if (monthDropdown.options.Count == 0) PopulateMonths();
-
-        // 3. Set Year Dropdown
-        SetDropdownToValue(yearDropdown, year.ToString());
-
-        // 4. Set Month Dropdown (1-indexed input to 0-indexed dropdown index)
-        int monthIndex = Mathf.Clamp(month - 1, 0, 11);
-        monthDropdown.value = monthIndex;
-        monthDropdown.RefreshShownValue();
-
-        // 5. Repopulate Days according to Year/Month and pick Day
-        UpdateDays();
-        int dayIndex = Mathf.Clamp(day - 1, 0, dayDropdown.options.Count - 1);
-        dayDropdown.value = dayIndex;
-        dayDropdown.RefreshShownValue();
-
-        // 6. Set Time Inputs (Formatted with two digits)
-        if (hourInput != null) {
-            hourInput.text = Mathf.Clamp(hour, 0, 23).ToString("D2");
-        }
-        if (minuteInput != null) {
-            minuteInput.text = Mathf.Clamp(minute, 0, 59).ToString("D2");
-        }
+        // 2. Date and time
+        SetDateTimeValues(year, month, day, hour, minute);
 
         isInitializing = wasInitializing; // Restore state
     }
 
+    /// <summary>
+    /// Updates only the date/time controls, so the live clock doesn't overwrite coordinates being typed.
+    /// </summary>
+    public void SetDateTimeValues(int year, int month, int day, int hour, int minute) {
+        bool wasInitializing = isInitializing;
+        isInitializing = true; // Block UI event callbacks from re-triggering SunManager
+
+        // 1. Ensure Year options are populated, then select the year
+        if (yearDropdown.options.Count == 0) PopulateYears();
+        SetDropdownToValue(yearDropdown, year.ToString());
+
+        // 2. Resize the date slider for the selected year and pick the day
+        UpdateDateSliderRange();
+        dateSlider.SetValueWithoutNotify(DayOfYear(SelectedYear(), month, day));
+        RefreshDateLabel();
+
+        // 3. Set the time slider (rounded down to the slider step)
+        timeSlider.SetValueWithoutNotify(TimeToSliderValue(hour, minute));
+        RefreshTimeLabel();
+
+        isInitializing = wasInitializing; // Restore state
+    }
+
+    public void SetCurrentTimeToggle(bool isOn) {
+        if (currentTimeToggle != null) {
+            currentTimeToggle.SetIsOnWithoutNotify(isOn);
+        }
+    }
+
     public void OnShowUI() {
-        ButtonGameObject.SetActive(false);
-        ContainerGameObject.SetActive(true);
+        SetVisible(true, animate: true);
     }
 
     public void OnHideUI() {
-        ButtonGameObject.SetActive(true);
-        ContainerGameObject.SetActive(false);
+        SetVisible(false, animate: true);
+    }
+
+    private void SetVisible(bool visible, bool animate) {
+        ButtonGameObject.SetActive(!visible);
+        ContainerGameObject.SetActive(visible);
+
+        SunButton = (RectTransform)ButtonGameObject.transform;
+        CurrentAnchor = (RectTransform)(visible ? ContainerGameObject : ButtonGameObject).transform;
+        AnchorChanged?.Invoke(CurrentAnchor, animate);
+    }
+
+    private void OnDestroy() {
+        if (CurrentAnchor != null && CurrentAnchor.IsChildOf(transform)) {
+            CurrentAnchor = null;
+        }
+        if (SunButton != null && SunButton.IsChildOf(transform)) {
+            SunButton = null;
+        }
     }
 
     private void ApplyAllValuesToManager() {
@@ -139,42 +191,53 @@ public class SunIRLUI: MonoBehaviour {
         yearDropdown.AddOptions(options);
     }
 
-    private void PopulateMonths() {
-        monthDropdown.ClearOptions();
-        List<string> options = new List<string>();
-
-        for (int m = 1; m <= 12; m++) {
-            options.Add(new DateTime(2026, m, 1).ToString("MMMM"));
-        }
-
-        monthDropdown.AddOptions(options);
+    private int SelectedYear() {
+        return int.Parse(yearDropdown.options[yearDropdown.value].text);
     }
 
-    private void UpdateDays() {
-        if (yearDropdown.options.Count == 0 || monthDropdown.options.Count == 0) return;
+    private void UpdateDateSliderRange() {
+        int daysInYear = DateTime.IsLeapYear(SelectedYear()) ? 366 : 365;
+        dateSlider.maxValue = daysInYear;
+        dateSlider.SetValueWithoutNotify(Mathf.Clamp(dateSlider.value, 1, daysInYear));
+    }
 
-        int selectedYear = int.Parse(yearDropdown.options[yearDropdown.value].text);
-        int selectedMonth = monthDropdown.value + 1;
-        int daysInMonth = DateTime.DaysInMonth(selectedYear, selectedMonth);
+    private DateTime DateFromSlider() {
+        return new DateTime(SelectedYear(), 1, 1).AddDays((int)dateSlider.value - 1);
+    }
 
-        int previousDayValue = dayDropdown.value;
+    private static int DayOfYear(int year, int month, int day) {
+        month = Mathf.Clamp(month, 1, 12);
+        day = Mathf.Clamp(day, 1, DateTime.DaysInMonth(year, month));
+        return new DateTime(year, month, day).DayOfYear;
+    }
 
-        dayDropdown.ClearOptions();
-        List<string> options = new List<string>();
+    private static int TimeToSliderValue(int hour, int minute) {
+        int totalMinutes = Mathf.Clamp(hour, 0, 23) * 60 + Mathf.Clamp(minute, 0, 59);
+        return totalMinutes / TimeStepMinutes;
+    }
 
-        for (int d = 1; d <= daysInMonth; d++) {
-            options.Add(d.ToString("D2"));
+    private int SliderTotalMinutes() {
+        return (int)timeSlider.value * TimeStepMinutes;
+    }
+
+    private void RefreshDateLabel() {
+        if (dateValueLabel != null) {
+            DateTime date = DateFromSlider();
+            dateValueLabel.text = $"{date.Day}. {CzechMonthsGenitive[date.Month - 1]}";
         }
+    }
 
-        dayDropdown.AddOptions(options);
-        dayDropdown.value = Mathf.Clamp(previousDayValue, 0, daysInMonth - 1);
-        dayDropdown.RefreshShownValue();
+    private void RefreshTimeLabel() {
+        if (timeValueLabel != null) {
+            int totalMinutes = SliderTotalMinutes();
+            timeValueLabel.text = $"{totalMinutes / 60:D2}:{totalMinutes % 60:D2}";
+        }
     }
 
     private void SetDropdownToValue(TMP_Dropdown dropdown, string valueStr) {
         int index = dropdown.options.FindIndex(option => option.text == valueStr);
         if (index != -1) {
-            dropdown.value = index;
+            dropdown.SetValueWithoutNotify(index);
             dropdown.RefreshShownValue();
         }
     }
@@ -190,30 +253,44 @@ public class SunIRLUI: MonoBehaviour {
         sunManager.UpdateCoordinates(lat, lon);
     }
 
-    private void OnYearOrMonthChanged(int _) {
+    private void OnCurrentTimeToggled(bool isOn) {
         if (isInitializing) return;
 
-        UpdateDays();
-        OnDateChanged(dayDropdown.value);
+        sunManager.SetUseCurrentTime(isOn);
     }
 
-    private void OnDateChanged(int _) {
-        if (isInitializing) return;
+    // Any manual date/time change "locks" the time: the live clock stops and the value stays fixed
+    private void LockToManualTime() {
+        if (!sunManager.UseCurrentTime) return;
 
-        uint year = uint.Parse(yearDropdown.options[yearDropdown.value].text);
-        uint month = (uint)(monthDropdown.value + 1);
-        uint day = (uint)(dayDropdown.value + 1);
-
-        sunManager.UpdateDate(year, month, day);
+        SetCurrentTimeToggle(false);
+        sunManager.SetUseCurrentTime(false);
     }
 
-    private void OnTimeChanged(string _) {
+    private void OnYearChanged(int _) {
         if (isInitializing) return;
 
-        uint.TryParse(hourInput.text, out uint hour);
-        uint.TryParse(minuteInput.text, out uint minute);
+        LockToManualTime();
+        UpdateDateSliderRange();
+        OnDateChanged(dateSlider.value);
+    }
 
-        sunManager.UpdateTime(hour, minute);
+    private void OnDateChanged(float _) {
+        RefreshDateLabel();
+        if (isInitializing) return;
+
+        LockToManualTime();
+        DateTime date = DateFromSlider();
+        sunManager.UpdateDate((uint)date.Year, (uint)date.Month, (uint)date.Day);
+    }
+
+    private void OnTimeChanged(float _) {
+        RefreshTimeLabel();
+        if (isInitializing) return;
+
+        LockToManualTime();
+        int totalMinutes = SliderTotalMinutes();
+        sunManager.UpdateTime((uint)(totalMinutes / 60), (uint)(totalMinutes % 60));
     }
 
     #endregion

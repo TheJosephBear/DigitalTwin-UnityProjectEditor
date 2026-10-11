@@ -36,5 +36,12 @@ public class ViewingSerializer : MonoBehaviour {
         if (GeoMapManager.Instance != null)
             GeoMapManager.Instance.DeserializeManager(serializedProject.serializableGeoMapManager);
 
+        // Must run before FreecamState opens the sun UI, otherwise it gets created with the inspector defaults.
+        // Coordinates come straight from the saved data: the geo managers are inactive in the Viewing scene.
+        if (SunManager.Instance != null) {
+            GeoLocalizationData geoData = serializedProject.serializableGeoMapManager?.geoData;
+            Vector2 geoCoordinates = geoData != null ? new Vector2(geoData.latitude, geoData.longtitude) : Vector2.zero;
+            SunManager.Instance.Deserialize(serializedProject.serializableSun, geoCoordinates);
+        }
     }
 }

@@ -17,8 +17,10 @@ public class SunIRL: MonoBehaviour {
     [Range(-180f, 180f)] public float Longitude = 0f;
 
     [Header("Timezone")]
-    [Tooltip("Local time offset from UTC in hours (e.g., +2 for CEST, -5 for EST)")]
-    public float UtcOffsetHours = 0f;
+    [Tooltip("Standard (winter) time offset from UTC in hours (e.g., +1 for CET, -5 for EST)")]
+    public float StandardUtcOffsetHours = 1f;
+    [Tooltip("Adds +1 h between the last Sunday of March and the last Sunday of October (EU rule, e.g. CEST)")]
+    public bool UseEuDaylightSaving = true;
 
     [Header("Time")]
     [SerializeField] private uint Year = 2026;
@@ -63,23 +65,74 @@ public class SunIRL: MonoBehaviour {
     }
 
     public void SetMonth(uint month) {
-        Month = Mathf.Clamp((int)month, 1, 12) > 0 ? month : 1;
+        Month = (uint)Mathf.Clamp((int)month, 1, 12);
         UpdateSunPosition();
     }
 
     public void SetDay(uint day) {
-        Day = Mathf.Clamp((int)day, 1, 31) > 0 ? day : 1;
+        Day = (uint)Mathf.Clamp((int)day, 1, 31);
         UpdateSunPosition();
     }
 
     public void SetHour(uint hour) {
-        Hour = Mathf.Clamp((int)hour, 0, 23) > 0 ? hour : 0;
+        Hour = (uint)Mathf.Clamp((int)hour, 0, 23);
         UpdateSunPosition();
     }
 
     public void SetMinute(uint minute) {
-        Minute = Mathf.Clamp((int)minute, 0, 59) > 0 ? minute : 0;
+        Minute = (uint)Mathf.Clamp((int)minute, 0, 59);
         UpdateSunPosition();
+    }
+
+    #endregion
+
+    #region Time Helpers
+
+    /// <summary>
+    /// The currently set date and time; the day is clamped to the month length so e.g. 30. 2. stays valid.
+    /// </summary>
+    public DateTime GetDateTime() {
+        try {
+            int year = (int)Year;
+            int month = Mathf.Clamp((int)Month, 1, 12);
+            int day = Mathf.Clamp((int)Day, 1, DateTime.DaysInMonth(year, month));
+            return new DateTime(year, month, day, Mathf.Clamp((int)Hour, 0, 23), Mathf.Clamp((int)Minute, 0, 59), 0, DateTimeKind.Unspecified);
+        } catch {
+            return new DateTime(2026, 1, 1, 12, 0, 0, DateTimeKind.Unspecified);
+        }
+    }
+
+    /// <summary>
+    /// Current wall-clock time in this sun's timezone. Built from UTC on purpose, so it
+    /// doesn't depend on the browser's timezone (unreliable in WebGL).
+    /// </summary>
+    public DateTime GetCurrentLocalTime() {
+        DateTime utcNow = DateTime.UtcNow;
+        float offset = StandardUtcOffsetHours + (UseEuDaylightSaving && IsEuDaylightSaving(utcNow) ? 1f : 0f);
+        return DateTime.SpecifyKind(utcNow.AddHours(offset), DateTimeKind.Unspecified);
+    }
+
+    /// <summary>
+    /// UTC offset in effect at the given local time (standard offset, +1 h during EU summer time).
+    /// </summary>
+    public float GetUtcOffsetHours(DateTime localTime) {
+        if (!UseEuDaylightSaving) return StandardUtcOffsetHours;
+
+        DateTime approxUtc = localTime.AddHours(-StandardUtcOffsetHours);
+        return StandardUtcOffsetHours + (IsEuDaylightSaving(approxUtc) ? 1f : 0f);
+    }
+
+    // EU summer time runs from 01:00 UTC on the last Sunday of March to 01:00 UTC on the last Sunday of October.
+    // Computed by hand because TimeZoneInfo has no timezone data in WebGL builds.
+    private static bool IsEuDaylightSaving(DateTime utc) {
+        DateTime start = LastSunday(utc.Year, 3).AddHours(1);
+        DateTime end = LastSunday(utc.Year, 10).AddHours(1);
+        return utc >= start && utc < end;
+    }
+
+    private static DateTime LastSunday(int year, int month) {
+        DateTime lastDay = new DateTime(year, month, DateTime.DaysInMonth(year, month));
+        return lastDay.AddDays(-(int)lastDay.DayOfWeek);
     }
 
     #endregion
@@ -108,19 +161,14 @@ public class SunIRL: MonoBehaviour {
     }
 
     private Quaternion CalculateSunQuaternion(out float altitudeDeg) {
-        DateTime currentDateTime;
-        try {
-            currentDateTime = new DateTime((int)Year, (int)Month, (int)Day, (int)Hour, (int)Minute, 0, DateTimeKind.Unspecified);
-        } catch {
-            currentDateTime = new DateTime(2026, 1, 1, 12, 0, 0, DateTimeKind.Unspecified);
-        }
+        DateTime currentDateTime = GetDateTime();
 
         // 1. Calculate Day of the Year
         int dayOfYear = currentDateTime.DayOfYear;
 
-        // 2. Convert Local Time to UTC Hours
+        // 2. Convert Local Time to UTC Hours (summer/winter time aware)
         float localHours = (float)currentDateTime.TimeOfDay.TotalHours;
-        float utcHours = localHours - UtcOffsetHours;
+        float utcHours = localHours - GetUtcOffsetHours(currentDateTime);
 
         // 3. Convert UTC to Local Solar Time using Longitude (15° per hour = 4 min per degree)
         float solarTimeHours = utcHours + (Longitude / 15f);
@@ -196,4 +244,5 @@ public class SerializableSun {
     public int day;
     public int hour;
     public int minute;
+    public bool useCurrentTime; // "Aktuální datum a čas" toggle: follow the real clock instead of the fixed values above
 }
