@@ -46,9 +46,9 @@ public class ProjectListItem : MonoBehaviour {
             if (hasSurvey) {
                 SurveyStatusText.color = activeColor;
                 if (SurveyRespondentsText != null) {
-                    SurveyStatusText.text = "● Aktivní";
+                    SurveyStatusText.text = "Aktivní";
                 } else {
-                    SurveyStatusText.text = $"● Aktivní · {ProjectMetadata.GetRespondentCountCzechText(respCount)}";
+                    SurveyStatusText.text = $"Aktivní · {ProjectMetadata.GetRespondentCountCzechText(respCount)}";
                 }
             } else {
                 SurveyStatusText.color = inactiveColor;

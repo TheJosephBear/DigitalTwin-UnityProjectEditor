@@ -1,16 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
-using System;
-using System.Text.RegularExpressions;
+using UnityEngine;
 
-public class ProjectListManager : Singleton<ProjectListManager> {
+/// <summary>
+/// User flows of the project list scene: open, create, rename, edit, duplicate, delete, export, feedback.
+/// Shared data and server access stays in ProjectManager.
+/// </summary>
+public class ProjectListManager: Singleton<ProjectListManager> {
 
     public GameObject ProjectExportUIReff;
     ProjectListUINew _ui;
 
-    void Awake() {
+    protected override void Awake() {
         base.Awake();
 
         _ui = FindAnyObjectByType<ProjectListUINew>();
@@ -28,9 +30,7 @@ public class ProjectListManager : Singleton<ProjectListManager> {
 
     #region Context menu actions
 
-
     public void OpenProject(ProjectMetadata projectMedata) {
-        print("open project started");
         // Download selected project data
         // Editor then deserializes it once the scene is loaded
         StartCoroutine(OpenProjectCoroutine(projectMedata));
@@ -52,59 +52,104 @@ public class ProjectListManager : Singleton<ProjectListManager> {
         while (!loading.IsCompleted)
             yield return null;
 
-      //  UIManager.Instance.HideUI(UIType.LoadingScreen);
+        //  UIManager.Instance.HideUI(UIType.LoadingScreen);
         UIManager.Instance.HideUI(UIType.ProjectsList);
         SceneLoadingManager.Instance.UnLoadSceneAsync(SceneType.ProjectList);
     }
 
     public void CreateNewProject() {
-        ProjectManager.Instance.CreateNewProject((id) => {
-            GetProjectMetadataList((list) => {
-                ProjectMetadata createdProject = ProjectManager.Instance.GetProjectMetadataByID(id);
-                if(createdProject != null) {
-                    OpenProject(createdProject);
-                    return;
+        PopUp.Instance.AskForInput("Jméno projektu", (userInput) => {
+            if (string.IsNullOrWhiteSpace(userInput)) {
+                PopUp.Instance.ShowPopUpWindow("Input was cancelled or empty.");
+                return;
+            }
+
+            string newProjectName = UniqueNameEnsure(userInput.Trim());
+            string id = System.Guid.NewGuid().ToString();
+
+            ServerCommunicationManager.Instance.CreateProject(newProjectName, id, (success, response) => {
+                if (!success) {
+                    PopUp.Instance.ShowPopUpWindow("Vytvoření projektu selhalo: " + response);
                 }
 
-                RefreshProjectList();
+                OnProjectCreated(id);
             });
-            
+        });
+    }
+
+    void OnProjectCreated(string id) {
+        GetProjectMetadataList((list) => {
+            ProjectMetadata createdProject = ProjectManager.Instance.GetProjectMetadataByID(id);
+            if (createdProject != null) {
+                OpenProject(createdProject);
+                return;
+            }
+
+            RefreshProjectList();
         });
     }
 
     public void RenameProject(ProjectMetadata projectMetadata) {
-        ProjectManager.Instance.RenameProject(projectMetadata, () => {
+        PopUp.Instance.AskForInput("Přejmenovat projekt", (userInput) => {
+            RenameProject(projectMetadata, userInput);
+        });
+    }
+
+    public void RenameProject(ProjectMetadata projectMetadata, string text) {
+        if (string.IsNullOrWhiteSpace(text)) {
+            PopUp.Instance.ShowPopUpWindow("Input was cancelled or empty.");
+            return;
+        }
+
+        ServerCommunicationManager.Instance.EditProjectName(projectMetadata.projectName, text.Trim(), (success, response) => {
+            if (!success) {
+                PopUp.Instance.ShowPopUpWindow("Failed " + response);
+            }
+
             RefreshProjectList();
         });
     }
 
     public void EditProject(string oldName, string newName, string description, string imageID, System.Action onCompleted) {
-        ProjectManager.Instance.EditProject(oldName, newName, description, imageID, () => {
-            onCompleted();
-        });
-    }
+        oldName = oldName?.Trim();
+        newName = newName?.Trim();
+        description = description?.Trim();
 
-    public void RenameProject(ProjectMetadata projectMetadata, string text) {
-        ProjectManager.Instance.RenameProject(projectMetadata, text, () => {
-            _ui.RefreshProjectList(() => { });
+        ServerCommunicationManager.Instance.EditProject(oldName, newName, description, imageID, (success, response) => {
+            if (!success) {
+                PopUp.Instance.ShowPopUpWindow("Failed " + response);
+            }
+
+            onCompleted?.Invoke();
         });
     }
 
     public void DuplicateProject(ProjectMetadata projectMetadata) {
-        ProjectManager.Instance.DuplicateProject(projectMetadata, () => {
+        ServerCommunicationManager.Instance.DuplicateProject(projectMetadata.projectName, (success, response) => {
+            if (!success) {
+                MessageDisplayManager.Instance.ShowMessage("Duplikování projektu selhalo: " + response);
+            } else {
+                MessageDisplayManager.Instance.ShowMessage("Projekt duplikován!");
+            }
+
             RefreshProjectList();
         });
     }
 
     public void DeleteProject(ProjectMetadata projectMetadata) {
-        ProjectManager.Instance.DeleteProject(projectMetadata, () => {
+        ServerCommunicationManager.Instance.DeleteProject(projectMetadata.projectName, (success, response) => {
+            if (!success) {
+                MessageDisplayManager.Instance.ShowMessage("Projekt se nepodařilo smazat! " + response);
+            } else {
+                MessageDisplayManager.Instance.ShowMessage("Projekt smazán!");
+            }
+
             RefreshProjectList();
         });
     }
 
     public void ExportProject(ProjectMetadata projectMetadata) {
-        ProjectManager.Instance.GetProjectIframeExport(projectMetadata, (iframeString) =>
-        {
+        ProjectManager.Instance.GetProjectIframeExport(projectMetadata.projectName, (iframeString) => {
             if (string.IsNullOrEmpty(iframeString))
                 return;
 
@@ -113,7 +158,7 @@ public class ProjectListManager : Singleton<ProjectListManager> {
                 .InstantiateObjectInScene(ProjectExportUIReff)
                 .GetComponent<ProjectExportUI>();
 
-            string url = GetUrlFromIframe(iframeString);
+            string url = ProjectManager.GetUrlFromIframe(iframeString);
 
             print($"trying to fill {exportUI.name} with {iframeString} and {url}");
 
@@ -122,7 +167,31 @@ public class ProjectListManager : Singleton<ProjectListManager> {
     }
 
     public void DownloadSurveyResponses(ProjectMetadata projectMetadata) {
-        ProjectManager.Instance.DownloadSurveyResponses(projectMetadata);
+        if (projectMetadata == null || string.IsNullOrEmpty(projectMetadata.projectName)) {
+            PopUp.Instance.ShowPopUpWindow("Projekt není vybrán.");
+            return;
+        }
+
+        string projectName = projectMetadata.projectName;
+        string exportUrl = $"{ServerCommunicationManager.Instance.serverUrl}/export_survey_csv?project_name={UnityEngine.Networking.UnityWebRequest.EscapeURL(projectName)}";
+
+        ServerCommunicationManager.Instance.StartSurveyResponsesDownload(projectName, (success, data) => {
+            if (!success) {
+                PopUp.Instance.ShowPopUpWindow("K exportu odpovědí tohoto projektu nemáte oprávnění nebo nastala chyba.");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(data) || data.Trim() == "[]" || data.Trim() == "{}") {
+                PopUp.Instance.ShowPopUpWindow("Pro tento projekt zatím nebyly odeslány žádné odpovědi.");
+                return;
+            }
+
+            if (WebGLTabOpener.Instance != null) {
+                WebGLTabOpener.Instance.OpenLinkInNewTab(exportUrl);
+            } else {
+                Application.OpenURL(exportUrl);
+            }
+        });
     }
 
     public void ShowFeedBack(ProjectMetadata projectMetadata) {
@@ -131,17 +200,38 @@ public class ProjectListManager : Singleton<ProjectListManager> {
 
     #endregion
 
-    string GetUrlFromIframe(string iframe) {
-        if (string.IsNullOrEmpty(iframe))
-            return null;
+    /// <summary>
+    /// Appends " (n)" to the name until no existing project uses it.
+    /// </summary>
+    string UniqueNameEnsure(string name) {
+        List<ProjectMetadata> existingProjects = ProjectManager.Instance.GetProjectMetadataList();
 
-        Match match = Regex.Match(iframe, "src\\s*=\\s*\"([^\"]+)\"");
+        string baseName = name?.Trim() ?? string.Empty;
+        string uniqueName = baseName;
+        int copyNumber = 1;
 
-        if (match.Success)
-            return match.Groups[1].Value;
+        bool NameExists(string checkName) {
+            return existingProjects.Any(wr => wr.projectName == checkName);
+        }
 
-        Debug.LogError("Failed to extract URL from iframe.");
-        return null;
+        if (!NameExists(uniqueName)) {
+            return uniqueName;
+        }
+
+        while (NameExists(uniqueName)) {
+            int lastIndexOfOpenParenthesis = baseName.LastIndexOf('(');
+            int lastIndexOfCloseParenthesis = baseName.LastIndexOf(')');
+            if (lastIndexOfOpenParenthesis != -1 && lastIndexOfCloseParenthesis == baseName.Length - 1) {
+                string suffix = baseName.Substring(lastIndexOfOpenParenthesis + 1, lastIndexOfCloseParenthesis - lastIndexOfOpenParenthesis - 1);
+                if (int.TryParse(suffix, out int existingNumber)) {
+                    copyNumber = existingNumber + 1;
+                    baseName = baseName.Substring(0, lastIndexOfOpenParenthesis).Trim();
+                }
+            }
+            uniqueName = $"{baseName} ({copyNumber})";
+            copyNumber++;
+        }
+        return uniqueName;
     }
 
 }

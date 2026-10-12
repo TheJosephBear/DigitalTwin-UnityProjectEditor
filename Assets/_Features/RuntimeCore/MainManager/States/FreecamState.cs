@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class FreecamState : StateBase {
     public override void Enter() {
-        UIManager.Instance.HideUI(UIType.EditorInitUI);
         SunManager.Instance.ToggleUI(true);
         MainManagerBase.Instance.ToggleHUD(true);
         ViewManager.Instance.ToggleViewPointUI(true);
