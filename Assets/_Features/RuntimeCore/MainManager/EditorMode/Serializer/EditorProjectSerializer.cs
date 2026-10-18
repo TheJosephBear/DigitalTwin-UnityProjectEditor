@@ -60,6 +60,7 @@ public class EditorProjectSerializer : MonoBehaviour {
             FPSManager.Instance.Deserialize(serializedProject.serializableFPS);
         if(serializedProject.serializableSettings != null)
             ProjectSettingsManager.Instance.Deserialize(serializedProject.serializableSettings);
+        yield return ProjectSettingsManager.Instance.DetectExistingSurveyCoroutine();
         // this hurts my soul
         CameraManager.Instance.ToggleCameraCollision(ProjectSettingsManager.Instance.EditorCameraCollision);
         FindAnyObjectByType<EditorHUDui>().CameraCollisionToggleRef.SetWithoutNotify(ProjectSettingsManager.Instance.EditorCameraCollision);

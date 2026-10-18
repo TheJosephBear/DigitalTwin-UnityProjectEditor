@@ -89,6 +89,7 @@ public class ProjectSettingsSerializable {
     public bool editorCameraCollision;
     public bool multiviewAllowed;
     public bool surveyAllowed;
+    public bool surveyAllowedSet; // false in saves made before the survey toggle existed -> ProjectSettingsManager detects an existing survey
     public bool firstPersonAllowed;
 }
 

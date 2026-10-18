@@ -47,6 +47,9 @@ public class ViewingSerializer : MonoBehaviour {
         if (serializedProject.serializableSettings != null)
             ProjectSettingsManager.Instance.Deserialize(serializedProject.serializableSettings);
 
+        // Must finish before ViewingInitializer checks SurveyAllowed
+        yield return ProjectSettingsManager.Instance.DetectExistingSurveyCoroutine();
+
         if (serializedProject.serializableFPS != null)
             FPSManager.Instance.Deserialize(serializedProject.serializableFPS);
     }

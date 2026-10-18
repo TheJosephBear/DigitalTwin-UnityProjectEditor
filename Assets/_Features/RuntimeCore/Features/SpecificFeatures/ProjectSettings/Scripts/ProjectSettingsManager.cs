@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -62,7 +63,10 @@ public class ProjectSettingsManager: Singleton<ProjectSettingsManager> {
 
     public bool SurveyAllowed {
         get => _settings.surveyAllowed;
-        set => SetSetting(ref _settings.surveyAllowed, value);
+        set {
+            _settings.surveyAllowedSet = true;
+            SetSetting(ref _settings.surveyAllowed, value);
+        }
     }
 
     public bool FirstPersonAllowed {
@@ -96,6 +100,29 @@ public class ProjectSettingsManager: Singleton<ProjectSettingsManager> {
 
         _settings = serializable;
         NotifyObservers();
+    }
+
+    /// <summary>
+    /// Projects saved before the survey toggle existed load with surveyAllowed == false even when they already have a survey.
+    /// For those, enable the toggle if a valid survey exists on the server. Only a found survey is stored,
+    /// so a failed download doesn't hide the survey for good (the check simply runs again on the next load).
+    /// </summary>
+    public IEnumerator DetectExistingSurveyCoroutine() {
+        if (_settings.surveyAllowedSet || _settings.surveyAllowed) yield break;
+        if (SurveyManager.Instance == null || ProjectManager.Instance?.SelectedProject == null) yield break;
+
+        bool isDone = false;
+        bool hasSurvey = false;
+        SurveyManager.Instance.CheckHasValidSurvey(result => {
+            hasSurvey = result;
+            isDone = true;
+        });
+        yield return new WaitUntil(() => isDone);
+
+        if (hasSurvey) {
+            Debug.Log("[ProjectSettingsManager] Existing survey found in an older project, enabling the survey setting");
+            SurveyAllowed = true;
+        }
     }
 
     #endregion
