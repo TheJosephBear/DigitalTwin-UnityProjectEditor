@@ -304,8 +304,9 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
         GameObject loadedModel = context.RootGameObject;
         loadedModel.SetActive(false);
 
+        var pivot = CenterPivot(loadedModel);   // pivot is now the object you move/rotate/scale
         MemoryLogger.Log($"After loading {fileName}");
-        return loadedModel;
+        return pivot;
     }
 
     #endregion
@@ -415,5 +416,62 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
     public string GetPathToFiles(string assetHash) {
         return GetPersistentAssetPath(assetHash);
     }
+
+    #region Center pivot
+
+    private static bool TryCalculateBounds(GameObject root, out Bounds bounds) {
+        bounds = default;
+        bool hasBounds = false;
+
+        // includeInactive: true, because the model is deactivated right after loading
+        var renderers = root.GetComponentsInChildren<Renderer>(true);
+        foreach (var r in renderers) {
+            // Renderer.bounds can be unreliable on inactive objects, so use mesh bounds transformed to world space
+            Bounds b;
+            if (r is MeshRenderer) {
+                var mf = r.GetComponent<MeshFilter>();
+                if (mf == null || mf.sharedMesh == null) continue;
+                b = TransformBounds(mf.sharedMesh.bounds, r.transform.localToWorldMatrix);
+            } else if (r is SkinnedMeshRenderer smr) {
+                if (smr.sharedMesh == null) continue;
+                b = TransformBounds(smr.sharedMesh.bounds, r.transform.localToWorldMatrix);
+            } else {
+                continue;
+            }
+
+            if (!hasBounds) { bounds = b; hasBounds = true; } else bounds.Encapsulate(b);
+        }
+        return hasBounds;
+    }
+
+    private static Bounds TransformBounds(Bounds local, Matrix4x4 m) {
+        var center = m.MultiplyPoint3x4(local.center);
+        var ext = local.extents;
+        // Transform the extents by the absolute value of the matrix axes
+        var axisX = m.MultiplyVector(new Vector3(ext.x, 0, 0));
+        var axisY = m.MultiplyVector(new Vector3(0, ext.y, 0));
+        var axisZ = m.MultiplyVector(new Vector3(0, 0, ext.z));
+        var worldExt = new Vector3(
+            Mathf.Abs(axisX.x) + Mathf.Abs(axisY.x) + Mathf.Abs(axisZ.x),
+            Mathf.Abs(axisX.y) + Mathf.Abs(axisY.y) + Mathf.Abs(axisZ.y),
+            Mathf.Abs(axisX.z) + Mathf.Abs(axisY.z) + Mathf.Abs(axisZ.z));
+        return new Bounds(center, worldExt * 2f);
+    }
+
+    private static GameObject CenterPivot(GameObject model) {
+        if (!TryCalculateBounds(model, out var bounds)) {
+            return model; // nothing to center
+        }
+
+        var pivot = new GameObject(model.name + "_Pivot");
+        pivot.transform.position = bounds.center;
+        pivot.transform.rotation = Quaternion.identity;
+
+        // Keep world position/rotation/scale of the model unchanged
+        model.transform.SetParent(pivot.transform, true);
+        return pivot;
+    }
+
+    #endregion
 
 }
