@@ -14,6 +14,7 @@ public class SurveyQuestionUIViewerString : SurveyQuestionUIViewer {
     #endregion
 
     private bool _isRadioGroupRegistered = false;
+    private int _maxAnswerLength = 0; // 0 = unlimited
 
     public SurveyQuestionUIViewerString(VisualElement root, int questionId, QuestionType questionType, List<SerializableViewPoint> viewPoints, SurveyUIBuilder uiBuilder) 
         : base(root, questionId, questionType, viewPoints, uiBuilder) {
@@ -109,6 +110,7 @@ public class SurveyQuestionUIViewerString : SurveyQuestionUIViewer {
 
             optionRow.AddToClassList("option-row--other");
             optionRow.Add(otherField);
+            ApplyMaxLength(otherField);
         } else {
             // Use the standard template for normal options
             if (_answerTemplate == null) return null;
@@ -160,6 +162,51 @@ public class SurveyQuestionUIViewerString : SurveyQuestionUIViewer {
 
         return answerUI;
     }
+
+    #region Max Answer Length
+
+    /// <summary>Limits the free-text inputs (text answer / "Other") to the given number of characters, 0 = unlimited.</summary>
+    public void SetMaxAnswerLength(int maxLength) {
+        _maxAnswerLength = Mathf.Max(0, maxLength);
+
+        if (_questionType == QuestionType.Paragraph || _questionType == QuestionType.ShortAnswer) {
+            ApplyMaxLength(_root.Q<TextField>(className: "text-answer-field") ?? _root.Q<TextField>());
+        }
+
+        ApplyMaxLength(_otherAnswerUI?.AnswerElement?.Q<TextField>("other-text-field"));
+    }
+
+    private void ApplyMaxLength(TextField field) {
+        if (field == null) return;
+
+        bool isLimited = _maxAnswerLength > 0;
+        field.maxLength = isLimited ? _maxAnswerLength : -1;
+
+        // Counter label sits right after the field
+        Label counter = field.userData as Label;
+        if (counter == null && isLimited && field.parent != null) {
+            counter = new Label();
+            counter.AddToClassList("char-counter");
+            field.parent.Insert(field.parent.IndexOf(field) + 1, counter);
+            field.userData = counter;
+            field.RegisterValueChangedCallback(evt => UpdateCharCounter(field));
+        }
+
+        if (counter != null) {
+            counter.style.display = isLimited ? DisplayStyle.Flex : DisplayStyle.None;
+            UpdateCharCounter(field);
+        }
+    }
+
+    private void UpdateCharCounter(TextField field) {
+        if (field.userData is not Label counter || _maxAnswerLength <= 0) return;
+
+        int length = field.value?.Length ?? 0;
+        counter.text = $"{length} / {_maxAnswerLength}";
+        counter.EnableInClassList("char-counter--full", length >= _maxAnswerLength);
+    }
+
+    #endregion
 
     public void SelectAnswerRadio(int selectedIndex) {
         if (_questionType != QuestionType.MultipleChoiceSingle) return;

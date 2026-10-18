@@ -20,6 +20,9 @@ namespace SurveySystem {
 
     public abstract class QuestionGridBase : QuestionBase {
 
+        public const int MaxRows = 14;
+        public const int MaxColumns = 7;
+
         protected List<string> Rows = new();
         protected List<string> Columns = new();
 
@@ -29,14 +32,14 @@ namespace SurveySystem {
         //    AddColumn();
         }
 
-        public void AddRow(string rowText = "Row") {
-            if (Rows.Count >= 20) return;
+        public void AddRow(string rowText = "") {
+            if (Rows.Count >= MaxRows) return;
             Rows.Add(rowText);
             SyncGridAnswers();
         }
 
-        public void AddColumn(string columnText = "Column") {
-            if (Columns.Count >= 8) return;
+        public void AddColumn(string columnText = "") {
+            if (Columns.Count >= MaxColumns) return;
             Columns.Add(columnText);
             SyncGridAnswers();
         }
@@ -131,11 +134,16 @@ namespace SurveySystem {
             IsRequired = serializable.IsRequired;
             ViewPointId = serializable.ViewPointId;
             ImageID = serializable.ImageId;
-            Rows = serializable.Rows != null ? new List<string>(serializable.Rows) : new List<string>();
-            Columns = serializable.Columns != null ? new List<string>(serializable.Columns) : new List<string>();
+            Rows = serializable.Rows != null ? serializable.Rows.ConvertAll(r => ClearLegacyDefault(r, "Row")) : new List<string>();
+            Columns = serializable.Columns != null ? serializable.Columns.ConvertAll(c => ClearLegacyDefault(c, "Column")) : new List<string>();
             SyncGridAnswers();
 
             return this;
+        }
+
+        // Older surveys stored "Row"/"Column" as the default text, which hid the editor placeholder
+        private static string ClearLegacyDefault(string text, string legacyDefault) {
+            return text == legacyDefault ? string.Empty : text;
         }
 
     }

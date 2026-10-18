@@ -8,7 +8,15 @@
         </ui:VisualElement>
         <ui:VisualElement name="question-container" class="question-container">
             <ui:Instance template="QuestionTitleBar" name="question-bar" />
-            <ui:TextField placeholder-text="Text odpovědi" multiline="true" enabled="false" style="white-space: normal; margin-top: 8px;" />
+            <ui:VisualElement name="answer-preview" class="answer-preview" tooltip="Náhled pole, do kterého respondent napíše svou odpověď">
+                <ui:TextField name="answer-preview-field" placeholder-text="Text odpovědi" multiline="true" enabled="false" class="answer-preview-field" style="white-space: normal;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="max-length-container" class="max-length-container">
+                <ui:Label text="Omezit počet znaků odpovědi" name="max-length-label" class="required-label" />
+                <ui:Toggle name="max-length-toggle" class="switch-pill" />
+                <ui:IntegerField name="max-length-field" value="200" class="max-length-field" />
+                <ui:Label text="znaků" name="max-length-hint" class="max-length-hint" />
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

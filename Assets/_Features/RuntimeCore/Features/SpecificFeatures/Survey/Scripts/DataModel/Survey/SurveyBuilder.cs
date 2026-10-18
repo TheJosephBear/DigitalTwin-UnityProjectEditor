@@ -90,6 +90,11 @@ namespace SurveySystem {
             question.IsRequired = isRequired;
         }
 
+        public void SetQuestionMaxAnswerLength(int questionID, int maxLength) {
+            QuestionBase question = _activeSurvey.GetQuestionById(questionID);
+            question.MaxAnswerLength = Mathf.Max(0, maxLength);
+        }
+
         public void SetQuestionDescription(string description) {
             _activeSurvey.ActiveQuestion.Description = description;
         }

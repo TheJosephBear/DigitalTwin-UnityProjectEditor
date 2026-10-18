@@ -8,6 +8,7 @@ namespace SurveySystem {
         public string Title { get; set; }
         public string Description { get; set; }
         public bool IsRequired { get; set; }
+        public int MaxAnswerLength { get; set; } // Character limit for free-text answers (text question / "Other"), 0 = unlimited
         public string ViewPointId { get; protected set; }
         public string ImageID { get; protected set; }
         public QuestionType QuestionType { get; protected set; }
@@ -98,6 +99,7 @@ namespace SurveySystem {
                 Title = Title,
                 Description = Description,
                 IsRequired = IsRequired,
+                MaxAnswerLength = MaxAnswerLength,
                 ViewPointId = ViewPointId,
                 ViewpointID = ViewPointId,
                 ImageId = ImageID,
@@ -127,6 +129,7 @@ namespace SurveySystem {
             Title = serializable.Title;
             Description = serializable.Description;
             IsRequired = serializable.IsRequired;
+            MaxAnswerLength = Mathf.Max(0, serializable.MaxAnswerLength);
             ViewPointId = !string.IsNullOrEmpty(serializable.ViewPointId) ? serializable.ViewPointId : (!string.IsNullOrEmpty(serializable.ViewpointID) ? serializable.ViewpointID : "");
             ImageID = !string.IsNullOrEmpty(serializable.ImageId) ? serializable.ImageId : (!string.IsNullOrEmpty(serializable.ImageID) ? serializable.ImageID : "");
             foreach (AnswerBase answer in serializable.Answers) {
@@ -143,6 +146,7 @@ namespace SurveySystem {
         public string Title;
         public string Description;
         public bool IsRequired;
+        public int MaxAnswerLength;
         public string ViewPointId;
         public string ViewpointID;
         public string ImageId;

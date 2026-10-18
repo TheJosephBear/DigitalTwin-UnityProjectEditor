@@ -276,6 +276,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
             builderUI.OnAnswerAdded += HandleAnswerAdded;
             builderUI.OnAnswerOtherAdded += HandleAnswerOtherAdded;
             builderUI.OnAnswerRemoved += HandleAnswerRemoved;
+            builderUI.OnMaxAnswerLengthChanged += (qId, maxLength) => _surveyBuilder.SetQuestionMaxAnswerLength(qId, maxLength);
 
             if (!isDeserialized) {
                 builderUI.AddInitialAnswer();
@@ -537,6 +538,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
                     if(answerUIBase is SurveyAnswerUIEditorString answerEditorString)
                         answerEditorString.OnTextChanged += HandleAnswerTextChanged;
                 }
+                stringQuestion.SetMaxAnswerLength(question.MaxAnswerLength);
             } else if (question is QuestionLinearScale linScaleQuestion && questionUI is SurveyQuestionUIEditorLinearScale scaleUI) {
                 scaleUI.SetScaleRange(linScaleQuestion.ScaleType, linScaleQuestion.Min, linScaleQuestion.Max);
                 foreach (AnswerBase answer in question.Answers) {

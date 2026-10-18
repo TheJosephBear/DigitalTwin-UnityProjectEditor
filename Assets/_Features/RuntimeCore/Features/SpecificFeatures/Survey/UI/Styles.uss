@@ -757,6 +757,8 @@ CustomRadioButton {
     align-items: center;
     flex-grow: 1;
     flex-shrink: 1;
+    min-width: 56px; /* radio 32px + margin 4px + 20px, so the text field can't squeeze the circle */
+    min-height: 32px;
     cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
@@ -765,6 +767,8 @@ CustomToggleButton {
     align-items: center;
     flex-grow: 1;
     flex-shrink: 1;
+    min-width: 56px; /* checkbox 32px + margin 4px + 20px, so the text field can't squeeze the box */
+    min-height: 32px;
     cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
@@ -772,7 +776,9 @@ CustomRadioButtonNoText {
     cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
-CustomRadioButton > Toggle {
+/* .unity-base-field raises specificity above the Unity default theme (.unity-base-field / .unity-radio-button / .unity-toggle),
+   which would otherwise replace these margins with its own 3px */
+CustomRadioButton > Toggle.unity-base-field {
     flex-grow: 0;
     flex-shrink: 0;
     width: 32px;
@@ -794,7 +800,7 @@ CustomRadioButton > Toggle {
     align-self: center;
 }
 
-CustomToggleButton > Toggle {
+CustomToggleButton > Toggle.unity-base-field {
     flex-grow: 0;
     flex-shrink: 0;
     width: 32px;
@@ -816,7 +822,7 @@ CustomToggleButton > Toggle {
     align-self: center;
 }
 
-CustomRadioButton > RadioButton {
+CustomRadioButton > RadioButton.unity-base-field {
     flex-grow: 0;
     flex-shrink: 0;
     width: 32px;
@@ -838,7 +844,7 @@ CustomRadioButton > RadioButton {
     align-self: center;
 }
 
-CustomToggleButton > RadioButton {
+CustomToggleButton > RadioButton.unity-base-field {
     flex-grow: 0;
     flex-shrink: 0;
     width: 32px;
@@ -1030,11 +1036,11 @@ CustomRadioButton .unity-toggle__checkmark {
     min-height: 28px;
     max-width: 28px;
     max-height: 28px;
-    border-radius: 50%;
-    border-top-left-radius: 50%;
-    border-top-right-radius: 50%;
-    border-bottom-right-radius: 50%;
-    border-bottom-left-radius: 50%;
+    border-radius: 14px;
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+    border-bottom-right-radius: 14px;
+    border-bottom-left-radius: 14px;
     border-width: 2px;
     border-color: rgba(103, 80, 164, 0.4);
     background-color: rgb(255, 255, 255);
@@ -1053,11 +1059,11 @@ CustomRadioButtonNoText .unity-toggle__checkmark {
     min-height: 28px;
     max-width: 28px;
     max-height: 28px;
-    border-radius: 50%;
-    border-top-left-radius: 50%;
-    border-top-right-radius: 50%;
-    border-bottom-right-radius: 50%;
-    border-bottom-left-radius: 50%;
+    border-radius: 14px;
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+    border-bottom-right-radius: 14px;
+    border-bottom-left-radius: 14px;
     border-width: 2px;
     border-color: rgba(103, 80, 164, 0.4);
     background-color: rgb(255, 255, 255);
@@ -1086,11 +1092,11 @@ CustomRadioButton .unity-radio-button__checkmark,
     min-height: 28px;
     max-width: 28px;
     max-height: 28px;
-    border-radius: 50%;
-    border-top-left-radius: 50%;
-    border-top-right-radius: 50%;
-    border-bottom-right-radius: 50%;
-    border-bottom-left-radius: 50%;
+    border-radius: 14px;
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+    border-bottom-right-radius: 14px;
+    border-bottom-left-radius: 14px;
     border-width: 2px;
     border-color: rgba(103, 80, 164, 0.4);
     background-color: rgb(255, 255, 255);
@@ -1113,11 +1119,11 @@ CustomRadioButtonNoText .unity-radio-button__checkmark {
     min-height: 28px;
     max-width: 28px;
     max-height: 28px;
-    border-radius: 50%;
-    border-top-left-radius: 50%;
-    border-top-right-radius: 50%;
-    border-bottom-right-radius: 50%;
-    border-bottom-left-radius: 50%;
+    border-radius: 14px;
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+    border-bottom-right-radius: 14px;
+    border-bottom-left-radius: 14px;
     border-width: 2px;
     border-color: rgba(103, 80, 164, 0.4);
     background-color: rgb(255, 255, 255);
@@ -1145,11 +1151,11 @@ CustomRadioButtonNoText .unity-radio-button__checkmark-background > .unity-radio
     min-height: 10px;
     max-width: 10px;
     max-height: 10px;
-    border-radius: 50%;
-    border-top-left-radius: 50%;
-    border-top-right-radius: 50%;
-    border-bottom-right-radius: 50%;
-    border-bottom-left-radius: 50%;
+    border-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
     background-color: transparent;
     background-image: none;
     -unity-background-image-tint-color: rgba(255, 255, 255, 0);
@@ -1182,11 +1188,11 @@ CustomRadioButtonNoText .unity-radio-button > .unity-radio-button__checkmark,
     min-height: 28px;
     max-width: 28px;
     max-height: 28px;
-    border-radius: 50%;
-    border-top-left-radius: 50%;
-    border-top-right-radius: 50%;
-    border-bottom-right-radius: 50%;
-    border-bottom-left-radius: 50%;
+    border-radius: 14px;
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+    border-bottom-right-radius: 14px;
+    border-bottom-left-radius: 14px;
     border-width: 2px;
     border-color: rgba(103, 80, 164, 0.4);
     background-color: rgb(255, 255, 255);
@@ -4203,6 +4209,16 @@ GenericDropdownMenu {
     cursor: url("project://database/Assets/_Features/RuntimeCore/Features/Survey/UI/Icons/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32");
 }
 
+/* Row/column limit reached (button stays enabled so its tooltip still shows) */
+#add-row-button.grid-add-button--limit,
+#add-column-button.grid-add-button--limit,
+#add-row-button.grid-add-button--limit:hover,
+#add-column-button.grid-add-button--limit:hover {
+    opacity: 0.6;
+    background-color: var(--primary-background-color);
+    cursor: initial;
+}
+
 /* Letter badge (A, B, C...) on image choice options */
 .image-option-letter {
     position: absolute;
@@ -5103,4 +5119,64 @@ GenericDropdownMenu {
     border-color: rgba(255, 255, 255, 0.12);
     display: none;
     -unity-text-align: middle-left;
+}
+
+/* Max answer length setting (text questions and "Other" option) */
+/* Disabled answer preview of text questions — same width as option rows (16px gap + 370px .edit-option-container) */
+.answer-preview {
+    flex-direction: row;
+    flex-shrink: 0;
+    margin-top: 8px;
+    margin-right: 386px;
+}
+
+.answer-preview-field > .unity-base-text-field__input,
+.answer-preview-field > #unity-text-input {
+    min-height: 56px;
+    -unity-text-align: upper-left;
+}
+
+.max-length-container {
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 0;
+    margin-top: 12px;
+}
+
+.max-length-container .required-label {
+    margin-right: 8px;
+}
+
+.max-length-field {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 90px;
+    margin-left: 12px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.max-length-field > .unity-base-field__label {
+    display: none;
+}
+
+.max-length-field > .unity-base-text-field__input {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-width: 1.5px;
+    border-color: rgba(103, 80, 164, 0.08);
+    background-color: var(--input-bg);
+    color: var(--text-main);
+    font-size: 14px;
+    padding-left: 12px;
+    padding-right: 12px;
+    min-height: 30px;
+}
+
+.max-length-hint {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-left: 8px;
 }

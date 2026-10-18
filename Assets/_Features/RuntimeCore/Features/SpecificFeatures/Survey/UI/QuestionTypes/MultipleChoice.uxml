@@ -16,6 +16,12 @@
                 <ui:Button text="Přidat odpověď" name="add-option-button" />
                 <ui:Button text="Přidat &quot;Jiná&quot; odpověď" name="add-other-option-button" />
             </ui:VisualElement>
+            <ui:VisualElement name="max-length-container" class="max-length-container" style="margin-left: 56px;">
+                <ui:Label text="Omezit počet znaků u odpovědi &quot;Jiná&quot;" name="max-length-label" class="required-label" />
+                <ui:Toggle name="max-length-toggle" class="switch-pill" />
+                <ui:IntegerField name="max-length-field" value="200" class="max-length-field" />
+                <ui:Label text="znaků" name="max-length-hint" class="max-length-hint" />
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

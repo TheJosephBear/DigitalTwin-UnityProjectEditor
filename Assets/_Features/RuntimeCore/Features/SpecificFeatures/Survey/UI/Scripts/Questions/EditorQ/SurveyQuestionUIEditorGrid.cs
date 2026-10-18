@@ -13,6 +13,9 @@ public class RadioCallbacks {
 
 public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
 
+    private const int MaxRows = QuestionGridBase.MaxRows;
+    private const int MaxColumns = QuestionGridBase.MaxColumns;
+
     private List<SurveyAnswerUIEditorGrid> _rows = new();
     private List<SurveyAnswerUIEditorGrid> _columns = new();
     private List<int> _rowIndices = new();
@@ -103,6 +106,7 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
             };
 
             var textField = new TextField { name = "row-title" };
+            textField.textEdition.placeholder = "Text řádku";
             textField.multiline = true;
             textField.style.flexGrow = 1;
             textField.style.whiteSpace = WhiteSpace.Normal;
@@ -174,6 +178,7 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
             deleteBtn.style.marginBottom = 2;
 
             var tf = new TextField { name = "column-title" };
+            tf.textEdition.placeholder = "Text sloupce";
             tf.multiline = true;
             tf.style.whiteSpace = WhiteSpace.Normal;
             tf.style.color = new Color(0, 0, 0);
@@ -392,7 +397,7 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
         if (addRowButton != null) {
             addRowButton.clickable = new Clickable(() =>
             {
-                if (_rows.Count < 20) {
+                if (_rows.Count < MaxRows) {
                     var newRow = AddRow();
                     if (newRow != null) {
                         OnAddRow?.Invoke(QuestionID, newRow);
@@ -405,7 +410,7 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
         if (addColumnButton != null) {
             addColumnButton.clickable = new Clickable(() =>
             {
-                if (_columns.Count < 8) {
+                if (_columns.Count < MaxColumns) {
                     var newCol = AddColumn();
                     if (newCol != null) {
                         OnAddColumn?.Invoke(QuestionID, newCol);
@@ -430,7 +435,7 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
     }
 
     public SurveyAnswerUIEditorGrid AddRow(string initialText = "") {
-        if (_rows.Count >= 20) return null;
+        if (_rows.Count >= MaxRows) return null;
 
         var element = _answerTemplate != null ? _answerTemplate.Instantiate() : new VisualElement();
         SurveyAnswerUIEditorGrid row = new SurveyAnswerUIEditorGrid(element, _rows.Count, this, false);
@@ -446,7 +451,7 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
     }
 
     public SurveyAnswerUIEditorGrid AddColumn(string initialText = "") {
-        if (_columns.Count >= 8) return null;
+        if (_columns.Count >= MaxColumns) return null;
 
         var element = _surveyUIBuilder.GridCollumnTemplate != null ? _surveyUIBuilder.GridCollumnTemplate.CloneTree() : new VisualElement();
         int colIdx = _columns.Count;
@@ -516,6 +521,26 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
         }
         foreach (var row in _rows) {
             row.RebuildRadioButtons(_columns.Count, _questionType == QuestionType.CheckboxGrid);
+        }
+        UpdateAddButtonsState();
+    }
+
+    // Grey out the add buttons once the row/column limit is reached.
+    // A class is used instead of SetEnabled(false): disabled elements get no pointer events, so the tooltip would never show.
+    // Clicks are already ignored by the count checks in RegisterButtons.
+    private void UpdateAddButtonsState() {
+        var addRowButton = _root.Q<Button>("add-row-button");
+        if (addRowButton != null) {
+            bool canAddRow = _rows.Count < MaxRows;
+            addRowButton.EnableInClassList("grid-add-button--limit", !canAddRow);
+            addRowButton.tooltip = canAddRow ? string.Empty : $"Dosažen maximální počet řádků ({MaxRows})";
+        }
+
+        var addColumnButton = _root.Q<Button>("add-column-button");
+        if (addColumnButton != null) {
+            bool canAddColumn = _columns.Count < MaxColumns;
+            addColumnButton.EnableInClassList("grid-add-button--limit", !canAddColumn);
+            addColumnButton.tooltip = canAddColumn ? string.Empty : $"Dosažen maximální počet sloupců ({MaxColumns})";
         }
     }
 }

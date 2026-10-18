@@ -596,6 +596,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
             foreach (AnswerBase answer in questionBase.Answers) {
                 questionUI.AddAnswer(answer.Text, answer.IsOther);
             }
+            stringUI.SetMaxAnswerLength(questionBase.MaxAnswerLength);
         } else if (questionUI is SurveyQuestionUIViewerImage imageUI) {
             imageUI.OnAnswerSelected += HandleAnswerSelected;
             foreach (AnswerBase answer in questionBase.Answers) {
