@@ -13,7 +13,10 @@ namespace SurveySystem {
         }
 
         public override AnswerBase AddNewAnswer(bool isOther) {
-            if (_answers.Count > 0) return _answers[0];
+            if (_answers.Count > 0) {
+                ActiveAnswer = _answers[0];
+                return _answers[0];
+            }
 
             AnswerBase answer = new AnswerString {
                 Idx = _answers.Count,

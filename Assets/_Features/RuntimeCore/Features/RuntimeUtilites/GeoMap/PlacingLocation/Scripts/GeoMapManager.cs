@@ -34,7 +34,7 @@ public class GeoMapManager : Singleton<GeoMapManager> {
         if(MainManagerBase.Instance is EditorManager editorMan) {
             editorMan.ExitEditor((exitSuccess) => {
                 onComplete.Invoke(true);
-            }, save: false);
+            });
         }
 
         onComplete.Invoke(false);

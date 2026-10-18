@@ -257,11 +257,8 @@ namespace SurveySystem {
 
         public string ExportSurveyAsJson() {
          //   string jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(_activeSurvey.Serialize());
-            string jsonString = JsonUtility.ToJson(_activeSurvey.Serialize());
-
-            Debug.Log(jsonString);
-
-            return jsonString;
+            // Called on every load, save and exit (unsaved changes check), so not logged
+            return JsonUtility.ToJson(_activeSurvey.Serialize());
         }
 
         public void DeserializeFromJson(string json) {

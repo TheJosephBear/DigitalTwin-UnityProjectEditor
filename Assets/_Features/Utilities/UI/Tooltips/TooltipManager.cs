@@ -24,6 +24,10 @@ public class TooltipManager: MonoBehaviour {
         HideTooltip();
     }
 
+    private void OnDestroy() {
+        if (Instance == this) Instance = null;
+    }
+
     private void Update() {
         if (tooltipPanel.activeSelf) {
             // Follow the mouse cursor position
@@ -70,7 +74,9 @@ public class TooltipManager: MonoBehaviour {
             showTooltipCoroutine = null;
         }
 
-        tooltipPanel.SetActive(false);
+        // Triggers hide the tooltip in OnDisable, on scene unload or quitting play mode the panel can be destroyed first
+        if (tooltipPanel != null)
+            tooltipPanel.SetActive(false);
     }
 
     private System.Collections.IEnumerator ShowTooltipAfterDelay(string text) {

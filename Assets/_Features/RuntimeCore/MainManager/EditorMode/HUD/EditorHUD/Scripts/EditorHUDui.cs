@@ -103,7 +103,7 @@ public class EditorHUDui : UIBehaviour, IProjectSettingsListener {
 
     public void OnLeave() {
         if (MainManagerBase.Instance is EditorManager editorMgr) {
-            editorMgr.ExitEditor((exitSuccess) => { }, save: false);
+            editorMgr.ExitEditor((exitSuccess) => { });
         }
     }
 

@@ -23,11 +23,11 @@ public class ProjectManager : Singleton<ProjectManager> {
     /// <summary>
     /// Save new project data into the database
     /// </summary>
-    public void SaveProject(SerializableProject serializableProject) {
+    public void SaveProject(SerializableProject serializableProject, Action<bool> onComplete = null) {
     //    ImageManager.Instance.UploadImagesToServer(SelectedProject.ProjectName);
         MemoryLogger.Log("After starting model and image uploads");
         string serializedProject = JsonUtility.ToJson(serializableProject);
-        ServerCommunicationManager.Instance.StartProjectDataUpload(serializedProject, serializableProject.projectName);
+        ServerCommunicationManager.Instance.StartProjectDataUpload(serializedProject, serializableProject.projectName, (success, _) => onComplete?.Invoke(success));
     //    MessageDisplayManager.Instance.DisplayMessage("Projekt úspěšně uložen");
     }
 

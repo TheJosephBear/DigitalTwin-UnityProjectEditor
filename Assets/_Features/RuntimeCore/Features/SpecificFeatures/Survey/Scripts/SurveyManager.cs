@@ -14,11 +14,13 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
     string _surveyJsonData;
     string _responseJsonData;
     string _savedSurveyJson; // Survey as it was last loaded or saved, used to detect unsaved changes
+    int _surveyLoadId; // Bumped on every load and exit, a download finishing for an older one is ignored
+    bool _isSurveyLoading;
 
     #region Init
 
     void Start() {
-        if(_flowManager == null && SceneLoadingManager.Instance != null)
+        if (_flowManager == null)
             _flowManager = CreateFlowManager();
     }
 
@@ -98,6 +100,10 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
             // Builder data persists between visits, throw away the unsaved edits
             _flowManager.RestoreSurvey(_savedSurveyJson);
         }
+
+        // A download still in flight must not rebuild the destroyed editor UI
+        _surveyLoadId++;
+        _isSurveyLoading = false;
         _flowManager.ExitSurvey();
 
         // Change state
@@ -127,21 +133,32 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
 
     public void DeserializeSurvey() {
         string projectName = ProjectManager.Instance.SelectedProject.ProjectName;
+        int loadId = ++_surveyLoadId;
+        _isSurveyLoading = true;
+
         ServerCommunicationManager.Instance.StartSurveyDownload(projectName, (success, data) => {
+            if (loadId != _surveyLoadId) return;
+
             _surveyJsonData = data;
-            if (_surveyJsonData == null) return;
+            if (_surveyJsonData == null) {
+                _isSurveyLoading = false;
+                return;
+            }
 
             // Images saved only with the survey aren't in the project's image list, load them before building the UI
             string json = _surveyJsonData;
             ImageManager.Instance.EnsureImagesLoaded(CollectSurveyImageIds(json), projectName, () => {
+                if (loadId != _surveyLoadId) return;
+                _isSurveyLoading = false;
+
+                // The builder showed the previous state until now, edits made on it get replaced
+                if (_flowManager.GetSurveyJsonData() != _savedSurveyJson)
+                    ShowMessage("Změny provedené během načítání dotazníku byly nahrazeny verzí ze serveru.");
+
                 _flowManager.DeserializeSurvey(json);
                 _savedSurveyJson = _flowManager.GetSurveyJsonData();
             });
         });
-    }
-
-    public void UploadSurveyData() {
-        ServerCommunicationManager.Instance.StartSurveyUpload(_surveyJsonData, ProjectManager.Instance.SelectedProject.ProjectName);
     }
 
     public void UploadSurveyAnswers(Action<bool> onComplete = null) {
@@ -214,9 +231,21 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
     }
 
     public void SaveSurvey() {
-        _surveyJsonData = _flowManager.GetSurveyJsonData();
-        _savedSurveyJson = _surveyJsonData;
-        UploadSurveyData();
+        // The builder still shows the previous state, uploading it would overwrite the survey on the server
+        if (_isSurveyLoading) {
+            ShowMessage("Dotazník se ještě načítá, zatím ho nelze uložit.");
+            return;
+        }
+
+        string json = _flowManager.GetSurveyJsonData();
+        _surveyJsonData = json;
+        _savedSurveyJson = json;
+        ServerCommunicationManager.Instance.StartSurveyUpload(json, ProjectManager.Instance.SelectedProject.ProjectName, (success, _) => {
+            if (success) return;
+            ShowMessage("Uložení dotazníku se nezdařilo.");
+            // Not on the server, keep it unsaved unless a newer save already replaced it
+            if (_savedSurveyJson == json) _savedSurveyJson = null;
+        });
 
         // Images picked in the survey are otherwise uploaded only with the next project save
         if (MainManagerBase.Instance is EditorManager) {
@@ -228,7 +257,13 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
     /// True if the edited survey differs from the last loaded or saved version.
     /// </summary>
     public bool HasUnsavedSurveyChanges() {
+        // While loading, edits are on the previous state and will be replaced, nothing to save
+        if (_isSurveyLoading) return false;
         return _flowManager != null && _flowManager.GetSurveyJsonData() != _savedSurveyJson;
+    }
+
+    static void ShowMessage(string message) {
+        if (MessageDisplayManager.Instance != null) MessageDisplayManager.Instance.ShowMessage(message);
     }
 
     /// <summary>

@@ -6,11 +6,13 @@ public class TooltipTrigger: MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [SerializeField] private string tooltipContent;
 
     public void OnPointerEnter(PointerEventData eventData) {
-        TooltipManager.Instance.ShowTooltip(tooltipContent);
+        if (TooltipManager.Instance != null)
+            TooltipManager.Instance.ShowTooltip(tooltipContent);
     }
 
     public void OnPointerExit(PointerEventData eventData) {
-        TooltipManager.Instance.HideTooltip();
+        if (TooltipManager.Instance != null)
+            TooltipManager.Instance.HideTooltip();
     }
 
     private void OnDisable() {

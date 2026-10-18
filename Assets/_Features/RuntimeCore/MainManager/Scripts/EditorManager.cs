@@ -13,11 +13,16 @@ public class EditorManager : MainManagerBase {
     public void SaveProject() {
 
     //    MessageDisplayManager.Instance.DisplayMessage("SaveProject()");
-        ProjectManager.Instance.SaveProject(ProjectSerializer.SerializeProject());
+        ProjectManager.Instance.SaveProject(ProjectSerializer.SerializeProject(), (success) => {
+            if (success) return;
+            // Not on the server, ask again on exit
+            ToggleUnsavedChanges(true);
+            if (MessageDisplayManager.Instance != null) MessageDisplayManager.Instance.ShowMessage("Uložení projektu se nezdařilo.");
+        });
         ToggleUnsavedChanges(false);
     }
 
-    public void ExitEditor(Action<bool> onComplete, bool save = true) {
+    public void ExitEditor(Action<bool> onComplete) {
         if (_hasUnsavedChanges) {
             PopUp.Instance.SaveBeforeExitPopUp((choice) => {
                 if (choice == UnsavedChangesChoice.Cancel) return;
@@ -27,7 +32,7 @@ public class EditorManager : MainManagerBase {
             onComplete.Invoke(false);
         } else {
             onComplete.Invoke(true);
-            StartCoroutine(ExitEditorCoroutine(save));
+            StartCoroutine(ExitEditorCoroutine(false));
         }
     }
 

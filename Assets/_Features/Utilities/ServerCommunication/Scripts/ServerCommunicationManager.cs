@@ -135,25 +135,25 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
     #region Editor
 
     // Upload project data (no models)
-    public void StartProjectDataUpload(string data, string projectName) {
+    public void StartProjectDataUpload(string data, string projectName, System.Action<bool, string> callback = null) {
         string url = $"{serverUrl}/upload_editor_data";
         Dictionary<string, string> formData = new Dictionary<string, string>
         {
             { "myData", data },
             { "project_name", projectName }
         };
-        StartCoroutine(PostRequest(url, formData, null));
+        StartCoroutine(PostRequest(url, formData, callback));
     }
 
     // Upload survey data
-    public void StartSurveyUpload(string surveyJson, string projectName) {
+    public void StartSurveyUpload(string surveyJson, string projectName, System.Action<bool, string> callback = null) {
         string url = $"{serverUrl}/upload_survey_data";
         Dictionary<string, string> formData = new Dictionary<string, string>
         {
             { "survey_data", surveyJson },
             { "project_name", projectName }
         };
-        StartCoroutine(PostRequest(url, formData, null));
+        StartCoroutine(PostRequest(url, formData, callback));
     }
 
     // Download project data (no models)

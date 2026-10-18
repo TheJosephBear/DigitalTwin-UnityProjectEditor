@@ -84,7 +84,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         var thankYouCloseBtn = _thankYouPageElement?.Q<Button>("thank-you-close-btn");
         if (thankYouCloseBtn != null) {
             thankYouCloseBtn.clicked += () => {
-                SurveyManager.Instance.ExitSurvey();
+                SurveyManager.Instance.ExitSurvey(save: false); // Viewer has nothing to save, the survey belongs to the editor
             };
         }
 
@@ -165,7 +165,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
     #region Input handling
 
     void HandleTogglePressed() {
-        SurveyManager.Instance.ExitSurvey();
+        SurveyManager.Instance.ExitSurvey(save: false); // Viewer has nothing to save, the survey belongs to the editor
     }
 
     void HandleNextPressed() {
