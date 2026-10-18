@@ -5,150 +5,103 @@ using System.IO;
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Handles two separate kinds of images:
+/// - Project images: belong to the opened project, identified by their content hash, saved with the project.
+/// - Preview images: one per project, shown in the project list, keyed by project name. Used while no project is open.
+/// </summary>
 public class ImageManager : Singleton<ImageManager> {
     public GameObject ImageContainer;
+
     private List<TextureAsset> _loadedTextures = new List<TextureAsset>();
-    private List<TextureAsset> _previewTextures = new List<TextureAsset>();
     private HashSet<string> _uploadedHashes = new HashSet<string>(); // Images known to be on the server (uploaded or downloaded)
 
-    private Action<TextureAsset> _onTextureAssetLoadedCallback;
-    private bool _processingPreview = false;
-    private string _forcedProjectContext = "";
+    // Preview textures are reused in place when re-downloaded, so UI that already shows them stays valid
+    private Dictionary<string, Texture2D> _previewTextures = new Dictionary<string, Texture2D>();
 
-    #region Dialog Logic
+    #region File Dialog
 
-    public void AskForImageDialog(Action<TextureAsset> callback, bool previewImage = false, string projectName = "") {
-        _onTextureAssetLoadedCallback = callback;
-        _processingPreview = previewImage;
-
-        if (string.IsNullOrEmpty(projectName) && ProjectManager.Instance?.SelectedProject != null) {
-            _forcedProjectContext = ProjectManager.Instance.SelectedProject.ProjectName;
-        } else {
-            _forcedProjectContext = projectName;
-        }
-
-        FileBrowserManager.Instance.ShowLoadDialog(OnImageFileSelected,
-            filterExtensions: "png, jpg, jpeg",
-            multipleSelection: false);
+    /// <summary>
+    /// Lets the user pick an image and adds it to the opened project's images. Returns null when cancelled or invalid.
+    /// </summary>
+    public void AskForImageDialog(Action<TextureAsset> callback) {
+        ShowImageFileDialog(file => callback?.Invoke(file != null ? AddProjectImage(file.data, file.fileInfo.name) : null));
     }
 
-    private void OnImageFileSelected(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
-        if (files != null && files.Length > 0) {
-            TextureAsset asset = CreateTextureAsset(files[0]);
-            _onTextureAssetLoadedCallback?.Invoke(asset);
-        } else {
-            if (MessageDisplayManager.Instance != null)
-                MessageDisplayManager.Instance.ShowMessage("Prosím vyberte soubor typu .png/.jpg");
-            _onTextureAssetLoadedCallback?.Invoke(null);
-        }
+    /// <summary>
+    /// Lets the user pick a preview image. Nothing is stored or uploaded; pass the result to UploadPreviewImage to apply it.
+    /// The caller owns the returned texture and should destroy it if the image isn't used.
+    /// </summary>
+    public void AskForPreviewImageDialog(Action<PendingPreviewImage> callback) {
+        ShowImageFileDialog(file => {
+            if (file == null) {
+                callback?.Invoke(null);
+                return;
+            }
 
-        _onTextureAssetLoadedCallback = null;
-        _processingPreview = false;
-        _forcedProjectContext = "";
+            Texture2D tex = LoadTexture(file.data);
+            callback?.Invoke(tex != null ? new PendingPreviewImage { Data = file.data, FileName = file.fileInfo.name, Texture = tex } : null);
+        });
+    }
+
+    private void ShowImageFileDialog(Action<FrostweepGames.Plugins.WebGLFileBrowser.File> onSelected) {
+        FileBrowserManager.Instance.ShowLoadDialog(files => {
+            if (files != null && files.Length > 0 && files[0]?.data != null) {
+                onSelected(files[0]);
+            } else {
+                if (MessageDisplayManager.Instance != null)
+                    MessageDisplayManager.Instance.ShowMessage("Prosím vyberte soubor typu .png/.jpg");
+                onSelected(null);
+            }
+        },
+        filterExtensions: "png, jpg, jpeg",
+        multipleSelection: false);
     }
 
     #endregion
 
-    #region Asset Creation
+    #region Project Images
 
-    public TextureAsset CreateTextureAsset(FrostweepGames.Plugins.WebGLFileBrowser.File file) {
-        if (file == null || file.data == null) return null;
+    private TextureAsset AddProjectImage(byte[] data, string fileName) {
+        if (data == null) return null;
 
-        string currentProject = !string.IsNullOrEmpty(_forcedProjectContext) ? _forcedProjectContext : "UnknownProject";
+        string fileHash = GetFileHash(data);
+        TextureAsset existing = _loadedTextures.Find(x => x != null && x.FileHash == fileHash);
+        if (existing != null) return existing;
 
-        string fileHash = _processingPreview ? "PREVIEW" : GetFileHash(file.data);
-        // Uses your preferred preview ID structure: Preview_ProjectName
-        string assetID = _processingPreview ? $"Preview_{currentProject}" : fileHash;
-
-        // --- 1. Manage Duplicates and Memory Optimization ---
-        if (_processingPreview) {
-            TextureAsset oldPreview = _previewTextures.Find(x => x.ID == assetID);
-            if (oldPreview != null) {
-                _previewTextures.Remove(oldPreview);
-                if (oldPreview.Texture != null) Destroy(oldPreview.Texture);
-                Destroy(oldPreview.gameObject);
-            }
-        } else {
-            foreach (var existing in _loadedTextures) {
-                if (existing.FileHash == fileHash) {
-                    if (string.IsNullOrEmpty(existing.ID)) existing.ID = fileHash;
-                    return existing;
-                }
-            }
+        Texture2D tex = LoadTexture(data);
+        if (tex == null) {
+            Debug.LogError($"Failed to decode image: {fileName}");
+            return null;
         }
 
-        // --- 2. Save File to Persistent Data Storage ---
-        string extension = Path.GetExtension(file.fileInfo.name);
+        // Kept on disk so the upload doesn't need the bytes in memory
+        string extension = Path.GetExtension(fileName);
         if (string.IsNullOrEmpty(extension)) extension = ".png";
-
-        string diskName = _processingPreview ? $"{currentProject}_preview" : fileHash;
-        string localPath = Path.Combine(Application.persistentDataPath, diskName + extension);
-
+        string localPath = Path.Combine(Application.persistentDataPath, fileHash + extension);
         try {
-            File.WriteAllBytes(localPath, file.data);
+            File.WriteAllBytes(localPath, data);
         } catch (Exception e) {
             Debug.LogError($"Failed to save file to persistent path: {e.Message}");
         }
 
-        // --- 3. Build Unity Engine Wrapper Object Components ---
-        Texture2D tex = new Texture2D(2, 2);
-        if (!tex.LoadImage(file.data)) return null;
-
-        string gameObjectName = _processingPreview ? $"Preview_{currentProject}" : $"Tex_{file.fileInfo.name}";
-        GameObject go = new GameObject(gameObjectName);
+        GameObject go = new GameObject($"Tex_{fileName}");
         if (ImageContainer != null) go.transform.parent = ImageContainer.transform;
 
         TextureAsset asset = go.AddComponent<TextureAsset>();
-        asset.FileName = _processingPreview ? $"{currentProject}_preview.png" : file.fileInfo.name;
+        asset.ID = fileHash;
+        asset.FileName = fileName;
         asset.FileHash = fileHash;
-        asset.ID = assetID;
         asset.Texture = tex;
         asset.LocalPersistentPath = localPath;
 
-        // --- 4. Route Downstream (DECOUPLED FROM SERVER UPLOAD) ---
-        if (_processingPreview) {
-            _previewTextures.Add(asset);
-            print($"Loaded preview texture locally with ID: {asset.ID}. (UPLOAD DEFERRED)");
-        } else {
-            _loadedTextures.Add(asset);
-            print($"Added standard image asset with ID: {asset.ID}");
-
-            /*
-            if (MainManagerBase.Instance is EditorManager editorMan) {
-            //    MessageDisplayManager.Instance.DisplayMessage("Image Manager save");
-            //    editorMan.SaveProject();
-            }
-            */
-        }
-
+        _loadedTextures.Add(asset);
         return asset;
     }
 
-    #endregion
-
-    #region Manual Explicit Server Uploads
-
-    /// <summary>
-    /// Call this explicitly when you are ready to send the preview to the server.
-    /// </summary>
-    public void UploadPreviewToServer(string projectName) {
-        string targetID = $"Preview_{projectName}";
-        TextureAsset preview = GetPreviewAssetByID(targetID);
-
-        if (preview != null) {
-            if (!string.IsNullOrEmpty(preview.LocalPersistentPath) && File.Exists(preview.LocalPersistentPath)) {
-                ServerCommunicationManager.Instance.UploadPreviewImageToServer(
-                    preview.LocalPersistentPath,
-                    preview.FileName,
-                    projectName,
-                    "PREVIEW" // Passing "PREVIEW" matching your original logic string layout
-                );
-            } else {
-                Debug.LogError($"Upload failed: Local file missing at {preview.LocalPersistentPath}");
-            }
-        } else {
-            Debug.LogWarning($"No preview asset found in memory matching ID: {targetID}");
-        }
+    public TextureAsset GetTextureAssetByID(string ID) {
+        if (string.IsNullOrEmpty(ID)) return null;
+        return _loadedTextures.Find(x => x != null && (x.ID == ID || x.FileHash == ID));
     }
 
     public void UploadImagesToServer(string projectName) {
@@ -163,7 +116,7 @@ public class ImageManager : Singleton<ImageManager> {
     /// </summary>
     public void UploadImagesIfMissing(IEnumerable<string> imageIds, string projectName) {
         foreach (string id in imageIds) {
-            TextureAsset asset = _loadedTextures.Find(x => x != null && (x.ID == id || x.FileHash == id));
+            TextureAsset asset = GetTextureAssetByID(id);
             if (asset == null || _uploadedHashes.Contains(asset.FileHash)) continue;
             UploadImage(asset, projectName);
         }
@@ -188,10 +141,6 @@ public class ImageManager : Singleton<ImageManager> {
         );
     }
 
-    #endregion
-
-    #region Serialization & Deserialization
-
     public List<serializableTextureAsset> SerializeTextureList() {
         List<serializableTextureAsset> list = new List<serializableTextureAsset>();
         foreach (var asset in _loadedTextures) {
@@ -208,26 +157,14 @@ public class ImageManager : Singleton<ImageManager> {
     }
 
     private IEnumerator DeserializeTexturesCoroutine(List<serializableTextureAsset> data, Action onComplete) {
-        string currentProject = (ProjectManager.Instance?.SelectedProject != null) ? ProjectManager.Instance.SelectedProject.ProjectName : "UnknownProject";
+        string currentProject = ProjectManager.Instance.SelectedProject.ProjectName;
 
-        bool previewDone = false;
-        DownloadPreviewImage(currentProject, success => {
-            previewDone = true;
-        });
-        yield return new WaitUntil(() => previewDone);
-
-        foreach (var serializableAsset in data) {
-            bool isDone = false;
-
-            DownloadTextureAsset(
-                serializableAsset.fileHash,
-                serializableAsset.fileName,
-                currentProject,
-                success => {
-                    isDone = true;
-                });
-
-            yield return new WaitUntil(() => isDone);
+        if (data != null) {
+            foreach (var serializableAsset in data) {
+                bool isDone = false;
+                DownloadProjectImage(serializableAsset.fileHash, serializableAsset.fileName, currentProject, success => isDone = true);
+                yield return new WaitUntil(() => isDone);
+            }
         }
 
         onComplete?.Invoke();
@@ -246,111 +183,135 @@ public class ImageManager : Singleton<ImageManager> {
             if (string.IsNullOrEmpty(id) || GetTextureAssetByID(id) != null) continue;
 
             bool isDone = false;
-            DownloadTextureAsset(id, $"{id}.png", projectName, success => isDone = true);
+            DownloadProjectImage(id, $"{id}.png", projectName, success => isDone = true);
             yield return new WaitUntil(() => isDone);
         }
 
         onComplete?.Invoke();
     }
 
-    public void DownloadPreviewImage(string projectName, Action<bool> onComplete = null) {
-        string targetID = $"Preview_{projectName}";
-        TextureAsset existingPreview = GetPreviewAssetByID(targetID);
-        if (existingPreview != null) {
-            _previewTextures.Remove(existingPreview);
-            if (existingPreview.Texture != null) Destroy(existingPreview.Texture);
-            Destroy(existingPreview.gameObject);
+    private void DownloadProjectImage(string hash, string fileName, string projectName, Action<bool> onComplete) {
+        if (GetTextureAssetByID(hash) != null) {
+            onComplete?.Invoke(true);
+            return;
         }
 
-        ServerCommunicationManager.Instance.DownloadPreviewImageFromServer(projectName, data => {
-            if (data != null) {
-                _processingPreview = true;
-                _forcedProjectContext = projectName;
-
-                FrostweepGames.Plugins.WebGLFileBrowser.File simulatedFile = new FrostweepGames.Plugins.WebGLFileBrowser.File {
-                    data = data,
-                    fileInfo = new FrostweepGames.Plugins.WebGLFileBrowser.FileInfo { name = $"{projectName}_preview.png" }
-                };
-
-                CreateTextureAsset(simulatedFile);
-                _processingPreview = false;
-                _forcedProjectContext = "";
+        ServerCommunicationManager.Instance.DownloadImageFromServer(projectName, hash, fileName, data => {
+            if (data != null && AddProjectImage(data, fileName) != null) {
+                _uploadedHashes.Add(hash);
                 onComplete?.Invoke(true);
             } else {
-                Debug.LogWarning($"No preview image found on server for project: {projectName}");
+                Debug.LogError($"Failed to download texture: {fileName}");
                 onComplete?.Invoke(false);
             }
         });
     }
 
-    private void DownloadTextureAsset(string hash, string fileName, string projectName, Action<bool> onComplete) {
-        foreach (var asset in _loadedTextures) {
-            if (asset.FileHash == hash) {
-                onComplete?.Invoke(true);
-                return;
-            }
-        }
-
-        ServerCommunicationManager.Instance.DownloadImageFromServer(
-            projectName,
-            hash,
-            fileName,
-            data => {
-                if (data != null) {
-                    FrostweepGames.Plugins.WebGLFileBrowser.File simulatedFile = new FrostweepGames.Plugins.WebGLFileBrowser.File {
-                        data = data,
-                        fileInfo = new FrostweepGames.Plugins.WebGLFileBrowser.FileInfo { name = fileName }
-                    };
-                    CreateTextureAsset(simulatedFile);
-                    _uploadedHashes.Add(hash);
-                    onComplete?.Invoke(true);
-                } else {
-                    Debug.LogError($"Failed to download texture: {fileName}");
-                    onComplete?.Invoke(false);
-                }
-            });
-    }
-
-    #endregion
-
-    #region Accessors & Maintenance
-
+    /// <summary>
+    /// Removes the opened project's images. Previews are kept for the project list.
+    /// </summary>
     public void ClearManager() {
         foreach (var asset in _loadedTextures) {
+            if (asset == null) continue;
             if (asset.Texture != null) Destroy(asset.Texture);
             Destroy(asset.gameObject);
         }
         _loadedTextures.Clear();
         _uploadedHashes.Clear();
+    }
 
-        foreach (var preview in _previewTextures) {
-            if (preview.Texture != null) Destroy(preview.Texture);
-            Destroy(preview.gameObject);
+    #endregion
+
+    #region Preview Images
+
+    /// <summary>
+    /// Returns the cached preview of a project, or null if it hasn't been downloaded or the project has none.
+    /// </summary>
+    public Texture2D GetPreviewTexture(string projectName) {
+        if (string.IsNullOrEmpty(projectName)) return null;
+        return _previewTextures.TryGetValue(projectName, out Texture2D tex) ? tex : null;
+    }
+
+    /// <summary>
+    /// Downloads a project's preview from the server and caches it. Returns null when the project has no preview.
+    /// </summary>
+    public void DownloadPreviewImage(string projectName, Action<Texture2D> onComplete = null) {
+        ServerCommunicationManager.Instance.DownloadPreviewImageFromServer(projectName, data => {
+            onComplete?.Invoke(data != null ? StorePreview(projectName, data) : GetPreviewTexture(projectName));
+        });
+    }
+
+    /// <summary>
+    /// Uploads a new preview for a project. The cache is updated only once the server has accepted it.
+    /// </summary>
+    public void UploadPreviewImage(string projectName, PendingPreviewImage image, Action<bool> onComplete = null) {
+        if (image == null || image.Data == null) {
+            onComplete?.Invoke(false);
+            return;
         }
-        _previewTextures.Clear();
+
+        string extension = Path.GetExtension(image.FileName);
+        if (string.IsNullOrEmpty(extension)) extension = ".png";
+
+        ServerCommunicationManager.Instance.UploadPreviewImageToServer(image.Data, "preview" + extension, projectName, success => {
+            if (success) {
+                StorePreview(projectName, image.Data);
+            } else if (MessageDisplayManager.Instance != null) {
+                MessageDisplayManager.Instance.ShowMessage("Nahrání náhledového obrázku selhalo");
+            }
+            onComplete?.Invoke(success);
+        });
     }
 
-    // UNIFIED LOOKUP: Automatically checks standard assets first, then fallback-searches previews by ID
-    public TextureAsset GetTextureAssetByID(string ID) {
-        if (string.IsNullOrEmpty(ID)) return null;
+    /// <summary>
+    /// Moves a cached preview to a new project name, so a renamed project keeps showing it without a re-download.
+    /// </summary>
+    public void RenamePreview(string oldProjectName, string newProjectName) {
+        if (oldProjectName == newProjectName || !_previewTextures.TryGetValue(oldProjectName, out Texture2D tex)) return;
 
-        TextureAsset standardAsset = _loadedTextures.Find(x => x != null && (x.ID == ID || x.FileHash == ID));
-        if (standardAsset != null) return standardAsset;
-
-        return _previewTextures.Find(x => x != null && (x.ID == ID || x.FileHash == ID));
+        _previewTextures.Remove(oldProjectName);
+        RemovePreview(newProjectName);
+        _previewTextures[newProjectName] = tex;
     }
 
-    public TextureAsset GetPreviewAssetByProject(string projectName) {
-        return _previewTextures.Find(x => x.ID == $"Preview_{projectName}");
+    public void RemovePreview(string projectName) {
+        if (string.IsNullOrEmpty(projectName) || !_previewTextures.TryGetValue(projectName, out Texture2D tex)) return;
+
+        _previewTextures.Remove(projectName);
+        if (tex != null) Destroy(tex);
     }
 
-    public TextureAsset GetPreviewAssetByID(string ID) {
-        return _previewTextures.Find(x => x.ID == ID);
+    /// <summary>
+    /// Drops previews of projects that no longer exist.
+    /// </summary>
+    public void KeepOnlyPreviews(ICollection<string> projectNames) {
+        foreach (string name in new List<string>(_previewTextures.Keys)) {
+            if (!projectNames.Contains(name)) RemovePreview(name);
+        }
+    }
+
+    private Texture2D StorePreview(string projectName, byte[] data) {
+        if (_previewTextures.TryGetValue(projectName, out Texture2D tex) && tex != null) {
+            tex.LoadImage(data);
+            return tex;
+        }
+
+        tex = LoadTexture(data);
+        if (tex != null) _previewTextures[projectName] = tex;
+        return tex;
     }
 
     #endregion
 
     #region Helpers
+
+    private Texture2D LoadTexture(byte[] data) {
+        Texture2D tex = new Texture2D(2, 2);
+        if (tex.LoadImage(data)) return tex;
+
+        Destroy(tex);
+        return null;
+    }
 
     private string GetFileHash(byte[] fileData) {
         using (var md5 = MD5.Create()) {
@@ -360,43 +321,15 @@ public class ImageManager : Singleton<ImageManager> {
     }
 
     #endregion
+}
 
-    /// <summary>
-    /// Takes any loaded texture asset and registers a clone of it as the official preview image for a project.
-    /// </summary>
-    public void SetAssetAsProjectPreview(TextureAsset sourceAsset, string projectName) {
-        if (sourceAsset == null || sourceAsset.Texture == null) {
-            Debug.LogError("SetAssetAsProjectPreview err: Source asset or texture is null!");
-            return;
-        }
-
-        string targetID = $"Preview_{projectName}";
-
-        // 1. Memory Cleanup: Wipe out any existing preview asset cached under this project ID
-        TextureAsset oldPreview = _previewTextures.Find(x => x.ID == targetID);
-        if (oldPreview != null) {
-            _previewTextures.Remove(oldPreview);
-            if (oldPreview.Texture != null) Destroy(oldPreview.Texture);
-            Destroy(oldPreview.gameObject);
-        }
-
-        // 2. Clone Structure: Create a new detached GameObject container for our preview asset layer
-        GameObject go = new GameObject(targetID);
-        if (ImageContainer != null) go.transform.parent = ImageContainer.transform;
-
-        // 3. Populate Properties: Mirror properties from the source asset to the new preview component context
-        TextureAsset projectPreview = go.AddComponent<TextureAsset>();
-        projectPreview.ID = targetID;
-        projectPreview.FileName = $"{projectName}_preview.png";
-        projectPreview.FileHash = sourceAsset.FileHash;
-        projectPreview.Texture = sourceAsset.Texture; // Points directly to the same texture pointer in GPU memory
-        projectPreview.LocalPersistentPath = sourceAsset.LocalPersistentPath;
-
-        // 4. Save to Runtime Cache: Register it into the internal array container
-        _previewTextures.Add(projectPreview);
-        Debug.Log($"Successfully assigned texture hash {sourceAsset.FileHash} as preview for project: {projectName}");
-    }
-
+/// <summary>
+/// A preview image picked by the user that hasn't been uploaded yet.
+/// </summary>
+public class PendingPreviewImage {
+    public byte[] Data;
+    public string FileName;
+    public Texture2D Texture;
 }
 
 [System.Serializable]
@@ -405,7 +338,7 @@ public class TextureAsset : MonoBehaviour {
     public string FileName;
     public string FileHash;
     public Texture2D Texture;
-    public string LocalPersistentPath; 
+    public string LocalPersistentPath;
 }
 
 [System.Serializable]

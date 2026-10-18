@@ -110,7 +110,7 @@ public class ProjectListManager: Singleton<ProjectListManager> {
         });
     }
 
-    public void EditProject(string oldName, string newName, string description, string imageID, System.Action onCompleted) {
+    public void EditProject(string oldName, string newName, string description, string imageID, System.Action<bool> onCompleted) {
         oldName = oldName?.Trim();
         newName = newName?.Trim();
         description = description?.Trim();
@@ -120,7 +120,7 @@ public class ProjectListManager: Singleton<ProjectListManager> {
                 PopUp.Instance.ShowPopUpWindow("Failed " + response);
             }
 
-            onCompleted?.Invoke();
+            onCompleted?.Invoke(success);
         });
     }
 

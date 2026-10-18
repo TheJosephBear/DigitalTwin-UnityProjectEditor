@@ -241,9 +241,9 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
         StartCoroutine(DownloadFileRequest(url, callback));
     }
 
-    public void UploadPreviewImageToServer(string path, string fileName, string projectName, string assetHash) {
+    public void UploadPreviewImageToServer(byte[] data, string fileName, string projectName, System.Action<bool> onComplete = null) {
         string url = $"{serverUrl}/upload_preview_image";
-        StartCoroutine(UploadFileRequest(url, path, fileName, projectName, assetHash));
+        StartCoroutine(UploadDataRequest(url, data, fileName, projectName, "PREVIEW", onComplete));
     }
 
 
@@ -335,11 +335,11 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
             yield break;
         }
 
-        byte[] fileData = File.ReadAllBytes(path);
-        WWWForm form = new WWWForm();
+        yield return UploadDataRequest(url, File.ReadAllBytes(path), fileName, projectName, assetHash, onComplete);
+    }
 
-        // Use actual file extension from the path
-        string extension = Path.GetExtension(fileName);
+    IEnumerator UploadDataRequest(string url, byte[] fileData, string fileName, string projectName, string assetHash, System.Action<bool> onComplete = null) {
+        WWWForm form = new WWWForm();
         form.AddBinaryData("file", fileData, fileName, "application/octet-stream");
         form.AddField("project_name", projectName, System.Text.Encoding.UTF8);
         form.AddField("asset_hash", assetHash, System.Text.Encoding.UTF8); // send assetHash so server knows which asset this file belongs to

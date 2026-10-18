@@ -7,7 +7,6 @@ public class ProjectListItem : MonoBehaviour {
     public TextMeshProUGUI ButtonText;
     public RawImage EditingImage;
     public ProjectMetadata ProjectMetadata;
-    public TextureAsset TextureAsset;
     private ProjectListUINew _projectListUI;
 
     [Header("Survey UI References (Assign in Prefab)")]
@@ -15,17 +14,19 @@ public class ProjectListItem : MonoBehaviour {
     public TextMeshProUGUI SurveyRespondentsText;
     public GameObject SurveyBadge;
 
-    public void Initialize(ProjectMetadata project, ProjectListUINew UIScript, TextureAsset textureAsset) {
+    public void Initialize(ProjectMetadata project, ProjectListUINew UIScript, Texture2D preview) {
         _projectListUI = UIScript;
         ProjectMetadata = project;
         ButtonText.text = ProjectMetadata.projectName;
-        TextureAsset = textureAsset;
-        if (TextureAsset != null && TextureAsset.Texture != null) {
-            EditingImage.texture = TextureAsset.Texture;
-            UpdateAspectRatio(EditingImage);
-        }
+        SetPreview(preview);
 
         UpdateSurveyUI();
+    }
+
+    public void SetPreview(Texture2D preview) {
+        if (preview == null) return;
+        EditingImage.texture = preview;
+        UpdateAspectRatio(EditingImage);
     }
 
     private void UpdateSurveyUI() {
@@ -71,9 +72,7 @@ public class ProjectListItem : MonoBehaviour {
     }
 
     public void OnClick() {
-        string id = "";
-        if (TextureAsset != null) id = TextureAsset.ID;
-        _projectListUI.OnProjectClick(ProjectMetadata, id);
+        _projectListUI.OnProjectClick(ProjectMetadata);
     }
 
     private void UpdateAspectRatio(RawImage rawImage) {

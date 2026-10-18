@@ -762,7 +762,6 @@ MonoBehaviour:
     owner: 
     hasSurvey: 0
     respondentCount: 0
-  TextureAsset: {fileID: 0}
   SurveyStatusText: {fileID: 0}
   SurveyRespondentsText: {fileID: 5125966589236710611}
   SurveyBadge: {fileID: 8663503384039674184}

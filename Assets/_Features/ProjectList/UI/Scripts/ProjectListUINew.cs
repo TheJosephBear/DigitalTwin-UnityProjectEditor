@@ -33,15 +33,15 @@ public class ProjectListUINew : MonoBehaviour {
     private string _pendingImageID;
     private List<ProjectListItem> _projectButtons = new List<ProjectListItem>();
     private Texture _placeholderTexture;
-    private TextureAsset _temporaryUploadTexture; // Stored while editing in case you dont want to use the picture
+    private PendingPreviewImage _pendingPreview; // Picked in the editing modal, uploaded only when the edit is saved
 
     void Awake() {
 
     }
 
     public void Initialize() {
-        RefreshProjectList(() => { OnCloseModal(); });
         _placeholderTexture = ClassicImage.texture;
+        RefreshProjectList(() => { OnCloseModal(); });
     }
 
 
@@ -52,36 +52,31 @@ public class ProjectListUINew : MonoBehaviour {
         }
         _projectButtons.Clear();
 
-        StartCoroutine(RefreshCoroutine(() => {
-            ReorderUIButtonsAlphabetically();
-            onCompleted();
-        }));
-    }
-    private IEnumerator RefreshCoroutine(System.Action onCompleted) {
         UIManager.Instance.ShowUI(UIType.LoadingScreen);
         ProjectListManager.Instance.GetProjectMetadataList(list => {
+            UIManager.Instance.HideUI(UIType.LoadingScreen);
+            if (list == null) {
+                onCompleted?.Invoke();
+                return;
+            }
             MemoryLogger.Log($"Project list metadata received ({list.Count} projects)");
-            int remainingPreviews = list.Count;
 
+            ImageManager.Instance.KeepOnlyPreviews(list.Select(x => x.projectName).ToList());
+
+            // Buttons show the cached preview right away, the fresh one replaces it once downloaded
             foreach (ProjectMetadata project in list) {
-                ImageManager.Instance.DownloadPreviewImage(project.projectName, success => {
-                    remainingPreviews--;
-                    if (remainingPreviews == 0) MemoryLogger.Log("After downloading all project preview images");
+                ProjectListItem item = AddProjectButtonToList();
+                item.Initialize(project: project, UIScript: this, preview: ImageManager.Instance.GetPreviewTexture(project.projectName));
 
-                    print($"Refresh called. Downloading preview image for: {project.projectName}, success: {success}");
-                    TextureAsset previewAsset = null;
-                    if (success) {
-                        previewAsset = ImageManager.Instance.GetPreviewAssetByProject(project.projectName);
-                    }
-                    AddProjectButtonToList().Initialize(project: project, UIScript: this, textureAsset: previewAsset);
-                    onCompleted();
+                ImageManager.Instance.DownloadPreviewImage(project.projectName, preview => {
+                    if (item != null) item.SetPreview(preview);
+                    if (_projectInModal != null && _projectInModal.projectName == project.projectName) ShowModalPreview();
                 });
             }
 
-            UIManager.Instance.HideUI(UIType.LoadingScreen);
-            Debug.Log("All project dashboard preview downloads have completed processing!");
+            ReorderUIButtonsAlphabetically();
+            onCompleted?.Invoke();
         });
-        yield return null;
     }
 
     private void ReorderUIButtonsAlphabetically() {
@@ -116,11 +111,11 @@ public class ProjectListUINew : MonoBehaviour {
     }
 
     // Open classic modal
-    public void OnProjectClick(ProjectMetadata projectMedata, string textureID) {
+    public void OnProjectClick(ProjectMetadata projectMedata) {
+        DiscardPendingPreview();
         ModalClassic.SetActive(true);
         ModalEditing.SetActive(false);
         _projectInModal = projectMedata;
-        _pendingImageID = textureID;
         InitializeClassicPanel();
     }
 
@@ -132,6 +127,7 @@ public class ProjectListUINew : MonoBehaviour {
     }
 
     public void OnCloseModal() {
+        DiscardPendingPreview();
         ModalClassic.SetActive(false);
         ModalEditing.SetActive(false);
         _projectInModal = null;
@@ -222,34 +218,64 @@ public class ProjectListUINew : MonoBehaviour {
     #region Editing Modal Buttons
 
     public void OnImageUpload() {
-        ImageManager.Instance.AskForImageDialog((texture) => {
-            EditingImage.texture = texture.Texture;
-            _temporaryUploadTexture = texture;
+        ImageManager.Instance.AskForPreviewImageDialog(image => {
+            if (image == null) return;
+            if (_projectInModal == null) {
+                Destroy(image.Texture);
+                return;
+            }
+
+            DiscardPendingPreview();
+            _pendingPreview = image;
+            EditingImage.texture = image.Texture;
             UpdateAspectRatio(EditingImage);
-         //   _pendingImageID = texture.ID;
         });
     }
 
     public void EditProjectInfo() {
         string projectID = _projectInModal.projectId;
-        ImageManager.Instance.SetAssetAsProjectPreview(_temporaryUploadTexture, _projectInModal.projectName);
-        ImageManager.Instance.UploadPreviewToServer(_projectInModal.projectName);
-        ProjectListManager.Instance.EditProject(
-            _projectInModal.projectName,
-            EditingNameInput.text,
-            EditingDescriptionInput.text,
-            _pendingImageID,
-            () => {
-                RefreshProjectList(() => {
-                    OnCloseModal();
-                    OnProjectClick(ProjectManager.Instance.GetProjectMetadataList().Find(x => x.projectId == projectID), _pendingImageID);
-                });
+        string oldName = _projectInModal.projectName;
+        string newName = EditingNameInput.text.Trim();
+        PendingPreviewImage preview = _pendingPreview;
+        _pendingPreview = null;
+
+        UIManager.Instance.ShowUI(UIType.LoadingScreen);
+
+        // The preview is uploaded after the rename, so it lands in the project's final folder
+        ProjectListManager.Instance.EditProject(oldName, newName, EditingDescriptionInput.text, _pendingImageID, success => {
+            string projectName = success ? newName : oldName;
+            if (success) ImageManager.Instance.RenamePreview(oldName, newName);
+
+            if (preview == null) {
+                ReopenProjectAfterEdit(projectID);
+                return;
             }
-        );
+
+            ImageManager.Instance.UploadPreviewImage(projectName, preview, uploaded => {
+                Destroy(preview.Texture);
+                ReopenProjectAfterEdit(projectID);
+            });
+        });
+    }
+
+    private void ReopenProjectAfterEdit(string projectID) {
+        RefreshProjectList(() => {
+            OnCloseModal();
+            ProjectMetadata project = ProjectManager.Instance.GetProjectMetadataByID(projectID);
+            if (project != null) OnProjectClick(project);
+        });
     }
 
     public void CancelEditing() {
-        OnProjectClick(_projectInModal, "");
+        OnProjectClick(_projectInModal);
+    }
+
+    private void DiscardPendingPreview() {
+        if (_pendingPreview == null) return;
+
+        if (EditingImage.texture == _pendingPreview.Texture) EditingImage.texture = _placeholderTexture;
+        Destroy(_pendingPreview.Texture);
+        _pendingPreview = null;
     }
 
     #endregion
@@ -263,10 +289,7 @@ public class ProjectListUINew : MonoBehaviour {
         // Description
         ClassicDescriptionRef.text = _projectInModal.projectDescription;
 
-        // Image
-        TextureAsset textureAsset = ImageManager.Instance.GetPreviewAssetByProject(_projectInModal.projectName);
-        if (textureAsset != null) ClassicImage.texture = textureAsset.Texture;
-        UpdateAspectRatio(ClassicImage);
+        ShowModalPreview();
 
         // Survey Info & Download Responses Button
         UpdateClassicSurveyPanel();
@@ -335,10 +358,21 @@ public class ProjectListUINew : MonoBehaviour {
         // Description
         EditingDescriptionInput.text = _projectInModal.projectDescription;
 
-        // Image
-        TextureAsset textureAsset = ImageManager.Instance.GetPreviewAssetByProject(_projectInModal.projectName);
-        if (textureAsset != null) EditingImage.texture = textureAsset.Texture;
-        UpdateAspectRatio(EditingImage);
+        ShowModalPreview();
+    }
+
+    // Shows the project's cached preview in both modals; the editing modal keeps a newly picked image
+    private void ShowModalPreview() {
+        Texture preview = ImageManager.Instance.GetPreviewTexture(_projectInModal.projectName);
+        if (preview == null) preview = _placeholderTexture;
+
+        ClassicImage.texture = preview;
+        UpdateAspectRatio(ClassicImage);
+
+        if (_pendingPreview == null) {
+            EditingImage.texture = preview;
+            UpdateAspectRatio(EditingImage);
+        }
     }
 
     private void UpdateAspectRatio(RawImage rawImage) {

@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PinManager: Singleton<PinManager> {
+
     [Header("Prefabs & Setup")]
     public SceneType SceneToInstantiate = SceneType.Editing;
     public GameObject PinPrefab;
     public GameObject PinUIPrefab;
     public GameObject PinPopUpPrefab;
 
-    private List<PinObject> pins = new List<PinObject>();
-    private PinObject activePin;
-    private PinUI pinUIInstance;
-    private PinContextUI popUpInstance;
+    private List<PinObject> _pins = new List<PinObject>();
+    private PinObject _activePin;
+    private PinUI _pinUIInstance;
+    private PinContextUI _popUpInstance;
  //   private PinMovingManager movingManager;
 
     protected override void Awake() {
@@ -21,15 +22,15 @@ public class PinManager: Singleton<PinManager> {
     }
 
     private void OnEnable() {
-        if (pinUIInstance == null && SceneLoadingManager.Instance != null) {
+        if (_pinUIInstance == null && SceneLoadingManager.Instance != null) {
             InitializeUI();
         }
     }
 
     private void InitializeUI() {
         GameObject uiObj = SceneLoadingManager.Instance.InstantiateObjectInScene(PinUIPrefab, SceneToInstantiate);
-        pinUIInstance = uiObj.GetComponent<PinUI>();
-        pinUIInstance.Initialize(this);
+        _pinUIInstance = uiObj.GetComponent<PinUI>();
+        _pinUIInstance.Initialize(this);
     }
 
     public PinObject CreateNewPin() {
@@ -45,21 +46,21 @@ public class PinManager: Singleton<PinManager> {
         GameObject spawnedObj = SceneLoadingManager.Instance.InstantiateObjectInScene(PinPrefab, spawnPos, SceneToInstantiate);
         PinObject newPin = spawnedObj.GetComponent<PinObject>();
 
-        newPin.Name = "Pin " + (pins.Count + 1);
-        pins.Add(newPin);
+        newPin.Name = "Pin " + (_pins.Count + 1);
+        _pins.Add(newPin);
 
-        pinUIInstance.UpdatePinList(pins);
+        _pinUIInstance.UpdatePinList(_pins);
         SelectPin(newPin);
 
         return newPin;
     }
 
     public void SelectPin(PinObject pin) {
-        activePin = pin;
+        _activePin = pin;
 
         // Show UI details panel
-        if (pinUIInstance != null) {
-            pinUIInstance.ShowDetails(pin);
+        if (_pinUIInstance != null) {
+            _pinUIInstance.ShowDetails(pin);
         }
 
         // Show attached world popup
@@ -67,20 +68,20 @@ public class PinManager: Singleton<PinManager> {
     }
 
     private void ShowPopUpForPin(PinObject pin) {
-        if (popUpInstance == null && PinPopUpPrefab != null) {
+        if (_popUpInstance == null && PinPopUpPrefab != null) {
             GameObject popUpObj = SceneLoadingManager.Instance.InstantiateObjectInScene(PinPopUpPrefab, SceneToInstantiate);
-            popUpInstance = popUpObj.GetComponent<PinContextUI>();
+            _popUpInstance = popUpObj.GetComponent<PinContextUI>();
         }
 
-        if (popUpInstance != null) {
-            popUpInstance.gameObject.SetActive(true);
-            popUpInstance.Initialize(pin);
+        if (_popUpInstance != null) {
+            _popUpInstance.gameObject.SetActive(true);
+            _popUpInstance.Initialize(pin);
         }
     }
 
     public void HidePopUp() {
-        if (popUpInstance != null) {
-            popUpInstance.gameObject.SetActive(false);
+        if (_popUpInstance != null) {
+            _popUpInstance.gameObject.SetActive(false);
         }
     }
 
@@ -88,13 +89,13 @@ public class PinManager: Singleton<PinManager> {
 
     }
 
-    public List<PinObject> GetPins() => pins;
+    public List<PinObject> GetPins() => _pins;
 
     #region Serialization
 
     public SerializablePinManager Serialize() {
         List<SerializablePin> list = new List<SerializablePin>();
-        foreach (PinObject pin in pins) {
+        foreach (PinObject pin in _pins) {
             list.Add(pin.Serialize());
         }
         return new SerializablePinManager { Pins = list };
@@ -108,7 +109,7 @@ public class PinManager: Singleton<PinManager> {
             newPin.Deserialize(pinData);
         }
 
-        pinUIInstance.UpdatePinList(pins);
+        _pinUIInstance.UpdatePinList(_pins);
     }
 
     #endregion
