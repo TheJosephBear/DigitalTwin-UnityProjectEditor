@@ -69,6 +69,11 @@ public class SurveyFlowManager : MonoBehaviour {
         _uiInstanceEditor.DeserializeUI();
     }
 
+    // Deserialize survey json into the data model only, without touching the UI
+    public void RestoreSurvey(string surveyJson) {
+        _builderInstance.DeserializeFromJson(surveyJson);
+    }
+
     // Disable UI and other related objects
     public void ExitSurvey() {
         //   _uiInstance.gameObject.SetActive(false); // Buggy, dont know uitoolkit well enough to know why, lets just destroy it (not that expensive on one object hopefully)

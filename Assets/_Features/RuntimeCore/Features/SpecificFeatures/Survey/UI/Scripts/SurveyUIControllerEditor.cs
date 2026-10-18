@@ -434,10 +434,14 @@ public class SurveyUIControllerEditor : MonoBehaviour {
     }
 
     public void HandleExitPressed() {
-        PopUp.Instance.AreYouSurePopUp((exit) => {
-            if (exit) {
-                _surveyManager.ExitSurvey();
-            }
+        if (!_surveyManager.HasUnsavedSurveyChanges()) {
+            _surveyManager.ExitSurvey(save: false);
+            return;
+        }
+
+        PopUp.Instance.SaveBeforeExitPopUp((choice) => {
+            if (choice == UnsavedChangesChoice.Cancel) return;
+            _surveyManager.ExitSurvey(save: choice == UnsavedChangesChoice.SaveAndExit);
         });
     }
 

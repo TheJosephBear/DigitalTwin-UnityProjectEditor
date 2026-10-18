@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using SurveySystem;
 using System;
 
@@ -12,17 +13,26 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
     SurveyFlowManager _flowManager;
     string _surveyJsonData;
     string _responseJsonData;
+    string _savedSurveyJson; // Survey as it was last loaded or saved, used to detect unsaved changes
 
     #region Init
 
     void Start() {
         if(_flowManager == null && SceneLoadingManager.Instance != null)
-            _flowManager = SceneLoadingManager.Instance.InstantiateObjectInScene(SurveyBuildingManagerPrefab).GetComponent<SurveyFlowManager>();
+            _flowManager = CreateFlowManager();
     }
 
     public void OnSceneInitialized() {
         if (_flowManager == null)
-            _flowManager = SceneLoadingManager.Instance.InstantiateObjectInScene(SurveyBuildingManagerPrefab).GetComponent<SurveyFlowManager>();
+            _flowManager = CreateFlowManager();
+    }
+
+    // Start can run while the previous scene (project list) is still the active one.
+    // Putting the flow manager there destroys it on unload, so keep it in this manager's scene.
+    SurveyFlowManager CreateFlowManager() {
+        GameObject flowManagerObject = Instantiate(SurveyBuildingManagerPrefab);
+        SceneManager.MoveGameObjectToScene(flowManagerObject, gameObject.scene);
+        return flowManagerObject.GetComponent<SurveyFlowManager>();
     }
 
     #endregion
@@ -31,8 +41,10 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
 
     public void EnterSurveyBuilding(bool debug = false) {
         _flowManager.EnterSurveyBuilding();
+        _savedSurveyJson = _flowManager.GetSurveyJsonData();
         if (debug) {
             _flowManager.DeserializeSurvey(_surveyJsonData);
+            _savedSurveyJson = _flowManager.GetSurveyJsonData();
         } else {
             DeserializeSurvey();
         }
@@ -78,9 +90,14 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
         onResult?.Invoke(hasContent);
     }
 
-    public void ExitSurvey() {
+    public void ExitSurvey(bool save = true) {
         // Save Builder/Viewer
-        SaveSurvey();
+        if (save) {
+            SaveSurvey();
+        } else if (_savedSurveyJson != null) {
+            // Builder data persists between visits, throw away the unsaved edits
+            _flowManager.RestoreSurvey(_savedSurveyJson);
+        }
         _flowManager.ExitSurvey();
 
         // Change state
@@ -116,7 +133,10 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
 
             // Images saved only with the survey aren't in the project's image list, load them before building the UI
             string json = _surveyJsonData;
-            ImageManager.Instance.EnsureImagesLoaded(CollectSurveyImageIds(json), projectName, () => _flowManager.DeserializeSurvey(json));
+            ImageManager.Instance.EnsureImagesLoaded(CollectSurveyImageIds(json), projectName, () => {
+                _flowManager.DeserializeSurvey(json);
+                _savedSurveyJson = _flowManager.GetSurveyJsonData();
+            });
         });
     }
 
@@ -195,12 +215,20 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
 
     public void SaveSurvey() {
         _surveyJsonData = _flowManager.GetSurveyJsonData();
+        _savedSurveyJson = _surveyJsonData;
         UploadSurveyData();
 
         // Images picked in the survey are otherwise uploaded only with the next project save
         if (MainManagerBase.Instance is EditorManager) {
             ImageManager.Instance.UploadImagesIfMissing(CollectSurveyImageIds(_surveyJsonData), ProjectManager.Instance.SelectedProject.ProjectName);
         }
+    }
+
+    /// <summary>
+    /// True if the edited survey differs from the last loaded or saved version.
+    /// </summary>
+    public bool HasUnsavedSurveyChanges() {
+        return _flowManager != null && _flowManager.GetSurveyJsonData() != _savedSurveyJson;
     }
 
     /// <summary>
