@@ -42,7 +42,7 @@ namespace SurveySystem {
             _activeSurvey.ViewPointId = vpId;
         }
 
-        public QuestionBase AddNewQuestion(QuestionType type) {
+        public QuestionBase AddNewQuestion(QuestionType type, int insertAtIndex = -1) {
             QuestionBase question = type switch {
                 QuestionType.MultipleChoiceSingle => new QuestionMultipleChoiceSingleAnswer(_nextId++),
                 QuestionType.MultipleChoiceMultiple => new QuestionMultipleChoiceMultipleAnswer(_nextId++),
@@ -56,7 +56,8 @@ namespace SurveySystem {
                 _ => new QuestionBase(_nextId++, type)
             };
 
-            _activeSurvey.AddNewQuestion(question);
+            // Keep the model order in sync with the UI, otherwise the question ends up last after save/load
+            _activeSurvey.InsertQuestion(insertAtIndex, question);
             return question;
         }
 

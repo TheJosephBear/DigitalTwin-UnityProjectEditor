@@ -227,7 +227,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
     }
 
     public SurveyQuestionUIBase HandleQuestionAdded(QuestionType questionType, int insertAtIndex = -1) {
-        QuestionBase newQuestion = _surveyBuilder.AddNewQuestion(questionType);
+        QuestionBase newQuestion = _surveyBuilder.AddNewQuestion(questionType, insertAtIndex);
         return HandleExistingQuestionAdded(newQuestion, insertAtIndex);
     }
 
