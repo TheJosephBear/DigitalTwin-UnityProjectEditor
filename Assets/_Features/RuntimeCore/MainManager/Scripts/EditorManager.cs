@@ -19,11 +19,10 @@ public class EditorManager : MainManagerBase {
 
     public void ExitEditor(Action<bool> onComplete, bool save = true) {
         if (_hasUnsavedChanges) {
-            PopUp.Instance.AreYouSurePopUp((exit) => {
-                if (exit) {
-                    onComplete.Invoke(true);
-                    StartCoroutine(ExitEditorCoroutine(save));
-                }
+            PopUp.Instance.SaveBeforeExitPopUp((choice) => {
+                if (choice == UnsavedChangesChoice.Cancel) return;
+                onComplete.Invoke(true);
+                StartCoroutine(ExitEditorCoroutine(choice == UnsavedChangesChoice.SaveAndExit));
             });
             onComplete.Invoke(false);
         } else {
