@@ -277,6 +277,9 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
         options.MaxVertexDataInitialCapacity = 1;
         // Stream the file instead of copying it whole into the heap first (default buffers files up to 50 MB)
         options.BufferizeFiles = FileBufferingMode.Disabled;
+        // Keep the CPU copy of the meshes: MeshColliders are added to the model (and its clones) after loading,
+        // which fails in builds once TriLib marks the meshes non-readable. The editor keeps meshes readable anyway.
+        options.ReadEnabled = true;
         // optional, if our OBJs never carry vertex colors (skips a 16 B/vertex buffer):
         // TriLibCore.Obj.Reader.ObjReader.ParseVertexColors = false;
         AssetLoaderContext context = null;
