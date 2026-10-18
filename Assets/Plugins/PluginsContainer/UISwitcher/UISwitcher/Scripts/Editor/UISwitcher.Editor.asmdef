@@ -1,0 +1,19 @@
+{
+    "name": "UISwitcher.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:b481fc006a788664f82e63f97047e65c",
+        "GUID:2bafac87e7f4b9b418d9448d219b01ab"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

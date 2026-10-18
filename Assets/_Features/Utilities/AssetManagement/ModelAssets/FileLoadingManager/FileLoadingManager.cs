@@ -5,7 +5,6 @@ using UnityEngine;
 using System.Linq;
 using TriLibCore;
 using System;
-using UnityEditor;
 
 /// <summary>
 /// Responsible for creating GameObjects from files from any source.

@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System;
 using System.IO;
 using System.Collections.Generic;
@@ -5,7 +6,6 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-#if UNITY_EDITOR
 public class UITypeEnumGenerator {
 
     [MenuItem("Tools/Generate UIType Enum")]
