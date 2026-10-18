@@ -34,4 +34,8 @@ public class PopUp : Singleton<PopUp> {
     public void AreYouSurePopUp(Action<bool> callback, string text = "Máte neuložené změny. Opravdu chcete odejít?") {
         SceneLoadingManager.Instance.InstantiateObjectInScene(AreYouSureUIPrefab).GetComponent<PopUpAreYouSureUI>().AskForInput(text, callback);
     }
+
+    public void SaveBeforeExitPopUp(Action<UnsavedChangesChoice> callback, string text = "Máte neuložené změny. Chcete je před odchodem uložit?") {
+        SceneLoadingManager.Instance.InstantiateObjectInScene(AreYouSureUIPrefab).GetComponent<PopUpAreYouSureUI>().AskSaveBeforeExit(text, callback);
+    }
 }
