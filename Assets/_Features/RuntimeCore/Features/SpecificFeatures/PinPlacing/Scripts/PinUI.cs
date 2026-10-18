@@ -1,98 +1,77 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PinUI: MonoBehaviour {
-    [Header("List References")]
-    [SerializeField] private Transform scrollContentParent;
-    [SerializeField] private GameObject pinButtonPrefab;
-    [SerializeField] private GameObject addPinButton; // Prefab or existing "+" button at bottom
 
-    [Header("Detail Inspector References")]
-    [SerializeField] private GameObject detailsPanel;
-    [SerializeField] private TMP_InputField nameInput;
-    [SerializeField] private TMP_InputField descriptionInput;
-    [SerializeField] private Image iconPreview;
-    [SerializeField] private Button movePinButton;
+    public GameObject PinButtonPrefab;
+    public GameObject ScrollViewContentRefference;
+    public GameObject AddPinButtonRefference;
 
-    private PinManager pinManager;
-    private PinObject currentInspectedPin;
-    private List<GameObject> spawnedButtons = new List<GameObject>();
+    List<PinHUDButton> _buttonList = new List<PinHUDButton>();
+    PinManager _pinManager;
 
-    public void Initialize(PinManager manager) {
-        pinManager = manager;
-        if (detailsPanel != null) detailsPanel.SetActive(false);
+
+    public void Initialize(PinManager pinManager) {
+        _pinManager = pinManager;
     }
 
-    public void UpdatePinList(List<PinObject> pins) {
-        ClearList();
+    public void OnExitEditing() {
+        UpdatePinButtonList();
+        foreach (PinHUDButton button in _buttonList) {
+            button.ToggleMovableVisual(false);
+        }
 
-        foreach (PinObject pin in pins) {
-            GameObject btnObj = Instantiate(pinButtonPrefab, scrollContentParent);
-            btnObj.GetComponentInChildren<TextMeshProUGUI>().text = pin.Name;
+        ResetButtonsVisual();
+    }
 
-            PinObject currentPin = pin;
-            btnObj.GetComponent<Button>().onClick.AddListener(() => {
-                pinManager.SelectPin(currentPin);
-            });
+    public void OnAddPin() {
+        _pinManager.StartPlacingNewPin();
+    }
 
-            spawnedButtons.Add(btnObj);
+    public void OnHUDButtonClick(PinObject pin) {
+        _pinManager.SelectPin(pin);
+        UpdatePinButtonList();
+    }
+
+    public void OnMoveButton(int index, bool moveUp) {
+        int newIndex = moveUp ? index - 1 : index + 1;
+        List<PinObject> list = _pinManager.GetPins();
+
+        // Bounds check
+        if (newIndex < 0 || newIndex >= list.Count) return;
+
+        _pinManager.SwapPins(index, newIndex);
+        UpdatePinButtonList();
+    }
+
+    public void UpdatePinButtonList() {
+        ClearPinButtonList();
+
+        foreach (PinObject pin in _pinManager.GetPins()) {
+            PinHUDButton buttonScript = Instantiate(PinButtonPrefab, ScrollViewContentRefference.transform).GetComponent<PinHUDButton>();
+            buttonScript.Initialize(this, pin);
+            _buttonList.Add(buttonScript);
         }
 
         // Always keep the "+" button as the last element in the Scroll Content
-        if (addPinButton != null) {
-            addPinButton.transform.SetAsLastSibling();
-            addPinButton.SetActive(true);
+        if (AddPinButtonRefference != null && AddPinButtonRefference.transform.parent == ScrollViewContentRefference.transform) {
+            AddPinButtonRefference.transform.SetAsLastSibling();
         }
     }
 
-    private void ClearList() {
-        foreach (GameObject btn in spawnedButtons) {
-            Destroy(btn);
+    public void ClearPinButtonList() {
+        foreach (PinHUDButton button in _buttonList) {
+            if (button != null) {
+                Destroy(button.gameObject);
+            }
         }
-        spawnedButtons.Clear();
+
+        _buttonList.Clear();
     }
 
-    public void ShowDetails(PinObject pin) {
-        currentInspectedPin = pin;
-        if (detailsPanel != null) detailsPanel.SetActive(true);
-
-        if (nameInput != null) nameInput.text = pin.Name;
-        if (descriptionInput != null) descriptionInput.text = pin.Description;
-        if (iconPreview != null) {
-            iconPreview.sprite = pin.Image;
-            iconPreview.gameObject.SetActive(pin.Image != null);
-        }
-    }
-
-    public void HideDetails() {
-        currentInspectedPin = null;
-        if (detailsPanel != null) detailsPanel.SetActive(false);
-    }
-
-    // --- Inspector Event Handlers ---
-
-    public void OnNameChanged(string newName) {
-        if (currentInspectedPin != null) {
-            currentInspectedPin.Name = newName;
-            UpdatePinList(pinManager.GetPins());
-        }
-    }
-
-    public void OnDescriptionChanged(string newDesc) {
-        if (currentInspectedPin != null) {
-            currentInspectedPin.Description = newDesc;
-        }
-    }
-
-    public void OnAddButtonClicked() {
-        pinManager.CreateNewPin();
-    }
-
-    public void OnStartMovingClicked() {
-        if (currentInspectedPin != null) {
-            pinManager.StartMovingPin(currentInspectedPin);
+    public void ResetButtonsVisual() {
+        foreach (PinHUDButton button in _buttonList) {
+            button.ToggleVisual(false);
         }
     }
 }

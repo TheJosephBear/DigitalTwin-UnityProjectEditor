@@ -304,9 +304,9 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
         GameObject loadedModel = context.RootGameObject;
         loadedModel.SetActive(false);
 
-        var pivot = CenterPivot(loadedModel);   // pivot is now the object you move/rotate/scale
+        CenterPivot(loadedModel);
         MemoryLogger.Log($"After loading {fileName}");
-        return pivot;
+        return loadedModel;
     }
 
     #endregion
@@ -458,18 +458,20 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
         return new Bounds(center, worldExt * 2f);
     }
 
-    private static GameObject CenterPivot(GameObject model) {
+    /// <summary>
+    /// Moves the model's children so the center of its bounds sits at the root's origin.
+    /// The root object stays the same, so the hierarchy and active state are untouched.
+    /// </summary>
+    private static void CenterPivot(GameObject model) {
         if (!TryCalculateBounds(model, out var bounds)) {
-            return model; // nothing to center
+            return; // nothing to center
         }
 
-        var pivot = new GameObject(model.name + "_Pivot");
-        pivot.transform.position = bounds.center;
-        pivot.transform.rotation = Quaternion.identity;
-
-        // Keep world position/rotation/scale of the model unchanged
-        model.transform.SetParent(pivot.transform, true);
-        return pivot;
+        // Children's local positions are in the root's space, so the offset is too
+        Vector3 offset = model.transform.InverseTransformPoint(bounds.center);
+        foreach (Transform child in model.transform) {
+            child.localPosition -= offset;
+        }
     }
 
     #endregion

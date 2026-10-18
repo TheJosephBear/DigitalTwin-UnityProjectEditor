@@ -43,6 +43,7 @@ public class SerializableProject {
     public List<SerializableModelAsset> serializableModelAssets;
     public List<serializableTextureAsset> serializableTextureAssets;
     public SerializableViewPointManager serializableViewPointManager;
+    public SerializablePinManager serializablePinManager;
     public SerializableGeoMapManager serializableGeoMapManager;
     public SerializableSun serializableSun;
     public ProjectSettingsSerializable serializableSettings;

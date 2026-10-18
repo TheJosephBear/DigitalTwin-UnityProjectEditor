@@ -55,6 +55,7 @@ public class EditorManager : MainManagerBase {
         AssetManager.Instance.ClearManager();
         MapManager.Instance.ClearEverything();
         ViewManager.Instance.ClearEverything();
+        if (PinManager.Instance != null) PinManager.Instance.ClearEverything();
         ImageManager.Instance.ClearManager();
     }
 }
@@ -67,5 +68,6 @@ public enum AppState {
     ViewActive,
     Survey,
     VariantAdjusting,
-    FPS
+    FPS,
+    PinPlacing
 }

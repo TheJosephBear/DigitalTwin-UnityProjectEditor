@@ -60,6 +60,19 @@ public class SerializableViewPoint {
     public Vector3 eulerRotation;
 }
 
+[Serializable]
+public class SerializablePinManager {
+    public List<SerializablePin> Pins;
+}
+
+[Serializable]
+public class SerializablePin {
+    public string ID;
+    public string Name;
+    public string Description;
+    public Vector3 position;
+}
+
 
 [Serializable]
 public class SerializableSun {

@@ -18,6 +18,7 @@ public class EditorProjectSerializer : MonoBehaviour {
             serializableTextureAssets = ImageManager.Instance.SerializeTextureList(),
             serializableMapManager = MapManager.Instance.Serialize(),
             serializableViewPointManager = ViewManager.Instance.Serialize(),
+            serializablePinManager = PinManager.Instance != null ? PinManager.Instance.Serialize() : null,
             serializableGeoMapManager = GeoMapManager.Instance.SerializeManager(),
             serializableSun = SunManager.Instance.Serialize(),
             serializableSettings = ProjectSettingsManager.Instance.Serialize(),
@@ -51,6 +52,8 @@ public class EditorProjectSerializer : MonoBehaviour {
         ImageManager.Instance.Deserialize(serializedProject.serializableTextureAssets);
         MapManager.Instance.Deserialize(serializedProject.serializableMapManager);
         ViewManager.Instance.Deserialize(serializedProject.serializableViewPointManager);
+        if (PinManager.Instance != null)
+            PinManager.Instance.Deserialize(serializedProject.serializablePinManager);
         GeoMapManager.Instance.DeserializeManager(serializedProject.serializableGeoMapManager);
         SunManager.Instance.Deserialize(serializedProject.serializableSun, GeoMapManager.Instance.GetCoordinates());
         if (serializedProject.serializableFPS != null)

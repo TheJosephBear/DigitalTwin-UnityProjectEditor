@@ -27,6 +27,7 @@ public class EditorInitializer : MonoBehaviour, Iinitializer {
         UIManager.Instance.ShowUI(UIType.LoadingScreen);
         SceneLoadingManager.Instance.SetActiveScene(SceneType.Editing);
         EditorManager.Instance.OpenedProject = ProjectManager.Instance.SelectedProject;
+        PinManager.Instance.InitializeUI();
 
         // Wait for project deserialization
         yield return StartCoroutine(_projectDeserializer.DeserializeProjectCoroutinable(
