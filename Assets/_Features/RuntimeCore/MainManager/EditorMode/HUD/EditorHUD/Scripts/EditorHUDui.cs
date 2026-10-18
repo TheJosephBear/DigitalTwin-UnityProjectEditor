@@ -24,7 +24,9 @@ public class EditorHUDui : UIBehaviour, IProjectSettingsListener {
     #region Button visual event change
 
     private void OnEnable() {
-        ProjectSettingsManager.Instance.AddObserver(this);
+        // On scene load the manager may not be awake yet, Start registers again in that case
+        if (ProjectSettingsManager.Instance != null)
+            ProjectSettingsManager.Instance.AddObserver(this);
         /*  GlobalSettings.OnSettingsLoadedOrChanged += HandleSettingsUpdated;
 
           if (GlobalSettings.Instance != null && GlobalSettings.Instance.IsLoaded) {
@@ -32,8 +34,14 @@ public class EditorHUDui : UIBehaviour, IProjectSettingsListener {
           }*/
     }
 
+    private void Start() {
+        if (ProjectSettingsManager.Instance != null)
+            ProjectSettingsManager.Instance.AddObserver(this);
+    }
+
     private void OnDisable() {
-        ProjectSettingsManager.Instance.AddObserver(this);
+        if (ProjectSettingsManager.Instance != null)
+            ProjectSettingsManager.Instance.RemoveObserver(this);
         //  GlobalSettings.OnSettingsLoadedOrChanged -= HandleSettingsUpdated;
     }
     /*
