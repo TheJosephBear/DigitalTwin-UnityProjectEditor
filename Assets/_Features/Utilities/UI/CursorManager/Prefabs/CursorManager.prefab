@@ -44,7 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9c74da822bda314cb67f49701e54180, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clickCursor: {fileID: 2800000, guid: 6688c331133a60e43ac099b06462199a, type: 3}
-  hotspot: {x: 0, y: 0}
-  cursorWidth: 2
-  cursorHeight: 2
+  clickCursor: {fileID: 2800000, guid: 1b4075f7f88528c4186bf33a5f7161a0, type: 3}
+  hotspot: {x: 6, y: 0}
