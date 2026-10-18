@@ -111,6 +111,10 @@ public class SurveyQuestionUIViewerGrid : SurveyQuestionUIViewer {
             row.Add(CreateCell(rowIdx, colIdx));
         }
 
+        // USS has no :last-child, so the bottom border is dropped via a class on the newest row
+        if (_rowElements.Count > 0) _rowElements[^1].RemoveFromClassList("grid-table__row--last");
+        row.AddToClassList("grid-table__row--last");
+
         _rowElements.Add(row);
         _table.Add(row);
     }
