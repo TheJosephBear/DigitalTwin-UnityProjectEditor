@@ -26,13 +26,25 @@ public class SurveyUIControllerEditor : MonoBehaviour {
     private VisualElement _surveyImageView;
     private List<SerializableViewPoint> _surveyViewPoints = new();
 
+    // Save button feedback: "Ukládám…" while uploading, greyed out "Uloženo" while there is nothing to save
+    private enum SaveButtonState { Idle, Saving, Saved }
+    private const string SaveSavingClass = "save-btn--saving";
+    private const string SaveSavedClass = "save-btn--saved";
+    private const long SaveStateCheckIntervalMs = 1000;
+    private Button _saveButton;
+    private Label _saveLabel;
+    private bool _isSaving;
+
     void Awake() {
         _surveyUIBuilder = GetComponent<SurveyUIBuilder>();
         _root = gameObject.GetComponent<UIDocument>().rootVisualElement;
 
         // Save button
-        var saveButton = _root.Q<Button>("save-btn");
-        if (saveButton != null) saveButton.clicked += HandleSavePressed;
+        _saveButton = _root.Q<Button>("save-btn");
+        if (_saveButton != null) {
+            _saveButton.clicked += HandleSavePressed;
+            _saveLabel = _saveButton.Q<Label>(className: "floating-fab-save-label");
+        }
         // Exit button
         var exitButton = _root.Q<Button>("exit-btn");
         if (exitButton != null) exitButton.clicked += HandleExitPressed;
@@ -43,7 +55,51 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         _surveyManager = manager;
 
         RegisterBaseSurveyInputs();
+        RegisterSaveStateTracking();
     }
+
+    #region Save button feedback
+
+    // Every edit ends up as a value change of some field or a click on some button (add, delete, move...).
+    // The periodic check covers changes finishing later, like a picked image or the survey download.
+    void RegisterSaveStateTracking() {
+        _root.RegisterCallback<ChangeEvent<string>>(_ => ScheduleSaveStateRefresh());
+        _root.RegisterCallback<ChangeEvent<bool>>(_ => ScheduleSaveStateRefresh());
+        _root.RegisterCallback<ChangeEvent<int>>(_ => ScheduleSaveStateRefresh());
+        _root.RegisterCallback<ClickEvent>(_ => ScheduleSaveStateRefresh());
+        _root.schedule.Execute(RefreshSaveButtonState).Every(SaveStateCheckIntervalMs);
+    }
+
+    // Next frame, so the data model is already updated by the field's own callbacks
+    void ScheduleSaveStateRefresh() {
+        _root.schedule.Execute(RefreshSaveButtonState);
+    }
+
+    void RefreshSaveButtonState() {
+        if (_isSaving || _surveyManager == null) return;
+
+        bool nothingToSave = !_surveyManager.IsSurveyLoading && !_surveyManager.HasUnsavedSurveyChanges();
+        SetSaveButtonState(nothingToSave ? SaveButtonState.Saved : SaveButtonState.Idle);
+    }
+
+    void SetSaveButtonState(SaveButtonState state) {
+        if (_saveButton == null) return;
+
+        _saveButton.SetEnabled(state == SaveButtonState.Idle);
+        _saveButton.EnableInClassList(SaveSavingClass, state == SaveButtonState.Saving);
+        _saveButton.EnableInClassList(SaveSavedClass, state == SaveButtonState.Saved);
+        _saveButton.tooltip = state == SaveButtonState.Saved ? "Všechny změny jsou uložené" : "Uložit dotazník";
+
+        if (_saveLabel != null) {
+            _saveLabel.text = state switch {
+                SaveButtonState.Saving => "Ukládám…",
+                SaveButtonState.Saved => "Uloženo",
+                _ => "Uložit"
+            };
+        }
+    }
+
+    #endregion
 
     void RegisterBaseSurveyInputs() {
         var titleBar = _root.Q("survey-title-bar");
@@ -430,7 +486,16 @@ public class SurveyUIControllerEditor : MonoBehaviour {
 
 
     public void HandleSavePressed() {
-        _surveyManager.SaveSurvey();
+        if (_isSaving) return;
+
+        _isSaving = true;
+        SetSaveButtonState(SaveButtonState.Saving);
+
+        // Failure message is shown by the manager, the button just becomes active again
+        _surveyManager.SaveSurvey(success => {
+            _isSaving = false;
+            RefreshSaveButtonState();
+        });
     }
 
     public void HandleExitPressed() {

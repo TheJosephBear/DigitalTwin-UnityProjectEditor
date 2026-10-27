@@ -384,57 +384,39 @@ public class SurveyUIBuilder : MonoBehaviour {
         var viewPoint = viewManager.GetViewPointByID(viewPointId);
         if (viewPoint == null) return null;
 
-        viewPoint.Activate(); // Position the camera at the viewpoint
-
         Camera unityCamera = Camera.main;
         if (unityCamera == null) return null;
 
-        Vector3 originalPosition = unityCamera.transform.position;
-        Quaternion originalRotation = unityCamera.transform.rotation;
+        // The camera is placed at the viewpoint directly and rendered right away. Going through Cinemachine
+        // (activating the vcam) moved the camera only on the next brain update, so the capture showed
+        // whatever view the camera was at before - usually the last selected one.
+        Transform viewTransform = viewPoint.vcam != null ? viewPoint.vcam.transform : viewPoint.transform;
+        Transform camTransform = unityCamera.transform;
+        Vector3 originalPosition = camTransform.position;
+        Quaternion originalRotation = camTransform.rotation;
+        float originalFov = unityCamera.fieldOfView;
 
-        CinemachineBrain brain = unityCamera.GetComponent<CinemachineBrain>();
-        if (brain != null) {
-            brain.ManualUpdate();
-        }
-        float originalBlendSpeed = brain != null ? brain.m_DefaultBlend.m_Time : 0f;
-        if (brain != null) {
-            brain.m_DefaultBlend.m_Time = 0f;
-        }
+        var vcam = viewPoint.vcam != null ? viewPoint.vcam.GetComponent<CinemachineVirtualCamera>() : null;
+        if (vcam != null) unityCamera.fieldOfView = vcam.m_Lens.FieldOfView;
+        camTransform.SetPositionAndRotation(viewTransform.position, viewTransform.rotation);
 
-
-        // 1. Create a new texture for this specific question
         // Note: We use a Depth of 24 for a standard 3D render
         RenderTexture questionRT = new RenderTexture(1024, 1024, 24);
         questionRT.name = "Question_Capture_" + viewPointId;
         questionRT.Create();
 
-        // 2. "Hijack" the camera for exactly one frame
-        RenderTexture previousRT = unityCamera.targetTexture; // Save existing state
+        RenderTexture previousRT = unityCamera.targetTexture;
         unityCamera.targetTexture = questionRT;
-
-        // Manually force the camera to render RIGHT NOW
         unityCamera.Render();
-
-        // 3. Release the camera immediately
         unityCamera.targetTexture = previousRT;
 
-        // 5. Track this texture 
+        camTransform.SetPositionAndRotation(originalPosition, originalRotation);
+        unityCamera.fieldOfView = originalFov;
+
         if(_createdTextures.ContainsKey(viewPointId)) _createdTextures.Remove(viewPointId);
         _createdTextures.Add(viewPointId, questionRT);
 
-        StartCoroutine(ClearRenderTextureStuffNextFrame(viewPoint, brain, originalBlendSpeed, originalPosition, originalRotation));
-
         return questionRT;
-    }
-
-    IEnumerator ClearRenderTextureStuffNextFrame(ViewPoint vp, CinemachineBrain brain,
-        float ogSpeed,
-        Vector3 ogPosition,
-        Quaternion ogRotation) {
-        yield return new WaitForEndOfFrame();
-        vp.Deactivate();
-        brain.m_DefaultBlend.m_Time = ogSpeed;
-        Camera.main.transform.SetPositionAndRotation(ogPosition, ogRotation);
     }
 
     public void ClearAllQuestionTextures() {

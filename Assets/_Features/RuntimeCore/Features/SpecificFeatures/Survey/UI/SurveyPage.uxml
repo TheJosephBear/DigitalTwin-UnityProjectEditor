@@ -15,7 +15,7 @@
                 <ui:VisualElement name="icon" class="floating-fab-exit-icon" style="background-image: url(&quot;project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/exit-to-app.png?fileID=2800000&amp;guid=268ab040285f4644aacd7fed523d06d8&amp;type=3#exit-to-app&quot;);" />
             </ui:Button>
             <ui:Button name="save-btn" class="floating-fab-primary" tooltip="Uložit dotazník">
-                <ui:VisualElement name="icon" class="floating-fab-save-icon" style="background-image: url(&quot;project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/content-save-outline.png?fileID=2800000&amp;guid=5650597150b473f4a9be8f98fce6a890&amp;type=3#content-save-outline&quot;); -unity-background-image-tint-color: rgb(255, 255, 255);" />
+                <ui:VisualElement name="icon" class="floating-fab-save-icon" style="background-image: url(&quot;project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/content-save-outline.png?fileID=2800000&amp;guid=5650597150b473f4a9be8f98fce6a890&amp;type=3#content-save-outline&quot;);" />
                 <ui:Label text="Uložit" class="floating-fab-save-label" />
             </ui:Button>
         </ui:VisualElement>

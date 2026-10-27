@@ -79,6 +79,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         _scrollView = _root.Q<ScrollView>("survey-scroll-view");
 
         _firstPageElement = _root.Q<VisualElement>("survey-first-page");
+        _firstPageElement?.RegisterCallback<PointerDownEvent>(HandleQuestionPointerDown, TrickleDown.TrickleDown);
         _thankYouPageElement = _root.Q<VisualElement>("survey-thank-you-page");
 
         var thankYouCloseBtn = _thankYouPageElement?.Q<Button>("thank-you-close-btn");
@@ -330,9 +331,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
 
             if (survey != null) {
                 SetupIntroPage(survey);
-                if (!string.IsNullOrEmpty(survey.ViewPointId)) {
-                    StartCoroutine(ShowViewCoroutine(survey.ViewPointId));
-                }
+                ShowView(survey.ViewPointId);
             }
         } else {
             if (_firstPageElement != null) {
@@ -349,9 +348,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
                 // Returning to a question the user was already warned about -> show the warning again
                 RefreshValidation(currentQuestion.Id);
 
-                if (!string.IsNullOrEmpty(currentQuestion.ViewPointId)) {
-                    StartCoroutine(ShowViewCoroutine(currentQuestion.ViewPointId));
-                }
+                ShowView(currentQuestion.ViewPointId);
             }
         }
     }
@@ -522,38 +519,70 @@ public class SurveyUIControllerViewer : MonoBehaviour {
     #endregion
 #endif
 
-    IEnumerator ShowViewCoroutine(string viewPointId) {
-        if (MainManagerBase.Instance == null || string.IsNullOrEmpty(viewPointId)) yield break;
+    #region Question view
 
-        ViewManager viewManager = ViewManager.Instance;
-        if (viewManager == null) yield break;
+    private const float ViewMoveDuration = 0.6f;
+    private const float ViewPositionTolerance = 0.01f;
+    private const float ViewAngleTolerance = 0.1f;
+    private Coroutine _viewMoveCoroutine;
 
-        ViewPoint vp = viewManager.GetViewPointByID(viewPointId);
-        if (vp == null) yield break;
+    // View of the page on screen (intro page or question), empty if it has none
+    string GetCurrentViewPointId() {
+        if (_currentPage == 0) return _surveyBuilder.GetActiveSurvey()?.ViewPointId;
 
-        if (CameraManager.Instance != null) {
-            CameraManager.Instance.ToggleCinemachineBrain(true);
-        }
+        int questionIndex = _currentPage - 1;
+        if (questionIndex < 0 || questionIndex >= _questions.Count) return null;
+        return _questions[questionIndex].ViewPointId;
+    }
 
-        viewManager.DeactivateViewPoint();
-        viewManager.SetActiveViewPoint(vp);
-        viewManager.ActivateViewPoint();
+    // Clicking anywhere in the question brings the camera back to its view, the user may have moved away from it
+    void HandleQuestionPointerDown(PointerDownEvent evt) {
+        ShowView(GetCurrentViewPointId());
+    }
 
-        yield return null;
+    /// <summary>
+    /// Moves the camera to the given view. The camera is moved directly (Cinemachine brain stays off),
+    /// so the user can keep moving it freely afterwards and the view can be shown again at any time.
+    /// </summary>
+    void ShowView(string viewPointId) {
+        if (MainManagerBase.Instance == null || string.IsNullOrEmpty(viewPointId)) return;
 
-        CinemachineBrain brain = FindAnyObjectByType<CinemachineBrain>();
+        ViewPoint vp = ViewManager.Instance?.GetViewPointByID(viewPointId);
+        Camera cam = Camera.main;
+        if (vp == null || cam == null) return;
 
-        if (brain != null && brain.ActiveBlend != null) {
-            float blendTime = brain.ActiveBlend.Duration;
-            yield return new WaitForSeconds(blendTime + 0.05f);
-        } else {
-            yield return null;
-        }
+        Transform target = vp.vcam != null ? vp.vcam.transform : vp.transform;
+        Transform camTransform = cam.transform;
+        bool isAtView = Vector3.Distance(camTransform.position, target.position) < ViewPositionTolerance
+            && Quaternion.Angle(camTransform.rotation, target.rotation) < ViewAngleTolerance;
+        if (isAtView && _viewMoveCoroutine == null) return;
 
+        if (_viewMoveCoroutine != null) StopCoroutine(_viewMoveCoroutine);
+        _viewMoveCoroutine = StartCoroutine(MoveCameraToViewCoroutine(camTransform, target.position, target.rotation));
+    }
+
+    IEnumerator MoveCameraToViewCoroutine(Transform camTransform, Vector3 targetPosition, Quaternion targetRotation) {
+        // Brain would overwrite the camera transform with the last live vcam
         if (CameraManager.Instance != null) {
             CameraManager.Instance.ToggleCinemachineBrain(false);
         }
+
+        Vector3 startPosition = camTransform.position;
+        Quaternion startRotation = camTransform.rotation;
+
+        for (float t = 0f; t < ViewMoveDuration; t += Time.deltaTime) {
+            float k = Mathf.SmoothStep(0f, 1f, t / ViewMoveDuration);
+            camTransform.SetPositionAndRotation(
+                Vector3.Lerp(startPosition, targetPosition, k),
+                Quaternion.Slerp(startRotation, targetRotation, k));
+            yield return null;
+        }
+
+        camTransform.SetPositionAndRotation(targetPosition, targetRotation);
+        _viewMoveCoroutine = null;
     }
+
+    #endregion
 
     SurveyQuestionUIBase AddQuestionToUI(QuestionBase questionBase) {
         // Check if we already created this UI before
@@ -564,6 +593,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
 
         // If not in cache, create it for the first time
         SurveyQuestionUIBase questionUI = _surveyUIBuilder.AddQuestionViewer(questionBase);
+        questionUI.QuestionElement.RegisterCallback<PointerDownEvent>(HandleQuestionPointerDown, TrickleDown.TrickleDown);
         questionUI.SetTitle(questionBase.Title);
         questionUI.SetDescription(questionBase.Description);
         questionUI.ImageID = questionBase.ImageID;

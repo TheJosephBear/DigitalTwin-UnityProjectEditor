@@ -230,10 +230,12 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
         _surveyJsonData = json;
     }
 
-    public void SaveSurvey() {
+    /// <param name="onComplete">Called with the result of the survey upload (images are uploaded separately).</param>
+    public void SaveSurvey(Action<bool> onComplete = null) {
         // The builder still shows the previous state, uploading it would overwrite the survey on the server
         if (_isSurveyLoading) {
             ShowMessage("Dotazník se ještě načítá, zatím ho nelze uložit.");
+            onComplete?.Invoke(false);
             return;
         }
 
@@ -241,10 +243,12 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
         _surveyJsonData = json;
         _savedSurveyJson = json;
         ServerCommunicationManager.Instance.StartSurveyUpload(json, ProjectManager.Instance.SelectedProject.ProjectName, (success, _) => {
-            if (success) return;
-            ShowMessage("Uložení dotazníku se nezdařilo.");
-            // Not on the server, keep it unsaved unless a newer save already replaced it
-            if (_savedSurveyJson == json) _savedSurveyJson = null;
+            if (!success) {
+                ShowMessage("Uložení dotazníku se nezdařilo.");
+                // Not on the server, keep it unsaved unless a newer save already replaced it
+                if (_savedSurveyJson == json) _savedSurveyJson = null;
+            }
+            onComplete?.Invoke(success);
         });
 
         // Images picked in the survey are otherwise uploaded only with the next project save
@@ -252,6 +256,8 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
             ImageManager.Instance.UploadImagesIfMissing(CollectSurveyImageIds(_surveyJsonData), ProjectManager.Instance.SelectedProject.ProjectName);
         }
     }
+
+    public bool IsSurveyLoading => _isSurveyLoading;
 
     /// <summary>
     /// True if the edited survey differs from the last loaded or saved version.

@@ -71,13 +71,25 @@ public class SurveyQuestionUIViewerString : SurveyQuestionUIViewer {
                 textLabel.text = string.Empty;
             }
 
-            var otherField = new TextField();
+            // Multiline so a long answer wraps onto the next line. A single-line field grew with its text
+            // and pushed itself and the character counter out of the panel.
+            var otherField = new TextField { multiline = true };
             otherField.name = "other-text-field";
             otherField.textEdition.placeholder = string.IsNullOrWhiteSpace(answerText) ? "Jiná..." : answerText;
             otherField.style.flexGrow = 1;
+            otherField.style.flexShrink = 1;
+            otherField.style.flexBasis = 0;
+            otherField.style.minWidth = 0;
             otherField.style.whiteSpace = WhiteSpace.Normal;
             otherField.style.marginLeft = 8;
             otherField.AddToClassList("other-text-input");
+
+            // Still a one-line answer, Enter must not add line breaks
+            otherField.RegisterValueChangedCallback(evt => {
+                if (evt.newValue != null && evt.newValue.IndexOf('\n') >= 0) {
+                    otherField.value = evt.newValue.Replace("\r", "").Replace('\n', ' ');
+                }
+            });
 
             void StyleTextInput(VisualElement inputEl) {
                 if (inputEl == null) return;

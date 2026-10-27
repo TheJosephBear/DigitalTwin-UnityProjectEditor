@@ -4932,6 +4932,30 @@ GenericDropdownMenu {
     padding: 0;
 }
 
+/* Zpětná vazba uložení – za :hover/:active, aby je přebila (stejná specificita) */
+.floating-bottom-bar #save-btn.save-btn--saving,
+.floating-bottom-bar #save-btn.save-btn--saving:hover {
+    background-color: var(--primary-hover);
+    opacity: 1;
+    scale: 1 1;
+}
+
+.floating-bottom-bar #save-btn.save-btn--saved,
+.floating-bottom-bar #save-btn.save-btn--saved:hover {
+    background-color: var(--card-border);
+    opacity: 1;
+    scale: 1 1;
+    cursor: initial;
+}
+
+.floating-bottom-bar #save-btn.save-btn--saved .floating-fab-save-label {
+    color: var(--text-muted);
+}
+
+.floating-bottom-bar #save-btn.save-btn--saved .floating-fab-save-icon {
+    -unity-background-image-tint-color: var(--text-muted);
+}
+
 .question-selection-popup {
     width: 250px;
     background-color: rgb(255, 255, 255);

@@ -293,6 +293,7 @@ public class ImageManager : Singleton<ImageManager> {
     private Texture2D StorePreview(string projectName, byte[] data) {
         if (_previewTextures.TryGetValue(projectName, out Texture2D tex) && tex != null) {
             tex.LoadImage(data);
+            ImageOrientationUtils.ApplyExifOrientation(tex, data);
             return tex;
         }
 
@@ -307,7 +308,10 @@ public class ImageManager : Singleton<ImageManager> {
 
     private Texture2D LoadTexture(byte[] data) {
         Texture2D tex = new Texture2D(2, 2);
-        if (tex.LoadImage(data)) return tex;
+        if (tex.LoadImage(data)) {
+            ImageOrientationUtils.ApplyExifOrientation(tex, data); // Phone photos would otherwise be rotated
+            return tex;
+        }
 
         Destroy(tex);
         return null;

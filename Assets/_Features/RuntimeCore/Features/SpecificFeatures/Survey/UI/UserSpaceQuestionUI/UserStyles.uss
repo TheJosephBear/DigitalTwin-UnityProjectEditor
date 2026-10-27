@@ -2359,3 +2359,9 @@ TextField:focus TextInput {
     color: var(--primary-color);
     -unity-font-style: bold;
 }
+
+/* Dlouhý text odpovědi se zalamuje na další řádek místo ujíždění mimo panel */
+.other-text-input .unity-text-element,
+.text-answer-field .unity-text-element {
+    white-space: normal;
+}
