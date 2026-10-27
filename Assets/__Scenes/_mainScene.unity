@@ -213,7 +213,7 @@ MonoBehaviour:
   firstSceneToLoadViewer: 5
   LoadEditorInUnityEditor: 1
   projectName: DEBUGGING PROJECT
-  MemoryLogging: 1
+  MemoryLogging: 0
 --- !u!4 &210335055
 Transform:
   m_ObjectHideFlags: 0

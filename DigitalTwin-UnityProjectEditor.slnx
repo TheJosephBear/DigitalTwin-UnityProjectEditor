@@ -1,11 +1,11 @@
 ﻿<Solution>
-  <Project Path="IxMilia.ThreeMf.Source.csproj" />
   <Project Path="Assembly-CSharp-firstpass.csproj" />
+  <Project Path="IxMilia.ThreeMf.Source.csproj" />
   <Project Path="TriLibCore.Source.csproj" />
   <Project Path="TriLibCore.Fbx.Source.csproj" />
   <Project Path="TriLibCore.Editor.csproj" />
-  <Project Path="Assembly-CSharp-Editor-firstpass.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="Assembly-CSharp-Editor-firstpass.csproj" />
   <Project Path="TriLibCore.Ply.Source.csproj" />
   <Project Path="ICSharpCode.SharpZipLib.Source.csproj" />
   <Project Path="TriLibCore.csproj" />

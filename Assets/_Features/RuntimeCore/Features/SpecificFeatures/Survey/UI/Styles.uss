@@ -2822,6 +2822,8 @@ DropdownField > .unity-base-field__label {
     margin-right: 6px;
 }
 
+/* Výchozí téma dává .unity-base-popup-field__input svislý padding, který
+   na 32px výšce zmáčkne text na 10px a ořízne diakritiku (Ž, ý) – nulujeme ho. */
 DropdownField > .unity-base-field__input {
     background-color: var(--input-bg);
     border-radius: 12px;
@@ -2830,6 +2832,8 @@ DropdownField > .unity-base-field__input {
     height: 32px;
     padding-left: 10px;
     padding-right: 8px;
+    padding-top: 0;
+    padding-bottom: 0;
     color: var(--primary-color);
     font-size: 12px;
     -unity-font-style: bold;
@@ -2846,6 +2850,8 @@ DropdownField > .unity-base-field__input {
     height: 32px;
     padding-left: 10px;
     padding-right: 8px;
+    padding-top: 0;
+    padding-bottom: 0;
     color: var(--primary-color);
     font-size: 12px;
     -unity-font-style: bold;
@@ -2862,6 +2868,8 @@ DropdownField > .unity-dropdown-field__input {
     height: 32px;
     padding-left: 10px;
     padding-right: 8px;
+    padding-top: 0;
+    padding-bottom: 0;
     color: var(--primary-color);
     font-size: 12px;
     -unity-font-style: bold;
@@ -2878,6 +2886,8 @@ DropdownField > .unity-dropdown-field__input {
     height: 32px;
     padding-left: 10px;
     padding-right: 8px;
+    padding-top: 0;
+    padding-bottom: 0;
     color: var(--primary-color);
     font-size: 12px;
     -unity-font-style: bold;
@@ -2969,6 +2979,8 @@ DropdownField > .unity-base-field__input > .unity-dropdown-field__arrow {
     border-color: rgba(103, 80, 164, 0.18);
     padding-left: 10px;
     padding-right: 8px;
+    padding-top: 0;
+    padding-bottom: 0;
     margin-top: 0;
     margin-bottom: 0;
     margin-left: 0;
@@ -2991,6 +3003,8 @@ DropdownField > .unity-base-field__input > .unity-dropdown-field__arrow {
     border-color: rgba(103, 80, 164, 0.18);
     padding-left: 10px;
     padding-right: 8px;
+    padding-top: 0;
+    padding-bottom: 0;
     margin-top: 0;
     margin-bottom: 0;
     margin-left: 0;
@@ -3455,12 +3469,12 @@ GenericDropdownMenu {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    width: 130px;
     min-width: 130px;
-    max-width: 130px;
     height: 32px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 12px; /* ikona má ~2px průhledný okraj, opticky = 14px */
+    padding-right: 14px;
+    padding-top: 0;
+    padding-bottom: 0;
     border-radius: 12px;
     background-color: var(--primary-background-color);
     color: var(--primary-color);
@@ -3478,12 +3492,12 @@ GenericDropdownMenu {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    width: 130px;
     min-width: 130px;
-    max-width: 130px;
     height: 32px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 12px; /* ikona má ~2px průhledný okraj, opticky = 14px */
+    padding-right: 14px;
+    padding-top: 0;
+    padding-bottom: 0;
     border-radius: 12px;
     background-color: var(--primary-background-color);
     color: var(--primary-color);
@@ -3507,24 +3521,30 @@ GenericDropdownMenu {
 
 #image-button #icon {
     -unity-background-image-tint-color: var(--primary-color);
-    margin-right: 4px;
+    margin-right: 6px;
 }
 
 .add-image-button #icon {
     -unity-background-image-tint-color: var(--primary-color);
-    margin-right: 4px;
+    margin-right: 6px;
 }
 
 #image-button Label {
     color: var(--primary-color);
     font-size: 12px;
     -unity-font-style: bold;
+    margin: 0;
+    padding: 0;
+    -unity-text-align: middle-left;
 }
 
 .add-image-button Label {
     color: var(--primary-color);
     font-size: 12px;
     -unity-font-style: bold;
+    margin: 0;
+    padding: 0;
+    -unity-text-align: middle-left;
 }
 
 .switch-pill {
@@ -4523,6 +4543,26 @@ GenericDropdownMenu {
     width: 18px;
     height: 18px;
     margin-top: -9px;
+    border-color: var(--primary-color);
+    transition-property: background-color, border-color;
+    transition-duration: 0.12s;
+}
+
+/* Vlastní stavy – jinak hover přebije šedá z výchozího tématu
+   (.unity-base-slider__dragger:hover:enabled) a active nemá žádnou odezvu. */
+.scale-slider .unity-base-slider__dragger:hover:enabled {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+.scale-slider .unity-base-slider__dragger:active:enabled {
+    background-color: rgb(68, 46, 112);
+    border-color: rgb(68, 46, 112);
+}
+
+.scale-slider.is-dragging .unity-base-slider__dragger {
+    background-color: rgb(68, 46, 112);
+    border-color: rgb(68, 46, 112);
 }
 
 #unity-dragger {
