@@ -1,5 +1,7 @@
+using Cinemachine;
 using System;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 public class EditorManager : MainManagerBase {
@@ -20,6 +22,35 @@ public class EditorManager : MainManagerBase {
             if (MessageDisplayManager.Instance != null) MessageDisplayManager.Instance.ShowMessage("Uložení projektu se nezdařilo.");
         });
         ToggleUnsavedChanges(false);
+        UpdateProjectPreview();
+    }
+
+    // Proportions of the preview box in the project list (ImageContainer in ProjectListItem.prefab, 163.49 x 104.91),
+    // the image fills it without being cropped
+    const float PreviewAspect = 163.49f / 104.91f;
+    const int PreviewWidth = 1280;
+    static readonly int PreviewHeight = Mathf.RoundToInt(PreviewWidth / PreviewAspect);
+
+    // Project list preview = render of the first view, or of the default (starting) view when there are none.
+    // Rendered right away, the views are cleared when saving on exit. A preview uploaded by the user is kept.
+    void UpdateProjectPreview() {
+        RenderTexture rt;
+        ViewPoint firstView = ViewManager.Instance != null ? ViewManager.Instance.GetViewPoints().FirstOrDefault() : null;
+        if (firstView != null) {
+            rt = ViewRenderer.Render(firstView, PreviewWidth, PreviewHeight);
+        } else if (CameraManager.Instance != null && CameraManager.Instance.InitialCameraPosition != null) {
+            Transform defaultView = CameraManager.Instance.InitialCameraPosition;
+            var freeCam = CameraManager.Instance.GetFreeCamVcam()?.GetComponent<CinemachineVirtualCamera>();
+            rt = ViewRenderer.Render(defaultView.position, defaultView.rotation, freeCam != null ? freeCam.m_Lens.FieldOfView : -1f, PreviewWidth, PreviewHeight);
+        } else {
+            return;
+        }
+
+        Texture2D render = ViewRenderer.ToTexture2D(rt);
+        if (render == null) return;
+
+        ImageManager.Instance.UpdateGeneratedPreview(ProjectManager.Instance.SelectedProject.ProjectName, render);
+        Destroy(render);
     }
 
     public void ExitEditor(Action<bool> onComplete) {

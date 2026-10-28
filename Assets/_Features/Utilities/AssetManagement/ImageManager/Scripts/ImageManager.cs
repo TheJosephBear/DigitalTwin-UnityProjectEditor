@@ -263,6 +263,84 @@ public class ImageManager : Singleton<ImageManager> {
         });
     }
 
+    // A generated preview carries this JPEG comment, so it is told apart from one the user uploaded
+    private const string GeneratedPreviewComment = "DigitalTwin generated preview";
+    private const int GeneratedPreviewQuality = 85;
+
+    /// <summary>
+    /// Replaces the project's preview with a generated one (render of the project), unless the user uploaded their own.
+    /// The render is encoded right away, the caller can destroy it after the call.
+    /// </summary>
+    public void UpdateGeneratedPreview(string projectName, Texture2D render, Action<bool> onComplete = null) {
+        if (string.IsNullOrEmpty(projectName) || render == null) {
+            onComplete?.Invoke(false);
+            return;
+        }
+
+        byte[] data = AddGeneratedPreviewMarker(render.EncodeToJPG(GeneratedPreviewQuality));
+
+        ServerCommunicationManager.Instance.DownloadPreviewImageWithStatus(projectName, (existing, responseCode) => {
+            // Replaced: no preview yet, or a generated one. A failed check keeps the preview, it may be the user's.
+            bool hasPreview = IsImageData(existing);
+            bool canReplace = hasPreview ? HasGeneratedPreviewMarker(existing) : existing != null || responseCode == 404;
+            if (!canReplace) {
+                onComplete?.Invoke(false);
+                return;
+            }
+
+            ServerCommunicationManager.Instance.UploadPreviewImageToServer(data, "preview.jpg", projectName, success => {
+                if (success) StorePreview(projectName, data);
+                else Debug.LogWarning($"Generated preview of project {projectName} was not uploaded");
+                onComplete?.Invoke(success);
+            });
+        });
+    }
+
+    private static bool IsImageData(byte[] data) {
+        if (data == null || data.Length < 4) return false;
+        bool isJpg = data[0] == 0xFF && data[1] == 0xD8;
+        bool isPng = data[0] == 0x89 && data[1] == 0x50 && data[2] == 0x4E && data[3] == 0x47;
+        return isJpg || isPng;
+    }
+
+    // Comment segment (FF FE) inserted after the JFIF header, decoders ignore it
+    private static byte[] AddGeneratedPreviewMarker(byte[] jpg) {
+        int insertAt = 2; // After the start of image marker
+        if (jpg.Length > 6 && jpg[2] == 0xFF && jpg[3] == 0xE0) insertAt = 4 + ((jpg[4] << 8) | jpg[5]);
+
+        byte[] comment = System.Text.Encoding.ASCII.GetBytes(GeneratedPreviewComment);
+        int segmentLength = comment.Length + 2; // Length field counts itself
+
+        byte[] result = new byte[jpg.Length + 2 + segmentLength];
+        Array.Copy(jpg, 0, result, 0, insertAt);
+        result[insertAt] = 0xFF;
+        result[insertAt + 1] = 0xFE;
+        result[insertAt + 2] = (byte)(segmentLength >> 8);
+        result[insertAt + 3] = (byte)segmentLength;
+        Array.Copy(comment, 0, result, insertAt + 4, comment.Length);
+        Array.Copy(jpg, insertAt, result, insertAt + 4 + comment.Length, jpg.Length - insertAt);
+        return result;
+    }
+
+    // Walks the JPEG header segments up to the image data looking for the comment
+    private static bool HasGeneratedPreviewMarker(byte[] data) {
+        if (data == null || data.Length < 4 || data[0] != 0xFF || data[1] != 0xD8) return false;
+
+        int i = 2;
+        while (i + 4 <= data.Length && data[i] == 0xFF) {
+            byte marker = data[i + 1];
+            int length = (data[i + 2] << 8) | data[i + 3];
+            if (marker == 0xDA || length < 2) break; // Image data starts
+
+            if (marker == 0xFE && i + 2 + length <= data.Length
+                && System.Text.Encoding.ASCII.GetString(data, i + 4, length - 2) == GeneratedPreviewComment) {
+                return true;
+            }
+            i += 2 + length;
+        }
+        return false;
+    }
+
     /// <summary>
     /// Moves a cached preview to a new project name, so a renamed project keeps showing it without a re-download.
     /// </summary>

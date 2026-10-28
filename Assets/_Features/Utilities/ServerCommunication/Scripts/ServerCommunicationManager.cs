@@ -241,6 +241,13 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
         StartCoroutine(DownloadFileRequest(url, callback));
     }
 
+    /// <summary>Also returns the response code, so a missing preview (404) can be told apart from a failed request.</summary>
+    public void DownloadPreviewImageWithStatus(string projectName, System.Action<byte[], long> callback) {
+        string url = $"{serverUrl}/download_preview_image" +
+                     $"?project_name={UnityWebRequest.EscapeURL(projectName)}";
+        StartCoroutine(DownloadFileWithStatusRequest(url, callback));
+    }
+
     public void UploadPreviewImageToServer(byte[] data, string fileName, string projectName, System.Action<bool> onComplete = null) {
         string url = $"{serverUrl}/upload_preview_image";
         StartCoroutine(UploadDataRequest(url, data, fileName, projectName, "PREVIEW", onComplete));
@@ -368,6 +375,13 @@ public class ServerCommunicationManager : Singleton<ServerCommunicationManager> 
             Debug.Log("Error downloading file: " + www.error);
             callback(null);
         }
+    }
+
+    IEnumerator DownloadFileWithStatusRequest(string url, System.Action<byte[], long> callback) {
+        UnityWebRequest www = UnityWebRequest.Get(url);
+        yield return www.SendWebRequest();
+
+        callback(www.result == UnityWebRequest.Result.Success ? www.downloadHandler.data : null, www.responseCode);
     }
 
     void HandleResponse(UnityWebRequest www, System.Action<bool, string> callback) {
