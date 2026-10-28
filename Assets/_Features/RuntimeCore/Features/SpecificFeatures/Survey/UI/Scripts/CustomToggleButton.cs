@@ -29,7 +29,15 @@ public partial class CustomToggleButton : VisualElement {
 
     private readonly TextField _labelTextField;
     private readonly Toggle _toggleButton;
+    private bool _previewOnly;
     public Toggle Toggle => _toggleButton;
+
+    // Editor: the option only previews the answer, the admin can't check it (the text stays editable)
+    public void SetPreviewOnly() {
+        _previewOnly = true;
+        AddToClassList(CustomRadioButton.PreviewOnlyClass);
+        CustomRadioButton.IgnorePointer(_toggleButton);
+    }
 
     public CustomToggleButton() {
         this.style.flexDirection = FlexDirection.Row;
@@ -50,6 +58,7 @@ public partial class CustomToggleButton : VisualElement {
         Add(textFieldWrapper);
 
         this.RegisterCallback<ClickEvent>(evt => {
+            if (_previewOnly) return;
             if (evt.target is TextField || (evt.target as VisualElement)?.GetFirstAncestorOfType<TextField>() != null) {
                 return;
             }

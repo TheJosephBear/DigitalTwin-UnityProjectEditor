@@ -25,6 +25,7 @@ public class SurveyAnswerUIEditorImage : SurveyAnswerUIEditor {
         // Register buttons for Move Up/Down/Delete (inherited logic, handles delete-option-button)
         RegisterModalButtonEvents(_answerElement);
 
+        SurveyUIUtils.AddUploadOverlay(_imageDisplay);
         _imageDisplay?.RegisterCallback<ClickEvent>(evt => {
             if (evt.target is Button btn && (btn.name == "enhance-image" || btn.name == "delete-option-button")) {
                 return;

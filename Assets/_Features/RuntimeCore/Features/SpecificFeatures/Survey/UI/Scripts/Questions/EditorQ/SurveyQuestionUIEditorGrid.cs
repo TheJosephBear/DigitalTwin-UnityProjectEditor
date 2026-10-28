@@ -5,12 +5,6 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UIRadioButton = UnityEngine.UIElements.RadioButton;
 
-public class RadioCallbacks {
-    public EventCallback<PointerDownEvent> PointerCb;
-    public EventCallback<ClickEvent> ClickCb;
-    public EventCallback<ChangeEvent<bool>> ChangeCb;
-}
-
 public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
 
     private const int MaxRows = QuestionGridBase.MaxRows;
@@ -20,16 +14,24 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
     private List<SurveyAnswerUIEditorGrid> _columns = new();
     private List<int> _rowIndices = new();
 
-    private Dictionary<int, int> _selectedColPerRow = new(); // rowIdx -> colIdx
-
     private MultiColumnListView _table;
 
-    private void RefreshAllRowRadioButtons() {
-        if (_table == null) return;
-        for (int i = 0; i < _rows.Count; i++) {
-            _table.RefreshItem(i);
-        }
-    }
+    #region Scale Presets
+
+    private const string CustomPreset = "Vlastní škála";
+
+    // Single-answer grid only. A preset fills in the columns, they stay editable
+    public static readonly List<(string Name, string[] Columns)> ColumnPresets = new() {
+        ("Škála souhlasu", new[] { "zcela nesouhlasím", "spíše nesouhlasím", "neutrální", "spíše souhlasím", "zcela souhlasím", "nedokážu posoudit" }),
+        ("Škála spokojenosti", new[] { "velmi nespokojen", "spíše nespokojen", "neutrální", "spíše spokojen", "velmi spokojen", "nedokážu posoudit" }),
+        ("Škála četnosti", new[] { "nikdy", "málokdy", "občas", "často", "vždy", "nechci odpovídat" }),
+        ("Škála důležitosti", new[] { "zcela nedůležité", "spíše nedůležité", "neutrální", "spíše důležité", "zcela důležité", "nedokážu posoudit" })
+    };
+
+    private DropdownField _presetDropdown;
+    private bool _applyingPreset;
+
+    #endregion
 
     #region Events
 
@@ -50,7 +52,70 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
         : base(root, questionId, questionType, viewPoints, uiBuilder){
         
         InitializeTable();
+        InitializePresetDropdown();
         RebuildGrid();
+    }
+
+    // Only the single-answer grid template has the dropdown
+    private void InitializePresetDropdown() {
+        _presetDropdown = _root.Q<DropdownField>("scale-preset-dropdown");
+        if (_presetDropdown == null) return;
+
+        var choices = new List<string> { CustomPreset };
+        foreach (var preset in ColumnPresets) {
+            choices.Add(preset.Name);
+        }
+        _presetDropdown.choices = choices;
+        _presetDropdown.SetValueWithoutNotify(CustomPreset);
+        _presetDropdown.RegisterValueChangedCallback(evt => ApplyColumnPreset(evt.newValue));
+    }
+
+    // Replaces the columns with the preset values. "Vlastní škála" keeps the columns as they are
+    private void ApplyColumnPreset(string presetName) {
+        int presetIdx = ColumnPresets.FindIndex(p => p.Name == presetName);
+        if (presetIdx < 0) return;
+
+        string[] values = ColumnPresets[presetIdx].Columns;
+        _applyingPreset = true;
+
+        while (_columns.Count > values.Length && _columns.Count > 1) {
+            RemoveColumn(_columns.Count - 1);
+        }
+        while (_columns.Count < values.Length) {
+            var newCol = AddColumn();
+            if (newCol == null) break;
+            OnAddColumn?.Invoke(QuestionID, newCol);
+        }
+        for (int i = 0; i < _columns.Count && i < values.Length; i++) {
+            _columns[i].InvokeTextChanged(i, values[i]);
+        }
+
+        _applyingPreset = false;
+        RebuildTableColumns();
+        RebuildGrid();
+    }
+
+    // Shows the preset the columns match, so any change to its values switches back to "Vlastní škála"
+    // (also picks the preset for a loaded survey)
+    private void UpdatePresetFromColumns() {
+        if (_presetDropdown == null || _applyingPreset) return;
+
+        string match = CustomPreset;
+        foreach (var preset in ColumnPresets) {
+            if (ColumnsMatch(preset.Columns)) {
+                match = preset.Name;
+                break;
+            }
+        }
+        _presetDropdown.SetValueWithoutNotify(match);
+    }
+
+    private bool ColumnsMatch(string[] values) {
+        if (_columns.Count != values.Length) return false;
+        for (int i = 0; i < values.Length; i++) {
+            if (_columns[i].Text != values[i]) return false;
+        }
+        return true;
     }
 
     private void InitializeTable() {
@@ -207,6 +272,7 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
                     if (currentColIdx < _columns.Count) {
                         _columns[currentColIdx].SetText(evt.newValue);
                         _columns[currentColIdx].InvokeTextChanged(currentColIdx, evt.newValue);
+                        UpdatePresetFromColumns();
                     }
                 };
                 tf.userData = newCb;
@@ -216,6 +282,7 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
                     if (currentColIdx < _columns.Count && tf != null) {
                         _columns[currentColIdx].SetText(tf.value);
                         _columns[currentColIdx].InvokeTextChanged(currentColIdx, tf.value);
+                        UpdatePresetFromColumns();
                     }
                 });
             }
@@ -238,79 +305,22 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
                 }
             };
             cell.AddToClassList("grid-cell-container");
+            // The cells only preview the answer, the admin can't check them
+            cell.AddToClassList("grid-cell--preview-only");
             if (_questionType == QuestionType.CheckboxGrid) {
-                cell.Add(new Toggle { name = "grid-cell-toggle" });
+                var toggle = new Toggle { name = "grid-cell-toggle" };
+                CustomRadioButton.IgnorePointer(toggle);
+                cell.Add(toggle);
             } else {
-                cell.Add(new CustomRadioButtonNoText { name = "grid-cell-radio" });
+                var radio = new CustomRadioButtonNoText { name = "grid-cell-radio" };
+                radio.SetPreviewOnly();
+                cell.Add(radio);
             }
-            cell.RegisterCallback<ClickEvent>(evt => {
-                var toggle = cell.Q<Toggle>("grid-cell-toggle");
-                if (toggle != null) {
-                    if (evt.target != toggle && (evt.target as VisualElement)?.GetFirstAncestorOfType<Toggle>() != toggle) {
-                        toggle.value = !toggle.value;
-                    }
-                }
-                var radio = cell.Q<CustomRadioButtonNoText>("grid-cell-radio");
-                if (radio != null && radio.Radio != null) {
-                    if (evt.target != radio && (evt.target as VisualElement)?.GetFirstAncestorOfType<CustomRadioButtonNoText>() != radio) {
-                        if (!radio.Radio.value) {
-                            radio.Radio.value = true;
-                        }
-                    }
-                }
-            });
             return cell;
         };
 
-        col.bindCell = (VisualElement cell, int rowIndex) => {
-            if (rowIndex < 0 || rowIndex >= _rows.Count) return;
-            int currentColIdx = colIdx;
-            if (_questionType == QuestionType.CheckboxGrid) {
-                var toggle = cell.Q<Toggle>("grid-cell-toggle");
-                if (toggle != null) {
-                    // Option cell toggle binding
-                }
-            } else {
-                var radio = cell.Q<CustomRadioButtonNoText>("grid-cell-radio");
-                if (radio != null) {
-                    bool isSelected = _selectedColPerRow.TryGetValue(rowIndex, out int selCol) && selCol == currentColIdx;
-                    radio.Radio.SetValueWithoutNotify(isSelected);
-
-                    if (radio.userData is RadioCallbacks oldCbs) {
-                        if (oldCbs.PointerCb != null) radio.UnregisterCallback(oldCbs.PointerCb, TrickleDown.TrickleDown);
-                        if (oldCbs.ClickCb != null) radio.UnregisterCallback(oldCbs.ClickCb, TrickleDown.TrickleDown);
-                        if (oldCbs.ChangeCb != null) radio.Radio.UnregisterValueChangedCallback(oldCbs.ChangeCb);
-                    }
-
-                    EventCallback<PointerDownEvent> pointerCb = evt => {
-                        _selectedColPerRow[rowIndex] = currentColIdx;
-                        RefreshAllRowRadioButtons();
-                        evt.StopPropagation();
-                    };
-                    EventCallback<ClickEvent> clickCb = evt => {
-                        _selectedColPerRow[rowIndex] = currentColIdx;
-                        RefreshAllRowRadioButtons();
-                        evt.StopPropagation();
-                    };
-                    EventCallback<ChangeEvent<bool>> changeCb = evt => {
-                        if (evt.newValue) {
-                            _selectedColPerRow[rowIndex] = currentColIdx;
-                            RefreshAllRowRadioButtons();
-                        }
-                    };
-
-                    radio.userData = new RadioCallbacks {
-                        PointerCb = pointerCb,
-                        ClickCb = clickCb,
-                        ChangeCb = changeCb
-                    };
-
-                    radio.RegisterCallback(pointerCb, TrickleDown.TrickleDown);
-                    radio.RegisterCallback(clickCb, TrickleDown.TrickleDown);
-                    radio.Radio.RegisterValueChangedCallback(changeCb);
-                }
-            }
-        };
+        // Nothing to bind, the cells show no state
+        col.bindCell = (VisualElement cell, int rowIndex) => { };
 
         return col;
     }
@@ -465,6 +475,7 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
         SyncAnswerIndices();
         RebuildTableColumns();
         RebuildGrid();
+        UpdatePresetFromColumns();
         return column;
     }
 
@@ -475,6 +486,7 @@ public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
         RebuildTableColumns();
         RebuildGrid();
         OnRemoveColumn?.Invoke(QuestionID, colIdx);
+        UpdatePresetFromColumns();
     }
 
     public void RemoveRow(int rowIdx) {

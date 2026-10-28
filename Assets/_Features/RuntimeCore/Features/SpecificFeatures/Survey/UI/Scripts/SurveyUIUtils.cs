@@ -2,6 +2,29 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 public static class SurveyUIUtils {
+    // Editor: on hover the image shows an upload icon and a hand cursor, since clicking it uploads a new image
+    public static void AddUploadOverlay(VisualElement imageElement) {
+        if (imageElement == null || imageElement.Q("image-upload-overlay") != null) return;
+
+        var overlay = new VisualElement { name = "image-upload-overlay", pickingMode = PickingMode.Ignore };
+        overlay.AddToClassList("image-upload-overlay");
+        var icon = new VisualElement { pickingMode = PickingMode.Ignore };
+        icon.AddToClassList("image-upload-overlay__icon");
+        overlay.Add(icon);
+
+        // First child, so the remove and enlarge buttons stay on top
+        imageElement.Insert(0, overlay);
+        imageElement.AddToClassList("image--uploadable");
+
+        // Over the remove / enlarge buttons a click does what the button says, not an upload, so the overlay hides
+        // The image choice option is a Button itself and the query includes it, so it is skipped
+        imageElement.Query<Button>().ForEach(button => {
+            if (button == imageElement) return;
+            button.RegisterCallback<PointerEnterEvent>(_ => imageElement.AddToClassList("image--over-button"));
+            button.RegisterCallback<PointerLeaveEvent>(_ => imageElement.RemoveFromClassList("image--over-button"));
+        });
+    }
+
     public static void EnhanceImage(VisualElement sourceElement, VisualTreeAsset template = null) {
         if (sourceElement == null) return;
 

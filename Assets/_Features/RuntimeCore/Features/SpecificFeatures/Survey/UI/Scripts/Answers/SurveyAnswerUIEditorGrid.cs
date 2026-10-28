@@ -49,11 +49,14 @@ public class SurveyAnswerUIEditorGrid : SurveyAnswerUIEditor {
         content.Clear();
 
         for (int i = 0; i < columnCount; i++) {
+            // Preview only, the admin can't check the answers
             if (isCheckbox) {
                 var button = new Toggle();
+                CustomRadioButton.IgnorePointer(button);
                 content.Add(button);
             } else {
                 var button = new CustomRadioButtonNoText();
+                button.SetPreviewOnly();
                 content.Add(button);
             }
         }

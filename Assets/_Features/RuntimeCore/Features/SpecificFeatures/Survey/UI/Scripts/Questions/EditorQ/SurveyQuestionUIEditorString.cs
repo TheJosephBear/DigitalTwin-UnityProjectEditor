@@ -171,26 +171,6 @@ public class SurveyQuestionUIEditorString : SurveyQuestionUIEditor {
         return answerUI;
     }
 
-    public void SelectAnswerRadio(int selectedIndex) {
-        if (_questionType != QuestionType.MultipleChoiceSingle) return;
-
-        for (int i = 0; i < _addedAnswers.Count; i++) {
-            if (_addedAnswers[i]?.AnswerElement != null) {
-                var customRadio = _addedAnswers[i].AnswerElement.Q<CustomRadioButton>();
-                if (customRadio != null && customRadio.Radio != null) {
-                    customRadio.Radio.SetValueWithoutNotify(i == selectedIndex);
-                }
-            }
-        }
-
-        if (_otherAnswerUI?.AnswerElement != null) {
-            var customRadio = _otherAnswerUI.AnswerElement.Q<CustomRadioButton>();
-            if (customRadio != null && customRadio.Radio != null) {
-                customRadio.Radio.SetValueWithoutNotify(_otherAnswerUI.AnswerIndex == selectedIndex);
-            }
-        }
-    }
-
     /// <summary>Deletes an answer.</summary>
     public void DeleteAnswer(int index) {
         if (index < 0) return;

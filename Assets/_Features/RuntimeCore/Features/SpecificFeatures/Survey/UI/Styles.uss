@@ -1399,6 +1399,22 @@ CustomToggleButton > Toggle *,
     cursor: url("project://database/Assets/Media/Cursors/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32") 6 0;
 }
 
+/* Editor: options and grid cells only preview the answer, they can't be checked, so no hand cursor */
+CustomRadioButton.option--preview-only,
+CustomToggleButton.option--preview-only,
+.grid-cell-container.grid-cell--preview-only {
+    cursor: initial;
+}
+
+/* ...and don't react to hover: keep the normal look instead of the highlighted circle / box (CustomRadioButton:hover rules above) */
+CustomRadioButton.option--preview-only:hover .unity-radio-button__checkmark-background,
+CustomRadioButton.option--preview-only:hover .unity-radio-button .unity-radio-button__checkmark-background,
+CustomRadioButton.option--preview-only:hover .unity-radio-button .unity-radio-button__input > .unity-radio-button__checkmark-background,
+CustomToggleButton.option--preview-only:hover .unity-toggle__checkmark {
+    border-color: rgba(103, 80, 164, 0.4);
+    background-color: rgb(255, 255, 255);
+}
+
 CustomRadioButton TextField > .unity-base-text-field__input {
     flex-grow: 1;
     width: 100%;
@@ -4478,6 +4494,41 @@ GenericDropdownMenu {
     border-color: var(--card-hover-border);
 }
 
+/* Editor: clicking an image uploads a new one, hover shows it (SurveyUIUtils.AddUploadOverlay) */
+.image--uploadable {
+    cursor: url("project://database/Assets/Media/Cursors/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32") 6 0;
+}
+
+.image-upload-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background-color: rgba(28, 27, 31, 0.45);
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: 0.15s;
+}
+
+.image--uploadable:hover > .image-upload-overlay {
+    opacity: 1;
+}
+
+.image--uploadable.image--over-button > .image-upload-overlay {
+    opacity: 0;
+}
+
+.image-upload-overlay__icon {
+    width: 40px;
+    height: 40px;
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/tray-arrow-up-white.png?fileID=2800000&guid=cb59b89f0c23433d89c2d28ecf4bd041&type=3#tray-arrow-up-white");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
 .scale-config-bar {
     flex-direction: row;
     align-items: center;
@@ -4496,6 +4547,11 @@ GenericDropdownMenu {
 .scale-type-dropdown {
     width: 140px;
     height: 32px;
+}
+
+/* Grid preset names are longer than the scale ranges */
+.scale-preset-dropdown {
+    width: 200px;
 }
 
 .scale-options-list {

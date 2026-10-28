@@ -196,6 +196,7 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
 
         var questionImage = _root.Q<VisualElement>("question-image");
         if (questionImage != null) {
+            SurveyUIUtils.AddUploadOverlay(questionImage);
             questionImage.RegisterCallback<ClickEvent>(evt => {
                 if (evt.target is Button btn && (btn.name == "enhance-image" || btn.name == "remove-image")) {
                     return;

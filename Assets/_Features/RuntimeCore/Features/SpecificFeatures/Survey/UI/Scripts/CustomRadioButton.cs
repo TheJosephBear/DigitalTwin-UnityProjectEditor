@@ -29,7 +29,24 @@ public partial class CustomRadioButton : VisualElement {
 
     private readonly TextField _labelTextField;
     private readonly UIRadioButton _radioButton;
+    private bool _previewOnly;
     public UIRadioButton Radio => _radioButton;
+
+    // Editor: the option only previews the answer, the admin can't check it (the text stays editable)
+    public void SetPreviewOnly() {
+        _previewOnly = true;
+        AddToClassList(PreviewOnlyClass);
+        IgnorePointer(_radioButton);
+    }
+
+    public const string PreviewOnlyClass = "option--preview-only";
+
+    public static void IgnorePointer(VisualElement element) {
+        element.pickingMode = PickingMode.Ignore;
+        foreach (VisualElement child in element.Children()) {
+            IgnorePointer(child);
+        }
+    }
 
     public CustomRadioButton() {
         this.style.flexDirection = FlexDirection.Row;
@@ -51,6 +68,7 @@ public partial class CustomRadioButton : VisualElement {
         Add(textFieldWrapper);
 
         this.RegisterCallback<ClickEvent>(evt => {
+            if (_previewOnly) return;
             if (evt.target is TextField || (evt.target as VisualElement)?.GetFirstAncestorOfType<TextField>() != null) {
                 return;
             }
@@ -77,7 +95,14 @@ public partial class CustomRadioButtonNoText : VisualElement {
     }
 
     private readonly UIRadioButton _radioButton;
+    private bool _previewOnly;
     public UIRadioButton Radio => _radioButton;
+
+    // Editor: the grid cell only previews the answer, the admin can't check it
+    public void SetPreviewOnly() {
+        _previewOnly = true;
+        CustomRadioButton.IgnorePointer(this);
+    }
 
     public CustomRadioButtonNoText() {
         this.style.flexDirection = FlexDirection.Row;
@@ -88,6 +113,7 @@ public partial class CustomRadioButtonNoText : VisualElement {
         Add(_radioButton);
 
         this.RegisterCallback<ClickEvent>(evt => {
+            if (_previewOnly) return;
             if (!_radioButton.value) {
                 _radioButton.value = true;
             }

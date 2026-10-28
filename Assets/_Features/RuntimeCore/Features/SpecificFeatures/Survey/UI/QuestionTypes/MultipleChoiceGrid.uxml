@@ -8,6 +8,10 @@
         </ui:VisualElement>
         <ui:VisualElement name="question-container" class="question-container">
             <ui:Instance template="QuestionTitleBar" name="question-bar" />
+            <ui:VisualElement name="scale-config-bar" class="scale-config-bar" style="justify-content: flex-end; margin-top: 4px;">
+                <ui:Label text="Přednastavení škály:" class="scale-config-label" />
+                <ui:DropdownField name="scale-preset-dropdown" class="scale-type-dropdown scale-preset-dropdown" />
+            </ui:VisualElement>
             <ui:MultiColumnListView name="grid-table" fixed-item-height="40" style="flex-grow: 1; min-height: 150px; margin-top: 8px;">
                 <ui:Columns />
             </ui:MultiColumnListView>

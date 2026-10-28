@@ -151,6 +151,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         if (_surveyImageView != null) {
             _surveyImageView.style.display = DisplayStyle.None;
             _surveyImageView.style.backgroundImage = null;
+            SurveyUIUtils.AddUploadOverlay(_surveyImageView);
 
             _surveyImageView.RegisterCallback<ClickEvent>(evt => {
                 if (evt.target is Button btn && (btn.name == "enhance-image" || btn.name == "remove-image")) return;

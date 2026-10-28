@@ -7,14 +7,14 @@ using UnityEngine.UIElements;
 public class SurveyQuestionUIEditorLinearScale : SurveyQuestionUIEditor {
 
     #region Scale Presets
+    // 1 - 7 is no longer offered, older surveys that use it still show it (SetScaleRange adds it to the choices)
     public static readonly List<string> ScaleTypeChoices = new() {
+        "0 - 5",
         "1 - 5",
-        "-3 - 3",
-        "1 - 7",
         "0 - 10",
         "1 - 10",
-        "-5 - 5",
-        "0 - 5"
+        "-3 - 3",
+        "-5 - 5"
     };
 
     public static (int min, int max) ParseScaleRange(string scaleType) {
@@ -68,7 +68,8 @@ public class SurveyQuestionUIEditorLinearScale : SurveyQuestionUIEditor {
     private void InitializeScaleTypeDropdown() {
         _scaleTypeDropdown = _root.Q<DropdownField>("scale-type-dropdown");
         if (_scaleTypeDropdown != null) {
-            _scaleTypeDropdown.choices = ScaleTypeChoices;
+            // Copy, SetScaleRange adds old scale types and must not change the shared list
+            _scaleTypeDropdown.choices = new List<string>(ScaleTypeChoices);
             _scaleTypeDropdown.value = _scaleType;
 
             _scaleTypeDropdown.RegisterValueChangedCallback(evt => {
