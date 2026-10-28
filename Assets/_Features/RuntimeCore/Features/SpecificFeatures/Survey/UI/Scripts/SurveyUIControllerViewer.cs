@@ -165,6 +165,14 @@ public class SurveyUIControllerViewer : MonoBehaviour {
 
     #region Input handling
 
+    void Update() {
+        if (_surveyBuilder == null) return;
+
+        // Page Down never submits the survey, only the "Odeslat" button does
+        if (Input.GetKeyDown(KeyCode.PageDown) && _currentPage < _questions.Count) HandleNextPressed();
+        else if (Input.GetKeyDown(KeyCode.PageUp)) HandlePreviousPressed();
+    }
+
     void HandleTogglePressed() {
         SurveyManager.Instance.ExitSurvey(save: false); // Viewer has nothing to save, the survey belongs to the editor
     }
@@ -311,6 +319,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
 
         ClearQuestionFromUI();
         SetValidationMessage(null);
+        if (_scrollView != null) _scrollView.scrollOffset = Vector2.zero; // Every page starts at its top
 
         if (_thankYouPageElement != null) {
             _thankYouPageElement.style.display = DisplayStyle.None;

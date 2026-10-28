@@ -35,6 +35,10 @@ public class SurveyUIControllerEditor : MonoBehaviour {
     private Label _saveLabel;
     private bool _isSaving;
 
+    // Scroll position per project (it has one survey), the survey opens where it was left within this app session
+    private static readonly Dictionary<string, float> s_scrollPositions = new();
+    private bool _trackScrollPosition;
+
     void Awake() {
         _surveyUIBuilder = GetComponent<SurveyUIBuilder>();
         _root = gameObject.GetComponent<UIDocument>().rootVisualElement;
@@ -56,7 +60,82 @@ public class SurveyUIControllerEditor : MonoBehaviour {
 
         RegisterBaseSurveyInputs();
         RegisterSaveStateTracking();
+        RegisterScrollPositionTracking();
     }
+
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.PageDown)) NavigateQuestions(1);
+        else if (Input.GetKeyDown(KeyCode.PageUp)) NavigateQuestions(-1);
+    }
+
+    #region Scrolling
+
+    string ScrollPositionKey => ProjectManager.Instance != null && ProjectManager.Instance.SelectedProject != null
+        ? ProjectManager.Instance.SelectedProject.ProjectName ?? ""
+        : "";
+
+    void RegisterScrollPositionTracking() {
+        var scrollView = _surveyUIBuilder.ScrollView;
+        if (scrollView == null) return;
+
+        _trackScrollPosition = true;
+        scrollView.verticalScroller.valueChanged += value => {
+            // Rebuilding the content while loading (or tearing the UI down) moves the scroller too
+            if (_trackScrollPosition && scrollView.panel != null) s_scrollPositions[ScrollPositionKey] = value;
+        };
+    }
+
+    // Opened again -> back where it was left, opened for the first time -> start of the survey
+    void RestoreScrollPosition() {
+        var scrollView = _surveyUIBuilder.ScrollView;
+        if (scrollView == null) return;
+
+        s_scrollPositions.TryGetValue(ScrollPositionKey, out float position);
+        // Next frame, the loaded questions have to be laid out first, before that the scroll range is too small
+        scrollView.schedule.Execute(() => {
+            scrollView.scrollOffset = new Vector2(scrollView.scrollOffset.x, position);
+            _trackScrollPosition = true;
+        }).ExecuteLater(1);
+    }
+
+    // Page Down / Page Up: next / previous question gets selected and scrolled to the top.
+    // Goes from the selected question while it is on screen, otherwise from what is at the top of the screen.
+    void NavigateQuestions(int direction) {
+        var scrollView = _surveyUIBuilder?.ScrollView;
+        int count = _surveyUIBuilder?.QuestionCount ?? 0;
+        if (scrollView == null || scrollView.panel == null || count == 0) return;
+
+        float topThreshold = SurveyUIBuilder.QuestionScrollTopGap + 1f;
+        int selected = _currentlySelectedQuestion != null ? _surveyUIBuilder.GetQuestionIndex(_currentlySelectedQuestion) : -1;
+        int target;
+        if (selected >= 0 && _surveyUIBuilder.IsQuestionVisible(selected)) {
+            target = selected + direction;
+        } else if (direction > 0) {
+            // First question starting below the top of the screen
+            target = 0;
+            while (target < count && _surveyUIBuilder.GetQuestionTopInView(target) <= topThreshold) target++;
+        } else {
+            // Last question starting above the top of the screen
+            target = count - 1;
+            while (target >= 0 && _surveyUIBuilder.GetQuestionTopInView(target) >= topThreshold - 2f) target--;
+        }
+
+        if (target < 0) {
+            scrollView.scrollOffset = new Vector2(scrollView.scrollOffset.x, 0f); // Survey title and description
+            return;
+        }
+        if (target >= count) {
+            scrollView.scrollOffset = new Vector2(scrollView.scrollOffset.x, scrollView.verticalScroller.highValue);
+            return;
+        }
+
+        // Typing would otherwise continue in the previous question
+        _root.focusController?.focusedElement?.Blur();
+        HandleQuestionSelectionChanged(_surveyUIBuilder.GetQuestionAtIndex(target) as SurveyQuestionUIEditor);
+        _surveyUIBuilder.ScrollQuestionToTop(target);
+    }
+
+    #endregion
 
     #region Save button feedback
 
@@ -260,11 +339,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
             return;
         }
 
-        RenderTexture rt = _surveyUIBuilder.CreateRenderTexture(viewPointId);
-        if (rt != null) {
-            _surveyCameraView.style.display = DisplayStyle.Flex;
-            _surveyCameraView.style.backgroundImage = Background.FromRenderTexture(rt);
-        }
+        _surveyUIBuilder.RenderViewInto(_surveyCameraView, viewPointId);
     }
 
     #region Input handling
@@ -538,6 +613,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
     /// </summary>
     public void DeserializeUI() {
         if (_surveyUIBuilder == null) _surveyUIBuilder = GetComponent<SurveyUIBuilder>();
+        _trackScrollPosition = false;
 
         Survey survey = _surveyBuilder.GetActiveSurvey();
         // set title & description
@@ -625,5 +701,6 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         }
 
         _surveyUIBuilder.RefreshAddQuestionBars();
+        RestoreScrollPosition();
     }
 }

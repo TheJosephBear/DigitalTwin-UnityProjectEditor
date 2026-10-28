@@ -170,6 +170,40 @@ public class SurveyUIBuilder : MonoBehaviour {
         }).ExecuteLater(1);
     }
 
+    #region Scrolling
+
+    // Space left above a question scrolled to the top, so the add-question bar above it stays visible
+    public const float QuestionScrollTopGap = 12f;
+
+    public ScrollView ScrollView => _scrollView;
+    public int QuestionCount => _addedQuestions.Count;
+
+    /// <summary>Top of the question relative to the top of the visible area (negative = scrolled above it).</summary>
+    public float GetQuestionTopInView(int index) {
+        var element = _addedQuestions[index].QuestionElement;
+        return element.worldBound.yMin - _scrollView.contentViewport.worldBound.yMin;
+    }
+
+    public bool IsQuestionVisible(int index) {
+        var element = _addedQuestions[index].QuestionElement;
+        float top = GetQuestionTopInView(index);
+        return top < _scrollView.contentViewport.layout.height && top + element.layout.height > 0f;
+    }
+
+    public void ScrollQuestionToTop(int index) {
+        _scrollView.scrollOffset += new Vector2(0f, GetQuestionTopInView(index) - QuestionScrollTopGap);
+    }
+
+    // Once laid out at its new place, the element is scrolled back to where it was in the visible area
+    void KeepElementInView(VisualElement element, float topInView) {
+        _scrollView.schedule.Execute(() => {
+            float newTop = element.worldBound.yMin - _scrollView.contentViewport.worldBound.yMin;
+            _scrollView.scrollOffset += new Vector2(0f, newTop - topInView);
+        }).ExecuteLater(1);
+    }
+
+    #endregion
+
     public SurveyQuestionUIBase AddQuestionEditor(QuestionBase addedQuestion, bool isDeserialized, int insertAtIndex = -1, VisualTreeAsset template = null) {
         print("Adding question in builder, type is: " + addedQuestion.QuestionType);
         if (template == null) {
@@ -245,7 +279,8 @@ public class SurveyUIBuilder : MonoBehaviour {
 
         RefreshAddQuestionBars();
         questionUI.RegisterInputs();
-        ScrollToAddedElement(questionInstance);
+        // A loaded survey keeps its scroll position (SurveyUIControllerEditor), only a new question is scrolled to
+        if (!isDeserialized) ScrollToAddedElement(questionInstance);
 
         return questionUI;
     }
@@ -334,6 +369,9 @@ public class SurveyUIBuilder : MonoBehaviour {
         print($"(Builder UI) return check? {(targetIndex < 0 || targetIndex >= _addedQuestions.Count)}");
         if (targetIndex < 0 || targetIndex >= _addedQuestions.Count) return;
 
+        // The moved question follows to its new position, it stays at the same place on screen (under the move button)
+        float movedTopInView = GetQuestionTopInView(questionIndex);
+
         var temp = _addedQuestions[questionIndex];
         _addedQuestions[questionIndex] = _addedQuestions[targetIndex];
         _addedQuestions[targetIndex] = temp;
@@ -341,6 +379,7 @@ public class SurveyUIBuilder : MonoBehaviour {
         print($"(Builder UI) Swapped in list and refreshing UI!");
 
         RefreshAddQuestionBars();
+        KeepElementInView(temp.QuestionElement, movedTopInView);
     }
 
     public bool DeleteQuestion(int questionIndex) {
@@ -374,8 +413,49 @@ public class SurveyUIBuilder : MonoBehaviour {
     #region View rendering
 
     private Dictionary<string, RenderTexture> _createdTextures = new Dictionary<string, RenderTexture>();
+    private Dictionary<VisualElement, string> _pendingViewRenders = new Dictionary<VisualElement, string>();
+    private const int ViewRenderWidth = 1024;
 
-    public RenderTexture CreateRenderTexture(string viewPointId) {
+    /// <summary>
+    /// Shows the view in the element, rendered in the element's proportions so it fills it.
+    /// An element shown just now has no size yet, it is rendered once laid out.
+    /// </summary>
+    public void RenderViewInto(VisualElement viewElement, string viewPointId) {
+        if (viewElement == null) return;
+
+        viewElement.style.display = DisplayStyle.Flex;
+        _pendingViewRenders[viewElement] = viewPointId;
+        RenderPendingView(viewElement);
+    }
+
+    void RenderPendingView(VisualElement viewElement) {
+        if (!_pendingViewRenders.TryGetValue(viewElement, out string viewPointId)) return;
+
+        // Hidden again before it was rendered (view removed)
+        if (viewElement.style.display == DisplayStyle.None) {
+            _pendingViewRenders.Remove(viewElement);
+            return;
+        }
+
+        Rect size = viewElement.layout;
+        if (float.IsNaN(size.width) || float.IsNaN(size.height) || size.width <= 0f || size.height <= 0f) {
+            viewElement.RegisterCallback<GeometryChangedEvent>(OnViewElementLaidOut);
+            return;
+        }
+
+        _pendingViewRenders.Remove(viewElement);
+        RenderTexture rt = CreateRenderTexture(viewPointId, size.width / size.height);
+        if (rt != null) viewElement.style.backgroundImage = Background.FromRenderTexture(rt);
+    }
+
+    void OnViewElementLaidOut(GeometryChangedEvent evt) {
+        var viewElement = (VisualElement)evt.currentTarget;
+        viewElement.UnregisterCallback<GeometryChangedEvent>(OnViewElementLaidOut);
+        // Not rendering the camera in the middle of the UI layout pass
+        viewElement.schedule.Execute(() => RenderPendingView(viewElement));
+    }
+
+    public RenderTexture CreateRenderTexture(string viewPointId, float aspect = 1f) {
         if (string.IsNullOrEmpty(viewPointId)) return null;
 
         var viewManager = GameObject.FindFirstObjectByType<ViewManager>();
@@ -384,34 +464,10 @@ public class SurveyUIBuilder : MonoBehaviour {
         var viewPoint = viewManager.GetViewPointByID(viewPointId);
         if (viewPoint == null) return null;
 
-        Camera unityCamera = Camera.main;
-        if (unityCamera == null) return null;
-
-        // The camera is placed at the viewpoint directly and rendered right away. Going through Cinemachine
-        // (activating the vcam) moved the camera only on the next brain update, so the capture showed
-        // whatever view the camera was at before - usually the last selected one.
-        Transform viewTransform = viewPoint.vcam != null ? viewPoint.vcam.transform : viewPoint.transform;
-        Transform camTransform = unityCamera.transform;
-        Vector3 originalPosition = camTransform.position;
-        Quaternion originalRotation = camTransform.rotation;
-        float originalFov = unityCamera.fieldOfView;
-
-        var vcam = viewPoint.vcam != null ? viewPoint.vcam.GetComponent<CinemachineVirtualCamera>() : null;
-        if (vcam != null) unityCamera.fieldOfView = vcam.m_Lens.FieldOfView;
-        camTransform.SetPositionAndRotation(viewTransform.position, viewTransform.rotation);
-
-        // Note: We use a Depth of 24 for a standard 3D render
-        RenderTexture questionRT = new RenderTexture(1024, 1024, 24);
+        int height = Mathf.Max(1, Mathf.RoundToInt(ViewRenderWidth / aspect));
+        RenderTexture questionRT = ViewRenderer.Render(viewPoint, ViewRenderWidth, height);
+        if (questionRT == null) return null;
         questionRT.name = "Question_Capture_" + viewPointId;
-        questionRT.Create();
-
-        RenderTexture previousRT = unityCamera.targetTexture;
-        unityCamera.targetTexture = questionRT;
-        unityCamera.Render();
-        unityCamera.targetTexture = previousRT;
-
-        camTransform.SetPositionAndRotation(originalPosition, originalRotation);
-        unityCamera.fieldOfView = originalFov;
 
         if(_createdTextures.ContainsKey(viewPointId)) _createdTextures.Remove(viewPointId);
         _createdTextures.Add(viewPointId, questionRT);
