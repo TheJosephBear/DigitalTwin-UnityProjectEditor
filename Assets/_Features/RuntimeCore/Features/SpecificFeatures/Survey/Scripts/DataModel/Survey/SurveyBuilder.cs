@@ -55,6 +55,7 @@ namespace SurveySystem {
                 QuestionType.LinearScale => new QuestionLinearScale(_nextId++),
                 _ => new QuestionBase(_nextId++, type)
             };
+            question.Description = QuestionBase.GetDefaultDescription(type);
 
             // Keep the model order in sync with the UI, otherwise the question ends up last after save/load
             _activeSurvey.InsertQuestion(insertAtIndex, question);

@@ -360,7 +360,9 @@ public class SurveyUIControllerEditor : MonoBehaviour {
 
     public SurveyQuestionUIBase HandleQuestionAdded(QuestionType questionType, int insertAtIndex = -1) {
         QuestionBase newQuestion = _surveyBuilder.AddNewQuestion(questionType, insertAtIndex);
-        return HandleExistingQuestionAdded(newQuestion, insertAtIndex);
+        SurveyQuestionUIBase questionUI = HandleExistingQuestionAdded(newQuestion, insertAtIndex);
+        questionUI?.SetDescription(newQuestion.Description);
+        return questionUI;
     }
 
     public SurveyQuestionUIBase HandleExistingQuestionAdded(QuestionBase question, int insertAtIndex = -1, bool isDeserialized = false) {

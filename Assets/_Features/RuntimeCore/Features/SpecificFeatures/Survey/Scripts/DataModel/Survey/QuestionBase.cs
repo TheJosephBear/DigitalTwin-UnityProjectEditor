@@ -27,6 +27,22 @@ namespace SurveySystem {
             QuestionType = type;
         }
 
+        // Instruction prefilled into the description of a newly added question
+        public static string GetDefaultDescription(QuestionType type) {
+            return type switch {
+                QuestionType.MultipleChoiceSingle => "Vyberte jednu odpověď.",
+                QuestionType.MultipleChoiceMultiple => "Vyberte jednu nebo více odpovědí.",
+                QuestionType.ShortAnswer => "Napište krátkou odpověď.",
+                QuestionType.Paragraph => "Napište svou odpověď.",
+                QuestionType.Dropdown => "Vyberte jednu možnost ze seznamu.",
+                QuestionType.MultipleChoiceGrid => "V každém řádku vyberte jednu odpověď.",
+                QuestionType.CheckboxGrid => "V každém řádku vyberte jednu nebo více odpovědí.",
+                QuestionType.ImageChoice => "Vyberte jeden obrázek.",
+                QuestionType.LinearScale => "Vyberte hodnotu na stupnici.",
+                _ => string.Empty
+            };
+        }
+
         public virtual AnswerBase AddNewAnswer() {
             AnswerBase answer = new AnswerBase {
                 Idx = _answers.Count,

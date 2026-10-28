@@ -611,10 +611,6 @@ public class SurveyUIControllerViewer : MonoBehaviour {
         }
 
         questionUI.SetQuestionPosition(_currentPage);
-        var mapping = _surveyUIBuilder.questionUIMapping.GetMappingByQuestionType(questionBase.QuestionType);
-        if (mapping != null) {
-            questionUI.SetQuestionType(mapping.DisplayName);
-        }
 
         if (questionBase is QuestionGridBase gridQuestion && questionUI is SurveyQuestionUIViewerGrid gridUI) {
             for (int i = 0; i < gridQuestion.GetColumnCount(); i++) {
