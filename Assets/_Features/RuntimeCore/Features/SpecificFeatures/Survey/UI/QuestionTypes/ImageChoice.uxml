@@ -9,7 +9,7 @@
         </ui:VisualElement>
         <ui:VisualElement name="question-container" class="question-container">
             <ui:Instance template="QuestionTitleBar" name="question-bar" class="hide-description-image" />
-            <ui:RadioButtonGroup name="options-list" class="radio-group-horizontal">
+            <ui:RadioButtonGroup name="options-list" class="radio-group-horizontal image-option-list">
                 <ui:Instance template="ImageOption" />
                 <ui:Instance template="ImageOption" />
             </ui:RadioButtonGroup>

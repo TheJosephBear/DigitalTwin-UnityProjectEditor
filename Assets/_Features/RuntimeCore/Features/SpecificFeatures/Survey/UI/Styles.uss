@@ -4247,29 +4247,219 @@ GenericDropdownMenu {
     cursor: initial;
 }
 
+/* Image choice options (editor): card with the image on top and the caption below */
+.image-option-list #contentContainer {
+    justify-content: center;
+}
+
+/* The shared option rules make every option a full-width row, the image cards keep their own size */
+.image-option-list TemplateContainer {
+    flex-grow: 0;
+    width: auto;
+    align-self: auto;
+}
+
+#option-container.image-option-card {
+    align-self: flex-start;
+    align-items: stretch;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-direction: column;
+    width: 240px;
+    margin-top: 8px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    margin-left: 8px;
+    border-radius: 12px;
+    border-width: 1.5px;
+    border-color: var(--card-border);
+    background-color: rgb(255, 255, 255);
+    overflow: hidden;
+    transition-property: border-color;
+    transition-duration: 0.15s;
+}
+
+#option-container.image-option-card:hover {
+    border-color: var(--card-hover-border);
+}
+
+.image-option-card .image-option-image {
+    width: 100%;
+    height: 190px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    border-radius: 0;
+    border-width: 0;
+    background-color: var(--input-bg);
+    -unity-background-scale-mode: scale-to-fit;
+    position: relative;
+}
+
+.image-option-card .image-option-image:hover,
+.image-option-card .image-option-image:active {
+    background-color: var(--input-bg);
+}
+
+/* The card clips the corners, so the hover overlay fills the image area edge to edge */
+.image-option-image > .image-upload-overlay {
+    border-radius: 0;
+}
+
+/* Empty state: icon and hint until an image is uploaded */
+.image-option-empty {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    transition-property: background-color;
+    transition-duration: 0.15s;
+}
+
+.image-option-card--empty .image-option-empty {
+    display: flex;
+}
+
+/* An empty card highlights its own hint on hover instead of the dark upload overlay */
+.image-option-card--empty .image-upload-overlay {
+    display: none;
+}
+
+.image-option-card--empty .image-option-image:hover > .image-option-empty {
+    background-color: var(--secondary-background-color);
+}
+
+.image-option-card--empty .image-option-image:hover .image-option-empty__icon {
+    -unity-background-image-tint-color: var(--primary-color);
+}
+
+.image-option-card--empty .image-option-image:hover .image-option-empty__label {
+    color: var(--primary-color);
+}
+
+/* Over the delete button a click deletes, so the upload hint stays calm */
+.image-option-card--empty .image-option-image.image--over-button:hover > .image-option-empty {
+    background-color: transparent;
+}
+
+.image-option-card--empty .image-option-image.image--over-button:hover .image-option-empty__icon {
+    -unity-background-image-tint-color: var(--card-hover-border);
+}
+
+.image-option-card--empty .image-option-image.image--over-button:hover .image-option-empty__label {
+    color: var(--text-muted);
+}
+
+.image-option-empty__icon {
+    width: 40px;
+    height: 40px;
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/image-outline.png?fileID=2800000&guid=2a8b0a5a8db48ee46924cdb62930cde7&type=3#image-outline");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: var(--card-hover-border);
+}
+
+.image-option-empty__label {
+    margin-top: 6px;
+    font-size: 12px;
+    -unity-font-style: bold;
+    color: var(--text-muted);
+}
+
+/* Nothing to enlarge without an image */
+.image-option-card--empty .image-option-enhance {
+    display: none;
+}
+
 /* Letter badge (A, B, C...) on image choice options */
 .image-option-letter {
     position: absolute;
-    top: 4px;
-    left: 4px;
-    min-width: 22px;
-    height: 22px;
-    padding-left: 6px;
-    padding-right: 6px;
-    border-top-left-radius: 11px;
-    border-top-right-radius: 11px;
-    border-bottom-left-radius: 11px;
-    border-bottom-right-radius: 11px;
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
-    border-color: var(--primary-color);
-    background-color: rgba(255, 255, 255, 0.9);
-    color: var(--primary-color);
+    top: 8px;
+    left: 8px;
+    min-width: 24px;
+    height: 24px;
+    padding-left: 7px;
+    padding-right: 7px;
+    border-radius: 12px;
+    background-color: var(--primary-color);
+    color: rgb(255, 255, 255);
     font-size: 12px;
     -unity-font-style: bold;
     -unity-text-align: middle-center;
+}
+
+.image-option-card .image-option-delete,
+.image-option-card .image-option-enhance {
+    position: absolute;
+    right: 8px;
+    width: 26px;
+    height: 26px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: var(--text-muted);
+}
+
+.image-option-card .image-option-delete {
+    top: 8px;
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/trash-can-outline.png?fileID=2800000&guid=7ad15b4efd0e279438b167e4bed1c7e6&type=3#trash-can-outline");
+}
+
+.image-option-card .image-option-delete:hover {
+    background-color: rgb(254, 242, 242);
+    -unity-background-image-tint-color: rgb(220, 38, 38);
+}
+
+.image-option-card .image-option-enhance {
+    bottom: 8px;
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/magnify-plus-outline.png?fileID=2800000&guid=11b0b51f78ca2b648a63350ae0bd5145&type=3#magnify-plus-outline");
+}
+
+.image-option-card .image-option-enhance:hover {
+    -unity-background-image-tint-color: var(--primary-color);
+}
+
+.image-option-footer {
+    border-top-width: 1px;
+    border-top-color: var(--card-border);
+}
+
+.image-option-caption {
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+
+/* The caption is part of the card: no border or rounding of its own, same backgrounds as the other inputs.
+   IDs are needed to win over the global TextField:focus > #unity-text-input rules */
+#option-caption.image-option-caption #unity-text-input {
+    min-height: 38px;
+    font-size: 13px;
+    padding-left: 12px;
+    padding-right: 12px;
+    white-space: normal;
+    border-width: 0;
+    border-radius: 0;
+    background-color: var(--input-bg);
+}
+
+#option-caption.image-option-caption:hover #unity-text-input {
+    background-color: var(--input-hover-bg);
+}
+
+#option-caption.image-option-caption:focus #unity-text-input {
+    background-color: var(--input-focus-bg);
 }
 
 .image-choice-add-container {

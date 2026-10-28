@@ -72,6 +72,7 @@ public class SurveyAnswerUIEditorImage : SurveyAnswerUIEditor {
         TextureAsset asset = ImageManager.Instance.GetTextureAssetByID(imageId);
         if (asset != null && asset.Texture != null) {
             _imageDisplay.style.backgroundImage = new StyleBackground(asset.Texture);
+            _answerElement.Q("option-container")?.RemoveFromClassList("image-option-card--empty");
         }
     }
 }
