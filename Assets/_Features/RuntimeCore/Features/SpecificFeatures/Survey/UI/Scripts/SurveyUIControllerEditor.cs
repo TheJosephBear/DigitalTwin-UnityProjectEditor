@@ -1,0 +1,708 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using SurveySystem;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+
+/// <summary>
+/// Handles the Survey Builder UI logic.
+/// Receives input events from addedQuestion and answer fields, as well as buttons,
+/// and relays the changes to the <see cref="SurveyBuilder"/> for updating the survey data model.
+/// (Tohle by možná mohl dělat svůj vlastní script) -> Manages the instantiation of addedQuestion UI elements based on templates and keeps track of added questions.
+/// </summary>
+public class SurveyUIControllerEditor : MonoBehaviour {
+
+    private VisualElement _root;
+    private SurveyManager _surveyManager;
+    private SurveyBuilder _surveyBuilder; // Interface for data model
+    private SurveyUIBuilder _surveyUIBuilder; // Script adding template instances to UI
+    private SurveyQuestionUIEditor _currentlySelectedQuestion;
+
+    private VisualElement _surveyHeaderContainer;
+    private DropdownField _surveyCameraDropdown;
+    private VisualElement _surveyCameraView;
+    private VisualElement _surveyImageView;
+    private List<SerializableViewPoint> _surveyViewPoints = new();
+
+    // Save button feedback: "Ukládám…" while uploading, greyed out "Uloženo" while there is nothing to save
+    private enum SaveButtonState { Idle, Saving, Saved }
+    private const string SaveSavingClass = "save-btn--saving";
+    private const string SaveSavedClass = "save-btn--saved";
+    private const long SaveStateCheckIntervalMs = 1000;
+    private Button _saveButton;
+    private Label _saveLabel;
+    private bool _isSaving;
+
+    // Scroll position per project (it has one survey), the survey opens where it was left within this app session
+    private static readonly Dictionary<string, float> s_scrollPositions = new();
+    private bool _trackScrollPosition;
+
+    void Awake() {
+        _surveyUIBuilder = GetComponent<SurveyUIBuilder>();
+        _root = gameObject.GetComponent<UIDocument>().rootVisualElement;
+
+        // Save button
+        _saveButton = _root.Q<Button>("save-btn");
+        if (_saveButton != null) {
+            _saveButton.clicked += HandleSavePressed;
+            _saveLabel = _saveButton.Q<Label>(className: "floating-fab-save-label");
+        }
+        // Exit button
+        var exitButton = _root.Q<Button>("exit-btn");
+        if (exitButton != null) exitButton.clicked += HandleExitPressed;
+    }
+
+    public void Initialize(SurveyBuilder surveyBuilder, SurveyManager manager) {
+        _surveyBuilder = surveyBuilder;
+        _surveyManager = manager;
+
+        RegisterBaseSurveyInputs();
+        RegisterSaveStateTracking();
+        RegisterScrollPositionTracking();
+    }
+
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.PageDown)) NavigateQuestions(1);
+        else if (Input.GetKeyDown(KeyCode.PageUp)) NavigateQuestions(-1);
+    }
+
+    #region Scrolling
+
+    string ScrollPositionKey => ProjectManager.Instance != null && ProjectManager.Instance.SelectedProject != null
+        ? ProjectManager.Instance.SelectedProject.ProjectName ?? ""
+        : "";
+
+    void RegisterScrollPositionTracking() {
+        var scrollView = _surveyUIBuilder.ScrollView;
+        if (scrollView == null) return;
+
+        _trackScrollPosition = true;
+        scrollView.verticalScroller.valueChanged += value => {
+            // Rebuilding the content while loading (or tearing the UI down) moves the scroller too
+            if (_trackScrollPosition && scrollView.panel != null) s_scrollPositions[ScrollPositionKey] = value;
+        };
+    }
+
+    // Opened again -> back where it was left, opened for the first time -> start of the survey
+    void RestoreScrollPosition() {
+        var scrollView = _surveyUIBuilder.ScrollView;
+        if (scrollView == null) return;
+
+        s_scrollPositions.TryGetValue(ScrollPositionKey, out float position);
+        // Next frame, the loaded questions have to be laid out first, before that the scroll range is too small
+        scrollView.schedule.Execute(() => {
+            scrollView.scrollOffset = new Vector2(scrollView.scrollOffset.x, position);
+            _trackScrollPosition = true;
+        }).ExecuteLater(1);
+    }
+
+    // Page Down / Page Up: next / previous question gets selected and scrolled to the top.
+    // Goes from the selected question while it is on screen, otherwise from what is at the top of the screen.
+    void NavigateQuestions(int direction) {
+        var scrollView = _surveyUIBuilder?.ScrollView;
+        int count = _surveyUIBuilder?.QuestionCount ?? 0;
+        if (scrollView == null || scrollView.panel == null || count == 0) return;
+
+        float topThreshold = SurveyUIBuilder.QuestionScrollTopGap + 1f;
+        int selected = _currentlySelectedQuestion != null ? _surveyUIBuilder.GetQuestionIndex(_currentlySelectedQuestion) : -1;
+        int target;
+        if (selected >= 0 && _surveyUIBuilder.IsQuestionVisible(selected)) {
+            target = selected + direction;
+        } else if (direction > 0) {
+            // First question starting below the top of the screen
+            target = 0;
+            while (target < count && _surveyUIBuilder.GetQuestionTopInView(target) <= topThreshold) target++;
+        } else {
+            // Last question starting above the top of the screen
+            target = count - 1;
+            while (target >= 0 && _surveyUIBuilder.GetQuestionTopInView(target) >= topThreshold - 2f) target--;
+        }
+
+        if (target < 0) {
+            scrollView.scrollOffset = new Vector2(scrollView.scrollOffset.x, 0f); // Survey title and description
+            return;
+        }
+        if (target >= count) {
+            scrollView.scrollOffset = new Vector2(scrollView.scrollOffset.x, scrollView.verticalScroller.highValue);
+            return;
+        }
+
+        // Typing would otherwise continue in the previous question
+        _root.focusController?.focusedElement?.Blur();
+        HandleQuestionSelectionChanged(_surveyUIBuilder.GetQuestionAtIndex(target) as SurveyQuestionUIEditor);
+        _surveyUIBuilder.ScrollQuestionToTop(target);
+    }
+
+    #endregion
+
+    #region Save button feedback
+
+    // Every edit ends up as a value change of some field or a click on some button (add, delete, move...).
+    // The periodic check covers changes finishing later, like a picked image or the survey download.
+    void RegisterSaveStateTracking() {
+        _root.RegisterCallback<ChangeEvent<string>>(_ => ScheduleSaveStateRefresh());
+        _root.RegisterCallback<ChangeEvent<bool>>(_ => ScheduleSaveStateRefresh());
+        _root.RegisterCallback<ChangeEvent<int>>(_ => ScheduleSaveStateRefresh());
+        _root.RegisterCallback<ClickEvent>(_ => ScheduleSaveStateRefresh());
+        _root.schedule.Execute(RefreshSaveButtonState).Every(SaveStateCheckIntervalMs);
+    }
+
+    // Next frame, so the data model is already updated by the field's own callbacks
+    void ScheduleSaveStateRefresh() {
+        _root.schedule.Execute(RefreshSaveButtonState);
+    }
+
+    void RefreshSaveButtonState() {
+        if (_isSaving || _surveyManager == null) return;
+
+        bool nothingToSave = !_surveyManager.IsSurveyLoading && !_surveyManager.HasUnsavedSurveyChanges();
+        SetSaveButtonState(nothingToSave ? SaveButtonState.Saved : SaveButtonState.Idle);
+    }
+
+    void SetSaveButtonState(SaveButtonState state) {
+        if (_saveButton == null) return;
+
+        _saveButton.SetEnabled(state == SaveButtonState.Idle);
+        _saveButton.EnableInClassList(SaveSavingClass, state == SaveButtonState.Saving);
+        _saveButton.EnableInClassList(SaveSavedClass, state == SaveButtonState.Saved);
+        _saveButton.tooltip = state == SaveButtonState.Saved ? "Všechny změny jsou uložené" : "Uložit dotazník";
+
+        if (_saveLabel != null) {
+            _saveLabel.text = state switch {
+                SaveButtonState.Saving => "Ukládám…",
+                SaveButtonState.Saved => "Uloženo",
+                _ => "Uložit"
+            };
+        }
+    }
+
+    #endregion
+
+    void RegisterBaseSurveyInputs() {
+        var titleBar = _root.Q("survey-title-bar");
+        _surveyHeaderContainer = titleBar?.parent ?? _root;
+
+        var titleField = _surveyHeaderContainer.Q<TextField>("question-title");
+        var descField = _surveyHeaderContainer.Q<TextField>("question-description");
+
+        if (titleField != null) {
+            titleField.RegisterValueChangedCallback(evt => {
+                _surveyBuilder.SetSurveyName(evt.newValue);
+            });
+        }
+
+        if (descField != null) {
+            descField.RegisterValueChangedCallback(evt => {
+                _surveyBuilder.SetSurveyDescription(evt.newValue);
+            });
+        }
+
+        // Camera viewpoint dropdown & views
+        _surveyCameraDropdown = _surveyHeaderContainer.Q<DropdownField>("camera-view-dropdown");
+        _surveyCameraView = _surveyHeaderContainer.Q<VisualElement>("camera-view");
+        _surveyImageView = _surveyHeaderContainer.Q<VisualElement>("question-image");
+
+        if (_surveyCameraView != null) {
+            _surveyCameraView.style.display = DisplayStyle.None;
+            _surveyCameraView.style.backgroundImage = null;
+
+            var removeViewBtn = _surveyCameraView.Q<Button>("remove-view");
+            if (removeViewBtn != null) {
+                removeViewBtn.RegisterCallback<ClickEvent>(evt => {
+                    evt.StopPropagation();
+                    if (_surveyCameraDropdown != null && _surveyCameraDropdown.choices != null && _surveyCameraDropdown.choices.Count > 0) {
+                        _surveyCameraDropdown.value = _surveyCameraDropdown.choices[0];
+                    }
+                });
+            }
+
+            var enhanceCamBtn = _surveyCameraView.Q<Button>("enhance-image");
+            if (enhanceCamBtn != null) {
+                enhanceCamBtn.RegisterCallback<ClickEvent>(evt => {
+                    evt.StopPropagation();
+                    SurveyUIUtils.EnhanceImage(_surveyCameraView, _surveyUIBuilder?.FullscreenImageOverlayTemplate);
+                });
+            }
+        }
+
+        if (_surveyImageView != null) {
+            _surveyImageView.style.display = DisplayStyle.None;
+            _surveyImageView.style.backgroundImage = null;
+            SurveyUIUtils.AddUploadOverlay(_surveyImageView);
+
+            _surveyImageView.RegisterCallback<ClickEvent>(evt => {
+                if (evt.target is Button btn && (btn.name == "enhance-image" || btn.name == "remove-image")) return;
+                HandleSurveyImageUpload();
+            });
+
+            var removeImgBtn = _surveyImageView.Q<Button>("remove-image");
+            if (removeImgBtn != null) {
+                removeImgBtn.RegisterCallback<ClickEvent>(evt => {
+                    evt.StopPropagation();
+                    _surveyBuilder.SetSurveyImageID("");
+                    SetSurveyImageRender();
+                });
+            }
+
+            var enhanceImgBtn = _surveyImageView.Q<Button>("enhance-image");
+            if (enhanceImgBtn != null) {
+                enhanceImgBtn.RegisterCallback<ClickEvent>(evt => {
+                    evt.StopPropagation();
+                    SurveyUIUtils.EnhanceImage(_surveyImageView, _surveyUIBuilder?.FullscreenImageOverlayTemplate);
+                });
+            }
+        }
+
+        var imageButton = _surveyHeaderContainer.Q<Button>("image-button");
+        if (imageButton != null) {
+            imageButton.clicked += HandleSurveyImageUpload;
+        }
+
+        PopulateSurveyCameraDropdown();
+    }
+
+    void PopulateSurveyCameraDropdown() {
+        if (_surveyCameraDropdown == null) return;
+
+        var viewManager = FindAnyObjectByType<ViewManager>();
+        _surveyViewPoints = viewManager?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>();
+
+        var choices = new List<string> { "Žádný" };
+        foreach (var vp in _surveyViewPoints) {
+            choices.Add(vp.Name);
+        }
+
+        _surveyCameraDropdown.choices = choices;
+        if (choices.Count > 0) {
+            _surveyCameraDropdown.value = choices[0];
+        }
+
+        _surveyCameraDropdown.RegisterValueChangedCallback(evt => {
+            int index = _surveyCameraDropdown.index - 1;
+
+            if (index == -1) {
+                _surveyBuilder.SetSurveyViewPointID("");
+                if (_surveyCameraView != null) {
+                    _surveyCameraView.style.backgroundImage = null;
+                    _surveyCameraView.style.display = DisplayStyle.None;
+                }
+                SetSurveyImageRender();
+            } else if (index >= 0 && index < _surveyViewPoints.Count) {
+                string vpId = _surveyViewPoints[index].ID;
+                _surveyBuilder.SetSurveyViewPointID(vpId);
+                SetSurveyViewPointRender(vpId);
+            }
+        });
+    }
+
+    void HandleSurveyImageUpload() {
+        ImageManager.Instance.AskForImageDialog((textureAsset) => {
+            if (textureAsset == null || string.IsNullOrEmpty(textureAsset.ID)) {
+                Debug.LogError("Upload failed: TextureAsset or ID is null");
+                return;
+            }
+
+            _surveyBuilder.SetSurveyImageID(textureAsset.ID);
+            SetSurveyImageRender();
+        });
+    }
+
+    void SetSurveyImageRender() {
+        if (_surveyImageView == null) return;
+
+        Survey survey = _surveyBuilder.GetActiveSurvey();
+        if (survey == null || string.IsNullOrEmpty(survey.ImageID)) {
+            _surveyImageView.style.backgroundImage = null;
+            _surveyImageView.style.display = DisplayStyle.None;
+            return;
+        }
+
+        TextureAsset textureAsset = ImageManager.Instance.GetTextureAssetByID(survey.ImageID);
+        if (textureAsset == null) {
+            _surveyImageView.style.backgroundImage = null;
+            _surveyImageView.style.display = DisplayStyle.None;
+            return;
+        }
+
+        _surveyImageView.style.backgroundImage = Background.FromTexture2D((Texture2D)textureAsset.Texture);
+        _surveyImageView.style.display = DisplayStyle.Flex;
+    }
+
+    void SetSurveyViewPointRender(string viewPointId) {
+        if (_surveyCameraView == null) return;
+
+        if (string.IsNullOrEmpty(viewPointId)) {
+            _surveyCameraView.style.backgroundImage = null;
+            _surveyCameraView.style.display = DisplayStyle.None;
+            return;
+        }
+
+        _surveyUIBuilder.RenderViewInto(_surveyCameraView, viewPointId);
+    }
+
+    #region Input handling
+
+    #region Survey Building
+
+    public void HandleQuestionAdded(string questionTypeString, int insertAtIndex = -1) {
+        QuestionTypeMapping mapping = _surveyUIBuilder.questionUIMapping.GetMappingByQuestionType(questionTypeString);
+        if (mapping == null) {
+            Debug.LogError($"No mapping found for string: {questionTypeString}");
+            return;
+        }
+
+        QuestionType questionTypeEnum = mapping.QuestionType;
+        //    if (questionTypeEnum == QuestionType.ImageChoice) questionTypeEnum = QuestionType.MultipleChoiceSingle; // IMAGE CHOICE ZATÍM NEDÁVAT
+        HandleQuestionAdded(questionTypeEnum, insertAtIndex);
+    }
+
+    public SurveyQuestionUIBase HandleQuestionAdded(QuestionType questionType, int insertAtIndex = -1) {
+        QuestionBase newQuestion = _surveyBuilder.AddNewQuestion(questionType, insertAtIndex);
+        SurveyQuestionUIBase questionUI = HandleExistingQuestionAdded(newQuestion, insertAtIndex);
+        questionUI?.SetDescription(newQuestion.Description);
+        return questionUI;
+    }
+
+    public SurveyQuestionUIBase HandleExistingQuestionAdded(QuestionBase question, int insertAtIndex = -1, bool isDeserialized = false) {
+        SurveyQuestionUIBase addedQuestionUI = _surveyUIBuilder.AddQuestionEditor(question, insertAtIndex: insertAtIndex, isDeserialized: isDeserialized);
+
+        if (addedQuestionUI is SurveyQuestionUIEditor editorUI) {
+            editorUI.OnQuestionSelected += HandleQuestionSelectionChanged;
+            if (!isDeserialized) {
+                HandleQuestionSelectionChanged(editorUI);
+            }
+
+            // Use a lambda to fetch the LATEST index from the UI list at the moment the event fires
+            editorUI.OnQuestionDeleted += (id) => {
+                int dynamicIdx = _surveyUIBuilder.GetQuestionIndex(addedQuestionUI);
+                HandleQuestionDeleted(dynamicIdx);
+            };
+
+            editorUI.OnQuestionMoved += (id, direction) => {
+                int dynamicIdx = _surveyUIBuilder.GetQuestionIndex(addedQuestionUI);
+                HandleQuestionMoved(dynamicIdx, direction);
+            };
+
+            editorUI.OnTitleChanged += HandleQuestionTitleChanged;
+            editorUI.OnDescriptionChanged += HandleQuestionDescriptionChanged;
+       //     editorUI.OnQuestionDeleted += HandleQuestionDeleted;
+      //      editorUI.OnQuestionMoved += HandleQuestionMoved;
+             editorUI.OnUploadImage += HandleImageUpload;
+             editorUI.OnRemoveImage += HandleRemoveImage;
+             editorUI.OnViewpointSelected += HandleQuestionViewPointSelected;
+            editorUI.OnMoveAnswer += HandleAnswerMoved;
+            editorUI.OnToggleRequired += HandleRequiredChange;
+        }
+
+        if (addedQuestionUI is SurveyQuestionUIEditorGrid gridUI) {
+            gridUI.OnAddRow += AddRow;
+            gridUI.OnAddColumn += AddColumn;
+            gridUI.OnRemoveRow += (qId, rowIdx) => _surveyBuilder.RemoveRow(qId, rowIdx);
+            gridUI.OnRemoveColumn += (qId, colIdx) => _surveyBuilder.RemoveColumn(qId, colIdx);
+            // Temporary - initial answer adding
+            if (!isDeserialized) {
+                AddRow(gridUI.QuestionID, gridUI.AddRow());
+                AddColumn(gridUI.QuestionID, gridUI.AddColumn());
+            }
+        } else if (addedQuestionUI is SurveyQuestionUIEditorString builderUI) {
+            builderUI.OnAnswerAdded += HandleAnswerAdded;
+            builderUI.OnAnswerOtherAdded += HandleAnswerOtherAdded;
+            builderUI.OnAnswerRemoved += HandleAnswerRemoved;
+            builderUI.OnMaxAnswerLengthChanged += (qId, maxLength) => _surveyBuilder.SetQuestionMaxAnswerLength(qId, maxLength);
+
+            if (!isDeserialized) {
+                builderUI.AddInitialAnswer();
+            }
+        } else if (addedQuestionUI is SurveyQuestionUIEditorImage imageUI) {
+            imageUI.OnAnswerImageChanged += HandleImageQuestionAnswerImageUpload;
+            imageUI.OnAnswerCaptionChanged += HandleAnswerTextChanged;
+            imageUI.OnAnswerAdded += HandleAddAnswerImage;
+            imageUI.OnAnswerRemoved += HandleAnswerRemoved;
+
+            if (!isDeserialized) {
+                imageUI.AddInitialAnswer();
+            }
+        } else if (addedQuestionUI is SurveyQuestionUIEditorLinearScale scaleUI) {
+            scaleUI.OnAnswerAdded += HandleAnswerAdded;
+            scaleUI.OnAnswerRemoved += HandleAnswerRemoved;
+            scaleUI.OnScaleTypeChanged += (qId, scaleType, min, max) => {
+                _surveyBuilder.SetLinearScaleRange(qId, scaleType, min, max);
+            };
+
+            if (question is QuestionLinearScale linScale) {
+                scaleUI.SetScaleRange(linScale.ScaleType, linScale.Min, linScale.Max);
+            }
+
+            if (!isDeserialized) {
+                scaleUI.AddInitialAnswer();
+            }
+        }
+
+        return addedQuestionUI;
+    }
+
+    void HandleRequiredChange(int questionID, bool isRequired) {
+        _surveyBuilder.SetQuestionRequired(questionID, isRequired);
+    }
+
+    void AddRow(int questionID, SurveyAnswerUIEditorGrid answerUI) {
+        _surveyBuilder.AddRow(questionID);
+        answerUI.OnTextChanged += OnRowTextChanged;
+    }
+
+    void AddColumn(int questionID, SurveyAnswerUIEditorGrid answerUI) {
+        _surveyBuilder.AddColumn(questionID);
+        answerUI.OnTextChanged += OnColumnTextChanged;
+    }
+
+    void OnRowTextChanged(int questionID, int rowIdx, string text) {
+        _surveyBuilder.SetRowText(questionID, rowIdx, text);
+    }
+
+    void OnColumnTextChanged(int questionID, int columnIdx, string text) {
+        _surveyBuilder.SetColumnText(questionID, columnIdx, text);
+    }
+
+    public void HandleQuestionDeleted(int questionIndex) {
+        print($"(Controller) Deleting index {questionIndex}");
+        var questionUI = _surveyUIBuilder.GetQuestionAtIndex(questionIndex) as SurveyQuestionUIEditor;
+        if (questionUI != null && _currentlySelectedQuestion == questionUI) {
+            _currentlySelectedQuestion = null;
+        }
+
+        if (!_surveyUIBuilder.DeleteQuestion(questionIndex)) return;
+        _surveyBuilder.RemoveQuestion(questionIndex);
+    }
+
+    public void HandleQuestionMoved(int questionIndex, int direction) {
+        print($"(Controller) Moving index {questionIndex} in direction: {direction}");
+        _surveyUIBuilder.MoveQuestion(questionIndex, direction);
+        _surveyBuilder.MoveQuestion(questionIndex, direction);
+    }
+
+    void HandleAnswerMoved(int questionIndex, int answerIndex, int direction) {
+        _surveyBuilder.MoveAnswer(questionIndex, answerIndex, direction);
+    }
+
+    public void HandleQuestionTitleChanged(int questionId, string newText) {
+        _surveyBuilder.SetQuestionTitle(questionId, newText);
+    }
+
+    public void HandleQuestionDescriptionChanged(int questionId, string newText) {
+        _surveyBuilder.SetQuestionDescription(questionId, newText);
+    }
+
+    public void HandleQuestionViewPointSelected(int questionID, string viewPointID) {
+        _surveyBuilder.SetQuestionViewPointID(questionID, viewPointID);
+    }
+
+    public void HandleAnswerAdded(int questionId, SurveyAnswerUIBase answerUI) {
+        _surveyBuilder.AddNewAnswerToQuestion(questionId);
+        if (answerUI is SurveyAnswerUIEditorString answerEditor) {
+            answerEditor.OnTextChanged += HandleAnswerTextChanged;
+        } else if (answerUI is SurveyAnswerUIEditorLinearScale answerEditorScale) {
+            answerEditorScale.OnTextChanged += HandleAnswerTextChanged;
+            answerEditorScale.OnRightTextChanged += HandleAnswerRightTextChanged;
+        }
+    }
+
+    public void HandleAnswerOtherAdded(int questionId, SurveyAnswerUIBase answerUI) {
+        _surveyBuilder.AddNewAnswerToQuestion(questionId, true);
+        if (answerUI is SurveyAnswerUIEditorString answerEditor) {
+            answerEditor.OnTextChanged += HandleAnswerTextChanged;
+        }
+    }
+
+    public void HandleAnswerTextChanged(int questionId, int answerId, string newText) {
+        _surveyBuilder.SetAnswerText(questionId, answerId, newText);
+    }
+
+    public void HandleAnswerRightTextChanged(int questionId, int answerId, string newText) {
+        _surveyBuilder.SetAnswerTextRight(questionId, answerId, newText);
+    }
+
+    public void HandleAnswerRemoved(int questionId, int answerId) {
+        _surveyBuilder.RemoveAnswer(questionId, answerId);
+    }
+
+    void HandleImageUpload(int questionIndex) {
+        ImageManager.Instance.AskForImageDialog((textureAsset) => {
+            // Validation: Ensure the asset and ID actually exist
+            if (textureAsset == null || string.IsNullOrEmpty(textureAsset.ID)) {
+                Debug.LogError("Upload failed: TextureAsset or ID is null");
+                return;
+            }
+
+            Debug.Log($"Assigning ImageID: {textureAsset.ID} to question: {questionIndex}");
+
+            // Update the Data Model (the model looks questions up by ID, the UI sends the index)
+            int questionId = _surveyUIBuilder.GetQuestionAtIndex(questionIndex).QuestionID;
+            _surveyBuilder.SetQuestionImageID(questionId, textureAsset.ID);
+
+            // Update the UI
+            _surveyUIBuilder.SetQuestionImage(questionIndex, textureAsset.ID);
+        });
+    }
+
+    void HandleRemoveImage(int questionIndex) {
+        Debug.Log($"Removing Image from question index: {questionIndex}");
+        int questionId = _surveyUIBuilder.GetQuestionAtIndex(questionIndex).QuestionID;
+        _surveyBuilder.SetQuestionImageID(questionId, "");
+        _surveyUIBuilder.SetQuestionImage(questionIndex, "");
+    }
+
+    void HandleImageQuestionAnswerImageUpload(int questionID, int answerID, string imageID) {
+        _surveyBuilder.SetAnswerImage(questionID, answerID, imageID);
+    }
+
+    void HandleAddAnswerImage(int questionID) {
+        _surveyBuilder.AddNewAnswerToQuestion(questionID);
+    }
+
+    #endregion
+
+
+
+    public void HandleSavePressed() {
+        if (_isSaving) return;
+
+        _isSaving = true;
+        SetSaveButtonState(SaveButtonState.Saving);
+
+        // Failure message is shown by the manager, the button just becomes active again
+        _surveyManager.SaveSurvey(success => {
+            _isSaving = false;
+            RefreshSaveButtonState();
+        });
+    }
+
+    public void HandleExitPressed() {
+        if (!_surveyManager.HasUnsavedSurveyChanges()) {
+            _surveyManager.ExitSurvey(save: false);
+            return;
+        }
+
+        PopUp.Instance.SaveBeforeExitPopUp((choice) => {
+            if (choice == UnsavedChangesChoice.Cancel) return;
+            _surveyManager.ExitSurvey(save: choice == UnsavedChangesChoice.SaveAndExit);
+        });
+    }
+
+    #endregion
+
+    private void HandleQuestionSelectionChanged(SurveyQuestionUIEditor selectedQuestion) {
+        // 1. If the clicked question is already the active one, do nothing
+        if (_currentlySelectedQuestion == selectedQuestion) return;
+
+        // 2. Remove the USS class from the previously selected question
+        if (_currentlySelectedQuestion != null && _currentlySelectedQuestion.QuestionElement != null) {
+            _currentlySelectedQuestion.QuestionElement.RemoveFromClassList("active-question");
+            _currentlySelectedQuestion.QuestionElement.RemoveFromClassList("new-question");
+        }
+
+        // 3. Assign the new selection and apply the USS class
+        _currentlySelectedQuestion = selectedQuestion;
+
+        if (_currentlySelectedQuestion != null && _currentlySelectedQuestion.QuestionElement != null) {
+            _currentlySelectedQuestion.QuestionElement.AddToClassList("active-question");
+        }
+    }
+
+    /// <summary>
+    /// Builds the UI from data in the active survey
+    /// </summary>
+    public void DeserializeUI() {
+        if (_surveyUIBuilder == null) _surveyUIBuilder = GetComponent<SurveyUIBuilder>();
+        _trackScrollPosition = false;
+
+        Survey survey = _surveyBuilder.GetActiveSurvey();
+        // set title & description
+        var titleField = _surveyHeaderContainer?.Q<TextField>("question-title") ?? _root.Q<TextField>("question-title");
+        var descField = _surveyHeaderContainer?.Q<TextField>("question-description") ?? _root.Q<TextField>("question-description");
+        if (titleField != null) titleField.SetValueWithoutNotify(survey.Name ?? "");
+        if (descField != null) descField.SetValueWithoutNotify(survey.Description ?? "");
+
+        // Restore survey viewpoint
+        if (MainManagerBase.Instance != null && !string.IsNullOrEmpty(survey.ViewPointId)) {
+            ViewPoint vp = ViewManager.Instance.GetViewPointByID(survey.ViewPointId);
+            if (vp != null && _surveyCameraDropdown != null) {
+                _surveyCameraDropdown.SetValueWithoutNotify(vp.Name);
+                SetSurveyViewPointRender(survey.ViewPointId);
+            } else if (_surveyCameraDropdown != null && _surveyCameraDropdown.choices != null && _surveyCameraDropdown.choices.Count > 0) {
+                _surveyCameraDropdown.SetValueWithoutNotify(_surveyCameraDropdown.choices[0]);
+            }
+        } else if (_surveyCameraDropdown != null && _surveyCameraDropdown.choices != null && _surveyCameraDropdown.choices.Count > 0) {
+            _surveyCameraDropdown.SetValueWithoutNotify(_surveyCameraDropdown.choices[0]);
+        }
+
+        // Restore survey image unconditionally
+        SetSurveyImageRender();
+
+        _surveyUIBuilder.ClearScrollviewContent();
+
+        foreach (QuestionBase question in survey.GetAllQuestions()) {
+            QuestionType questionType = question.QuestionType;
+            SurveyQuestionUIBase questionUI = HandleExistingQuestionAdded(question, isDeserialized: true);
+            questionUI.SetTitle(question.Title);
+            questionUI.SetDescription(question.Description);
+            questionUI.ImageID = question.ImageID;
+
+            print("Calling required: " + question.IsRequired);
+            (questionUI as SurveyQuestionUIEditor).SetRequired(question.IsRequired);
+
+            // Set selected viewpoint
+            if (MainManagerBase.Instance != null && !string.IsNullOrEmpty(question.ViewPointId)) {
+                ViewPoint vp = ViewManager.Instance.GetViewPointByID(question.ViewPointId);
+                if (vp != null) {
+                    (questionUI as SurveyQuestionUIEditor).SetSelectedView(vp);
+                }
+            }
+
+            // Always render question image unconditionally
+            questionUI.SetImageRender();
+
+            if (question is QuestionGridBase gridQuestion) {
+                if (questionUI is SurveyQuestionUIEditorGrid gridUI) {
+                    for (int i = 0; i < gridQuestion.GetColumnCount(); i++) {
+                        var colUI = gridUI.AddColumn(gridQuestion.GetColumn(i));
+                        colUI.OnTextChanged += OnColumnTextChanged;
+                    }
+                    for (int i = 0; i < gridQuestion.GetRowCount(); i++) {
+                        var rowUI = gridUI.AddRow(gridQuestion.GetRow(i));
+                        rowUI.OnTextChanged += OnRowTextChanged;
+                    }
+                }
+            } else if (question is QuestionImageChoice imageQuestion) {
+                if (questionUI is SurveyQuestionUIEditorImage imageUI) {
+                    foreach (AnswerBase answer in imageQuestion.Answers) {
+                        if (answer is AnswerImage imgAns) {
+                            imageUI.AddAnswerWithImage(imgAns.GetImageId(), imgAns.Text);
+                        }
+                    }
+                }
+            } else if (questionUI is SurveyQuestionUIEditorString stringQuestion) {
+                foreach (AnswerBase answer in question.Answers) {
+                    SurveyAnswerUIBase answerUIBase = questionUI.AddAnswer(answer.Text, answer.IsOther);
+                    if(answerUIBase is SurveyAnswerUIEditorString answerEditorString)
+                        answerEditorString.OnTextChanged += HandleAnswerTextChanged;
+                }
+                stringQuestion.SetMaxAnswerLength(question.MaxAnswerLength);
+            } else if (question is QuestionLinearScale linScaleQuestion && questionUI is SurveyQuestionUIEditorLinearScale scaleUI) {
+                scaleUI.SetScaleRange(linScaleQuestion.ScaleType, linScaleQuestion.Min, linScaleQuestion.Max);
+                foreach (AnswerBase answer in question.Answers) {
+                    SurveyAnswerUIBase answerUIBase = scaleUI.AddAnswer(answer.Text);
+                    if (answerUIBase is SurveyAnswerUIEditorLinearScale answerEditorScale) {
+                        answerEditorScale.SetRightText((answer as AnswerString)?.TextRight);
+                        answerEditorScale.OnTextChanged += HandleAnswerTextChanged;
+                        answerEditorScale.OnRightTextChanged += HandleAnswerRightTextChanged;
+                    }
+                }
+            }
+        }
+
+        _surveyUIBuilder.RefreshAddQuestionBars();
+        RestoreScrollPosition();
+    }
+}

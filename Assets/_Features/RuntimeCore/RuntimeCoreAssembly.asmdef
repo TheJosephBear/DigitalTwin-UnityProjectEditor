@@ -1,0 +1,22 @@
+{
+    "name": "RuntimeCoreAssembly",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f7b1c3fd953536341a67ec2ed76622ba",
+        "GUID:b481fc006a788664f82e63f97047e65c",
+        "GUID:f25db0b47b522d44dacb0f33b82e6f7b",
+        "GUID:4307f53044263cf4b835bd812fc161a4",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:c685d05731421f64287ad6d13be5af0e",
+        "GUID:75469ad4d38634e559750d17036d5f7c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

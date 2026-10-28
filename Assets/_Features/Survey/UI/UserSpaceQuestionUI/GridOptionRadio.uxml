@@ -1,9 +1,0 @@
-<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/_Features/Survey/UI/UserSpaceQuestionUI/UserStyles.uss" />
-    <ui:VisualElement name="option-container" class="grid-row">
-        <ui:Label text="Popis řádku" name="row-title" class="grid-row-label" />
-        <ui:RadioButtonGroup class="radio-group-grid grid-row-options" style="flex-grow: 1; justify-content: center;">
-            <ui:RadioButton />
-        </ui:RadioButtonGroup>
-    </ui:VisualElement>
-</ui:UXML>

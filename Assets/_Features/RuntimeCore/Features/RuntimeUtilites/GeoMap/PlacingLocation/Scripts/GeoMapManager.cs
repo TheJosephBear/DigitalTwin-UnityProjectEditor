@@ -1,0 +1,116 @@
+using System;
+using UnityEngine;
+
+public class GeoMapManager : Singleton<GeoMapManager> {
+
+    public OnlineMaps OnlineMapsReff;
+    public GameObject vcam;
+    GeoMapLocalizationManager _localizationManager;
+    int _equator = 40075000;
+    float _previousZoomValue;
+
+    protected override void Awake() {
+        base.Awake();
+        _localizationManager = GeoMapLocalizationManager.Instance;
+
+        OnlineMapsReff.gameObject.SetActive(false);
+        if(vcam!=null) vcam.SetActive(false);
+    }
+
+    public void ActivateGeoLocalization(bool firstOpen = true) {
+    //    UIManager.Instance.ShowUI(UIType.GeoLocalizationUI);
+        ToggleGeoMap(true);
+        GeoMapLocalizationManager.Instance.Setup(firstOpen);
+    }
+
+    public void ExitGeoLocalization() {
+    //    UIManager.Instance.HideUI(UIType.GeoLocalizationUI);
+        ToggleGeoMap(false);
+        GeoMapLocalizationManager.Instance.Exit();
+        EditorManager.Instance.ChangeState(AppState.Freecam);
+    }
+
+    public void LeaveToMenu(Action<bool> onComplete = null) {
+        if(MainManagerBase.Instance is EditorManager editorMan) {
+            editorMan.ExitEditor((exitSuccess) => {
+                onComplete.Invoke(true);
+            });
+        }
+
+        onComplete.Invoke(false);
+        // TO IMPLEMENT PROPERLY
+
+        //UIManager.Instance.HideUI(UIType.GeoLocalizationUI);
+        //ToggleGeoMap(false);
+        //GeoMapLocalizationManager.Instance.Exit();
+        //if (MainManagerBase.Instance is EditorManager editorMgr) {
+        //    editorMgr.ExitEditor();
+        //}
+    }
+
+    public void ZoomMap(float zoomValue) {
+        float delta = zoomValue - _previousZoomValue;
+        OnlineMapsReff.floatZoom += delta;
+        _previousZoomValue = zoomValue;
+    }
+
+    public void ResetZoomBaseline(float defaultValue = 0.5f) {
+        _previousZoomValue = defaultValue;
+    }
+
+    public void ToggleGeoMap() {
+        OnlineMapsReff.gameObject.SetActive(!OnlineMapsReff.gameObject.activeSelf);
+        if (vcam != null) vcam.SetActive(!vcam.activeSelf);
+    }
+
+    public void ToggleGeoMap(bool toggleOn) {
+        OnlineMapsReff.gameObject.SetActive(toggleOn);
+        if (vcam != null) vcam.SetActive(toggleOn);
+    }
+
+    public void ToggleGeoMapControl() {
+        OnlineMapsReff.GetComponent<OnlineMapsTileSetControl>().enabled = !OnlineMapsReff.GetComponent<OnlineMapsTileSetControl>().enabled;
+    }
+
+    public void ToggleGeoMapControl(bool toggleOn) {
+        OnlineMapsReff.GetComponent<OnlineMapsTileSetControl>().enabled = toggleOn;
+    }
+
+    // Returns maps current map to ground scale as an int (1 : returned value)
+    public float GetCurrentMapScale() {
+        float size;
+        if (OnlineMapsReff.zoom < 5) size = (_equator / (1 << OnlineMapsReff.zoom) * OnlineMapsReff.zoomFactor * OnlineMapsReff.width / OnlineMapsUtils.tileSize);
+        else size = (OnlineMapsUtils.DistanceBetweenPoints(OnlineMapsReff.topLeftPosition, OnlineMapsReff.bottomRightPosition).x * 1000);
+        return size / OnlineMapsReff.width;
+    }
+
+    // Zoom the Geo map to fit the given scale (1 : wanted scale)
+    public void ZoomToFitScale(float requiredScale, float threshold = 0.1f) {
+        float step = 0.01f;
+        OnlineMapsReff.floatZoom = 3f;
+
+        // Currently bruteforcing because i have no idea how else to do it
+        while (Mathf.Abs(GetCurrentMapScale() - requiredScale) >= threshold) {
+            OnlineMapsReff.floatZoom += step;
+            if (OnlineMapsReff.floatZoom > 20) return;
+        }
+    }
+
+    // Returns Vector2.zero if the project hasn't been geolocated yet (e.g. new project)
+    public Vector2 GetCoordinates() {
+        GeoLocalizationData data = GeoMapLocalizationManager.Instance?.GetPlacementMapData();
+        if (data == null) return Vector2.zero;
+        return new Vector2(data.latitude, data.longtitude);
+    }
+
+    public SerializableGeoMapManager SerializeManager() {
+        return new SerializableGeoMapManager {
+            geoData = GeoMapLocalizationManager.Instance.GetPlacementMapData()
+        };
+    }
+
+    public void DeserializeManager(SerializableGeoMapManager serializedData) {
+        // Null geoData clears data left over from a previously opened project
+        GeoMapLocalizationManager.Instance?.InitializeWithPlacementMapData(serializedData?.geoData);
+    }
+}

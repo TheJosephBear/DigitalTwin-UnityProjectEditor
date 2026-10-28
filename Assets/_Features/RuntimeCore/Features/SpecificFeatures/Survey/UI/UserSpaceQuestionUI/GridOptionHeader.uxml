@@ -1,0 +1,9 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/UserSpaceQuestionUI/UserStyles.uss?fileID=7433441132597879392&amp;guid=74558b2425df4b44db13d07e45d34b9f&amp;type=3#UserStyles" />
+    <ui:VisualElement name="col-header" class="grid-header">
+        <ui:VisualElement name="spacer" class="grid-header-spacer" />
+        <ui:VisualElement name="col-headers" class="grid-header-columns">
+            <ui:Label text="Label" name="column-title" class="grid-column-label" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

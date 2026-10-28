@@ -1,0 +1,119 @@
+using System;
+using System.Collections;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class ViewingInitializer : MonoBehaviour, Iinitializer {
+
+    [Header("Scene references")]
+    public ViewingSerializer Serializer;
+    public ViewerHUDUI HUDUI;
+
+    [Header("Debugging")]
+    public string _projectName;
+    public bool InEditorDebugging = false;
+
+    public void Initialize() {
+#if UNITY_EDITOR
+        if (!InEditorDebugging) {
+            if (ProjectManager.Instance != null && ProjectManager.Instance.SelectedProject != null && !string.IsNullOrWhiteSpace(ProjectManager.Instance.SelectedProject.ProjectName)) {
+                _projectName = ProjectManager.Instance.SelectedProject.ProjectName;
+            } else {
+                _projectName = GetUrlParameter("projectName");
+            }
+        }
+#else
+        _projectName = GetUrlParameter("projectName");
+#endif
+
+        SceneLoadingManager.Instance.SetActiveScene(SceneType.Viewing);
+        InitializeViewer();
+    }
+
+    public void StartRunning() {
+
+    }
+
+    public void Unload() {
+
+    }
+
+    public void InitializeViewer() {
+        StartCoroutine(InitializeViewerCoroutine(_projectName));
+    }
+
+    IEnumerator InitializeViewerCoroutine(string projectName) {
+        bool downloadFinished = false;
+        bool downloadSuccess = false;
+
+        UIManager.Instance.ShowUI(UIType.LoadingScreen);
+
+        StartCoroutine(ProjectManager.Instance.DownloadProjectData(projectName, (list, success) => {
+            downloadSuccess = success;
+            downloadFinished = true;
+        }));
+
+        while (!downloadFinished)
+            yield return null;
+
+        if (!downloadSuccess) {
+            MessageDisplayManager.Instance.ShowMessage("Project download failed!");
+            UIManager.Instance.HideUI(UIType.LoadingScreen);
+            yield break; // Stops coroutine safely
+        }
+
+        // UIManager.Instance.ShowUI(UIType.ViewerHUD);
+        yield return Serializer.DeserializeProjectCoroutine(ProjectManager.Instance.SelectedProject);
+        MemoryLogger.Log("After viewer project deserialization");
+        MainManagerBase.Instance.ChangeState(AppState.Freecam);
+
+        CameraManager.Instance.ToggleCameraCollision(ProjectSettingsManager.Instance.ViewerCameraCollision);
+        if (!ProjectSettingsManager.Instance.SurveyAllowed) yield break;
+
+        SurveyManager.Instance.CheckHasValidSurvey((result) => {
+            print("VALID SURVEYX RESULT: " + result);
+            // Don't auto-open the survey if this client already submitted it
+            if (result && !SurveyManager.Instance.IsSurveySubmitted()) {
+                MainManagerBase.Instance.ChangeState(AppState.Survey);
+            }
+
+            HUDUI.DisableUnneededButtons();
+            UIManager.Instance.HideUI(UIType.LoadingScreen);
+        });
+    }
+
+    public static string GetUrlParameter(string parameterName) {
+        // Basic checks
+        if (string.IsNullOrEmpty(parameterName))
+            return "";
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+        string url = Application.absoluteURL;
+
+        if (string.IsNullOrEmpty(url))
+            return "";
+
+        int questionMarkIndex = url.IndexOf('?');
+        if (questionMarkIndex == -1)
+            return "";
+
+        string query = url.Substring(questionMarkIndex + 1);
+        string[] pairs = query.Split('&');
+
+        foreach (string pair in pairs)
+        {
+            if (string.IsNullOrEmpty(pair))
+                continue;
+
+            string[] kv = pair.Split('=');
+            if (kv.Length != 2)
+                continue;
+
+            if (kv[0] == parameterName)
+                return Uri.UnescapeDataString(kv[1]);
+        }
+#endif
+
+        return "";
+    }
+}

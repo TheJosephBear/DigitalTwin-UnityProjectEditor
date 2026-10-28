@@ -1,0 +1,136 @@
+using SurveySystem;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+public class SurveyQuestionUIViewerLinearScale : SurveyQuestionUIViewer {
+
+    public event Action<int, int, int> OnScaleValueChanged;
+
+    private int _min = 1;
+    private int _max = 5;
+    private string _scaleType = "1 - 5";
+
+    public SurveyQuestionUIViewerLinearScale(VisualElement root, int questionId, QuestionType questionType, List<SerializableViewPoint> viewPoints, SurveyUIBuilder uiBuilder)
+        : base(root, questionId, questionType, viewPoints, uiBuilder) {
+
+        // In viewer, hide scale configuration bar if present in template
+        var configBar = _root.Q<VisualElement>("scale-config-bar");
+        if (configBar != null) {
+            configBar.style.display = DisplayStyle.None;
+        }
+
+        var addBtn = _root.Q<Button>("add-option-button");
+        if (addBtn != null) {
+            addBtn.style.display = DisplayStyle.None;
+        }
+    }
+
+    public void SetScaleRange(string scaleType, int min, int max) {
+        _scaleType = !string.IsNullOrEmpty(scaleType) ? scaleType : $"{min} - {max}";
+        _min = min;
+        _max = max;
+
+        foreach (var answer in _addedAnswers) {
+            if (answer is SurveyAnswerUIViewerLinearScale scaleAnswer) {
+                scaleAnswer.SetScaleRange(_min, _max);
+            }
+        }
+    }
+
+    public override SurveyAnswerUIBase AddAnswer(string answerText, bool isOther = false) {
+        return AddScaleRow(answerText, null);
+    }
+
+    public SurveyAnswerUIBase AddScaleRow(string leftText, string rightText) {
+        if (_optionsList == null) return null;
+
+        VisualElement rowElement = CreateViewerRowElement();
+        int answerIndex = _addedAnswers.Count;
+
+        SurveyAnswerUIViewerLinearScale answerUI = new SurveyAnswerUIViewerLinearScale(rowElement, answerIndex, this, false);
+        answerUI.SetText(leftText);
+        answerUI.SetRightText(rightText);
+        answerUI.SetScaleRange(_min, _max);
+
+        answerUI.OnValueChanged += (qId, aIdx, val) => {
+            OnScaleValueChanged?.Invoke(qId, aIdx, val);
+        };
+
+        _optionsList.Add(rowElement);
+        _addedAnswers.Add(answerUI);
+
+        return answerUI;
+    }
+
+    // Two lines: texts (left / right end) on top, full-width scale below, so all scales have the same length
+    private VisualElement CreateViewerRowElement() {
+        var row = new VisualElement();
+        row.AddToClassList("scale-viewer-row");
+
+        var labels = new VisualElement();
+        labels.name = "scale-row-labels";
+        labels.AddToClassList("scale-viewer-row-labels");
+        row.Add(labels);
+
+        var label = new Label();
+        label.name = "scale-row-label";
+        label.AddToClassList("scale-viewer-row-label");
+        labels.Add(label);
+
+        var rightLabel = new Label();
+        rightLabel.name = "scale-row-label-right";
+        rightLabel.AddToClassList("scale-viewer-row-label");
+        rightLabel.AddToClassList("scale-viewer-row-label--right");
+        labels.Add(rightLabel);
+
+        var sliderContainer = new VisualElement();
+        sliderContainer.AddToClassList("scale-preview-container");
+
+        var minLabel = new Label(_min.ToString());
+        minLabel.name = "scale-min-label";
+        minLabel.AddToClassList("scale-limit-label");
+        sliderContainer.Add(minLabel);
+
+        int defaultVal = (_min + _max) / 2;
+        var slider = new SliderInt();
+        slider.name = "scale-slider";
+        slider.lowValue = _min;
+        slider.highValue = _max;
+        slider.value = defaultVal;
+        slider.AddToClassList("scale-slider");
+        sliderContainer.Add(slider);
+
+        var maxLabel = new Label(_max.ToString());
+        maxLabel.name = "scale-max-label";
+        maxLabel.AddToClassList("scale-limit-label");
+        sliderContainer.Add(maxLabel);
+
+        var valueBadge = new Label("–"); // No value until the user touches the slider
+        valueBadge.name = "scale-value-badge";
+        valueBadge.AddToClassList("scale-value-badge");
+        sliderContainer.Add(valueBadge);
+
+        row.Add(sliderContainer);
+        return row;
+    }
+
+    public override void SetValidationError(bool invalid, QuestionValidationResult result) {
+        base.SetValidationError(invalid, result);
+        for (int i = 0; i < _addedAnswers.Count; i++) {
+            bool rowInvalid = invalid && result != null && result.MissingRows.Contains(i);
+            _addedAnswers[i].AnswerElement?.EnableInClassList("scale-viewer-row--invalid", rowInvalid);
+        }
+    }
+
+    protected override SurveyAnswerUIBase CreateAnswerUI(VisualElement element, int index, bool isOther) {
+        return null;
+    }
+
+    protected override void RegisterDropdown() {
+    }
+
+    protected override void RegisterTextInputs() {
+    }
+}

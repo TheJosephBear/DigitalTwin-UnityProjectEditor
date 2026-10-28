@@ -1,0 +1,18 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Styles.uss?fileID=7433441132597879392&amp;guid=e2857671203a4094b98524b8aefbd78f&amp;type=3#Styles" />
+    <ui:VisualElement name="option-container" class="image-option-card image-option-card--empty">
+        <ui:Button name="image" tooltip="Klikněte pro nahrání obrázku" class="image-option-image">
+            <ui:VisualElement name="image-empty-state" picking-mode="Ignore" class="image-option-empty">
+                <ui:VisualElement picking-mode="Ignore" class="image-option-empty__icon" />
+                <ui:Label text="Nahrát obrázek" picking-mode="Ignore" class="image-option-empty__label" />
+            </ui:VisualElement>
+            <ui:Label name="option-letter" text="A" picking-mode="Ignore" class="image-option-letter" />
+            <ui:Button name="delete-option-button" tooltip="Odstranit možnost" class="icon remove-button image-option-delete" />
+            <ui:Button name="enhance-image" tooltip="Zvětšit obrázek" class="icon enhance-button image-option-enhance" />
+        </ui:Button>
+        <ui:VisualElement class="image-option-footer">
+            <ui:TextField name="option-caption" placeholder-text="Popisek (volitelný)" max-length="100" class="image-option-caption" />
+        </ui:VisualElement>
+        <ui:RadioButton style="flex-direction: column; visibility: hidden; display: flex; width: 0; height: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+    </ui:VisualElement>
+</ui:UXML>

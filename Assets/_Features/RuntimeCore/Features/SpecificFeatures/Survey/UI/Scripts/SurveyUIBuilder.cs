@@ -1,0 +1,489 @@
+using Cinemachine;
+using SurveySystem;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.UIElements;
+using System.Collections;
+
+public class SurveyUIBuilder : MonoBehaviour {
+
+    public QuestionUIMapping questionUIMapping;
+    [SerializeField]
+    public VisualTreeAsset GridCollumnTemplate;
+    public Texture AsteriskTexture;
+    public Texture AsteriskCrossedTexture;
+
+    [SerializeField]
+    private VisualTreeAsset addQuestionBarTemplate;
+    [SerializeField]
+    private VisualTreeAsset fullscreenImageOverlayTemplate;
+    public VisualTreeAsset FullscreenImageOverlayTemplate => fullscreenImageOverlayTemplate;
+
+#if UNITY_EDITOR
+    private void OnValidate() {
+        if (fullscreenImageOverlayTemplate == null) {
+            fullscreenImageOverlayTemplate = UnityEditor.AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/FullscreenImageOverlay.uxml");
+        }
+    }
+#endif
+
+    private VisualElement _root;
+    private ScrollView _scrollView;
+    private VisualElement _scrollViewContent;
+
+    // Question adding //
+    private List<SurveyQuestionUIBase> _addedQuestions = new List<SurveyQuestionUIBase>();
+    private List<TemplateContainer> _addQuestionBars = new List<TemplateContainer>();
+
+    private List<QuestionType> QuestionTypesUsingStringUI = new List<QuestionType>{
+        QuestionType.MultipleChoiceSingle,
+        QuestionType.MultipleChoiceMultiple,
+        QuestionType.Paragraph,
+        QuestionType.ShortAnswer,
+    };
+
+    private List<QuestionType> QuestionTypesUsingGridUI = new List<QuestionType>{
+        QuestionType.MultipleChoiceGrid,
+        QuestionType.CheckboxGrid
+    };
+
+    void Awake() {
+        _root = gameObject.GetComponent<UIDocument>().rootVisualElement;
+        _scrollView = _root.Q<ScrollView>("survey-scroll-view");
+        _scrollViewContent = _root.Q<ScrollView>("survey-scroll-view").contentContainer;
+
+        // Add the initial bar at the start (before any questions) ONLY in editor mode
+        if (GetComponent<SurveyUIControllerViewer>() == null) {
+            RefreshAddQuestionBars();
+        } else {
+            ClearAddQuestionBars();
+        }
+    }
+
+    public void ClearAddQuestionBars() {
+        foreach (var bar in _addQuestionBars) {
+            if (bar != null) bar.RemoveFromHierarchy();
+        }
+        _addQuestionBars.Clear();
+
+        if (_scrollViewContent != null) {
+            var staticBars = _scrollViewContent.Query<VisualElement>("add-question-bar").ToList();
+            foreach (var sb in staticBars) {
+                if (sb.parent != null && sb.parent != _scrollViewContent) {
+                    sb.parent.RemoveFromHierarchy();
+                } else {
+                    sb.RemoveFromHierarchy();
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Rebuilds the scroll view content so there is one add-addedQuestion bar before each addedQuestion
+    /// and one trailing bar after the last addedQuestion: [bar, q0, bar, q1, bar, ..., barN].
+    /// </summary>
+    public void RefreshAddQuestionBars() {
+        if (GetComponent<SurveyUIControllerViewer>() != null) {
+            ClearAddQuestionBars();
+            return;
+        }
+
+        // Clear scroll view content except for the first item (the title item)
+        for (int i = _scrollViewContent.childCount - 1; i > 0; i--) {
+            _scrollViewContent.RemoveAt(i);
+        }
+
+        if (addQuestionBarTemplate == null) {
+            Debug.LogWarning("addQuestionBarTemplate is not assigned on SurveyBuildingUI.");
+            return;
+        }
+
+        // Remove existing bars from the hierarchy
+        foreach (var bar in _addQuestionBars) {
+            bar.RemoveFromHierarchy();
+        }
+        _addQuestionBars.Clear();
+
+        // Remove addedQuestion instances from hierarchy so we can re-insert them in order
+        foreach (var question in _addedQuestions) {
+            if (question.QuestionElement != null) {
+                question.QuestionElement.RemoveFromHierarchy();
+            }
+        }
+
+        // Re-insert: bar, [addedQuestion, bar] * N
+        for (int i = 0; i <= _addedQuestions.Count; i++) {
+            TemplateContainer bar = addQuestionBarTemplate.Instantiate();
+            _addQuestionBars.Add(bar);
+            _scrollViewContent.Add(bar);
+
+            // Wire up the add-addedQuestion button on this bar
+            int insertIndex = i; // capture for lambda
+            TemplateContainer capturedBar = bar; // capture for lambda
+            var addButton = bar.Q<Button>("add-question-button");
+            if (addButton != null) {
+                addButton.clicked += () => AddQuestion.Instance.OpenModalAtIndex(insertIndex, capturedBar);
+            }
+
+            if (i < _addedQuestions.Count && _addedQuestions[i].QuestionElement != null) {
+                _scrollViewContent.Add(_addedQuestions[i].QuestionElement);
+                
+                var questionUI = _addedQuestions[i];
+                questionUI.SetQuestionPosition(i + 1);
+                var mapping = questionUIMapping.GetMappingByQuestionType(questionUI.QuestionType);
+                if (mapping != null) {
+                    questionUI.SetQuestionType(mapping.DisplayName);
+                }
+
+                if (questionUI is SurveyQuestionUIEditor editorUI) {
+                    bool canMoveUp = i > 0;
+                    bool canMoveDown = i < _addedQuestions.Count - 1;
+                    editorUI.SetQuestionMoveButtonsEnabled(canMoveUp, canMoveDown);
+                }
+            }
+        }
+    }
+
+    public void SetQuestionImage(int questionIndex, string textureAssetID) {
+        if (questionIndex < 0 || questionIndex >= _addedQuestions.Count) {
+            Debug.LogError("Question index out of bounds!");
+            return;
+        }
+
+        Debug.Log($"Setting and activating image in builder. Index: {questionIndex}, ID: {textureAssetID}");
+
+        // Explicitly set the ID first
+        _addedQuestions[questionIndex].ImageID = textureAssetID;
+
+        // Now call the render
+        _addedQuestions[questionIndex].SetImageRender();
+    }
+
+    void ScrollToAddedElement(TemplateContainer addedElement) {
+        if (addedElement == null) return;
+
+        _scrollView.schedule.Execute(() =>
+        {
+            _scrollView.ScrollTo(addedElement);
+        }).ExecuteLater(1);
+    }
+
+    #region Scrolling
+
+    // Space left above a question scrolled to the top, so the add-question bar above it stays visible
+    public const float QuestionScrollTopGap = 12f;
+
+    public ScrollView ScrollView => _scrollView;
+    public int QuestionCount => _addedQuestions.Count;
+
+    /// <summary>Top of the question relative to the top of the visible area (negative = scrolled above it).</summary>
+    public float GetQuestionTopInView(int index) {
+        var element = _addedQuestions[index].QuestionElement;
+        return element.worldBound.yMin - _scrollView.contentViewport.worldBound.yMin;
+    }
+
+    public bool IsQuestionVisible(int index) {
+        var element = _addedQuestions[index].QuestionElement;
+        float top = GetQuestionTopInView(index);
+        return top < _scrollView.contentViewport.layout.height && top + element.layout.height > 0f;
+    }
+
+    public void ScrollQuestionToTop(int index) {
+        _scrollView.scrollOffset += new Vector2(0f, GetQuestionTopInView(index) - QuestionScrollTopGap);
+    }
+
+    // Once laid out at its new place, the element is scrolled back to where it was in the visible area
+    void KeepElementInView(VisualElement element, float topInView) {
+        _scrollView.schedule.Execute(() => {
+            float newTop = element.worldBound.yMin - _scrollView.contentViewport.worldBound.yMin;
+            _scrollView.scrollOffset += new Vector2(0f, newTop - topInView);
+        }).ExecuteLater(1);
+    }
+
+    #endregion
+
+    public SurveyQuestionUIBase AddQuestionEditor(QuestionBase addedQuestion, bool isDeserialized, int insertAtIndex = -1, VisualTreeAsset template = null) {
+        print("Adding question in builder, type is: " + addedQuestion.QuestionType);
+        if (template == null) {
+            //Template not provided, look it up
+            QuestionTypeMapping mapping = questionUIMapping.GetMappingByQuestionType(addedQuestion.QuestionType);
+
+            if (mapping == null) {
+                Debug.LogError($"No mapping found for enum: {addedQuestion.QuestionType}");
+                return null;
+            }
+
+            template = mapping.QuestionTemplate;
+        }
+
+        return CreateQuestion(addedQuestion, template, insertAtIndex: insertAtIndex, isDeserialized: isDeserialized);
+    }
+
+    private SurveyQuestionUIBase CreateQuestion(QuestionBase addedQuestion, VisualTreeAsset template, bool isDeserialized, int insertAtIndex = -1) {
+        QuestionType questionType = addedQuestion.QuestionType;
+        TemplateContainer questionInstance;
+
+        if (template != null) {
+            questionInstance = template.Instantiate();
+        } else {
+            questionInstance = new TemplateContainer();
+            questionInstance.Add(new Label($"Question template for '{questionType}' is missing"));
+        }
+
+        SurveyQuestionUIBase questionUI = null;
+
+        if(QuestionTypesUsingStringUI.Contains(questionType)) {
+            questionUI = new SurveyQuestionUIEditorString(
+                questionInstance,
+                addedQuestion.Id,
+                questionType,
+                FindAnyObjectByType<ViewManager>()?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>(),
+                this,
+                isDeserialized: isDeserialized
+            );
+        } else if(QuestionTypesUsingGridUI.Contains(questionType)) {
+            questionUI = new SurveyQuestionUIEditorGrid(
+                questionInstance,
+                addedQuestion.Id,
+                questionType,
+                FindAnyObjectByType<ViewManager>()?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>(),
+                this,
+                isDeserialized: isDeserialized
+            );
+        } else if (questionType == QuestionType.ImageChoice) {
+            questionUI = new SurveyQuestionUIEditorImage(
+                questionInstance,
+                addedQuestion.Id,
+                questionType,
+                FindAnyObjectByType<ViewManager>()?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>(),
+                this
+            );
+        } else if (questionType == QuestionType.LinearScale) {
+            questionUI = new SurveyQuestionUIEditorLinearScale(
+                questionInstance,
+                addedQuestion.Id,
+                questionType,
+                FindAnyObjectByType<ViewManager>()?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>(),
+                this,
+                isDeserialized: isDeserialized
+            );
+        }
+
+        if (insertAtIndex < 0 || insertAtIndex >= _addedQuestions.Count) {
+            _addedQuestions.Add(questionUI);
+        } else {
+            _addedQuestions.Insert(insertAtIndex, questionUI);
+        }
+
+        RefreshAddQuestionBars();
+        questionUI.RegisterInputs();
+        // A loaded survey keeps its scroll position (SurveyUIControllerEditor), only a new question is scrolled to
+        if (!isDeserialized) ScrollToAddedElement(questionInstance);
+
+        return questionUI;
+    }
+    
+    public SurveyQuestionUIViewer AddQuestionViewer(QuestionBase questionBase, int insertAtIndex = -1) {
+        QuestionType questionType = questionBase.QuestionType;
+        TemplateContainer questionInstance;
+
+        QuestionTypeMapping mapping = questionUIMapping.GetMappingByQuestionType(questionType);
+
+        if (mapping == null) {
+            Debug.LogError($"No mapping found for enum: {questionType}");
+            return null;
+        }
+
+        VisualTreeAsset template = mapping.QuestionTemplate;
+
+        questionInstance = template != null
+            ? template.Instantiate()
+            : new TemplateContainer();
+
+        if (template == null) {
+            questionInstance.Add(new Label($"Missing template for '{questionType}'"));
+        }
+
+        SurveyQuestionUIViewer questionUI = null;
+
+        if (QuestionTypesUsingStringUI.Contains(questionType)) {
+            questionUI = new SurveyQuestionUIViewerString(
+                questionInstance,
+                questionBase.Id,
+                questionType,
+                FindAnyObjectByType<ViewManager>()?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>(),
+                this
+            );
+        } else if (QuestionTypesUsingGridUI.Contains(questionType)) {
+            questionUI = new SurveyQuestionUIViewerGrid(
+                questionInstance,
+                questionBase.Id,
+                questionType,
+                FindAnyObjectByType<ViewManager>()?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>(),
+                this
+            );
+        } else if (questionType == QuestionType.ImageChoice) {
+            questionUI = new SurveyQuestionUIViewerImage(
+                questionInstance,
+                questionBase.Id,
+                questionType,
+                FindAnyObjectByType<ViewManager>()?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>(),
+                this
+            );
+        } else if (questionType == QuestionType.LinearScale) {
+            questionUI = new SurveyQuestionUIViewerLinearScale(
+                questionInstance,
+                questionBase.Id,
+                questionType,
+                FindAnyObjectByType<ViewManager>()?.GetSerializedViewPointsList() ?? new List<SerializableViewPoint>(),
+                this
+            );
+        }
+
+        _scrollViewContent.Add(questionInstance);
+
+        foreach (var bar in _addQuestionBars) {
+            bar.RemoveFromHierarchy();
+        }
+        _addQuestionBars.Clear();
+
+
+        if (insertAtIndex < 0 || insertAtIndex >= _addedQuestions.Count) {
+            _addedQuestions.Add(questionUI);
+        } else {
+            _addedQuestions.Insert(insertAtIndex, questionUI);
+        }
+
+        questionUI?.RegisterInputs();
+
+        return questionUI;
+    }
+
+    public void MoveQuestion(int questionIndex, int direction) {
+
+        print($"(Builder UI) Moving index {questionIndex}");
+        int targetIndex = questionIndex + direction;
+        print($"(Builder UI) Target index {targetIndex}");
+        print($"(Builder UI) return check? {(targetIndex < 0 || targetIndex >= _addedQuestions.Count)}");
+        if (targetIndex < 0 || targetIndex >= _addedQuestions.Count) return;
+
+        // The moved question follows to its new position, it stays at the same place on screen (under the move button)
+        float movedTopInView = GetQuestionTopInView(questionIndex);
+
+        var temp = _addedQuestions[questionIndex];
+        _addedQuestions[questionIndex] = _addedQuestions[targetIndex];
+        _addedQuestions[targetIndex] = temp;
+
+        print($"(Builder UI) Swapped in list and refreshing UI!");
+
+        RefreshAddQuestionBars();
+        KeepElementInView(temp.QuestionElement, movedTopInView);
+    }
+
+    public bool DeleteQuestion(int questionIndex) {
+        if (questionIndex < 0 || questionIndex >= _addedQuestions.Count) return false;
+
+        _addedQuestions[questionIndex].QuestionElement?.RemoveFromHierarchy();
+        _addedQuestions.RemoveAt(questionIndex);
+
+        RefreshAddQuestionBars();   
+        return true;
+    }
+
+    /// <summary>Returns the current index of the given addedQuestion in the list, or -1 if not found.</summary>
+    public int GetQuestionIndex(SurveyQuestionUIBase questionUI) {
+        return _addedQuestions.IndexOf(questionUI);
+    }
+
+    public SurveyQuestionUIBase GetQuestionAtIndex(int index) {
+        return _addedQuestions[index];
+    }
+
+    public void ClearScrollviewContent() {
+        foreach (var question in _addedQuestions) {
+            if (question.QuestionElement != null) {
+                question.QuestionElement.RemoveFromHierarchy();
+            }
+        }
+        _addedQuestions.Clear();
+    }
+
+    #region View rendering
+
+    private Dictionary<string, RenderTexture> _createdTextures = new Dictionary<string, RenderTexture>();
+    private Dictionary<VisualElement, string> _pendingViewRenders = new Dictionary<VisualElement, string>();
+    private const int ViewRenderWidth = 1024;
+
+    /// <summary>
+    /// Shows the view in the element, rendered in the element's proportions so it fills it.
+    /// An element shown just now has no size yet, it is rendered once laid out.
+    /// </summary>
+    public void RenderViewInto(VisualElement viewElement, string viewPointId) {
+        if (viewElement == null) return;
+
+        viewElement.style.display = DisplayStyle.Flex;
+        _pendingViewRenders[viewElement] = viewPointId;
+        RenderPendingView(viewElement);
+    }
+
+    void RenderPendingView(VisualElement viewElement) {
+        if (!_pendingViewRenders.TryGetValue(viewElement, out string viewPointId)) return;
+
+        // Hidden again before it was rendered (view removed)
+        if (viewElement.style.display == DisplayStyle.None) {
+            _pendingViewRenders.Remove(viewElement);
+            return;
+        }
+
+        Rect size = viewElement.layout;
+        if (float.IsNaN(size.width) || float.IsNaN(size.height) || size.width <= 0f || size.height <= 0f) {
+            viewElement.RegisterCallback<GeometryChangedEvent>(OnViewElementLaidOut);
+            return;
+        }
+
+        _pendingViewRenders.Remove(viewElement);
+        RenderTexture rt = CreateRenderTexture(viewPointId, size.width / size.height);
+        if (rt != null) viewElement.style.backgroundImage = Background.FromRenderTexture(rt);
+    }
+
+    void OnViewElementLaidOut(GeometryChangedEvent evt) {
+        var viewElement = (VisualElement)evt.currentTarget;
+        viewElement.UnregisterCallback<GeometryChangedEvent>(OnViewElementLaidOut);
+        // Not rendering the camera in the middle of the UI layout pass
+        viewElement.schedule.Execute(() => RenderPendingView(viewElement));
+    }
+
+    public RenderTexture CreateRenderTexture(string viewPointId, float aspect = 1f) {
+        if (string.IsNullOrEmpty(viewPointId)) return null;
+
+        var viewManager = GameObject.FindFirstObjectByType<ViewManager>();
+        if (viewManager == null) return null;
+
+        var viewPoint = viewManager.GetViewPointByID(viewPointId);
+        if (viewPoint == null) return null;
+
+        int height = Mathf.Max(1, Mathf.RoundToInt(ViewRenderWidth / aspect));
+        RenderTexture questionRT = ViewRenderer.Render(viewPoint, ViewRenderWidth, height);
+        if (questionRT == null) return null;
+        questionRT.name = "Question_Capture_" + viewPointId;
+
+        if(_createdTextures.ContainsKey(viewPointId)) _createdTextures.Remove(viewPointId);
+        _createdTextures.Add(viewPointId, questionRT);
+
+        return questionRT;
+    }
+
+    public void ClearAllQuestionTextures() {
+        foreach (var item in _createdTextures.Values) {
+            if (item != null) {
+                item.Release();
+                Destroy(item); // Important to prevent memory leaks in the editor
+            }
+        }
+        _createdTextures.Clear(); // Clear everything at once after the loop
+    }
+
+    #endregion
+}

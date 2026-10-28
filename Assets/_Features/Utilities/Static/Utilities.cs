@@ -1,9 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public static class Utilities {
     /// <summary>
@@ -28,51 +24,6 @@ public static class Utilities {
 
         // Clear the original list
         list.Clear();
-    }
-
-    public static string UniqueNameEnsure<T>(string name, List<T> objects) where T : EditorObjectBase {
-        string baseName = name;
-        string uniqueName = baseName;
-        int copyNumber = 1;
-
-        // Function to check if a name exists in the list
-        bool NameExists(string checkName) =>
-            objects.Any(obj => obj.Name == checkName);
-
-        if (!NameExists(uniqueName)) {
-            return uniqueName;
-        }
-
-        while (NameExists(uniqueName)) {
-            // Check if the baseName ends with a numeric suffix in parentheses
-            int lastIndexOfOpenParenthesis = baseName.LastIndexOf('(');
-            int lastIndexOfCloseParenthesis = baseName.LastIndexOf(')');
-            if (lastIndexOfOpenParenthesis != -1 && lastIndexOfCloseParenthesis == baseName.Length - 1) {
-                string suffix = baseName.Substring(lastIndexOfOpenParenthesis + 1, lastIndexOfCloseParenthesis - lastIndexOfOpenParenthesis - 1);
-                if (int.TryParse(suffix, out int existingNumber)) {
-                    copyNumber = existingNumber + 1;
-                    baseName = baseName.Substring(0, lastIndexOfOpenParenthesis).Trim();
-                }
-            }
-            uniqueName = $"{baseName} ({copyNumber})";
-            copyNumber++;
-        }
-
-        return uniqueName;
-    }
-
-    public static List<GameObject> GetDropdownItems(TMP_Dropdown dropdown) {
-        var templateInstance = dropdown.template;
-        var content = templateInstance.GetComponentInChildren<ScrollRect>()
-                                      .content;
-
-        List<GameObject> itemObjects = new List<GameObject>();
-
-        foreach (Transform child in content) {
-            itemObjects.Add(child.gameObject);
-        }
-
-        return itemObjects;
     }
 
     public static void KillAllChildren(this Transform parent) {

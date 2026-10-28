@@ -1,0 +1,558 @@
+using SurveySystem;
+using System.Collections.Generic;
+using System;
+using UnityEngine;
+using UnityEngine.UIElements;
+using UIRadioButton = UnityEngine.UIElements.RadioButton;
+
+public class SurveyQuestionUIEditorGrid : SurveyQuestionUIEditor {
+
+    private const int MaxRows = QuestionGridBase.MaxRows;
+    private const int MaxColumns = QuestionGridBase.MaxColumns;
+
+    private List<SurveyAnswerUIEditorGrid> _rows = new();
+    private List<SurveyAnswerUIEditorGrid> _columns = new();
+    private List<int> _rowIndices = new();
+
+    private MultiColumnListView _table;
+
+    #region Scale Presets
+
+    private const string CustomPreset = "Vlastní škála";
+
+    // Single-answer grid only. A preset fills in the columns, they stay editable
+    public static readonly List<(string Name, string[] Columns)> ColumnPresets = new() {
+        ("Škála souhlasu", new[] { "zcela nesouhlasím", "spíše nesouhlasím", "neutrální", "spíše souhlasím", "zcela souhlasím", "nedokážu posoudit" }),
+        ("Škála spokojenosti", new[] { "velmi nespokojen", "spíše nespokojen", "neutrální", "spíše spokojen", "velmi spokojen", "nedokážu posoudit" }),
+        ("Škála četnosti", new[] { "nikdy", "málokdy", "občas", "často", "vždy", "nechci odpovídat" }),
+        ("Škála důležitosti", new[] { "zcela nedůležité", "spíše nedůležité", "neutrální", "spíše důležité", "zcela důležité", "nedokážu posoudit" })
+    };
+
+    private DropdownField _presetDropdown;
+    private bool _applyingPreset;
+
+    #endregion
+
+    #region Events
+
+    public event Action<int, SurveyAnswerUIEditorGrid> OnAddRow;
+    public event Action<int, SurveyAnswerUIEditorGrid> OnAddColumn;
+    public event Action<int, int> OnRemoveRow; // questionID, rowIdx
+    public event Action<int, int> OnRemoveColumn; // questionID, colIdx
+
+    #endregion
+
+    public SurveyQuestionUIEditorGrid(
+        VisualElement root,
+        int questionId,
+        QuestionType questionType,
+        List<SerializableViewPoint> viewPoints,
+        SurveyUIBuilder uiBuilder,
+        bool isDeserialized = false) 
+        : base(root, questionId, questionType, viewPoints, uiBuilder){
+        
+        InitializeTable();
+        InitializePresetDropdown();
+        RebuildGrid();
+    }
+
+    // Only the single-answer grid template has the dropdown
+    private void InitializePresetDropdown() {
+        _presetDropdown = _root.Q<DropdownField>("scale-preset-dropdown");
+        if (_presetDropdown == null) return;
+
+        var choices = new List<string> { CustomPreset };
+        foreach (var preset in ColumnPresets) {
+            choices.Add(preset.Name);
+        }
+        _presetDropdown.choices = choices;
+        _presetDropdown.SetValueWithoutNotify(CustomPreset);
+        _presetDropdown.RegisterValueChangedCallback(evt => ApplyColumnPreset(evt.newValue));
+    }
+
+    // Replaces the columns with the preset values. "Vlastní škála" keeps the columns as they are
+    private void ApplyColumnPreset(string presetName) {
+        int presetIdx = ColumnPresets.FindIndex(p => p.Name == presetName);
+        if (presetIdx < 0) return;
+
+        string[] values = ColumnPresets[presetIdx].Columns;
+        _applyingPreset = true;
+
+        while (_columns.Count > values.Length && _columns.Count > 1) {
+            RemoveColumn(_columns.Count - 1);
+        }
+        while (_columns.Count < values.Length) {
+            var newCol = AddColumn();
+            if (newCol == null) break;
+            OnAddColumn?.Invoke(QuestionID, newCol);
+        }
+        for (int i = 0; i < _columns.Count && i < values.Length; i++) {
+            _columns[i].InvokeTextChanged(i, values[i]);
+        }
+
+        _applyingPreset = false;
+        RebuildTableColumns();
+        RebuildGrid();
+    }
+
+    // Shows the preset the columns match, so any change to its values switches back to "Vlastní škála"
+    // (also picks the preset for a loaded survey)
+    private void UpdatePresetFromColumns() {
+        if (_presetDropdown == null || _applyingPreset) return;
+
+        string match = CustomPreset;
+        foreach (var preset in ColumnPresets) {
+            if (ColumnsMatch(preset.Columns)) {
+                match = preset.Name;
+                break;
+            }
+        }
+        _presetDropdown.SetValueWithoutNotify(match);
+    }
+
+    private bool ColumnsMatch(string[] values) {
+        if (_columns.Count != values.Length) return false;
+        for (int i = 0; i < values.Length; i++) {
+            if (_columns[i].Text != values[i]) return false;
+        }
+        return true;
+    }
+
+    private void InitializeTable() {
+        _table = _root.Q<MultiColumnListView>("grid-table") ?? _root.Q<MultiColumnListView>();
+        if (_table == null) return;
+
+        _table.fixedItemHeight = 44f;
+        _table.reorderable = false;
+        _table.showAddRemoveFooter = false;
+        _table.selectionType = SelectionType.None;
+        _table.itemsSource = _rowIndices;
+
+        RebuildTableColumns();
+    }
+
+    private void RebuildTableColumns() {
+        if (_table == null) return;
+        _table.columns.Clear();
+
+        // 1. Column 0: Row Title Column
+        var rowTitleCol = CreateRowTitleColumn();
+        _table.columns.Add(rowTitleCol);
+
+        // 2. Columns 1..N: Option Columns
+        for (int i = 0; i < _columns.Count; i++) {
+            var col = CreateOptionColumn(i);
+            _table.columns.Add(col);
+        }
+
+        // 3. Last Column: Row Actions Column (move up, move down, delete row)
+        var rowActionsCol = CreateRowActionsColumn();
+        _table.columns.Add(rowActionsCol);
+    }
+
+    private Column CreateRowTitleColumn() {
+        var rowTitleCol = new Column {
+            name = "row-title-col",
+            title = "Řádky / Sloupce",
+            width = 150,
+            minWidth = 120,
+            stretchable = false
+        };
+
+        rowTitleCol.makeCell = () => {
+            var container = new VisualElement {
+                style = {
+                    flexDirection = FlexDirection.Row,
+                    alignItems = Align.Center,
+                    justifyContent = Justify.Center,
+                    flexGrow = 1,
+                    width = Length.Percent(100)
+                }
+            };
+
+            var textField = new TextField { name = "row-title" };
+            textField.textEdition.placeholder = "Text řádku";
+            textField.multiline = true;
+            textField.style.flexGrow = 1;
+            textField.style.whiteSpace = WhiteSpace.Normal;
+            textField.style.color = new Color(0, 0, 0);
+            textField.style.width = Length.Percent(100);
+
+            container.Add(textField);
+            return container;
+        };
+
+        rowTitleCol.bindCell = (VisualElement cell, int rowIndex) => {
+            if (rowIndex < 0 || rowIndex >= _rows.Count) return;
+
+            var textField = cell.Q<TextField>("row-title");
+            if (textField != null) {
+                var rowUI = _rows[rowIndex];
+                rowUI.UpdateIndex(rowIndex);
+                textField.SetValueWithoutNotify(rowUI.Text);
+
+                if (textField.userData is EventCallback<ChangeEvent<string>> oldCb) {
+                    textField.UnregisterValueChangedCallback(oldCb);
+                }
+                EventCallback<ChangeEvent<string>> newCb = evt => {
+                    if (rowIndex < _rows.Count) {
+                        _rows[rowIndex].SetText(evt.newValue);
+                        _rows[rowIndex].InvokeTextChanged(rowIndex, evt.newValue);
+                    }
+                };
+                textField.userData = newCb;
+                textField.RegisterValueChangedCallback(newCb);
+
+                textField.RegisterCallback<FocusOutEvent>(evt => {
+                    if (rowIndex < _rows.Count && textField != null) {
+                        _rows[rowIndex].SetText(textField.value);
+                        _rows[rowIndex].InvokeTextChanged(rowIndex, textField.value);
+                    }
+                });
+            }
+        };
+
+        return rowTitleCol;
+    }
+
+    private Column CreateOptionColumn(int colIdx) {
+        var col = new Column {
+            name = $"col-{colIdx}",
+            title = $"Sloupec {colIdx + 1}",
+            width = 100,
+            minWidth = 80,
+            stretchable = true
+        };
+
+        col.makeHeader = () => {
+            var header = new VisualElement {
+                name = "grid-column-header-container",
+                style = {
+                    flexDirection = FlexDirection.Column,
+                    alignItems = Align.Center,
+                    justifyContent = Justify.Center,
+                    flexGrow = 1,
+                    width = Length.Percent(100),
+                    alignSelf = Align.Stretch
+                }
+            };
+
+            var deleteBtn = new Button { name = "col-delete-button", tooltip = "Smazat sloupec" };
+            deleteBtn.AddToClassList("icon");
+            deleteBtn.AddToClassList("icon-trash");
+            deleteBtn.style.marginBottom = 2;
+
+            var tf = new TextField { name = "column-title" };
+            tf.textEdition.placeholder = "Text sloupce";
+            tf.multiline = true;
+            tf.style.whiteSpace = WhiteSpace.Normal;
+            tf.style.color = new Color(0, 0, 0);
+            tf.style.flexGrow = 1;
+            tf.style.width = Length.Percent(100);
+            tf.style.alignSelf = Align.Stretch;
+            tf.style.unityTextAlign = TextAnchor.MiddleCenter;
+
+            header.Add(deleteBtn);
+            header.Add(tf);
+            return header;
+        };
+
+        col.bindHeader = (VisualElement header) => {
+            int currentColIdx = colIdx;
+            var tf = header.Q<TextField>("column-title");
+            if (tf != null && currentColIdx < _columns.Count) {
+                var colUI = _columns[currentColIdx];
+                colUI.UpdateIndex(currentColIdx);
+                tf.SetValueWithoutNotify(colUI.Text);
+
+                if (tf.userData is EventCallback<ChangeEvent<string>> oldCb) {
+                    tf.UnregisterValueChangedCallback(oldCb);
+                }
+                EventCallback<ChangeEvent<string>> newCb = evt => {
+                    if (currentColIdx < _columns.Count) {
+                        _columns[currentColIdx].SetText(evt.newValue);
+                        _columns[currentColIdx].InvokeTextChanged(currentColIdx, evt.newValue);
+                        UpdatePresetFromColumns();
+                    }
+                };
+                tf.userData = newCb;
+                tf.RegisterValueChangedCallback(newCb);
+
+                tf.RegisterCallback<FocusOutEvent>(evt => {
+                    if (currentColIdx < _columns.Count && tf != null) {
+                        _columns[currentColIdx].SetText(tf.value);
+                        _columns[currentColIdx].InvokeTextChanged(currentColIdx, tf.value);
+                        UpdatePresetFromColumns();
+                    }
+                });
+            }
+
+            var deleteBtn = header.Q<Button>("col-delete-button");
+            if (deleteBtn != null) {
+                deleteBtn.clickable = new Clickable(() => RemoveColumn(currentColIdx));
+            }
+        };
+
+        col.makeCell = () => {
+            var cell = new VisualElement {
+                style = {
+                    flexDirection = FlexDirection.Row,
+                    alignItems = Align.Center,
+                    justifyContent = Justify.Center,
+                    flexGrow = 1,
+                    width = Length.Percent(100),
+                    height = Length.Percent(100)
+                }
+            };
+            cell.AddToClassList("grid-cell-container");
+            // The cells only preview the answer, the admin can't check them
+            cell.AddToClassList("grid-cell--preview-only");
+            if (_questionType == QuestionType.CheckboxGrid) {
+                var toggle = new Toggle { name = "grid-cell-toggle" };
+                CustomRadioButton.IgnorePointer(toggle);
+                cell.Add(toggle);
+            } else {
+                var radio = new CustomRadioButtonNoText { name = "grid-cell-radio" };
+                radio.SetPreviewOnly();
+                cell.Add(radio);
+            }
+            return cell;
+        };
+
+        // Nothing to bind, the cells show no state
+        col.bindCell = (VisualElement cell, int rowIndex) => { };
+
+        return col;
+    }
+
+    private Column CreateRowActionsColumn() {
+        var actionsCol = new Column {
+            name = "row-actions-col",
+            title = "",
+            width = 110,
+            minWidth = 90,
+            stretchable = false
+        };
+
+        actionsCol.makeHeader = () => {
+            return new VisualElement {
+                style = {
+                    flexGrow = 1,
+                    width = Length.Percent(100),
+                    height = Length.Percent(100)
+                }
+            };
+        };
+
+        actionsCol.makeCell = () => {
+            var container = new VisualElement {
+                name = "edit-option-container",
+                style = {
+                    flexDirection = FlexDirection.Row,
+                    alignItems = Align.Center,
+                    justifyContent = Justify.Center,
+                    flexGrow = 1,
+                    width = Length.Percent(100)
+                }
+            };
+
+            // Same classes as the option buttons (OptionToggle.uxml), so the disabled state looks the same
+            var moveUpBtn = new Button { name = "row-move-up-button", tooltip = "Posunout řádek nahoru" };
+            moveUpBtn.AddToClassList("icon");
+            moveUpBtn.AddToClassList("icon-move-up");
+
+            var moveDownBtn = new Button { name = "row-move-down-button", tooltip = "Posunout řádek dolů" };
+            moveDownBtn.AddToClassList("icon");
+            moveDownBtn.AddToClassList("icon-move-down");
+
+            var deleteBtn = new Button { name = "row-delete-button", tooltip = "Smazat řádek" };
+            deleteBtn.AddToClassList("icon");
+            deleteBtn.AddToClassList("icon-trash");
+
+            container.Add(moveUpBtn);
+            container.Add(moveDownBtn);
+            container.Add(deleteBtn);
+            return container;
+        };
+
+        actionsCol.bindCell = (VisualElement cell, int rowIndex) => {
+            if (rowIndex < 0 || rowIndex >= _rows.Count) return;
+            int currentIdx = rowIndex;
+
+            var moveUpBtn = cell.Q<Button>("row-move-up-button");
+            if (moveUpBtn != null) {
+                moveUpBtn.clickable = new Clickable(() => MoveRowUp(currentIdx));
+                moveUpBtn.SetEnabled(currentIdx > 0);
+            }
+
+            var moveDownBtn = cell.Q<Button>("row-move-down-button");
+            if (moveDownBtn != null) {
+                moveDownBtn.clickable = new Clickable(() => MoveRowDown(currentIdx));
+                moveDownBtn.SetEnabled(currentIdx < _rows.Count - 1);
+            }
+
+            var deleteBtn = cell.Q<Button>("row-delete-button");
+            if (deleteBtn != null) {
+                deleteBtn.clickable = new Clickable(() => RemoveRow(currentIdx));
+            }
+        };
+
+        return actionsCol;
+    }
+
+    protected override void RegisterButtons() {
+        base.RegisterButtons();
+
+        var addRowButton = _root.Q<Button>("add-row-button");
+        if (addRowButton != null) {
+            addRowButton.clickable = new Clickable(() =>
+            {
+                if (_rows.Count < MaxRows) {
+                    var newRow = AddRow();
+                    if (newRow != null) {
+                        OnAddRow?.Invoke(QuestionID, newRow);
+                    }
+                }
+            });
+        }
+
+        var addColumnButton = _root.Q<Button>("add-column-button");
+        if (addColumnButton != null) {
+            addColumnButton.clickable = new Clickable(() =>
+            {
+                if (_columns.Count < MaxColumns) {
+                    var newCol = AddColumn();
+                    if (newCol != null) {
+                        OnAddColumn?.Invoke(QuestionID, newCol);
+                    }
+                }
+            });
+        }
+
+        RegisterQuestionModalButtonEvents();
+    }
+
+    protected override SurveyAnswerUIBase CreateAnswerUI(VisualElement element, int index, bool isOther) {
+        return new SurveyAnswerUIEditorGrid(element, index, this, isOther);
+    }
+
+    public void AddExistingRow(string text) {
+        AddRow(text);
+    }
+
+    public void AddExistingColumn(string text) {
+        AddColumn(text);
+    }
+
+    public SurveyAnswerUIEditorGrid AddRow(string initialText = "") {
+        if (_rows.Count >= MaxRows) return null;
+
+        var element = _answerTemplate != null ? _answerTemplate.Instantiate() : new VisualElement();
+        SurveyAnswerUIEditorGrid row = new SurveyAnswerUIEditorGrid(element, _rows.Count, this, false);
+        if (!string.IsNullOrEmpty(initialText)) {
+            row.SetText(initialText);
+        }
+        _rows.Add(row);
+        _rowIndices.Add(_rows.Count - 1);
+
+        SyncAnswerIndices();
+        RebuildGrid();
+        return row;
+    }
+
+    public SurveyAnswerUIEditorGrid AddColumn(string initialText = "") {
+        if (_columns.Count >= MaxColumns) return null;
+
+        var element = _surveyUIBuilder.GridCollumnTemplate != null ? _surveyUIBuilder.GridCollumnTemplate.CloneTree() : new VisualElement();
+        int colIdx = _columns.Count;
+
+        SurveyAnswerUIEditorGrid column = new SurveyAnswerUIEditorGrid(element, colIdx, this, false);
+        if (!string.IsNullOrEmpty(initialText)) {
+            column.SetText(initialText);
+        }
+        _columns.Add(column);
+
+        SyncAnswerIndices();
+        RebuildTableColumns();
+        RebuildGrid();
+        UpdatePresetFromColumns();
+        return column;
+    }
+
+    public void RemoveColumn(int colIdx) {
+        if (_columns.Count <= 1) return;
+        if (colIdx < 0 || colIdx >= _columns.Count) return;
+        _columns.RemoveAt(colIdx);
+        RebuildTableColumns();
+        RebuildGrid();
+        OnRemoveColumn?.Invoke(QuestionID, colIdx);
+        UpdatePresetFromColumns();
+    }
+
+    public void RemoveRow(int rowIdx) {
+        if (_rows.Count <= 1) return;
+        if (rowIdx < 0 || rowIdx >= _rows.Count) return;
+        _rows.RemoveAt(rowIdx);
+        _rowIndices.Clear();
+        for (int i = 0; i < _rows.Count; i++) _rowIndices.Add(i);
+        RebuildGrid();
+        OnRemoveRow?.Invoke(QuestionID, rowIdx);
+    }
+
+    public void MoveRowUp(int rowIdx) {
+        if (rowIdx <= 0 || rowIdx >= _rows.Count) return;
+        var temp = _rows[rowIdx];
+        _rows[rowIdx] = _rows[rowIdx - 1];
+        _rows[rowIdx - 1] = temp;
+        RebuildGrid();
+    }
+
+    public void MoveRowDown(int rowIdx) {
+        if (rowIdx < 0 || rowIdx >= _rows.Count - 1) return;
+        var temp = _rows[rowIdx];
+        _rows[rowIdx] = _rows[rowIdx + 1];
+        _rows[rowIdx + 1] = temp;
+        RebuildGrid();
+    }
+
+    private void SyncAnswerIndices() {
+        for (int i = 0; i < _rows.Count; i++) {
+            _rows[i].UpdateIndex(i);
+        }
+        for (int i = 0; i < _columns.Count; i++) {
+            _columns[i].UpdateIndex(i);
+        }
+    }
+
+    private void RebuildGrid() {
+        SyncAnswerIndices();
+        if (_table != null) {
+            _table.itemsSource = _rowIndices;
+            _table.Rebuild();
+            _table.RefreshItems();
+        }
+        foreach (var row in _rows) {
+            row.RebuildRadioButtons(_columns.Count, _questionType == QuestionType.CheckboxGrid);
+        }
+        UpdateAddButtonsState();
+    }
+
+    // Grey out the add buttons once the row/column limit is reached.
+    // A class is used instead of SetEnabled(false): disabled elements get no pointer events, so the tooltip would never show.
+    // Clicks are already ignored by the count checks in RegisterButtons.
+    private void UpdateAddButtonsState() {
+        var addRowButton = _root.Q<Button>("add-row-button");
+        if (addRowButton != null) {
+            bool canAddRow = _rows.Count < MaxRows;
+            addRowButton.EnableInClassList("grid-add-button--limit", !canAddRow);
+            addRowButton.tooltip = canAddRow ? string.Empty : $"Dosažen maximální počet řádků ({MaxRows})";
+        }
+
+        var addColumnButton = _root.Q<Button>("add-column-button");
+        if (addColumnButton != null) {
+            bool canAddColumn = _columns.Count < MaxColumns;
+            addColumnButton.EnableInClassList("grid-add-button--limit", !canAddColumn);
+            addColumnButton.tooltip = canAddColumn ? string.Empty : $"Dosažen maximální počet sloupců ({MaxColumns})";
+        }
+    }
+}
