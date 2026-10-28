@@ -75,7 +75,7 @@ public class SurveyQuestionUIViewerString : SurveyQuestionUIViewer {
             // and pushed itself and the character counter out of the panel.
             var otherField = new TextField { multiline = true };
             otherField.name = "other-text-field";
-            otherField.textEdition.placeholder = string.IsNullOrWhiteSpace(answerText) ? "Jiná..." : answerText;
+            otherField.textEdition.placeholder = string.IsNullOrWhiteSpace(answerText) ? "Jiná" : answerText;
             otherField.style.flexGrow = 1;
             otherField.style.flexShrink = 1;
             otherField.style.flexBasis = 0;

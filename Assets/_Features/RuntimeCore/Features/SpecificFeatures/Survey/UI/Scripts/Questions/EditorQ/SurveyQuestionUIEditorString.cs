@@ -64,7 +64,7 @@ public class SurveyQuestionUIEditorString : SurveyQuestionUIEditor {
                     // Set after the model answer exists so the change callback stores the text
                     TextField otherTextField = otherUI?.AnswerElement != null ? FindTextFieldRecursive(otherUI.AnswerElement) : null;
                     if (otherTextField != null)
-                        otherTextField.value = "Jiné";
+                        otherTextField.value = "Jiná";
 
                     UpdateMaxLengthVisibility();
                 }

@@ -281,7 +281,7 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
 
         SurveySerializable survey;
         try {
-            survey = JsonUtility.FromJson<SurveySerializable>(surveyJson);
+            survey = SurveySerializable.FromJson(surveyJson);
         } catch (Exception e) {
             Debug.LogWarning($"[SurveyManager] Cannot read survey images: {e.Message}");
             return ids;

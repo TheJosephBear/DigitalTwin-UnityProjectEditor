@@ -284,7 +284,7 @@ public class SurveyUIControllerViewer : MonoBehaviour {
     }
 
     string GetValidationMessage(QuestionValidationResult result) {
-        if (result.MissingOtherText) return "Doplňte prosím text u možnosti „Jiná…“.";
+        if (result.MissingOtherText) return "Doplňte prosím text u možnosti „Jiná“.";
         if (result.MissingRows.Count > 0) return "Vyplňte prosím všechny řádky této povinné otázky.";
         return "Toto je povinná otázka. Před pokračováním na ni prosím odpovězte.";
     }

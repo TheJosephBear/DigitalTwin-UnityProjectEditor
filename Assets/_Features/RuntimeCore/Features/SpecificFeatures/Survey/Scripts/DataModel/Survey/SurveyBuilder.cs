@@ -262,7 +262,7 @@ namespace SurveySystem {
         }
 
         public void DeserializeFromJson(string json) {
-            SurveySerializable deserializedSurvey = JsonUtility.FromJson<SurveySerializable>(json);
+            SurveySerializable deserializedSurvey = SurveySerializable.FromJson(json);
             if(deserializedSurvey == null) 
                 return;
 

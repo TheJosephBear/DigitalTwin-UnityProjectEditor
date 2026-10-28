@@ -132,8 +132,14 @@ namespace SurveySystem {
             MaxAnswerLength = Mathf.Max(0, serializable.MaxAnswerLength);
             ViewPointId = !string.IsNullOrEmpty(serializable.ViewPointId) ? serializable.ViewPointId : (!string.IsNullOrEmpty(serializable.ViewpointID) ? serializable.ViewpointID : "");
             ImageID = !string.IsNullOrEmpty(serializable.ImageId) ? serializable.ImageId : (!string.IsNullOrEmpty(serializable.ImageID) ? serializable.ImageID : "");
-            foreach (AnswerBase answer in serializable.Answers) {
-                AddExistingAnswer(answer);
+            if (serializable.Answers != null) {
+                foreach (AnswerBase answer in serializable.Answers) {
+                    if (answer == null) {
+                        Debug.LogWarning($"[Survey] Skipping an answer of question {serializable.Id} that couldn't be deserialized.");
+                        continue;
+                    }
+                    AddExistingAnswer(answer);
+                }
             }
 
             return this;

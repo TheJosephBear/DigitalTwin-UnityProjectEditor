@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace SurveySystem {
     public class Survey {
@@ -91,7 +92,13 @@ namespace SurveySystem {
             Description = serializable.Description;
             ImageID = !string.IsNullOrEmpty(serializable.ImageID) ? serializable.ImageID : (!string.IsNullOrEmpty(serializable.ImageId) ? serializable.ImageId : "");
             ViewPointId = !string.IsNullOrEmpty(serializable.ViewPointId) ? serializable.ViewPointId : (!string.IsNullOrEmpty(serializable.ViewpointID) ? serializable.ViewpointID : "");
+            if (serializable.Questions == null) return;
             foreach (SerializableQuestion q in serializable.Questions) {
+                // Entry whose type couldn't be resolved, skip it instead of failing the whole survey
+                if (q == null) {
+                    Debug.LogWarning("[Survey] Skipping a question that couldn't be deserialized.");
+                    continue;
+                }
                 _questions.Add(QuestionBase.CreateAndDeserialize(q));
             }
         }
@@ -109,5 +116,21 @@ namespace SurveySystem {
         public string ViewpointID;
         [SerializeReference]
         public List<SerializableQuestion> Questions;
+
+        // [SerializeReference] entries store their type with the assembly name. Surveys saved before the survey code
+        // moved into its own assembly (RuntimeCoreAssembly.asmdef) say "Assembly-CSharp" and would load as null.
+        const string LegacyAssemblyName = "Assembly-CSharp";
+        static readonly Regex LegacyAssemblyRegex = new(@"(""asm""\s*:\s*"")" + LegacyAssemblyName + @"("")");
+
+        /// <summary>Use instead of JsonUtility.FromJson, also reads surveys saved by older builds.</summary>
+        public static SurveySerializable FromJson(string json) {
+            if (string.IsNullOrEmpty(json)) return null;
+
+            string currentAssembly = typeof(SurveySerializable).Assembly.GetName().Name;
+            if (currentAssembly != LegacyAssemblyName) {
+                json = LegacyAssemblyRegex.Replace(json, "${1}" + currentAssembly + "${2}");
+            }
+            return JsonUtility.FromJson<SurveySerializable>(json);
+        }
     }
 }

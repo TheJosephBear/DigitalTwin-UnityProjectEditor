@@ -90,11 +90,11 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
 
             var radioButton = element.Q<CustomRadioButton>();
             if (radioButton != null) {
-                radioButton.Placeholder = "Jiná odpověď...";
+                radioButton.Placeholder = "Jiná";
             }
             var toggleButton = element.Q<CustomToggleButton>();
             if (toggleButton != null) {
-                toggleButton.Placeholder = "Jiná odpověď...";
+                toggleButton.Placeholder = "Jiná";
             }
             _otherAnswerUI = answerUI;
         } else {

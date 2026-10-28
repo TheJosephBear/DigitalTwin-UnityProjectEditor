@@ -136,9 +136,18 @@ namespace SurveySystem {
             ImageID = serializable.ImageId;
             Rows = serializable.Rows != null ? serializable.Rows.ConvertAll(r => ClearLegacyDefault(r, "Row")) : new List<string>();
             Columns = serializable.Columns != null ? serializable.Columns.ConvertAll(c => ClearLegacyDefault(c, "Column")) : new List<string>();
+            CropToLimit(Rows, MaxRows, "rows");
+            CropToLimit(Columns, MaxColumns, "columns");
             SyncGridAnswers();
 
             return this;
+        }
+
+        // Surveys saved before the limits existed can have more rows/columns, the extra ones are dropped
+        private void CropToLimit(List<string> items, int limit, string what) {
+            if (items.Count <= limit) return;
+            Debug.LogWarning($"[Survey] Question {Id} has {items.Count} {what}, keeping the first {limit}.");
+            items.RemoveRange(limit, items.Count - limit);
         }
 
         // Older surveys stored "Row"/"Column" as the default text, which hid the editor placeholder

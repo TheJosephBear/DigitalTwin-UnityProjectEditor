@@ -459,8 +459,9 @@ public class SurveyUIControllerEditor : MonoBehaviour {
 
             Debug.Log($"Assigning ImageID: {textureAsset.ID} to question: {questionIndex}");
 
-            // Update the Data Model
-            _surveyBuilder.SetQuestionImageID(questionIndex, textureAsset.ID);
+            // Update the Data Model (the model looks questions up by ID, the UI sends the index)
+            int questionId = _surveyUIBuilder.GetQuestionAtIndex(questionIndex).QuestionID;
+            _surveyBuilder.SetQuestionImageID(questionId, textureAsset.ID);
 
             // Update the UI
             _surveyUIBuilder.SetQuestionImage(questionIndex, textureAsset.ID);
@@ -469,7 +470,8 @@ public class SurveyUIControllerEditor : MonoBehaviour {
 
     void HandleRemoveImage(int questionIndex) {
         Debug.Log($"Removing Image from question index: {questionIndex}");
-        _surveyBuilder.SetQuestionImageID(questionIndex, "");
+        int questionId = _surveyUIBuilder.GetQuestionAtIndex(questionIndex).QuestionID;
+        _surveyBuilder.SetQuestionImageID(questionId, "");
         _surveyUIBuilder.SetQuestionImage(questionIndex, "");
     }
 

@@ -4978,6 +4978,7 @@ GenericDropdownMenu {
     background-color: var(--primary-hover);
     opacity: 1;
     scale: 1 1;
+    cursor: initial;
 }
 
 .floating-bottom-bar #save-btn.save-btn--saved,
@@ -4985,6 +4986,14 @@ GenericDropdownMenu {
     background-color: var(--card-border);
     opacity: 1;
     scale: 1 1;
+    cursor: initial;
+}
+
+/* Neaktivní tlačítko: bez ručičky ani nad textem a ikonou (nastavují ji Button Label:hover / Button VisualElement:hover) */
+.floating-bottom-bar #save-btn.save-btn--saved Label:hover,
+.floating-bottom-bar #save-btn.save-btn--saved VisualElement:hover,
+.floating-bottom-bar #save-btn.save-btn--saving Label:hover,
+.floating-bottom-bar #save-btn.save-btn--saving VisualElement:hover {
     cursor: initial;
 }
 
