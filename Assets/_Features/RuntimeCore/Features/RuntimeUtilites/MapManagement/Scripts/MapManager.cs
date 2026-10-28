@@ -219,27 +219,47 @@ public class MapManager : Singleton<MapManager> {
             UploadMapVariant(asset);
         }
         */
+        // JsonUtility never deserializes baseMap as null: a project saved without a base map
+        // comes back with an empty hash, which means "no base map yet" (editor opens the upload step)
+        if (string.IsNullOrEmpty(serializedMap.baseMap.modelFileHash)) return;
+
+        // Missing models are skipped so the rest still loads, then reported together at the end
+        List<string> missingModels = new List<string>();
+
         var baseAsset = AssetManager.Instance.FindModelAssetByFileHash(serializedMap.baseMap.modelFileHash);
-        SetBaseMapModel(baseAsset);
+        if (baseAsset != null) {
+            SetBaseMapModel(baseAsset);
 
-        // Spawn standard base map object
-        SpawnMap();
+            // Spawn standard base map object
+            SpawnMap();
 
-        // Restore base map transform values and apply to scene
-        _baseMap.Deserialize(serializedMap.baseMap);
+            // Restore base map transform values and apply to scene
+            _baseMap.Deserialize(serializedMap.baseMap);
+        } else {
+            missingModels.Add("base map " + serializedMap.baseMap.name);
+        }
 
         // 2. Spawn and apply transforms for all variant maps
-        foreach (var variantData in serializedMap.variants) {
-            var asset = AssetManager.Instance.FindModelAssetByFileHash(variantData.modelFileHash);
+        if (serializedMap.variants != null) {
+            foreach (var variantData in serializedMap.variants) {
+                var asset = AssetManager.Instance.FindModelAssetByFileHash(variantData.modelFileHash);
+                if (asset == null) {
+                    missingModels.Add("variant " + variantData.name);
+                    continue;
+                }
 
-            // Assuming UploadMapVariant instantiates and returns the created MapVariant reference
-            MapVariant spawnedVariant = UploadMapVariant(asset, deseralization: true);
+                // Assuming UploadMapVariant instantiates and returns the created MapVariant reference
+                MapVariant spawnedVariant = UploadMapVariant(asset, deseralization: true);
 
-            if (spawnedVariant != null) {
-                // Restore variant transform values and apply to scene
-                spawnedVariant.Deserialize(variantData);
+                if (spawnedVariant != null) {
+                    // Restore variant transform values and apply to scene
+                    spawnedVariant.Deserialize(variantData);
+                }
             }
         }
+
+        if (missingModels.Count > 0)
+            throw new InvalidOperationException("Map models not found: " + string.Join(", ", missingModels));
     }
 
     #endregion
