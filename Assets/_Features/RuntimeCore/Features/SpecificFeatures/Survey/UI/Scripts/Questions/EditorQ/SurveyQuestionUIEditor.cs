@@ -30,6 +30,7 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
     public event Action<int, int, int> OnMoveAnswer;
     public event Action<SurveyQuestionUIEditor> OnQuestionSelected;
     public event Action<int> OnRemoveImage;
+    public event Action<int> OnRotateImage;
 
     #endregion
 
@@ -196,9 +197,10 @@ public abstract class SurveyQuestionUIEditor : SurveyQuestionUIBase {
 
         var questionImage = _root.Q<VisualElement>("question-image");
         if (questionImage != null) {
+            SurveyUIUtils.AddRotateButton(questionImage, () => OnRotateImage?.Invoke(_surveyUIBuilder.GetQuestionIndex(this)));
             SurveyUIUtils.AddUploadOverlay(questionImage);
             questionImage.RegisterCallback<ClickEvent>(evt => {
-                if (evt.target is Button btn && (btn.name == "enhance-image" || btn.name == "remove-image")) {
+                if (evt.target is Button btn && (btn.name == "enhance-image" || btn.name == "remove-image" || btn.name == SurveyUIUtils.RotateButtonName)) {
                     return;
                 }
                 int index = _surveyUIBuilder.GetQuestionIndex(this);

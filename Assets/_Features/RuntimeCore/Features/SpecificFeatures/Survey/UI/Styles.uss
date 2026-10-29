@@ -4379,7 +4379,7 @@ GenericDropdownMenu {
     display: none;
 }
 
-/* Letter badge (A, B, C...) on image choice options */
+/* Letter badge (A, B, C...) on image choice options, same look as for respondents */
 .image-option-letter {
     position: absolute;
     top: 8px;
@@ -4389,8 +4389,10 @@ GenericDropdownMenu {
     padding-left: 7px;
     padding-right: 7px;
     border-radius: 12px;
-    background-color: var(--primary-color);
-    color: rgb(255, 255, 255);
+    border-width: 1px;
+    border-color: var(--primary-color);
+    background-color: rgba(255, 255, 255, 0.9);
+    color: var(--primary-color);
     font-size: 12px;
     -unity-font-style: bold;
     -unity-text-align: middle-center;
@@ -4427,6 +4429,29 @@ GenericDropdownMenu {
 
 .image-option-card .image-option-enhance:hover {
     -unity-background-image-tint-color: var(--primary-color);
+}
+
+/* Rotate button (SurveyUIUtils.AddRotateButton), next to the enlarge button */
+.image-option-card .image-option-rotate {
+    position: absolute;
+    right: 40px;
+    bottom: 8px;
+    width: 26px;
+    height: 26px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: var(--text-muted);
+}
+
+.image-option-card .image-option-rotate:hover {
+    -unity-background-image-tint-color: var(--primary-color);
+}
+
+.image-option-card--empty .image-option-rotate {
+    display: none;
 }
 
 .image-option-footer {
@@ -4641,6 +4666,53 @@ GenericDropdownMenu {
 .remove-button:active {
     background-color: rgb(240, 240, 240);
     scale: 0.95 0.95;
+}
+
+/* Buttons over images (remove, enlarge, rotate) keep a see-through white backing, so they stay visible on dark
+   pictures. With the type in the selector it wins over Button.icon, which makes the background transparent */
+Button.enhance-button,
+Button.remove-button {
+    background-color: rgba(255, 255, 255, 0.85);
+}
+
+.rotate-button {
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/rotate-right.png?fileID=2800000&guid=1a9a957ab1b83674fad3ce6185f338eb&type=3#rotate-right");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+/* On image previews: left of the enlarge button in the bottom right corner (size copied from it in code).
+   Button.icon sets 32 px, so the type is in the selector to win over it */
+Button.media-rotate-button {
+    position: absolute;
+    bottom: 4px;
+    right: 32px;
+    width: 22px;
+    height: 22px;
+}
+
+/* Enlarged image (FullscreenImageOverlay.uxml): same look as the close button, left of it */
+.fullscreen-rotate-button {
+    position: absolute;
+    top: 40px;
+    right: 96px;
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.27);
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/rotate-right-white.png?fileID=2800000&guid=7b953fb2d5c34b67b1d8952b0ca7eb29&type=3#rotate-right-white");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    border-width: 0;
+    border-radius: 22px;
+}
+
+/* Otherwise the default theme turns it grey on hover */
+.fullscreen-rotate-button:hover:enabled {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.fullscreen-rotate-button:active:enabled {
+    background-color: rgba(255, 255, 255, 0.5);
 }
 
 .media-views-container,

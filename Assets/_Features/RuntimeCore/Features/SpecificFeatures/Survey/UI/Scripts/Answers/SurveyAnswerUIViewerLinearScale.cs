@@ -37,6 +37,12 @@ public class SurveyAnswerUIViewerLinearScale : SurveyAnswerUIViewer {
         RegisterAnswerEvents();
         SetupDraggerTooltip();
         _answerElement?.AddToClassList(UnsetClass);
+        _slider?.RegisterCallback<GeometryChangedEvent>(_ => UpdateUnsetDraggerOffset());
+    }
+
+    // Until the respondent touches the scale, the handle is shown exactly in the middle; the first touch snaps it to a value
+    private void UpdateUnsetDraggerOffset() {
+        SurveyUIUtils.CenterSliderHandle(_slider, !_hasValue);
     }
 
     private void SetupDraggerTooltip() {
@@ -121,6 +127,7 @@ public class SurveyAnswerUIViewerLinearScale : SurveyAnswerUIViewer {
         if (_hasValue) return;
         _hasValue = true;
         _answerElement?.RemoveFromClassList(UnsetClass);
+        UpdateUnsetDraggerOffset();
     }
 
     private void UpdateValueLabels(string text) {
@@ -165,6 +172,7 @@ public class SurveyAnswerUIViewerLinearScale : SurveyAnswerUIViewer {
             if (initialValue.HasValue) MarkAsSet();
 
             UpdateValueLabels(_hasValue ? val.ToString() : NoValueText);
+            UpdateUnsetDraggerOffset();
         }
     }
 }

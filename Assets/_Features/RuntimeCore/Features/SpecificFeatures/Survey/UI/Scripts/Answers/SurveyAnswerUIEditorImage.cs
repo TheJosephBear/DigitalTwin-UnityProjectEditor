@@ -10,6 +10,7 @@ public class SurveyAnswerUIEditorImage : SurveyAnswerUIEditor {
     private VisualElement _imageDisplay;
     private Label _letterLabel;
     private TextField _captionField;
+    private string _imageId;
 
     public SurveyAnswerUIEditorImage(VisualElement answerElement, int answerIndex, SurveyQuestionUIEditor questionUI, bool isOther)
         : base(answerElement, answerIndex, questionUI, isOther) {
@@ -25,9 +26,10 @@ public class SurveyAnswerUIEditorImage : SurveyAnswerUIEditor {
         // Register buttons for Move Up/Down/Delete (inherited logic, handles delete-option-button)
         RegisterModalButtonEvents(_answerElement);
 
+        SurveyUIUtils.AddRotateButton(_imageDisplay, RotateImage, "image-option-rotate");
         SurveyUIUtils.AddUploadOverlay(_imageDisplay);
         _imageDisplay?.RegisterCallback<ClickEvent>(evt => {
-            if (evt.target is Button btn && (btn.name == "enhance-image" || btn.name == "delete-option-button")) {
+            if (evt.target is Button btn && (btn.name == "enhance-image" || btn.name == "delete-option-button" || btn.name == SurveyUIUtils.RotateButtonName)) {
                 return;
             }
             ImageManager.Instance.AskForImageDialog((textureAsset) => {
@@ -66,11 +68,21 @@ public class SurveyAnswerUIEditorImage : SurveyAnswerUIEditor {
         _captionField?.SetValueWithoutNotify(caption ?? "");
     }
 
+    // Turned image is a new image, saved to the option like a newly uploaded one
+    void RotateImage() {
+        TextureAsset rotated = ImageManager.Instance.RotateProjectImage(_imageId);
+        if (rotated == null) return;
+
+        SetImage(rotated.ID);
+        OnAnswerImageChanged?.Invoke(_answerIndex, rotated.ID);
+    }
+
     public void SetImage(string imageId) {
         if (string.IsNullOrEmpty(imageId)) return;
 
         TextureAsset asset = ImageManager.Instance.GetTextureAssetByID(imageId);
         if (asset != null && asset.Texture != null) {
+            _imageId = imageId;
             _imageDisplay.style.backgroundImage = new StyleBackground(asset.Texture);
             _answerElement.Q("option-container")?.RemoveFromClassList("image-option-card--empty");
         }

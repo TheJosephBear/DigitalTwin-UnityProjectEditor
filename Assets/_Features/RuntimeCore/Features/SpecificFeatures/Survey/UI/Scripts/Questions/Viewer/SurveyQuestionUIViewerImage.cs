@@ -10,6 +10,24 @@ public class SurveyQuestionUIViewerImage : SurveyQuestionUIViewer {
 
     public SurveyQuestionUIViewerImage(VisualElement root, int questionId, QuestionType questionType, List<SerializableViewPoint> viewPoints, SurveyUIBuilder uiBuilder)
         : base(root, questionId, questionType, viewPoints, uiBuilder) {
+        AddQuestionImageChip();
+    }
+
+    // The question image looks like one more option, so it says what it is (in place of the small image badge)
+    private void AddQuestionImageChip() {
+        var questionImage = _root.Q<VisualElement>("question-image");
+        if (questionImage == null) return;
+
+        var badge = questionImage.Q<VisualElement>("media-type-badge");
+        if (badge != null) badge.style.display = DisplayStyle.None;
+
+        var chip = new VisualElement { name = "question-image-chip", pickingMode = PickingMode.Ignore };
+        chip.AddToClassList("question-image-chip");
+        var icon = new VisualElement { pickingMode = PickingMode.Ignore };
+        icon.AddToClassList("question-image-chip__icon");
+        chip.Add(icon);
+        chip.Add(new Label("Ilustrace k otázce") { pickingMode = PickingMode.Ignore });
+        questionImage.Add(chip);
     }
 
     // This is called by the UI Builder when iterating through the question's answers

@@ -99,7 +99,36 @@ public static class ImageOrientationUtils {
 
         var src = new NativeArray<byte>(pixels, Allocator.Persistent);
         texture.Reinitialize(dw, dh, texture.format, texture.mipmapCount > 1);
-        NativeArray<byte> dst = texture.GetPixelData<byte>(0);
+        CopyReoriented(src, w, h, bytesPerPixel, orientation, texture.GetPixelData<byte>(0));
+
+        src.Dispose();
+        texture.Apply(updateMipmaps: true);
+    }
+
+    /// <summary>
+    /// Returns a copy of the texture turned by 90° clockwise, or null if its pixels can't be read.
+    /// The source is left unchanged.
+    /// </summary>
+    public static Texture2D Rotated90Clockwise(Texture2D source) {
+        if (source == null || !source.isReadable) return null;
+
+        int w = source.width;
+        int h = source.height;
+        NativeArray<byte> pixels = source.GetPixelData<byte>(0);
+        int bytesPerPixel = pixels.Length / (w * h);
+        if (bytesPerPixel < 1 || pixels.Length != w * h * bytesPerPixel) return null;
+
+        var rotated = new Texture2D(h, w, source.format, source.mipmapCount > 1);
+        CopyReoriented(pixels, w, h, bytesPerPixel, 6, rotated.GetPixelData<byte>(0));
+        rotated.Apply(updateMipmaps: true);
+        return rotated;
+    }
+
+    // Writes the w × h source pixels into dst turned by the EXIF orientation (dst has swapped sides for 5–8)
+    static void CopyReoriented(NativeArray<byte> src, int w, int h, int bytesPerPixel, int orientation, NativeArray<byte> dst) {
+        bool swapsSides = orientation >= 5;
+        int dw = swapsSides ? h : w;
+        int dh = swapsSides ? w : h;
 
         // EXIF works with rows from the top, Unity stores them from the bottom
         for (int dy = 0; dy < dh; dy++) {
@@ -123,8 +152,5 @@ public static class ImageOrientationUtils {
                 }
             }
         }
-
-        src.Dispose();
-        texture.Apply(updateMipmaps: true);
     }
 }

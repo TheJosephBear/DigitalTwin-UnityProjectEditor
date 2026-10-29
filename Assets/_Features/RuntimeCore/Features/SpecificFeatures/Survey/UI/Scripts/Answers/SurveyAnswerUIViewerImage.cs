@@ -64,7 +64,8 @@ public class SurveyAnswerUIViewerImage : SurveyAnswerUIViewer {
     public void SetCaption(string caption) {
         bool hasCaption = !string.IsNullOrWhiteSpace(caption);
         if (_captionLabel != null) _captionLabel.text = hasCaption ? caption.Trim() : "";
-        if (_captionContainer != null) _captionContainer.style.display = hasCaption ? DisplayStyle.Flex : DisplayStyle.None;    }
+        if (_captionContainer != null) _captionContainer.style.display = hasCaption ? DisplayStyle.Flex : DisplayStyle.None;
+    }
 
     public void SetSelected(bool selected) {
         if (selected) {

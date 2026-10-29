@@ -13,8 +13,6 @@ public class SurveyAnswerUIEditorLinearScale : SurveyAnswerUIEditor {
     private Label _minLabel;
     private Label _maxLabel;
     private SliderInt _sliderPreview;
-    private Label _draggerTooltip;
-    private bool _isDragging = false;
 
     public SurveyAnswerUIEditorLinearScale(VisualElement answerElement, int answerIndex, SurveyQuestionUIEditorLinearScale questionUI, bool isOther = false)
         : base(answerElement, answerIndex, questionUI, isOther) {
@@ -26,75 +24,22 @@ public class SurveyAnswerUIEditorLinearScale : SurveyAnswerUIEditor {
         _sliderPreview = _answerElement.Q<SliderInt>("scale-slider-preview") ?? _answerElement.Q<SliderInt>();
 
         RegisterAnswerEvents();
-        SetupDraggerTooltip();
+        DisableSliderInteraction();
     }
 
-    private void SetupDraggerTooltip() {
+    // Only a preview of the scale: the admin doesn't answer it, so it ignores the pointer (and keeps its look)
+    private void DisableSliderInteraction() {
         if (_sliderPreview == null) return;
+        _sliderPreview.focusable = false;
+        _sliderPreview.Query<VisualElement>().ForEach(element => element.pickingMode = PickingMode.Ignore);
 
-        var dragger = _sliderPreview.Q("unity-dragger") ?? _sliderPreview.Q(className: "unity-base-slider__dragger");
-        if (dragger != null && _draggerTooltip == null) {
-            _draggerTooltip = new Label(_sliderPreview.value.ToString());
-            _draggerTooltip.AddToClassList("scale-dragger-tooltip");
-            _draggerTooltip.pickingMode = PickingMode.Ignore;
-            dragger.Add(_draggerTooltip);
-        }
+        // Preview has no value, its handle always sits in the middle (also on 0–5 and 1–10)
+        _sliderPreview.RegisterCallback<GeometryChangedEvent>(_ => SurveyUIUtils.CenterSliderHandle(_sliderPreview, true));
     }
 
     protected override void RegisterAnswerEvents() {
         RegisterModalButtonEvents(_answerElement);
         RegisterTextFieldChanges();
-
-        if (_sliderPreview != null) {
-            _sliderPreview.RegisterValueChangedCallback(evt => {
-                if (_draggerTooltip != null) {
-                    _draggerTooltip.text = evt.newValue.ToString();
-                }
-            });
-
-            _sliderPreview.RegisterCallback<PointerDownEvent>(evt => {
-                SetupDraggerTooltip();
-                _isDragging = true;
-                _sliderPreview.AddToClassList("is-dragging");
-                if (_draggerTooltip != null) {
-                    _draggerTooltip.AddToClassList("is-dragging");
-                    _draggerTooltip.style.opacity = 1f;
-                }
-            }, TrickleDown.TrickleDown);
-
-            _sliderPreview.RegisterCallback<PointerMoveEvent>(evt => {
-                if (_isDragging && _draggerTooltip != null) {
-                    _draggerTooltip.style.opacity = 1f;
-                }
-            }, TrickleDown.TrickleDown);
-
-            _sliderPreview.RegisterCallback<PointerUpEvent>(evt => {
-                _isDragging = false;
-                _sliderPreview.RemoveFromClassList("is-dragging");
-                if (_draggerTooltip != null) {
-                    _draggerTooltip.RemoveFromClassList("is-dragging");
-                    _draggerTooltip.style.opacity = StyleKeyword.Null;
-                }
-            }, TrickleDown.TrickleDown);
-
-            _sliderPreview.RegisterCallback<PointerCaptureOutEvent>(evt => {
-                _isDragging = false;
-                _sliderPreview.RemoveFromClassList("is-dragging");
-                if (_draggerTooltip != null) {
-                    _draggerTooltip.RemoveFromClassList("is-dragging");
-                    _draggerTooltip.style.opacity = StyleKeyword.Null;
-                }
-            }, TrickleDown.TrickleDown);
-
-            _sliderPreview.RegisterCallback<PointerCancelEvent>(evt => {
-                _isDragging = false;
-                _sliderPreview.RemoveFromClassList("is-dragging");
-                if (_draggerTooltip != null) {
-                    _draggerTooltip.RemoveFromClassList("is-dragging");
-                    _draggerTooltip.style.opacity = StyleKeyword.Null;
-                }
-            }, TrickleDown.TrickleDown);
-        }
     }
 
     private void RegisterTextFieldChanges() {
@@ -126,12 +71,8 @@ public class SurveyAnswerUIEditorLinearScale : SurveyAnswerUIEditor {
         if (_sliderPreview != null) {
             _sliderPreview.lowValue = min;
             _sliderPreview.highValue = max;
-            int val = (min + max) / 2;
-            _sliderPreview.value = val;
-
-            if (_draggerTooltip != null) {
-                _draggerTooltip.text = val.ToString();
-            }
+            _sliderPreview.value = (min + max) / 2;
+            SurveyUIUtils.CenterSliderHandle(_sliderPreview, true);
         }
     }
 }

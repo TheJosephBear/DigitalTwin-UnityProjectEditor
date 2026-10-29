@@ -62,14 +62,43 @@ public class ImageManager : Singleton<ImageManager> {
 
     #region Project Images
 
-    private TextureAsset AddProjectImage(byte[] data, string fileName) {
-        if (data == null) return null;
+    private const int RotatedJpgQuality = 90;
+
+    /// <summary>
+    /// Turns a project image by 90° clockwise. Images are identified by their content, so the result is a new image
+    /// (uploaded like a newly picked one) and the caller replaces the old ID with it. Returns null if it can't be turned.
+    /// </summary>
+    public TextureAsset RotateProjectImage(string imageId) {
+        TextureAsset source = GetTextureAssetByID(imageId);
+        if (source == null || source.Texture == null) return null;
+
+        Texture2D rotated = ImageOrientationUtils.Rotated90Clockwise(source.Texture);
+        if (rotated == null) {
+            Debug.LogError($"Failed to rotate image: {source.FileName}");
+            return null;
+        }
+
+        // Turned from the decoded pixels, so repeated turns don't add up JPEG losses within a session
+        bool isPng = string.Equals(Path.GetExtension(source.FileName), ".png", StringComparison.OrdinalIgnoreCase);
+        byte[] data = isPng ? rotated.EncodeToPNG() : rotated.EncodeToJPG(RotatedJpgQuality);
+        return AddProjectImage(data, source.FileName, rotated);
+    }
+
+    // decoded: the texture of the data when the caller already has it, owned by the manager from then on
+    private TextureAsset AddProjectImage(byte[] data, string fileName, Texture2D decoded = null) {
+        if (data == null) {
+            if (decoded != null) Destroy(decoded);
+            return null;
+        }
 
         string fileHash = GetFileHash(data);
         TextureAsset existing = _loadedTextures.Find(x => x != null && x.FileHash == fileHash);
-        if (existing != null) return existing;
+        if (existing != null) {
+            if (decoded != null) Destroy(decoded);
+            return existing;
+        }
 
-        Texture2D tex = LoadTexture(data);
+        Texture2D tex = decoded != null ? decoded : LoadTexture(data);
         if (tex == null) {
             Debug.LogError($"Failed to decode image: {fileName}");
             return null;

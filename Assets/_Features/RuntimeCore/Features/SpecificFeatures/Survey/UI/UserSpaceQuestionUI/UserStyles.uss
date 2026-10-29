@@ -1789,7 +1789,8 @@ TextField:focus TextInput {
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
     border-width: 2px;
-    border-color: rgba(0, 0, 0, 0.08);
+    /* Purple tint marks options as clickable, unlike the question image above them */
+    border-color: rgba(103, 80, 164, 0.35);
     background-color: rgb(252, 250, 255);
     flex-direction: column;
     overflow: hidden;
@@ -1906,6 +1907,77 @@ TextField:focus TextInput {
 .image-option-card--selected .image-option-label Label {
     color: var(--primary-color);
     -unity-font-style: bold;
+}
+
+/* Image choice: labelled line between the question (with its image) and the options */
+.question-divider.image-choice-divider {
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0);
+    margin-top: 16px;
+    margin-bottom: 0;
+}
+
+.image-choice-divider__line {
+    flex-grow: 1;
+    height: 1px;
+    background-color: rgba(103, 80, 164, 0.3);
+}
+
+.image-choice-divider__label {
+    margin-left: 8px;
+    margin-right: 8px;
+    padding-left: 0;
+    padding-right: 0;
+    font-size: 12px;
+    color: var(--primary-color);
+}
+
+/* Image choice: says the question image is an illustration, not an option (SurveyQuestionUIViewerImage) */
+.question-image-chip {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 7px;
+    padding-right: 9px;
+    height: 22px;
+    border-top-left-radius: 11px;
+    border-top-right-radius: 11px;
+    border-bottom-left-radius: 11px;
+    border-bottom-right-radius: 11px;
+    background-color: rgba(255, 255, 255, 0.92);
+}
+
+.question-image-chip__icon {
+    flex-shrink: 0;
+    align-self: center;
+    width: 14px;
+    height: 14px;
+    margin-right: 5px;
+    background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/image-outline.png?fileID=2800000&guid=2a8b0a5a8db48ee46924cdb62930cde7&type=3#image-outline");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: var(--secondary-color);
+}
+
+/* As tall as the chip and centred in it, so the text lines up with the icon */
+.question-image-chip Label {
+    flex-shrink: 0;
+    height: 100%;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    font-size: 11px;
+    -unity-text-align: middle-left;
+    white-space: nowrap;
+    color: var(--secondary-color);
 }
 
 .options-list-vertical {

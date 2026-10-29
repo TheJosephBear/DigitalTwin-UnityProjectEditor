@@ -230,10 +230,11 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         if (_surveyImageView != null) {
             _surveyImageView.style.display = DisplayStyle.None;
             _surveyImageView.style.backgroundImage = null;
+            SurveyUIUtils.AddRotateButton(_surveyImageView, RotateSurveyImage);
             SurveyUIUtils.AddUploadOverlay(_surveyImageView);
 
             _surveyImageView.RegisterCallback<ClickEvent>(evt => {
-                if (evt.target is Button btn && (btn.name == "enhance-image" || btn.name == "remove-image")) return;
+                if (evt.target is Button btn && (btn.name == "enhance-image" || btn.name == "remove-image" || btn.name == SurveyUIUtils.RotateButtonName)) return;
                 HandleSurveyImageUpload();
             });
 
@@ -307,6 +308,15 @@ public class SurveyUIControllerEditor : MonoBehaviour {
             _surveyBuilder.SetSurveyImageID(textureAsset.ID);
             SetSurveyImageRender();
         });
+    }
+
+    void RotateSurveyImage() {
+        Survey survey = _surveyBuilder.GetActiveSurvey();
+        TextureAsset rotated = survey != null ? ImageManager.Instance.RotateProjectImage(survey.ImageID) : null;
+        if (rotated == null) return;
+
+        _surveyBuilder.SetSurveyImageID(rotated.ID);
+        SetSurveyImageRender();
     }
 
     void SetSurveyImageRender() {
@@ -391,6 +401,7 @@ public class SurveyUIControllerEditor : MonoBehaviour {
       //      editorUI.OnQuestionMoved += HandleQuestionMoved;
              editorUI.OnUploadImage += HandleImageUpload;
              editorUI.OnRemoveImage += HandleRemoveImage;
+             editorUI.OnRotateImage += HandleRotateImage;
              editorUI.OnViewpointSelected += HandleQuestionViewPointSelected;
             editorUI.OnMoveAnswer += HandleAnswerMoved;
             editorUI.OnToggleRequired += HandleRequiredChange;
@@ -551,6 +562,16 @@ public class SurveyUIControllerEditor : MonoBehaviour {
         int questionId = _surveyUIBuilder.GetQuestionAtIndex(questionIndex).QuestionID;
         _surveyBuilder.SetQuestionImageID(questionId, "");
         _surveyUIBuilder.SetQuestionImage(questionIndex, "");
+    }
+
+    // Turned image is a new image, assigned to the question like a newly uploaded one
+    void HandleRotateImage(int questionIndex) {
+        SurveyQuestionUIBase questionUI = _surveyUIBuilder.GetQuestionAtIndex(questionIndex);
+        TextureAsset rotated = ImageManager.Instance.RotateProjectImage(questionUI.ImageID);
+        if (rotated == null) return;
+
+        _surveyBuilder.SetQuestionImageID(questionUI.QuestionID, rotated.ID);
+        _surveyUIBuilder.SetQuestionImage(questionIndex, rotated.ID);
     }
 
     void HandleImageQuestionAnswerImageUpload(int questionID, int answerID, string imageID) {
