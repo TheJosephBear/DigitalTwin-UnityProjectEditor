@@ -55,9 +55,20 @@ public class SunManager: Singleton<SunManager> {
 
     #region Relay Methods to SunIRL
 
+    // Latitude, longitude the sun is calculated for
+    public Vector2 Coordinates => _sunIRL != null ? new Vector2(_sunIRL.Latitude, _sunIRL.Longitude) : Vector2.zero;
+
     public void UpdateCoordinates(float latitude, float longitude) {
         if (_sunIRL != null)
             _sunIRL.SetCoordinates(latitude, longitude);
+    }
+
+    /// <summary>
+    /// The project was placed on the map: the sun and the coordinate fields move to the new location.
+    /// </summary>
+    public void SetGeoCoordinates(float latitude, float longitude) {
+        UpdateCoordinates(latitude, longitude);
+        _uiScript?.SetCoordinateValues(latitude, longitude);
     }
 
     public void UpdateDate(uint year, uint month, uint day) {
@@ -136,9 +147,8 @@ public class SunManager: Singleton<SunManager> {
 
         if (isFreshProject) {
             _sunIRL.SetDate(_sunIRL.GetCurrentLocalTime());
-            if (geoCoordinates != Vector2.zero) {
-                _sunIRL.SetCoordinates(geoCoordinates.x, geoCoordinates.y);
-            }
+            // Also 0, 0 for a project not placed on the map, so it doesn't keep the previous project's location
+            _sunIRL.SetCoordinates(geoCoordinates.x, geoCoordinates.y);
         } else {
             _sunIRL.Deserialize(serializedSun, geoCoordinates);
         }

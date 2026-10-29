@@ -164,21 +164,23 @@ public class GeoMapLocalizationManager: Singleton<GeoMapLocalizationManager> {
         OnlineMapsTileSetControl.instance.GetCoordsByWorldPosition(_baseMapCopy.transform.position, out lng, out lat);
 
         ElevationFetcher.Instance.GetElevation(new Vector2((float)lng, (float)lat), elevation => {
-            _geoData = new GeoLocalizationData {
-                longtitude = (float)lng,
-                latitude = (float)lat,
-                elevation = elevation,
-            };
+            SetGeoData((float)lat, (float)lng, elevation);
             GeoMapManager.Instance.ExitGeoLocalization();
         }, error => {
             Debug.LogError(error);
-            _geoData = new GeoLocalizationData {
-                longtitude = (float)lng,
-                latitude = (float)lat,
-                elevation = 0,
-            };
+            SetGeoData((float)lat, (float)lng, 0);
             GeoMapManager.Instance.ExitGeoLocalization();
         });
+    }
+
+    void SetGeoData(float latitude, float longitude, float elevation) {
+        _geoData = new GeoLocalizationData {
+            longtitude = longitude,
+            latitude = latitude,
+            elevation = elevation,
+        };
+        // The sun otherwise gets the location only when the project is loaded
+        SunManager.Instance?.SetGeoCoordinates(latitude, longitude);
     }
 
     void ApplyTransformToBaseMap() {

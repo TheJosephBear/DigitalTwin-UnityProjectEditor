@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 
@@ -23,6 +24,8 @@ public class SunIRLUI: MonoBehaviour {
     [Range(0, 59)][SerializeField] private uint initialMinute = 0;
 
     [Header("Coordinates")]
+    [Tooltip("Off: the fields only show the project's location from the map, which is where the sun is calculated")]
+    [SerializeField] private bool coordinatesEditable = false;
     [SerializeField] private TMP_InputField latitudeInput;
     [SerializeField] private TMP_InputField longitudeInput;
 
@@ -76,6 +79,8 @@ public class SunIRLUI: MonoBehaviour {
         RefreshTimeLabel();
 
         // 2. Bind Listeners
+        latitudeInput.interactable = coordinatesEditable;
+        longitudeInput.interactable = coordinatesEditable;
         latitudeInput.onEndEdit.AddListener(OnCoordinatesChanged);
         longitudeInput.onEndEdit.AddListener(OnCoordinatesChanged);
 
@@ -103,17 +108,36 @@ public class SunIRLUI: MonoBehaviour {
         isInitializing = true; // Block UI event callbacks from re-triggering SunManager
 
         // 1. Set Coordinate Inputs
-        if (latitudeInput != null) {
-            latitudeInput.text = latitude.ToString("F4");
-        }
-        if (longitudeInput != null) {
-            longitudeInput.text = longitude.ToString("F4");
-        }
+        SetCoordinateValues(latitude, longitude);
 
         // 2. Date and time
         SetDateTimeValues(year, month, day, hour, minute);
 
         isInitializing = wasInitializing; // Restore state
+    }
+
+    public void SetCoordinateValues(float latitude, float longitude) {
+        bool wasInitializing = isInitializing;
+        isInitializing = true; // Block UI event callbacks from re-triggering SunManager
+
+        if (latitudeInput != null) {
+            latitudeInput.text = FormatCoordinate(latitude);
+        }
+        if (longitudeInput != null) {
+            longitudeInput.text = FormatCoordinate(longitude);
+        }
+
+        isInitializing = wasInitializing; // Restore state
+    }
+
+    // Czech decimal comma; built from the invariant format, so it doesn't depend on cs-CZ culture data (WebGL)
+    private static string FormatCoordinate(float value) {
+        return value.ToString("F4", CultureInfo.InvariantCulture).Replace('.', ',');
+    }
+
+    // Accepts both 49,88 and 49.88 regardless of the system's language settings
+    private static bool TryParseCoordinate(string text, out float value) {
+        return float.TryParse(text?.Trim().Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value);
     }
 
     /// <summary>
@@ -247,10 +271,13 @@ public class SunIRLUI: MonoBehaviour {
     private void OnCoordinatesChanged(string _) {
         if (isInitializing) return;
 
-        float.TryParse(latitudeInput.text, out float lat);
-        float.TryParse(longitudeInput.text, out float lon);
+        if (TryParseCoordinate(latitudeInput.text, out float lat) && TryParseCoordinate(longitudeInput.text, out float lon)) {
+            sunManager.UpdateCoordinates(lat, lon);
+        }
 
-        sunManager.UpdateCoordinates(lat, lon);
+        // Shows what the sun uses: the typed value clamped to the valid range, or the previous one if it isn't a number
+        Vector2 coordinates = sunManager.Coordinates;
+        SetCoordinateValues(coordinates.x, coordinates.y);
     }
 
     private void OnCurrentTimeToggled(bool isOn) {

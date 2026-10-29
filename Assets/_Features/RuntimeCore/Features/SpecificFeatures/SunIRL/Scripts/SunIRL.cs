@@ -229,10 +229,7 @@ public class SunIRL: MonoBehaviour {
         SetHour((uint)serializedSun.hour);
         SetMinute((uint)serializedSun.minute);
 
-        if (geoCoordinates != Vector2.zero) {
-            SetCoordinates(geoCoordinates.x, geoCoordinates.y);
-        }
-
-        UpdateSunPosition();
+        // Also 0, 0 for a project not placed on the map, so it doesn't keep the previous project's location
+        SetCoordinates(geoCoordinates.x, geoCoordinates.y);
     }
 }
