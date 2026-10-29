@@ -7,14 +7,19 @@ using System.Collections;
 
 /// <summary>
 /// Handles two separate kinds of images:
-/// - Project images: belong to the opened project, identified by their content hash, saved with the project.
+/// - Project images: belong to the opened project, saved with the project. Identified by the content hash of the
+///   file they were added with; a losslessly turned image keeps its ID while its content changes.
 /// - Preview images: one per project, shown in the project list, keyed by project name. Used while no project is open.
 /// </summary>
 public class ImageManager : Singleton<ImageManager> {
     public GameObject ImageContainer;
 
     private List<TextureAsset> _loadedTextures = new List<TextureAsset>();
-    private HashSet<string> _uploadedHashes = new HashSet<string>(); // Images known to be on the server (uploaded or downloaded)
+    private HashSet<string> _uploadedIds = new HashSet<string>(); // Images known to be on the server (uploaded or downloaded)
+    private HashSet<string> _changedIds = new HashSet<string>(); // Turned in place, the server still has the previous file
+
+    /// <summary>True while an image was turned in place and its new file hasn't been uploaded yet.</summary>
+    public bool HasUnsavedImageChanges => _changedIds.Count > 0;
 
     // Preview textures are reused in place when re-downloaded, so UI that already shows them stays valid
     private Dictionary<string, Texture2D> _previewTextures = new Dictionary<string, Texture2D>();
@@ -25,7 +30,12 @@ public class ImageManager : Singleton<ImageManager> {
     /// Lets the user pick an image and adds it to the opened project's images. Returns null when cancelled or invalid.
     /// </summary>
     public void AskForImageDialog(Action<TextureAsset> callback) {
-        ShowImageFileDialog(file => callback?.Invoke(file != null ? AddProjectImage(file.data, file.fileInfo.name) : null));
+        ShowImageFileDialog(file => callback?.Invoke(file != null ? AddProjectImage(file.data, PickedFileName(file)) : null));
+    }
+
+    // fileInfo.name has no extension, fullName does
+    private static string PickedFileName(FrostweepGames.Plugins.WebGLFileBrowser.File file) {
+        return !string.IsNullOrEmpty(file.fileInfo.fullName) ? file.fileInfo.fullName : file.fileInfo.name;
     }
 
     /// <summary>
@@ -40,7 +50,7 @@ public class ImageManager : Singleton<ImageManager> {
             }
 
             Texture2D tex = LoadTexture(file.data);
-            callback?.Invoke(tex != null ? new PendingPreviewImage { Data = file.data, FileName = file.fileInfo.name, Texture = tex } : null);
+            callback?.Invoke(tex != null ? new PendingPreviewImage { Data = file.data, FileName = WithContentExtension(PickedFileName(file), file.data), Texture = tex } : null);
         });
     }
 
@@ -65,37 +75,86 @@ public class ImageManager : Singleton<ImageManager> {
     private const int RotatedJpgQuality = 90;
 
     /// <summary>
-    /// Turns a project image by 90° clockwise. Images are identified by their content, so the result is a new image
-    /// (uploaded like a newly picked one) and the caller replaces the old ID with it. Returns null if it can't be turned.
+    /// Turns a project image by 90° clockwise and returns the image to show; the caller stores its ID.
+    /// A lossless turn (new EXIF orientation of a JPEG, re-encoded PNG) replaces the image's file and keeps its ID,
+    /// the server gets the new file with the next save. Re-encoding a JPEG loses quality, so then the original stays
+    /// and the turned picture is a new image. Returns null if the image can't be turned.
     /// </summary>
     public TextureAsset RotateProjectImage(string imageId) {
         TextureAsset source = GetTextureAssetByID(imageId);
         if (source == null || source.Texture == null) return null;
 
-        Texture2D rotated = ImageOrientationUtils.Rotated90Clockwise(source.Texture);
-        if (rotated == null) {
+        byte[] original = ReadLocalImageData(source);
+        byte[] data = ImageOrientationUtils.RotateJpeg90ClockwiseByExif(original);
+        bool isPng = original != null ? IsPngData(original) : HasExtension(source.FileName, ".png");
+
+        if (data == null && !isPng) {
+            // JPEG whose EXIF has no orientation tag, or its file is gone. Same pixels the new file decodes to
+            Texture2D rotated = ImageOrientationUtils.Rotated90Clockwise(source.Texture);
+            if (rotated == null) {
+                Debug.LogError($"Failed to rotate image: {source.FileName}");
+                return null;
+            }
+            return AddProjectImage(rotated.EncodeToJPG(RotatedJpgQuality), source.FileName, rotated);
+        }
+
+        // Turned in place, so everything showing the texture shows the turned picture
+        if (!ImageOrientationUtils.Rotate90ClockwiseInPlace(source.Texture)) {
             Debug.LogError($"Failed to rotate image: {source.FileName}");
             return null;
         }
-
-        // Turned from the decoded pixels, so repeated turns don't add up JPEG losses within a session
-        bool isPng = string.Equals(Path.GetExtension(source.FileName), ".png", StringComparison.OrdinalIgnoreCase);
-        byte[] data = isPng ? rotated.EncodeToPNG() : rotated.EncodeToJPG(RotatedJpgQuality);
-        return AddProjectImage(data, source.FileName, rotated);
+        ReplaceImageData(source, data ?? source.Texture.EncodeToPNG());
+        return source;
     }
 
-    // decoded: the texture of the data when the caller already has it, owned by the manager from then on
-    private TextureAsset AddProjectImage(byte[] data, string fileName, Texture2D decoded = null) {
+    // New content for an image that keeps its ID: the local copy is replaced and the file is uploaded again
+    private void ReplaceImageData(TextureAsset asset, byte[] data) {
+        string oldPath = asset.LocalPersistentPath;
+        asset.FileHash = GetFileHash(data);
+        asset.LocalPersistentPath = WriteLocalCopy(asset.FileHash, asset.FileName, data);
+
+        if (!string.IsNullOrEmpty(oldPath) && oldPath != asset.LocalPersistentPath
+            && !_loadedTextures.Exists(x => x != null && x.LocalPersistentPath == oldPath)) {
+            try {
+                File.Delete(oldPath);
+            } catch (Exception e) {
+                Debug.LogWarning($"Failed to delete replaced file {oldPath}: {e.Message}");
+            }
+        }
+
+        _uploadedIds.Remove(asset.ID);
+        _changedIds.Add(asset.ID);
+    }
+
+    private static byte[] ReadLocalImageData(TextureAsset asset) {
+        if (string.IsNullOrEmpty(asset.LocalPersistentPath) || !File.Exists(asset.LocalPersistentPath)) return null;
+        try {
+            return File.ReadAllBytes(asset.LocalPersistentPath);
+        } catch (Exception e) {
+            Debug.LogWarning($"Failed to read {asset.FileName} for rotating: {e.Message}");
+            return null;
+        }
+    }
+
+    // decoded: the texture of the data when the caller already has it, owned by the manager from then on.
+    // id: the image's ID on the server when downloading it; a picked image is found by, and named after, its content
+    private TextureAsset AddProjectImage(byte[] data, string fileName, Texture2D decoded = null, string id = null) {
         if (data == null) {
             if (decoded != null) Destroy(decoded);
             return null;
         }
 
+        fileName = WithContentExtension(fileName, data);
         string fileHash = GetFileHash(data);
-        TextureAsset existing = _loadedTextures.Find(x => x != null && x.FileHash == fileHash);
-        if (existing != null) {
-            if (decoded != null) Destroy(decoded);
-            return existing;
+        if (id == null) {
+            TextureAsset existing = _loadedTextures.Find(x => x != null && x.FileHash == fileHash);
+            if (existing != null) {
+                if (decoded != null) Destroy(decoded);
+                return existing;
+            }
+
+            // The ID is taken by an image that was turned in place since, so this picture needs another one
+            id = GetTextureAssetByID(fileHash) == null ? fileHash : Guid.NewGuid().ToString("N");
         }
 
         Texture2D tex = decoded != null ? decoded : LoadTexture(data);
@@ -104,7 +163,22 @@ public class ImageManager : Singleton<ImageManager> {
             return null;
         }
 
-        // Kept on disk so the upload doesn't need the bytes in memory
+        GameObject go = new GameObject($"Tex_{fileName}");
+        if (ImageContainer != null) go.transform.parent = ImageContainer.transform;
+
+        TextureAsset asset = go.AddComponent<TextureAsset>();
+        asset.ID = id;
+        asset.FileName = fileName;
+        asset.FileHash = fileHash;
+        asset.Texture = tex;
+        asset.LocalPersistentPath = WriteLocalCopy(fileHash, fileName, data);
+
+        _loadedTextures.Add(asset);
+        return asset;
+    }
+
+    // Kept on disk so the upload doesn't need the bytes in memory
+    private static string WriteLocalCopy(string fileHash, string fileName, byte[] data) {
         string extension = Path.GetExtension(fileName);
         if (string.IsNullOrEmpty(extension)) extension = ".png";
         string localPath = Path.Combine(Application.persistentDataPath, fileHash + extension);
@@ -113,24 +187,12 @@ public class ImageManager : Singleton<ImageManager> {
         } catch (Exception e) {
             Debug.LogError($"Failed to save file to persistent path: {e.Message}");
         }
-
-        GameObject go = new GameObject($"Tex_{fileName}");
-        if (ImageContainer != null) go.transform.parent = ImageContainer.transform;
-
-        TextureAsset asset = go.AddComponent<TextureAsset>();
-        asset.ID = fileHash;
-        asset.FileName = fileName;
-        asset.FileHash = fileHash;
-        asset.Texture = tex;
-        asset.LocalPersistentPath = localPath;
-
-        _loadedTextures.Add(asset);
-        return asset;
+        return localPath;
     }
 
     public TextureAsset GetTextureAssetByID(string ID) {
         if (string.IsNullOrEmpty(ID)) return null;
-        return _loadedTextures.Find(x => x != null && (x.ID == ID || x.FileHash == ID));
+        return _loadedTextures.Find(x => x != null && x.ID == ID);
     }
 
     public void UploadImagesToServer(string projectName) {
@@ -140,32 +202,36 @@ public class ImageManager : Singleton<ImageManager> {
     }
 
     /// <summary>
-    /// Uploads only the given images (by ID / hash) that aren't on the server yet.
+    /// Uploads only the given images (by ID) that aren't on the server yet, or were turned since.
     /// The survey is saved separately from the project, so its images would otherwise wait for the next project save.
     /// </summary>
     public void UploadImagesIfMissing(IEnumerable<string> imageIds, string projectName) {
         foreach (string id in imageIds) {
             TextureAsset asset = GetTextureAssetByID(id);
-            if (asset == null || _uploadedHashes.Contains(asset.FileHash)) continue;
+            if (asset == null || _uploadedIds.Contains(asset.ID)) continue;
             UploadImage(asset, projectName);
         }
     }
 
+    // Stored on the server under the image's ID; the upload replaces the file a turned image had before
     private void UploadImage(TextureAsset asset, string projectName) {
         if (string.IsNullOrEmpty(asset.LocalPersistentPath) || !File.Exists(asset.LocalPersistentPath)) {
             Debug.LogWarning($"Attempted to upload {asset.FileName} but local file was missing.");
             return;
         }
 
-        string hash = asset.FileHash;
-        _uploadedHashes.Add(hash); // Marked right away so a second save doesn't send it again, reverted on failure
+        string id = asset.ID;
+        string uploadedHash = asset.FileHash;
+        _uploadedIds.Add(id); // Marked right away so a second save doesn't send it again, reverted on failure
         ServerCommunicationManager.Instance.UploadImageToServer(
             asset.LocalPersistentPath,
             asset.FileName,
             projectName,
-            hash,
+            id,
             success => {
-                if (!success) _uploadedHashes.Remove(hash);
+                if (!success) _uploadedIds.Remove(id);
+                // Unless it was turned again meanwhile
+                else if (asset != null && asset.FileHash == uploadedHash) _changedIds.Remove(id);
             }
         );
     }
@@ -174,8 +240,9 @@ public class ImageManager : Singleton<ImageManager> {
         List<serializableTextureAsset> list = new List<serializableTextureAsset>();
         foreach (var asset in _loadedTextures) {
             list.Add(new serializableTextureAsset {
+                id = asset.ID,
                 fileName = asset.FileName,
-                fileHash = asset.FileHash
+                fileHash = asset.ID // The key the image is stored and downloaded by, older projects read this field
             });
         }
         return list;
@@ -212,7 +279,7 @@ public class ImageManager : Singleton<ImageManager> {
             if (string.IsNullOrEmpty(id) || GetTextureAssetByID(id) != null) continue;
 
             bool isDone = false;
-            DownloadProjectImage(id, $"{id}.png", projectName, success => isDone = true);
+            DownloadProjectImage(id, id, projectName, success => isDone = true); // Extension is added by content
             yield return new WaitUntil(() => isDone);
         }
 
@@ -226,8 +293,8 @@ public class ImageManager : Singleton<ImageManager> {
         }
 
         ServerCommunicationManager.Instance.DownloadImageFromServer(projectName, hash, fileName, data => {
-            if (data != null && AddProjectImage(data, fileName) != null) {
-                _uploadedHashes.Add(hash);
+            if (data != null && AddProjectImage(data, fileName, null, hash) != null) {
+                _uploadedIds.Add(hash);
                 onComplete?.Invoke(true);
             } else {
                 Debug.LogError($"Failed to download texture: {fileName}");
@@ -246,7 +313,8 @@ public class ImageManager : Singleton<ImageManager> {
             Destroy(asset.gameObject);
         }
         _loadedTextures.Clear();
-        _uploadedHashes.Clear();
+        _uploadedIds.Clear();
+        _changedIds.Clear();
     }
 
     #endregion
@@ -326,10 +394,7 @@ public class ImageManager : Singleton<ImageManager> {
     }
 
     private static bool IsImageData(byte[] data) {
-        if (data == null || data.Length < 4) return false;
-        bool isJpg = data[0] == 0xFF && data[1] == 0xD8;
-        bool isPng = data[0] == 0x89 && data[1] == 0x50 && data[2] == 0x4E && data[3] == 0x47;
-        return isJpg || isPng;
+        return IsJpegData(data) || IsPngData(data);
     }
 
     // Comment segment (FF FE) inserted after the JFIF header, decoders ignore it
@@ -412,6 +477,30 @@ public class ImageManager : Singleton<ImageManager> {
     #endregion
 
     #region Helpers
+
+    private static bool IsJpegData(byte[] data) {
+        return data != null && data.Length >= 4 && data[0] == 0xFF && data[1] == 0xD8;
+    }
+
+    private static bool IsPngData(byte[] data) {
+        return data != null && data.Length >= 4 && data[0] == 0x89 && data[1] == 0x50 && data[2] == 0x4E && data[3] == 0x47;
+    }
+
+    private static bool HasExtension(string fileName, params string[] extensions) {
+        string extension = Path.GetExtension(fileName ?? "");
+        return Array.Exists(extensions, e => string.Equals(e, extension, StringComparison.OrdinalIgnoreCase));
+    }
+
+    // The file name gets the extension of what the data is: picked names may come without one,
+    // and images downloaded without a name were once all called .png
+    private static string WithContentExtension(string fileName, byte[] data) {
+        string extension = IsPngData(data) ? ".png" : IsJpegData(data) ? ".jpg" : null;
+        if (extension == null || string.IsNullOrEmpty(fileName)) return fileName;
+
+        if (extension == ".png" ? HasExtension(fileName, ".png") : HasExtension(fileName, ".jpg", ".jpeg")) return fileName;
+        string baseName = HasExtension(fileName, ".png", ".jpg", ".jpeg") ? Path.GetFileNameWithoutExtension(fileName) : fileName;
+        return baseName + extension;
+    }
 
     private Texture2D LoadTexture(byte[] data) {
         Texture2D tex = new Texture2D(2, 2);

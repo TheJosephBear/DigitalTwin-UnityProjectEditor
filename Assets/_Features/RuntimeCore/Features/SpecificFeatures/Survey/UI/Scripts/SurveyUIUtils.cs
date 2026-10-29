@@ -23,6 +23,7 @@ public static class SurveyUIUtils {
         button.RegisterCallback<ClickEvent>(evt => {
             evt.StopPropagation(); // Otherwise the click reaches the image and opens the upload dialog
             onRotate?.Invoke();
+            imageElement.MarkDirtyRepaint(); // A texture turned in place is the same background, but with swapped sides
         });
 
         // Same size as the enlarge button (sized inline in the templates), just left of it
@@ -166,6 +167,8 @@ public static class SurveyUIUtils {
                 evt.StopPropagation(); // A click on the dark background closes the view
                 rotate?.Invoke();
                 preview.style.backgroundImage = sourceElement.style.backgroundImage;
+                preview.MarkDirtyRepaint();
+                sourceElement.MarkDirtyRepaint();
             });
             overlay.Add(rotateBtn);
         }

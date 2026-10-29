@@ -260,11 +260,13 @@ public class SurveyManager : Singleton<SurveyManager>, IInitializationListener {
     public bool IsSurveyLoading => _isSurveyLoading;
 
     /// <summary>
-    /// True if the edited survey differs from the last loaded or saved version.
+    /// True if the edited survey differs from the last loaded or saved version,
+    /// or one of its images was turned in place (same ID, new file to upload).
     /// </summary>
     public bool HasUnsavedSurveyChanges() {
         // While loading, edits are on the previous state and will be replaced, nothing to save
         if (_isSurveyLoading) return false;
+        if (ImageManager.Instance != null && ImageManager.Instance.HasUnsavedImageChanges) return true;
         return _flowManager != null && _flowManager.GetSurveyJsonData() != _savedSurveyJson;
     }
 
