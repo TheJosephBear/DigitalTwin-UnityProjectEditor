@@ -7,11 +7,26 @@ public class PinManager: Singleton<PinManager> {
     public GameObject PinPrefab;
     public GameObject PinUIPrefab;
     public GameObject PinContextUIPrefab;
+    [Tooltip("Read only context UI the viewer opens instead of the editing one")]
+    public GameObject PinInfoUIPrefab;
+
+    [Header("Viewer")]
+    [Tooltip("Creates the pin list UI in the viewer too (the editor always has it)")]
+    public bool InstantiatePinUIInViewer = false;
+
+    [Header("Pin camera")]
+    [Tooltip("Distance of a pin's vcam from the pin, perpendicular to the surface the pin is on (shorter when a wall is in the way)")]
+    public float VcamDistance = 10f;
+    [Tooltip("Geometry the pin vcams can't be placed inside of")]
+    public LayerMask VcamObstacleLayers = ~0;
+    [Tooltip("Clicking a pin flies the camera to its vcam in the editor, this also enables it in the viewer")]
+    public bool EnableVcamInViewer = false;
 
     private List<PinObject> _pins = new List<PinObject>();
     private PinObject _activePin;
     private PinUI _pinUIInstance;
     private PinContextUI _contextUIInstance;
+    private PinInfoUI _infoUIInstance;
     private PinPlacingManager _placingManager;
     private SceneType _sceneToInstantiate = SceneType.Editing;
 
@@ -27,9 +42,24 @@ public class PinManager: Singleton<PinManager> {
         }
     }
 
+    /// <summary>
+    /// True in the Viewing scene. Decided by the scene this manager is in, because OnEnable creates the UI
+    /// before the viewer is the active scene and possibly before MainManagerBase.Instance exists.
+    /// </summary>
+    public bool IsViewer => SceneList.Instance != null && gameObject.scene.name == SceneList.Instance.GetScene(SceneType.Viewing).SceneName;
+
+    /// <summary>False in the viewer unless InstantiatePinUIInViewer is on.</summary>
+    public bool HasPinUI => _pinUIInstance != null;
+
     public void InitializeUI() {
-        _sceneToInstantiate = SceneLoadingManager.Instance.GetActiveScene(); // Just to be sure...
-        _pinUIInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(PinUIPrefab).GetComponent<PinUI>();
+        if (IsViewer) {
+            _sceneToInstantiate = SceneType.Viewing;
+            if (!InstantiatePinUIInViewer) return;
+        } else {
+            _sceneToInstantiate = SceneLoadingManager.Instance.GetActiveScene(); // Just to be sure...
+        }
+
+        _pinUIInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(PinUIPrefab, _sceneToInstantiate).GetComponent<PinUI>();
         _pinUIInstance.Initialize(this);
     }
 
@@ -49,7 +79,7 @@ public class PinManager: Singleton<PinManager> {
 
     public void RegisterPin(PinObject pin, bool deserialization = false) {
         _pins.Add(pin);
-        _pinUIInstance.UpdatePinButtonList();
+        RefreshPinButtons();
 
         if (!deserialization) MarkUnsavedChanges();
     }
@@ -61,7 +91,7 @@ public class PinManager: Singleton<PinManager> {
             if (pin == _activePin) CloseContextUI();
             _pins.Remove(pin);
             Destroy(pin.gameObject);
-            _pinUIInstance.UpdatePinButtonList();
+            RefreshPinButtons();
             MarkUnsavedChanges();
         }, $"Chcete smazat pin {pin.Name}?");
     }
@@ -113,13 +143,32 @@ public class PinManager: Singleton<PinManager> {
         if (_activePin != null) _activePin.SetOutline(false);
         _activePin = pin;
 
-        if (_contextUIInstance == null)
-            _contextUIInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(PinContextUIPrefab, _sceneToInstantiate).GetComponent<PinContextUI>();
-        _contextUIInstance.Initialize(pin, this);
+        if (IsViewer) {
+            // The viewer only shows the pin's content
+            if (_infoUIInstance == null)
+                _infoUIInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(PinInfoUIPrefab, _sceneToInstantiate).GetComponent<PinInfoUI>();
+            _infoUIInstance.Initialize(pin, this);
+        } else {
+            if (_contextUIInstance == null)
+                _contextUIInstance = SceneLoadingManager.Instance.InstantiateObjectInScene(PinContextUIPrefab, _sceneToInstantiate).GetComponent<PinContextUI>();
+            _contextUIInstance.Initialize(pin, this);
+        }
         ToggleContextUI(true);
 
         pin.SetOutline(true);
-        _pinUIInstance.UpdatePinButtonList();
+        RefreshPinButtons();
+    }
+
+    /// <summary>
+    /// Flies the camera to the pin's vcam (Cinemachine blend), then hands the camera back to the free cam there.
+    /// </summary>
+    public void FocusPin(PinObject pin) {
+        if (pin == null || pin.Vcam == null || CameraManager.Instance == null || MainManagerBase.Instance == null) return;
+        if (MainManagerBase.Instance is ViewingManager && !EnableVcamInViewer) return;
+        if (MainManagerBase.Instance.ActiveState != AppState.Freecam) return; // other states drive the camera themselves
+
+        pin.PlaceVcam(VcamDistance, VcamObstacleLayers);
+        CameraManager.Instance.FlyToVcam(pin.Vcam);
     }
 
     public void CloseContextUI() {
@@ -127,7 +176,7 @@ public class PinManager: Singleton<PinManager> {
         _activePin = null;
 
         ToggleContextUI(false);
-        _pinUIInstance.OnExitEditing();
+        if (_pinUIInstance != null) _pinUIInstance.OnExitEditing();
     }
 
     public void StartPlacingNewPin() {
@@ -168,13 +217,14 @@ public class PinManager: Singleton<PinManager> {
         if (_pinUIInstance != null) _pinUIInstance.gameObject.SetActive(show);
     }
 
+    // Only one of them exists: the editing one in the editor, the read only one in the viewer
     public void ToggleContextUI(bool show) {
-        if (_contextUIInstance == null) return;
-        _contextUIInstance.gameObject.SetActive(show);
+        if (_contextUIInstance != null) _contextUIInstance.gameObject.SetActive(show);
+        if (_infoUIInstance != null) _infoUIInstance.gameObject.SetActive(show);
     }
 
     public void RefreshPinButtons() {
-        _pinUIInstance.UpdatePinButtonList();
+        if (_pinUIInstance != null) _pinUIInstance.UpdatePinButtonList();
     }
 
     #endregion
@@ -183,7 +233,7 @@ public class PinManager: Singleton<PinManager> {
         _placingManager.CancelPlacing();
         CloseContextUI();
         Utilities.DestroyAllGameObjects(_pins);
-        _pinUIInstance.ClearPinButtonList();
+        if (_pinUIInstance != null) _pinUIInstance.ClearPinButtonList();
     }
 
     #region Serialization

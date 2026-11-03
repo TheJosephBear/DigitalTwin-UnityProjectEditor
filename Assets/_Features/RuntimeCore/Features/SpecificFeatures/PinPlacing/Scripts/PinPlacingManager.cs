@@ -15,6 +15,7 @@ public class PinPlacingManager : MonoBehaviour {
     GameObject _placingLabelInstance;
     PinObject _pinBeingPlaced;
     Vector3 _originalPos;
+    Vector3 _originalNormal;
     bool _isNew = false;
     bool _placingActive = false;
     int _finishedFrame = -1;
@@ -42,6 +43,7 @@ public class PinPlacingManager : MonoBehaviour {
         // Raycast to track cursor in real time
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _placementRaycastMask)) {
             _pinBeingPlaced.transform.position = hit.point;
+            _pinBeingPlaced.SurfaceNormal = hit.normal;
             // Tilted so it touches the target
             if (Mathf.Abs(hit.normal.y) < 0.3f) {
                 Quaternion wallRotation = Quaternion.LookRotation(-hit.normal, Vector3.up);
@@ -75,6 +77,7 @@ public class PinPlacingManager : MonoBehaviour {
 
         _pinBeingPlaced = pin;
         _originalPos = pin.transform.position;
+        _originalNormal = pin.SurfaceNormal;
         _pinBeingPlaced.SetPlacingMode(true);
 
         ToggleLabel(true);
@@ -113,7 +116,10 @@ public class PinPlacingManager : MonoBehaviour {
     private void EndPlacing(bool confirmed) {
         _placingActive = false;
         _finishedFrame = Time.frameCount;
-        if (!confirmed) _pinBeingPlaced.transform.position = _originalPos;
+        if (!confirmed) {
+            _pinBeingPlaced.transform.position = _originalPos;
+            _pinBeingPlaced.SurfaceNormal = _originalNormal;
+        }
         _pinBeingPlaced.SetPlacingMode(false);
         _pinBeingPlaced = null;
         ToggleLabel(false);

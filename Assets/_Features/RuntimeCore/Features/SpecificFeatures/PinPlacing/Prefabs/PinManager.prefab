@@ -45,10 +45,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e74a79ea460f96d4ca7967312d72ff0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SceneToInstantiate: 1
   PinPrefab: {fileID: 6419846916223420960, guid: 40ce04258ca1ddd4ea908666fc5f8baf, type: 3}
   PinUIPrefab: {fileID: 7108490475019053845, guid: e7eec147eefa3c94fa71f23e100bf81b, type: 3}
   PinContextUIPrefab: {fileID: 9042962715043446997, guid: e56d7abd786750d458dbe55d411c28b1, type: 3}
+  PinInfoUIPrefab: {fileID: 1159437126100673770, guid: e93dc2b33d9911a49b8a8e7cbd6eac6c, type: 3}
+  InstantiatePinUIInViewer: 0
+  VcamDistance: 10
+  VcamObstacleLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  EnableVcamInViewer: 0
 --- !u!114 &4129137214061424411
 MonoBehaviour:
   m_ObjectHideFlags: 0

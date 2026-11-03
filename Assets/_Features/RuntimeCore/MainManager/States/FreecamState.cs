@@ -19,6 +19,7 @@ public class FreecamState : StateBase {
     }
 
     public override void Exit() {
+        CameraManager.Instance.CancelFlyToVcam(); // a pin fly-to can't keep the brain on in the next state
         SunManager.Instance.ToggleUI(false);
         CameraManager.Instance.ToggleFreecamUpdating(false);
         CameraManager.Instance.ToggleBoundsEnforcing(false);

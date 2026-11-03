@@ -10,6 +10,11 @@ public class PinUI: MonoBehaviour {
     List<PinHUDButton> _buttonList = new List<PinHUDButton>();
     PinManager _pinManager;
 
+    void Start() {
+        if (MainManagerBase.Instance is ViewingManager) {
+            AddPinButtonRefference.SetActive(false);
+        }
+    }
 
     public void Initialize(PinManager pinManager) {
         _pinManager = pinManager;
@@ -30,6 +35,7 @@ public class PinUI: MonoBehaviour {
 
     public void OnHUDButtonClick(PinObject pin) {
         _pinManager.SelectPin(pin);
+        _pinManager.FocusPin(pin);
         UpdatePinButtonList();
     }
 
@@ -54,9 +60,10 @@ public class PinUI: MonoBehaviour {
         }
 
         // Always keep the "+" button as the last element in the Scroll Content
-        if (AddPinButtonRefference != null && AddPinButtonRefference.transform.parent == ScrollViewContentRefference.transform) {
-            AddPinButtonRefference.transform.SetAsLastSibling();
-        }
+        if (MainManagerBase.Instance is EditorManager)
+            if (AddPinButtonRefference != null && AddPinButtonRefference.transform.parent == ScrollViewContentRefference.transform) 
+                AddPinButtonRefference.transform.SetAsLastSibling();
+        
     }
 
     public void ClearPinButtonList() {

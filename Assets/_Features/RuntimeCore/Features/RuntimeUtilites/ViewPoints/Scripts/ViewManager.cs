@@ -194,7 +194,7 @@ public class ViewManager : Singleton<ViewManager> {
 
             // Viewer without pins has no pin list, so the preview goes right next to the view point list
             bool pinListShown = !(MainManagerBase.Instance is ViewingManager)
-                || (PinManager.Instance != null && PinManager.Instance.GetPins().Count > 0);
+                || (PinManager.Instance != null && PinManager.Instance.HasPinUI && PinManager.Instance.GetPins().Count > 0);
             SetPreviewOffsetX(pinListShown ? 0f : NoPinListPreviewOffsetX);
         } else {
             previewCam.transform.SetParent(gameObject.transform);

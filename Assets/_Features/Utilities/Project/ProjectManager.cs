@@ -24,7 +24,7 @@ public class ProjectManager : Singleton<ProjectManager> {
     /// Save new project data into the database
     /// </summary>
     public void SaveProject(SerializableProject serializableProject, Action<bool> onComplete = null) {
-    //    ImageManager.Instance.UploadImagesToServer(SelectedProject.ProjectName);
+        ImageManager.Instance.UploadImagesToServer(serializableProject.projectName);
         MemoryLogger.Log("After starting model and image uploads");
         string serializedProject = JsonUtility.ToJson(serializableProject);
         ServerCommunicationManager.Instance.StartProjectDataUpload(serializedProject, serializableProject.projectName, (success, _) => onComplete?.Invoke(success));

@@ -53,6 +53,9 @@ public class CameraManager: Singleton<CameraManager> {
     MainManagerBase _editorManager;
 
     Coroutine _disableCoroutine;
+    Coroutine _flyToVcamCoroutine;
+    GameObject _flyToVcamTarget;
+    bool _isFlyingToVcam;
     bool _isLeftDragLooking;
 
     protected override void Awake() {
@@ -258,6 +261,54 @@ public class CameraManager: Singleton<CameraManager> {
 
         _cinemachineBrainRefference.enabled = false;
         _disableCoroutine = null;
+    }
+
+    /// <summary>
+    /// Blends the main camera from where it is to the (inactive) vcam with the default Cinemachine blend,
+    /// then puts the free cam there and turns the vcam and the brain off, so the camera can be moved again.
+    /// </summary>
+    public void FlyToVcam(GameObject vcam) {
+        CancelFlyToVcam();
+        if (vcam == null || Camera.main == null) return;
+
+        // Fresh brain (disabling clears its frame stack) starting from the free cam at the current view
+        _cinemachineBrainRefference.enabled = false;
+        _vCamFreeCamRefference.transform.SetPositionAndRotation(Camera.main.transform.position, Camera.main.transform.rotation);
+        ToggleCinemachineBrain(true);
+        _cinemachineBrainRefference.ManualUpdate();
+
+        _isFlyingToVcam = true;
+        _flyToVcamTarget = vcam;
+        vcam.SetActive(true);
+        _flyToVcamCoroutine = StartCoroutine(FlyToVcamCoroutine(vcam.GetComponent<CinemachineVirtualCameraBase>()));
+    }
+
+    IEnumerator FlyToVcamCoroutine(CinemachineVirtualCameraBase vcam) {
+        // The brain picks up the vcam on its next update
+        while (vcam != null && (!_cinemachineBrainRefference.IsLive(vcam) || _cinemachineBrainRefference.IsBlending)) {
+            yield return null;
+        }
+
+        _flyToVcamCoroutine = null;
+        CancelFlyToVcam();
+    }
+
+    /// <summary>
+    /// Stops at the current view (or the vcam when the blend is done), gives the camera back to the free cam.
+    /// </summary>
+    public void CancelFlyToVcam() {
+        if (!_isFlyingToVcam) return;
+        _isFlyingToVcam = false;
+
+        if (_flyToVcamCoroutine != null) {
+            StopCoroutine(_flyToVcamCoroutine);
+            _flyToVcamCoroutine = null;
+        }
+
+        _vCamFreeCamRefference.transform.SetPositionAndRotation(Camera.main.transform.position, Camera.main.transform.rotation);
+        if (_flyToVcamTarget != null) _flyToVcamTarget.SetActive(false); // null when its pin got deleted
+        _flyToVcamTarget = null;
+        ToggleCinemachineBrain(false);
     }
 
     public GameObject GetFreeCamVcam() {

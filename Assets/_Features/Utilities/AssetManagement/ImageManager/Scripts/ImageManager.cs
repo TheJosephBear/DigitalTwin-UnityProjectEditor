@@ -33,6 +33,28 @@ public class ImageManager : Singleton<ImageManager> {
         ShowImageFileDialog(file => callback?.Invoke(file != null ? AddProjectImage(file.data, PickedFileName(file)) : null));
     }
 
+    /// <summary>
+    /// Like AskForImageDialog, but several images can be picked at once. The list is empty when cancelled or invalid.
+    /// </summary>
+    public void AskForImagesDialog(Action<List<TextureAsset>> callback) {
+        FileBrowserManager.Instance.ShowLoadDialog(files => {
+            List<TextureAsset> added = new List<TextureAsset>();
+            if (files != null) {
+                foreach (var file in files) {
+                    if (file?.data == null) continue;
+                    TextureAsset asset = AddProjectImage(file.data, PickedFileName(file));
+                    if (asset != null && !added.Contains(asset)) added.Add(asset); // the same picture twice is one image
+                }
+            }
+
+            if (added.Count == 0 && MessageDisplayManager.Instance != null)
+                MessageDisplayManager.Instance.ShowMessage("Prosím vyberte soubor typu .png/.jpg");
+            callback?.Invoke(added);
+        },
+        filterExtensions: "png, jpg, jpeg",
+        multipleSelection: true);
+    }
+
     // fileInfo.name has no extension, fullName does
     private static string PickedFileName(FrostweepGames.Plugins.WebGLFileBrowser.File file) {
         return !string.IsNullOrEmpty(file.fileInfo.fullName) ? file.fileInfo.fullName : file.fileInfo.name;
@@ -195,8 +217,12 @@ public class ImageManager : Singleton<ImageManager> {
         return _loadedTextures.Find(x => x != null && x.ID == ID);
     }
 
+    /// <summary>
+    /// Uploads the project's images that aren't on the server yet, or were turned since. Called on every project save.
+    /// </summary>
     public void UploadImagesToServer(string projectName) {
         foreach (TextureAsset asset in _loadedTextures) {
+            if (asset == null || _uploadedIds.Contains(asset.ID)) continue;
             UploadImage(asset, projectName);
         }
     }

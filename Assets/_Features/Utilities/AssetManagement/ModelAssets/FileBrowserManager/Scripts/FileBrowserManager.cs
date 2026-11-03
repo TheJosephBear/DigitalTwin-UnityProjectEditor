@@ -42,11 +42,41 @@ public class FileBrowserManager : Singleton<FileBrowserManager> {
     /// </param>
     public void ShowLoadDialog(Action<File[]> onFilesSelected, string filterExtensions = "obj", bool multipleSelection = false) {
         onFilesSelectedCallback = onFilesSelected;
+#if UNITY_EDITOR
+        ShowEditorLoadDialog(filterExtensions);
+#else
         WebGLFileBrowser.OpenFilePanelWithFilters(
             WebGLFileBrowser.GetFilteredFileExtensions(filterExtensions),
             multipleSelection
         );
+#endif
     }
+
+#if UNITY_EDITOR
+    /// <summary>
+    /// Editor only: the plugin's editor fallback refuses multiple selection, so the Unity file panel is used directly.
+    /// The panel picks a single file even when multiple selection is requested. Cancelling does nothing, like in WebGL.
+    /// </summary>
+    void ShowEditorLoadDialog(string filterExtensions) {
+        string extensions = (filterExtensions ?? "").Replace(" ", "").Replace(".", "");
+        string path = UnityEditor.EditorUtility.OpenFilePanelWithFilters("Vyberte soubor", "", new[] { "Files", extensions });
+        if (string.IsNullOrEmpty(path)) return;
+
+        byte[] data = System.IO.File.ReadAllBytes(path);
+        File file = new File {
+            fileInfo = new FileInfo {
+                extension = System.IO.Path.GetExtension(path),
+                name = System.IO.Path.GetFileNameWithoutExtension(path),
+                fullName = System.IO.Path.GetFileName(path),
+                path = path,
+                length = data.Length,
+                size = data.Length
+            },
+            data = data
+        };
+        onFilesSelectedCallback?.Invoke(new[] { file });
+    }
+#endif
 
     public void ShowLoadDialogDebugMultiFile(Action<FrostweepGames.Plugins.WebGLFileBrowser.File[]> onFilesSelected, string filterExtensions = "obj, mtl, png, jpg", bool multipleSelection = false) {
         onFilesSelectedCallback = onFilesSelected;

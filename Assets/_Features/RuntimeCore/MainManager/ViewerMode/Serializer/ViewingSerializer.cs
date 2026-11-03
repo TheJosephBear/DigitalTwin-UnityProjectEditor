@@ -26,7 +26,6 @@ public class ViewingSerializer : MonoBehaviour {
 
         yield return new WaitUntil(() => isImageDeserializationComplete);
 
-
         if (MapManager.Instance != null)
             MapManager.Instance.Deserialize(serializedProject.serializableMapManager);
 
@@ -35,6 +34,9 @@ public class ViewingSerializer : MonoBehaviour {
 
         if (GeoMapManager.Instance != null)
             GeoMapManager.Instance.DeserializeManager(serializedProject.serializableGeoMapManager);
+
+        if (PinManager.Instance != null)
+            PinManager.Instance.Deserialize(serializedProject.serializablePinManager);
 
         // Must run before FreecamState opens the sun UI, otherwise it gets created with the inspector defaults.
         // Coordinates come straight from the saved data: the geo managers are inactive in the Viewing scene.
