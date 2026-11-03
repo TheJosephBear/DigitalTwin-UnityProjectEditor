@@ -22,7 +22,9 @@ public class ViewactiveState : StateBase {
     }
 
     public override void Exit() {
-        CameraManager.Instance.ToggleCameraCollision(_isCollisionEnabled);
+        // Only the editor turns collision off in Enter, the viewer keeps its own setting
+        if (MainManagerBase.Instance is EditorManager)
+            CameraManager.Instance.ToggleCameraCollision(_isCollisionEnabled);
         MainManagerBase.Instance.ToggleHUD(true);
     }
 }

@@ -28,6 +28,7 @@ public class FPSUI: MonoBehaviour {
 
     private FPSManager _manager;
     private bool _isPlacingMode = false;
+    private bool _enterFPSAfterPlacing = false;
     private bool _inputsSubscribed = false;
     private GameObject _spawnPreviewInstance;
 
@@ -93,7 +94,9 @@ public class FPSUI: MonoBehaviour {
     /// <summary>Hook to the Save button.</summary>
     public void OnSaveButtonClicked() {
         if (_manager == null) return;
-        _manager.SetSpawnPosition(_draftSpawn);   // manager calls DisplaySpawnPosition with the saved value
+        // Only a moved spawn point counts as placed by hand (saving just the settings keeps an unplaced spawn unplaced)
+        if (_draftSpawn != _manager.SpawnPosition)
+            _manager.SetSpawnPosition(_draftSpawn);   // manager calls DisplaySpawnPosition with the saved value
         _manager.ApplySettings(_draft);           // manager applies, then calls DisplaySettings with the saved values
     }
 
@@ -194,11 +197,19 @@ public class FPSUI: MonoBehaviour {
                     return;
                 }
 
+                bool enterFPS = _enterFPSAfterPlacing;
+
                 // Only changes the draft, the real spawn point is set on Save
                 _draftSpawn = hit.point;
                 RefreshSaveButton();
 
                 ExitPlacingMode();
+
+                // Placing was opened by entering FPS mode: keep the point and continue into FPS mode
+                if (enterFPS && _manager != null) {
+                    _manager.SetSpawnPosition(hit.point);
+                    _manager.EnterFPSMode();
+                }
             }
         }
     }
@@ -234,11 +245,19 @@ public class FPSUI: MonoBehaviour {
 
     public void EnterPlacingMode() {
         _isPlacingMode = true;
+        _enterFPSAfterPlacing = false;
         SetViewsActive(settings: false, placing: true, fps: false);
+    }
+
+    /// <summary>Spawn placing opened by entering FPS mode without a placed spawn point, FPS mode starts after the click.</summary>
+    public void EnterPlacingModeThenFPS() {
+        EnterPlacingMode();
+        _enterFPSAfterPlacing = true;
     }
 
     public void ExitPlacingMode() {
         _isPlacingMode = false;
+        _enterFPSAfterPlacing = false;
 
         // Show the marker at the (possibly unsaved) spawn point
         if (_manager != null) {

@@ -7,8 +7,11 @@ public class FPSManager: Singleton<FPSManager> {
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private Vector3 spawnPosition = Vector3.zero;
 
+    [Tooltip("Player height for new projects (and projects that never changed the player settings)")]
+    public float InitialPlayerHeight = 1.7f;
+
     [Header("Fall & Respawn Settings")]
-    [Tooltip("If the player's Y position falls below this value, they will be respawned.")]
+    [Tooltip("Offset from the lowest point of the base map, the player is respawned when falling below it (-60 = 60 units below the map).")]
     [SerializeField] private float fallThresholdY = -10f;
     [Tooltip("Height offset added to the spawn position when respawning/placing.")]
     [SerializeField] private float respawnHeightOffset = 1.0f;
@@ -19,6 +22,8 @@ public class FPSManager: Singleton<FPSManager> {
     private CharacterController playerController;
     private PlayerSetup playerSetup;
     private bool isInFPSMode = false;
+    private float fallY;   // world Y the player respawns below, set when entering FPS mode
+    private bool spawnPlaced;   // false until the user places the spawn point by hand
 
     // Player settings
     // defaultSettings = what the player prefab had before we touched it (filled in Start)
@@ -62,6 +67,7 @@ public class FPSManager: Singleton<FPSManager> {
 
         // Read the prefab's own values BEFORE anything gets applied
         defaultSettings = playerSetup.Defaults;
+        defaultSettings.playerHeight = InitialPlayerHeight;
 
         // Use settings loaded before the player existed, otherwise the defaults
         PlayerSettings initial = pendingSettings ?? defaultSettings;
@@ -79,7 +85,7 @@ public class FPSManager: Singleton<FPSManager> {
 
         // Check if player falls below the Y threshold while in FPS mode
         if (isInFPSMode && playerInstance != null && playerInstance.activeSelf) {
-            if (playerInstance.transform.position.y < fallThresholdY) {
+            if (playerInstance.transform.position.y < fallY) {
                 RespawnPlayerAtSpawnPoint();
             }
         }
@@ -224,6 +230,7 @@ public class FPSManager: Singleton<FPSManager> {
     /// </summary>
     public void SetSpawnPosition(Vector3 position) {
         spawnPosition = position;
+        spawnPlaced = true;
 
         if (playerInstance != null && !isInFPSMode) {
             playerInstance.transform.position = spawnPosition;
@@ -240,7 +247,21 @@ public class FPSManager: Singleton<FPSManager> {
     public void EnterFPSMode() {
         if (playerInstance == null) return;
 
+        // Editor: no spawn point placed yet -> let the user place it first, FPS mode starts right after the click
+        if (!spawnPlaced && MainManagerBase.Instance is EditorManager) {
+            ToggleUI(true);
+            if (uiInstance != null) {
+                uiInstance.EnterPlacingModeThenFPS();
+                return;
+            }
+        }
+
         isInFPSMode = true;
+
+        // The map doesn't move during FPS mode, so its lowest point is measured once here (no base map -> world 0)
+        GameObject baseMap = MapManager.Instance != null ? MapManager.Instance.GetBaseMap()?.gameObject : null;
+        float lowestMapY = baseMap != null && FileLoadingManager.TryCalculateBounds(baseMap, out Bounds mapBounds) ? mapBounds.min.y : 0f;
+        fallY = lowestMapY + fallThresholdY;
 
         // Hide the spawn visual when entering FPS mode
         ToggleUI(true);
@@ -288,6 +309,7 @@ public class FPSManager: Singleton<FPSManager> {
     public SerializableFPSManager Serialize() {
         SerializableFPSManager serialized = new SerializableFPSManager();
         serialized.SpawnPosition = this.spawnPosition;
+        serialized.SpawnPlaced = spawnPlaced;
 
         // Only store the settings if they differ from the prefab defaults,
         // so untouched players keep following the prefab.
@@ -302,6 +324,8 @@ public class FPSManager: Singleton<FPSManager> {
         if (serializedManager == null) return;
 
         SetSpawnPosition(serializedManager.SpawnPosition);
+        // Older saves have no flag, a spawn point away from the origin was placed by hand
+        spawnPlaced = serializedManager.SpawnPlaced || serializedManager.SpawnPosition != Vector3.zero;
 
         // No stored settings (untouched or old save) -> prefab defaults
         PlayerSettings loaded = serializedManager.Settings;

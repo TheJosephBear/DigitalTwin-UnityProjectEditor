@@ -14,7 +14,6 @@ public class ViewHUDButton : MonoBehaviour {
     [SerializeField] GameObject ArrowsContainer;
     [SerializeField] GameObject ArrowUpButton;
     [SerializeField] GameObject ArrowDownButton;
-    ViewPoint _previousActiveViewPoint;
     bool _isActiveViewpoint;
 
 
@@ -24,6 +23,12 @@ public class ViewHUDButton : MonoBehaviour {
         _isActiveViewpoint = ViewManager.Instance.GetActiveViewPoint() == ViewPointRefference;
         ToggleVisual(_isActiveViewpoint);
         ToggleMovableVisual(_isActiveViewpoint);
+
+        // The first item can't move up and the last can't move down
+        List<ViewPoint> viewPoints = ViewManager.Instance.GetViewPoints();
+        int index = viewPoints.IndexOf(vp);
+        ArrowUpButton.SetActive(index > 0);
+        ArrowDownButton.SetActive(index < viewPoints.Count - 1);
     }
 
     public void OnClick() {
@@ -46,10 +51,9 @@ public class ViewHUDButton : MonoBehaviour {
         print("View moving active? " + ViewManager.Instance.isViewMovingActive);
         if (ViewManager.Instance.isViewMovingActive) return;
 
-        _previousActiveViewPoint = ViewManager.Instance.GetActiveViewPoint();
-        ViewManager.Instance.SetActiveViewPoint(ViewPointRefference);
-        ViewManager.Instance.ToggleCameraPreview(true);
-        if (_previousActiveViewPoint != null) ViewManager.Instance.SetActiveViewPoint(_previousActiveViewPoint);
+        // Preview without switching the active view point: switching deactivates its vcam and moves the free cam,
+        // which cut the camera blend started by clicking a view point in the viewer (the list rebuilds under the cursor)
+        ViewManager.Instance.ToggleCameraPreview(true, ViewPointRefference);
     }
 
     public void OnUnhover() {

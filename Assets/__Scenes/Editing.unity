@@ -7118,6 +7118,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OnlineMapsReff: {fileID: 768166}
   vcam: {fileID: 1343206214}
+  MinVcamHeight: 200
 --- !u!4 &1658796927
 Transform:
   m_ObjectHideFlags: 0
@@ -7973,26 +7974,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
-      propertyPath: MaxPanSpeed
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
-      propertyPath: MinPanSpeed
-      value: 0.0000001
-      objectReference: {fileID: 0}
-    - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
-      propertyPath: MaxScrollSpeed
-      value: 3.61
-      objectReference: {fileID: 0}
-    - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
-      propertyPath: MinScrollSpeed
-      value: 0.007
-      objectReference: {fileID: 0}
-    - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
-      propertyPath: PanSlowDistance
-      value: 80
-      objectReference: {fileID: 0}
-    - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: boundsPadding.x
       value: 20
       objectReference: {fileID: 0}
@@ -8005,10 +7986,6 @@ PrefabInstance:
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
-      propertyPath: ScrollSlowDistance
-      value: 80
-      objectReference: {fileID: 0}
-    - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: InitialCameraPosition
       value: 
       objectReference: {fileID: 1632604755}
@@ -8016,10 +7993,6 @@ PrefabInstance:
       propertyPath: CameraColissionScriptRef
       value: 
       objectReference: {fileID: 1642862919}
-    - target: {fileID: 3063658295699770602, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
-      propertyPath: GroundGeometryLayers.m_Bits
-      value: 1025
-      objectReference: {fileID: 0}
     - target: {fileID: 5141712591725554919, guid: 0c4da02de3e9e514da87d96a67f0383a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 136.93216

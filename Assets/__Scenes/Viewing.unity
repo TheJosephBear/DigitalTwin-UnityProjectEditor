@@ -560,6 +560,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OnlineMapsReff: {fileID: 0}
   vcam: {fileID: 0}
+  MinVcamHeight: 200
 --- !u!4 &399284763
 Transform:
   m_ObjectHideFlags: 0

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CameraManager: Singleton<CameraManager> {
 
@@ -28,6 +29,12 @@ public class CameraManager: Singleton<CameraManager> {
     public float PanSlowDistance = 10f;
 
     public LayerMask GroundGeometryLayers;
+    [Tooltip("RTG multiplies pan/zoom by the camera's distance to its focus point, kept this far in front of the camera so the speed is the same everywhere (350 = what the editor had at its initial view)")]
+    public float SpeedReferenceDistance = 350f;
+
+    [Header("Viewer")]
+    [Tooltip("Degrees per mouse axis unit when rotating with a left click drag in the viewer")]
+    public float LeftDragLookSensitivity = 3f;
 
     // Bounds tracking
     private Bounds _mapBounds;
@@ -46,6 +53,7 @@ public class CameraManager: Singleton<CameraManager> {
     MainManagerBase _editorManager;
 
     Coroutine _disableCoroutine;
+    bool _isLeftDragLooking;
 
     protected override void Awake() {
         base.Awake();
@@ -72,9 +80,33 @@ public class CameraManager: Singleton<CameraManager> {
     private void Update() {
         if (_canUpdateFreecam) {
             UpdateFreeCamTransform();
+            if (MainManagerBase.Instance is ViewingManager) LeftDragLook();
         }
 
         UpdateCameraSpeed();
+    }
+
+    /// <summary>
+    /// Viewer only: rotating with a left click drag, like Google Street View - the view follows the cursor as if dragging it.
+    /// Easier on a touchpad than holding the right button.
+    /// </summary>
+    void LeftDragLook() {
+        // Only drags that start in the scene, not on the UI
+        if (Input.GetMouseButtonDown(0)) {
+            _isLeftDragLooking = EventSystem.current == null || !EventSystem.current.IsPointerOverGameObject();
+        }
+        if (!Input.GetMouseButton(0)) {
+            _isLeftDragLooking = false;
+            return;
+        }
+        if (!_isLeftDragLooking) return;
+
+        float mouseX = Input.GetAxis("Mouse X");
+        float mouseY = Input.GetAxis("Mouse Y");
+        if (mouseX == 0f && mouseY == 0f) return;
+
+        // Opposite of the right click look: dragging right turns the view left, dragging up tilts it down
+        GizmoManager.Instance.RTFocusCameraScript.LookAround(mouseY * LeftDragLookSensitivity, -mouseX * LeftDragLookSensitivity);
     }
 
     // LateUpdate guarantees we enforce bounds AFTER the external script moves the camera
@@ -164,6 +196,7 @@ public class CameraManager: Singleton<CameraManager> {
 
         GizmoManager.Instance.SetFreecamScrollSpeed(newScrollSpeed);
         GizmoManager.Instance.SetFreecamPanSpeed(newPanSpeed);
+        GizmoManager.Instance.RTFocusCameraScript.SetSpeedReferencePoint(camTransform.position + camTransform.forward * SpeedReferenceDistance);
     }
 
     private void EnforceCameraBounds() {

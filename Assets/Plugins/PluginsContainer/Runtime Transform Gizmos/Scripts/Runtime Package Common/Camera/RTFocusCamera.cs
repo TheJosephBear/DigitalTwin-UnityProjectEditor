@@ -158,6 +158,13 @@ namespace RTG
             _fieldOfView = fov;
         }
 
+        // DigitalTwin: pan/zoom speed scales with the distance to this point, set from CameraManager
+        // so the speed doesn't depend on where the camera was when the scene started
+        public void SetSpeedReferencePoint(Vector3 point)
+        {
+            _lastFocusPoint = point;
+        }
+
         public void SetObjectVisibilityDirty()
         {
             _isObjectVisibilityDirty = true;

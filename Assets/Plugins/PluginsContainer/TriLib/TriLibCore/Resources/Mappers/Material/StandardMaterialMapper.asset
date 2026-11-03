@@ -16,10 +16,8 @@ MonoBehaviour:
   DisableAlpha: 0
   _compatibleSetups: -1
   _convertMaterialTextures: 1
-  _cutoutMaterialPreset: {fileID: 2100000, guid: c53f2359734184a46a7fdfdfa9978478,
-    type: 2}
-  _cutoutNoMetallicMaterialPreset: {fileID: 2100000, guid: 8309f1fb458c996458674486dcd9f05e,
-    type: 2}
+  _cutoutMaterialPreset: {fileID: 2100000, guid: c53f2359734184a46a7fdfdfa9978478, type: 2}
+  _cutoutNoMetallicMaterialPreset: {fileID: 2100000, guid: 8309f1fb458c996458674486dcd9f05e, type: 2}
   _extractMetallicAndSmoothness: 0
   _isCompatible: 1
   _keywords:
@@ -45,16 +43,11 @@ MonoBehaviour:
   - 
   - 
   _materialPreset: {fileID: 2100000, guid: 34299f43105692d4d916d49aaae74148, type: 2}
-  _noMetallicMaterialPreset: {fileID: 2100000, guid: 1ef02446831dc7746b5fc43385fcbd9f,
-    type: 2}
-  _transparentComposeMaterialPreset: {fileID: 2100000, guid: 6302700af9146a54d9a53cefcd53e1ca,
-    type: 2}
-  _transparentComposeNoMetallicMaterialPreset: {fileID: 2100000, guid: 6302700af9146a54d9a53cefcd53e1ca,
-    type: 2}
-  _transparentMaterialPreset: {fileID: 2100000, guid: 5e11ad76aa50c8b44bcb5d546cd7262f,
-    type: 2}
-  _transparentNoMetallicMaterialPreset: {fileID: 2100000, guid: 3cfca9826465c8345a87491023dfac5f,
-    type: 2}
+  _noMetallicMaterialPreset: {fileID: 2100000, guid: 1ef02446831dc7746b5fc43385fcbd9f, type: 2}
+  _transparentComposeMaterialPreset: {fileID: 2100000, guid: 6302700af9146a54d9a53cefcd53e1ca, type: 2}
+  _transparentComposeNoMetallicMaterialPreset: {fileID: 2100000, guid: 6302700af9146a54d9a53cefcd53e1ca, type: 2}
+  _transparentMaterialPreset: {fileID: 2100000, guid: 5e11ad76aa50c8b44bcb5d546cd7262f, type: 2}
+  _transparentNoMetallicMaterialPreset: {fileID: 2100000, guid: 3cfca9826465c8345a87491023dfac5f, type: 2}
   _useShaderVariantCollection: 0
   _values:
   - _Color

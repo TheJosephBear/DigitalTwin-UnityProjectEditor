@@ -421,7 +421,7 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
 
     #region Center pivot
 
-    private static bool TryCalculateBounds(GameObject root, out Bounds bounds) {
+    public static bool TryCalculateBounds(GameObject root, out Bounds bounds) {
         bounds = default;
         bool hasBounds = false;
 

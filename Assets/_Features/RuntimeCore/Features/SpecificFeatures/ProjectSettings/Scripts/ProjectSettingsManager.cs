@@ -51,8 +51,8 @@ public class ProjectSettingsManager: Singleton<ProjectSettingsManager> {
 
     #region Properties (Getters / Setters)
 
-    public bool ViewerCameraCollision {
-        get => _settings.viewerCameraCollision;
+    public bool EditorCameraCollision {
+        get => _settings.editorCameraCollision;
         set => SetSetting(ref _settings.viewerCameraCollision, value);
     }
 
@@ -74,9 +74,10 @@ public class ProjectSettingsManager: Singleton<ProjectSettingsManager> {
         set => SetSetting(ref _settings.firstPersonAllowed, value);
     }
 
-    public bool EditorCameraCollision {
-        get => _settings.editorCameraCollision;
-        set => SetSetting(ref _settings.editorCameraCollision, value);
+    // Disable for now
+    public bool ViewerCameraCollision {
+        get => /*_settings.viewerCameraCollision*/ true;
+        set => SetSetting(ref _settings.editorCameraCollision, /* value */ true);
     }
 
     private void SetSetting<T>(ref T field, T value) {

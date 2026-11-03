@@ -58,3 +58,4 @@ MonoBehaviour:
   GroundGeometryLayers:
     serializedVersion: 2
     m_Bits: 1025
+  LeftDragLookSensitivity: 3

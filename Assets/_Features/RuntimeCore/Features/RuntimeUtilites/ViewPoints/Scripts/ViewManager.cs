@@ -2,6 +2,7 @@ using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -16,6 +17,11 @@ public class ViewManager : Singleton<ViewManager> {
     public Vector3 viewPointSpawnPosition;
     public GameObject cameraViewUI;
     public Camera previewCam;
+    [Tooltip("Shift of the preview in the viewer when there's no pin list between it and the view point list (the pin list sits 32.6 units right of the view list on its 1000 wide canvas = 26 units on the preview's 800 wide canvas)")]
+    public float NoPinListPreviewOffsetX = -26f;
+
+    RectTransform[] _previewRects;
+    Vector2[] _previewRectPositions;
 
     ViewPointUI _viewPointUIInstance;
     ViewPoint _activeViewPoint;
@@ -135,6 +141,8 @@ public class ViewManager : Singleton<ViewManager> {
                 if(viewPoint == _activeViewPoint) {
                     _activeViewPoint = null;
                 }
+                // The preview cam may be parented to this view point, it would get destroyed with it
+                ToggleCameraPreview(false);
                 _viewPoints.Remove(viewPoint);
                 Destroy(viewPoint.gameObject);
                 _viewPointUIInstance.UpdateViewButtonList();
@@ -164,7 +172,8 @@ public class ViewManager : Singleton<ViewManager> {
 
     #region UI management
 
-    public void ToggleCameraPreview(bool toggleOn) {
+    /// <param name="viewPoint">View point to preview, the active one when null. Previewing doesn't change the active view point.</param>
+    public void ToggleCameraPreview(bool toggleOn, ViewPoint viewPoint = null) {
         print($"Toggle preview function, toggleOn {toggleOn}");
         print($"Toggle preview function, cameraViewUI {cameraViewUI}");
         print($"Toggle preview function, previewCam {previewCam}");
@@ -173,17 +182,42 @@ public class ViewManager : Singleton<ViewManager> {
         if (cameraViewUI == null || previewCam == null) return;
 
         if (toggleOn) {
-            if (_activeViewPoint == null) return;
+            ViewPoint target = viewPoint != null ? viewPoint : _activeViewPoint;
+            if (target == null) return;
             // Move the camera to the current vcam - must be continous so child
-            previewCam.transform.SetParent(_activeViewPoint.gameObject.transform);
+            previewCam.transform.SetParent(target.gameObject.transform);
             previewCam.transform.localPosition = new Vector3(0, 0, 0);
-            previewCam.transform.rotation = _activeViewPoint.transform.rotation;
+            previewCam.transform.rotation = target.transform.rotation;
+
+            TextMeshProUGUI nameText = cameraViewUI.GetComponentInChildren<TextMeshProUGUI>(true);
+            if (nameText != null) nameText.text = target.Name;
+
+            // Viewer without pins has no pin list, so the preview goes right next to the view point list
+            bool pinListShown = !(MainManagerBase.Instance is ViewingManager)
+                || (PinManager.Instance != null && PinManager.Instance.GetPins().Count > 0);
+            SetPreviewOffsetX(pinListShown ? 0f : NoPinListPreviewOffsetX);
         } else {
             previewCam.transform.SetParent(gameObject.transform);
         }
         // Toggle UI and cam
         cameraViewUI.SetActive(toggleOn);
         previewCam.gameObject.SetActive(toggleOn);
+    }
+
+    void SetPreviewOffsetX(float offsetX) {
+        if (_previewRects == null) {
+            // The preview's parts (image, name) are direct children of the preview canvas
+            _previewRects = new RectTransform[cameraViewUI.transform.childCount];
+            _previewRectPositions = new Vector2[_previewRects.Length];
+            for (int i = 0; i < _previewRects.Length; i++) {
+                _previewRects[i] = (RectTransform)cameraViewUI.transform.GetChild(i);
+                _previewRectPositions[i] = _previewRects[i].anchoredPosition;
+            }
+        }
+
+        for (int i = 0; i < _previewRects.Length; i++) {
+            _previewRects[i].anchoredPosition = _previewRectPositions[i] + new Vector2(offsetX, 0f);
+        }
     }
 
     public void ToggleViewPointUI(bool show) {
@@ -218,6 +252,7 @@ public class ViewManager : Singleton<ViewManager> {
     public void ClearEverything() {
         ExitViewMoving(false);
         SetActiveViewPoint(null);
+        ToggleCameraPreview(false); // move the preview cam out of the view points before they're destroyed
         Utilities.DestroyAllGameObjects(_viewPoints);
         _viewPointUIInstance.ClearViewButtonList();
     }

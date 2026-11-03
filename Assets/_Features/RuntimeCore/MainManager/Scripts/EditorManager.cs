@@ -7,6 +7,7 @@ using UnityEngine;
 public class EditorManager : MainManagerBase {
 
     bool _hasUnsavedChanges = false;
+    public bool HasUnsavedChanges => _hasUnsavedChanges;
 
     public void ToggleUnsavedChanges(bool unsavedChanges) { 
         _hasUnsavedChanges = unsavedChanges;

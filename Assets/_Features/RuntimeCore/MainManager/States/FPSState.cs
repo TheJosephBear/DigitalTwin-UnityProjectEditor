@@ -6,6 +6,7 @@ public class FPSState: StateBase {
         SunManager.Instance.ToggleUI(false);
         MainManagerBase.Instance.ToggleHUD(false);
         ViewManager.Instance.ToggleViewPointUI(false);
+        if (PinManager.Instance != null) PinManager.Instance.TogglePinUI(false);
         if (MainManagerBase.Instance is EditorManager manager) {
             CameraManager.Instance.ToggleVcamVisbility(false);
         }
@@ -15,6 +16,7 @@ public class FPSState: StateBase {
     }
 
     public override void Exit() {
+        if (PinManager.Instance != null) PinManager.Instance.TogglePinUI(true);
 
     }
 }

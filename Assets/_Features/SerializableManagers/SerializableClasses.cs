@@ -85,7 +85,7 @@ public class SerializableSun {
 
 [Serializable]
 public class ProjectSettingsSerializable {
-    public bool viewerCameraCollision;
+    public bool viewerCameraCollision = true; // new projects have no settings saved yet, so they get this default
     public bool editorCameraCollision;
     public bool multiviewAllowed;
     public bool surveyAllowed;
@@ -96,6 +96,9 @@ public class ProjectSettingsSerializable {
 [Serializable]
 public class SerializableFPSManager {
     [SerializeField] private float posX, posY, posZ;
+    [SerializeField] private bool spawnPlaced; // false in new projects and in saves made before this existed
+
+    public bool SpawnPlaced { get => spawnPlaced; set => spawnPlaced = value; }
 
     // Player settings (hasSettings == false -> use the prefab defaults; also the case for old saves)
     [SerializeField] private bool hasSettings;

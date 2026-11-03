@@ -90,6 +90,18 @@ public class EditorHUDui : UIBehaviour, IProjectSettingsListener {
     }
 
     public void OnOpenViewerTab() {
+        // The viewer loads the project from the server, so unsaved changes won't be in it
+        if (MainManagerBase.Instance is EditorManager editorMgr && editorMgr.HasUnsavedChanges) {
+            PopUp.Instance.AreYouSurePopUp((sure) => {
+                if (sure) OpenViewerTab();
+            }, "Máte neuložené změny, prohlížeč zobrazí poslední uložený stav projektu. Chcete ho přesto otevřít?");
+            return;
+        }
+
+        OpenViewerTab();
+    }
+
+    void OpenViewerTab() {
         ProjectManager.Instance.GetOpenedProjectExportURL((url) => {
             WebGLTabOpener.Instance.OpenLinkInNewTab(url);
         });

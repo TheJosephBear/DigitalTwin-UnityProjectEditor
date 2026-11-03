@@ -24,6 +24,12 @@ public class PinHUDButton : MonoBehaviour {
         _isActivePin = PinManager.Instance.GetActivePin() == PinRefference;
         ToggleVisual(_isActivePin);
         ToggleMovableVisual(_isActivePin);
+
+        // The first item can't move up and the last can't move down
+        var pins = PinManager.Instance.GetPins();
+        int index = pins.IndexOf(pin);
+        ArrowUpButton.SetActive(index > 0);
+        ArrowDownButton.SetActive(index < pins.Count - 1);
     }
 
     public void OnClick() {

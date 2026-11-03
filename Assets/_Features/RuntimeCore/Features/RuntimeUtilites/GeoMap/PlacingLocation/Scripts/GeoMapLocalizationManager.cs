@@ -41,6 +41,9 @@ public class GeoMapLocalizationManager: Singleton<GeoMapLocalizationManager> {
 
         if (_baseMapCopy != null) {
             ToggleLock(true);
+            FocusVcamOnBaseMapCopy();
+        } else {
+            GeoMapManager.Instance.ResetVcamHeight();
         }
     }
 
@@ -53,6 +56,13 @@ public class GeoMapLocalizationManager: Singleton<GeoMapLocalizationManager> {
         MapManager.Instance.SetBaseMapModel(uploadedModel);
         CreateBaseMapCopy();
         ToggleLock(true);
+        FocusVcamOnBaseMapCopy();
+    }
+
+    void FocusVcamOnBaseMapCopy() {
+        if (_baseMapCopy != null && FileLoadingManager.TryCalculateBounds(_baseMapCopy, out Bounds bounds)) {
+            GeoMapManager.Instance.FocusVcamOnBounds(bounds);
+        }
     }
 
     void ToggleUI(bool toggleOn) {
@@ -72,6 +82,7 @@ public class GeoMapLocalizationManager: Singleton<GeoMapLocalizationManager> {
 
             // Vector3 spawnPosition = MapCenterPosition;
             Vector3 spawnPosition = baseMapReff.transform.position;
+            GameObject geoMapGameObject = GeoMapManager.Instance.OnlineMapsReff.gameObject;
 
             _baseMapCopy = SceneLoadingManager.Instance.InstantiateObjectInScene(
                 MapManager.Instance.GetBaseMap().ModelAsset.ModelGameObject,
@@ -79,6 +90,12 @@ public class GeoMapLocalizationManager: Singleton<GeoMapLocalizationManager> {
             );
 
             _baseMapCopy.transform.rotation = baseMapReff.transform.rotation;
+
+            // Lift (or lower) the copy so its lowest geometry point is 1 unit above the geo map
+            if (FileLoadingManager.TryCalculateBounds(_baseMapCopy, out Bounds copyBounds)) {
+                float targetLowestY = geoMapGameObject.transform.position.y + 1f;
+                _baseMapCopy.transform.position += Vector3.up * (targetLowestY - copyBounds.min.y);
+            }
 
             // Add mesh collider
             foreach (Transform child in _baseMapCopy.GetComponentsInChildren<Transform>()) {

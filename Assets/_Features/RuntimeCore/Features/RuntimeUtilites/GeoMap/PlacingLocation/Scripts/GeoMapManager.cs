@@ -1,20 +1,54 @@
 using System;
+using Cinemachine;
 using UnityEngine;
 
 public class GeoMapManager : Singleton<GeoMapManager> {
 
     public OnlineMaps OnlineMapsReff;
     public GameObject vcam;
+    public float MinVcamHeight = 200f; // the closest the vcam zooms in
     GeoMapLocalizationManager _localizationManager;
     int _equator = 40075000;
     float _previousZoomValue;
+    float _maxVcamHeight; // the vcam's starting height is the furthest it zooms out
 
     protected override void Awake() {
         base.Awake();
         _localizationManager = GeoMapLocalizationManager.Instance;
 
         OnlineMapsReff.gameObject.SetActive(false);
-        if(vcam!=null) vcam.SetActive(false);
+        if(vcam!=null) {
+            _maxVcamHeight = vcam.transform.position.y;
+            vcam.SetActive(false);
+        }
+    }
+
+    /// <summary>
+    /// Moves the vcam (looking straight down) on the Y axis only, so the bounds fit in its view with some padding.
+    /// It stays between MinVcamHeight and its starting height.
+    /// </summary>
+    public void FocusVcamOnBounds(Bounds bounds, float padding = 1.2f) {
+        if (vcam == null) return;
+
+        float tanHalfVertical = Mathf.Tan(vcam.GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView * 0.5f * Mathf.Deg2Rad);
+        float tanHalfHorizontal = tanHalfVertical * Camera.main.aspect;
+
+        // The vcam doesn't move on X/Z, so the bounds' offset from it counts too.
+        // Looking down, the screen's horizontal axis is world X and its vertical axis is world Z.
+        Vector3 camPos = vcam.transform.position;
+        float halfX = (Mathf.Abs(bounds.center.x - camPos.x) + bounds.extents.x) * padding;
+        float halfZ = (Mathf.Abs(bounds.center.z - camPos.z) + bounds.extents.z) * padding;
+        float distance = Mathf.Max(halfX / tanHalfHorizontal, halfZ / tanHalfVertical);
+
+        camPos.y = Mathf.Clamp(bounds.max.y + distance, MinVcamHeight, _maxVcamHeight);
+        vcam.transform.position = camPos;
+    }
+
+    public void ResetVcamHeight() {
+        if (vcam == null) return;
+        Vector3 camPos = vcam.transform.position;
+        camPos.y = _maxVcamHeight;
+        vcam.transform.position = camPos;
     }
 
     public void ActivateGeoLocalization(bool firstOpen = true) {
