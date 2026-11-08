@@ -338,9 +338,14 @@ public class ProjectListUINew : MonoBehaviour {
         if (downloadBtn != null) {
             bool canDownload = hasSurvey && respCount > 0;
             if (downloadBtn.targetGraphic != null) {
-                Color c = downloadBtn.targetGraphic.color;
-                c.a = canDownload ? 1.0f : 0.4f;
-                downloadBtn.targetGraphic.color = c;
+                // A themed icon keeps its color from the IconTheme, so only its opacity changes
+                if (downloadBtn.targetGraphic.TryGetComponent(out ThemedIcon themedIcon)) {
+                    themedIcon.Opacity = canDownload ? 1.0f : 0.4f;
+                } else {
+                    Color c = downloadBtn.targetGraphic.color;
+                    c.a = canDownload ? 1.0f : 0.4f;
+                    downloadBtn.targetGraphic.color = c;
+                }
             }
             var canvasGroup = downloadBtn.GetComponent<CanvasGroup>();
             if (canvasGroup != null) {

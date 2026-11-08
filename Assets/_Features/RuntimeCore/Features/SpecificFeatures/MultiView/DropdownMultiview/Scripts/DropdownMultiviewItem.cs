@@ -39,7 +39,15 @@ public class DropdownMultiviewItem : MonoBehaviour {
         dropdownMultiview.OnLockToggled(this);
     }
 
+    // Locked: the full icon color, unlocked: faded. The color itself comes from the IconTheme
     public void UpdateLockVisual() {
-        lockVisual.color = mapVariant.IsLocked ? Color.black : Color.grey;
+        float opacity = mapVariant.IsLocked ? 1f : 0.45f;
+        if (lockVisual.TryGetComponent(out ThemedIcon themedIcon)) {
+            themedIcon.Opacity = opacity;
+        } else {
+            Color color = IconTheme.Current != null ? IconTheme.Current.IconColor : Color.black;
+            color.a *= opacity;
+            lockVisual.color = color;
+        }
     }
 }

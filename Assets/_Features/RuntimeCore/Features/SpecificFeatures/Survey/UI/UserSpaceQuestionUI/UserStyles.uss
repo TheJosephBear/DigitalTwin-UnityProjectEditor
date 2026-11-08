@@ -1,3 +1,5 @@
+@import url("project://database/Assets/_Features/Utilities/UI/IconTheme/IconTheme.uss?fileID=7433441132597879392&guid=9bd080891af141028ad7049ce5298ef1&type=3#IconTheme");
+
 :root {
     --primary-color: rgb(103, 80, 164);
     --primary-hover: rgb(86, 61, 141);
@@ -49,6 +51,7 @@
     margin-right: 10px;
     background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/icons8-survey-96.png?fileID=2800000&guid=e4cbf49ef86a87f4e8d7f185fd605cf8&type=3#icons8-survey-96");
     -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: var(--icon-color);
 }
 
 #title {
@@ -139,7 +142,7 @@
     padding: 0;
     background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/chevron-up.png?fileID=2800000&guid=13e6e2a9f27e5874eab92e305adb3fa1&type=3#chevron-up");
     -unity-background-scale-mode: scale-to-fit;
-    -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
+    -unity-background-image-tint-color: var(--icon-color);
     cursor: url("project://database/Assets/Media/Cursors/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32") 6 0;
     transition-property: -unity-background-image-tint-color;
     transition-duration: 0.15s;
@@ -183,7 +186,7 @@
     padding: 0;
     background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/chevron-down.png?fileID=2800000&guid=d1a74cec442a2284589bab0730540f72&type=3#chevron-down");
     -unity-background-scale-mode: scale-to-fit;
-    -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
+    -unity-background-image-tint-color: var(--icon-color);
     cursor: url("project://database/Assets/Media/Cursors/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32") 6 0;
     transition-property: -unity-background-image-tint-color;
     transition-duration: 0.15s;
@@ -225,7 +228,7 @@
     padding: 0;
     background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/chevron-left.png?fileID=2800000&guid=4ab49af5e05cd304a88ca8241e489d55&type=3#chevron-left");
     -unity-background-scale-mode: scale-to-fit;
-    -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
+    -unity-background-image-tint-color: var(--icon-color);
     cursor: url("project://database/Assets/Media/Cursors/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32") 6 0;
 }
 
@@ -244,7 +247,7 @@
     padding: 0;
     background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/chevron-right.png?fileID=2800000&guid=05c0e935411a9e64383e2a9a89216d33&type=3#chevron-right");
     -unity-background-scale-mode: scale-to-fit;
-    -unity-background-image-tint-color: rgba(103, 80, 164, 0.6);
+    -unity-background-image-tint-color: var(--icon-color);
     cursor: url("project://database/Assets/Media/Cursors/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32") 6 0;
 }
 
@@ -585,7 +588,7 @@ GenericDropdownMenu,
     margin-bottom: 20px;
     background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/icons8-survey-96.png?fileID=2800000&guid=e4cbf49ef86a87f4e8d7f185fd605cf8&type=3#icons8-survey-96");
     -unity-background-scale-mode: scale-to-fit;
-    -unity-background-image-tint-color: var(--primary-color);
+    -unity-background-image-tint-color: var(--icon-color);
 }
 
 #thank-you-title {
@@ -660,13 +663,14 @@ GenericDropdownMenu,
     align-items: center;
     justify-content: center;
     -unity-background-scale-mode: scale-to-fit;
-    background-size: 55% 55%;
+    background-size: 24px 24px;
     cursor: url("project://database/Assets/Media/Cursors/hand_32.png?fileID=2800000&guid=1b4075f7f88528c4186bf33a5f7161a0&type=3#hand_32") 6 0;
 }
 
 #previous-btn {
     background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/chevron-left.png?fileID=2800000&guid=4ab49af5e05cd304a88ca8241e489d55&type=3#chevron-left");
     background-color: rgb(240, 240, 240);
+    -unity-background-image-tint-color: var(--icon-color);
 }
 
 #previous-btn:hover {
@@ -677,6 +681,7 @@ GenericDropdownMenu,
 #next-btn {
     background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/chevron-right-white.png?fileID=2800000&guid=ac528657c42b4782bb1257d4bbe98749&type=3#chevron-right-white");
     background-color: var(--primary-color);
+    -unity-background-image-tint-color: var(--icon-on-dark-color);
 }
 
 #next-btn:hover {
@@ -733,8 +738,8 @@ GenericDropdownMenu,
     padding: 0;
     margin: 0;
     background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/arrow-collapse-right.png?fileID=2800000&guid=2b6de49098cd4b94f85d1faeaba9f409&type=3#arrow-collapse-right");
-    background-size: 65% 65%;
-    -unity-background-scale-mode: scale-to-fit;
+    background-size: 24px 24px;
+    -unity-background-image-tint-color: var(--icon-color);
 }
 
 #toggle-btn:hover {
@@ -958,7 +963,7 @@ GenericDropdownMenu,
 .unity-radio-button__checkmark-background:checked > .unity-radio-button__checkmark {
     background-color: rgb(255, 255, 255);
     background-image: none;
-    -unity-background-image-tint-color: rgb(255, 255, 255);
+    -unity-background-image-tint-color: var(--icon-on-dark-color);
 }
 
 /* Direct checkmark fallback (when Unity doesn't nest in checkmark-background) */
@@ -1002,7 +1007,7 @@ GenericDropdownMenu,
     border-color: var(--primary-color);
     background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/dot-white.png?fileID=2800000&guid=a123529c3fb34d638d526d7deabd69f5&type=3#dot-white");
     -unity-background-scale-mode: scale-to-fit;
-    -unity-background-image-tint-color: rgb(255, 255, 255);
+    -unity-background-image-tint-color: var(--icon-on-dark-color);
 }
 
 /* Radio Button Text */
@@ -1082,7 +1087,7 @@ GenericDropdownMenu,
     border-color: var(--primary-color);
     background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/check-white.png?fileID=2800000&guid=631e4421e2e8456f9d8d1bb1e039336b&type=3#check-white");
     -unity-background-scale-mode: scale-to-fit;
-    -unity-background-image-tint-color: rgb(255, 255, 255);
+    -unity-background-image-tint-color: var(--icon-on-dark-color);
 }
 
 /* Toggle Text */
@@ -1954,12 +1959,12 @@ TextField:focus TextInput {
 .question-image-chip__icon {
     flex-shrink: 0;
     align-self: center;
-    width: 14px;
-    height: 14px;
+    width: 20px;
+    height: 20px;
     margin-right: 5px;
     background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/image-outline.png?fileID=2800000&guid=2a8b0a5a8db48ee46924cdb62930cde7&type=3#image-outline");
     -unity-background-scale-mode: scale-to-fit;
-    -unity-background-image-tint-color: var(--secondary-color);
+    -unity-background-image-tint-color: var(--icon-color);
 }
 
 /* As tall as the chip and centred in it, so the text lines up with the icon */
@@ -2177,7 +2182,7 @@ TextField:focus TextInput {
     border-color: var(--primary-color);
     background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/dot-white.png?fileID=2800000&guid=a123529c3fb34d638d526d7deabd69f5&type=3#dot-white");
     -unity-background-scale-mode: scale-to-fit;
-    -unity-background-image-tint-color: rgb(255, 255, 255);
+    -unity-background-image-tint-color: var(--icon-on-dark-color);
 }
 
 /* Checkbox in grid (Square) */
@@ -2216,20 +2221,21 @@ TextField:focus TextInput {
     border-color: var(--primary-color);
     background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/check-white.png?fileID=2800000&guid=631e4421e2e8456f9d8d1bb1e039336b&type=3#check-white");
     -unity-background-scale-mode: scale-to-fit;
-    -unity-background-image-tint-color: rgb(255, 255, 255);
+    -unity-background-image-tint-color: var(--icon-on-dark-color);
 }
 
 .icon-trash {
     background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/trash-can-outline.png?fileID=2800000&guid=7ad15b4efd0e279438b167e4bed1c7e6&type=3#trash-can-outline");
     -unity-background-scale-mode: scale-to-fit;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     background-color: transparent;
     border-width: 0;
     margin-left: 2px;
     margin-right: 2px;
     opacity: 0.55;
     transition-duration: 0.15s;
+    -unity-background-image-tint-color: var(--icon-color);
 }
 
 .icon-trash:hover {
@@ -2240,14 +2246,15 @@ TextField:focus TextInput {
 .icon-move-up {
     background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/chevron-up.png?fileID=2800000&guid=13e6e2a9f27e5874eab92e305adb3fa1&type=3#chevron-up");
     -unity-background-scale-mode: scale-to-fit;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     background-color: transparent;
     border-width: 0;
     margin-left: 2px;
     margin-right: 2px;
     opacity: 0.55;
     transition-duration: 0.15s;
+    -unity-background-image-tint-color: var(--icon-color);
 }
 
 .icon-move-up:hover {
@@ -2258,14 +2265,15 @@ TextField:focus TextInput {
 .icon-move-down {
     background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/chevron-down.png?fileID=2800000&guid=d1a74cec442a2284589bab0730540f72&type=3#chevron-down");
     -unity-background-scale-mode: scale-to-fit;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     background-color: transparent;
     border-width: 0;
     margin-left: 2px;
     margin-right: 2px;
     opacity: 0.55;
     transition-duration: 0.15s;
+    -unity-background-image-tint-color: var(--icon-color);
 }
 
 .icon-move-down:hover {
@@ -2318,6 +2326,7 @@ TextField:focus TextInput {
     border-bottom-left-radius: 4px;
     transition-duration: 0.15s;
     transition-property: background-color, scale;
+    -unity-background-image-tint-color: var(--icon-color);
 }
 
 .remove-button {
@@ -2328,6 +2337,7 @@ TextField:focus TextInput {
     border-bottom-left-radius: 4px;
     transition-duration: 0.15s;
     transition-property: background-color, scale;
+    -unity-background-image-tint-color: var(--icon-color);
 }
 
 .enhance-button:hover {
@@ -2464,18 +2474,19 @@ TextField:focus TextInput {
     position: absolute;
     top: 4px;
     left: 4px;
-    width: 22px;
-    height: 22px;
+    width: 28px;
+    height: 28px;
     align-items: center;
     justify-content: center;
-    border-radius: 4px;
-    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.85);
 }
 
 .media-type-badge__icon {
-    width: 16px;
-    height: 16px;
-    -unity-background-scale-mode: scale-to-fit;
+    width: 20px;
+    height: 20px;
+    background-size: 20px 20px;
+    -unity-background-image-tint-color: var(--icon-color);
 }
 
 .media-type-badge--view > .media-type-badge__icon {
@@ -2484,4 +2495,9 @@ TextField:focus TextInput {
 
 .media-type-badge--image > .media-type-badge__icon {
     background-image: url("project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/image-outline.png?fileID=2800000&guid=2a8b0a5a8db48ee46924cdb62930cde7&type=3#image-outline");
+}
+
+/* Icon buttons without a rule of their own (e.g. enlarge on image options) take the icon color */
+Button.icon {
+    -unity-background-image-tint-color: var(--icon-color);
 }

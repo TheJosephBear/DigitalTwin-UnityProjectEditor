@@ -5,7 +5,6 @@ using UnityEngine.UIElements;
 
 public static class SurveyUIUtils {
     public const string RotateButtonName = "rotate-image";
-    private const float RotateButtonGap = 6f;
 
     // Images that can be turned, so the enlarged view offers the same button
     private static readonly ConditionalWeakTable<VisualElement, Action> RotateActions = new ConditionalWeakTable<VisualElement, Action>();
@@ -26,17 +25,7 @@ public static class SurveyUIUtils {
             imageElement.MarkDirtyRepaint(); // A texture turned in place is the same background, but with swapped sides
         });
 
-        // Same size as the enlarge button (sized inline in the templates), just left of it
-        // (Button.icon would otherwise make it 32 px)
-        var enhanceButton = imageElement.Q<Button>("enhance-image");
-        float size = enhanceButton != null ? enhanceButton.style.width.value.value : 0f;
-        if (size > 0f) {
-            button.style.width = size;
-            button.style.height = size;
-            button.style.bottom = enhanceButton.style.bottom.value.value;
-            button.style.right = enhanceButton.style.right.value.value + size + RotateButtonGap;
-        }
-
+        // Size and place come from positionClass in Styles.uss: same size as the enlarge button, just left of it
         imageElement.Add(button);
         RotateActions.AddOrUpdate(imageElement, onRotate);
     }

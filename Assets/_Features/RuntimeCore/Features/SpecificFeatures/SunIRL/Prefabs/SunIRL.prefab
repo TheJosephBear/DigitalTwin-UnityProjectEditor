@@ -51,7 +51,8 @@ MonoBehaviour:
   SunsetFadeAngle: 5
   Latitude: 50.665092
   Longitude: 14.023887
-  UtcOffsetHours: 2
+  StandardUtcOffsetHours: 1
+  UseEuDaylightSaving: 1
   Year: 2026
   Month: 8
   Day: 12

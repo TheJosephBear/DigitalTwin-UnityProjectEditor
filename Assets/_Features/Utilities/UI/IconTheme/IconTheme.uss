@@ -1,0 +1,5 @@
+/* Generated from Resources/IconTheme.asset (IconTheme.cs). Change the colors there, not here. */
+:root {
+    --icon-color: rgb(106, 88, 167);
+    --icon-on-dark-color: rgb(255, 255, 255);
+}

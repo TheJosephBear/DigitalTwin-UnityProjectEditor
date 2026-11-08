@@ -166,6 +166,7 @@ GameObject:
   - component: {fileID: 4942730436630230590}
   - component: {fileID: 926250831621540985}
   - component: {fileID: 5436759066719783430}
+  - component: {fileID: 6332850664978654519}
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -187,10 +188,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2295676821804149221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0.13, y: 0.13}
+  m_AnchorMax: {x: 0.87, y: 0.87}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 22, y: 22}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &926250831621540985
 CanvasRenderer:
@@ -227,6 +228,20 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &6332850664978654519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030962140457975309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24fe5d87e4df4d37a348a65311f1d70d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  role: 1
+  opacity: 1
 --- !u!1 &1159437126100673770
 GameObject:
   m_ObjectHideFlags: 0
@@ -641,6 +656,7 @@ GameObject:
   - component: {fileID: 8867799504410091364}
   - component: {fileID: 6272370755369640453}
   - component: {fileID: 5202679655125766985}
+  - component: {fileID: 984445663109481266}
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -662,10 +678,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 3478029364090075754}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0.13, y: 0.13}
+  m_AnchorMax: {x: 0.87, y: 0.87}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 14, y: 14}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6272370755369640453
 CanvasRenderer:
@@ -702,6 +718,20 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &984445663109481266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1658696935790980473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24fe5d87e4df4d37a348a65311f1d70d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  role: 1
+  opacity: 1
 --- !u!1 &1725595913770830383
 GameObject:
   m_ObjectHideFlags: 0
@@ -2848,6 +2878,7 @@ GameObject:
   - component: {fileID: 2449182815561714226}
   - component: {fileID: 1941030967183960538}
   - component: {fileID: 4128404848010414807}
+  - component: {fileID: 5508131901664419273}
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -2869,10 +2900,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 4931753579051208968}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0.13, y: 0.13}
+  m_AnchorMax: {x: 0.87, y: 0.87}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 14, y: 14}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1941030967183960538
 CanvasRenderer:
@@ -2909,6 +2940,20 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &5508131901664419273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7599132129575003117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24fe5d87e4df4d37a348a65311f1d70d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  role: 1
+  opacity: 1
 --- !u!1 &8243325545458172699
 GameObject:
   m_ObjectHideFlags: 0
@@ -3057,6 +3102,7 @@ GameObject:
   - component: {fileID: 5541176169933531279}
   - component: {fileID: 875009069342727320}
   - component: {fileID: 3225303208070773290}
+  - component: {fileID: 5037067018247852729}
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -3078,10 +3124,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1396379298224283714}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0.13, y: 0.13}
+  m_AnchorMax: {x: 0.87, y: 0.87}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 22, y: 22}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &875009069342727320
 CanvasRenderer:
@@ -3118,6 +3164,20 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &5037067018247852729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8311461464660188967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24fe5d87e4df4d37a348a65311f1d70d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  role: 1
+  opacity: 1
 --- !u!1 &8374791775304033741
 GameObject:
   m_ObjectHideFlags: 0
@@ -3129,6 +3189,7 @@ GameObject:
   - component: {fileID: 7792509995834639479}
   - component: {fileID: 4577517871505548336}
   - component: {fileID: 1481545475520064280}
+  - component: {fileID: 4328056753403359726}
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -3150,10 +3211,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 8209102197582700489}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0.13, y: 0.13}
+  m_AnchorMax: {x: 0.87, y: 0.87}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 18, y: 18}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4577517871505548336
 CanvasRenderer:
@@ -3190,3 +3251,17 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &4328056753403359726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8374791775304033741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24fe5d87e4df4d37a348a65311f1d70d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  role: 1
+  opacity: 1

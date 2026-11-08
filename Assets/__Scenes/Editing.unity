@@ -6647,15 +6647,15 @@ PrefabInstance:
       objectReference: {fileID: 2800000, guid: 6af7f45d61fd0d64e9f4d4e709fc8adb, type: 3}
     - target: {fileID: 7619755013666647386, guid: 393b80a1e9bbb6848ae0af8fdb2ac486, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.854325
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7619755013666647386, guid: 393b80a1e9bbb6848ae0af8fdb2ac486, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.854325
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7619755013666647386, guid: 393b80a1e9bbb6848ae0af8fdb2ac486, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.854325
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

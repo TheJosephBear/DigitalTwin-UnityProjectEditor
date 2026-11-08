@@ -9,7 +9,7 @@
             <ui:VisualElement name="question-attachment" class="question-row-actions">
                 <ui:DropdownField label="Pohled kamery" name="camera-view-dropdown" class="camera-view-dropdown" />
                 <ui:Button name="image-button" class="add-image-button">
-                    <ui:VisualElement name="icon" style="flex-grow: 0; width: 18px; height: 18px; background-image: url(&quot;project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/image-outline.png?fileID=2800000&amp;guid=2a8b0a5a8db48ee46924cdb62930cde7&amp;type=3#image-outline&quot;); flex-shrink: 0;" />
+                    <ui:VisualElement name="icon" style="flex-grow: 0; width: 20px; height: 20px; background-image: url(&quot;project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/image-outline.png?fileID=2800000&amp;guid=2a8b0a5a8db48ee46924cdb62930cde7&amp;type=3#image-outline&quot;); flex-shrink: 0;" />
                     <ui:Label text="Přidat obrázek" />
                 </ui:Button>
             </ui:VisualElement>
@@ -19,15 +19,15 @@
                 <ui:VisualElement name="media-type-badge" class="media-type-badge media-type-badge--view" picking-mode="Ignore">
                     <ui:VisualElement class="media-type-badge__icon" picking-mode="Ignore" />
                 </ui:VisualElement>
-                <ui:Button name="remove-view" class="icon remove-button" style="background-image: url(&quot;project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/close.png?fileID=2800000&amp;guid=36073b272ed400e4fb5cef1e5e174a8d&amp;type=3#close&quot;); right: 4px; position: absolute; top: 4px; width: 22px; height: 22px;" />
-                <ui:Button name="enhance-image" class="icon enhance-button" style="background-image: url(&quot;project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/magnify-plus-outline.png?fileID=2800000&amp;guid=11b0b51f78ca2b648a63350ae0bd5145&amp;type=3#magnify-plus-outline&quot;); position: absolute; bottom: 4px; right: 4px; width: 22px; height: 22px;" />
+                <ui:Button name="remove-view" class="icon remove-button" style="background-image: url(&quot;project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/close.png?fileID=2800000&amp;guid=36073b272ed400e4fb5cef1e5e174a8d&amp;type=3#close&quot;); right: 4px; position: absolute; top: 4px; width: 28px; height: 28px;" />
+                <ui:Button name="enhance-image" class="icon enhance-button" style="background-image: url(&quot;project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/magnify-plus-outline.png?fileID=2800000&amp;guid=11b0b51f78ca2b648a63350ae0bd5145&amp;type=3#magnify-plus-outline&quot;); position: absolute; bottom: 4px; right: 4px; width: 28px; height: 28px;" />
             </ui:VisualElement>
             <ui:VisualElement name="question-image" class="media-preview-card" style="display: none;">
                 <ui:VisualElement name="media-type-badge" class="media-type-badge media-type-badge--image" picking-mode="Ignore">
                     <ui:VisualElement class="media-type-badge__icon" picking-mode="Ignore" />
                 </ui:VisualElement>
-                <ui:Button name="remove-image" class="icon remove-button" style="background-image: url(&quot;project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/close.png?fileID=2800000&amp;guid=36073b272ed400e4fb5cef1e5e174a8d&amp;type=3#close&quot;); right: 4px; position: absolute; top: 4px; width: 22px; height: 22px;" />
-                <ui:Button name="enhance-image" class="icon enhance-button" style="background-image: url(&quot;project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/magnify-plus-outline.png?fileID=2800000&amp;guid=11b0b51f78ca2b648a63350ae0bd5145&amp;type=3#magnify-plus-outline&quot;); position: absolute; bottom: 4px; right: 4px; width: 22px; height: 22px;" />
+                <ui:Button name="remove-image" class="icon remove-button" style="background-image: url(&quot;project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/close.png?fileID=2800000&amp;guid=36073b272ed400e4fb5cef1e5e174a8d&amp;type=3#close&quot;); right: 4px; position: absolute; top: 4px; width: 28px; height: 28px;" />
+                <ui:Button name="enhance-image" class="icon enhance-button" style="background-image: url(&quot;project://database/Assets/_Features/RuntimeCore/Features/SpecificFeatures/Survey/UI/Icons/magnify-plus-outline.png?fileID=2800000&amp;guid=11b0b51f78ca2b648a63350ae0bd5145&amp;type=3#magnify-plus-outline&quot;); position: absolute; bottom: 4px; right: 4px; width: 28px; height: 28px;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
