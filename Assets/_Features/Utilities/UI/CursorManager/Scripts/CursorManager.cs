@@ -29,7 +29,7 @@ public class CursorManager : MonoBehaviour {
         results.Clear();
         EventSystem.current.RaycastAll(pointerData, results);
 
-        bool hoveringButton = false;
+        bool hoveringClickable = false;
         bool isOverUIToolkit = false;
 
         // 1. Check if we hit absolutely anything at all
@@ -42,14 +42,19 @@ public class CursorManager : MonoBehaviour {
             if (module is UnityEngine.UIElements.PanelRaycaster) {
                 isOverUIToolkit = true;
             } else {
-                // 4. Check if this topmost object (or its parents) is an interactable Button
-                Button button = topmostObject.GetComponentInParent<Button>();
-                hoveringButton = button != null && button.IsInteractable();
+                // 4. Check if this topmost object (or its parents) is something you can click or drag:
+                // buttons, toggles (incl. UISwitcher), sliders (whole track, not just the handle),
+                // dropdowns and scrollbars. Text inputs keep the normal cursor.
+                Selectable selectable = topmostObject.GetComponentInParent<Selectable>();
+                hoveringClickable = selectable != null
+                    && selectable.IsInteractable()
+                    && !(selectable is InputField)
+                    && !(selectable is TMPro.TMP_InputField);
             }
         }
 
         // Determine the target cursor we want to show
-        Texture2D targetCursor = hoveringButton ? clickCursor : null;
+        Texture2D targetCursor = hoveringClickable ? clickCursor : null;
 
         if (isOverUIToolkit) {
             // If we transitioned to UI Toolkit, we clear any cursor set by CursorManager
