@@ -72,6 +72,7 @@ public class SerializablePin {
     public Vector3 position;
     public Vector3 normal; // surface the pin was placed on, zero in older saves
     public List<string> imageIds; // ImageManager IDs in display order, null in older saves
+    public List<string> imageDescriptions; // same order as imageIds, null in older saves
 }
 
 

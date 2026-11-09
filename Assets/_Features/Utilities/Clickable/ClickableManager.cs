@@ -31,6 +31,20 @@ public class ClickableManager : Singleton<ClickableManager> {
                 clickables.AddRange(hitCollider.transform.root.GetComponents<IClickable>());
             }
 
+            // Some clickables (pins) stay clickable behind geometry: when what's in front isn't clickable, take the nearest of them on the ray
+            if (clickables.Count == 0) {
+                IClickableBehindGeometry nearest = null;
+                float nearestDistance = float.MaxValue;
+                foreach (RaycastHit behindHit in Physics.RaycastAll(ray)) {
+                    IClickableBehindGeometry clickable = behindHit.collider.GetComponentInParent<IClickableBehindGeometry>();
+                    if (clickable != null && behindHit.distance < nearestDistance) {
+                        nearest = clickable;
+                        nearestDistance = behindHit.distance;
+                    }
+                }
+                if (nearest != null) clickables.Add(nearest);
+            }
+
             newHovered.AddRange(clickables);
         }
 
