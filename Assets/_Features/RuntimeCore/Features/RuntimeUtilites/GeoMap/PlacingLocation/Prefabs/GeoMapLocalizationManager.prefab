@@ -47,3 +47,5 @@ MonoBehaviour:
   GeoLocalizationUIPrefab: {fileID: 3628746868668138363, guid: 07d6cb66fbb685d4bb798cb797160241, type: 3}
   MapCenterPosition: {x: 0, y: 0, z: 0}
   ModelTransparency: 0.8
+  InitialLocalization: 0
+  _previewMaterial: {fileID: 2100000, guid: 55e0d03c388b58a43a879fe56046375c, type: 2}

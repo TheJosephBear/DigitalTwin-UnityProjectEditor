@@ -26,9 +26,12 @@ public class PinInfoUI : MonoBehaviour {
     public AspectRatioFitter LightboxFitter;
     public GameObject LightboxArrows;
     public TextMeshProUGUI LightboxCounter;
+    [Tooltip("The image's description under the enlarged image, hidden when it has none")]
+    public TextMeshProUGUI LightboxCaption;
 
     PinManager _pinManager;
     readonly List<Texture> _images = new List<Texture>();
+    readonly List<string> _descriptions = new List<string>(); // same order as _images
     int _index;
 
     public void Initialize(PinObject pin, PinManager pinManager) {
@@ -45,9 +48,12 @@ public class PinInfoUI : MonoBehaviour {
 
         // Images that failed to download are left out
         _images.Clear();
-        foreach (string id in pin.ImageIds) {
-            TextureAsset asset = ImageManager.Instance != null ? ImageManager.Instance.GetTextureAssetByID(id) : null;
-            if (asset != null && asset.Texture != null) _images.Add(asset.Texture);
+        _descriptions.Clear();
+        for (int i = 0; i < pin.ImageIds.Count; i++) {
+            TextureAsset asset = ImageManager.Instance != null ? ImageManager.Instance.GetTextureAssetByID(pin.ImageIds[i]) : null;
+            if (asset == null || asset.Texture == null) continue;
+            _images.Add(asset.Texture);
+            _descriptions.Add(pin.ImageDescriptions[i]);
         }
         _index = 0;
 
@@ -96,6 +102,11 @@ public class PinInfoUI : MonoBehaviour {
         LightboxArrows.SetActive(several);
         LightboxCounter.text = counter;
         LightboxCounter.transform.parent.gameObject.SetActive(several);
+
+        if (LightboxCaption != null) {
+            LightboxCaption.text = _descriptions[_index];
+            LightboxCaption.gameObject.SetActive(!string.IsNullOrWhiteSpace(_descriptions[_index]));
+        }
     }
 
     /// <summary>Hook to clicking the image in the panel.</summary>

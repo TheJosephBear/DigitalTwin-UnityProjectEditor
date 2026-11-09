@@ -1,52 +1,84 @@
 Shader "Custom/PinOutline"
 {
-    // Inverted hull outline: added as an extra material on the pin while it is being edited
+    // Inverted hull outline: added as an extra material on the pin while it is being edited.
+    // Extruded in screen space so it is the same width in pixels at any pin scale,
+    // drawn only outside the pin (stencil from Pin3D) and dimmed where geometry is in front of it.
     Properties
     {
         _OutlineColor ("Outline Color", Color) = (1, 0.57, 1, 1)
-        _OutlineWidth ("Outline Width", Range(0, 0.2)) = 0.03
+        _OutlineWidth ("Outline Width (px)", Range(0, 10)) = 3
+        _OccludedAlpha ("Occluded Alpha", Range(0, 1)) = 0.5
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" "Queue"="Geometry+1" }
+        // Right after the pins (Pin3D), so their stencil is written
+        Tags { "Queue"="Transparent+101" "RenderType"="Transparent" "IgnoreProjector"="True" }
+
+        Cull Front
+        ZWrite Off
+
+        Stencil
+        {
+            Ref 64
+            ReadMask 64
+            Comp NotEqual
+        }
+
+        CGINCLUDE
+        #include "UnityCG.cginc"
+
+        struct appdata
+        {
+            float4 vertex : POSITION;
+            float3 normal : NORMAL;
+        };
+
+        fixed4 _OutlineColor;
+        float _OutlineWidth;
+        float _OccludedAlpha;
+
+        float4 vert (appdata v) : SV_POSITION
+        {
+            float4 pos = UnityObjectToClipPos(v.vertex);
+            float3 viewNormal = normalize(mul((float3x3)UNITY_MATRIX_IT_MV, v.normal));
+            float2 offset = TransformViewToProjection(viewNormal.xy);
+            float len = length(offset);
+            if (len > 0.0001) offset /= len;
+            // Pixels to clip space (2 clip units span the screen), times w to undo the perspective divide
+            pos.xy += offset * _OutlineWidth * 2.0 / _ScreenParams.xy * pos.w;
+            return pos;
+        }
+        ENDCG
 
         Pass
         {
-            Name "Outline"
-            Cull Front
-            ZWrite On
+            Name "Visible"
+            ZTest LEqual
 
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #include "UnityCG.cginc"
 
-            struct appdata
+            fixed4 frag () : SV_Target
             {
-                float4 vertex : POSITION;
-                float3 normal : NORMAL;
-            };
-
-            struct v2f
-            {
-                float4 pos : SV_POSITION;
-            };
-
-            fixed4 _OutlineColor;
-            float _OutlineWidth;
-
-            v2f vert (appdata v)
-            {
-                v2f o;
-                // Push the vertices out along their normals; only the back faces of this bigger shell are drawn
-                v.vertex.xyz += normalize(v.normal) * _OutlineWidth;
-                o.pos = UnityObjectToClipPos(v.vertex);
-                return o;
+                return fixed4(_OutlineColor.rgb, 1);
             }
+            ENDCG
+        }
 
-            fixed4 frag (v2f i) : SV_Target
+        Pass
+        {
+            Name "Occluded"
+            ZTest Greater
+            Blend SrcAlpha OneMinusSrcAlpha
+
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+
+            fixed4 frag () : SV_Target
             {
-                return _OutlineColor;
+                return fixed4(_OutlineColor.rgb, _OccludedAlpha);
             }
             ENDCG
         }

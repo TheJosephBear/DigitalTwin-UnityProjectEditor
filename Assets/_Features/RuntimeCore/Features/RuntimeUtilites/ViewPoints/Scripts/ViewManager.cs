@@ -57,7 +57,8 @@ public class ViewManager : Singleton<ViewManager> {
         isViewMovingActive = true;
     }
 
-    public void ExitViewMoving(bool save, string message = "Neuložené změny, chcete odejít?") {
+    /// <param name="onExited">Called once the view point is left (not when the user chose to stay because of unsaved changes)</param>
+    public void ExitViewMoving(bool save, string message = "Neuložené změny, chcete odejít?", Action onExited = null) {
         _viewMovingScript.ExitViewMoving(save, message, (success) => {
             if (!success) return;
 
@@ -67,6 +68,7 @@ public class ViewManager : Singleton<ViewManager> {
             _viewPointUIInstance.OnExitMoving();
             (EditorManager.Instance as EditorManager).ToggleUnsavedChanges(true);
             MainManagerBase.Instance.ChangeState(AppState.Freecam);
+            onExited?.Invoke();
         });
     }
 

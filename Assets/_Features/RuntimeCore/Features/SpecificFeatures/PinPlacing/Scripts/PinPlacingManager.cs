@@ -43,14 +43,7 @@ public class PinPlacingManager : MonoBehaviour {
         // Raycast to track cursor in real time
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _placementRaycastMask)) {
             _pinBeingPlaced.transform.position = hit.point;
-            _pinBeingPlaced.SurfaceNormal = hit.normal;
-            // Tilted so it touches the target
-            if (Mathf.Abs(hit.normal.y) < 0.3f) {
-                Quaternion wallRotation = Quaternion.LookRotation(-hit.normal, Vector3.up);
-                _pinBeingPlaced.transform.rotation = wallRotation * Quaternion.Euler(-15f, 0f, 0f);
-            } else {
-                _pinBeingPlaced.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
-            }
+            _pinBeingPlaced.SurfaceNormal = hit.normal; // also turns the pin to the surface
 
             // Left Click to set position
             if (Input.GetMouseButtonDown(0)) {

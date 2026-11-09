@@ -16,6 +16,15 @@ public class PinContextUI : MonoBehaviour {
     [Tooltip("First tile of the image list (always in view, the list scrolls), opens the image picker")]
     public GameObject AddImageButton;
 
+    [Header("Image popup")]
+    [Tooltip("Opened by clicking a thumbnail: the image big with its description")]
+    public GameObject ImagePopup;
+    public RawImage PopupImage;
+    public AspectRatioFitter PopupFitter;
+    public GameObject PopupArrows;
+    public TextMeshProUGUI PopupCounter;
+    public TMP_InputField PopupDescriptionInput;
+
     PinManager _pinManager;
     PinObject _pin;
     string _originalName;
@@ -23,6 +32,9 @@ public class PinContextUI : MonoBehaviour {
     Vector3 _originalPos;
     Vector3 _originalNormal;
     List<string> _originalImageIds;
+    List<string> _originalImageDescriptions;
+    readonly List<PinImageItem> _imageItems = new List<PinImageItem>();
+    int _popupIndex = -1;
     bool _unsavedChanges = false;
 
     public bool HasUnsavedChanges => _unsavedChanges;
@@ -36,6 +48,7 @@ public class PinContextUI : MonoBehaviour {
         _originalPos = pin.transform.position;
         _originalNormal = pin.SurfaceNormal;
         _originalImageIds = new List<string>(pin.ImageIds);
+        _originalImageDescriptions = new List<string>(pin.ImageDescriptions);
 
         NameInput.SetTextWithoutNotify(pin.Name);
         DescriptionInput.SetTextWithoutNotify(pin.Description);
@@ -43,9 +56,18 @@ public class PinContextUI : MonoBehaviour {
             IconImage.sprite = pin.Image;
             IconImage.gameObject.SetActive(pin.Image != null);
         }
+        CloseImagePopup();
         RefreshImages();
 
         ToggleUnsavedChanges(false);
+    }
+
+    void Awake() {
+        if (PopupDescriptionInput != null) PopupDescriptionInput.onValueChanged.AddListener(value => SetImageDescription(_popupIndex, value));
+    }
+
+    void OnDisable() {
+        CloseImagePopup();
     }
 
     public void OnNameChanged(string value) {
@@ -73,6 +95,7 @@ public class PinContextUI : MonoBehaviour {
             foreach (TextureAsset asset in assets) {
                 if (_pin.ImageIds.Contains(asset.ID)) continue;
                 _pin.ImageIds.Add(asset.ID);
+                _pin.ImageDescriptions.Add("");
                 added = true;
             }
             if (!added) return;
@@ -87,7 +110,9 @@ public class PinContextUI : MonoBehaviour {
         List<string> ids = _pin.ImageIds;
         if (newIndex < 0 || newIndex >= ids.Count) return;
 
+        List<string> descriptions = _pin.ImageDescriptions;
         (ids[index], ids[newIndex]) = (ids[newIndex], ids[index]);
+        (descriptions[index], descriptions[newIndex]) = (descriptions[newIndex], descriptions[index]);
         RefreshImages();
         ToggleUnsavedChanges(true);
     }
@@ -95,6 +120,7 @@ public class PinContextUI : MonoBehaviour {
     // Only removed from the pin, the image stays in the project like other unused images
     void DeleteImage(int index) {
         _pin.ImageIds.RemoveAt(index);
+        _pin.ImageDescriptions.RemoveAt(index);
         RefreshImages();
         ToggleUnsavedChanges(true);
     }
@@ -105,15 +131,62 @@ public class PinContextUI : MonoBehaviour {
         foreach (Transform child in ImageListContent) {
             if (AddImageButton == null || child.gameObject != AddImageButton) Destroy(child.gameObject);
         }
+        _imageItems.Clear();
 
         List<string> ids = _pin.ImageIds;
         for (int i = 0; i < ids.Count; i++) {
             TextureAsset asset = ImageManager.Instance != null ? ImageManager.Instance.GetTextureAssetByID(ids[i]) : null;
             PinImageItem item = Instantiate(ImageItemPrefab, ImageListContent).GetComponent<PinImageItem>();
-            item.Initialize(asset != null ? asset.Texture : null, i, ids.Count, MoveImage, DeleteImage);
+            item.Initialize(asset != null ? asset.Texture : null, i, ids.Count, _pin.ImageDescriptions[i], MoveImage, DeleteImage, SetImageDescription, OpenImagePopup);
+            _imageItems.Add(item);
         }
 
         if (AddImageButton != null) AddImageButton.transform.SetAsFirstSibling();
+    }
+
+    // From the tile's field or the popup's, the other one is updated to match
+    void SetImageDescription(int index, string value) {
+        if (index < 0 || index >= _pin.ImageDescriptions.Count || _pin.ImageDescriptions[index] == value) return;
+
+        _pin.ImageDescriptions[index] = value;
+        if (index < _imageItems.Count) _imageItems[index].SetDescriptionWithoutNotify(value);
+        if (index == _popupIndex && PopupDescriptionInput != null) PopupDescriptionInput.SetTextWithoutNotify(value);
+        ToggleUnsavedChanges(true);
+    }
+
+    void OpenImagePopup(int index) {
+        if (ImagePopup == null || index < 0 || index >= _pin.ImageIds.Count) return;
+
+        _popupIndex = index;
+        TextureAsset asset = ImageManager.Instance != null ? ImageManager.Instance.GetTextureAssetByID(_pin.ImageIds[index]) : null;
+        Texture texture = asset != null ? asset.Texture : null;
+        int count = _pin.ImageIds.Count;
+
+        PopupImage.texture = texture;
+        if (PopupFitter != null) PopupFitter.aspectRatio = texture != null && texture.height > 0 ? (float)texture.width / texture.height : 1f;
+        if (PopupArrows != null) PopupArrows.SetActive(count > 1);
+        if (PopupCounter != null) {
+            PopupCounter.text = $"{index + 1} / {count}";
+            PopupCounter.transform.parent.gameObject.SetActive(count > 1);
+        }
+        PopupDescriptionInput.SetTextWithoutNotify(_pin.ImageDescriptions[index]);
+        ImagePopup.SetActive(true);
+    }
+
+    /// <summary>Hooks to the popup's arrows.</summary>
+    public void OnPopupPrevious() => StepPopup(-1);
+    public void OnPopupNext() => StepPopup(1);
+
+    void StepPopup(int direction) {
+        int count = _pin.ImageIds.Count;
+        if (_popupIndex < 0 || count == 0) return;
+        OpenImagePopup((_popupIndex + direction + count) % count);
+    }
+
+    /// <summary>Hook to the popup's close button and its dark background.</summary>
+    public void CloseImagePopup() {
+        _popupIndex = -1;
+        if (ImagePopup != null) ImagePopup.SetActive(false);
     }
 
     #endregion
@@ -135,7 +208,7 @@ public class PinContextUI : MonoBehaviour {
         _pin.SetDescription(_originalDescription);
         _pin.transform.position = _originalPos;
         _pin.SurfaceNormal = _originalNormal;
-        _pin.SetImageIds(_originalImageIds);
+        _pin.SetImages(_originalImageIds, _originalImageDescriptions);
         _pinManager.RefreshPinButtons();
         ToggleUnsavedChanges(false);
     }

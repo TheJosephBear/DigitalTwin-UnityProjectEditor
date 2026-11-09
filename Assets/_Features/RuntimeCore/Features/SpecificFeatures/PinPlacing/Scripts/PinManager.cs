@@ -15,8 +15,13 @@ public class PinManager: Singleton<PinManager> {
     public bool InstantiatePinUIInViewer = false;
 
     [Header("Pin camera")]
-    [Tooltip("Distance of a pin's vcam from the pin, perpendicular to the surface the pin is on (shorter when a wall is in the way)")]
+    [Tooltip("Distance of a pin's vcam from the pin (shorter when a wall is in the way)")]
     public float VcamDistance = 10f;
+    [Tooltip("How many degrees the pin's vcam looks down at the pin (other angles are tried when geometry is in the way)")]
+    [Range(5f, 85f)]
+    public float VcamPitch = 45f;
+    [Tooltip("[min, max] camera-to-pin distance in which clicking a pin only turns the camera to it instead of flying to its vcam")]
+    public Vector2 TurnOnlyDistanceRange = new Vector2(40f, 100000f);
     [Tooltip("Geometry the pin vcams can't be placed inside of")]
     public LayerMask VcamObstacleLayers = ~0;
     [Tooltip("Clicking a pin flies the camera to its vcam in the editor, this also enables it in the viewer")]
@@ -123,6 +128,12 @@ public class PinManager: Singleton<PinManager> {
     public void SelectPin(PinObject pin) {
         if (pin == null || pin == _activePin) return;
 
+        // A selected view point is left first (like its cancel button, asking about unsaved changes), so only the pin stays selected
+        if (!IsViewer && MainManagerBase.Instance != null && MainManagerBase.Instance.ActiveState == AppState.ViewActive && ViewManager.Instance != null) {
+            ViewManager.Instance.ExitViewMoving(save: false, onExited: () => SelectPin(pin));
+            return;
+        }
+
         if (_contextUIInstance != null && _contextUIInstance.HasUnsavedChanges) {
             PopUp.Instance.AreYouSurePopUp((sure) => {
                 if (!sure) {
@@ -161,13 +172,19 @@ public class PinManager: Singleton<PinManager> {
 
     /// <summary>
     /// Flies the camera to the pin's vcam (Cinemachine blend), then hands the camera back to the free cam there.
+    /// Within TurnOnlyDistanceRange the vcam is where the camera is, so the blend only turns the camera to the pin.
     /// </summary>
     public void FocusPin(PinObject pin) {
         if (pin == null || pin.Vcam == null || CameraManager.Instance == null || MainManagerBase.Instance == null) return;
         if (MainManagerBase.Instance is ViewingManager && !EnableVcamInViewer) return;
         if (MainManagerBase.Instance.ActiveState != AppState.Freecam) return; // other states drive the camera themselves
 
-        pin.PlaceVcam(VcamDistance, VcamObstacleLayers);
+        float distance = Camera.main != null ? Vector3.Distance(Camera.main.transform.position, pin.transform.position) : 0f;
+        if (distance >= TurnOnlyDistanceRange.x && distance <= TurnOnlyDistanceRange.y) {
+            pin.AimVcamFromCamera();
+        } else {
+            pin.PlaceVcam(VcamDistance, VcamPitch, VcamObstacleLayers);
+        }
         CameraManager.Instance.FlyToVcam(pin.Vcam);
     }
 

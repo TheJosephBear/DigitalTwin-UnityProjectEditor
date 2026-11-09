@@ -21,14 +21,12 @@ public class PinBillboard : MonoBehaviour {
 
     List<SpriteRenderer> _renderers;
     Color _visibleColor;
-    PinObject _pin;
     bool _occluded;
 
     void Awake() {
         _renderers = GetComponentsInChildren<SpriteRenderer>().ToList();
         _renderers.Add(GetComponent<SpriteRenderer>());
         _visibleColor = _renderers[0].color;
-        _pin = GetComponentInParent<PinObject>();
     }
 
     void OnEnable() {
@@ -83,7 +81,5 @@ public class PinBillboard : MonoBehaviour {
         foreach (SpriteRenderer renderer in _renderers) {
             renderer.color = occluded ? OccludedColor : _visibleColor;
         }
-        
-        if (_pin != null) _pin.SetOccluded(occluded);
     }
 }

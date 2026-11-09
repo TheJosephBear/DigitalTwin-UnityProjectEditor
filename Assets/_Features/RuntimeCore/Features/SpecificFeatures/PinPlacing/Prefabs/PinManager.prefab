@@ -51,6 +51,8 @@ MonoBehaviour:
   PinInfoUIPrefab: {fileID: 1159437126100673770, guid: e93dc2b33d9911a49b8a8e7cbd6eac6c, type: 3}
   InstantiatePinUIInViewer: 0
   VcamDistance: 10
+  VcamPitch: 45
+  TurnOnlyDistanceRange: {x: 0.2, y: 30}
   VcamObstacleLayers:
     serializedVersion: 2
     m_Bits: 4294967295

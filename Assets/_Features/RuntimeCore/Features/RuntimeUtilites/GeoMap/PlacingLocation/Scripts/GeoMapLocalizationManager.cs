@@ -16,7 +16,16 @@ public class GeoMapLocalizationManager: Singleton<GeoMapLocalizationManager> {
     [HideInInspector]
     public bool InitialLocalization = false;
 
+    [Tooltip("See-through material of the model's copy while placing it (GeoPreviewTransparent shader), referenced here so builds include its shader")]
+    [SerializeField] Material _previewMaterial;
+
+    const string PreviewShaderName = "GeoMapLocalization/GeoPreviewTransparent";
+    static readonly int MainTexId = Shader.PropertyToID("_MainTex");
+    static readonly int ColorId = Shader.PropertyToID("_Color");
+    static readonly int OpacityId = Shader.PropertyToID("_Opacity");
+
     GameObject _baseMapCopy;
+    readonly List<Material> _previewMaterials = new List<Material>(); // created for the copy, destroyed with it
     GeoLocalizationData _geoData;
     GeoLocalizationUI _UIInstance;
     bool _lastLockToggle = false;
@@ -51,6 +60,7 @@ public class GeoMapLocalizationManager: Singleton<GeoMapLocalizationManager> {
         if (_baseMapCopy != null) {
             Destroy(_baseMapCopy.gameObject);
             _baseMapCopy = null;
+            DestroyPreviewMaterials();
         }
 
         MapManager.Instance.SetBaseMapModel(uploadedModel);
@@ -101,10 +111,12 @@ public class GeoMapLocalizationManager: Singleton<GeoMapLocalizationManager> {
             foreach (Transform child in _baseMapCopy.GetComponentsInChildren<Transform>()) {
                 if (child.GetComponent<MeshRenderer>() != null || child.GetComponent<MeshFilter>() != null) {
                     child.gameObject.AddComponent<MeshCollider>();
-                    // Also make it transparent
-                    MakeMaterialsTransparent(child.gameObject, ModelTransparency);
                 }
             }
+
+            // Also make it transparent
+            ApplyPreviewMaterials();
+            SetPreviewOpacity(ModelTransparency);
 
             // Add movable component for clickability
             BaseMapCopyMovable movableScript = _baseMapCopy.AddComponent<BaseMapCopyMovable>();
@@ -161,11 +173,8 @@ public class GeoMapLocalizationManager: Singleton<GeoMapLocalizationManager> {
     }
 
     public void UpdateCloneOpacity(float opacityValue) {
-        foreach (Transform child in _baseMapCopy.GetComponentsInChildren<Transform>()) {
-            if (child.GetComponent<MeshRenderer>() != null || child.GetComponent<MeshFilter>() != null) {
-                MakeMaterialsTransparent(child.gameObject, opacityValue);
-            }
-        }
+        if (_baseMapCopy == null) return;
+        SetPreviewOpacity(opacityValue);
     }
 
     public void InitializeWithPlacementMapData(GeoLocalizationData geoData) {
@@ -204,20 +213,60 @@ public class GeoMapLocalizationManager: Singleton<GeoMapLocalizationManager> {
         MapManager.Instance.SetBaseMapPositionAndRotation(_baseMapCopy.transform.position, _baseMapCopy.transform.rotation);
     }
 
-    void MakeMaterialsTransparent(GameObject targetObject, float transparency) {
-        Renderer rend = targetObject.GetComponent<Renderer>();
-        Material[] materials = rend.materials;
-        foreach (Material mat in materials) {
-            Color color = mat.color;
-            color.a = transparency;
-            mat.color = color;
-            mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-            mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-            mat.SetInt("_ZWrite", 0);
-            mat.DisableKeyword("_ALPHATEST_ON");
-            mat.EnableKeyword("_ALPHABLEND_ON");
-            mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-            mat.renderQueue = 3000;
+    #region Preview materials
+
+    /// <summary>
+    /// Gives the copy see-through materials with the model's texture and color.
+    /// A dedicated shader instead of switching the model's own materials to transparent: that needs shader variants
+    /// (Standard + _ALPHABLEND_ON with the model's keywords) that builds don't contain, so the opacity only changed in the editor.
+    /// Created once per copy, the opacity slider only changes a value on them.
+    /// </summary>
+    void ApplyPreviewMaterials() {
+        DestroyPreviewMaterials();
+        Shader shader = _previewMaterial != null ? _previewMaterial.shader : Shader.Find(PreviewShaderName);
+        if (shader == null) return;
+
+        // Renderers sharing a material share its preview material too
+        Dictionary<Material, Material> previews = new Dictionary<Material, Material>();
+        foreach (Renderer rend in _baseMapCopy.GetComponentsInChildren<Renderer>(true)) {
+            Material[] materials = rend.sharedMaterials; // .materials would make (and leak) copies
+            for (int i = 0; i < materials.Length; i++) {
+                Material original = materials[i];
+                if (original == null) continue;
+
+                if (!previews.TryGetValue(original, out Material preview)) {
+                    preview = _previewMaterial != null ? new Material(_previewMaterial) : new Material(shader);
+                    if (original.HasProperty(MainTexId)) {
+                        preview.SetTexture(MainTexId, original.GetTexture(MainTexId));
+                        preview.SetTextureScale(MainTexId, original.GetTextureScale(MainTexId));
+                        preview.SetTextureOffset(MainTexId, original.GetTextureOffset(MainTexId));
+                    }
+                    if (original.HasProperty(ColorId)) preview.SetColor(ColorId, original.GetColor(ColorId));
+                    previews.Add(original, preview);
+                    _previewMaterials.Add(preview);
+                }
+                materials[i] = preview;
+            }
+            rend.sharedMaterials = materials;
         }
     }
+
+    void SetPreviewOpacity(float opacity) {
+        foreach (Material preview in _previewMaterials) {
+            if (preview != null) preview.SetFloat(OpacityId, opacity);
+        }
+    }
+
+    void DestroyPreviewMaterials() {
+        foreach (Material preview in _previewMaterials) {
+            if (preview != null) Destroy(preview);
+        }
+        _previewMaterials.Clear();
+    }
+
+    void OnDestroy() {
+        DestroyPreviewMaterials();
+    }
+
+    #endregion
 }
