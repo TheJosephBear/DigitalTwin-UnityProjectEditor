@@ -61,10 +61,10 @@ Each modal's text is sized by scaling its top-level container. The canvas keeps 
 | PinInfoUI | 800×600 | 0.71 | 14 / 18 px |
 | PinContextUI | 800×600 | 0.7 | 15 px (description 10.8 px) |
 | ViewPointContextUI | 800×600 | 0.56 | 14 / 16 px |
-| EditorHUD MapUI | 1000×800 | 0.69 | 14 / 23 px |
+| EditorHUD MapUI | 1000×800 | 0.69 | 14 / 18 px |
 | MapManagement MapUI | 1000×800 | 0.58 | 14 px |
 | MapVarAdjustUI | 800×600 | 0.341 | 13–15 px |
-| EditorObjectInfoUI | 800×600 | 0.6 | 13 / 21 px |
+| EditorObjectInfoUI | 800×600 | 0.6 | 13–14 / 18 px |
 | FPS_UI player settings | 800×600 | 0.52 | 12–15 px |
 | FPS_UI movement hint | 800×600 | 0.6 | 12–15 px |
 | PopUpAreYouSure | 800×600 | 0.62 | 14 / 18 px |
@@ -84,7 +84,15 @@ Screen margins are 20.5 units (28 px) on the left, top and bottom.
 | Opacity and zoom icons | 20 px | scale 0.74 (opacity), 0.617 (zoom) |
 | Opacity and zoom sliders | from 133 px below the top to 155 px above the bottom | so they clear the "Viditelnost pinů" and lock toggles in the bottom-right corner |
 
-**Known gaps:** EditorObjectInfoUI titles and buttons (about 21 px) and the EditorHUD MapUI title (23 px) are still larger than the 18 px title size.
+## Color and interaction
+
+- **Accent color:** IconTheme purple `#6A58A7`. It's used for icons, the "on" state of every `UISwitcher` toggle, slider handles and fills, and the upload progress bar.
+- **Hover:**
+  - White icon buttons (`MainButton`, `ViewButton`) tint to `#EDE9FA` on hover and `#D6CCF0` when pressed.
+  - Close buttons stay invisible until hovered, then show a 14 % purple rounded square, darker when pressed.
+- **Cursor:** a hand over every interactable `Selectable` (buttons, toggles, sliders including the track, dropdowns, scrollbars). Text inputs keep the normal cursor.
+- **Tooltips:** every icon-only button has a short Czech `TooltipTrigger`, such as "Uložit", "Zpět" or "Smazat pin". The `TEMPLabelBackground` inside `MainButton` is off by default.
+- **Labels over the 3D scene or map** (toggle labels): white text with the `LiberationSans SDF - Soft Shadow` material (`_Features/Utilities/UI/Fonts`), a soft dark halo that keeps them readable over light sky and map.
 
 ## Checking sizes
 
