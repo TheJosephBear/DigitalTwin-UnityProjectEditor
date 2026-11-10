@@ -18,6 +18,8 @@ public class PopUpAreYouSureUI : MonoBehaviour {
     public RectTransform SubmitButtonRef;
     public TextMeshProUGUI SubmitButtonTextRef;
     public GameObject SaveButtonRef; // Hidden unless asking about unsaved changes
+    public Button CancelButtonRef;   // Secondary (tonal) style; the submit button takes it over when it becomes "Odejít"
+    public TextMeshProUGUI CancelButtonTextRef;
 
     Action<bool> onInputSubmitted;
     Action<UnsavedChangesChoice> onChoiceSubmitted;
@@ -39,6 +41,12 @@ public class PopUpAreYouSureUI : MonoBehaviour {
         SubmitButtonRef.anchorMin = SubmitButtonRef.anchorMax = new Vector2(0.5f, 0f);
         SubmitButtonRef.anchoredPosition = new Vector2(0f, SubmitButtonRef.anchoredPosition.y);
         SubmitButtonTextRef.text = "Odejít";
+
+        // "Uložit a odejít" is the primary action here, so "Odejít" looks like "Zrušit"
+        if (CancelButtonRef != null) {
+            SubmitButtonRef.GetComponent<Button>().colors = CancelButtonRef.colors;
+            SubmitButtonTextRef.color = CancelButtonTextRef.color;
+        }
     }
 
     public void OnSubmitButtonClicked() {

@@ -90,6 +90,9 @@ Screen margins are 20.5 units (28 px) on the left, top and bottom.
 - **Hover:**
   - White icon buttons (`MainButton`, `ViewButton`) tint to `#EDE9FA` on hover and `#D6CCF0` when pressed.
   - Close buttons stay invisible until hovered, then show a 14 % purple rounded square, darker when pressed.
+- **Text buttons** (`PopUpAreYouSureUI`): bold labels, ≈ 24 px tall, Image white with the color set by the Button's Color Tint.
+  - Primary (the action: "Ano", "Uložit a odejít"): `#6A58A7` with white text, hover `#5A4A93`, pressed `#4B3D7D`.
+  - Secondary ("Zrušit", "Odejít"): `#EDE9FA` with `#6A58A7` text, hover `#D6CCF0`, pressed `#C5B8E8`.
 - **Cursor:** a hand over every interactable `Selectable` (buttons, toggles, sliders including the track, dropdowns, scrollbars). Text inputs keep the normal cursor.
 - **Tooltips:** every icon-only button has a short Czech `TooltipTrigger`, such as "Uložit", "Zpět" or "Smazat pin". The `TEMPLabelBackground` inside `MainButton` is off by default.
 - **Labels over the 3D scene or map** (toggle labels): white text with the `LiberationSans SDF - Soft Shadow` material (`_Features/Utilities/UI/Fonts`), a soft dark halo that keeps them readable over light sky and map.
