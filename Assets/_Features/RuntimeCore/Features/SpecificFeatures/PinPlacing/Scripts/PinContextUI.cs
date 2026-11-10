@@ -233,10 +233,15 @@ public class PinContextUI : MonoBehaviour {
             return;
         }
 
-        PopUp.Instance.AreYouSurePopUp((sure) => {
-            if (!sure) return;
+        // Same three-way choice as leaving the survey: save and exit / exit without saving / stay
+        PopUp.Instance.SaveBeforeExitPopUp((choice) => {
+            if (choice == UnsavedChangesChoice.Cancel) return;
+            if (choice == UnsavedChangesChoice.SaveAndExit) {
+                OnSave();
+                return;
+            }
             Revert();
             _pinManager.CloseContextUI();
-        }, "Neuložené změny, přejete si odejít?");
+        });
     }
 }

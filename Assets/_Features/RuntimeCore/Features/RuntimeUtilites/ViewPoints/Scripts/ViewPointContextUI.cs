@@ -47,9 +47,20 @@ public class ViewPointContextUI : MonoBehaviour {
     }
 
     public void OnCancel() {
-        ViewManager.Instance.ExitViewMoving(
-            save: false,
-            message: "Neuložené změny, přejete si odejít?"
-        );
+        if (!_viewMovingManager.HasUnsavedChanges) {
+            ViewManager.Instance.ExitViewMoving(save: false);
+            return;
+        }
+
+        // Same three-way choice as leaving the survey: save and exit / exit without saving / stay
+        PopUp.Instance.SaveBeforeExitPopUp((choice) => {
+            if (choice == UnsavedChangesChoice.Cancel) return;
+            if (choice == UnsavedChangesChoice.SaveAndExit) {
+                OnSave();
+                return;
+            }
+            _viewMovingManager.DiscardChanges();
+            ViewManager.Instance.ExitViewMoving(save: false);
+        });
     }
 }

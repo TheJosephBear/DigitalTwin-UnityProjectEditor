@@ -10,8 +10,11 @@ public class ViewMovingManager : MonoBehaviour {
     ViewPointContextUI _viewPointContextUIInstance;
     Vector3 _originalPos;
     Quaternion _originalRot;
+    string _originalName;
     bool _unsavedChanges = false;
     bool _movingActive = false;
+
+    public bool HasUnsavedChanges => _unsavedChanges;
 
     void Awake() {
         _movementScript = GetComponent<CustomMovement>();
@@ -29,6 +32,7 @@ public class ViewMovingManager : MonoBehaviour {
         _viewPointBeingMoved = viewPointToMove;
         _originalPos = _viewPointBeingMoved.transform.position;
         _originalRot = _viewPointBeingMoved.transform.rotation;
+        _originalName = _viewPointBeingMoved.Name;
         // Start controlling it
         _movementScript.SetTarget(_viewPointBeingMoved.gameObject);
         // Show context UI
@@ -44,30 +48,39 @@ public class ViewMovingManager : MonoBehaviour {
         if (_unsavedChanges && !save) {
             PopUp.Instance.AreYouSurePopUp((sure) => {
                 if (sure) {
-                    _movingActive = false;
-                    if (!save && _originalPos != null && _originalRot != null) {
-                        _viewPointBeingMoved.transform.position = _originalPos;
-                        _viewPointBeingMoved.transform.rotation = _originalRot;
-                    }
-
-                    _movementScript.SetTarget(null);
-                    ToggleViewPointContextUI(false);
+                    FinishMoving(save);
                     success.Invoke(true);
                 } else {
                     success.Invoke(false);
                 }
             }, message);
         } else {
-            _movingActive = false;
-            if (!save && _originalPos != null && _originalRot != null) {
-                _viewPointBeingMoved.transform.position = _originalPos;
-                _viewPointBeingMoved.transform.rotation = _originalRot;
-            }
-
-            _movementScript.SetTarget(null);
-            ToggleViewPointContextUI(false);
+            FinishMoving(save);
             success.Invoke(true);
         }
+    }
+
+    /// <summary>
+    /// Puts the view point back to how it was when moving started (position, rotation and name).
+    /// After this, ExitViewMoving(save: false) leaves without asking.
+    /// </summary>
+    public void DiscardChanges() {
+        if (_viewPointBeingMoved == null) return;
+        RevertViewPoint();
+        ToggleUnsavedChanges(false);
+    }
+
+    void FinishMoving(bool save) {
+        _movingActive = false;
+        if (!save) RevertViewPoint();
+        _movementScript.SetTarget(null);
+        ToggleViewPointContextUI(false);
+    }
+
+    void RevertViewPoint() {
+        _viewPointBeingMoved.transform.position = _originalPos;
+        _viewPointBeingMoved.transform.rotation = _originalRot;
+        if (_originalName != null) _viewPointBeingMoved.SetName(_originalName);
     }
 
     public void ToggleUnsavedChanges(bool toggleOn) {
