@@ -77,7 +77,7 @@ public class PinObject: EditorObjectBase, IClickableBehindGeometry {
 
     public void OnClickDown() {
         if (PinManager.Instance.IsPlacing) return;
-        if (EditorManager.Instance.ActiveState == AppState.Survey) return;
+        if (EditorManager.Instance != null && EditorManager.Instance.ActiveState == AppState.Survey) return;
         PinManager.Instance.SelectPin(this);
         PinManager.Instance.FocusPin(this);
     }
@@ -86,7 +86,7 @@ public class PinObject: EditorObjectBase, IClickableBehindGeometry {
     public void OnClickUp() { }
 
     public void OnHover() {
-        if (EditorManager.Instance.ActiveState == AppState.Survey) return;
+        if (EditorManager.Instance != null && EditorManager.Instance.ActiveState == AppState.Survey) return;
         if (_headObject != null) _headObject.transform.localScale = Vector3.Scale(originalScale, hoverScale);
     }
 
