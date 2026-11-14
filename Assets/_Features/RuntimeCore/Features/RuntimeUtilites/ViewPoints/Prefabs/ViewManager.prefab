@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 129.47476, y: -43.305496}
+  m_AnchoredPosition: {x: 122.424774, y: -34.13883}
   m_SizeDelta: {x: 104.07, y: 25.2285}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3005455483345924193
@@ -172,7 +172,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 129, y: -84}
+  m_AnchoredPosition: {x: 121.95001, y: -74.833336}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8794994670614136849
@@ -280,6 +280,7 @@ MonoBehaviour:
   viewPointSpawnPosition: {x: 0, y: 120, z: -200}
   cameraViewUI: {fileID: 8794994671842005292}
   previewCam: {fileID: 8794994672007692011}
+  NoPinListPreviewOffsetX: -30
   isActivelyShowingCam: 0
   isViewMovingActive: 0
   OnViewPointAddedEvent:

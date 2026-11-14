@@ -18,7 +18,7 @@ public class ViewManager : Singleton<ViewManager> {
     public GameObject cameraViewUI;
     public Camera previewCam;
     [Tooltip("Shift of the preview in the viewer when there's no pin list between it and the view point list (the pin list sits 32.6 units right of the view list on its 1000 wide canvas = 26 units on the preview's 800 wide canvas)")]
-    public float NoPinListPreviewOffsetX = -26f;
+    public float NoPinListPreviewOffsetX = -30f;
 
     RectTransform[] _previewRects;
     Vector2[] _previewRectPositions;
