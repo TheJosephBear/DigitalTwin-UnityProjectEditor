@@ -37,6 +37,7 @@ public class EditorInitializer : MonoBehaviour, Iinitializer {
         if (!MapManager.Instance.IsBaseMapUploaded()) {
             EditorManager.Instance.ChangeState(AppState.GeoLocalization);
         } else {
+            CameraManager.Instance.FrameFreeCamOn(MapManager.Instance.GetBaseMap().gameObject);
             EditorManager.Instance.ChangeState(AppState.Freecam);
         }
     }

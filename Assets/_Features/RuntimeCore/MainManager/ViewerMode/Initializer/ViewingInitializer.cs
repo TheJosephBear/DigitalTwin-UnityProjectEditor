@@ -65,6 +65,8 @@ public class ViewingInitializer : MonoBehaviour, Iinitializer {
         // UIManager.Instance.ShowUI(UIType.ViewerHUD);
         yield return Serializer.DeserializeProjectCoroutine(ProjectManager.Instance.SelectedProject);
         MemoryLogger.Log("After viewer project deserialization");
+        MapVariant baseMap = MapManager.Instance != null ? MapManager.Instance.GetBaseMap() : null;
+        if (baseMap != null) CameraManager.Instance.FrameFreeCamOn(baseMap.gameObject);
         MainManagerBase.Instance.ChangeState(AppState.Freecam);
 
         CameraManager.Instance.ToggleCameraCollision(ProjectSettingsManager.Instance.ViewerCameraCollision);

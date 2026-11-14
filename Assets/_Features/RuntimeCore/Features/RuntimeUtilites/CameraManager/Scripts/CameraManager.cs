@@ -314,6 +314,56 @@ public class CameraManager: Singleton<CameraManager> {
         return _vCamFreeCamRefference;
     }
 
+    #region Framing
+
+    /// <summary>
+    /// Puts the free cam where the whole model is in view, looking at it at the InitialCameraPosition's angle.
+    /// Used as the default camera position when a project opens (the scene's position isn't tied to the model).
+    /// </summary>
+    public void FrameFreeCamOn(GameObject model) {
+        if (!TryGetFramingPose(model, out Vector3 position, out Quaternion rotation)) return;
+
+        _vCamFreeCamRefference.transform.SetPositionAndRotation(position, rotation);
+        // The brain blends to the free vcam only when it's on, the free cam itself moves the main camera
+        if (Camera.main != null) Camera.main.transform.SetPositionAndRotation(position, rotation);
+    }
+
+    /// <summary>
+    /// Pose looking at the model at the InitialCameraPosition's angle, from the distance where all of its bounds fit
+    /// in the free cam's view (with some padding). False when the model has no geometry.
+    /// </summary>
+    public bool TryGetFramingPose(GameObject model, out Vector3 position, out Quaternion rotation, float padding = 1.1f) {
+        position = Vector3.zero;
+        rotation = InitialCameraPosition != null ? InitialCameraPosition.rotation : Quaternion.Euler(45f, 0f, 0f);
+        if (model == null || !FileLoadingManager.TryCalculateBounds(model, out Bounds bounds)) return false;
+
+        var lens = _vCamFreeCamRefference != null ? _vCamFreeCamRefference.GetComponent<CinemachineVirtualCamera>() : null;
+        float fov = lens != null ? lens.m_Lens.FieldOfView : (Camera.main != null ? Camera.main.fieldOfView : 60f);
+        float aspect = Camera.main != null ? Camera.main.aspect : 16f / 9f;
+        float tanVertical = Mathf.Tan(fov * 0.5f * Mathf.Deg2Rad);
+        float tanHorizontal = tanVertical * aspect;
+
+        // Each corner of the bounds, in the camera's space around the center, must be inside the view:
+        // |x| <= (distance + z) * tanHorizontal, |y| <= (distance + z) * tanVertical  (z toward the camera is negative)
+        Quaternion inverse = Quaternion.Inverse(rotation);
+        float distance = 0f;
+        for (int i = 0; i < 8; i++) {
+            Vector3 corner = new Vector3(
+                (i & 1) == 0 ? -bounds.extents.x : bounds.extents.x,
+                (i & 2) == 0 ? -bounds.extents.y : bounds.extents.y,
+                (i & 4) == 0 ? -bounds.extents.z : bounds.extents.z);
+            Vector3 local = inverse * corner;
+            distance = Mathf.Max(distance,
+                Mathf.Abs(local.x) * padding / tanHorizontal - local.z,
+                Mathf.Abs(local.y) * padding / tanVertical - local.z);
+        }
+
+        position = bounds.center - rotation * Vector3.forward * distance;
+        return true;
+    }
+
+    #endregion
+
     public void ToggleVcamVisbility(bool toggleOn) {
         int layerIndex = LayerMask.NameToLayer("InterestPoint");
         int layerMask = 1 << layerIndex;

@@ -77,8 +77,10 @@ public class FPSManager: Singleton<FPSManager> {
     }
 
     private void Update() {
-        // ESC key completely exits, resets state, and hides the UI
-        if (Input.GetKeyDown(KeyCode.Escape)) {
+        // ESC key completely exits, resets state, and hides the UI.
+        // Only when FPS mode or its UI is open: closing switches to the free cam, which would break other states (e.g. geolocalization)
+        bool uiOpen = uiInstance != null && uiInstance.gameObject.activeInHierarchy;
+        if (Input.GetKeyDown(KeyCode.Escape) && (isInFPSMode || uiOpen)) {
             RequestCloseUI();
             return;
         }
@@ -239,6 +241,17 @@ public class FPSManager: Singleton<FPSManager> {
         if (uiInstance != null) {
             uiInstance.DisplaySpawnPosition(spawnPosition);
         }
+    }
+
+    public bool SpawnPlaced => spawnPlaced;
+
+    /// <summary>
+    /// Moves an already placed spawn point along with the map (geolocalization), without showing the FPS UI or the spawn visual.
+    /// </summary>
+    public void MoveSpawnWithMap(Vector3 position) {
+        if (!spawnPlaced) return; // the default spawn isn't tied to the map
+        spawnPosition = position;
+        if (playerInstance != null && !isInFPSMode) playerInstance.transform.position = spawnPosition;
     }
 
     /// <summary>

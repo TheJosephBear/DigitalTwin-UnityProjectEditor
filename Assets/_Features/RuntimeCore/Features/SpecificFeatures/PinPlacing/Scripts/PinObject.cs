@@ -75,9 +75,12 @@ public class PinObject: EditorObjectBase, IClickableBehindGeometry {
         if (_vcam != null) Destroy(_vcam);
     }
 
+    // Pins only follow the model while it's being geolocated, they can't be opened then
+    static bool IsInteractionBlocked => EditorManager.Instance.ActiveState == AppState.Survey || EditorManager.Instance.ActiveState == AppState.GeoLocalization;
+
     public void OnClickDown() {
         if (PinManager.Instance.IsPlacing) return;
-        if (EditorManager.Instance.ActiveState == AppState.Survey) return;
+        if (IsInteractionBlocked) return;
         PinManager.Instance.SelectPin(this);
         PinManager.Instance.FocusPin(this);
     }
@@ -86,7 +89,7 @@ public class PinObject: EditorObjectBase, IClickableBehindGeometry {
     public void OnClickUp() { }
 
     public void OnHover() {
-        if (EditorManager.Instance.ActiveState == AppState.Survey) return;
+        if (IsInteractionBlocked) return;
         if (_headObject != null) _headObject.transform.localScale = Vector3.Scale(originalScale, hoverScale);
     }
 

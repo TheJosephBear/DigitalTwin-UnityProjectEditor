@@ -39,10 +39,11 @@ public class EditorManager : MainManagerBase {
         ViewPoint firstView = ViewManager.Instance != null ? ViewManager.Instance.GetViewPoints().FirstOrDefault() : null;
         if (firstView != null) {
             rt = ViewRenderer.Render(firstView, PreviewWidth, PreviewHeight);
-        } else if (CameraManager.Instance != null && CameraManager.Instance.InitialCameraPosition != null) {
-            Transform defaultView = CameraManager.Instance.InitialCameraPosition;
+        } else if (CameraManager.Instance != null &&
+                   CameraManager.Instance.TryGetFramingPose(MapManager.Instance?.GetBaseMap()?.gameObject, out Vector3 defaultPosition, out Quaternion defaultRotation)) {
+            // Same view the project opens with: the whole model in view
             var freeCam = CameraManager.Instance.GetFreeCamVcam()?.GetComponent<CinemachineVirtualCamera>();
-            rt = ViewRenderer.Render(defaultView.position, defaultView.rotation, freeCam != null ? freeCam.m_Lens.FieldOfView : -1f, PreviewWidth, PreviewHeight);
+            rt = ViewRenderer.Render(defaultPosition, defaultRotation, freeCam != null ? freeCam.m_Lens.FieldOfView : -1f, PreviewWidth, PreviewHeight);
         } else {
             return;
         }

@@ -8,9 +8,16 @@ public class GeoLocalizationUI : UIBehaviour {
     public TMP_InputField ZoomScaleInputFieldReff;
     public Movable Basemapreff; 
     public UISwitcher.UISwitcher LockToggleRef;
+    public UnityEngine.UI.Slider OpacitySliderRef;
 
     bool _firstOpen = false;
 
+    void Update() {
+        // ESC does what the exit button does, unless a popup or file dialog is open (ESC belongs to it then)
+        if (!Input.GetKeyDown(KeyCode.Escape)) return;
+        if (SimpleFileBrowser.FileBrowser.IsOpen || FindAnyObjectByType<PopUpAreYouSureUI>() != null) return;
+        OnExit();
+    }
 
     #region OnClick
 
@@ -65,6 +72,11 @@ public class GeoLocalizationUI : UIBehaviour {
 
     public void ToggleExitToMenuButtonVisibility(bool toggleOn) {
         ExitToMenuButton.SetActive(toggleOn);
+    }
+
+    // The slider shows the copy's opacity (it starts at the manager's ModelTransparency, not at the slider's own value)
+    public void SetOpacityVisual(float opacity) {
+        if (OpacitySliderRef != null) OpacitySliderRef.SetValueWithoutNotify(opacity);
     }
 
     public void ChangeLockVisual(bool toggleOn) {

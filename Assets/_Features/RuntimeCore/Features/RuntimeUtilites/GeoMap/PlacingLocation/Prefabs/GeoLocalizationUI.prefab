@@ -1132,6 +1132,7 @@ MonoBehaviour:
   ZoomScaleInputFieldReff: {fileID: 0}
   Basemapreff: {fileID: 0}
   LockToggleRef: {fileID: 5804360358353683000}
+  OpacitySliderRef: {fileID: 60730068846734221}
 --- !u!1 &3628746869903541401
 GameObject:
   m_ObjectHideFlags: 0
