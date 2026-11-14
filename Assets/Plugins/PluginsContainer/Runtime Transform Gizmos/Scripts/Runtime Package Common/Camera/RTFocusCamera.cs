@@ -297,6 +297,8 @@ namespace RTG
         private void HandleMouseAndKeyboardInput()
         {
             float moveAmount = (_moveSettings.MoveSpeed + _currentAcceleration) * Time.deltaTime;
+            // DigitalTwin: holding Shift moves faster
+            if (RTInput.IsKeyPressed(KeyCode.LeftShift) || RTInput.IsKeyPressed(KeyCode.RightShift)) moveAmount *= _moveSettings.FastMoveMultiplier;
 
             Vector3 moveVector = Vector3.zero;
             _moveDirFlags[(int)MoveDirection.Forward] = Hotkeys.MoveForward.IsActive();

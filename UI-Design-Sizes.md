@@ -109,8 +109,8 @@ Screen margins are 24 px on every side (17.76 units for the search bar and exit 
 - **Hover:**
   - White icon buttons (`MainButton`, `ViewButton`) tint to `#EDE9FA` on hover and `#D6CCF0` when pressed.
   - Close buttons stay invisible until hovered, then show a 14 % purple rounded square, darker when pressed.
-- **Text buttons** (`PopUpAreYouSureUI`): bold labels, ≈ 24 px tall, Image white with the color set by the Button's Color Tint.
-  - Primary (the action: "Ano", "Uložit a odejít"): `#6A58A7` with white text, hover `#5A4A93`, pressed `#4B3D7D`.
+- **Text buttons** (`PopUpAreYouSureUI`, `PopUpInputUI`): bold labels, ≈ 24 px tall, Image white with the color set by the Button's Color Tint.
+  - Primary (the action: "Ano", "Uložit a odejít", "Pokračovat"): `#6A58A7` with white text, hover `#5A4A93`, pressed `#4B3D7D`.
   - Secondary ("Zrušit", "Odejít"): `#EDE9FA` with `#6A58A7` text, hover `#D6CCF0`, pressed `#C5B8E8`.
 - **Cursor:** a hand over every interactable `Selectable` (buttons, toggles, sliders including the track, dropdowns, scrollbars). Text inputs keep the normal cursor.
 - **Tooltips:** every icon-only button has a short Czech `TooltipTrigger`, such as "Uložit", "Zpět" or "Smazat pin". The `TEMPLabelBackground` inside `MainButton` is off by default.

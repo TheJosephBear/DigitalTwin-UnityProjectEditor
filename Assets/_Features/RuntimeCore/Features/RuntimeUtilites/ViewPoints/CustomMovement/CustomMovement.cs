@@ -6,6 +6,8 @@ public class CustomMovement : MonoBehaviour {
     [Header("Look & Movement Settings")]
     public bool RightClickLookEnabled = true;
     public float moveSpeed = 5f;
+    [Tooltip("Move speed multiplier while Shift is held")]
+    public float fastMoveMultiplier = 3f;
     public float lookSensitivity = 2f;
 
     [Header("Pan Settings")]
@@ -58,7 +60,8 @@ public class CustomMovement : MonoBehaviour {
     void ApplyMovement() {
         Vector3 inputDir = new Vector3(_moveInput.x, _ascendInput, _moveInput.y);
         Vector3 moveDir = _movedObject.transform.TransformDirection(inputDir.normalized);
-        _movedObject.transform.position += moveDir * moveSpeed * Time.deltaTime;
+        bool fast = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+        _movedObject.transform.position += moveDir * moveSpeed * (fast ? fastMoveMultiplier : 1f) * Time.deltaTime;
     }
 
     void RightClickLook() {

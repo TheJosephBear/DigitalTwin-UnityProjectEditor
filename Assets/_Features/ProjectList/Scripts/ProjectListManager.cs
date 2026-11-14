@@ -58,9 +58,10 @@ public class ProjectListManager: Singleton<ProjectListManager> {
     }
 
     public void CreateNewProject() {
-        PopUp.Instance.AskForInput("Jméno projektu", (userInput) => {
+        PopUp.Instance.AskForInput("Název projektu", (userInput) => {
+            if (userInput == null) return; // Cancelled (button or ESC)
             if (string.IsNullOrWhiteSpace(userInput)) {
-                PopUp.Instance.ShowPopUpWindow("Input was cancelled or empty.");
+                PopUp.Instance.ShowPopUpWindow("Název projektu nesmí být prázdný.");
                 return;
             }
 
@@ -96,8 +97,9 @@ public class ProjectListManager: Singleton<ProjectListManager> {
     }
 
     public void RenameProject(ProjectMetadata projectMetadata, string text) {
+        if (text == null) return; // Cancelled (button or ESC)
         if (string.IsNullOrWhiteSpace(text)) {
-            PopUp.Instance.ShowPopUpWindow("Input was cancelled or empty.");
+            PopUp.Instance.ShowPopUpWindow("Název projektu nesmí být prázdný.");
             return;
         }
 

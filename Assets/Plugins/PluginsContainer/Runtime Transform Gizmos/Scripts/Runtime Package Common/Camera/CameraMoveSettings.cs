@@ -15,9 +15,13 @@ namespace RTG
         private float _moveSpeed = 6.0f;
         [SerializeField]
         private float _accelerationRate = 15.0f;
+        // DigitalTwin: move speed multiplier while Shift is held
+        [SerializeField]
+        private float _fastMoveMultiplier = 3.0f;
 
         public float MoveSpeed { get { return _moveSpeed; } set { _moveSpeed = Mathf.Max(_minMoveSpeed, value); } }
         public float AccelerationRate { get { return _accelerationRate; } set { _accelerationRate = Mathf.Max(0.0f, value); } }
+        public float FastMoveMultiplier { get { return _fastMoveMultiplier; } set { _fastMoveMultiplier = Mathf.Max(1.0f, value); } }
 
         #if UNITY_EDITOR
         protected override void RenderContent(UnityEngine.Object undoRecordObject)
@@ -41,6 +45,15 @@ namespace RTG
             {
                 EditorUndoEx.Record(undoRecordObject);
                 AccelerationRate = newFloat;
+            }
+
+            content.text = "Fast move multiplier";
+            content.tooltip = "Move speed is multiplied by this value while Shift is held.";
+            newFloat = EditorGUILayout.FloatField(content, FastMoveMultiplier);
+            if (newFloat != FastMoveMultiplier)
+            {
+                EditorUndoEx.Record(undoRecordObject);
+                FastMoveMultiplier = newFloat;
             }
             EditorGUILayout.EndVertical();
         }

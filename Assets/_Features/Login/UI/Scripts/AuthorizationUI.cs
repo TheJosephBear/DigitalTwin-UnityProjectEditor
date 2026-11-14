@@ -11,18 +11,48 @@ public class AuthorizationUI : UIBehaviour {
     public GameObject LoginElementContainer;
     public GameObject RegisterElementContainer;
 
+    private int _lastSubmitFrame = -1;
+
     private void Awake() {
+        // Enter in the name field goes on to the password, Enter in the password logs in (or registers)
+        name_field.onSubmit.AddListener(_ => OnNameSubmitted());
+        password_field.onSubmit.AddListener(_ => OnPasswordSubmitted());
+
         GoToLogin();
     }
 
     public void GoToLogin() {
         LoginElementContainer.SetActive(true);
         RegisterElementContainer.SetActive(false);
+        FocusFirstEmptyField();
     }
 
     public void GoToRegister() {
         LoginElementContainer.SetActive(false);
         RegisterElementContainer.SetActive(true);
+        FocusFirstEmptyField();
+    }
+
+    void FocusFirstEmptyField() {
+        bool nameFilled = !string.IsNullOrEmpty(name_field.text);
+        InputFieldNavigation.Focus(nameFilled ? password_field : name_field);
+    }
+
+    void OnNameSubmitted() {
+        if (string.IsNullOrEmpty(password_field.text)) {
+            InputFieldNavigation.Focus(password_field);
+        } else {
+            OnPasswordSubmitted();
+        }
+    }
+
+    void OnPasswordSubmitted() {
+        // One Enter can come both from the field and from the UI submit action
+        if (_lastSubmitFrame == Time.frameCount) return;
+        _lastSubmitFrame = Time.frameCount;
+
+        if (RegisterElementContainer.activeSelf) Register();
+        else Login();
     }
 
     public void Login() {
