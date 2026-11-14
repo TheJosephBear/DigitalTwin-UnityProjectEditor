@@ -273,8 +273,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e3d84b3346b6394e8cb2671b316a20a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SceneToInstantiate: 5
-  ShowAddViewButton: 0
+  SceneToInstantiate: 1
+  ShowAddViewButton: 1
   ViewPointPrefab: {fileID: 4159745496729114929, guid: 70ca2b64b92f43844adf2a73f8ef5565, type: 3}
   ViewPointUIPrefab: {fileID: 4228714253713323084, guid: eb57ad5ba8f8d98439865de866529ce1, type: 3}
   viewPointSpawnPosition: {x: 0, y: 120, z: -200}
@@ -312,15 +312,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RightClickLookEnabled: 1
-  moveSpeed: 5
+  moveSpeed: 10
   lookSensitivity: 2
   panSensitivity: 0.5
-  ScrollSlowDistance: 50
-  MinScrollSpeed: 2
-  MaxScrollSpeed: 20
+  ScrollSlowDistance: 67
+  MinScrollSpeed: 0.007
+  MaxScrollSpeed: 67
   GroundGeometryLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1025
 --- !u!1 &8794994671842005292
 GameObject:
   m_ObjectHideFlags: 0

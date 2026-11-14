@@ -63,13 +63,12 @@ public class CameraManager: Singleton<CameraManager> {
 
         _cinemachineBrainRefference = FindAnyObjectByType<CinemachineBrain>();
 
-        if (SceneLoadingManager.Instance != null) {
-            _vCamFreeCamRefference = SceneLoadingManager.Instance.InstantiateObjectInScene(VcamFreeCamPrefab, InitialCameraPosition.position, MainManagerBase.Instance.SceneType);
-        } else {
-            _vCamFreeCamRefference = Instantiate(VcamFreeCamPrefab, InitialCameraPosition.position, Quaternion.identity);
+        // The free cam belongs to this manager's own scene (Editing or Viewing). MainManagerBase.Instance
+        // can't be used here: Awake order between scene objects isn't guaranteed, so it may not be set yet.
+        _vCamFreeCamRefference = Instantiate(VcamFreeCamPrefab, InitialCameraPosition.position, InitialCameraPosition.rotation);
+        if (_vCamFreeCamRefference.scene != gameObject.scene) {
+            UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(_vCamFreeCamRefference, gameObject.scene);
         }
-
-        _vCamFreeCamRefference.transform.rotation = InitialCameraPosition.rotation;
     }
 
     /*
