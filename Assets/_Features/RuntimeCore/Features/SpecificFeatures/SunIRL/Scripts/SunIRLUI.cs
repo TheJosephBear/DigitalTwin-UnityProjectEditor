@@ -37,6 +37,8 @@ public class SunIRLUI: MonoBehaviour {
     [Header("Time")]
     [SerializeField] private UnityEngine.UI.Slider timeSlider;
     [SerializeField] private TMP_Text timeValueLabel;
+    [Tooltip("Track of the time slider; coloured by the day's night, dawn, sunrise, sunset and dusk. Found under the slider when empty")]
+    [SerializeField] private GradientPillTrack timeTrack;
 
     [Header("Live Time")]
     [Tooltip("\"Aktuální datum a čas\": follow the real clock until the user moves a date/time control")]
@@ -56,6 +58,9 @@ public class SunIRLUI: MonoBehaviour {
 
     private SunManager sunManager;
     private bool isInitializing = false;
+
+    /// <summary>Dawn, sunrise, sunset and dusk of the selected date at the sun's location.</summary>
+    public SunTimes SelectedDaySunTimes { get; private set; }
 
     public void Initialize(SunManager manager, bool applyDefaults = true) {
         sunManager = manager;
@@ -99,6 +104,7 @@ public class SunIRLUI: MonoBehaviour {
         if (applyDefaults) {
             ApplyAllValuesToManager();
         }
+        RefreshTimeTrack(); // after the defaults, so it uses the sun's location
 
         SetVisible(false, animate: false);
     }
@@ -126,6 +132,9 @@ public class SunIRLUI: MonoBehaviour {
         if (longitudeInput != null) {
             longitudeInput.text = FormatCoordinate(longitude);
         }
+
+        // The sun has moved to these coordinates by now; days are longer or shorter there
+        RefreshTimeTrack();
 
         isInitializing = wasInitializing; // Restore state
     }
@@ -155,6 +164,7 @@ public class SunIRLUI: MonoBehaviour {
         UpdateDateSliderRange();
         dateSlider.SetValueWithoutNotify(DayOfYear(SelectedYear(), month, day));
         RefreshDateLabel();
+        RefreshTimeTrack();
 
         // 3. Set the time slider (rounded down to the slider step)
         timeSlider.SetValueWithoutNotify(TimeToSliderValue(hour, minute));
@@ -258,6 +268,24 @@ public class SunIRLUI: MonoBehaviour {
         }
     }
 
+    // Recolours the time track for the selected date at the sun's location: dark at night, then dawn,
+    // sunrise, day sky, sunset and dusk at the times they happen that day (shorter days in winter)
+    private void RefreshTimeTrack() {
+        if (sunManager == null || timeSlider == null) return;
+        if (timeTrack == null) timeTrack = timeSlider.GetComponentInChildren<GradientPillTrack>(true);
+        if (timeTrack == null) return;
+
+        DateTime date = DateFromSlider().Date;
+        SelectedDaySunTimes = sunManager.GetSunTimes(date);
+
+        // The track's ends are the slider's first and last positions (00:00 and 23:55), not 24:00
+        float spanMinutes = (timeSlider.maxValue - timeSlider.minValue) * TimeStepMinutes;
+        timeTrack.SetColorStops(DaylightTrackColors.Build(
+            minute => sunManager.GetSunElevation(date.AddMinutes(minute)),
+            SelectedDaySunTimes,
+            spanMinutes));
+    }
+
     private void SetDropdownToValue(TMP_Dropdown dropdown, string valueStr) {
         int index = dropdown.options.FindIndex(option => option.text == valueStr);
         if (index != -1) {
@@ -304,6 +332,7 @@ public class SunIRLUI: MonoBehaviour {
 
     private void OnDateChanged(float _) {
         RefreshDateLabel();
+        RefreshTimeTrack();
         if (isInitializing) return;
 
         LockToManualTime();

@@ -161,53 +161,36 @@ public class SunIRL: MonoBehaviour {
     }
 
     private Quaternion CalculateSunQuaternion(out float altitudeDeg) {
-        DateTime currentDateTime = GetDateTime();
+        SolarPosition(GetDateTime(), out double elevationDeg, out double azimuthDeg);
+        altitudeDeg = (float)elevationDeg;
 
-        // 1. Calculate Day of the Year
-        int dayOfYear = currentDateTime.DayOfYear;
+        // Azimuth is measured clockwise from true north; the light points away from the sun
+        return Quaternion.Euler(altitudeDeg, (float)azimuthDeg + 180f, 0f);
+    }
 
-        // 2. Convert Local Time to UTC Hours (summer/winter time aware)
-        float localHours = (float)currentDateTime.TimeOfDay.TotalHours;
-        float utcHours = localHours - GetUtcOffsetHours(currentDateTime);
+    // Sun position at a local wall-clock time here (summer/winter time aware)
+    private void SolarPosition(DateTime localTime, out double elevationDeg, out double azimuthDeg) {
+        DateTime utc = localTime.AddHours(-GetUtcOffsetHours(localTime));
+        SolarCalculator.Position(utc, Latitude, Longitude, out elevationDeg, out azimuthDeg);
+    }
 
-        // 3. Convert UTC to Local Solar Time using Longitude (15° per hour = 4 min per degree)
-        float solarTimeHours = utcHours + (Longitude / 15f);
+    /// <summary>
+    /// Sun elevation in degrees at a local wall-clock time, at this sun's location.
+    /// </summary>
+    public float GetElevation(DateTime localTime) {
+        SolarPosition(localTime, out double elevationDeg, out _);
+        return (float)elevationDeg;
+    }
 
-        // Normalize solar time between 0 and 24
-        solarTimeHours = (solarTimeHours % 24f + 24f) % 24f;
-
-        // 4. Calculate Solar Declination (radians)
-        float declinationRad = 23.45f * Mathf.Deg2Rad * Mathf.Sin(Mathf.Deg2Rad * (360f / 365f * (dayOfYear + 284)));
-
-        // 5. Calculate Hour Angle (radians)
-        // -12h = Morning (-180°), 0h = Solar Noon (0°), +12h = Evening (+180°)
-        float hourAngleRad = (solarTimeHours - 12f) * 15f * Mathf.Deg2Rad;
-
-        // 6. Latitude in radians
-        float latRad = Latitude * Mathf.Deg2Rad;
-
-        // 7. Calculate Solar Altitude / Elevation angle
-        float sinAltitude = Mathf.Sin(latRad) * Mathf.Sin(declinationRad) +
-                            Mathf.Cos(latRad) * Mathf.Cos(declinationRad) * Mathf.Cos(hourAngleRad);
-        float altitudeRad = Mathf.Asin(Mathf.Clamp(sinAltitude, -1f, 1f));
-        altitudeDeg = altitudeRad * Mathf.Rad2Deg;
-
-        // 8. Calculate Solar Azimuth angle (Measured from True North = 0°)
-        float cosAzimuth = (Mathf.Sin(declinationRad) * Mathf.Cos(latRad) -
-                            Mathf.Cos(declinationRad) * Mathf.Sin(latRad) * Mathf.Cos(hourAngleRad)) / Mathf.Max(0.0001f, Mathf.Cos(altitudeRad));
-
-        float azimuthRad = Mathf.Acos(Mathf.Clamp(cosAzimuth, -1f, 1f));
-
-        // Morning sun is in the East (< 180°), Afternoon sun is in the West (> 180°)
-        if (hourAngleRad > 0) {
-            azimuthRad = (2f * Mathf.PI) - azimuthRad;
-        }
-
-        float azimuthDeg = azimuthRad * Mathf.Rad2Deg;
-
-        float adjustedAzimuthDeg = azimuthDeg + 180f;
-
-        return Quaternion.Euler(altitudeDeg, adjustedAzimuthDeg, 0f);
+    /// <summary>
+    /// Dawn, sunrise, sunset and dusk on the given local date, at this sun's location.
+    /// </summary>
+    public SunTimes GetSunTimes(DateTime date) {
+        DateTime midnight = date.Date;
+        return SolarCalculator.FindSunTimes(minutes => {
+            SolarPosition(midnight.AddMinutes(minutes), out double elevationDeg, out _);
+            return elevationDeg;
+        });
     }
 
     public SerializableSun Serialize() {

@@ -79,6 +79,16 @@ public class SunManager: Singleton<SunManager> {
         }
     }
 
+    /// <summary>Dawn, sunrise, sunset and dusk on a local date, at the sun's location.</summary>
+    public SunTimes GetSunTimes(DateTime date) {
+        return _sunIRL != null ? _sunIRL.GetSunTimes(date) : default;
+    }
+
+    /// <summary>Sun elevation in degrees at a local wall-clock time, at the sun's location.</summary>
+    public float GetSunElevation(DateTime localTime) {
+        return _sunIRL != null ? _sunIRL.GetElevation(localTime) : 0f;
+    }
+
     public void UpdateTime(uint hour, uint minute) {
         if (_sunIRL != null) {
             _sunIRL.SetHour(hour);
