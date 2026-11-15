@@ -31,7 +31,7 @@ public class PinManager: Singleton<PinManager> {
     public float PanMaxDistance = 30f;
     [Tooltip("Geometry the pin vcams can't be placed inside of")]
     public LayerMask VcamObstacleLayers = ~0;
-    [Tooltip("Clicking a pin flies the camera to its vcam in the editor, this also enables it in the viewer")]
+    [Tooltip("Clicking a far pin (beyond PanMaxDistance) flies the camera to its vcam in the editor, this also enables it in the viewer. Close pins are panned to in both")]
     public bool EnableVcamInViewer = false;
 
     private List<PinObject> _pins = new List<PinObject>();
@@ -226,11 +226,11 @@ public class PinManager: Singleton<PinManager> {
     /// </summary>
     public void FocusPin(PinObject pin) {
         if (pin == null || pin.Vcam == null || CameraManager.Instance == null || MainManagerBase.Instance == null) return;
-        if (MainManagerBase.Instance is ViewingManager && !EnableVcamInViewer) return;
         if (MainManagerBase.Instance.ActiveState != AppState.Freecam) return; // other states drive the camera themselves
 
         float distance = Camera.main != null ? Vector3.Distance(Camera.main.transform.position, pin.transform.position) : 0f;
         if (distance > PanMaxDistance || !pin.PanVcamFromCamera()) {
+            if (MainManagerBase.Instance is ViewingManager && !EnableVcamInViewer) return; // the viewer only pans unless enabled
             pin.PlaceVcam(VcamDistance, VcamPitch, VcamObstacleLayers); // far away, or close but behind the camera
         }
         CameraManager.Instance.FlyToVcam(pin.Vcam);
