@@ -5,22 +5,14 @@ public class PinObject: EditorObjectBase, IClickableBehindGeometry {
     [Header("Pin Data")]
     public Sprite Image;
 
-    [Header("Outline")]
-    [Tooltip("Added to the model's renderers while the pin is being edited (PinOutline shader)")]
-    [SerializeField] private Material _outlineMaterial;
-    [Tooltip("Enlarged on hover")]
-    [SerializeField] private GameObject _headObject;
+    [Header("Visual")]
+    [SerializeField] private PinBillboard _billboard;
 
     [Header("Camera")]
     [Tooltip("Vcam the camera flies to when the pin is clicked. Child in the prefab, detached on Awake so the pin's scaling doesn't move it")]
     [SerializeField] private GameObject _vcam;
 
-    [Header("Hover Settings")]
-    [SerializeField] private Vector3 hoverScale = new Vector3(1.2f, 1.2f, 1.2f);
-    private Vector3 originalScale;
     private bool _placing;
-    private Renderer[] _renderers;
-    private bool _outlined;
 
     const float VcamClearance = 0.3f; // How far the vcam stays from walls
 
@@ -62,9 +54,6 @@ public class PinObject: EditorObjectBase, IClickableBehindGeometry {
     }
 
     private void Awake() {
-        originalScale = _headObject != null ? _headObject.transform.localScale : Vector3.one;
-        _renderers = GetComponentsInChildren<Renderer>(true);
-
         if (_vcam != null) {
             _vcam.transform.SetParent(null, true); // stays in the pin's scene
             _vcam.SetActive(false);
@@ -87,23 +76,21 @@ public class PinObject: EditorObjectBase, IClickableBehindGeometry {
 
     public void OnHover() {
         if (EditorManager.Instance != null && EditorManager.Instance.ActiveState == AppState.Survey) return;
-        if (_headObject != null) _headObject.transform.localScale = Vector3.Scale(originalScale, hoverScale);
+        _billboard.Hovered = true;
     }
 
     public void OnUnhover() {
-        if (_headObject != null) _headObject.transform.localScale = originalScale;
+        _billboard.Hovered = false;
     }
 
-    public void SetOutline(bool toggleOn) {
-        if (_outlineMaterial == null || toggleOn == _outlined) return;
-        _outlined = toggleOn;
+    /// <summary>Selected look while the pin is being edited/viewed.</summary>
+    public void SetSelected(bool selected) {
+        _billboard.Selected = selected;
+    }
 
-        foreach (Renderer renderer in _renderers) {
-            List<Material> materials = new List<Material>(renderer.sharedMaterials);
-            if (toggleOn) materials.Add(_outlineMaterial);
-            else materials.Remove(_outlineMaterial);
-            renderer.sharedMaterials = materials.ToArray();
-        }
+    /// <summary>Number or letter shown in the pin's head, "" for none.</summary>
+    public void SetLabel(string label) {
+        _billboard.SetLabel(label);
     }
 
     /// <summary>
@@ -111,7 +98,7 @@ public class PinObject: EditorObjectBase, IClickableBehindGeometry {
     /// </summary>
     public void SetPlacingMode(bool placing) {
         _placing = placing;
-        foreach (Collider col in GetComponentsInChildren<Collider>()) {
+        foreach (Collider col in GetComponentsInChildren<Collider>(true)) { // true: a new pin is still hidden when placing starts
             col.enabled = !_placing;
         }
         if (placing) OnUnhover();
@@ -171,16 +158,19 @@ public class PinObject: EditorObjectBase, IClickableBehindGeometry {
     }
 
     /// <summary>
-    /// Puts the vcam where the main camera is, looking at the pin, so flying to it only turns the camera.
+    /// Puts the vcam where the main camera would be with the pin in the middle of the screen, keeping its rotation and depth,
+    /// so flying to it only pans the camera. False when the pin is behind the camera.
     /// </summary>
-    public void AimVcamFromCamera() {
+    public bool PanVcamFromCamera() {
         Camera cam = Camera.main;
-        if (_vcam == null || cam == null) return;
+        if (_vcam == null || cam == null) return false;
 
-        Vector3 position = cam.transform.position;
-        Vector3 forward = transform.position - position;
-        if (forward.sqrMagnitude < 0.0001f) forward = cam.transform.forward;
-        _vcam.transform.SetPositionAndRotation(position, Quaternion.LookRotation(forward, Vector3.up));
+        Transform camTransform = cam.transform;
+        float depth = Vector3.Dot(transform.position - camTransform.position, camTransform.forward);
+        if (depth <= 0f) return false;
+
+        _vcam.transform.SetPositionAndRotation(transform.position - camTransform.forward * depth, camTransform.rotation);
+        return true;
     }
 
     // How far the vcam can go from the origin in the direction before hitting geometry

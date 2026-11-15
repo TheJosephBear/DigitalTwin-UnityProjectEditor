@@ -4,6 +4,9 @@ using System.IO;
 using UnityEngine;
 using System.Linq;
 using TriLibCore;
+using TriLibCore.Dae;
+using TriLibCore.Fbx;
+using TriLibCore.General;
 using System;
 
 /// <summary>
@@ -293,9 +296,9 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
         bool isZip = System.IO.Path.GetExtension(copiedModelPath).Equals(".zip", System.StringComparison.OrdinalIgnoreCase);
 
         if (isZip) {
-            context = AssetLoaderZip.LoadModelFromZipFile(copiedModelPath, null, null, progressHandler, null, null, options);
+            context = AssetLoaderZip.LoadModelFromZipFile(copiedModelPath, null, RestoreOriginalMetallic, progressHandler, null, null, options);
         } else {
-            context = AssetLoader.LoadModelFromFile(copiedModelPath, null, null, progressHandler, null, null, options);
+            context = AssetLoader.LoadModelFromFile(copiedModelPath, null, RestoreOriginalMetallic, progressHandler, null, null, options);
         }
 
         if (context == null || context.RootGameObject == null) {
@@ -309,6 +312,27 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
         CenterPivot(loadedModel);
         MemoryLogger.Log($"After loading {fileName}");
         return loadedModel;
+    }
+
+    /// <summary>
+    /// TriLib's Phong to PBR conversion makes up a metallic value for FBX Phong/Lambert (non Blender) and Collada materials
+    /// from their specular color. A missing specular color counts as white and the specular factor is ignored,
+    /// so many of them end up fully metallic. Puts metallic back to what the file says (FBX Phong/Lambert has none, so 0).
+    /// The rest of the conversion (smoothness) is kept.
+    /// </summary>
+    private static void RestoreOriginalMetallic(AssetLoaderContext context) {
+        // The second pass ("_alpha") materials of partly transparent materials always take metallic from a (black) texture, so they're fine
+        foreach (KeyValuePair<TriLibCore.Interfaces.IMaterial, Material> loaded in context.LoadedMaterials) {
+            Material material = loaded.Value;
+            if (material == null || !material.HasProperty("_Metallic")) continue;
+            if (material.IsKeywordEnabled("_METALLICGLOSSMAP")) continue; // a metallic texture is the original value
+
+            if (loaded.Key is FBXMaterial fbx && fbx.IsPhongMaterial && !fbx.IsBlenderMaterial) {
+                material.SetFloat("_Metallic", 0f);
+            } else if (loaded.Key is DaeMaterial dae) {
+                material.SetFloat("_Metallic", dae.GetGenericFloatValue(GenericMaterialProperty.Metallic));
+            }
+        }
     }
 
     #endregion

@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Saved as int in projects, so only append. Numbers is 0 so older saves get numbers
+public enum PinLabelMode { Numbers, Letters, None }
+
 public class PinManager: Singleton<PinManager> {
 
     [Header("Prefabs & Setup")]
@@ -9,6 +12,10 @@ public class PinManager: Singleton<PinManager> {
     public GameObject PinContextUIPrefab;
     [Tooltip("Read only context UI the viewer opens instead of the editing one")]
     public GameObject PinInfoUIPrefab;
+
+    [Header("Labels")]
+    [Tooltip("What the pins' heads show, assigned by the pin's position in the list")]
+    public PinLabelMode LabelMode = PinLabelMode.Numbers;
 
     [Header("Viewer")]
     [Tooltip("Creates the pin list UI in the viewer too (the editor always has it)")]
@@ -20,8 +27,8 @@ public class PinManager: Singleton<PinManager> {
     [Tooltip("How many degrees the pin's vcam looks down at the pin (other angles are tried when geometry is in the way)")]
     [Range(5f, 85f)]
     public float VcamPitch = 45f;
-    [Tooltip("[min, max] camera-to-pin distance in which clicking a pin only turns the camera to it instead of flying to its vcam")]
-    public Vector2 TurnOnlyDistanceRange = new Vector2(40f, 100000f);
+    [Tooltip("Clicking a pin closer than this pans the camera to it (keeping its rotation), farther pins are flown to with the pin's vcam")]
+    public float PanMaxDistance = 30f;
     [Tooltip("Geometry the pin vcams can't be placed inside of")]
     public LayerMask VcamObstacleLayers = ~0;
     [Tooltip("Clicking a pin flies the camera to its vcam in the editor, this also enables it in the viewer")]
@@ -34,10 +41,12 @@ public class PinManager: Singleton<PinManager> {
     private PinInfoUI _infoUIInstance;
     private PinPlacingManager _placingManager;
     private SceneType _sceneToInstantiate = SceneType.Editing;
+    private PinLabelMode _defaultLabelMode;
 
     protected override void Awake() {
         base.Awake();
         _placingManager = GetComponent<PinPlacingManager>();
+        _defaultLabelMode = LabelMode;
         if (SceneLoadingManager.Instance != null) _sceneToInstantiate = SceneLoadingManager.Instance.GetActiveScene();
     }
 
@@ -79,11 +88,13 @@ public class PinManager: Singleton<PinManager> {
         GameObject spawnedObj = SceneLoadingManager.Instance.InstantiateObjectInScene(PinPrefab, position, _sceneToInstantiate);
         PinObject newPin = spawnedObj.GetComponent<PinObject>();
         newPin.SetName("Pin " + (_pins.Count + 1));
+        newPin.SetLabel(GetLabel(_pins.Count)); // where it lands when registered
         return newPin;
     }
 
     public void RegisterPin(PinObject pin, bool deserialization = false) {
         _pins.Add(pin);
+        RefreshLabels();
         RefreshPinButtons();
 
         if (!deserialization) MarkUnsavedChanges();
@@ -96,6 +107,7 @@ public class PinManager: Singleton<PinManager> {
             if (pin == _activePin) CloseContextUI();
             _pins.Remove(pin);
             Destroy(pin.gameObject);
+            RefreshLabels();
             RefreshPinButtons();
             MarkUnsavedChanges();
         }, $"Chcete smazat pin {pin.Name}?");
@@ -105,7 +117,45 @@ public class PinManager: Singleton<PinManager> {
         PinObject temp = _pins[index];
         _pins[index] = _pins[newIndex];
         _pins[newIndex] = temp;
+        RefreshLabels();
         MarkUnsavedChanges();
+    }
+
+    public void SetLabelMode(PinLabelMode mode) {
+        if (mode == LabelMode) return;
+        LabelMode = mode;
+        RefreshLabels();
+        if (_pinUIInstance != null) _pinUIInstance.UpdateLabelModeVisual();
+        MarkUnsavedChanges();
+    }
+
+    /// <summary>Gives every pin the label of its position in the list.</summary>
+    public void RefreshLabels() {
+        for (int i = 0; i < _pins.Count; i++) {
+            if (_pins[i] != null) _pins[i].SetLabel(GetLabel(i));
+        }
+    }
+
+    /// <summary>Label of the pin at the index: "1", "2"... or "A".."Z", "AA", "AB"... or "".</summary>
+    public string GetLabel(int index) {
+        switch (LabelMode) {
+            case PinLabelMode.Numbers:
+                return (index + 1).ToString();
+            case PinLabelMode.Letters:
+                string label = "";
+                for (int n = index + 1; n > 0; n = (n - 1) / 26) {
+                    label = (char)('A' + (n - 1) % 26) + label;
+                }
+                return label;
+            default:
+                return "";
+        }
+    }
+
+    void OnValidate() {
+        if (!Application.isPlaying) return; // LabelMode changed in the inspector
+        RefreshLabels();
+        if (_pinUIInstance != null) _pinUIInstance.UpdateLabelModeVisual();
     }
 
     public List<PinObject> GetPins() => _pins;
@@ -151,7 +201,7 @@ public class PinManager: Singleton<PinManager> {
     }
 
     private void OpenContextUI(PinObject pin) {
-        if (_activePin != null) _activePin.SetOutline(false);
+        if (_activePin != null) _activePin.SetSelected(false);
         _activePin = pin;
 
         if (IsViewer) {
@@ -166,13 +216,13 @@ public class PinManager: Singleton<PinManager> {
         }
         ToggleContextUI(true);
 
-        pin.SetOutline(true);
+        pin.SetSelected(true);
         RefreshPinButtons();
     }
 
     /// <summary>
     /// Flies the camera to the pin's vcam (Cinemachine blend), then hands the camera back to the free cam there.
-    /// Within TurnOnlyDistanceRange the vcam is where the camera is, so the blend only turns the camera to the pin.
+    /// Pins within PanMaxDistance in front of the camera are panned to instead, keeping the camera's rotation.
     /// </summary>
     public void FocusPin(PinObject pin) {
         if (pin == null || pin.Vcam == null || CameraManager.Instance == null || MainManagerBase.Instance == null) return;
@@ -180,16 +230,14 @@ public class PinManager: Singleton<PinManager> {
         if (MainManagerBase.Instance.ActiveState != AppState.Freecam) return; // other states drive the camera themselves
 
         float distance = Camera.main != null ? Vector3.Distance(Camera.main.transform.position, pin.transform.position) : 0f;
-        if (distance >= TurnOnlyDistanceRange.x && distance <= TurnOnlyDistanceRange.y) {
-            pin.AimVcamFromCamera();
-        } else {
-            pin.PlaceVcam(VcamDistance, VcamPitch, VcamObstacleLayers);
+        if (distance > PanMaxDistance || !pin.PanVcamFromCamera()) {
+            pin.PlaceVcam(VcamDistance, VcamPitch, VcamObstacleLayers); // far away, or close but behind the camera
         }
         CameraManager.Instance.FlyToVcam(pin.Vcam);
     }
 
     public void CloseContextUI() {
-        if (_activePin != null) _activePin.SetOutline(false);
+        if (_activePin != null) _activePin.SetSelected(false);
         _activePin = null;
 
         ToggleContextUI(false);
@@ -201,7 +249,7 @@ public class PinManager: Singleton<PinManager> {
     }
 
     public void StartMovingPin(PinObject pin) {
-        pin.SetOutline(false);
+        pin.SetSelected(false);
         _placingManager.StartPlacing(pin);
     }
 
@@ -220,7 +268,7 @@ public class PinManager: Singleton<PinManager> {
 
         // Moving continues the context UI's edit session, so a cancel there still reverts the move
         if (pin == _activePin) {
-            pin.SetOutline(true);
+            pin.SetSelected(true);
             ToggleContextUI(true);
             _contextUIInstance.OnReturnFromMoving();
         }
@@ -250,7 +298,11 @@ public class PinManager: Singleton<PinManager> {
         _placingManager.CancelPlacing();
         CloseContextUI();
         Utilities.DestroyAllGameObjects(_pins);
-        if (_pinUIInstance != null) _pinUIInstance.ClearPinButtonList();
+        LabelMode = _defaultLabelMode;
+        if (_pinUIInstance != null) {
+            _pinUIInstance.ClearPinButtonList();
+            _pinUIInstance.UpdateLabelModeVisual();
+        }
     }
 
     #region Serialization
@@ -260,7 +312,7 @@ public class PinManager: Singleton<PinManager> {
         foreach (PinObject pin in _pins) {
             list.Add(pin.Serialize());
         }
-        return new SerializablePinManager { Pins = list };
+        return new SerializablePinManager { Pins = list, labelMode = (int)LabelMode };
     }
 
     public void Deserialize(SerializablePinManager data) {
@@ -268,6 +320,9 @@ public class PinManager: Singleton<PinManager> {
             Debug.Log("Pin manager deserialization skipped: Source data is null");
             return;
         }
+
+        LabelMode = (PinLabelMode)data.labelMode;
+        if (_pinUIInstance != null) _pinUIInstance.UpdateLabelModeVisual();
 
         foreach (SerializablePin pinData in data.Pins) {
             PinObject newPin = CreatePinObject(pinData.position);

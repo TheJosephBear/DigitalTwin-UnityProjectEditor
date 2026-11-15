@@ -279,6 +279,9 @@ public class CameraManager: Singleton<CameraManager> {
 
         _isFlyingToVcam = true;
         _flyToVcamTarget = vcam;
+        // Like ViewactiveState: collision off while flying, else the enforcer pulls the camera back to where it got stuck once the blend ends.
+        // Only the component, the collision setting stays as it is
+        CameraColissionScriptRef.enabled = false;
         vcam.SetActive(true);
         _flyToVcamCoroutine = StartCoroutine(FlyToVcamCoroutine(vcam.GetComponent<CinemachineVirtualCameraBase>()));
     }
@@ -309,6 +312,7 @@ public class CameraManager: Singleton<CameraManager> {
         if (_flyToVcamTarget != null) _flyToVcamTarget.SetActive(false); // null when its pin got deleted
         _flyToVcamTarget = null;
         ToggleCinemachineBrain(false);
+        CameraColissionScriptRef.enabled = _isCollisionEnabled; // enabling it resets its last valid position to where the camera is now
     }
 
     public GameObject GetFreeCamVcam() {

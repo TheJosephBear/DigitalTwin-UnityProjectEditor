@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PinUI: MonoBehaviour {
 
@@ -7,13 +8,24 @@ public class PinUI: MonoBehaviour {
     public GameObject ScrollViewContentRefference;
     public GameObject AddPinButtonRefference;
 
+    [Header("Label mode")]
+    [Tooltip("Hidden in the viewer")]
+    public GameObject LabelModeSelectorRefference;
+    [Tooltip("One per PinLabelMode, in its order")]
+    public Image[] LabelModeButtonImages;
+    public TMPro.TextMeshProUGUI[] LabelModeButtonTexts;
+    public Color LabelModeSelectedColor = new Color(0.415686f, 0.345098f, 0.654902f, 1f);
+    public Color LabelModeUnselectedColor = Color.white;
+
     List<PinHUDButton> _buttonList = new List<PinHUDButton>();
     PinManager _pinManager;
 
     void Start() {
         if (MainManagerBase.Instance is ViewingManager) {
             AddPinButtonRefference.SetActive(false);
+            if (LabelModeSelectorRefference != null) LabelModeSelectorRefference.SetActive(false);
         }
+        UpdateLabelModeVisual();
     }
 
     public void Initialize(PinManager pinManager) {
@@ -31,6 +43,22 @@ public class PinUI: MonoBehaviour {
 
     public void OnAddPin() {
         _pinManager.StartPlacingNewPin();
+    }
+
+    /// <summary>Label mode buttons, the argument is the PinLabelMode as int.</summary>
+    public void OnLabelModeButton(int mode) {
+        _pinManager.SetLabelMode((PinLabelMode)mode);
+    }
+
+    // The current mode's button is filled, the others outlined
+    public void UpdateLabelModeVisual() {
+        if (_pinManager == null || LabelModeButtonImages == null) return;
+        for (int i = 0; i < LabelModeButtonImages.Length; i++) {
+            bool selected = i == (int)_pinManager.LabelMode;
+            if (LabelModeButtonImages[i] != null) LabelModeButtonImages[i].color = selected ? LabelModeSelectedColor : LabelModeUnselectedColor;
+            if (LabelModeButtonTexts != null && i < LabelModeButtonTexts.Length && LabelModeButtonTexts[i] != null)
+                LabelModeButtonTexts[i].color = selected ? LabelModeUnselectedColor : LabelModeSelectedColor;
+        }
     }
 
     public void OnHUDButtonClick(PinObject pin) {

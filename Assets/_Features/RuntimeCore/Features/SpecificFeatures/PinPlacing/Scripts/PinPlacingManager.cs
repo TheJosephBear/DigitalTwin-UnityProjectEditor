@@ -43,7 +43,8 @@ public class PinPlacingManager : MonoBehaviour {
         // Raycast to track cursor in real time
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _placementRaycastMask)) {
             _pinBeingPlaced.transform.position = hit.point;
-            _pinBeingPlaced.SurfaceNormal = hit.normal; // also turns the pin to the surface
+            _pinBeingPlaced.gameObject.SetActive(true); // a new pin is hidden until the cursor is over a spot it can go
+           //  _pinBeingPlaced.SurfaceNormal = hit.normal; // also turns the pin to the surface
 
             // Left Click to set position
             if (Input.GetMouseButtonDown(0)) {
@@ -64,8 +65,9 @@ public class PinPlacingManager : MonoBehaviour {
 
         _isNew = pin == null;
         if (_isNew) {
-            pin = PinManager.Instance.CreatePinObject(GetSpawnPosition());
+            pin = PinManager.Instance.CreatePinObject(Vector3.zero);
             if (pin == null) return;
+            pin.gameObject.SetActive(false);
         }
 
         _pinBeingPlaced = pin;
@@ -116,12 +118,6 @@ public class PinPlacingManager : MonoBehaviour {
         _pinBeingPlaced.SetPlacingMode(false);
         _pinBeingPlaced = null;
         ToggleLabel(false);
-    }
-
-    private Vector3 GetSpawnPosition() {
-        Camera cam = Camera.main;
-        if (cam == null) return Vector3.zero;
-        return cam.transform.position + cam.transform.forward * 2f;
     }
 
     private void TogglePinUIs(bool show) {
