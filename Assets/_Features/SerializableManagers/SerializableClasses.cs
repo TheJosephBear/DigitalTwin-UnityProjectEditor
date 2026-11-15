@@ -62,6 +62,7 @@ public class SerializableViewPoint {
 [Serializable]
 public class SerializablePinManager {
     public List<SerializablePin> Pins;
+    public int labelMode; // PinLabelMode, 0 (numbers) in older saves
 }
 
 [Serializable]
