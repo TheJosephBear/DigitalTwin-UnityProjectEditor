@@ -62,6 +62,8 @@ public class PinBillboard : MonoBehaviour {
 
     public bool Selected { get => _selected; set { _selected = value; ApplyStyle(); } }
     public bool Hovered { get => _hovered; set => _hovered = value; }
+    /// <summary>Something is between the main camera and the head (as of the last rendered frame).</summary>
+    public bool Occluded => _occluded;
 
     /// <summary>Text inside the head, "" for none.</summary>
     public void SetLabel(string text) {

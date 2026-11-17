@@ -36,6 +36,17 @@ public class CameraManager: Singleton<CameraManager> {
     [Tooltip("Degrees per mouse axis unit when rotating with a left click drag in the viewer")]
     public float LeftDragLookSensitivity = 3f;
 
+    [Header("Rise until visible")]
+    [Tooltip("[min, max] units per second the camera rises at when a clicked pin is hidden behind geometry. Starts at min and speeds up to max over RiseRampTime")]
+    [MinMaxSlider(0f, 200f)]
+    public Vector2 RiseSpeed = new Vector2(30f, 100f);
+    [Tooltip("Seconds the rise takes to speed up from the min to the max speed")]
+    public float RiseRampTime = 1f;
+    [Tooltip("Degrees per second the camera turns toward the pin while rising")]
+    public float RiseTurnSpeed = 120f;
+    [Tooltip("The camera stops rising after this many units even when the pin is still hidden")]
+    public float MaxRiseHeight = 500f;
+
     // Bounds tracking
     private Bounds _mapBounds;
     private bool _hasBounds = false;
@@ -57,6 +68,7 @@ public class CameraManager: Singleton<CameraManager> {
     GameObject _flyToVcamTarget;
     bool _isFlyingToVcam;
     bool _isLeftDragLooking;
+    Coroutine _riseCoroutine;
 
     protected override void Awake() {
         base.Awake();
@@ -267,6 +279,7 @@ public class CameraManager: Singleton<CameraManager> {
     /// then puts the free cam there and turns the vcam and the brain off, so the camera can be moved again.
     /// </summary>
     public void FlyToVcam(GameObject vcam) {
+        StopRise();
         CancelFlyToVcam();
         if (vcam == null || Camera.main == null) return;
 
@@ -312,6 +325,65 @@ public class CameraManager: Singleton<CameraManager> {
         _flyToVcamTarget = null;
         ToggleCinemachineBrain(false);
         CameraColissionScriptRef.enabled = _isCollisionEnabled; // enabling it resets its last valid position to where the camera is now
+    }
+
+    /// <summary>
+    /// Moves the free cam straight up while turning it to look at the target, until isHidden() returns false,
+    /// then finishes turning. Also stops at MaxRiseHeight, at the top of the camera bounds, or when the user presses a key/button or scrolls.
+    /// </summary>
+    public void RiseUntilVisible(Transform target, Func<bool> isHidden) {
+        StopRise();
+        CancelFlyToVcam();
+        if (target == null || Camera.main == null) return;
+
+        // Like FlyToVcam: the enforcer would pull the camera back down under a roof. Only the component, the setting stays
+        CameraColissionScriptRef.enabled = false;
+        _riseCoroutine = StartCoroutine(RiseCoroutine(target, isHidden));
+    }
+
+    public void StopRise() {
+        if (_riseCoroutine == null) return;
+        StopCoroutine(_riseCoroutine);
+        EndRise();
+    }
+
+    void EndRise() {
+        _riseCoroutine = null;
+        CameraColissionScriptRef.enabled = _isCollisionEnabled; // enabling it resets its last valid position to where the camera is now
+    }
+
+    IEnumerator RiseCoroutine(Transform target, Func<bool> isHidden) {
+        Transform cam = Camera.main.transform;
+        float startY = cam.position.y;
+        float expectedY = cam.position.y;
+        bool rising = true;
+        float elapsed = 0f;
+
+        yield return null; // the click's own input isn't the user taking over
+
+        while (target != null && cam != null) {
+            if (Input.anyKeyDown || Input.mouseScrollDelta.y != 0f) break; // the user takes over
+
+            // Occlusion is updated when the pin renders, so it reflects last frame's position.
+            // Lower than where it was moved = clamped by the camera bounds, it can't go higher
+            if (rising) rising = isHidden() && cam.position.y - startY < MaxRiseHeight && cam.position.y >= expectedY - 0.001f;
+            if (rising) {
+                elapsed += Time.deltaTime;
+                float speed = Mathf.Lerp(RiseSpeed.x, RiseSpeed.y, RiseRampTime > 0f ? elapsed / RiseRampTime : 1f);
+                cam.position += Vector3.up * (speed * Time.deltaTime);
+                expectedY = cam.position.y;
+            }
+
+            Vector3 toTarget = target.position - cam.position;
+            if (toTarget.sqrMagnitude < 0.0001f) break;
+            Quaternion look = Quaternion.LookRotation(toTarget, Vector3.up);
+            cam.rotation = Quaternion.RotateTowards(cam.rotation, look, RiseTurnSpeed * Time.deltaTime);
+
+            if (!rising && Quaternion.Angle(cam.rotation, look) < 0.1f) break;
+            yield return null;
+        }
+
+        EndRise();
     }
 
     public GameObject GetFreeCamVcam() {

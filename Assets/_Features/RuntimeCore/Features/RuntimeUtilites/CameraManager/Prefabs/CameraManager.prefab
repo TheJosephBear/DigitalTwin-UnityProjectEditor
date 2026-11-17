@@ -60,3 +60,7 @@ MonoBehaviour:
     m_Bits: 1025
   SpeedReferenceDistance: 350
   LeftDragLookSensitivity: 3
+  RiseSpeed: {x: 60.252098, y: 91.596634}
+  RiseRampTime: 1
+  RiseTurnSpeed: 120
+  MaxRiseHeight: 500

@@ -22,6 +22,9 @@ public class PinObject: EditorObjectBase, IClickableBehindGeometry {
 
     public GameObject Vcam => _vcam;
 
+    /// <summary>Hidden behind geometry from the main camera.</summary>
+    public bool IsObscured => _billboard != null && _billboard.Occluded;
+
     Vector3 _surfaceNormal = Vector3.up;
 
     /// <summary>

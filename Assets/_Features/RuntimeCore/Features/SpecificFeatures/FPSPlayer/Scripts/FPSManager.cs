@@ -24,6 +24,7 @@ public class FPSManager: Singleton<FPSManager> {
     private bool isInFPSMode = false;
     private float fallY;   // world Y the player respawns below, set when entering FPS mode
     private bool spawnPlaced;   // false until the user places the spawn point by hand
+    private bool cursorLockAcquired;   // WebGL: the browser has locked the cursor since entering FPS mode
 
     // Player settings
     // defaultSettings = what the player prefab had before we touched it (filled in Start)
@@ -84,6 +85,19 @@ public class FPSManager: Singleton<FPSManager> {
             RequestCloseUI();
             return;
         }
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+        // The browser uses the first ESC to release the pointer lock and Unity never gets the key, so losing the lock counts as ESC.
+        // Only once the lock was actually acquired: the browser grants it a moment after EnterFPSMode asks for it
+        if (isInFPSMode) {
+            if (Cursor.lockState == CursorLockMode.Locked) {
+                cursorLockAcquired = true;
+            } else if (cursorLockAcquired) {
+                RequestCloseUI();
+                return;
+            }
+        }
+#endif
 
         // Check if player falls below the Y threshold while in FPS mode
         if (isInFPSMode && playerInstance != null && playerInstance.activeSelf) {
@@ -300,6 +314,7 @@ public class FPSManager: Singleton<FPSManager> {
     /// </summary>
     public void ResetAndCloseAll() {
         isInFPSMode = false;
+        cursorLockAcquired = false;
 
         if (playerInstance != null) {
             playerInstance.SetActive(false);

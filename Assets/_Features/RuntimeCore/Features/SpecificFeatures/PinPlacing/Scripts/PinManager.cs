@@ -228,6 +228,12 @@ public class PinManager: Singleton<PinManager> {
         if (pin == null || pin.Vcam == null || CameraManager.Instance == null || MainManagerBase.Instance == null) return;
         if (MainManagerBase.Instance.ActiveState != AppState.Freecam) return; // other states drive the camera themselves
 
+        // Hidden behind geometry: the camera rises while turning to the pin, until it can see it
+        if (pin.IsObscured) {
+            CameraManager.Instance.RiseUntilVisible(pin.transform, () => pin != null && pin.IsObscured);
+            return;
+        }
+
         float distance = Camera.main != null ? Vector3.Distance(Camera.main.transform.position, pin.transform.position) : 0f;
         if (distance > PanMaxDistance || !pin.PanVcamFromCamera()) {
             if (MainManagerBase.Instance is ViewingManager && !EnableVcamInViewer) return; // the viewer only pans unless enabled

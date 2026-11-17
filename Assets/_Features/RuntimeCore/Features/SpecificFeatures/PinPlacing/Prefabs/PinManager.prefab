@@ -51,13 +51,13 @@ MonoBehaviour:
   PinInfoUIPrefab: {fileID: 1159437126100673770, guid: e93dc2b33d9911a49b8a8e7cbd6eac6c, type: 3}
   LabelMode: 0
   InstantiatePinUIInViewer: 0
-  VcamDistance: 10
+  VcamDistance: 250
   VcamPitch: 20
-  PanMaxDistance: 30
+  PanMaxDistance: 300
   VcamObstacleLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  EnableVcamInViewer: 0
+  EnableVcamInViewer: 1
 --- !u!114 &4129137214061424411
 MonoBehaviour:
   m_ObjectHideFlags: 0
