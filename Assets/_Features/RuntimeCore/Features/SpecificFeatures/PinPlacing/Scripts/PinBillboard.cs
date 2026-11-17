@@ -25,6 +25,8 @@ public class PinBillboard : MonoBehaviour {
     public float HoverScale = 1.2f;
     [Tooltip("[min, max] camera distance in which the pin keeps its size on screen. Closer than min it stops shrinking (grows on screen), farther than max it stops growing (shrinks on screen)")]
     public Vector2 ConstantSizeDistance = new Vector2(2f, 300f);
+    [Tooltip("Farther than ConstantSizeDistance max the pin shrinks on screen, but never below this fraction of its normal screen size")]
+    [Range(0f, 1f)] public float MinScreenScale = 0.5f;
 
     [Header("Colors")]
     public Color Purple = new Color32(91, 74, 217, 255);
@@ -136,12 +138,14 @@ public class PinBillboard : MonoBehaviour {
         return onScreen > 0.0001f ? reach / onScreen : float.MaxValue;
     }
 
-    // World height the camera sees at the point's depth, the depth clamped to ConstantSizeDistance
+    // World height the camera sees at the point's depth, the depth clamped to ConstantSizeDistance.
+    // Past the max it's kept at least MinScreenScale of the real view height, so far pins don't shrink below that on screen
     float ViewHeight(Camera cam, Vector3 point) {
         if (cam.orthographic) return 2f * cam.orthographicSize;
         float depth = Vector3.Dot(point - cam.transform.position, cam.transform.forward);
-        depth = Mathf.Clamp(depth, Mathf.Max(ConstantSizeDistance.x, cam.nearClipPlane), ConstantSizeDistance.y);
-        return 2f * depth * Mathf.Tan(cam.fieldOfView * 0.5f * Mathf.Deg2Rad);
+        float clamped = Mathf.Clamp(depth, Mathf.Max(ConstantSizeDistance.x, cam.nearClipPlane), ConstantSizeDistance.y);
+        float tan = Mathf.Tan(cam.fieldOfView * 0.5f * Mathf.Deg2Rad);
+        return 2f * Mathf.Max(clamped, depth * MinScreenScale) * tan;
     }
 
     // Nearer pins draw over farther ones, each pin's leg, head and text in that order

@@ -15,6 +15,7 @@ public class PinObject: EditorObjectBase, IClickableBehindGeometry {
     private bool _placing;
 
     const float VcamClearance = 0.3f; // How far the vcam stays from walls
+    const int MaxOriginLifts = 10; // Vcam search start can be lifted up to this many VcamClearance steps off the ground
 
     // Tried in order when the preferred vcam direction is blocked
     static readonly float[] VcamPitchOffsets = { 0f, 15f, -15f, 30f };
@@ -126,6 +127,8 @@ public class PinObject: EditorObjectBase, IClickableBehindGeometry {
         Camera cam = Camera.main;
         // Casts start off the surface, so they don't hit the surface the pin is on
         Vector3 origin = target + SurfaceNormal * (VcamClearance + 0.05f);
+        // Pins stand upright, so on a slope the sphere touches the ground right above the pin and every direction would count as blocked
+        for (int i = 0; i < MaxOriginLifts && OverlapsObstacle(origin, obstacles); i++) origin += Vector3.up * VcamClearance;
 
         // Horizontal direction from the pin toward where the vcam should be
         Vector3 heading = Vector3.ProjectOnPlane(SurfaceNormal, Vector3.up);
@@ -151,7 +154,8 @@ public class PinObject: EditorObjectBase, IClickableBehindGeometry {
         Vector3 position = origin + bestDirection * bestFree;
         Vector3 forward = target - position;
         if (forward.sqrMagnitude < 0.0001f) forward = -bestDirection;
-        Vector3 up = Vector3.Cross(forward, Vector3.up).sqrMagnitude < 0.0001f ? heading : Vector3.up;
+        // Looking straight down: the screen's top points away from where the camera comes from, not back at it (that turns the view upside down)
+        Vector3 up = Vector3.Cross(forward, Vector3.up).sqrMagnitude < 0.0001f ? -heading : Vector3.up;
         _vcam.transform.SetPositionAndRotation(position, Quaternion.LookRotation(forward, up));
 
         // True when the whole distance is free, otherwise remembers the direction if it's the most open one so far
@@ -183,10 +187,7 @@ public class PinObject: EditorObjectBase, IClickableBehindGeometry {
 
     // How far the vcam can go from the origin in the direction before hitting geometry
     float FreeDistance(Vector3 origin, Vector3 direction, float distance, LayerMask obstacles) {
-        // A sphere cast doesn't see colliders it starts inside of
-        foreach (Collider col in Physics.OverlapSphere(origin, VcamClearance, obstacles, QueryTriggerInteraction.Ignore)) {
-            if (col.GetComponentInParent<PinObject>() == null) return 0f;
-        }
+        if (OverlapsObstacle(origin, obstacles)) return 0f; // a sphere cast doesn't see colliders it starts inside of
 
         float free = distance;
         RaycastHit[] hits = Physics.SphereCastAll(origin, VcamClearance, direction, distance, obstacles, QueryTriggerInteraction.Ignore);
@@ -195,6 +196,14 @@ public class PinObject: EditorObjectBase, IClickableBehindGeometry {
             free = Mathf.Min(free, hit.distance);
         }
         return free;
+    }
+
+    // Geometry (not pins) within VcamClearance of the point
+    static bool OverlapsObstacle(Vector3 point, LayerMask obstacles) {
+        foreach (Collider col in Physics.OverlapSphere(point, VcamClearance, obstacles, QueryTriggerInteraction.Ignore)) {
+            if (col.GetComponentInParent<PinObject>() == null) return true;
+        }
+        return false;
     }
 
     #endregion
