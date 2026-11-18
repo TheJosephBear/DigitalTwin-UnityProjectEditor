@@ -126,12 +126,14 @@ public class ImageManager : Singleton<ImageManager> {
                 return null;
             }
 
-            rotated = FitForDisplay(rotated, isPng);
             if (!isPng) {
+                rotated = FitForDisplay(rotated, false);
                 byte[] jpg = rotated.EncodeToJPG(RotatedJpgQuality);
                 MakeDisplayOnly(rotated);
                 return AddProjectImage(jpg, source.FileName, rotated);
             }
+            // Kept at full size, so the turn stays lossless: the file replaces the original under the same ID.
+            // ReplacePicture fits the shown picture
             data = rotated.EncodeToPNG();
             DestroyImmediate(rotated);
         }
