@@ -109,6 +109,7 @@ namespace FrostweepGames.Plugins.WebGLFileBrowser
 
             _filesWereLoaded = 0;
             _filesToBeLoaded = 0;
+            _files.Clear(); // DigitalTwin: drops files of a selection that never completed, see HandleLoadedFile
 
 #if UNITY_EDITOR
 
@@ -183,6 +184,7 @@ namespace FrostweepGames.Plugins.WebGLFileBrowser
 
             _filesWereLoaded = 0;
             _filesToBeLoaded = 0;
+            _files.Clear(); // DigitalTwin: drops files of a selection that never completed, see HandleLoadedFile
 
 #if UNITY_EDITOR
             string path = UnityEditor.EditorUtility.OpenFolderPanel("Editor Folder Browser", System.IO.Directory.GetLogicalDrives()[0], string.Empty);
@@ -463,8 +465,14 @@ namespace FrostweepGames.Plugins.WebGLFileBrowser
 
                 if (_filesWereLoaded >= _filesToBeLoaded)
                 {
+                    // DigitalTwin: the list only collects the files of one selection. Kept, it held the bytes of every
+                    // file ever picked in the WASM heap (FreeMemory, the only cleanup, also unloads unused assets).
+                    // From here on the receivers own the files.
+                    File[] selection = _files.GetRange(_files.Count - _filesToBeLoaded, _filesToBeLoaded).ToArray();
+                    _files.Clear();
+
                     if (FilesWereOpenedEvent != null)
-                        FilesWereOpenedEvent(_files.GetRange(_files.Count - _filesToBeLoaded, _filesToBeLoaded).ToArray());
+                        FilesWereOpenedEvent(selection);
                 }
             }
         }
