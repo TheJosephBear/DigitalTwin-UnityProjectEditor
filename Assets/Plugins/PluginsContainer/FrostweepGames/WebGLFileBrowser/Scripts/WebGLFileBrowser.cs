@@ -467,8 +467,9 @@ namespace FrostweepGames.Plugins.WebGLFileBrowser
                 {
                     // DigitalTwin: the list only collects the files of one selection. Kept, it held the bytes of every
                     // file ever picked in the WASM heap (FreeMemory, the only cleanup, also unloads unused assets).
-                    // From here on the receivers own the files.
-                    File[] selection = _files.GetRange(_files.Count - _filesToBeLoaded, _filesToBeLoaded).ToArray();
+                    // From here on the receivers own the files. All of the list, it may hold fewer than _filesToBeLoaded
+                    // when a file failed to load
+                    File[] selection = _files.ToArray();
                     _files.Clear();
 
                     if (FilesWereOpenedEvent != null)
