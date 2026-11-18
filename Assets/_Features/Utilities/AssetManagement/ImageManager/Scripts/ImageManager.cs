@@ -158,12 +158,24 @@ public class ImageManager : Singleton<ImageManager> {
         }
     }
 
-    // decoded: the texture of the data when the caller already has it, owned by the manager from then on.
+    // decoded: the texture of the data when the caller already has it (made for display only, see DecodeImage),
+    // owned by the manager from then on.
     // id: the image's ID on the server when downloading it; a picked image is found by, and named after, its content
     private TextureAsset AddProjectImage(byte[] data, string fileName, Texture2D decoded = null, string id = null) {
         if (data == null) {
             if (decoded != null) Destroy(decoded);
             return null;
+        }
+
+        // A picked picture is stored at most MaxImageSide, so it is decoded (and maybe shrunk) before it is hashed.
+        // A downloaded one stays as the server has it, older projects may have larger ones: only the texture is shrunk.
+        if (id == null && decoded == null) {
+            decoded = DecodeImage(data, true, out byte[] resizedData);
+            if (decoded == null) {
+                Debug.LogError($"Failed to decode image: {fileName}");
+                return null;
+            }
+            if (resizedData != null) data = resizedData;
         }
 
         fileName = WithContentExtension(fileName, data);
@@ -490,8 +502,7 @@ public class ImageManager : Singleton<ImageManager> {
 
     private Texture2D StorePreview(string projectName, byte[] data) {
         if (_previewTextures.TryGetValue(projectName, out Texture2D tex) && tex != null) {
-            tex.LoadImage(data);
-            ImageOrientationUtils.ApplyExifOrientation(tex, data);
+            if (!ReplacePicture(tex, data)) Debug.LogWarning($"Failed to decode the preview of project {projectName}");
             return tex;
         }
 
@@ -528,15 +539,8 @@ public class ImageManager : Singleton<ImageManager> {
         return baseName + extension;
     }
 
-    private Texture2D LoadTexture(byte[] data) {
-        Texture2D tex = new Texture2D(2, 2);
-        if (tex.LoadImage(data)) {
-            ImageOrientationUtils.ApplyExifOrientation(tex, data); // Phone photos would otherwise be rotated
-            return tex;
-        }
-
-        Destroy(tex);
-        return null;
+    private static Texture2D LoadTexture(byte[] data) {
+        return DecodeImage(data, false, out _);
     }
 
     private string GetFileHash(byte[] fileData) {
@@ -544,6 +548,123 @@ public class ImageManager : Singleton<ImageManager> {
             byte[] hashBytes = md5.ComputeHash(fileData);
             return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
         }
+    }
+
+    #endregion
+
+    #region Decoding
+
+    /// <summary>Longest side of a shown image. Larger pictures are shrunk, and picked ones are stored shrunk.</summary>
+    public const int MaxImageSide = 2048;
+    private const int ResizedJpgQuality = 85;
+    private const int ShownJpgQuality = 95; // Only decoded again right away, see ReplacePicture
+
+    // A decoded picture costs width × height × 3–4 bytes, twice (heap and GPU): a 4000 × 4000 photo is about 64 MB each.
+    // The texture made here is for showing only: upright (EXIF applied), at most MaxImageSide, without mipmaps,
+    // GPU-compressed where supported and with no copy of its pixels left in the heap, so it can't be read or changed
+    // except through ReplacePicture.
+    // resizedData: when reencodeIfResized and the picture was larger than MaxImageSide, the shown picture encoded again
+    // (JPEG, or PNG to keep transparency); otherwise null.
+    private static Texture2D DecodeImage(byte[] data, bool reencodeIfResized, out byte[] resizedData) {
+        resizedData = null;
+        Texture2D tex = DecodeUpright(data);
+        if (tex == null) return null;
+
+        bool png = IsPngData(data);
+        bool tooLarge = Mathf.Max(tex.width, tex.height) > MaxImageSide;
+        tex = FitForDisplay(tex, png);
+        if (tooLarge && reencodeIfResized) resizedData = Encode(tex, png, ResizedJpgQuality);
+
+        MakeDisplayOnly(tex);
+        return tex;
+    }
+
+    // Shows another picture in a texture made by DecodeImage, keeping the object so UI that shows it stays valid.
+    // Only LoadImage can change such a texture: it keeps it unreadable (and compressed), but it ignores EXIF orientation
+    // and size, so it is given the picture upright and resized, encoded again unless the data already is that.
+    private static bool ReplacePicture(Texture2D target, byte[] data) {
+        Texture2D tex = DecodeUpright(data);
+        if (tex == null) return false;
+
+        bool png = IsPngData(data);
+        bool shownAsIs = ImageOrientationUtils.GetJpegOrientation(data) <= 1 && DisplaySize(tex.width, tex.height) == new Vector2Int(tex.width, tex.height);
+        tex = FitForDisplay(tex, png);
+        byte[] shown = shownAsIs ? data : Encode(tex, png, ShownJpgQuality);
+        DestroyImmediate(tex);
+
+        return target.LoadImage(shown, true);
+    }
+
+    // Readable texture of the picture, turned by its EXIF orientation. Null if the data isn't an image
+    private static Texture2D DecodeUpright(byte[] data) {
+        if (data == null) return null;
+
+        var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+        if (!tex.LoadImage(data)) {
+            DestroyImmediate(tex);
+            return null;
+        }
+        ImageOrientationUtils.ApplyExifOrientation(tex, data); // Phone photos would otherwise be rotated
+        return tex;
+    }
+
+    // At most MaxImageSide, sides a multiple of 4 so it can be compressed (at most 3 px less, not visible)
+    private static Vector2Int DisplaySize(int width, int height) {
+        float scale = Mathf.Min(1f, (float)MaxImageSide / Mathf.Max(width, height));
+        return new Vector2Int(
+            Mathf.Max(4, Mathf.FloorToInt(width * scale) / 4 * 4),
+            Mathf.Max(4, Mathf.FloorToInt(height * scale) / 4 * 4));
+    }
+
+    // The texture at DisplaySize. When a new texture is returned, the source is destroyed
+    private static Texture2D FitForDisplay(Texture2D source, bool keepAlpha) {
+        Vector2Int size = DisplaySize(source.width, source.height);
+        if (size.x == source.width && size.y == source.height) return source;
+
+        Texture2D resized = Resized(source, size.x, size.y, keepAlpha);
+        DestroyImmediate(source); // Destroy would keep the full-size picture until the end of the frame
+        return resized;
+    }
+
+    // Shrinks on the GPU, by at most half per step, so the bilinear filter doesn't skip pixels. The result is readable
+    private static Texture2D Resized(Texture2D source, int width, int height, bool keepAlpha) {
+        source.filterMode = FilterMode.Bilinear;
+        Texture current = source;
+        RenderTexture currentRT = null;
+        int w = source.width;
+        int h = source.height;
+
+        while (true) {
+            w = Mathf.Max(w / 2, width);
+            h = Mathf.Max(h / 2, height);
+            // sRGB keeps the colors as they are in the linear color space project
+            RenderTexture rt = RenderTexture.GetTemporary(w, h, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
+            rt.filterMode = FilterMode.Bilinear;
+            Graphics.Blit(current, rt);
+            if (currentRT != null) RenderTexture.ReleaseTemporary(currentRT);
+            current = currentRT = rt;
+            if (w == width && h == height) break;
+        }
+
+        var result = new Texture2D(width, height, keepAlpha ? TextureFormat.RGBA32 : TextureFormat.RGB24, false);
+        RenderTexture previous = RenderTexture.active;
+        RenderTexture.active = currentRT;
+        result.ReadPixels(new Rect(0, 0, width, height), 0, 0, false);
+        RenderTexture.active = previous;
+        RenderTexture.ReleaseTemporary(currentRT);
+        return result;
+    }
+
+    // Compresses where supported (about 4–8× less GPU memory) and drops the copy of the pixels in the heap
+    private static void MakeDisplayOnly(Texture2D tex) {
+        if (tex.width % 4 == 0 && tex.height % 4 == 0 && SystemInfo.SupportsTextureFormat(TextureFormat.DXT5)) {
+            tex.Compress(false);
+        }
+        tex.Apply(false, true);
+    }
+
+    private static byte[] Encode(Texture2D tex, bool png, int jpgQuality) {
+        return png ? tex.EncodeToPNG() : tex.EncodeToJPG(jpgQuality);
     }
 
     #endregion
