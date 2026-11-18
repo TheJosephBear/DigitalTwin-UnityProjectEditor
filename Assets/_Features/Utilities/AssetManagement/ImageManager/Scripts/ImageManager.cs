@@ -106,26 +106,42 @@ public class ImageManager : Singleton<ImageManager> {
         TextureAsset source = GetTextureAssetByID(imageId);
         if (source == null || source.Texture == null) return null;
 
+        // Shown textures can't be read, so the picture is turned from its file
         byte[] original = ReadLocalImageData(source);
-        byte[] data = ImageOrientationUtils.RotateJpeg90ClockwiseByExif(original);
-        bool isPng = original != null ? IsPngData(original) : HasExtension(source.FileName, ".png");
+        if (original == null) {
+            Debug.LogError($"Failed to rotate image, its file is missing: {source.FileName}");
+            return null;
+        }
 
-        if (data == null && !isPng) {
-            // JPEG whose EXIF has no orientation tag, or its file is gone. Same pixels the new file decodes to
-            Texture2D rotated = ImageOrientationUtils.Rotated90Clockwise(source.Texture);
+        bool isPng = IsPngData(original);
+        byte[] data = isPng ? null : ImageOrientationUtils.RotateJpeg90ClockwiseByExif(original);
+
+        if (data == null) {
+            // PNG, or a JPEG whose EXIF can't take an orientation tag: the turned pixels are encoded again
+            Texture2D upright = DecodeUpright(original);
+            Texture2D rotated = upright != null ? ImageOrientationUtils.Rotated90Clockwise(upright) : null;
+            if (upright != null) DestroyImmediate(upright);
             if (rotated == null) {
                 Debug.LogError($"Failed to rotate image: {source.FileName}");
                 return null;
             }
-            return AddProjectImage(rotated.EncodeToJPG(RotatedJpgQuality), source.FileName, rotated);
+
+            rotated = FitForDisplay(rotated, isPng);
+            if (!isPng) {
+                byte[] jpg = rotated.EncodeToJPG(RotatedJpgQuality);
+                MakeDisplayOnly(rotated);
+                return AddProjectImage(jpg, source.FileName, rotated);
+            }
+            data = rotated.EncodeToPNG();
+            DestroyImmediate(rotated);
         }
 
         // Turned in place, so everything showing the texture shows the turned picture
-        if (!ImageOrientationUtils.Rotate90ClockwiseInPlace(source.Texture)) {
+        if (!ReplacePicture(source.Texture, data)) {
             Debug.LogError($"Failed to rotate image: {source.FileName}");
             return null;
         }
-        ReplaceImageData(source, data ?? source.Texture.EncodeToPNG());
+        ReplaceImageData(source, data);
         return source;
     }
 

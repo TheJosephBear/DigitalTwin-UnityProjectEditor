@@ -183,14 +183,6 @@ public static class ImageOrientationUtils {
             : (uint)((data[offset] << 24) | (data[offset + 1] << 16) | (data[offset + 2] << 8) | data[offset + 3]);
     }
 
-    /// <summary>
-    /// Turns the texture by 90° clockwise in place, so everything showing it shows the turned picture.
-    /// Returns false if its pixels can't be read.
-    /// </summary>
-    public static bool Rotate90ClockwiseInPlace(Texture2D texture) {
-        return texture != null && texture.isReadable && Reorient(texture, 6);
-    }
-
     // Works on native buffers, so the only extra memory is one copy of the top mip level
     static bool Reorient(Texture2D texture, int orientation) {
         int w = texture.width;
