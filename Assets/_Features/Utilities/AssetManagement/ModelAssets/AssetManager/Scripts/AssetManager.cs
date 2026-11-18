@@ -44,7 +44,29 @@ public class AssetManager : Singleton<AssetManager> {
         return modelAsset;
     }
 
+    /// <summary>
+    /// Model files written to disk by <see cref="PrepareAssetFromFiles"/>, ready for <see cref="BuildPreparedAsset"/>.
+    /// </summary>
+    public class PreparedModelFiles {
+        public string FileHash;
+        public string FileName;
+        public string MainModelPath;
+        public ModelAsset ExistingAsset; // The same model was uploaded before, nothing to build
+    }
+
     public ModelAsset CreateNewAssetFromFiles(FrostweepGames.Plugins.WebGLFileBrowser.File[] files, Action<float> onProgress = null) {
+        return BuildPreparedAsset(PrepareAssetFromFiles(files), onProgress);
+    }
+
+    /// <summary>
+    /// First half of <see cref="CreateNewAssetFromFiles"/>: hashes the files and writes them to disk, then releases
+    /// their bytes (<c>file.data</c> is null afterwards). Returns null when the selection has no model.
+    /// </summary>
+    /// <remarks>
+    /// On WebGL the garbage collector only runs between frames, so let a frame pass before <see cref="BuildPreparedAsset"/>
+    /// to free the bytes before the model is parsed.
+    /// </remarks>
+    public PreparedModelFiles PrepareAssetFromFiles(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
         if (files == null || files.Length == 0) {
             Debug.LogError("No files selected.");
             return null;
@@ -69,17 +91,31 @@ public class AssetManager : Singleton<AssetManager> {
         // 2. Hash based on main file
         string fileHash = GetFileHash(mainFile.data);
 
+        var prepared = new PreparedModelFiles { FileHash = fileHash, FileName = mainFile.fileInfo.fullName };
+
         // 3. Duplication check
         foreach (var asset in _assets) {
             if (asset.FileHash == fileHash) {
                 Debug.Log("Model already uploaded.");
-                return asset;
+                prepared.ExistingAsset = asset;
+                return prepared;
             }
         }
 
-        // 4. Upload full bundle
-        GameObject newAssetGo =
-            FileLoadingManager.Instance.UploadFromWebGLFiles(files, fileHash, onProgress);
+        // 4. Write the full bundle to disk, the model is built from there
+        prepared.MainModelPath = FileLoadingManager.Instance.WriteWebGLFiles(files, fileHash);
+        return prepared;
+    }
+
+    /// <summary>
+    /// Second half of <see cref="CreateNewAssetFromFiles"/>: builds and registers the model. Returns null if it failed.
+    /// </summary>
+    public ModelAsset BuildPreparedAsset(PreparedModelFiles prepared, Action<float> onProgress = null) {
+        if (prepared == null) return null;
+        if (prepared.ExistingAsset != null) return prepared.ExistingAsset;
+        if (prepared.MainModelPath == null) return null;
+
+        GameObject newAssetGo = FileLoadingManager.Instance.BuildModelFromPath(prepared.MainModelPath, onProgress);
 
         if (newAssetGo == null)
             return null;
@@ -88,8 +124,8 @@ public class AssetManager : Singleton<AssetManager> {
         newAssetGo.transform.parent = AssetContainer.transform;
 
         ModelAsset modelAsset = newAssetGo.AddComponent<ModelAsset>();
-        modelAsset.FileName = mainFile.fileInfo.fullName;
-        modelAsset.FileHash = fileHash;
+        modelAsset.FileName = prepared.FileName;
+        modelAsset.FileHash = prepared.FileHash;
         modelAsset.SetModelGameObject(newAssetGo);
 
         _assets.Add(modelAsset);

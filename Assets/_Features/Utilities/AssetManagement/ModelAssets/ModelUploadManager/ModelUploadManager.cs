@@ -43,9 +43,21 @@ public class ModelUploadManager : Singleton<ModelUploadManager> {
         yield return null;
         yield return null;
 
+        AssetManager.PreparedModelFiles prepared = null;
+        try {
+            prepared = AssetManager.Instance.PrepareAssetFromFiles(_files.ToArray());
+        } catch (Exception e) {
+            Debug.LogException(e);
+        }
+
+        // The files are on disk now and their bytes released. On WebGL the garbage collector only runs between frames,
+        // so one passes before the model is parsed, the memory peak of the upload
+        _files.Clear();
+        yield return null;
+
         ModelAsset asset = null;
         try {
-            asset = AssetManager.Instance.CreateNewAssetFromFiles(_files.ToArray(), onProgress);
+            asset = AssetManager.Instance.BuildPreparedAsset(prepared, onProgress);
         } catch (Exception e) {
             Debug.LogException(e);
         }

@@ -69,8 +69,9 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
         string fileName = Path.GetFileName(file.fileInfo.fullName);
         string targetPath = Path.Combine(targetRoot, fileName);
 
-        // Save binary payload to persistent storage
+        // Save binary payload to persistent storage. TriLib reads it from there, so the bytes are released
         System.IO.File.WriteAllBytes(targetPath, file.data);
+        file.data = null;
 
         string ext = file.fileInfo.extension;
 
@@ -94,6 +95,20 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
         string fileHash,
         Action<float> onProgress = null
     ) {
+        string mainModelPath = WriteWebGLFiles(files, fileHash);
+        return mainModelPath != null ? BuildModelFromPath(mainModelPath, onProgress) : null;
+    }
+
+    /// <summary>
+    /// First half of <see cref="UploadFromWebGLFiles"/>: writes the files (main model, MTLs, textures, etc.)
+    /// into the asset's persistent directory and releases their bytes (<c>file.data</c> is null afterwards).
+    /// </summary>
+    /// <remarks>
+    /// On WebGL the garbage collector only runs between frames. Let a frame pass before <see cref="BuildModelFromPath"/>,
+    /// so the bytes are freed before the parse, which is the memory peak of loading a model.
+    /// </remarks>
+    /// <returns>Path of the main model file, or null if the selection has none.</returns>
+    public string WriteWebGLFiles(FrostweepGames.Plugins.WebGLFileBrowser.File[] files, string fileHash) {
         if (files == null || files.Length == 0) {
             Debug.LogError("[FileLoadingManager] No files provided in array.");
             return null;
@@ -108,8 +123,9 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
             string fileName = Path.GetFileName(file.fileInfo.fullName);
             string targetPath = Path.Combine(targetRoot, fileName);
 
-            // Save each file (main model, MTLs, textures, etc.) into the hash folder
-            System.IO.File.WriteAllBytes(targetPath, file.data);
+            // Save each file (main model, MTLs, textures, etc.) into the hash folder. TriLib reads them from there
+            if (file.data != null) System.IO.File.WriteAllBytes(targetPath, file.data);
+            file.data = null;
 
             string ext = file.fileInfo.extension;
 
@@ -137,6 +153,14 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
             return null;
         }
 
+        return mainModelPath;
+    }
+
+    /// <summary>
+    /// Second half of <see cref="UploadFromWebGLFiles"/>: loads the model from files written by <see cref="WriteWebGLFiles"/>.
+    /// </summary>
+    /// <returns>Loaded model GameObject, deactivated, or null if loading failed.</returns>
+    public GameObject BuildModelFromPath(string mainModelPath, Action<float> onProgress = null) {
         return BuildModelFromCopiedFiles(mainModelPath, onProgress);
     }
 
