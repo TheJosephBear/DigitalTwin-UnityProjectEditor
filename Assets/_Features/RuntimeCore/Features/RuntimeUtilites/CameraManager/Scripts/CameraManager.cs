@@ -67,6 +67,9 @@ public class CameraManager: Singleton<CameraManager> {
     Coroutine _flyToVcamCoroutine;
     GameObject _flyToVcamTarget;
     bool _isFlyingToVcam;
+    const int FlyToVcamPriority = 1000; // above any vcam priority set in the project
+    int _freeCamPriority;
+    int _flyToVcamTargetPriority;
     bool _isLeftDragLooking;
     Coroutine _riseCoroutine;
 
@@ -283,6 +286,17 @@ public class CameraManager: Singleton<CameraManager> {
         CancelFlyToVcam();
         if (vcam == null || Camera.main == null) return;
 
+        var freeVcam = _vCamFreeCamRefference.GetComponent<CinemachineVirtualCameraBase>();
+        var targetVcam = vcam.GetComponent<CinemachineVirtualCameraBase>();
+
+        // The brain cuts to the highest priority active vcam. Any other vcam left on (e.g. a view point's, priority 10 like the pins')
+        // beats the free cam (priority 0), so the camera jumped there first and blended from it. Lifted above everything for the flight:
+        // the free cam for the cut, the target for the blend. Restored in CancelFlyToVcam
+        _freeCamPriority = freeVcam.Priority;
+        _flyToVcamTargetPriority = targetVcam != null ? targetVcam.Priority : 0;
+        freeVcam.Priority = FlyToVcamPriority;
+        if (targetVcam != null) targetVcam.Priority = FlyToVcamPriority + 1;
+
         // Fresh brain (disabling clears its frame stack) starting from the free cam at the current view
         _cinemachineBrainRefference.enabled = false;
         _vCamFreeCamRefference.transform.SetPositionAndRotation(Camera.main.transform.position, Camera.main.transform.rotation);
@@ -295,7 +309,7 @@ public class CameraManager: Singleton<CameraManager> {
         // Only the component, the collision setting stays as it is
         CameraColissionScriptRef.enabled = false;
         vcam.SetActive(true);
-        _flyToVcamCoroutine = StartCoroutine(FlyToVcamCoroutine(vcam.GetComponent<CinemachineVirtualCameraBase>()));
+        _flyToVcamCoroutine = StartCoroutine(FlyToVcamCoroutine(targetVcam));
     }
 
     IEnumerator FlyToVcamCoroutine(CinemachineVirtualCameraBase vcam) {
@@ -321,7 +335,12 @@ public class CameraManager: Singleton<CameraManager> {
         }
 
         _vCamFreeCamRefference.transform.SetPositionAndRotation(Camera.main.transform.position, Camera.main.transform.rotation);
-        if (_flyToVcamTarget != null) _flyToVcamTarget.SetActive(false); // null when its pin got deleted
+        _vCamFreeCamRefference.GetComponent<CinemachineVirtualCameraBase>().Priority = _freeCamPriority;
+        if (_flyToVcamTarget != null) { // null when its pin got deleted
+            var targetVcam = _flyToVcamTarget.GetComponent<CinemachineVirtualCameraBase>();
+            if (targetVcam != null) targetVcam.Priority = _flyToVcamTargetPriority;
+            _flyToVcamTarget.SetActive(false);
+        }
         _flyToVcamTarget = null;
         ToggleCinemachineBrain(false);
         CameraColissionScriptRef.enabled = _isCollisionEnabled; // enabling it resets its last valid position to where the camera is now
