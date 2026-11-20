@@ -47,15 +47,11 @@ public class ViewPointUI : MonoBehaviour {
         UpdateViewButtonList();
 
         if (SceneLoadingManager.Instance.GetActiveScene() == SceneType.Viewing) {
-            if (MainManagerBase.Instance.ActiveState != AppState.ViewActive) {
-                MainManagerBase.Instance.ChangeState(AppState.ViewActive);
-            }
-
-            // 1. Trigger the camera movement to the viewpoint
-            ViewManager.Instance.ActivateViewPoint();
-
-            // 2. Immediately switch to Freecam and reset button visuals
+            // Like pins: fly there with the free cam's FlyToVcam, which turns the collision enforcer off for the blend
+            // (else it pulls the camera back to where it got stuck) and hands the camera back to the free cam at the view point.
+            // Freecam first: entering it starts the brain disabling coroutine, which FlyToVcam then cancels
             MainManagerBase.Instance.ChangeState(AppState.Freecam);
+            if (ViewPointRefference != null) CameraManager.Instance.FlyToVcam(ViewPointRefference.vcam);
             ResetButtonsVisual();
         } else {
             if (MainManagerBase.Instance.ActiveState == AppState.ViewActive) {
