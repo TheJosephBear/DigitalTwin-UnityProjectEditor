@@ -434,6 +434,9 @@ namespace FrostweepGames.Plugins.WebGLFileBrowser
             var data = new byte[length];
             try
             {
+                if (dataPointer == IntPtr.Zero)
+                    throw new OutOfMemoryException($"Not enough WebGL memory to load {fileInfo.fullName} ({length} bytes)");
+
                 Marshal.Copy(dataPointer, data, 0, data.Length);
                 fileLoaded = true;
             }

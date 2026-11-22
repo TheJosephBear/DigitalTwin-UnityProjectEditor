@@ -49,7 +49,10 @@ var webGlNativeFileBrowserLibrary = {
             return null;
 
         var file = document.fbStorage.loadedFiles[document.convertPtrToString(fileName)];
-        var dataPointer = _malloc(file.info.byteLength);
+        // ">>> 0": unsigned right shift operator - with a heap over 2 GB, malloc's address arrives as a negative signed int, this converts it to unsigned int
+        var dataPointer = _malloc(file.info.byteLength) >>> 0;
+        if (dataPointer === 0)
+            return 0;
         var dataHeap = new Uint8Array(HEAPU8.buffer, dataPointer, file.info.byteLength);
         dataHeap.set(new Uint8Array(file.info));
         document.fbStorage.dataPointers.push(dataPointer);
