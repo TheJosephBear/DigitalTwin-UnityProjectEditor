@@ -26,6 +26,12 @@ public class FPSManager: Singleton<FPSManager> {
     private bool spawnPlaced;   // false until the user places the spawn point by hand
     private bool cursorLockAcquired;   // WebGL: the browser has locked the cursor since entering FPS mode
 
+#if UNITY_WEBGL && !UNITY_EDITOR
+    // From Assets/Plugins/PluginsContainer/WebGLPointerLock.jslib
+    [System.Runtime.InteropServices.DllImport("__Internal")]
+    private static extern bool IsPointerLocked();
+#endif
+
     // Player settings
     // defaultSettings = what the player prefab had before we touched it (filled in Start)
     // currentSettings = what is currently applied / shown in the UI / saved
@@ -90,7 +96,7 @@ public class FPSManager: Singleton<FPSManager> {
         // The browser uses the first ESC to release the pointer lock and Unity never gets the key, so losing the lock counts as ESC.
         // Only once the lock was actually acquired: the browser grants it a moment after EnterFPSMode asks for it
         if (isInFPSMode) {
-            if (Cursor.lockState == CursorLockMode.Locked) {
+            if (IsPointerLocked()) {
                 cursorLockAcquired = true;
             } else if (cursorLockAcquired) {
                 RequestCloseUI();
