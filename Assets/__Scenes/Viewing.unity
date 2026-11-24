@@ -1426,6 +1426,7 @@ MonoBehaviour:
   ModelTransparency: 0.8
   InitialLocalization: 0
   _previewMaterial: {fileID: 0}
+  _screenEdgeMargin: 0.1
 --- !u!4 &1375345352
 Transform:
   m_ObjectHideFlags: 0

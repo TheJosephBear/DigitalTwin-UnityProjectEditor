@@ -54,10 +54,8 @@ public class MapUI : UIBehaviour {
     #region BaseMap
 
     public void OnUploadBaseMap() {
-        ModelUploadManager.Instance.AskForModel((createdAsset) => {
-            MapManager.Instance.SetBaseMapModel(createdAsset);
-            UpdateItems();
-        });
+        ModelUploadManager.Instance.AskForModel((ModelAsset createdAsset) => PlaceUploadedModel(
+            MapManager.Instance.SetBaseMapModelCoroutine(createdAsset)));
     }
 
     public void OnRenameBaseMap(MapVariant mapVariant, string text) {
@@ -70,10 +68,8 @@ public class MapUI : UIBehaviour {
     #region Variants
 
     public void OnAddVariant() {
-        ModelUploadManager.Instance.AskForModel((createdAsset) => {
-            MapManager.Instance.UploadMapVariant(createdAsset);
-            UpdateItems();
-        });
+        ModelUploadManager.Instance.AskForModel((ModelAsset createdAsset) => PlaceUploadedModel(
+            MapManager.Instance.UploadMapVariantCoroutine(createdAsset)));
     }
 
     public void OnRenameVariant(MapVariant mapVariant, string text) {
@@ -82,10 +78,14 @@ public class MapUI : UIBehaviour {
     }
 
     public void OnUploadVariantAgain(MapVariant mapVariant) {
-        ModelUploadManager.Instance.AskForModel((createdAsset) => {
-            MapManager.Instance.UploadMapVariantAgain(mapVariant, createdAsset);
-            UpdateItems();
-        });
+        ModelUploadManager.Instance.AskForModel((ModelAsset createdAsset) => PlaceUploadedModel(
+            MapManager.Instance.UploadMapVariantAgainCoroutine(mapVariant, createdAsset)));
+    }
+
+    // Runs behind the upload's loading screen, then shows the new model in the list
+    IEnumerator PlaceUploadedModel(IEnumerator placing) {
+        yield return placing;
+        UpdateItems();
     }
 
     public void OnAdjustVariantGeoPosition(MapVariant mapVariant) {

@@ -68,9 +68,18 @@ public class GeoMapLocalizationManager: Singleton<GeoMapLocalizationManager> {
         ToggleGeoMapZoom(true);
         GeoMapManager.Instance.ToggleGeoMapControl(true);
 
+        // Runs in this frame unless the copy has to be created, which takes frames behind the loading screen
+        StartCoroutine(SetupCoroutine());
+    }
+
+    IEnumerator SetupCoroutine() {
         if (MapManager.Instance.IsBaseMapUploaded()) {
             if (_baseMapCopy == null) {
-                CreateBaseMapCopy();
+                // Another loading (e.g. opening the project) may be showing it already, then it hides it too
+                bool showLoading = !LoadingScreenUI.IsVisible;
+                if (showLoading) UIManager.Instance.ShowUI(UIType.LoadingScreen);
+                yield return CoroutineUtils.TryCoroutine(CreateBaseMapCopyCoroutine(), Debug.LogException);
+                if (showLoading) UIManager.Instance.HideUI(UIType.LoadingScreen);
             } else {
                 // Starts where the model is, a previous session may have left it elsewhere without placing it
                 _baseMapCopy.SetActive(true);
@@ -89,15 +98,18 @@ public class GeoMapLocalizationManager: Singleton<GeoMapLocalizationManager> {
         }
     }
 
-    public void UploadMap(ModelAsset uploadedModel) {
+    /// <summary>
+    /// Makes the uploaded model the base map and its copy to place, over frames (call it behind the loading screen).
+    /// </summary>
+    public IEnumerator UploadMapCoroutine(ModelAsset uploadedModel) {
         if (_baseMapCopy != null) {
             Destroy(_baseMapCopy.gameObject);
             _baseMapCopy = null;
             DestroyPreviewMaterials();
         }
 
-        MapManager.Instance.SetBaseMapModel(uploadedModel);
-        CreateBaseMapCopy();
+        yield return MapManager.Instance.SetBaseMapModelCoroutine(uploadedModel);
+        yield return CreateBaseMapCopyCoroutine();
         // The pins, views and variants now move relative to the new model
         if (_followingCopy) SetFollowerReference();
         else CaptureFollowers();
@@ -118,8 +130,11 @@ public class GeoMapLocalizationManager: Singleton<GeoMapLocalizationManager> {
         _UIInstance.gameObject.SetActive(toggleOn);
     }
 
-    void CreateBaseMapCopy() {
+    IEnumerator CreateBaseMapCopyCoroutine() {
         if (_baseMapCopy == null && MapManager.Instance.IsBaseMapUploaded()) {
+            LoadingScreenUI.SetStatus("Připravuji náhled pro umístění");
+            yield return null;
+
             MapVariant baseMapReff = MapManager.Instance.GetBaseMap();
             if (!baseMapReff.IsVisible) {
                 baseMapReff.ToggleMeshVisibility(true);
@@ -138,9 +153,16 @@ public class GeoMapLocalizationManager: Singleton<GeoMapLocalizationManager> {
             ResetCopyToBaseMap();
 
             // Add mesh collider
-            foreach (Transform child in _baseMapCopy.GetComponentsInChildren<Transform>()) {
+            Transform[] children = _baseMapCopy.GetComponentsInChildren<Transform>();
+            FrameBudget budget = new FrameBudget();
+            for (int i = 0; i < children.Length; i++) {
+                Transform child = children[i];
                 if (child.GetComponent<MeshRenderer>() != null || child.GetComponent<MeshFilter>() != null) {
                     child.gameObject.AddComponent<MeshCollider>();
+                }
+                if (budget.ShouldYield()) {
+                    LoadingScreenUI.SetStatus($"Připravuji náhled pro umístění – kolize {i + 1}/{children.Length}");
+                    yield return null;
                 }
             }
 

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class MapVariant : MonoBehaviour {
@@ -12,9 +13,23 @@ public class MapVariant : MonoBehaviour {
     private ModelAsset _modelAsset;
 
     public void AddCollider() {
-        foreach (Transform child in GetComponentsInChildren<Transform>()) {
-            if (child.GetComponent<MeshCollider>() == null) {
+        CoroutineUtils.RunSync(AddColliderCoroutine());
+    }
+
+    /// <summary>
+    /// <see cref="AddCollider"/> spread over frames (each MeshCollider cooks its mesh), showing its progress on the loading screen.
+    /// </summary>
+    public IEnumerator AddColliderCoroutine() {
+        Transform[] children = GetComponentsInChildren<Transform>();
+        FrameBudget budget = new FrameBudget();
+        for (int i = 0; i < children.Length; i++) {
+            Transform child = children[i];
+            if (child != null && child.GetComponent<MeshCollider>() == null) {
                 child.gameObject.AddComponent<MeshCollider>();
+            }
+            if (budget.ShouldYield()) {
+                LoadingScreenUI.SetStatus($"Vytvářím kolize {i + 1}/{children.Length}");
+                yield return null;
             }
         }
     }

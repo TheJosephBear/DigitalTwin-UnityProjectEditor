@@ -16,15 +16,15 @@ public class GeoLocalizationUI : UIBehaviour {
         // ESC does what the exit button does, unless a popup or file dialog is open (ESC belongs to it then)
         if (!Input.GetKeyDown(KeyCode.Escape)) return;
         if (SimpleFileBrowser.FileBrowser.IsOpen || FindAnyObjectByType<PopUpAreYouSureUI>() != null) return;
+        if (LoadingScreenUI.IsVisible) return; // the model is still being prepared
         OnExit();
     }
 
     #region OnClick
 
     public void OnUploadMap() {
-        ModelUploadManager.Instance.AskForModel((createdAsset) => {
-            GeoMapLocalizationManager.Instance.UploadMap(createdAsset);
-        });
+        ModelUploadManager.Instance.AskForModel((ModelAsset createdAsset) =>
+            GeoMapLocalizationManager.Instance.UploadMapCoroutine(createdAsset));
         /*
         ModelUploadManager.Instance.AskForModel((createdAsset) => {
             EditorManager.Instance.MapManager.SetBaseMapModel(createdAsset);

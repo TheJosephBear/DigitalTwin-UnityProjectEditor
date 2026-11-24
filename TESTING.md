@@ -8,7 +8,7 @@ They are Unity **play mode tests** in `Assets/Tests/PlayMode/`.
 
 For each model:
 
-1. **Upload.** It hands the files to `AssetManager` the way `ModelUploadManager` does: `PrepareAssetFromFiles`, one frame, then `BuildPreparedAsset`. TriLib loads the model.
+1. **Upload.** It hands the files to `AssetManager` the way `ModelUploadManager` does: `PrepareAssetFromFiles`, one frame, then `BuildPreparedAssetCoroutine`. TriLib parses the model in one frame, then builds its meshes, materials and textures over the following frames.
 2. **Check.** A model passes when all of these hold:
    - it loaded, and nothing logged an error
    - it has renderers and vertices
@@ -107,7 +107,7 @@ All figures are in MB (1 MB = 1,048,576 bytes):
 
 | Column | Meaning |
 |---|---|
-| `parse_allocated_mb` | Managed memory allocated during the frame TriLib builds the model. On WebGL the garbage collector only runs between frames, so all of it is in memory at once. This is the main part of the **peak**. |
+| `parse_allocated_mb` | Managed memory allocated during the build's busiest frame, usually the one where TriLib parses the file. On WebGL the garbage collector only runs between frames, so all of it is in memory at once. This is the main part of the **peak**. |
 | `managed_retained_mb` | Managed memory the loaded model still holds after a garbage collection |
 | `native_retained_mb` | Native memory (meshes, textures) still held after the load |
 | `input_mb`, `vertices`, `triangles`, `textures`, `build_s` | The same as in the table |

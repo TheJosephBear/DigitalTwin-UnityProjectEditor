@@ -48,18 +48,26 @@ public class EditorProjectSerializer : MonoBehaviour {
         });
         yield return new WaitUntil(() => isAssetDeserializationComplete);
 
-        // Deserialize everything else
+        // Deserialize everything else, a frame between the parts so the loading screen shows each
         // A failing part is logged and skipped so the rest still loads; the user is told at the end
         List<string> failedParts = new List<string>();
         TryDeserialize("obrázky", failedParts, () =>
             ImageManager.Instance.Deserialize(serializedProject.serializableTextureAssets));
-        TryDeserialize("podkladová mapa a varianty", failedParts, () =>
-            MapManager.Instance.Deserialize(serializedProject.serializableMapManager));
+        yield return CoroutineUtils.TryCoroutine(
+            MapManager.Instance.DeserializeCoroutine(serializedProject.serializableMapManager),
+            e => {
+                Debug.LogException(e);
+                failedParts.Add("podkladová mapa a varianty");
+            });
+        yield return ShowStep("Načítám pohledy");
         TryDeserialize("pohledy", failedParts, () =>
             ViewManager.Instance.Deserialize(serializedProject.serializableViewPointManager));
-        if (PinManager.Instance != null)
+        if (PinManager.Instance != null) {
+            yield return ShowStep("Načítám špendlíky");
             TryDeserialize("špendlíky", failedParts, () =>
                 PinManager.Instance.Deserialize(serializedProject.serializablePinManager));
+        }
+        yield return ShowStep("Načítám nastavení projektu");
         TryDeserialize("umístění na mapě", failedParts, () =>
             GeoMapManager.Instance.DeserializeManager(serializedProject.serializableGeoMapManager));
         TryDeserialize("nastavení slunce", failedParts, () =>
@@ -70,6 +78,7 @@ public class EditorProjectSerializer : MonoBehaviour {
         if(serializedProject.serializableSettings != null)
             TryDeserialize("nastavení projektu", failedParts, () =>
                 ProjectSettingsManager.Instance.Deserialize(serializedProject.serializableSettings));
+        LoadingScreenUI.SetStatus("Kontroluji dotazník…");
         yield return ProjectSettingsManager.Instance.DetectExistingSurveyCoroutine();
         // this hurts my soul
         CameraManager.Instance.ToggleCameraCollision(ProjectSettingsManager.Instance.EditorCameraCollision);
@@ -82,6 +91,12 @@ public class EditorProjectSerializer : MonoBehaviour {
                 "Při načítání projektu došlo k chybě. Nepodařilo se načíst: " + string.Join(", ", failedParts) + ".\n" +
                 "Pokud projekt uložíte, tyto části se mohou ztratit.");
         }
+    }
+
+    // Shows the next step on the loading screen and lets it render before the step blocks the main thread
+    public static IEnumerator ShowStep(string status) {
+        LoadingScreenUI.SetStatus(status);
+        yield return null;
     }
 
     void TryDeserialize(string partName, List<string> failedParts, System.Action deserialize) {

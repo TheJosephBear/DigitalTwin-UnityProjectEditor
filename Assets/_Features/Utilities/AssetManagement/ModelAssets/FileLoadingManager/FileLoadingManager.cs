@@ -109,16 +109,30 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
     /// </remarks>
     /// <returns>Path of the main model file, or null if the selection has none.</returns>
     public string WriteWebGLFiles(FrostweepGames.Plugins.WebGLFileBrowser.File[] files, string fileHash) {
+        string result = null;
+        CoroutineUtils.RunSync(WriteWebGLFilesCoroutine(files, fileHash, path => result = path));
+        return result;
+    }
+
+    /// <summary>
+    /// <see cref="WriteWebGLFiles"/> spread over frames, a frame per file. <paramref name="done"/> gets the main model path or null.
+    /// </summary>
+    public IEnumerator WriteWebGLFilesCoroutine(FrostweepGames.Plugins.WebGLFileBrowser.File[] files, string fileHash, Action<string> done) {
         if (files == null || files.Length == 0) {
             Debug.LogError("[FileLoadingManager] No files provided in array.");
-            return null;
+            done?.Invoke(null);
+            yield break;
         }
 
         string targetRoot = GetPersistentAssetPath(fileHash);
         string mainModelPath = null;
 
-        foreach (var file in files) {
+        for (int i = 0; i < files.Length; i++) {
+            var file = files[i];
             if (file == null || file.fileInfo == null) continue;
+
+            LoadingScreenUI.SetStatus($"Ukládám soubory {i + 1}/{files.Length}");
+            yield return null;
 
             string fileName = Path.GetFileName(file.fileInfo.fullName);
             string targetPath = Path.Combine(targetRoot, fileName);
@@ -150,10 +164,9 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
 
         if (mainModelPath == null) {
             Debug.LogError("[FileLoadingManager] No valid primary 3D model file found in uploaded selection.");
-            return null;
         }
 
-        return mainModelPath;
+        done?.Invoke(mainModelPath);
     }
 
     /// <summary>
@@ -200,6 +213,23 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
     /// <param name="assetHash">Unique hash identifying this model asset.</param>
     /// <returns>Instantiated model GameObject, deactivated by default.</returns>
     public GameObject BuildFromDownloadedFiles(string assetHash) {
+        string mainModelPath = FindDownloadedMainModel(assetHash);
+        return mainModelPath != null ? BuildModelFromCopiedFiles(mainModelPath) : null;
+    }
+
+    /// <summary>
+    /// <see cref="BuildFromDownloadedFiles"/> spread over frames, see <see cref="BuildModelCoroutine(string, string, Action{GameObject})"/>.
+    /// </summary>
+    public IEnumerator BuildFromDownloadedFilesCoroutine(string assetHash, string label, Action<GameObject> done) {
+        string mainModelPath = FindDownloadedMainModel(assetHash);
+        if (mainModelPath == null) {
+            done?.Invoke(null);
+            yield break;
+        }
+        yield return BuildModelCoroutine(mainModelPath, label, done);
+    }
+
+    string FindDownloadedMainModel(string assetHash) {
         string root = GetPersistentAssetPath(assetHash);
 
         if (!Directory.Exists(root)) {
@@ -235,7 +265,7 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
             return null;
         }
 
-        return BuildModelFromCopiedFiles(mainModelPath);
+        return mainModelPath;
     }
 
     #endregion
@@ -290,12 +320,39 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
     /// TriLib automatically locates and binds companion files (MTL, PNG, JPG, BIN) in the same directory.
     /// </summary>
     private GameObject BuildModelFromCopiedFiles(string copiedModelPath, Action<float> onProgress = null) {
+        GameObject result = null;
+        CoroutineUtils.RunSync(BuildModelCoroutine(copiedModelPath, false, null, model => result = model, onProgress));
+        return result;
+    }
+
+    /// <summary>
+    /// Loads a model like <see cref="BuildModelFromPath"/>, spread over frames so the loading screen keeps updating.
+    /// Only TriLib's parse of the file stays one long frame (WebGL has no threads), creating the meshes,
+    /// materials and textures after it is split over frames. <paramref name="done"/> gets the deactivated model, or null.
+    /// </summary>
+    /// <param name="label">What the loading screen calls the model, the file name if null.</param>
+    public IEnumerator BuildModelCoroutine(string mainModelPath, string label, Action<GameObject> done) {
+        return BuildModelCoroutine(mainModelPath, true, label, done, null);
+    }
+
+    /// <param name="useCoroutines">False builds it all in this frame (callbacks are called before this returns).</param>
+    IEnumerator BuildModelCoroutine(string copiedModelPath, bool useCoroutines, string label, Action<GameObject> done, Action<float> onProgress) {
         if (!System.IO.File.Exists(copiedModelPath)) {
             Debug.LogError($"[FileLoadingManager] Model file does not exist: {copiedModelPath}");
-            return null;
+            done?.Invoke(null);
+            yield break;
         }
 
         string fileName = System.IO.Path.GetFileName(copiedModelPath);
+        if (string.IsNullOrEmpty(label)) label = fileName;
+
+        if (useCoroutines) {
+            // The parse below blocks the main thread, show what's coming before it
+            LoadingScreenUI.SetStatus($"Načítám {label} (může chvíli trvat)…");
+            yield return null;
+            yield return null;
+        }
+
         MemoryLogger.Log($"Before loading {fileName}");
 
         AssetLoaderOptions options = AssetLoader.CreateDefaultLoaderOptions();
@@ -309,33 +366,69 @@ public class FileLoadingManager : Singleton<FileLoadingManager> {
         options.ReadEnabled = true;
         // optional, if our OBJs never carry vertex colors (skips a 16 B/vertex buffer):
         // TriLibCore.Obj.Reader.ObjReader.ParseVertexColors = false;
-        AssetLoaderContext context = null;
+        // Creating the GameObjects, meshes and materials yields a frame once it took this long (the parse before it can't)
+        options.UseCoroutines = useCoroutines;
+        options.MaxCoroutineDelayInMS = FrameBudget.DefaultMilliseconds;
 
-        // Progress callback handler for TriLib
+        AssetLoaderContext context = null;
+        bool finished = false;
+        bool failed = false;
+
         Action<AssetLoaderContext, float> progressHandler = (ctx, progress) => {
             onProgress?.Invoke(progress);
+            if (useCoroutines) LoadingScreenUI.SetStatus($"Sestavuji {label}", progress);
+        };
+        // Called last, after the materials and textures
+        Action<AssetLoaderContext> onMaterialsLoad = ctx => {
+            RestoreOriginalMetallic(ctx);
+            finished = true;
+        };
+        // TriLib only calls onLoad (no onMaterialsLoad) when the file has no model in it
+        Action<AssetLoaderContext> onLoad = ctx => {
+            if (ctx.RootModel == null) finished = failed = true;
+        };
+        Action<IContextualizedError> onError = error => {
+            Debug.LogException(error.GetInnerException());
+            finished = failed = true;
+        };
+        // An exception thrown in TriLib's own coroutine only stops it and gets logged, it never reaches onError
+        Application.LogCallback onLog = (condition, stackTrace, type) => {
+            if (type == LogType.Exception && stackTrace != null && stackTrace.Contains("TriLibCore")) finished = failed = true;
         };
 
         // Check if the file is an archive (.zip)
         bool isZip = System.IO.Path.GetExtension(copiedModelPath).Equals(".zip", System.StringComparison.OrdinalIgnoreCase);
 
-        if (isZip) {
-            context = AssetLoaderZip.LoadModelFromZipFile(copiedModelPath, null, RestoreOriginalMetallic, progressHandler, null, null, options);
-        } else {
-            context = AssetLoader.LoadModelFromFile(copiedModelPath, null, RestoreOriginalMetallic, progressHandler, null, null, options);
+        Application.logMessageReceived += onLog;
+        try {
+            if (isZip) {
+                context = AssetLoaderZip.LoadModelFromZipFile(copiedModelPath, onLoad, onMaterialsLoad, progressHandler, onError, null, options);
+            } else {
+                context = AssetLoader.LoadModelFromFile(copiedModelPath, onLoad, onMaterialsLoad, progressHandler, onError, null, options);
+            }
+        } catch (Exception e) {
+            Debug.LogException(e);
+            finished = failed = true;
         }
 
-        if (context == null || context.RootGameObject == null) {
+        // Without coroutines it has all run by now
+        if (!useCoroutines && !finished) failed = true;
+        while (!finished) yield return null;
+        Application.logMessageReceived -= onLog;
+
+        GameObject loadedModel = context?.RootGameObject;
+        if (failed || loadedModel == null) {
             Debug.LogError($"[FileLoadingManager] TriLib failed to load model from path: {copiedModelPath}");
-            return null;
+            if (loadedModel != null) Destroy(loadedModel);
+            done?.Invoke(null);
+            yield break;
         }
 
-        GameObject loadedModel = context.RootGameObject;
         loadedModel.SetActive(false);
 
         CenterPivot(loadedModel);
         MemoryLogger.Log($"After loading {fileName}");
-        return loadedModel;
+        done?.Invoke(loadedModel);
     }
 
     /// <summary>

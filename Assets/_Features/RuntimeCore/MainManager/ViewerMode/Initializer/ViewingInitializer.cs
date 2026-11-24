@@ -47,6 +47,7 @@ public class ViewingInitializer : MonoBehaviour, Iinitializer {
         bool downloadSuccess = false;
 
         UIManager.Instance.ShowUI(UIType.LoadingScreen);
+        LoadingScreenUI.SetStatus("Stahuji data projektu…");
 
         StartCoroutine(ProjectManager.Instance.DownloadProjectData(projectName, (list, success) => {
             downloadSuccess = success;

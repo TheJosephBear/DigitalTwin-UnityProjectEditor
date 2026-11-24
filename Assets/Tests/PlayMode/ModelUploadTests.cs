@@ -16,7 +16,8 @@ using Debug = UnityEngine.Debug;
 
 /// <summary>
 /// Uploads real models the way the upload dialog does (<see cref="ModelUploadManager"/>): the picked files go to
-/// <see cref="AssetManager.PrepareAssetFromFiles"/>, a frame passes, then <see cref="AssetManager.BuildPreparedAsset"/>.
+/// <see cref="AssetManager.PrepareAssetFromFiles"/>, a frame passes, then <see cref="AssetManager.BuildPreparedAssetCoroutine"/>
+/// builds it over frames (<see cref="AssetManager.BuildPreparedAsset"/> on older commits).
 /// Every model gets screenshots and stats in TestResults/ModelUpload/&lt;run&gt;/report.html
 /// (menu Tools > Model Upload Tests > Open Latest Report).
 /// </summary>
@@ -157,11 +158,45 @@ public class ModelUploadTests {
 
             BeginBuildMemory();
             watch.Restart();
-            try {
-                if (prepared != null) _asset = (ModelAsset)buildMethod.Invoke(AssetManager.Instance, new object[] { prepared, null });
-            } catch (Exception e) {
-                entry.Failure = "BuildPreparedAsset threw: " + Unwrap(e).Message;
-                Debug.LogException(Unwrap(e));
+            // Since "Loading screen status": the upload builds the model over frames (TriLib coroutines), test that path
+            MethodInfo buildCoroutineMethod = typeof(AssetManager).GetMethod("BuildPreparedAssetCoroutine");
+            if (buildCoroutineMethod != null) {
+                entry.Notes += " [built over frames: BuildPreparedAssetCoroutine]";
+                IEnumerator build = null;
+                if (prepared != null) {
+                    Action<ModelAsset> done = asset => _asset = asset;
+                    build = (IEnumerator)buildCoroutineMethod.Invoke(AssetManager.Instance, new object[] { prepared, done });
+                }
+                // Run by hand (nested coroutines too) to catch its exceptions and see every frame's allocations
+                var stack = new Stack<IEnumerator>();
+                if (build != null) stack.Push(build);
+                while (stack.Count > 0) {
+                    object current;
+                    try {
+                        if (!stack.Peek().MoveNext()) {
+                            stack.Pop();
+                            continue;
+                        }
+                        current = stack.Peek().Current;
+                    } catch (Exception e) {
+                        entry.Failure = "BuildPreparedAssetCoroutine threw: " + e.Message;
+                        Debug.LogException(e);
+                        break;
+                    }
+                    if (current is IEnumerator nested) {
+                        stack.Push(nested);
+                        continue;
+                    }
+                    yield return current;
+                    TrackPeakFrameAllocation();
+                }
+            } else {
+                try {
+                    if (prepared != null) _asset = (ModelAsset)buildMethod.Invoke(AssetManager.Instance, new object[] { prepared, null });
+                } catch (Exception e) {
+                    entry.Failure = "BuildPreparedAsset threw: " + Unwrap(e).Message;
+                    Debug.LogException(Unwrap(e));
+                }
             }
         } else {
             entry.Notes += " [one-step upload: CreateNewAssetFromFiles]";
@@ -178,10 +213,11 @@ public class ModelUploadTests {
         entry.MemoryDeltaMB = (Profiler.GetTotalAllocatedMemoryLong() - memoryBefore) / (1024.0 * 1024.0);
         entry.NativeRetainedMB = (Profiler.GetTotalAllocatedMemoryLong() - _nativeBeforeBuild) / MB;
 
-        // The build ran within one frame. On WebGL the garbage collector only runs between frames, so all C# memory
-        // allocated during it is in the heap at once at the end of the parse: that's the upload's peak
+        // On WebGL the garbage collector only runs between frames, so all C# memory allocated in a frame is in the heap
+        // at once at its end. The frame that allocated most (the parse, the whole build without coroutines) is the upload's peak
         yield return null;
-        entry.ParseAllocatedMB = _allocatedInFrame.Valid ? _allocatedInFrame.LastValue / MB : -1;
+        TrackPeakFrameAllocation();
+        entry.ParseAllocatedMB = _allocatedInFrame.Valid ? _peakFrameAllocation / MB : -1;
         _allocatedInFrame.Dispose();
         GC.Collect();
         entry.ManagedRetainedMB = (Profiler.GetMonoUsedSizeLong() - _managedBeforeBuild) / MB;
@@ -290,6 +326,7 @@ public class ModelUploadTests {
     long _nativeBeforeBuild;
     long _managedBeforeBuild;
     Unity.Profiling.ProfilerRecorder _allocatedInFrame;
+    long _peakFrameAllocation;
 
     // Right before the model is built: the file bytes are already released (or still held, on older commits)
     void BeginBuildMemory() {
@@ -297,6 +334,12 @@ public class ModelUploadTests {
         _managedBeforeBuild = Profiler.GetMonoUsedSizeLong();
         _nativeBeforeBuild = Profiler.GetTotalAllocatedMemoryLong();
         _allocatedInFrame = Unity.Profiling.ProfilerRecorder.StartNew(Unity.Profiling.ProfilerCategory.Memory, "GC Allocated In Frame");
+        _peakFrameAllocation = 0;
+    }
+
+    // Call after each frame of the build, the recorder holds the frame before
+    void TrackPeakFrameAllocation() {
+        if (_allocatedInFrame.Valid) _peakFrameAllocation = Math.Max(_peakFrameAllocation, _allocatedInFrame.LastValue);
     }
 
     static Exception Unwrap(Exception e) => e is TargetInvocationException tie && tie.InnerException != null ? tie.InnerException : e;

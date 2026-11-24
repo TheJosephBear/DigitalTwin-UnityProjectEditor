@@ -40,6 +40,7 @@ public class ProjectListManager: Singleton<ProjectListManager> {
         bool downloadFinished = false;
 
         UIManager.Instance.ShowUI(UIType.LoadingScreen);
+        LoadingScreenUI.SetStatus("Stahuji data projektu…");
         StartCoroutine(ProjectManager.Instance.DownloadProjectData(projectMetadata, (list, success) => {
             downloadFinished = true;
         }));
@@ -48,6 +49,7 @@ public class ProjectListManager: Singleton<ProjectListManager> {
             yield return null;
 
         MemoryLogger.Log($"After downloading project data {projectMetadata.projectName}");
+        LoadingScreenUI.SetStatus("Otevírám projekt…");
         var loading = SceneLoadingManager.Instance.LoadSceneAsync(SceneType.Editing, 0f);
         while (!loading.IsCompleted)
             yield return null;

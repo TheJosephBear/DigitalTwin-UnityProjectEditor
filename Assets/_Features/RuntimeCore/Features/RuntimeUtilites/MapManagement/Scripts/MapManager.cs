@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,6 +35,16 @@ public class MapManager : Singleton<MapManager> {
     }
 
     public void SetBaseMapModel(ModelAsset newMap) {
+        CoroutineUtils.RunSync(SetBaseMapModelCoroutine(newMap));
+    }
+
+    /// <summary>
+    /// <see cref="SetBaseMapModel"/> spread over frames, showing its progress on the loading screen.
+    /// </summary>
+    public IEnumerator SetBaseMapModelCoroutine(ModelAsset newMap) {
+        LoadingScreenUI.SetStatus($"Umísťuji model {newMap.FileName}");
+        yield return null;
+
         Transform originalTransform = null;
         if (_baseMap != null) {
             originalTransform = _baseMap.gameObject.transform;
@@ -53,7 +64,7 @@ public class MapManager : Singleton<MapManager> {
         }
 
         _baseMap = addedMap;
-        SpawnMap();
+        yield return SpawnMapCoroutine();
     }
 
     public void SetMapName(MapVariant map, string name) {
@@ -61,30 +72,52 @@ public class MapManager : Singleton<MapManager> {
     }
 
     public MapVariant UploadMapVariant(ModelAsset newMap, bool deseralization = false) {
+        MapVariant result = null;
+        CoroutineUtils.RunSync(UploadMapVariantCoroutine(newMap, deseralization, variant => result = variant));
+        return result;
+    }
+
+    /// <summary>
+    /// <see cref="UploadMapVariant"/> spread over frames, showing its progress on the loading screen.
+    /// </summary>
+    public IEnumerator UploadMapVariantCoroutine(ModelAsset newMap, bool deseralization = false, Action<MapVariant> done = null) {
         if(!deseralization)
             (EditorManager.Instance as EditorManager).ToggleUnsavedChanges(true);
+
+        LoadingScreenUI.SetStatus($"Umísťuji model {newMap.FileName}");
+        yield return null;
 
         MapVariant addedMap = newMap.InstantiateModel(MapSpawnPosition).AddComponent<MapVariant>();
         addedMap.ModelAsset = newMap;
         addedMap.Name = newMap.FileName;
         addedMap.IsBaseMap = false;
-        addedMap.AddCollider();
+        yield return addedMap.AddColliderCoroutine();
         _mapVariants.Add(addedMap);
-        return addedMap;
+        done?.Invoke(addedMap);
     }
 
     public void UploadMapVariantAgain(MapVariant oldMap, ModelAsset newModel) {
+        CoroutineUtils.RunSync(UploadMapVariantAgainCoroutine(oldMap, newModel));
+    }
+
+    /// <summary>
+    /// <see cref="UploadMapVariantAgain"/> spread over frames, showing its progress on the loading screen.
+    /// </summary>
+    public IEnumerator UploadMapVariantAgainCoroutine(MapVariant oldMap, ModelAsset newModel) {
         if (oldMap == null || newModel == null) {
             Debug.LogError("UploadMapVariantAgain failed: oldMap or newModel is null.");
-            return;
+            yield break;
         }
 
         // 1. Find the index of the old variant in your tracking list
         int index = _mapVariants.IndexOf(oldMap);
         if (index == -1) {
             Debug.LogError("The map variant you are trying to replace is not tracked in _mapVariants!");
-            return;
+            yield break;
         }
+
+        LoadingScreenUI.SetStatus($"Umísťuji model {newModel.FileName}");
+        yield return null;
 
         // 2. Capture the exact transform metrics of the old map variant
         Vector3 oldPosition = oldMap.gameObject.transform.position;
@@ -105,7 +138,7 @@ public class MapManager : Singleton<MapManager> {
         MapVariant replacementMap = newGo.AddComponent<MapVariant>();
         replacementMap.ModelAsset = newModel;
         replacementMap.IsBaseMap = false;
-        replacementMap.AddCollider();
+        yield return replacementMap.AddColliderCoroutine();
 
         // Retain its old name if it was customized, otherwise fall back to new file name
         replacementMap.Name = string.IsNullOrEmpty(oldCustomName) ? newModel.FileName : oldCustomName;
@@ -128,8 +161,13 @@ public class MapManager : Singleton<MapManager> {
     }
 
     public void SpawnMap() {
-        _baseMap?.ToggleMeshVisibility(true);
-        _baseMap?.AddCollider();
+        CoroutineUtils.RunSync(SpawnMapCoroutine());
+    }
+
+    IEnumerator SpawnMapCoroutine() {
+        if (_baseMap == null) yield break;
+        _baseMap.ToggleMeshVisibility(true);
+        yield return _baseMap.AddColliderCoroutine();
     }
 
     public void ToggleMapVisibility() {
@@ -208,7 +246,14 @@ public class MapManager : Singleton<MapManager> {
     }
 
     public void Deserialize(SerializableMapManager serializedMap) {
-        if (serializedMap == null || serializedMap.baseMap == null) return;
+        CoroutineUtils.RunSync(DeserializeCoroutine(serializedMap));
+    }
+
+    /// <summary>
+    /// <see cref="Deserialize"/> spread over frames, showing its progress on the loading screen.
+    /// </summary>
+    public IEnumerator DeserializeCoroutine(SerializableMapManager serializedMap) {
+        if (serializedMap == null || serializedMap.baseMap == null) yield break;
         /*
         //    var baseAsset = AssetManager.Instance.FindModelAssetByFileHash(serializableMapManager.baseModelID);
         SetBaseMapModel(AssetManager.Instance.FindModelAssetByFileHash(serializedMap.baseMap.modelFileHash));
@@ -221,17 +266,15 @@ public class MapManager : Singleton<MapManager> {
         */
         // JsonUtility never deserializes baseMap as null: a project saved without a base map
         // comes back with an empty hash, which means "no base map yet" (editor opens the upload step)
-        if (string.IsNullOrEmpty(serializedMap.baseMap.modelFileHash)) return;
+        if (string.IsNullOrEmpty(serializedMap.baseMap.modelFileHash)) yield break;
 
         // Missing models are skipped so the rest still loads, then reported together at the end
         List<string> missingModels = new List<string>();
 
         var baseAsset = AssetManager.Instance.FindModelAssetByFileHash(serializedMap.baseMap.modelFileHash);
         if (baseAsset != null) {
-            SetBaseMapModel(baseAsset);
-
-            // Spawn standard base map object
-            SpawnMap();
+            // Also spawns the base map object (SpawnMap)
+            yield return SetBaseMapModelCoroutine(baseAsset);
 
             // Restore base map transform values and apply to scene
             _baseMap.Deserialize(serializedMap.baseMap);
@@ -249,7 +292,8 @@ public class MapManager : Singleton<MapManager> {
                 }
 
                 // Assuming UploadMapVariant instantiates and returns the created MapVariant reference
-                MapVariant spawnedVariant = UploadMapVariant(asset, deseralization: true);
+                MapVariant spawnedVariant = null;
+                yield return UploadMapVariantCoroutine(asset, deseralization: true, done: variant => spawnedVariant = variant);
 
                 if (spawnedVariant != null) {
                     // Restore variant transform values and apply to scene

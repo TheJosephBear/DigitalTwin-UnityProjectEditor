@@ -67,9 +67,20 @@ public class AssetManager : Singleton<AssetManager> {
     /// to free the bytes before the model is parsed.
     /// </remarks>
     public PreparedModelFiles PrepareAssetFromFiles(FrostweepGames.Plugins.WebGLFileBrowser.File[] files) {
+        PreparedModelFiles result = null;
+        CoroutineUtils.RunSync(PrepareAssetFromFilesCoroutine(files, prepared => result = prepared));
+        return result;
+    }
+
+    /// <summary>
+    /// <see cref="PrepareAssetFromFiles"/> spread over frames, showing its progress on the loading screen.
+    /// <paramref name="done"/> gets the result (null when the selection has no model).
+    /// </summary>
+    public IEnumerator PrepareAssetFromFilesCoroutine(FrostweepGames.Plugins.WebGLFileBrowser.File[] files, Action<PreparedModelFiles> done) {
         if (files == null || files.Length == 0) {
             Debug.LogError("No files selected.");
-            return null;
+            done?.Invoke(null);
+            yield break;
         }
 
         // 1. Find OBJ file NOT ANYMOREEEEE
@@ -85,11 +96,13 @@ public class AssetManager : Singleton<AssetManager> {
 
         if (mainFile == null) {
             Debug.LogError("No main file in selection.");
-            return null;
+            done?.Invoke(null);
+            yield break;
         }
 
         // 2. Hash based on main file
-        string fileHash = GetFileHash(mainFile.data);
+        string fileHash = null;
+        yield return GetFileHashCoroutine(mainFile.data, mainFile.fileInfo.fullName, hash => fileHash = hash);
 
         var prepared = new PreparedModelFiles { FileHash = fileHash, FileName = mainFile.fileInfo.fullName };
 
@@ -98,13 +111,14 @@ public class AssetManager : Singleton<AssetManager> {
             if (asset.FileHash == fileHash) {
                 Debug.Log("Model already uploaded.");
                 prepared.ExistingAsset = asset;
-                return prepared;
+                done?.Invoke(prepared);
+                yield break;
             }
         }
 
         // 4. Write the full bundle to disk, the model is built from there
-        prepared.MainModelPath = FileLoadingManager.Instance.WriteWebGLFiles(files, fileHash);
-        return prepared;
+        yield return FileLoadingManager.Instance.WriteWebGLFilesCoroutine(files, fileHash, path => prepared.MainModelPath = path);
+        done?.Invoke(prepared);
     }
 
     /// <summary>
@@ -115,8 +129,29 @@ public class AssetManager : Singleton<AssetManager> {
         if (prepared.ExistingAsset != null) return prepared.ExistingAsset;
         if (prepared.MainModelPath == null) return null;
 
-        GameObject newAssetGo = FileLoadingManager.Instance.BuildModelFromPath(prepared.MainModelPath, onProgress);
+        return RegisterBuiltAsset(FileLoadingManager.Instance.BuildModelFromPath(prepared.MainModelPath, onProgress), prepared);
+    }
 
+    /// <summary>
+    /// <see cref="BuildPreparedAsset"/> spread over frames, showing its progress on the loading screen.
+    /// <paramref name="done"/> gets the asset, or null if it failed.
+    /// </summary>
+    public IEnumerator BuildPreparedAssetCoroutine(PreparedModelFiles prepared, Action<ModelAsset> done) {
+        if (prepared == null || (prepared.ExistingAsset == null && prepared.MainModelPath == null)) {
+            done?.Invoke(null);
+            yield break;
+        }
+        if (prepared.ExistingAsset != null) {
+            done?.Invoke(prepared.ExistingAsset);
+            yield break;
+        }
+
+        GameObject newAssetGo = null;
+        yield return FileLoadingManager.Instance.BuildModelCoroutine(prepared.MainModelPath, prepared.FileName, go => newAssetGo = go);
+        done?.Invoke(RegisterBuiltAsset(newAssetGo, prepared));
+    }
+
+    ModelAsset RegisterBuiltAsset(GameObject newAssetGo, PreparedModelFiles prepared) {
         if (newAssetGo == null)
             return null;
 
@@ -173,6 +208,29 @@ public class AssetManager : Singleton<AssetManager> {
         }
     }
 
+    /// <summary>
+    /// The same hash as <see cref="GetFileHash"/>, computed in chunks over frames so the loading screen shows its progress.
+    /// </summary>
+    IEnumerator GetFileHashCoroutine(byte[] fileData, string fileName, Action<string> done) {
+        const int chunkSize = 4 * 1024 * 1024;
+        FrameBudget budget = new FrameBudget();
+        LoadingScreenUI.SetStatus($"Kontroluji soubor {fileName}");
+        using (var md5 = MD5.Create()) {
+            int offset = 0;
+            while (offset < fileData.Length) {
+                int count = Math.Min(chunkSize, fileData.Length - offset);
+                md5.TransformBlock(fileData, offset, count, null, 0);
+                offset += count;
+                if (budget.ShouldYield()) {
+                    LoadingScreenUI.SetStatus($"Kontroluji soubor {fileName}", (float)offset / fileData.Length);
+                    yield return null;
+                }
+            }
+            md5.TransformFinalBlock(fileData, 0, 0);
+            done(System.BitConverter.ToString(md5.Hash).Replace("-", "").ToLowerInvariant());
+        }
+    }
+
     #endregion
 
     #region Serialization
@@ -218,12 +276,14 @@ public class AssetManager : Singleton<AssetManager> {
     }
 
     IEnumerator DeserializeAssetCoroutine(List<SerializableModelAsset> data, System.Action onComplete) {
-        foreach (SerializableModelAsset serializableAsset in data) {
+        for (int i = 0; i < data.Count; i++) {
+            SerializableModelAsset serializableAsset = data[i];
             bool isDone = false;
 
             DownloadAsset(
                 assetHash: serializableAsset.fileHash,
                 projectName: ProjectManager.Instance.SelectedProject.ProjectName,
+                label: $"model {i + 1}/{data.Count}",
                 onComplete: modelAsset => {
                     if (modelAsset != null) {
                         modelAsset.FileHash = serializableAsset.fileHash;
@@ -238,7 +298,7 @@ public class AssetManager : Singleton<AssetManager> {
     }
 
 
-    ModelAsset DownloadAsset(string assetHash, string projectName, System.Action<ModelAsset> onComplete) {
+    ModelAsset DownloadAsset(string assetHash, string projectName, string label, System.Action<ModelAsset> onComplete) {
         // already loaded?
         foreach (var asset in _assets) {
             if (asset.FileHash == assetHash) {
@@ -247,11 +307,13 @@ public class AssetManager : Singleton<AssetManager> {
             }
         }
 
-        StartCoroutine(DownloadAssetCoroutine(assetHash, projectName, onComplete));
+        StartCoroutine(DownloadAssetCoroutine(assetHash, projectName, label, onComplete));
         return null;
     }
 
-    IEnumerator DownloadAssetCoroutine(string assetHash, string projectName, System.Action<ModelAsset> onComplete) {
+    IEnumerator DownloadAssetCoroutine(string assetHash, string projectName, string label, System.Action<ModelAsset> onComplete) {
+        LoadingScreenUI.SetStatus($"Stahuji {label}");
+
         // 1. Get the list of files associated with this asset hash
         List<string> fileNames = null;
         bool listDone = false;
@@ -275,6 +337,7 @@ public class AssetManager : Singleton<AssetManager> {
         // 2. Track remaining file downloads in a counter
         int remainingDownloads = fileNames.Count;
         bool downloadFailed = false;
+        LoadingScreenUI.SetStatus($"Stahuji {label} – soubory 0/{fileNames.Count}");
 
         foreach (string fileName in fileNames) {
             ServerCommunicationManager.Instance.DownloadFileFromServer(
@@ -301,6 +364,7 @@ public class AssetManager : Singleton<AssetManager> {
 
                     // Decrement counter once caching is secure
                     remainingDownloads--;
+                    LoadingScreenUI.SetStatus($"Stahuji {label} – soubory {fileNames.Count - remainingDownloads}/{fileNames.Count}");
                 });
         }
 
@@ -314,7 +378,8 @@ public class AssetManager : Singleton<AssetManager> {
         }
 
         // 4. Safe Zone: Construct the GameObject now that all matching files exist locally
-        GameObject go = FileLoadingManager.Instance.BuildFromDownloadedFiles(assetHash);
+        GameObject go = null;
+        yield return FileLoadingManager.Instance.BuildFromDownloadedFilesCoroutine(assetHash, label, built => go = built);
         if (go == null) {
             Debug.LogError($"FileLoadingManager failed to construct model geometry for hash: {assetHash}");
             onComplete(null);
